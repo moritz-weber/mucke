@@ -92,30 +92,21 @@ class _CurrentlyPlayingPageState extends State<CurrentlyPlayingPage> {
                   Container(
                     height: 20,
                   ),
-                  Row(
-                    children: [
-                      Icon(Icons.repeat, size: 24.0),
-                      Container(
-                        width: 32,
-                      ),
-                      Icon(Icons.skip_previous, size: 40.0),
-                      Container(
-                        width: 32,
-                      ),
-                      Icon(
-                        Icons.play_circle_filled,
-                        size: 64.0,
-                      ),
-                      Container(
-                        width: 32,
-                      ),
-                      Icon(Icons.skip_next, size: 40.0),
-                      Container(
-                        width: 32,
-                      ),
-                      Icon(Icons.shuffle, size: 24.0),
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Row(
+                      children: [
+                        Icon(Icons.repeat, size: 20.0),
+                        Icon(Icons.skip_previous, size: 40.0),
+                        Icon(
+                          Icons.play_circle_filled,
+                          size: 64.0,
+                        ),
+                        Icon(Icons.skip_next, size: 40.0),
+                        Icon(Icons.shuffle, size: 20.0),
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    ),
                   ),
                   Container(
                     height: 100,

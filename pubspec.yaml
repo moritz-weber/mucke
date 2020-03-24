@@ -10,6 +10,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  equatable: ^1.1.0
+  dartz: ^0.8.9
+  mockito: ^4.1.1
   
   flutter_audio_query: "0.3.3"
 

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mosh/presentation/pages/home.dart';
-import 'package:mosh/presentation/pages/library.dart';
-import 'package:mosh/presentation/pages/settings.dart';
-import 'package:mosh/presentation/widgets/navbar.dart';
+
+import 'presentation/pages/home.dart';
+import 'presentation/pages/library.dart';
+import 'presentation/pages/settings.dart';
+import 'presentation/widgets/navbar.dart';
 
 void main() => runApp(MyApp());
 

@@ -10,6 +10,12 @@
             "type": "dart"
         },
         {
+            "name": "Test",
+            "type": "dart",
+            "request": "launch",
+            "program": "./test/",
+        },
+        {
             "name": "Profile",
             "type": "dart",
             "request": "launch",
