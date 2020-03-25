@@ -1,10 +1,3 @@
-### Custom Part
-
-assets/disease.jpg
-assets/twilight.jpg
-
-### Standard Part
-
 # Miscellaneous
 *.class
 *.log
@@ -42,3 +35,10 @@ lib/generated_plugin_registrant.dart
 
 # Exceptions to above rules.
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+
+
+### Custom Part ----------------------------------------------------------------
+
+assets/disease.jpg
+assets/twilight.jpg
+assets/flick.jpg

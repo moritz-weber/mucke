@@ -10,23 +10,33 @@ class QueueCard extends StatefulWidget {
 }
 
 class _QueueCardState extends State<QueueCard> {
+  final title = "Fire";
+  final artist = "Beartooth";
+  final height = 64.0;
+
   bool _first = true;
-  double _height = 96.0;
+  double _currentHeight;
+
+  @override
+  void initState() {
+    _currentHeight = height;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-
     return AnimatedPositioned(
       bottom: 0,
       left: 0,
       right: 0,
-      height: _height,
+      height: _currentHeight,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: GestureDetector(
           onTap: () {
             setState(() {
-              _height = _first ? widget.boxConstraints.maxHeight : 96.0;
+              _currentHeight =
+                  _first ? widget.boxConstraints.maxHeight : height;
               _first = !_first;
             });
           },
@@ -43,28 +53,18 @@ class _QueueCardState extends State<QueueCard> {
                       Container(
                         width: 4.0,
                       ),
-                      Text(
-                        "Als nächstes:",
-                        style:
-                            TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
-                      ),
-                    ],
-                  ),
-                  Container(
-                    height: 6.0,
-                  ),
-                  Row(
-                    children: [
-                      Image(
-                        image: AssetImage('assets/disease.jpg'),
-                        height: 26.0,
-                      ),
-                      Container(
-                        width: 10,
-                      ),
-                      Text("Fire ~ Beartooth", // ·
+                      RichText(
+                        text: TextSpan(
                           style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w300)),
+                            fontSize: 16,
+                          ),
+                          children: [
+                            TextSpan(text: "$title"),
+                            TextSpan(text: " • ", style: TextStyle(color: Colors.white70)),
+                            TextSpan(text: "$artist", style: TextStyle(fontWeight: FontWeight.w300, color: Colors.white70)),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ],

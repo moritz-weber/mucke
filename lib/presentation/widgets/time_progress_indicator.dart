@@ -11,7 +11,7 @@ class _TimeProgressIndicatorState extends State<TimeProgressIndicator> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Row(
         children: [
           Text("0:42"),
@@ -21,7 +21,7 @@ class _TimeProgressIndicatorState extends State<TimeProgressIndicator> {
           Expanded(
               child: Container(
             child: LinearProgressIndicator(value: 0.42),
-            height: 4.0,
+            height: 3.0,
           )),
           Container(
             width: 10,

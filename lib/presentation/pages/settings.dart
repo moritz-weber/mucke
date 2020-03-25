@@ -10,8 +10,15 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-       child: Center(child: Text("Settings Page"),),
+    return ListView(
+      children: [
+        ListTile(
+          title: Text("Update database"),
+          onTap: () {
+            print("Hello World");
+          },
+        )
+      ],
     );
   }
 }
