@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:mosh/presentation/pages/currently_playing.dart';
 
 class NavBar extends StatefulWidget {
-  final int currentIndex;
-  final Function(int) onTap;
-
   const NavBar({Key key, @required this.onTap, @required this.currentIndex})
       : super(key: key);
+
+  final int currentIndex;
+  final Function(int) onTap;
 
   @override
   _NavBarState createState() => _NavBarState();
 }
 
 class _NavBarState extends State<NavBar> {
-  final _optionTextStyle = TextStyle(
+  final TextStyle _optionTextStyle = TextStyle(
     fontWeight: FontWeight.w300,
   );
 
@@ -25,7 +25,7 @@ class _NavBarState extends State<NavBar> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Container(
-            child: LinearProgressIndicator(
+            child: const LinearProgressIndicator(
               value: 0.42,
             ),
             height: 2,
@@ -33,13 +33,14 @@ class _NavBarState extends State<NavBar> {
           GestureDetector(
             onTap: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => CurrentlyPlayingPage()));
+                context,
+                MaterialPageRoute<Widget>(
+                    builder: (BuildContext context) => CurrentlyPlayingPage()),
+              );
             },
             child: Row(
               children: <Widget>[
-                Image(
+                const Image(
                   image: AssetImage('assets/twilight.jpg'),
                   height: 64.0,
                 ),
@@ -49,7 +50,7 @@ class _NavBarState extends State<NavBar> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text("Guardians of Asgaard"),
+                    Text('Guardians of Asgaard'),
                     Text(
                       "Amon Amarth",
                       style: TextStyle(

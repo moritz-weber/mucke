@@ -19,7 +19,11 @@ class _CurrentlyPlayingPageState extends State<CurrentlyPlayingPage> {
         child: LayoutBuilder(
           builder: (context, constraints) => Stack(children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              padding: const EdgeInsets.only(
+                left: 12.0,
+                right: 12.0,
+                top: 8.0,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -53,14 +57,14 @@ class _CurrentlyPlayingPageState extends State<CurrentlyPlayingPage> {
                         size: 20.0,
                       ),
                       Container(
-                        width: 32,
+                        width: 40,
                       ),
                       Icon(
                         Icons.favorite,
                         size: 20.0,
                       ),
                       Container(
-                        width: 32,
+                        width: 40,
                       ),
                       Icon(
                         Icons.remove_circle_outline,

@@ -40,38 +40,35 @@ class AlbumArt extends StatelessWidget {
               ),
             ),
             Positioned(
-              bottom: 8.0,
-              left: 8.0,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    "Guardians of Asgaard",
-                    style: Theme.of(context).textTheme.title,
-                  ),
-                  RichText(
-                    text: TextSpan(
-                      style: TextStyle(
-                        fontSize: 14,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: "Amon Amarth: ",
-                          style: TextStyle(
-                            color: Colors.white70,
-                          ),
-                        ),
-                        TextSpan(
-                          text: "Twilight of the Thunder God",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w300,
-                            color: Colors.white70,
-                          ),
-                        ),
-                      ],
+              bottom: 0,
+              left: 0,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      'Guardians of Asgaard',
+                      style: Theme.of(context).textTheme.title,
                     ),
-                  ),
-                ],
+                    Container(
+                      height: 4.0,
+                    ),
+                    const Text(
+                      'Amon Amarth',
+                      style: TextStyle(
+                        color: Colors.white70,
+                      ),
+                    ),
+                    const Text(
+                      'Twilight of the Thunder God',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w300,
+                        color: Colors.white70,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

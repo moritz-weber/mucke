@@ -21,8 +21,8 @@ class MyApp extends StatelessWidget {
         // https://api.flutter.dev/flutter/material/TextTheme-class.html
         textTheme: TextTheme(
           headline: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
-          title: TextStyle(fontSize: 20.0), //, fontWeight: FontWeight.w300),
-          body1: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
+          title: const TextStyle(fontSize: 20.0), //, fontWeight: FontWeight.w300),
+          body1: const TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
         ),
       ),
       home: RootPage(title: 'Flutter Demo Home Page'),
