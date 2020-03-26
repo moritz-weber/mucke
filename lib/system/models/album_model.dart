@@ -1,3 +1,4 @@
+import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:meta/meta.dart';
 
 import '../../domain/entities/album.dart';
@@ -22,6 +23,13 @@ class AlbumModel extends Album {
         artist: moorAlbum.artist,
         albumArtPath: moorAlbum.albumArtPath,
         year: moorAlbum.year,
+      );
+
+  factory AlbumModel.fromAlbumInfo(AlbumInfo albumInfo) => AlbumModel(
+        title: albumInfo.title,
+        artist: albumInfo.artist,
+        albumArtPath: albumInfo.albumArt,
+        year: int.parse(albumInfo.lastYear),
       );
 
   final int id;
