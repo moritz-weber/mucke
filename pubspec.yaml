@@ -26,11 +26,15 @@ dependencies:
   path_provider:
   path:
 
+  mobx: ^1.1.1
+  flutter_mobx: ^1.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
   moor_generator: ^2.4.0
   build_runner:
+  mobx_codegen: ^1.0.3
 
 
 # For information on the generic Dart part of this file, see the
