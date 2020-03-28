@@ -29,20 +29,7 @@ void main() {
       musicDataSource: mockMusicDataSource,
     );
 
-    tAlbumList = [
-      AlbumModel(
-        artist: ARTIST_1,
-        title: TITLE_1,
-        albumArtPath: ALBUM_ART_PATH_1,
-        year: YEAR_1,
-      ),
-      AlbumModel(
-        artist: ARTIST_2,
-        title: TITLE_2,
-        albumArtPath: ALBUM_ART_PATH_2,
-        year: YEAR_2,
-      ),
-    ];
+    tAlbumList = setupAlbumList(tAlbumList);
 
     tEmptyList = [];
   });
@@ -130,3 +117,18 @@ void main() {
     );
   });
 }
+
+List<AlbumModel> setupAlbumList(List<AlbumModel> tAlbumList) => [
+      AlbumModel(
+        artist: ARTIST_1,
+        title: ALBUM_TITLE_1,
+        albumArtPath: ALBUM_ART_PATH_1,
+        year: YEAR_1,
+      ),
+      AlbumModel(
+        artist: ARTIST_2,
+        title: ALBUM_TITLE_2,
+        albumArtPath: ALBUM_ART_PATH_2,
+        year: YEAR_2,
+      ),
+    ];

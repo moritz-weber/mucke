@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:meta/meta.dart';
+import 'package:mosh/domain/entities/song.dart';
 
 import '../../core/error/failures.dart';
 import '../../domain/entities/album.dart';
@@ -34,5 +35,11 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
         musicDataSource.insertAlbum(album);
       }
     }
+  }
+
+  @override
+  Future<Either<Failure, List<Song>>> getSongs() {
+    // TODO: implement getSongs
+    return null;
   }
 }

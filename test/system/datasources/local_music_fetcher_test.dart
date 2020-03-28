@@ -23,7 +23,7 @@ void main() {
 
     setUp(() {
       mockAlbumInfo = MockAlbumInfo();
-      when(mockAlbumInfo.title).thenReturn(TITLE_1);
+      when(mockAlbumInfo.title).thenReturn(ALBUM_TITLE_1);
       when(mockAlbumInfo.albumArt).thenReturn(ALBUM_ART_PATH_1);
       when(mockAlbumInfo.artist).thenReturn(ARTIST_1);
       when(mockAlbumInfo.firstYear).thenReturn(FIRST_YEAR_1.toString());

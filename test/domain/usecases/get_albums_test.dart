@@ -17,8 +17,8 @@ void main() {
   });
 
   final tAlbums = <Album>[
-    Album(title: "Back in Black", artist: "AC/DC"),
-    Album(title: "Twilight Of The Thunder God", artist: "Amon Amarth"),
+    Album(title: 'Back in Black', artist: 'AC/DC'),
+    Album(title: 'Twilight Of The Thunder God', artist: 'Amon Amarth'),
   ];
 
   test(

@@ -14,7 +14,7 @@ void main() {
         MoorMusicDataSource.withQueryExecutor(VmDatabase.memory());
 
     albumModel = AlbumModel(
-      title: TITLE_1,
+      title: ALBUM_TITLE_1,
       artist: ARTIST_1,
       albumArtPath: ALBUM_ART_PATH_1,
       year: YEAR_1,

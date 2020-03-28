@@ -11,7 +11,7 @@ class MockAlbumInfo extends Mock implements AlbumInfo {}
 
 void main() {
   final tAlbumModel = AlbumModel(
-    title: TITLE_1,
+    title: ALBUM_TITLE_1,
     artist: ARTIST_1,
     albumArtPath: ALBUM_ART_PATH_1,
     year: YEAR_1,
@@ -32,14 +32,14 @@ void main() {
         // arrange
         final expected = MoorAlbum(
           artist: ARTIST_1,
-          title: TITLE_1,
+          title: ALBUM_TITLE_1,
           albumArtPath: ALBUM_ART_PATH_1,
           year: YEAR_1,
         );
 
         final albumModel = AlbumModel(
           artist: ARTIST_1,
-          title: TITLE_1,
+          title: ALBUM_TITLE_1,
           albumArtPath: ALBUM_ART_PATH_1,
           year: YEAR_1,
         );
@@ -58,14 +58,14 @@ void main() {
         // arrange
         final moorAlbum = MoorAlbum(
           artist: ARTIST_1,
-          title: TITLE_1,
+          title: ALBUM_TITLE_1,
           albumArtPath: ALBUM_ART_PATH_1,
           year: YEAR_1,
         );
 
         final expected = AlbumModel(
           artist: ARTIST_1,
-          title: TITLE_1,
+          title: ALBUM_TITLE_1,
           albumArtPath: ALBUM_ART_PATH_1,
           year: YEAR_1,
         );
@@ -82,13 +82,13 @@ void main() {
         // arrange
         final moorAlbum = MoorAlbum(
           artist: ARTIST_1,
-          title: TITLE_1,
+          title: ALBUM_TITLE_1,
           year: YEAR_1,
         );
 
         final expected = AlbumModel(
           artist: ARTIST_1,
-          title: TITLE_1,
+          title: ALBUM_TITLE_1,
           year: YEAR_1,
         );
         // act
@@ -104,13 +104,13 @@ void main() {
         // arrange
         final moorAlbum = MoorAlbum(
           artist: ARTIST_1,
-          title: TITLE_1,
+          title: ALBUM_TITLE_1,
           albumArtPath: ALBUM_ART_PATH_1,
         );
 
         final expected = AlbumModel(
           artist: ARTIST_1,
-          title: TITLE_1,
+          title: ALBUM_TITLE_1,
           albumArtPath: ALBUM_ART_PATH_1,
         );
         // act
@@ -126,7 +126,7 @@ void main() {
 
     setUp(() {
       mockAlbumInfo = MockAlbumInfo();
-      when(mockAlbumInfo.title).thenReturn(TITLE_1);
+      when(mockAlbumInfo.title).thenReturn(ALBUM_TITLE_1);
       when(mockAlbumInfo.albumArt).thenReturn(ALBUM_ART_PATH_1);
       when(mockAlbumInfo.artist).thenReturn(ARTIST_1);
       when(mockAlbumInfo.firstYear).thenReturn(FIRST_YEAR_1.toString());
@@ -139,7 +139,7 @@ void main() {
       () async {
         // arrange
         final expected = AlbumModel(
-          title: TITLE_1,
+          title: ALBUM_TITLE_1,
           artist: ARTIST_1,
           albumArtPath: ALBUM_ART_PATH_1,
           year: FIRST_YEAR_1,
