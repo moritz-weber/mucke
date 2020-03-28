@@ -142,7 +142,7 @@ void main() {
           title: TITLE_1,
           artist: ARTIST_1,
           albumArtPath: ALBUM_ART_PATH_1,
-          year: LAST_YEAR_1,
+          year: FIRST_YEAR_1,
         );
         // act
         final result = AlbumModel.fromAlbumInfo(mockAlbumInfo);

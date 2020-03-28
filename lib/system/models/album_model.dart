@@ -25,12 +25,16 @@ class AlbumModel extends Album {
         year: moorAlbum.year,
       );
 
-  factory AlbumModel.fromAlbumInfo(AlbumInfo albumInfo) => AlbumModel(
-        title: albumInfo.title,
-        artist: albumInfo.artist,
-        albumArtPath: albumInfo.albumArt,
-        year: int.parse(albumInfo.lastYear),
-      );
+  factory AlbumModel.fromAlbumInfo(AlbumInfo albumInfo) {
+    final String _year = albumInfo.firstYear;
+
+    return AlbumModel(
+      title: albumInfo.title,
+      artist: albumInfo.artist,
+      albumArtPath: albumInfo.albumArt,
+      year: _year == null ? null : int.parse(_year),
+    );
+  }
 
   final int id;
 
