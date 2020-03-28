@@ -10,7 +10,7 @@ import 'music_data_source_contract.dart';
 
 part 'moor_music_data_source.g.dart';
 
-@DataClassName("MoorAlbum")
+@DataClassName('MoorAlbum')
 class Albums extends Table {
   TextColumn get title => text()();
   TextColumn get artist => text()();
@@ -18,22 +18,17 @@ class Albums extends Table {
   IntColumn get year => integer().nullable()();
 
   @override
-  Set<Column> get primaryKey => {title, artist};
+  Set<Column> get primaryKey => {title, artist, year};
 }
 
 @UseMoor(tables: [Albums])
 class MoorMusicDataSource extends _$MoorMusicDataSource
     implements MusicDataSource {
   MoorMusicDataSource() : super(_openConnection());
+  MoorMusicDataSource.withQueryExecutor(QueryExecutor e) : super(e);
 
   @override
   int get schemaVersion => 1;
-
-  // Future<AlbumModel> getAlbum(String title, String artist) async {
-  //   return (select(albums)..where((t) => t.title.equals(title)))
-  //       .getSingle()
-  //       .then((moorAlbum) => AlbumModel.fromMoor(moorAlbum));
-  // }
 
   @override
   Future<List<AlbumModel>> getAlbums() async {
@@ -42,16 +37,18 @@ class MoorMusicDataSource extends _$MoorMusicDataSource
         .toList());
   }
 
+  // TODO: insert can throw exception -> implications?
+  // TODO: use companion instead: https://moor.simonbinder.eu/docs/getting-started/writing_queries/
   @override
-  Future<void> insertAlbum(AlbumModel albumModel) {
-    // TODO: implement insertAlbum
-    return null;
+  Future<void> insertAlbum(AlbumModel albumModel) async {
+    await into(albums).insert(albumModel.toMoor());
+    return;
   }
 
   @override
-  Future<bool> albumExists(AlbumModel albumModel) {
-    // TODO: implement albumExists
-    return null;
+  Future<bool> albumExists(AlbumModel albumModel) async {
+    final List<AlbumModel> albumList = await getAlbums();
+    return albumList.contains(albumModel);
   }
 }
 
@@ -60,8 +57,8 @@ LazyDatabase _openConnection() {
   return LazyDatabase(() async {
     // put the database file, called db.sqlite here, into the documents folder
     // for your app.
-    final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'db.sqlite'));
+    final Directory dbFolder = await getApplicationDocumentsDirectory();
+    final File file = File(p.join(dbFolder.path, 'db.sqlite'));
     return VmDatabase(file);
   });
 }

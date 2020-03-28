@@ -223,7 +223,7 @@ class $AlbumsTable extends Albums with TableInfo<$AlbumsTable, MoorAlbum> {
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {title, artist};
+  Set<GeneratedColumn> get $primaryKey => {title, artist, year};
   @override
   MoorAlbum map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
