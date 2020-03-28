@@ -10,8 +10,8 @@ class QueueCard extends StatefulWidget {
 }
 
 class _QueueCardState extends State<QueueCard> {
-  final title = "Fire";
-  final artist = "Beartooth";
+  final title = 'Fire';
+  final artist = 'Beartooth';
   final height = 64.0;
 
   bool _first = true;

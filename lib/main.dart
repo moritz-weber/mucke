@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_audio_query/flutter_audio_query.dart';
+import 'package:mosh/system/datasources/local_music_fetcher.dart';
+import 'package:mosh/system/datasources/moor_music_data_source.dart';
+import 'package:mosh/system/repositories/music_data_repository_impl.dart';
+import 'package:provider/provider.dart';
 
-import 'presentation/pages/home.dart';
-import 'presentation/pages/library.dart';
-import 'presentation/pages/settings.dart';
+import 'presentation/pages/home_page.dart';
+import 'presentation/pages/library_page.dart';
+import 'presentation/pages/settings_page.dart';
+import 'presentation/state/music_store.dart';
+import 'presentation/theming.dart';
 import 'presentation/widgets/navbar.dart';
 
 void main() => runApp(MyApp());
@@ -12,28 +19,23 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // Define the default brightness and colors.
-        brightness: Brightness.dark,
-        primaryColor: Colors.amber,
-        accentColor: Colors.amberAccent,
-        // https://api.flutter.dev/flutter/material/TextTheme-class.html
-        textTheme: TextTheme(
-          headline: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
-          title: const TextStyle(fontSize: 20.0), //, fontWeight: FontWeight.w300),
-          body1: const TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
+      title: 'mosh',
+      theme: theme(),
+      home: Provider<MusicStore>(
+        child: RootPage(),
+        create: (BuildContext context) => MusicStore(
+          MusicDataRepositoryImpl(
+            localMusicFetcher: LocalMusicFetcherImpl(FlutterAudioQuery()),
+            musicDataSource: MoorMusicDataSource(),
+          ),
         ),
       ),
-      home: RootPage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
 class RootPage extends StatefulWidget {
-  RootPage({Key key, this.title}) : super(key: key);
-
-  final String title;
+  RootPage({Key key}) : super(key: key);
 
   @override
   _RootPageState createState() => _RootPageState();
@@ -42,7 +44,21 @@ class RootPage extends StatefulWidget {
 class _RootPageState extends State<RootPage> {
   var navIndex = 0;
 
-  final _pages = <Widget>[HomePage(), LibraryPage(), SettingsPage()];
+  List<Widget> _pages;
+  MusicStore _musicStore;
+
+  @override
+  void didChangeDependencies() {
+    _musicStore = Provider.of<MusicStore>(context);
+    _musicStore.fetchAlbums();
+
+    _pages = <Widget>[
+      HomePage(),
+      LibraryPage(store: _musicStore),
+      SettingsPage(store: _musicStore),
+    ];
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
