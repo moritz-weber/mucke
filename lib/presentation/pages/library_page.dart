@@ -1,69 +1,43 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mobx/mobx.dart';
-import 'package:mosh/domain/entities/album.dart';
 
 import '../state/music_store.dart';
+import 'albums_page.dart';
 
 class LibraryPage extends StatelessWidget {
   const LibraryPage({Key key, @required this.store}) : super(key: key);
 
   final MusicStore store;
 
-  Image getAlbumImage(Album album) {
-    if (album.albumArtPath == null || !File(album.albumArtPath).existsSync()) {
-      return Image.asset('assets/no_cover.jpg');
-    }
-    return Image.file(File(album.albumArtPath));
-  }
-
   @override
-  Widget build(BuildContext context) => Observer(builder: (_) {
-        final ObservableFuture<List<Album>> future = store.albumsFuture;
-
-        switch (future.status) {
-          case FutureStatus.pending:
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                CircularProgressIndicator(),
-                Text('Loading items...'),
-              ],
-            );
-
-          case FutureStatus.rejected:
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                const Text(
-                  'Failed to load items.',
-                  style: TextStyle(color: Colors.red),
+  Widget build(BuildContext context) => DefaultTabController(
+        length: 3,
+        child: SafeArea(
+          child: Column(
+            children: <Widget>[
+              const TabBar(
+                tabs: <Tab>[
+                  Tab(
+                    text: 'Artists',
+                  ),
+                  Tab(
+                    text: 'Albums',
+                  ),
+                  Tab(
+                    text: 'Songs',
+                  ),
+                ],
+              ),
+              Expanded(
+                child: TabBarView(
+                  children: <Widget>[
+                    const Center(child: Text('Artists')),
+                    AlbumsPage(store: store),
+                    const Center(child: Text('Songs')),
+                  ],
                 ),
-              ],
-            );
-
-          case FutureStatus.fulfilled:
-            final List<Album> albums = future.result as List<Album>;
-            return ListView.builder(
-              physics: const AlwaysScrollableScrollPhysics(),
-              itemCount: albums.length,
-              itemBuilder: (_, index) {
-                final album = albums[index];
-                return ListTile(
-                  leading: Card(
-                    child: getAlbumImage(album),
-                  ),
-                  title: Text(
-                    '${album.title}, ${album.artist}, ${album.year}',
-                  ),
-                );
-              },
-            );
-        }
-        return Center(
-          child: Text('Library Page'),
-        );
-      });
+              )
+            ],
+          ),
+        ),
+      );
 }
