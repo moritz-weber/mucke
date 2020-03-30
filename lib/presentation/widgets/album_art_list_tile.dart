@@ -16,7 +16,11 @@ class AlbumArtListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: Card(
-        child: utils.getAlbumImage(albumArtPath),
+        child: Container(
+          height: 56,
+          width: 56,
+          child: utils.getAlbumImage(albumArtPath),
+        ),
         clipBehavior: Clip.antiAlias,
         margin: const EdgeInsets.all(0),
         shape: RoundedRectangleBorder(

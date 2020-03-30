@@ -26,6 +26,24 @@ mixin _$MusicStore on _MusicStore, Store {
     }, _$albumsFutureAtom, name: '${_$albumsFutureAtom.name}_set');
   }
 
+  final _$isUpdatingDatabaseAtom = Atom(name: '_MusicStore.isUpdatingDatabase');
+
+  @override
+  bool get isUpdatingDatabase {
+    _$isUpdatingDatabaseAtom.context
+        .enforceReadPolicy(_$isUpdatingDatabaseAtom);
+    _$isUpdatingDatabaseAtom.reportObserved();
+    return super.isUpdatingDatabase;
+  }
+
+  @override
+  set isUpdatingDatabase(bool value) {
+    _$isUpdatingDatabaseAtom.context.conditionallyRunInAction(() {
+      super.isUpdatingDatabase = value;
+      _$isUpdatingDatabaseAtom.reportChanged();
+    }, _$isUpdatingDatabaseAtom, name: '${_$isUpdatingDatabaseAtom.name}_set');
+  }
+
   final _$updateDatabaseAsyncAction = AsyncAction('updateDatabase');
 
   @override
@@ -47,7 +65,8 @@ mixin _$MusicStore on _MusicStore, Store {
 
   @override
   String toString() {
-    final string = 'albumsFuture: ${albumsFuture.toString()}';
+    final string =
+        'albumsFuture: ${albumsFuture.toString()},isUpdatingDatabase: ${isUpdatingDatabase.toString()}';
     return '{$string}';
   }
 }

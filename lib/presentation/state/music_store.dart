@@ -26,10 +26,17 @@ abstract class _MusicStore with Store {
   @observable
   ObservableFuture<List<Album>> albumsFuture;
 
+  @observable
+  bool isUpdatingDatabase = false;
+
   @action
   Future<void> updateDatabase() async {
-    await _updateDatabase();
-    fetchAlbums();
+    isUpdatingDatabase = true;
+    await Future.delayed(Duration(seconds: 5));
+    isUpdatingDatabase = false;
+
+    // await _updateDatabase();
+    // fetchAlbums();
   }
 
   @action
