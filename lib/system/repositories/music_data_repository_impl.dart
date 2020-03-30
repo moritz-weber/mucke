@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:meta/meta.dart';
 import 'package:mosh/domain/entities/song.dart';
+import 'package:mosh/system/models/song_model.dart';
 
 import '../../core/error/failures.dart';
 import '../../domain/entities/album.dart';
@@ -24,6 +25,12 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
         (List<AlbumModel> albums) => Right<Failure, List<AlbumModel>>(albums));
   }
 
+  @override
+  Future<Either<Failure, List<Song>>> getSongs() async {
+    return musicDataSource.getSongs().then(
+        (List<SongModel> songs) => Right<Failure, List<SongModel>>(songs));
+  }
+
   // TODO: should remove albums that are not longer on the device
   @override
   Future<void> updateDatabase() async {
@@ -35,11 +42,5 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
         musicDataSource.insertAlbum(album);
       }
     }
-  }
-
-  @override
-  Future<Either<Failure, List<Song>>> getSongs() {
-    // TODO: implement getSongs
-    return null;
   }
 }

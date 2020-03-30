@@ -1,5 +1,6 @@
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:meta/meta.dart';
+import 'package:moor/moor.dart';
 
 import '../../domain/entities/album.dart';
 import '../datasources/moor_music_data_source.dart';
@@ -10,19 +11,19 @@ class AlbumModel extends Album {
     @required String title,
     @required String artist,
     String albumArtPath,
-    int year,
+    int pubYear,
   }) : super(
           title: title,
           artist: artist,
           albumArtPath: albumArtPath,
-          year: year,
+          pubYear: pubYear,
         );
 
-  factory AlbumModel.fromMoor(MoorAlbum moorAlbum) => AlbumModel(
+  factory AlbumModel.fromMoorAlbum(MoorAlbum moorAlbum) => AlbumModel(
         title: moorAlbum.title,
         artist: moorAlbum.artist,
         albumArtPath: moorAlbum.albumArtPath,
-        year: moorAlbum.year,
+        pubYear: moorAlbum.year,
       );
 
   factory AlbumModel.fromAlbumInfo(AlbumInfo albumInfo) {
@@ -32,16 +33,16 @@ class AlbumModel extends Album {
       title: albumInfo.title,
       artist: albumInfo.artist,
       albumArtPath: albumInfo.albumArt,
-      year: _year == null ? null : int.parse(_year),
+      pubYear: _year == null ? null : int.parse(_year),
     );
   }
 
   final int id;
 
-  MoorAlbum toMoor() => MoorAlbum(
-        title: title,
-        artist: artist,
-        albumArtPath: albumArtPath,
-        year: year,
+  AlbumsCompanion toAlbumsCompanion() => AlbumsCompanion(
+        title: Value(title),
+        artist: Value(artist),
+        albumArtPath: Value(albumArtPath),
+        year: Value(pubYear),
       );
 }

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:moor/moor.dart';
 import 'package:moor_ffi/moor_ffi.dart';
+import 'package:mosh/system/models/song_model.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
@@ -18,10 +19,20 @@ class Albums extends Table {
   IntColumn get year => integer().nullable()();
 
   @override
-  Set<Column> get primaryKey => {title, artist, year};
+  Set<Column> get primaryKey => {title, artist};
 }
 
-@UseMoor(tables: [Albums])
+@DataClassName('MoorSong')
+class Songs extends Table {
+  TextColumn get title => text()();
+  TextColumn get album => text()();
+  TextColumn get artist => text()();
+  TextColumn get path => text()();
+  TextColumn get albumArtPath => text().nullable()();
+  IntColumn get trackNumber => integer().nullable()();
+}
+
+@UseMoor(tables: [Albums, Songs])
 class MoorMusicDataSource extends _$MoorMusicDataSource
     implements MusicDataSource {
   MoorMusicDataSource() : super(_openConnection());
@@ -33,7 +44,7 @@ class MoorMusicDataSource extends _$MoorMusicDataSource
   @override
   Future<List<AlbumModel>> getAlbums() async {
     return select(albums).get().then((moorAlbumList) => moorAlbumList
-        .map((moorAlbum) => AlbumModel.fromMoor(moorAlbum))
+        .map((moorAlbum) => AlbumModel.fromMoorAlbum(moorAlbum))
         .toList());
   }
 
@@ -41,7 +52,7 @@ class MoorMusicDataSource extends _$MoorMusicDataSource
   // TODO: use companion instead: https://moor.simonbinder.eu/docs/getting-started/writing_queries/
   @override
   Future<void> insertAlbum(AlbumModel albumModel) async {
-    await into(albums).insert(albumModel.toMoor());
+    await into(albums).insert(albumModel.toAlbumsCompanion());
     return;
   }
 
@@ -49,6 +60,12 @@ class MoorMusicDataSource extends _$MoorMusicDataSource
   Future<bool> albumExists(AlbumModel albumModel) async {
     final List<AlbumModel> albumList = await getAlbums();
     return albumList.contains(albumModel);
+  }
+
+  @override
+  Future<List<SongModel>> getSongs() {
+    // TODO: implement getSongs
+    return null;
   }
 }
 

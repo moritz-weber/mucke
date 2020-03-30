@@ -1,6 +1,7 @@
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:moor/moor.dart';
 import 'package:mosh/domain/entities/album.dart';
 import 'package:mosh/system/datasources/moor_music_data_source.dart';
 import 'package:mosh/system/models/album_model.dart';
@@ -14,7 +15,7 @@ void main() {
     title: ALBUM_TITLE_1,
     artist: ARTIST_1,
     albumArtPath: ALBUM_ART_PATH_1,
-    year: YEAR_1,
+    pubYear: YEAR_1,
   );
 
   test(
@@ -25,33 +26,36 @@ void main() {
     },
   );
 
-  group('toMoor', () {
+  group('toAlbumsCompanion', () {
     test(
-      'should return valid MoorAlbum',
+      'should return valid AlbumsCompanion',
       () async {
         // arrange
-        final expected = MoorAlbum(
-          artist: ARTIST_1,
-          title: ALBUM_TITLE_1,
-          albumArtPath: ALBUM_ART_PATH_1,
-          year: YEAR_1,
+        final expected = AlbumsCompanion(
+          artist: Value(ARTIST_1),
+          title: Value(ALBUM_TITLE_1),
+          albumArtPath: Value(ALBUM_ART_PATH_1),
+          year: Value(YEAR_1),
         );
 
         final albumModel = AlbumModel(
           artist: ARTIST_1,
           title: ALBUM_TITLE_1,
           albumArtPath: ALBUM_ART_PATH_1,
-          year: YEAR_1,
+          pubYear: YEAR_1,
         );
         // act
-        final result = albumModel.toMoor();
+        final result = albumModel.toAlbumsCompanion();
         // assert
-        expect(result, expected);
+        expect(result.artist.value, expected.artist.value);
+        expect(result.title.value, expected.title.value);
+        expect(result.albumArtPath.value, expected.albumArtPath.value);
+        expect(result.year.value, expected.year.value);
       },
     );
   });
 
-  group('fromMoor', () {
+  group('fromMoorAlbum', () {
     test(
       'should create valid AlbumModel',
       () async {
@@ -67,10 +71,10 @@ void main() {
           artist: ARTIST_1,
           title: ALBUM_TITLE_1,
           albumArtPath: ALBUM_ART_PATH_1,
-          year: YEAR_1,
+          pubYear: YEAR_1,
         );
         // act
-        final result = AlbumModel.fromMoor(moorAlbum);
+        final result = AlbumModel.fromMoorAlbum(moorAlbum);
         // assert
         expect(result, expected);
       },
@@ -89,10 +93,10 @@ void main() {
         final expected = AlbumModel(
           artist: ARTIST_1,
           title: ALBUM_TITLE_1,
-          year: YEAR_1,
+          pubYear: YEAR_1,
         );
         // act
-        final result = AlbumModel.fromMoor(moorAlbum);
+        final result = AlbumModel.fromMoorAlbum(moorAlbum);
         // assert
         expect(result, expected);
       },
@@ -114,7 +118,7 @@ void main() {
           albumArtPath: ALBUM_ART_PATH_1,
         );
         // act
-        final result = AlbumModel.fromMoor(moorAlbum);
+        final result = AlbumModel.fromMoorAlbum(moorAlbum);
         // assert
         expect(result, expected);
       },
@@ -142,7 +146,7 @@ void main() {
           title: ALBUM_TITLE_1,
           artist: ARTIST_1,
           albumArtPath: ALBUM_ART_PATH_1,
-          year: FIRST_YEAR_1,
+          pubYear: FIRST_YEAR_1,
         );
         // act
         final result = AlbumModel.fromAlbumInfo(mockAlbumInfo);

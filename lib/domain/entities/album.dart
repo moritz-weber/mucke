@@ -6,14 +6,14 @@ class Album extends Equatable {
     @required this.title,
     @required this.artist,
     this.albumArtPath,
-    this.year,
+    this.pubYear,
   });
 
   final String title;
   final String artist;
-  final int year;
+  final int pubYear;
   final String albumArtPath;
 
   @override
-  List<Object> get props => [title, artist, albumArtPath, year];
+  List<Object> get props => [title, artist, albumArtPath, pubYear];
 }

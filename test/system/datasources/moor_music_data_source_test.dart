@@ -17,7 +17,7 @@ void main() {
       title: ALBUM_TITLE_1,
       artist: ARTIST_1,
       albumArtPath: ALBUM_ART_PATH_1,
-      year: YEAR_1,
+      pubYear: YEAR_1,
     );
   });
 
