@@ -32,11 +32,9 @@ abstract class _MusicStore with Store {
   @action
   Future<void> updateDatabase() async {
     isUpdatingDatabase = true;
-    await Future.delayed(Duration(seconds: 5));
+    await _updateDatabase();
     isUpdatingDatabase = false;
-
-    // await _updateDatabase();
-    // fetchAlbums();
+    fetchAlbums();
   }
 
   @action

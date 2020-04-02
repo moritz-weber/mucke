@@ -44,13 +44,13 @@ class _CurrentlyPlayingPageState extends State<CurrentlyPlayingPage> {
                       ],
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     ),
-                    Spacer(),
+                    const Spacer(),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: AlbumArt(),
                     ),
-                    Spacer(
-                      flex: 3,
+                    const Spacer(
+                      flex: 4,
                     ),
                     Row(
                       children: [
@@ -76,31 +76,31 @@ class _CurrentlyPlayingPageState extends State<CurrentlyPlayingPage> {
                       ],
                       mainAxisAlignment: MainAxisAlignment.center,
                     ),
-                    Container(
-                      height: 24,
+                    const Spacer(
+                      flex: 3,
                     ),
                     TimeProgressIndicator(),
-                    Container(
-                      height: 20,
+                    const Spacer(
+                      flex: 3,
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Row(
                         children: [
                           Icon(Icons.repeat, size: 20.0),
-                          Icon(Icons.skip_previous, size: 40.0),
+                          Icon(Icons.skip_previous, size: 32.0),
                           Icon(
                             Icons.play_circle_filled,
-                            size: 64.0,
+                            size: 52.0,
                           ),
-                          Icon(Icons.skip_next, size: 40.0),
+                          Icon(Icons.skip_next, size: 32.0),
                           Icon(Icons.shuffle, size: 20.0),
                         ],
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       ),
                     ),
                     Container(
-                      height: 72,
+                      height: 64,
                     ),
                   ],
                 ),
