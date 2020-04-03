@@ -37,7 +37,7 @@ class SettingsPage extends StatelessWidget {
             if (albumsFuture.status == FutureStatus.fulfilled && !isFetchingSongs) {
                 final int albumCount = (albumsFuture.result as List).length;
                 final int songCount = store.songs.length;
-                return Text('XX artsts, $albumCount albums, $songCount songs');
+                return Text('XX artists, $albumCount albums, $songCount songs');
             }
             return const Text('');
           }),

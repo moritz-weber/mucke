@@ -51,7 +51,6 @@ class _RootPageState extends State<RootPage> {
 
   List<Widget> _pages;
   MusicStore _musicStore;
-  final PageStorageBucket _bucket = PageStorageBucket();
 
   @override
   void didChangeDependencies() {
@@ -76,9 +75,9 @@ class _RootPageState extends State<RootPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageStorage(
-        child: _pages[navIndex],
-        bucket: _bucket,
+      body: IndexedStack(
+        index: navIndex,
+        children: _pages,
       ),
       bottomNavigationBar: NavBar(
         onTap: (int index) {

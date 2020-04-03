@@ -14,18 +14,14 @@ class SongsPage extends StatefulWidget {
   _SongsPageState createState() => _SongsPageState();
 }
 
-class _SongsPageState extends State<SongsPage> {
-  ScrollController _scrollController;
-
+class _SongsPageState extends State<SongsPage>
+    with AutomaticKeepAliveClientMixin {
   @override
-  void initState() {
-    print('SongsPageState initState');
-    _scrollController = ScrollController();
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) => Observer(builder: (_) {
+  Widget build(BuildContext context) {
+    print('SongsPage.build');
+    
+    super.build(context);
+    return Observer(builder: (_) {
         final bool isFetching = widget.store.isFetchingSongs;
 
         if (isFetching) {
@@ -39,13 +35,10 @@ class _SongsPageState extends State<SongsPage> {
         } else {
           final List<Song> songs = widget.store.songs;
           return ListView.separated(
-            controller: _scrollController,
             itemCount: songs.length,
             itemBuilder: (_, int index) {
               final Song song = songs[index];
               return AlbumArtListTile(
-                key: PageStorageKey(
-                    '${song.title}_${song.album}_${song.artist}'),
                 title: song.title,
                 subtitle: '${song.artist} • ${song.album}',
                 albumArtPath: song.albumArtPath,
@@ -57,4 +50,8 @@ class _SongsPageState extends State<SongsPage> {
           );
         }
       });
+  }
+
+  @override
+  bool get wantKeepAlive => true;
 }

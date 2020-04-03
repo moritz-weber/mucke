@@ -22,7 +22,6 @@ abstract class _MusicStore with Store {
         _getAlbums = GetAlbums(_musicDataRepository),
         _getSongs = GetSongs(_musicDataRepository);
 
-  // final MusicDataRepository _musicDataRepository;
   final UpdateDatabase _updateDatabase;
   final GetAlbums _getAlbums;
   final GetSongs _getSongs;
@@ -48,7 +47,7 @@ abstract class _MusicStore with Store {
   }
 
   @action
-  Future<void> fetchAlbums() {
+  Future<void> fetchAlbums() async {
     albumsFuture = ObservableFuture<List<Album>>(
       _getAlbums().then(
         (Either<Failure, List<Album>> either) => either.fold(
@@ -57,9 +56,9 @@ abstract class _MusicStore with Store {
         ),
       ),
     );
-    return null;
   }
 
+  @action
   Future<void> fetchSongs() async {
     isFetchingSongs = true;
     final result = await _getSongs();
