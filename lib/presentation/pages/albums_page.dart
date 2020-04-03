@@ -14,6 +14,7 @@ class AlbumsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Observer(builder: (_) {
+        print('AlbumsPage.build');
         final ObservableFuture<List<Album>> future = store.albumsFuture;
 
         switch (future.status) {

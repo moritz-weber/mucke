@@ -49,7 +49,6 @@ class MoorMusicDataSource extends _$MoorMusicDataSource
   }
 
   // TODO: insert can throw exception -> implications?
-  // TODO: use companion instead: https://moor.simonbinder.eu/docs/getting-started/writing_queries/
   @override
   Future<void> insertAlbum(AlbumModel albumModel) async {
     await into(albums).insert(albumModel.toAlbumsCompanion());
@@ -64,8 +63,21 @@ class MoorMusicDataSource extends _$MoorMusicDataSource
 
   @override
   Future<List<SongModel>> getSongs() {
-    // TODO: implement getSongs
-    return null;
+    return select(songs).get().then((moorSongList) => moorSongList
+        .map((moorSong) => SongModel.fromMoorSong(moorSong))
+        .toList());
+  }
+
+  @override
+  Future<void> insertSong(SongModel songModel) async {
+    await into(songs).insert(songModel.toSongsCompanion());
+    return;
+  }
+
+  @override
+  Future<bool> songExists(SongModel songModel) async {
+    final List<SongModel> songList = await getSongs();
+    return songList.contains(songModel);
   }
 }
 

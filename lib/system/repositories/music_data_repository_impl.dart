@@ -42,5 +42,13 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
         musicDataSource.insertAlbum(album);
       }
     }
+
+    final List<SongModel> songs = await localMusicFetcher.getSongs();
+
+    for (final SongModel song in songs) {
+      if (!await musicDataSource.songExists(song)) {
+        musicDataSource.insertSong(song);
+      }
+    }
   }
 }

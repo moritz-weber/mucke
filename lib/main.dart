@@ -51,16 +51,24 @@ class _RootPageState extends State<RootPage> {
 
   List<Widget> _pages;
   MusicStore _musicStore;
+  final PageStorageBucket _bucket = PageStorageBucket();
 
   @override
   void didChangeDependencies() {
     _musicStore = Provider.of<MusicStore>(context);
     _musicStore.fetchAlbums();
+    _musicStore.fetchSongs();
 
     _pages = <Widget>[
       HomePage(),
-      LibraryPage(store: _musicStore),
-      SettingsPage(store: _musicStore),
+      LibraryPage(
+        key: const PageStorageKey('LibraryPage'),
+        store: _musicStore,
+      ),
+      SettingsPage(
+        key: const PageStorageKey('SettingsPage'),
+        store: _musicStore,
+      ),
     ];
     super.didChangeDependencies();
   }
@@ -68,7 +76,10 @@ class _RootPageState extends State<RootPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[navIndex],
+      body: PageStorage(
+        child: _pages[navIndex],
+        bucket: _bucket,
+      ),
       bottomNavigationBar: NavBar(
         onTap: (int index) {
           setState(() {

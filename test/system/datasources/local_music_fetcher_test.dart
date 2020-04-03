@@ -3,11 +3,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mosh/system/datasources/local_music_fetcher.dart';
 import 'package:mosh/system/models/album_model.dart';
+import 'package:mosh/system/models/song_model.dart';
 import '../../test_constants.dart';
 
 class MockFlutterAudioQuery extends Mock implements FlutterAudioQuery {}
 
 class MockAlbumInfo extends Mock implements AlbumInfo {}
+
+class MockSongInfo extends Mock implements SongInfo {}
 
 void main() {
   LocalMusicFetcherImpl localMusicFetcher;
@@ -56,6 +59,50 @@ void main() {
         ];
         // act
         final List<AlbumModel> result = await localMusicFetcher.getAlbums();
+        // assert
+        expect(result, expected);
+      },
+    );
+  });
+
+  group('getSongs', () {
+    MockSongInfo mockSongInfo;
+
+    setUp(() {
+      mockSongInfo = MockSongInfo();
+      when(mockSongInfo.title).thenReturn(SONG_TITLE_3);
+      when(mockSongInfo.album).thenReturn(ALBUM_TITLE_3);
+      when(mockSongInfo.artist).thenReturn(ARTIST_3);
+      when(mockSongInfo.filePath).thenReturn(PATH_3);
+      when(mockSongInfo.track).thenReturn(TRACKNUMBER_3.toString());
+      when(mockSongInfo.albumArtwork).thenReturn(ALBUM_ART_PATH_3);
+    });
+
+    test(
+      'should fetch list of songs from FlutterAudioQuery',
+      () async {
+        // arrange
+        when(mockFlutterAudioQuery.getSongs())
+            .thenAnswer((_) async => <SongInfo>[mockSongInfo]);
+        // act
+        await localMusicFetcher.getSongs();
+        // assert
+        verify(mockFlutterAudioQuery.getSongs());
+      },
+    );
+
+    test(
+      'should return songs as List<SongModel>',
+      () async {
+        // arrange
+        when(mockFlutterAudioQuery.getSongs())
+            .thenAnswer((_) async => <SongInfo>[mockSongInfo]);
+
+        final List<SongModel> expected = <SongModel>[
+          SongModel.fromSongInfo(mockSongInfo),
+        ];
+        // act
+        final List<SongModel> result = await localMusicFetcher.getSongs();
         // assert
         expect(result, expected);
       },

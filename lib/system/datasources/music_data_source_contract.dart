@@ -7,4 +7,6 @@ abstract class MusicDataSource {
   Future<void> insertAlbum(AlbumModel albumModel);
 
   Future<List<SongModel>> getSongs();
+  Future<bool> songExists(SongModel songModel);
+  Future<void> insertSong(SongModel songModel);
 }

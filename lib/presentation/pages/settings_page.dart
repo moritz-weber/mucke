@@ -33,9 +33,11 @@ class SettingsPage extends StatelessWidget {
           subtitle: Observer(builder: (_) {
             final ObservableFuture<List<Album>> albumsFuture =
                 store.albumsFuture;
-            if (albumsFuture.status == FutureStatus.fulfilled) {
+            final bool isFetchingSongs = store.isFetchingSongs;
+            if (albumsFuture.status == FutureStatus.fulfilled && !isFetchingSongs) {
                 final int albumCount = (albumsFuture.result as List).length;
-                return Text('XX artsts, $albumCount albums, XXXX songs');
+                final int songCount = store.songs.length;
+                return Text('XX artsts, $albumCount albums, $songCount songs');
             }
             return const Text('');
           }),
