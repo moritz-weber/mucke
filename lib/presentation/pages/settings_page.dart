@@ -14,10 +14,13 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       children: [
+        Container(
+          height: 12.0,
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 16.0,
-            vertical: 12.0,
+            vertical: 4.0,
           ),
           child: Text(
             'Library',
@@ -27,17 +30,17 @@ class SettingsPage extends StatelessWidget {
             ),
           ),
         ),
-        // const Divider(),
         ListTile(
           title: const Text('Update library'),
           subtitle: Observer(builder: (_) {
             final ObservableFuture<List<Album>> albumsFuture =
                 store.albumsFuture;
             final bool isFetchingSongs = store.isFetchingSongs;
-            if (albumsFuture.status == FutureStatus.fulfilled && !isFetchingSongs) {
-                final int albumCount = (albumsFuture.result as List).length;
-                final int songCount = store.songs.length;
-                return Text('XX artists, $albumCount albums, $songCount songs');
+            if (albumsFuture.status == FutureStatus.fulfilled &&
+                !isFetchingSongs) {
+              final int albumCount = (albumsFuture.result as List).length;
+              final int songCount = store.songs.length;
+              return Text('XX artists, $albumCount albums, $songCount songs');
             }
             return const Text('');
           }),
@@ -54,13 +57,17 @@ class SettingsPage extends StatelessWidget {
             );
           }),
         ),
-        const Divider(),
+        const Divider(
+          height: 4.0,
+        ),
         ListTile(
           title: Text('Select library folders'),
           trailing: Icon(Icons.chevron_right),
           onTap: () {},
         ),
-        const Divider(),
+        const Divider(
+          height: 4.0,
+        ),
       ],
     );
   }

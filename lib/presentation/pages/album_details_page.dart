@@ -13,7 +13,9 @@ class AlbumDetailsPage extends StatelessWidget {
     return SafeArea(
       child: Column(
         children: <Widget>[
-          utils.getAlbumImage(album.albumArtPath),
+          Image(
+            image: utils.getAlbumImage(album.albumArtPath),
+          ),
         ],
       ),
     );

@@ -41,9 +41,11 @@ abstract class _MusicStore with Store {
   Future<void> updateDatabase() async {
     isUpdatingDatabase = true;
     await _updateDatabase();
+    await Future.wait([
+      fetchAlbums(),
+      fetchSongs(),
+    ]);
     isUpdatingDatabase = false;
-    fetchAlbums();
-    fetchSongs();
   }
 
   @action

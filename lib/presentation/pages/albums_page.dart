@@ -61,7 +61,9 @@ class AlbumsPage extends StatelessWidget {
                 );
               },
               separatorBuilder: (BuildContext context, int index) =>
-                  const Divider(),
+                  const Divider(
+                height: 4.0,
+              ),
             );
         }
         return const Center(

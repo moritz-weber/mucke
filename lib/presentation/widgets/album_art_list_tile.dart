@@ -14,17 +14,14 @@ class AlbumArtListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('$title');
     return ListTile(
-      leading: Card(
-        child: Container(
-          height: 56,
-          width: 56,
-          child: utils.getAlbumImage(albumArtPath),
-        ),
-        clipBehavior: Clip.antiAlias,
-        margin: const EdgeInsets.all(0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(2.0),
+      leading: SizedBox(
+        height: 56,
+        width: 56,
+        child: Image(
+          image: utils.getAlbumImage(albumArtPath),
+          fit: BoxFit.cover,
         ),
       ),
       title: Text(
