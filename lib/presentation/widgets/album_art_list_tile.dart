@@ -14,7 +14,6 @@ class AlbumArtListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('$title');
     return ListTile(
       leading: SizedBox(
         height: 56,

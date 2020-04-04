@@ -17,31 +17,6 @@ class SongsPage extends StatefulWidget {
 
 class _SongsPageState extends State<SongsPage>
     with AutomaticKeepAliveClientMixin {
-  ReactionDisposer _dispose;
-  bool _changeIndicator = false;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    _dispose = reaction(
-      (_) => widget.store.isUpdatingDatabase,
-      (bool isUpdating) {
-        if (!isUpdating) {
-          setState(() {
-            _changeIndicator = !_changeIndicator;
-          });
-        }
-      },
-    );
-  }
-
-  @override
-  void dispose() {
-    print('SongsPage.dispose');
-    super.dispose();
-    _dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +24,7 @@ class _SongsPageState extends State<SongsPage>
 
     super.build(context);
     return Observer(builder: (_) {
+      print('SongsPage.build -> Observer.builder');
       final bool isFetching = widget.store.isFetchingSongs;
 
       if (isFetching) {

@@ -31,6 +31,7 @@ abstract class _MusicStore with Store {
 
   @observable
   ObservableList<Song> songs = <Song>[].asObservable();
+
   @observable
   bool isFetchingSongs = false;
 
@@ -67,8 +68,12 @@ abstract class _MusicStore with Store {
 
     result.fold(
       (_) => songs = <Song>[].asObservable(),
-      (songList) => songs = songList.asObservable(),
+      (songList) {
+        songs.clear();
+        songs.addAll(songList);
+      },
     );
+
     isFetchingSongs = false;
   }
 }
