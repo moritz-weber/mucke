@@ -12,8 +12,8 @@ ThemeData theme() => ThemeData(
       primaryColor: Colors.amber,
       accentColor: Colors.amberAccent,
       // https://api.flutter.dev/flutter/material/TextTheme-class.html
-      textTheme: TextTheme(
-        title: const TextStyle(fontSize: 20.0),
+      textTheme: const TextTheme(
+        title: TextStyle(fontSize: 20.0),
       ),
       tabBarTheme: TabBarTheme(
         labelColor: Colors.white,
