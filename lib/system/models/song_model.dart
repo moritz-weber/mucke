@@ -1,3 +1,4 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:meta/meta.dart';
 import 'package:moor/moor.dart';
@@ -54,5 +55,14 @@ class SongModel extends Song {
         path: Value(path),
         albumArtPath: Value(albumArtPath),
         trackNumber: Value(trackNumber),
+      );
+
+  // TODO: test!
+  MediaItem toMediaItem() => MediaItem(
+        title: title,
+        album: album,
+        artist: artist,
+        artUri: albumArtPath,
+        id: path,
       );
 }

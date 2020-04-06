@@ -1,3 +1,4 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
@@ -45,7 +46,7 @@ class _SongsPageState extends State<SongsPage>
               title: song.title,
               subtitle: '${song.artist} • ${song.album}',
               albumArtPath: song.albumArtPath,
-              onTap: () {},
+              onTap: () => _playSong(index, songs),
             );
           },
           separatorBuilder: (BuildContext context, int index) => const Divider(
@@ -58,4 +59,9 @@ class _SongsPageState extends State<SongsPage>
 
   @override
   bool get wantKeepAlive => true;
+
+  void _playSong(int index, List<Song> songList) {
+    widget.store.playSong(index, songList);
+    // AudioService.playFromMediaId(songList[index].path);
+  }
 }

@@ -88,7 +88,8 @@ void main() {
       'should get songs from MusicDataSource',
       () async {
         // arrange
-        when(mockMusicDataSource.getSongs()).thenAnswer((_) async => tEmptySongList);
+        when(mockMusicDataSource.getSongs())
+            .thenAnswer((_) async => tEmptySongList);
         // act
         final result = await repository.getSongs();
         // assert
@@ -99,13 +100,18 @@ void main() {
   });
 
   group('updateDatabase', () {
-    setUp(() {});
+    setUp(() {
+      when(mockLocalMusicFetcher.getSongs())
+          .thenAnswer((_) async => tEmptySongList);
+      when(mockMusicDataSource.songExists(any)).thenAnswer((_) async => false);
+    });
 
     test(
       'should fetch list of albums from LocalMusicFetcher',
       () async {
         when(mockLocalMusicFetcher.getAlbums())
             .thenAnswer((_) async => tAlbumList);
+
         when(mockMusicDataSource.albumExists(any))
             .thenAnswer((_) async => false);
         // act
