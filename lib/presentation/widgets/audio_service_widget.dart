@@ -21,6 +21,7 @@ class _AudioServiceWidgetState extends State<AudioServiceWidget>
 
   @override
   void dispose() {
+    AudioService.stop();
     AudioService.disconnect();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();

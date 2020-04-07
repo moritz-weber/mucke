@@ -12,10 +12,10 @@ import '../../domain/usecases/get_albums.dart';
 import '../../domain/usecases/get_songs.dart';
 import '../../domain/usecases/update_database.dart';
 
-part 'music_store.g.dart';
+part 'music_data_store.g.dart';
 
-class MusicStore extends _MusicStore with _$MusicStore {
-  MusicStore({@required MusicDataRepository musicDataRepository, @required AudioRepository audioRepository})
+class MusicDataStore extends _MusicStore with _$MusicDataStore {
+  MusicDataStore({@required MusicDataRepository musicDataRepository, @required AudioRepository audioRepository})
       : super(musicDataRepository, audioRepository);
 }
 

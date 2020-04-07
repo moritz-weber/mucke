@@ -1,16 +1,13 @@
-import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mobx/mobx.dart';
+import 'package:provider/provider.dart';
 
 import '../../domain/entities/song.dart';
-import '../state/music_store.dart';
+import '../state/music_data_store.dart';
 import '../widgets/album_art_list_tile.dart';
 
 class SongsPage extends StatefulWidget {
-  SongsPage({Key key, @required this.store}) : super(key: key);
-
-  final MusicStore store;
+  SongsPage({Key key}) : super(key: key);
 
   @override
   _SongsPageState createState() => _SongsPageState();
@@ -22,11 +19,12 @@ class _SongsPageState extends State<SongsPage>
   @override
   Widget build(BuildContext context) {
     print('SongsPage.build');
+    final MusicDataStore store = Provider.of<MusicDataStore>(context);
 
     super.build(context);
     return Observer(builder: (_) {
       print('SongsPage.build -> Observer.builder');
-      final bool isFetching = widget.store.isFetchingSongs;
+      final bool isFetching = store.isFetchingSongs;
 
       if (isFetching) {
         return Column(
@@ -37,7 +35,7 @@ class _SongsPageState extends State<SongsPage>
           ],
         );
       } else {
-        final List<Song> songs = widget.store.songs;
+        final List<Song> songs = store.songs;
         return ListView.separated(
           itemCount: songs.length,
           itemBuilder: (_, int index) {
@@ -46,7 +44,7 @@ class _SongsPageState extends State<SongsPage>
               title: song.title,
               subtitle: '${song.artist} • ${song.album}',
               albumArtPath: song.albumArtPath,
-              onTap: () => _playSong(index, songs),
+              onTap: () => store.playSong(index, songs),
             );
           },
           separatorBuilder: (BuildContext context, int index) => const Divider(
@@ -59,9 +57,4 @@ class _SongsPageState extends State<SongsPage>
 
   @override
   bool get wantKeepAlive => true;
-
-  void _playSong(int index, List<Song> songList) {
-    widget.store.playSong(index, songList);
-    // AudioService.playFromMediaId(songList[index].path);
-  }
 }

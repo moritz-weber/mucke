@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
+import 'package:provider/provider.dart';
 
 import '../../domain/entities/album.dart';
-import '../state/music_store.dart';
+import '../state/music_data_store.dart';
 
 class SettingsPage extends StatelessWidget {
-  const SettingsPage({Key key, @required this.store}) : super(key: key);
-
-  final MusicStore store;
+  const SettingsPage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final MusicDataStore store = Provider.of<MusicDataStore>(context);
+
     return ListView(
       children: [
         Container(
@@ -61,7 +62,7 @@ class SettingsPage extends StatelessWidget {
           height: 4.0,
         ),
         ListTile(
-          title: Text('Select library folders'),
+          title: const Text('Select library folders'),
           trailing: Icon(Icons.chevron_right),
           onTap: () {},
         ),

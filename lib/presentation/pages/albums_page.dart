@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
+import 'package:provider/provider.dart';
 
 import '../../domain/entities/album.dart';
-import '../state/music_store.dart';
+import '../state/music_data_store.dart';
 import '../widgets/album_art_list_tile.dart';
 import 'album_details_page.dart';
 
 class AlbumsPage extends StatelessWidget {
-  const AlbumsPage({Key key, @required this.store}) : super(key: key);
-
-  final MusicStore store;
+  const AlbumsPage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Observer(builder: (_) {
         print('AlbumsPage.build');
+        final MusicDataStore store = Provider.of<MusicDataStore>(context);
         final ObservableFuture<List<Album>> future = store.albumsFuture;
 
         switch (future.status) {

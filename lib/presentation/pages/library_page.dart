@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../state/music_store.dart';
 import 'albums_page.dart';
 import 'songs_page.dart';
 
 class LibraryPage extends StatefulWidget {
-  const LibraryPage({Key key, @required this.store}) : super(key: key);
-
-  final MusicStore store;
+  const LibraryPage({Key key}) : super(key: key);
 
   @override
   _LibraryPageState createState() => _LibraryPageState();
@@ -43,11 +40,9 @@ class _LibraryPageState extends State<LibraryPage> {
                   ),
                   AlbumsPage(
                     key: const PageStorageKey('AlbumsPage'),
-                    store: widget.store,
                   ),
                   SongsPage(
                     key: const PageStorageKey('SongsPage'),
-                    store: widget.store,
                   ),
                 ],
               ),

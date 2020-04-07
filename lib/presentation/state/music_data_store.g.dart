@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'music_store.dart';
+part of 'music_data_store.dart';
 
 // **************************************************************************
 // StoreGenerator
@@ -8,7 +8,7 @@ part of 'music_store.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
-mixin _$MusicStore on _MusicStore, Store {
+mixin _$MusicDataStore on _MusicStore, Store {
   final _$albumsFutureAtom = Atom(name: '_MusicStore.albumsFuture');
 
   @override

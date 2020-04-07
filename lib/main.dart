@@ -1,21 +1,17 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_audio_query/flutter_audio_query.dart';
+import 'package:mosh/presentation/widgets/injection_widget.dart';
 import 'package:provider/provider.dart';
 
 import 'presentation/pages/home_page.dart';
 import 'presentation/pages/library_page.dart';
 import 'presentation/pages/settings_page.dart';
-import 'presentation/state/music_store.dart';
+import 'presentation/state/music_data_store.dart';
 import 'presentation/theming.dart';
 import 'presentation/widgets/audio_service_widget.dart';
 import 'presentation/widgets/navbar.dart';
 import 'system/datasources/audio_manager.dart';
-import 'system/datasources/local_music_fetcher.dart';
-import 'system/datasources/moor_music_data_source.dart';
-import 'system/repositories/audio_repository_impl.dart';
-import 'system/repositories/music_data_repository_impl.dart';
 
 void main() => runApp(MyApp());
 
@@ -28,18 +24,11 @@ class MyApp extends StatelessWidget {
     ]);
 
     return MaterialApp(
-      title: 'mosh',
+      title: 'mucke',
       theme: theme(),
-      home: AudioServiceWidget(
-        child: Provider<MusicStore>(
-          child: const RootPage(),
-          create: (BuildContext context) => MusicStore(
-            musicDataRepository: MusicDataRepositoryImpl(
-              localMusicFetcher: LocalMusicFetcherImpl(FlutterAudioQuery()),
-              musicDataSource: MoorMusicDataSource(),
-            ),
-            audioRepository: AudioRepositoryImpl(AudioManagerImpl()),
-          ),
+      home: const AudioServiceWidget(
+        child: InjectionWidget(
+          child: RootPage(),
         ),
       ),
     );
@@ -56,35 +45,26 @@ class RootPage extends StatefulWidget {
 class _RootPageState extends State<RootPage> {
   var navIndex = 0;
 
-  List<Widget> _pages;
-  MusicStore _musicStore;
+  final List<Widget> _pages = <Widget>[
+    HomePage(),
+    const LibraryPage(
+      key: PageStorageKey('LibraryPage'),
+    ),
+    const SettingsPage(
+      key: PageStorageKey('SettingsPage'),
+    ),
+  ];
 
   @override
   void didChangeDependencies() {
-    _musicStore = Provider.of<MusicStore>(context);
+    final MusicDataStore _musicStore = Provider.of<MusicDataStore>(context);
     _musicStore.fetchAlbums();
     _musicStore.fetchSongs();
 
+    // TODO: don't do this here...
     AudioService.start(backgroundTaskEntrypoint: _backgroundTaskEntrypoint);
 
-    _pages = <Widget>[
-      HomePage(),
-      LibraryPage(
-        key: const PageStorageKey('LibraryPage'),
-        store: _musicStore,
-      ),
-      SettingsPage(
-        key: const PageStorageKey('SettingsPage'),
-        store: _musicStore,
-      ),
-    ];
     super.didChangeDependencies();
-  }
-
-  @override
-  void dispose() {
-    AudioService.stop();
-    super.dispose();
   }
 
   @override
