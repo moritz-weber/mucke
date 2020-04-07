@@ -8,8 +8,8 @@ part of 'music_data_store.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
-mixin _$MusicDataStore on _MusicStore, Store {
-  final _$albumsFutureAtom = Atom(name: '_MusicStore.albumsFuture');
+mixin _$MusicDataStore on _MusicDataStore, Store {
+  final _$albumsFutureAtom = Atom(name: '_MusicDataStore.albumsFuture');
 
   @override
   ObservableFuture<List<Album>> get albumsFuture {
@@ -26,7 +26,7 @@ mixin _$MusicDataStore on _MusicStore, Store {
     }, _$albumsFutureAtom, name: '${_$albumsFutureAtom.name}_set');
   }
 
-  final _$songsAtom = Atom(name: '_MusicStore.songs');
+  final _$songsAtom = Atom(name: '_MusicDataStore.songs');
 
   @override
   ObservableList<Song> get songs {
@@ -43,7 +43,7 @@ mixin _$MusicDataStore on _MusicStore, Store {
     }, _$songsAtom, name: '${_$songsAtom.name}_set');
   }
 
-  final _$isFetchingSongsAtom = Atom(name: '_MusicStore.isFetchingSongs');
+  final _$isFetchingSongsAtom = Atom(name: '_MusicDataStore.isFetchingSongs');
 
   @override
   bool get isFetchingSongs {
@@ -60,7 +60,8 @@ mixin _$MusicDataStore on _MusicStore, Store {
     }, _$isFetchingSongsAtom, name: '${_$isFetchingSongsAtom.name}_set');
   }
 
-  final _$isUpdatingDatabaseAtom = Atom(name: '_MusicStore.isUpdatingDatabase');
+  final _$isUpdatingDatabaseAtom =
+      Atom(name: '_MusicDataStore.isUpdatingDatabase');
 
   @override
   bool get isUpdatingDatabase {
@@ -97,13 +98,6 @@ mixin _$MusicDataStore on _MusicStore, Store {
   @override
   Future<void> fetchSongs() {
     return _$fetchSongsAsyncAction.run(() => super.fetchSongs());
-  }
-
-  final _$playSongAsyncAction = AsyncAction('playSong');
-
-  @override
-  Future<void> playSong(int index, List<Song> songList) {
-    return _$playSongAsyncAction.run(() => super.playSong(index, songList));
   }
 
   @override

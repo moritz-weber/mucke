@@ -11,7 +11,7 @@ class AudioManagerImpl implements AudioManager {
   Future<void> playSong(int index, List<SongModel> songList) async {
     final List<MediaItem> queue = songList.map((s) => s.toMediaItem()).toList();
 
-    // await AudioService.addQueueItem(queue[index]);
+    await AudioService.addQueueItem(queue[index]);
     AudioService.playFromMediaId(queue[index].id);
   }
 }
@@ -25,6 +25,12 @@ class AudioPlayerTask extends BackgroundAudioTask {
   @override
   Future<void> onStart() async {
     print('onStart');
+
+    AudioServiceBackground.setState(
+      controls: [pauseControl, stopControl],
+      basicState: BasicPlaybackState.playing,
+    );
+
     await _completer.future;
   }
 
@@ -41,8 +47,43 @@ class AudioPlayerTask extends BackgroundAudioTask {
 
   @override
   Future<void> onPlayFromMediaId(String mediaId) async {
-    // _audioPlayer.setFilePath(_mediaItems[mediaId].id);
+
+    // await _audioPlayer.setFilePath(_mediaItems[mediaId]);
+    AudioServiceBackground.setMediaItem(_mediaItems[mediaId]);
+
     await _audioPlayer.setFilePath(mediaId);
     _audioPlayer.play();
   }
+
+  @override
+  Future<void> onPlay() async {
+    AudioServiceBackground.setState(
+        controls: [pauseControl, stopControl],
+        basicState: BasicPlaybackState.playing);
+    _audioPlayer.play();
+  }
+
+  @override
+  Future<void> onPause() async {
+    AudioServiceBackground.setState(
+        controls: [playControl, stopControl],
+        basicState: BasicPlaybackState.paused);
+    await _audioPlayer.pause();
+  }
 }
+
+MediaControl playControl = const MediaControl(
+  androidIcon: 'drawable/ic_action_play_arrow',
+  label: 'Play',
+  action: MediaAction.play,
+);
+MediaControl pauseControl = const MediaControl(
+  androidIcon: 'drawable/ic_action_pause',
+  label: 'Pause',
+  action: MediaAction.pause,
+);
+MediaControl stopControl = const MediaControl(
+  androidIcon: 'drawable/ic_action_stop',
+  label: 'Stop',
+  action: MediaAction.stop,
+);

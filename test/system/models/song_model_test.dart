@@ -74,7 +74,7 @@ void main() {
           title: SONG_TITLE_3,
           album: ALBUM_TITLE_3,
           artist: ARTIST_3,
-          artUri: ALBUM_ART_PATH_3,
+          artUri: 'file://$ALBUM_ART_PATH_3',
         );
 
         final songModel = SongModel(

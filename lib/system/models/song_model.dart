@@ -57,12 +57,11 @@ class SongModel extends Song {
         trackNumber: Value(trackNumber),
       );
 
-  // TODO: test!
   MediaItem toMediaItem() => MediaItem(
         title: title,
         album: album,
         artist: artist,
-        artUri: albumArtPath,
+        artUri: 'file://$albumArtPath',
         id: path,
       );
 }

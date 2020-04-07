@@ -62,7 +62,11 @@ class _RootPageState extends State<RootPage> {
     _musicStore.fetchSongs();
 
     // TODO: don't do this here...
-    AudioService.start(backgroundTaskEntrypoint: _backgroundTaskEntrypoint);
+    AudioService.start(
+      backgroundTaskEntrypoint: _backgroundTaskEntrypoint,
+      enableQueue: true,
+      androidStopOnRemoveTask: true,
+    );
 
     super.didChangeDependencies();
   }

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
+import 'package:mosh/domain/repositories/audio_repository.dart';
+import 'package:mosh/domain/repositories/music_data_repository.dart';
+import 'package:mosh/presentation/state/audio_store.dart';
 import 'package:mosh/presentation/state/music_data_store.dart';
 import 'package:mosh/system/datasources/audio_manager.dart';
 import 'package:mosh/system/datasources/local_music_fetcher.dart';
@@ -15,15 +18,29 @@ class InjectionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Provider<MusicDataStore>(
+    final MusicDataRepository musicDataRepository = MusicDataRepositoryImpl(
+      localMusicFetcher: LocalMusicFetcherImpl(FlutterAudioQuery()),
+      musicDataSource: MoorMusicDataSource(),
+    );
+
+    final AudioRepository audioRepository =
+        AudioRepositoryImpl(AudioManagerImpl());
+
+    return MultiProvider(
       child: child,
-      create: (BuildContext context) => MusicDataStore(
-        musicDataRepository: MusicDataRepositoryImpl(
-          localMusicFetcher: LocalMusicFetcherImpl(FlutterAudioQuery()),
-          musicDataSource: MoorMusicDataSource(),
+      providers: [
+        Provider<MusicDataStore>(
+          create: (BuildContext context) => MusicDataStore(
+            musicDataRepository: musicDataRepository,
+          ),
         ),
-        audioRepository: AudioRepositoryImpl(AudioManagerImpl()),
-      ),
+        Provider<AudioStore>(
+          create: (BuildContext context) => AudioStore(
+            musicDataRepository: musicDataRepository,
+            audioRepository: audioRepository,
+          ),
+        ),
+      ],
     );
   }
 }
