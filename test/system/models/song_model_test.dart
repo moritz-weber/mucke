@@ -1,3 +1,4 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -59,6 +60,39 @@ void main() {
         expect(result.path.value, expected.path.value);
         expect(result.albumArtPath.value, expected.albumArtPath.value);
         expect(result.trackNumber.value, expected.trackNumber.value);
+      },
+    );
+  });
+
+  group('toMediaItem', () {
+    test(
+      'should return valid MediaItem',
+      () async {
+        // arrange
+        final expected = MediaItem(
+          id: PATH_3,
+          title: SONG_TITLE_3,
+          album: ALBUM_TITLE_3,
+          artist: ARTIST_3,
+          artUri: ALBUM_ART_PATH_3,
+        );
+
+        final songModel = SongModel(
+          album: ALBUM_TITLE_3,
+          artist: ARTIST_3,
+          title: SONG_TITLE_3,
+          path: PATH_3,
+          albumArtPath: ALBUM_ART_PATH_3,
+          trackNumber: TRACKNUMBER_3,
+        );
+        // act
+        final result = songModel.toMediaItem();
+        // assert
+        expect(result.album, expected.album);
+        expect(result.artist, expected.artist);
+        expect(result.title, expected.title);
+        expect(result.id, expected.id);
+        expect(result.artUri, expected.artUri);
       },
     );
   });
