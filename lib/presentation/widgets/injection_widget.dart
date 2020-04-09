@@ -18,6 +18,8 @@ class InjectionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: this does not dispose correctly! use ProxyProvider
+
     final MusicDataRepository musicDataRepository = MusicDataRepositoryImpl(
       localMusicFetcher: LocalMusicFetcherImpl(FlutterAudioQuery()),
       musicDataSource: MoorMusicDataSource(),

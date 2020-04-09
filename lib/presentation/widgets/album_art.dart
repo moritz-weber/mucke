@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../../domain/entities/song.dart';
+import '../utils.dart';
+
 class AlbumArt extends StatelessWidget {
-  const AlbumArt({Key key}) : super(key: key);
+  const AlbumArt({Key key, this.song}) : super(key: key);
+
+  final Song song;
 
   @override
   Widget build(BuildContext context) {
@@ -10,10 +15,12 @@ class AlbumArt extends StatelessWidget {
       child: Card(
         elevation: 2.0,
         clipBehavior: Clip.antiAlias,
-        margin: EdgeInsets.all(0),
+        margin: const EdgeInsets.all(0),
         child: Stack(
           children: [
-            Image.asset('assets/twilight.jpg'),
+            Image(
+              image: getAlbumImage(song.albumArtPath),
+            ),
             Positioned(
               bottom: 0,
               left: 0,
@@ -24,13 +31,13 @@ class AlbumArt extends StatelessWidget {
                   gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: [
-                        const Color(0x00555555),
-                        const Color(0x77333333),
-                        const Color(0xCC111111),
-                        const Color(0xEE000000)
+                      colors: const [
+                        Color(0x00555555),
+                        Color(0x77333333),
+                        Color(0xCC111111),
+                        Color(0xEE000000)
                       ],
-                      stops: [
+                      stops: const [
                         0.0,
                         0.6,
                         0.8,
@@ -48,20 +55,20 @@ class AlbumArt extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      'Guardians of Asgaard',
+                      song.title,
                       style: Theme.of(context).textTheme.title,
                     ),
                     Container(
                       height: 4.0,
                     ),
-                    const Text(
-                      'Amon Amarth',
+                    Text(
+                      song.artist,
                       style: TextStyle(
                         color: Colors.white70,
                       ),
                     ),
-                    const Text(
-                      'Twilight of the Thunder God',
+                    Text(
+                      song.album,
                       style: TextStyle(
                         fontWeight: FontWeight.w300,
                         color: Colors.white70,

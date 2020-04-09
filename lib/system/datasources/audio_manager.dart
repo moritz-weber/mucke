@@ -8,12 +8,33 @@ import 'audio_manager_contract.dart';
 
 class AudioManagerImpl implements AudioManager {
   @override
+  Stream<SongModel> watchCurrentSong = AudioService.currentMediaItemStream.map(
+    (currentMediaItem) {
+      return SongModel.fromMediaItem(currentMediaItem);
+    },
+  );
+
+  @override
   Future<void> playSong(int index, List<SongModel> songList) async {
+    await _startAudioService();
     final List<MediaItem> queue = songList.map((s) => s.toMediaItem()).toList();
 
     await AudioService.addQueueItem(queue[index]);
     AudioService.playFromMediaId(queue[index].id);
   }
+
+  Future<void> _startAudioService() async {
+    if (!await AudioService.running) {
+      await AudioService.start(
+        backgroundTaskEntrypoint: _backgroundTaskEntrypoint,
+        enableQueue: true,
+      );
+    }
+  }
+}
+
+void _backgroundTaskEntrypoint() {
+  AudioServiceBackground.run(() => AudioPlayerTask());
 }
 
 class AudioPlayerTask extends BackgroundAudioTask {
@@ -24,13 +45,6 @@ class AudioPlayerTask extends BackgroundAudioTask {
 
   @override
   Future<void> onStart() async {
-    print('onStart');
-
-    AudioServiceBackground.setState(
-      controls: [pauseControl, stopControl],
-      basicState: BasicPlaybackState.playing,
-    );
-
     await _completer.future;
   }
 
@@ -47,11 +61,16 @@ class AudioPlayerTask extends BackgroundAudioTask {
 
   @override
   Future<void> onPlayFromMediaId(String mediaId) async {
+    AudioServiceBackground.setState(
+      controls: [pauseControl, stopControl],
+      basicState: BasicPlaybackState.playing,
+    );
 
-    // await _audioPlayer.setFilePath(_mediaItems[mediaId]);
-    AudioServiceBackground.setMediaItem(_mediaItems[mediaId]);
+    Future.wait([
+      AudioServiceBackground.setMediaItem(_mediaItems[mediaId]),
+      _audioPlayer.setFilePath(mediaId),
+    ]);
 
-    await _audioPlayer.setFilePath(mediaId);
     _audioPlayer.play();
   }
 

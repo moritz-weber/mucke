@@ -18,9 +18,39 @@ abstract class _AudioStore with Store {
   final MusicDataRepository _musicDataRepository;
   final AudioRepository _audioRepository;
 
+  ReactionDisposer _disposer;
+
+  @observable
+  ObservableStream<Song> currentSong;
+
+  @observable
+  Song song;
+
+  @action
+  Future<void> init() async {
+    currentSong = _audioRepository.watchCurrentSong.asObservable();
+
+    _disposer = autorun((_) {
+      updateSong(currentSong.value);
+    });
+  }
+
+  void dispose() {
+    _disposer();
+  }
+
   @action
   Future<void> playSong(int index, List<Song> songList) async {
     _audioRepository.playSong(index, songList);
+  }
+
+  @action
+  Future<void> updateSong(Song streamValue) async {
+    print('updateSong');
+    if (streamValue != null && streamValue != song) {
+      print('actually updating...');
+      song = streamValue;
+    }
   }
 
 }

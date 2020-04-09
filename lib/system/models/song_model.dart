@@ -46,6 +46,19 @@ class SongModel extends Song {
     );
   }
 
+  // TODO: test
+  factory SongModel.fromMediaItem(MediaItem mediaItem) {
+    final String artUri = mediaItem.artUri.replaceFirst('file://', '');
+
+    return SongModel(
+        title: mediaItem.title,
+        album: mediaItem.album,
+        artist: mediaItem.artist,
+        path: mediaItem.id,
+        albumArtPath: artUri,
+      );
+  }
+
   final int id;
 
   SongsCompanion toSongsCompanion() => SongsCompanion(

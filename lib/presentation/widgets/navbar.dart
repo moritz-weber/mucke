@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mosh/presentation/pages/currently_playing.dart';
+
+import 'currently_playing_bar.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({Key key, @required this.onTap, @required this.currentIndex})
@@ -24,77 +25,39 @@ class _NavBarState extends State<NavBar> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Container(
-            child: const LinearProgressIndicator(
-              value: 0.42,
-            ),
-            height: 2,
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute<Widget>(
-                    builder: (BuildContext context) => CurrentlyPlayingPage()),
-              );
-            },
-            child: Row(
-              children: <Widget>[
-                const Image(
-                  image: AssetImage('assets/twilight.jpg'),
-                  height: 64.0,
-                ),
-                Container(
-                  width: 10.0,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text('Guardians of Asgaard'),
-                    Text(
-                      "Amon Amarth",
-                      style: TextStyle(
-                        fontSize: 12.0,
-                        color: Colors.white70,
-                      ),
-                    )
-                  ],
-                ),
-                Spacer(),
-                IconButton(icon: Icon(Icons.favorite_border), onPressed: () {}),
-                IconButton(icon: Icon(Icons.pause), onPressed: () {}),
-                IconButton(icon: Icon(Icons.skip_next), onPressed: () {}),
-              ],
-            ),
-          ),
+          const CurrentlyPlayingBar(),
           Container(
             color: Colors.grey[850],
             height: 1.0,
           ),
           BottomNavigationBar(
-              backgroundColor: Colors.grey[900],
-              currentIndex: widget.currentIndex,
-              onTap: widget.onTap,
-              items: [
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.home),
-                    title: Text(
-                      "Home",
-                      style: _optionTextStyle,
-                    )),
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.library_music),
-                    title: Text(
-                      "Library",
-                      style: _optionTextStyle,
-                    )),
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.settings),
-                    title: Text(
-                      "Settings",
-                      style: _optionTextStyle,
-                    )),
-              ])
+            backgroundColor: Colors.grey[900],
+            currentIndex: widget.currentIndex,
+            onTap: widget.onTap,
+            items: [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                title: Text(
+                  'Home',
+                  style: _optionTextStyle,
+                ),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.library_music),
+                title: Text(
+                  'Library',
+                  style: _optionTextStyle,
+                ),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.settings),
+                title: Text(
+                  'Settings',
+                  style: _optionTextStyle,
+                ),
+              ),
+            ],
+          )
         ],
       ),
     );

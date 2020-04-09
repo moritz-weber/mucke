@@ -1,17 +1,17 @@
-import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mosh/presentation/widgets/injection_widget.dart';
 import 'package:provider/provider.dart';
 
+import 'presentation/pages/currently_playing.dart';
 import 'presentation/pages/home_page.dart';
 import 'presentation/pages/library_page.dart';
 import 'presentation/pages/settings_page.dart';
+import 'presentation/state/audio_store.dart';
 import 'presentation/state/music_data_store.dart';
 import 'presentation/theming.dart';
 import 'presentation/widgets/audio_service_widget.dart';
+import 'presentation/widgets/injection_widget.dart';
 import 'presentation/widgets/navbar.dart';
-import 'system/datasources/audio_manager.dart';
 
 void main() => runApp(MyApp());
 
@@ -23,12 +23,16 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
     ]);
 
-    return MaterialApp(
-      title: 'mucke',
-      theme: theme(),
-      home: const AudioServiceWidget(
-        child: InjectionWidget(
-          child: RootPage(),
+    return InjectionWidget(
+      child: AudioServiceWidget(
+      child: MaterialApp(
+        title: 'mucke',
+        theme: theme(),
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const RootPage(),
+          '/playing': (context) => const CurrentlyPlayingPage(),
+        },
         ),
       ),
     );
@@ -43,7 +47,7 @@ class RootPage extends StatefulWidget {
 }
 
 class _RootPageState extends State<RootPage> {
-  var navIndex = 0;
+  var navIndex = 1;
 
   final List<Widget> _pages = <Widget>[
     HomePage(),
@@ -61,14 +65,17 @@ class _RootPageState extends State<RootPage> {
     _musicStore.fetchAlbums();
     _musicStore.fetchSongs();
 
-    // TODO: don't do this here...
-    AudioService.start(
-      backgroundTaskEntrypoint: _backgroundTaskEntrypoint,
-      enableQueue: true,
-      androidStopOnRemoveTask: true,
-    );
+    final AudioStore _audioStore = Provider.of<AudioStore>(context);
+    _audioStore.init();
 
     super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    final AudioStore _audioStore = Provider.of<AudioStore>(context);
+    _audioStore.dispose();
+    super.dispose();
   }
 
   @override
@@ -88,8 +95,4 @@ class _RootPageState extends State<RootPage> {
       ),
     );
   }
-}
-
-void _backgroundTaskEntrypoint() {
-  AudioServiceBackground.run(() => AudioPlayerTask());
 }
