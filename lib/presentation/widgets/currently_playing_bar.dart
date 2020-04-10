@@ -6,6 +6,7 @@ import '../../domain/entities/song.dart';
 import '../pages/currently_playing.dart';
 import '../state/audio_store.dart';
 import '../utils.dart';
+import 'play_pause_button.dart';
 
 class CurrentlyPlayingBar extends StatelessWidget {
   const CurrentlyPlayingBar({Key key}) : super(key: key);
@@ -52,18 +53,17 @@ class CurrentlyPlayingBar extends StatelessWidget {
                       ],
                     ),
                     const Spacer(),
-                    IconButton(
-                      icon: Icon(Icons.favorite_border),
-                      onPressed: () {},
+                    // IconButton(
+                    //   icon: Icon(Icons.favorite_border),
+                    //   onPressed: () {},
+                    // ),
+                    const PlayPauseButton(
+                      circle: false,
                     ),
-                    IconButton(
-                      icon: Icon(Icons.pause),
-                      onPressed: () {},
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.skip_next),
-                      onPressed: () {},
-                    ),
+                    // IconButton(
+                    //   icon: Icon(Icons.skip_next),
+                    //   onPressed: () {},
+                    // ),
                   ],
                 ),
               ),

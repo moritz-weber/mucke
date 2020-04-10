@@ -6,6 +6,7 @@ import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
 import '../theming.dart';
 import '../widgets/album_art.dart';
+import '../widgets/play_pause_button.dart';
 import '../widgets/queue_card.dart';
 import '../widgets/time_progress_indicator.dart';
 
@@ -99,9 +100,9 @@ class CurrentlyPlayingPage extends StatelessWidget {
                             children: [
                               Icon(Icons.repeat, size: 20.0),
                               Icon(Icons.skip_previous, size: 32.0),
-                              Icon(
-                                Icons.play_circle_filled,
-                                size: 52.0,
+                              const PlayPauseButton(
+                                circle: true,
+                                iconSize: 52.0,
                               ),
                               Icon(Icons.skip_next, size: 32.0),
                               Icon(Icons.shuffle, size: 20.0),

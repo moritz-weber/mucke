@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../core/error/failures.dart';
+import '../../domain/entities/playback_state.dart';
 import '../../domain/entities/song.dart';
 import '../../domain/repositories/audio_repository.dart';
 import '../datasources/audio_manager_contract.dart';
@@ -12,7 +13,11 @@ class AudioRepositoryImpl implements AudioRepository {
   final AudioManager _audioManager;
 
   @override
-  Stream<Song> get watchCurrentSong => _audioManager.watchCurrentSong;
+  Stream<Song> get currentSongStream => _audioManager.currentSongStream;
+
+  @override
+  Stream<PlaybackState> get playbackStateStream =>
+      _audioManager.playbackStateStream;
 
   @override
   Future<Either<Failure, void>> playSong(int index, List<Song> songList) async {
@@ -24,5 +29,17 @@ class AudioRepositoryImpl implements AudioRepository {
       return Right(null);
     }
     return Left(IndexFailure());
+  }
+
+  @override
+  Future<Either<Failure, void>> play() async {
+    await _audioManager.play();
+    return Right(null);
+  }
+
+  @override
+  Future<Either<Failure, void>> pause() async {
+    await _audioManager.pause();
+    return Right(null);
   }
 }

@@ -79,6 +79,13 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
     }, _$isUpdatingDatabaseAtom, name: '${_$isUpdatingDatabaseAtom.name}_set');
   }
 
+  final _$initAsyncAction = AsyncAction('init');
+
+  @override
+  Future<void> init() {
+    return _$initAsyncAction.run(() => super.init());
+  }
+
   final _$updateDatabaseAsyncAction = AsyncAction('updateDatabase');
 
   @override

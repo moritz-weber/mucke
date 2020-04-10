@@ -50,7 +50,7 @@ class _RootPageState extends State<RootPage> {
   var navIndex = 1;
 
   final List<Widget> _pages = <Widget>[
-    HomePage(),
+    const HomePage(),
     const LibraryPage(
       key: PageStorageKey('LibraryPage'),
     ),
@@ -62,8 +62,7 @@ class _RootPageState extends State<RootPage> {
   @override
   void didChangeDependencies() {
     final MusicDataStore _musicStore = Provider.of<MusicDataStore>(context);
-    _musicStore.fetchAlbums();
-    _musicStore.fetchSongs();
+    _musicStore.init();
 
     final AudioStore _audioStore = Provider.of<AudioStore>(context);
     _audioStore.init();
@@ -80,6 +79,7 @@ class _RootPageState extends State<RootPage> {
 
   @override
   Widget build(BuildContext context) {
+    print('RootPage.build');
     return Scaffold(
       body: IndexedStack(
         index: navIndex,

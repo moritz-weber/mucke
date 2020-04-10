@@ -23,6 +23,8 @@ abstract class _MusicDataStore with Store {
         _getAlbums = GetAlbums(_musicDataRepository),
         _getSongs = GetSongs(_musicDataRepository);
 
+  bool _initialized = false;
+
   final UpdateDatabase _updateDatabase;
   final GetAlbums _getAlbums;
   final GetSongs _getSongs;
@@ -38,6 +40,17 @@ abstract class _MusicDataStore with Store {
 
   @observable
   bool isUpdatingDatabase = false;
+
+  @action
+  Future<void> init() async {
+    if (!_initialized) {
+      print('MusicDataStore.init');
+      fetchAlbums();
+      fetchSongs();
+
+      _initialized = true;
+    }
+  }
 
   @action
   Future<void> updateDatabase() async {

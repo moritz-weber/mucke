@@ -43,6 +43,26 @@ mixin _$AudioStore on _AudioStore, Store {
     }, _$songAtom, name: '${_$songAtom.name}_set');
   }
 
+  final _$playbackStateStreamAtom =
+      Atom(name: '_AudioStore.playbackStateStream');
+
+  @override
+  ObservableStream<PlaybackState> get playbackStateStream {
+    _$playbackStateStreamAtom.context
+        .enforceReadPolicy(_$playbackStateStreamAtom);
+    _$playbackStateStreamAtom.reportObserved();
+    return super.playbackStateStream;
+  }
+
+  @override
+  set playbackStateStream(ObservableStream<PlaybackState> value) {
+    _$playbackStateStreamAtom.context.conditionallyRunInAction(() {
+      super.playbackStateStream = value;
+      _$playbackStateStreamAtom.reportChanged();
+    }, _$playbackStateStreamAtom,
+        name: '${_$playbackStateStreamAtom.name}_set');
+  }
+
   final _$initAsyncAction = AsyncAction('init');
 
   @override
@@ -57,6 +77,20 @@ mixin _$AudioStore on _AudioStore, Store {
     return _$playSongAsyncAction.run(() => super.playSong(index, songList));
   }
 
+  final _$playAsyncAction = AsyncAction('play');
+
+  @override
+  Future<void> play() {
+    return _$playAsyncAction.run(() => super.play());
+  }
+
+  final _$pauseAsyncAction = AsyncAction('pause');
+
+  @override
+  Future<void> pause() {
+    return _$pauseAsyncAction.run(() => super.pause());
+  }
+
   final _$updateSongAsyncAction = AsyncAction('updateSong');
 
   @override
@@ -67,7 +101,7 @@ mixin _$AudioStore on _AudioStore, Store {
   @override
   String toString() {
     final string =
-        'currentSong: ${currentSong.toString()},song: ${song.toString()}';
+        'currentSong: ${currentSong.toString()},song: ${song.toString()},playbackStateStream: ${playbackStateStream.toString()}';
     return '{$string}';
   }
 }

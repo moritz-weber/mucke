@@ -16,10 +16,14 @@ class AlbumArt extends StatelessWidget {
         elevation: 2.0,
         clipBehavior: Clip.antiAlias,
         margin: const EdgeInsets.all(0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(2.0),
+        ),
         child: Stack(
           children: [
             Image(
               image: getAlbumImage(song.albumArtPath),
+              fit: BoxFit.cover,
             ),
             Positioned(
               bottom: 0,
