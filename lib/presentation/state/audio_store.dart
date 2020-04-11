@@ -32,11 +32,17 @@ abstract class _AudioStore with Store {
   @observable
   ObservableStream<PlaybackState> playbackStateStream;
 
+  @observable
+  ObservableStream<int> currentPositionStream;
+
   @action
   Future<void> init() async {
     if (!_initialized) {
       print('AudioStore.init');
       currentSong = _audioRepository.currentSongStream.asObservable();
+
+      currentPositionStream =
+          _audioRepository.currentPositionStream.asObservable(initialValue: 0);
 
       _disposers.add(autorun((_) {
         updateSong(currentSong.value);

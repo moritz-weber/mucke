@@ -1,35 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:provider/provider.dart';
 
-class TimeProgressIndicator extends StatefulWidget {
-  TimeProgressIndicator({Key key}) : super(key: key);
+import '../state/audio_store.dart';
+import '../utils.dart';
 
-  @override
-  _TimeProgressIndicatorState createState() => _TimeProgressIndicatorState();
-}
+class TimeProgressIndicator extends StatelessWidget {
+  const TimeProgressIndicator({Key key}) : super(key: key);
 
-class _TimeProgressIndicatorState extends State<TimeProgressIndicator> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Row(
-        children: [
-          Text("0:42"),
-          Container(
-            width: 10,
+    final AudioStore audioStore = Provider.of<AudioStore>(context);
+
+    return Observer(
+      builder: (BuildContext context) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Row(
+            children: [
+              Text(msToTimeString(audioStore.currentPositionStream.value)),
+              Container(
+                width: 10,
+              ),
+              Expanded(
+                child: Container(
+                  child: LinearProgressIndicator(value: audioStore.currentPositionStream.value / audioStore.currentSong.value.duration),
+                  height: 3.0,
+                ),
+              ),
+              Container(
+                width: 10,
+              ),
+              Text(msToTimeString(audioStore.currentSong.value.duration)),
+            ],
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           ),
-          Expanded(
-              child: Container(
-            child: LinearProgressIndicator(value: 0.42),
-            height: 3.0,
-          )),
-          Container(
-            width: 10,
-          ),
-          Text("3:42"),
-        ],
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      ),
+        );
+      },
     );
   }
 }

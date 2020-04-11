@@ -20,6 +20,11 @@ class AudioRepositoryImpl implements AudioRepository {
       _audioManager.playbackStateStream;
 
   @override
+  Stream<int> get currentPositionStream {
+    return _audioManager.currentPositionStream;
+  }
+
+  @override
   Future<Either<Failure, void>> playSong(int index, List<Song> songList) async {
     final List<SongModel> songModelList =
         songList.map((song) => song as SongModel).toList();

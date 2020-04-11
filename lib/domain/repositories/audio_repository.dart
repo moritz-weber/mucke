@@ -7,6 +7,7 @@ import '../entities/song.dart';
 abstract class AudioRepository {
   Stream<Song> get currentSongStream;
   Stream<PlaybackState> get playbackStateStream;
+  Stream<int> get currentPositionStream;
 
   Future<Either<Failure, void>> playSong(int index, List<Song> songList);
   Future<Either<Failure, void>> play();

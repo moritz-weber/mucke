@@ -23,8 +23,8 @@ class CurrentlyPlayingBar extends StatelessWidget {
           return Column(
             children: <Widget>[
               Container(
-                child: const LinearProgressIndicator(
-                  value: 0.42,
+                child: LinearProgressIndicator(
+                  value: audioStore.currentPositionStream.value / audioStore.currentSong.value.duration,
                 ),
                 height: 2,
               ),

@@ -90,7 +90,7 @@ class CurrentlyPlayingPage extends StatelessWidget {
                         const Spacer(
                           flex: 3,
                         ),
-                        TimeProgressIndicator(),
+                        const TimeProgressIndicator(),
                         const Spacer(
                           flex: 3,
                         ),

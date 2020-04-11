@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
-import 'package:just_audio/just_audio.dart';
 
 import '../../domain/entities/playback_state.dart' as entity;
 import '../models/playback_state_model.dart';
 import '../models/song_model.dart';
 import 'audio_manager_contract.dart';
+import 'audio_player_task.dart';
 
 typedef Conversion<S, T> = T Function(S);
 
@@ -28,6 +28,9 @@ class AudioManagerImpl implements AudioManager {
         _sourcePlaybackStateStream,
         (PlaybackState ps) => PlaybackStateModel.fromASPlaybackState(ps),
       );
+
+  @override
+  Stream<int> get currentPositionStream => _position().distinct();
 
   @override
   Future<void> playSong(int index, List<SongModel> songList) async {
@@ -68,80 +71,35 @@ class AudioManagerImpl implements AudioManager {
       }
     }
   }
+
+  Stream<int> _position() async* {
+    BasicPlaybackState state;
+    int updateTime;
+    int statePosition;
+
+    // should this class get an init method for this?
+    _sourcePlaybackStateStream.listen((currentState) {
+      state = currentState?.basicState;
+      updateTime = currentState?.updateTime;
+      statePosition = currentState?.position;
+    });
+
+    while (true) {
+      if (statePosition != null && updateTime != null && state != null) {
+        if (state == BasicPlaybackState.playing) {
+          yield statePosition +
+              (DateTime.now().millisecondsSinceEpoch - updateTime);
+        } else {
+          yield statePosition;
+        }
+      } else {
+        yield 0;
+      }
+      await Future.delayed(const Duration(milliseconds: 200));
+    }
+  }
 }
 
 void _backgroundTaskEntrypoint() {
   AudioServiceBackground.run(() => AudioPlayerTask());
 }
-
-class AudioPlayerTask extends BackgroundAudioTask {
-  final _audioPlayer = AudioPlayer();
-  final _completer = Completer();
-
-  final _mediaItems = <String, MediaItem>{};
-
-  @override
-  Future<void> onStart() async {
-    // AudioServiceBackground.setState(
-    //   controls: [],
-    //   basicState: BasicPlaybackState.none,
-    // );
-    await _completer.future;
-  }
-
-  @override
-  void onStop() {
-    _audioPlayer.stop();
-    _completer.complete();
-  }
-
-  @override
-  void onAddQueueItem(MediaItem mediaItem) {
-    _mediaItems[mediaItem.id] = mediaItem;
-  }
-
-  @override
-  Future<void> onPlayFromMediaId(String mediaId) async {
-    AudioServiceBackground.setState(
-      controls: [pauseControl, stopControl],
-      basicState: BasicPlaybackState.playing,
-    );
-
-    await AudioServiceBackground.setMediaItem(_mediaItems[mediaId]);
-    await _audioPlayer.setFilePath(mediaId);
-
-    _audioPlayer.play();
-  }
-
-  @override
-  Future<void> onPlay() async {
-    AudioServiceBackground.setState(
-        controls: [pauseControl, stopControl],
-        basicState: BasicPlaybackState.playing);
-    _audioPlayer.play();
-  }
-
-  @override
-  Future<void> onPause() async {
-    AudioServiceBackground.setState(
-        controls: [playControl, stopControl],
-        basicState: BasicPlaybackState.paused);
-    await _audioPlayer.pause();
-  }
-}
-
-MediaControl playControl = const MediaControl(
-  androidIcon: 'drawable/ic_action_play_arrow',
-  label: 'Play',
-  action: MediaAction.play,
-);
-MediaControl pauseControl = const MediaControl(
-  androidIcon: 'drawable/ic_action_pause',
-  label: 'Pause',
-  action: MediaAction.pause,
-);
-MediaControl stopControl = const MediaControl(
-  androidIcon: 'drawable/ic_action_stop',
-  label: 'Stop',
-  action: MediaAction.stop,
-);
