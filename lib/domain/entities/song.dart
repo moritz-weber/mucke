@@ -2,11 +2,12 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 class Song extends Equatable {
-  Song({
+  const Song({
     @required this.title,
     @required this.album,
     @required this.artist,
     @required this.path,
+    @required this.duration,
     this.trackNumber,
     this.albumArtPath,
   });
@@ -14,8 +15,10 @@ class Song extends Equatable {
   final String title;
   final String album;
   final String artist;
-  final int trackNumber;
   final String path;
+  /// Duration in milliseconds.
+  final int duration;
+  final int trackNumber;
   final String albumArtPath;
 
   @override

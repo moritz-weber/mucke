@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:moor/moor.dart';
 import 'package:moor_ffi/moor_ffi.dart';
-import 'package:mosh/system/models/song_model.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 import '../models/album_model.dart';
+import '../models/song_model.dart';
 import 'music_data_source_contract.dart';
 
 part 'moor_music_data_source.g.dart';
@@ -28,6 +28,7 @@ class Songs extends Table {
   TextColumn get album => text()();
   TextColumn get artist => text()();
   TextColumn get path => text()();
+  IntColumn get duration => integer().nullable()();
   TextColumn get albumArtPath => text().nullable()();
   IntColumn get trackNumber => integer().nullable()();
 }

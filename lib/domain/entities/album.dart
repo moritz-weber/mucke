@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 class Album extends Equatable {
-  Album({
+  const Album({
     @required this.title,
     @required this.artist,
     this.albumArtPath,

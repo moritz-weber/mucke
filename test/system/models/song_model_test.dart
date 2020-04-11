@@ -17,6 +17,7 @@ void main() {
     album: ALBUM_TITLE_3,
     artist: ARTIST_3,
     path: PATH_3,
+    duration: DURATION_3,
     trackNumber: TRACKNUMBER_3,
     albumArtPath: ALBUM_ART_PATH_3,
   );
@@ -39,6 +40,7 @@ void main() {
           artist: Value(ARTIST_3),
           title: Value(SONG_TITLE_3),
           path: Value(PATH_3),
+          duration: Value(DURATION_3),
           albumArtPath: Value(ALBUM_ART_PATH_3),
           trackNumber: Value(TRACKNUMBER_3),
         );
@@ -48,6 +50,7 @@ void main() {
           artist: ARTIST_3,
           title: SONG_TITLE_3,
           path: PATH_3,
+          duration: DURATION_3,
           albumArtPath: ALBUM_ART_PATH_3,
           trackNumber: TRACKNUMBER_3,
         );
@@ -74,6 +77,7 @@ void main() {
           title: SONG_TITLE_3,
           album: ALBUM_TITLE_3,
           artist: ARTIST_3,
+          duration: DURATION_3,
           artUri: 'file://$ALBUM_ART_PATH_3',
         );
 
@@ -82,6 +86,7 @@ void main() {
           artist: ARTIST_3,
           title: SONG_TITLE_3,
           path: PATH_3,
+          duration: DURATION_3,
           albumArtPath: ALBUM_ART_PATH_3,
           trackNumber: TRACKNUMBER_3,
         );
@@ -92,6 +97,7 @@ void main() {
         expect(result.artist, expected.artist);
         expect(result.title, expected.title);
         expect(result.id, expected.id);
+        expect(result.duration, expected.duration);
         expect(result.artUri, expected.artUri);
       },
     );
@@ -107,6 +113,7 @@ void main() {
           artist: ARTIST_3,
           title: SONG_TITLE_3,
           path: PATH_3,
+          duration: DURATION_3,
           albumArtPath: ALBUM_ART_PATH_3,
           trackNumber: TRACKNUMBER_3,
         );
@@ -116,6 +123,7 @@ void main() {
           artist: ARTIST_3,
           title: SONG_TITLE_3,
           path: PATH_3,
+          duration: DURATION_3,
           albumArtPath: ALBUM_ART_PATH_3,
           trackNumber: TRACKNUMBER_3,
         );
@@ -137,6 +145,7 @@ void main() {
       when(mockSongInfo.title).thenReturn(SONG_TITLE_3);
       when(mockSongInfo.albumArtwork).thenReturn(ALBUM_ART_PATH_3);
       when(mockSongInfo.filePath).thenReturn(PATH_3);
+      when(mockSongInfo.duration).thenReturn(DURATION_3.toString());
       when(mockSongInfo.track).thenReturn(TRACKNUMBER_3.toString());
     });
 
@@ -149,6 +158,7 @@ void main() {
           artist: ARTIST_3,
           title: SONG_TITLE_3,
           path: PATH_3,
+          duration: DURATION_3,
           albumArtPath: ALBUM_ART_PATH_3,
           trackNumber: TRACKNUMBER_3,
         );

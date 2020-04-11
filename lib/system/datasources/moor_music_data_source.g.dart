@@ -260,6 +260,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
   final String album;
   final String artist;
   final String path;
+  final int duration;
   final String albumArtPath;
   final int trackNumber;
   MoorSong(
@@ -267,6 +268,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
       @required this.album,
       @required this.artist,
       @required this.path,
+      this.duration,
       this.albumArtPath,
       this.trackNumber});
   factory MoorSong.fromData(Map<String, dynamic> data, GeneratedDatabase db,
@@ -282,6 +284,8 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
       artist:
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}artist']),
       path: stringType.mapFromDatabaseResponse(data['${effectivePrefix}path']),
+      duration:
+          intType.mapFromDatabaseResponse(data['${effectivePrefix}duration']),
       albumArtPath: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}album_art_path']),
       trackNumber: intType
@@ -296,6 +300,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
       album: serializer.fromJson<String>(json['album']),
       artist: serializer.fromJson<String>(json['artist']),
       path: serializer.fromJson<String>(json['path']),
+      duration: serializer.fromJson<int>(json['duration']),
       albumArtPath: serializer.fromJson<String>(json['albumArtPath']),
       trackNumber: serializer.fromJson<int>(json['trackNumber']),
     );
@@ -308,6 +313,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
       'album': serializer.toJson<String>(album),
       'artist': serializer.toJson<String>(artist),
       'path': serializer.toJson<String>(path),
+      'duration': serializer.toJson<int>(duration),
       'albumArtPath': serializer.toJson<String>(albumArtPath),
       'trackNumber': serializer.toJson<int>(trackNumber),
     };
@@ -323,6 +329,9 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
       artist:
           artist == null && nullToAbsent ? const Value.absent() : Value(artist),
       path: path == null && nullToAbsent ? const Value.absent() : Value(path),
+      duration: duration == null && nullToAbsent
+          ? const Value.absent()
+          : Value(duration),
       albumArtPath: albumArtPath == null && nullToAbsent
           ? const Value.absent()
           : Value(albumArtPath),
@@ -337,6 +346,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
           String album,
           String artist,
           String path,
+          int duration,
           String albumArtPath,
           int trackNumber}) =>
       MoorSong(
@@ -344,6 +354,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
         album: album ?? this.album,
         artist: artist ?? this.artist,
         path: path ?? this.path,
+        duration: duration ?? this.duration,
         albumArtPath: albumArtPath ?? this.albumArtPath,
         trackNumber: trackNumber ?? this.trackNumber,
       );
@@ -354,6 +365,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
           ..write('album: $album, ')
           ..write('artist: $artist, ')
           ..write('path: $path, ')
+          ..write('duration: $duration, ')
           ..write('albumArtPath: $albumArtPath, ')
           ..write('trackNumber: $trackNumber')
           ..write(')'))
@@ -367,8 +379,10 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
           album.hashCode,
           $mrjc(
               artist.hashCode,
-              $mrjc(path.hashCode,
-                  $mrjc(albumArtPath.hashCode, trackNumber.hashCode))))));
+              $mrjc(
+                  path.hashCode,
+                  $mrjc(duration.hashCode,
+                      $mrjc(albumArtPath.hashCode, trackNumber.hashCode)))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -377,6 +391,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
           other.album == this.album &&
           other.artist == this.artist &&
           other.path == this.path &&
+          other.duration == this.duration &&
           other.albumArtPath == this.albumArtPath &&
           other.trackNumber == this.trackNumber);
 }
@@ -386,6 +401,7 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
   final Value<String> album;
   final Value<String> artist;
   final Value<String> path;
+  final Value<int> duration;
   final Value<String> albumArtPath;
   final Value<int> trackNumber;
   const SongsCompanion({
@@ -393,6 +409,7 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
     this.album = const Value.absent(),
     this.artist = const Value.absent(),
     this.path = const Value.absent(),
+    this.duration = const Value.absent(),
     this.albumArtPath = const Value.absent(),
     this.trackNumber = const Value.absent(),
   });
@@ -401,6 +418,7 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
     @required String album,
     @required String artist,
     @required String path,
+    this.duration = const Value.absent(),
     this.albumArtPath = const Value.absent(),
     this.trackNumber = const Value.absent(),
   })  : title = Value(title),
@@ -412,6 +430,7 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
       Value<String> album,
       Value<String> artist,
       Value<String> path,
+      Value<int> duration,
       Value<String> albumArtPath,
       Value<int> trackNumber}) {
     return SongsCompanion(
@@ -419,6 +438,7 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
       album: album ?? this.album,
       artist: artist ?? this.artist,
       path: path ?? this.path,
+      duration: duration ?? this.duration,
       albumArtPath: albumArtPath ?? this.albumArtPath,
       trackNumber: trackNumber ?? this.trackNumber,
     );
@@ -477,6 +497,18 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
     );
   }
 
+  final VerificationMeta _durationMeta = const VerificationMeta('duration');
+  GeneratedIntColumn _duration;
+  @override
+  GeneratedIntColumn get duration => _duration ??= _constructDuration();
+  GeneratedIntColumn _constructDuration() {
+    return GeneratedIntColumn(
+      'duration',
+      $tableName,
+      true,
+    );
+  }
+
   final VerificationMeta _albumArtPathMeta =
       const VerificationMeta('albumArtPath');
   GeneratedTextColumn _albumArtPath;
@@ -507,7 +539,7 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
 
   @override
   List<GeneratedColumn> get $columns =>
-      [title, album, artist, path, albumArtPath, trackNumber];
+      [title, album, artist, path, duration, albumArtPath, trackNumber];
   @override
   $SongsTable get asDslTable => this;
   @override
@@ -541,6 +573,10 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
           _pathMeta, path.isAcceptableValue(d.path.value, _pathMeta));
     } else if (isInserting) {
       context.missing(_pathMeta);
+    }
+    if (d.duration.present) {
+      context.handle(_durationMeta,
+          duration.isAcceptableValue(d.duration.value, _durationMeta));
     }
     if (d.albumArtPath.present) {
       context.handle(
@@ -577,6 +613,9 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
     }
     if (d.path.present) {
       map['path'] = Variable<String, StringType>(d.path.value);
+    }
+    if (d.duration.present) {
+      map['duration'] = Variable<int, IntType>(d.duration.value);
     }
     if (d.albumArtPath.present) {
       map['album_art_path'] =

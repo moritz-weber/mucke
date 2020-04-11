@@ -18,8 +18,8 @@ class _LibraryPageState extends State<LibraryPage> {
       length: 3,
       child: SafeArea(
         child: Column(
-          children: <Widget>[
-            const TabBar(
+          children: const <Widget>[
+            TabBar(
               tabs: <Tab>[
                 Tab(
                   text: 'Artists',
@@ -35,14 +35,14 @@ class _LibraryPageState extends State<LibraryPage> {
             Expanded(
               child: TabBarView(
                 children: <Widget>[
-                  const Center(
+                  Center(
                     child: Text('Artists'),
                   ),
                   AlbumsPage(
-                    key: const PageStorageKey('AlbumsPage'),
+                    key: PageStorageKey('AlbumsPage'),
                   ),
                   SongsPage(
-                    key: const PageStorageKey('SongsPage'),
+                    key: PageStorageKey('SongsPage'),
                   ),
                 ],
               ),

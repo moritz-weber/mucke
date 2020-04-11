@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
 
 class Artist extends Equatable {
-  final String name;
+  const Artist(this.name);
 
-  Artist(this.name);
+  final String name;
 
   @override
   List<Object> get props => [name];

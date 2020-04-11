@@ -7,12 +7,13 @@ import '../../domain/entities/song.dart';
 import '../datasources/moor_music_data_source.dart';
 
 class SongModel extends Song {
-  SongModel({
+  const SongModel({
     this.id,
     @required String title,
     @required String album,
     @required String artist,
     @required String path,
+    @required int duration,
     int trackNumber,
     String albumArtPath,
   }) : super(
@@ -20,6 +21,7 @@ class SongModel extends Song {
           album: album,
           artist: artist,
           path: path,
+          duration: duration,
           trackNumber: trackNumber,
           albumArtPath: albumArtPath,
         );
@@ -29,20 +31,23 @@ class SongModel extends Song {
         artist: moorSong.artist,
         album: moorSong.album,
         path: moorSong.path,
+        duration: moorSong.duration,
         albumArtPath: moorSong.albumArtPath,
         trackNumber: moorSong.trackNumber,
       );
 
   factory SongModel.fromSongInfo(SongInfo songInfo) {
-    final String _trackNumber = songInfo.track;
+    final String trackNumber = songInfo.track;
+    final String duration = songInfo.duration;
 
     return SongModel(
       title: songInfo.title,
       artist: songInfo.artist,
-      albumArtPath: songInfo.albumArtwork,
       album: songInfo.album,
       path: songInfo.filePath,
-      trackNumber: _trackNumber == null ? null : int.parse(_trackNumber),
+      duration: duration == null ? null : int.parse(duration),
+      albumArtPath: songInfo.albumArtwork,
+      trackNumber: trackNumber == null ? null : int.parse(trackNumber),
     );
   }
 
@@ -59,6 +64,7 @@ class SongModel extends Song {
       album: mediaItem.album,
       artist: mediaItem.artist,
       path: mediaItem.id,
+      duration: mediaItem.duration,
       albumArtPath: artUri,
     );
   }
@@ -70,15 +76,17 @@ class SongModel extends Song {
         artist: Value(artist),
         title: Value(title),
         path: Value(path),
+        duration: Value(duration),
         albumArtPath: Value(albumArtPath),
         trackNumber: Value(trackNumber),
       );
 
   MediaItem toMediaItem() => MediaItem(
+        id: path,
         title: title,
         album: album,
         artist: artist,
+        duration: duration,
         artUri: 'file://$albumArtPath',
-        id: path,
       );
 }
