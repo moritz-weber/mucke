@@ -1,55 +1,35 @@
 import 'package:flutter/material.dart';
 
-import 'albums_page.dart';
-import 'songs_page.dart';
+import 'library_tab_container.dart';
 
-class LibraryPage extends StatefulWidget {
+class LibraryPage extends StatelessWidget {
   const LibraryPage({Key key}) : super(key: key);
 
   @override
-  _LibraryPageState createState() => _LibraryPageState();
-}
-
-class _LibraryPageState extends State<LibraryPage> {
-  @override
   Widget build(BuildContext context) {
     print('LibraryPage.build');
-    return DefaultTabController(
-      length: 3,
-      child: SafeArea(
-        child: Column(
-          children: const <Widget>[
-            TabBar(
-              tabs: <Tab>[
-                Tab(
-                  text: 'Artists',
-                ),
-                Tab(
-                  text: 'Albums',
-                ),
-                Tab(
-                  text: 'Songs',
-                ),
-              ],
-            ),
-            Expanded(
-              child: TabBarView(
-                children: <Widget>[
-                  Center(
-                    child: Text('Artists'),
-                  ),
-                  AlbumsPage(
-                    key: PageStorageKey('AlbumsPage'),
-                  ),
-                  SongsPage(
-                    key: PageStorageKey('SongsPage'),
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
+    final GlobalKey<NavigatorState> nav = GlobalKey();
+
+    return WillPopScope(
+      child: Navigator(
+        key: nav,
+        initialRoute: 'library',
+        onGenerateRoute: (RouteSettings settings) {
+          WidgetBuilder builder;
+          switch (settings.name) {
+            case 'library':
+              builder = (BuildContext context) => const LibraryTabContainer();
+              break;
+            default:
+              throw Exception('Invalid route: ${settings.name}');
+          }
+          return MaterialPageRoute(builder: builder, settings: settings);
+        },
       ),
+      onWillPop: () async {
+        print('onWillPop');
+        return !await nav.currentState.maybePop();
+      },
     );
   }
 }
