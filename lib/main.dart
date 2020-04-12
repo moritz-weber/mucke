@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
 import 'presentation/pages/currently_playing.dart';
@@ -8,6 +9,7 @@ import 'presentation/pages/library_page.dart';
 import 'presentation/pages/settings_page.dart';
 import 'presentation/state/audio_store.dart';
 import 'presentation/state/music_data_store.dart';
+import 'presentation/state/navigation_store.dart';
 import 'presentation/theming.dart';
 import 'presentation/widgets/audio_service_widget.dart';
 import 'presentation/widgets/injection_widget.dart';
@@ -25,14 +27,14 @@ class MyApp extends StatelessWidget {
 
     return InjectionWidget(
       child: AudioServiceWidget(
-      child: MaterialApp(
-        title: 'mucke',
-        theme: theme(),
-        initialRoute: '/',
-        routes: {
-          '/': (context) => const RootPage(),
-          '/playing': (context) => const CurrentlyPlayingPage(),
-        },
+        child: MaterialApp(
+          title: 'mucke',
+          theme: theme(),
+          initialRoute: '/',
+          routes: {
+            '/': (context) => const RootPage(),
+            '/playing': (context) => const CurrentlyPlayingPage(),
+          },
         ),
       ),
     );
@@ -47,8 +49,6 @@ class RootPage extends StatefulWidget {
 }
 
 class _RootPageState extends State<RootPage> {
-  var navIndex = 1;
-
   final List<Widget> _pages = <Widget>[
     const HomePage(),
     const LibraryPage(
@@ -79,19 +79,19 @@ class _RootPageState extends State<RootPage> {
 
   @override
   Widget build(BuildContext context) {
+    final NavigationStore navStore = Provider.of<NavigationStore>(context);
+
     print('RootPage.build');
-    return Scaffold(
-      body: IndexedStack(
-        index: navIndex,
-        children: _pages,
-      ),
-      bottomNavigationBar: NavBar(
-        onTap: (int index) {
-          setState(() {
-            navIndex = index;
-          });
-        },
-        currentIndex: navIndex,
+    return Observer(
+      builder: (BuildContext context) => Scaffold(
+        body: IndexedStack(
+          index: navStore.navIndex,
+          children: _pages,
+        ),
+        bottomNavigationBar: NavBar(
+          onTap: (int index) => navStore.setNavIndex(index),
+          currentIndex: navStore.navIndex,
+        ),
       ),
     );
   }

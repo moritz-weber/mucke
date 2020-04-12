@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../state/navigation_store.dart';
 import 'library_tab_container.dart';
 
 class LibraryPage extends StatelessWidget {
@@ -9,6 +11,8 @@ class LibraryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     print('LibraryPage.build');
     final GlobalKey<NavigatorState> nav = GlobalKey();
+
+    final NavigationStore navStore = Provider.of<NavigationStore>(context);
 
     return WillPopScope(
       child: Navigator(
@@ -27,8 +31,10 @@ class LibraryPage extends StatelessWidget {
         },
       ),
       onWillPop: () async {
-        print('onWillPop');
-        return !await nav.currentState.maybePop();
+        if (navStore.navIndex == 1) {
+          return !await nav.currentState.maybePop();
+        }
+        return Future.value(true);
       },
     );
   }

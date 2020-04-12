@@ -11,6 +11,7 @@ import '../../system/repositories/audio_repository_impl.dart';
 import '../../system/repositories/music_data_repository_impl.dart';
 import '../state/audio_store.dart';
 import '../state/music_data_store.dart';
+import '../state/navigation_store.dart';
 
 class InjectionWidget extends StatelessWidget {
   const InjectionWidget({Key key, this.child}) : super(key: key);
@@ -43,6 +44,9 @@ class InjectionWidget extends StatelessWidget {
             musicDataRepository: musicDataRepository,
             audioRepository: audioRepository,
           ),
+        ),
+        Provider<NavigationStore>(
+          create: (BuildContext context) => NavigationStore(),
         ),
       ],
     );
