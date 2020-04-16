@@ -49,6 +49,7 @@ class AlbumsPage extends StatelessWidget {
                   subtitle: album.artist,
                   albumArtPath: album.albumArtPath,
                   onTap: () {
+                    store.fetchSongsFromAlbum(album);
                     Navigator.push(
                       context,
                       MaterialPageRoute<Widget>(

@@ -79,6 +79,23 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
     }, _$isUpdatingDatabaseAtom, name: '${_$isUpdatingDatabaseAtom.name}_set');
   }
 
+  final _$albumSongsAtom = Atom(name: '_MusicDataStore.albumSongs');
+
+  @override
+  ObservableList<Song> get albumSongs {
+    _$albumSongsAtom.context.enforceReadPolicy(_$albumSongsAtom);
+    _$albumSongsAtom.reportObserved();
+    return super.albumSongs;
+  }
+
+  @override
+  set albumSongs(ObservableList<Song> value) {
+    _$albumSongsAtom.context.conditionallyRunInAction(() {
+      super.albumSongs = value;
+      _$albumSongsAtom.reportChanged();
+    }, _$albumSongsAtom, name: '${_$albumSongsAtom.name}_set');
+  }
+
   final _$initAsyncAction = AsyncAction('init');
 
   @override
@@ -107,10 +124,18 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
     return _$fetchSongsAsyncAction.run(() => super.fetchSongs());
   }
 
+  final _$fetchSongsFromAlbumAsyncAction = AsyncAction('fetchSongsFromAlbum');
+
+  @override
+  Future<void> fetchSongsFromAlbum(Album album) {
+    return _$fetchSongsFromAlbumAsyncAction
+        .run(() => super.fetchSongsFromAlbum(album));
+  }
+
   @override
   String toString() {
     final string =
-        'albumsFuture: ${albumsFuture.toString()},songs: ${songs.toString()},isFetchingSongs: ${isFetchingSongs.toString()},isUpdatingDatabase: ${isUpdatingDatabase.toString()}';
+        'albumsFuture: ${albumsFuture.toString()},songs: ${songs.toString()},isFetchingSongs: ${isFetchingSongs.toString()},isUpdatingDatabase: ${isUpdatingDatabase.toString()},albumSongs: ${albumSongs.toString()}';
     return '{$string}';
   }
 }

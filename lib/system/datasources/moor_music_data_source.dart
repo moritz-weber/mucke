@@ -69,6 +69,13 @@ class MoorMusicDataSource extends _$MoorMusicDataSource
         .toList());
   }
 
+    @override
+  Future<List<SongModel>> getSongsFromAlbum(AlbumModel album) {
+    return (select(songs)..where((tbl) => tbl.album.equals(album.title))).get().then((moorSongList) => moorSongList
+        .map((moorSong) => SongModel.fromMoorSong(moorSong))
+        .toList());
+  }
+
   @override
   Future<void> insertSong(SongModel songModel) async {
     await into(songs).insert(songModel.toSongsCompanion());

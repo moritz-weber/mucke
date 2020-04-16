@@ -3,11 +3,14 @@ import 'dart:async';
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
 
+const String SET_QUEUE = 'SET_QUEUE';
+
 class AudioPlayerTask extends BackgroundAudioTask {
   final _audioPlayer = AudioPlayer();
   final _completer = Completer();
 
   final _mediaItems = <String, MediaItem>{};
+  final _queue = <MediaItem>[];
 
   Duration _position;
 
@@ -67,6 +70,20 @@ class AudioPlayerTask extends BackgroundAudioTask {
       position: _position.inMilliseconds,
     );
     await _audioPlayer.pause();
+  }
+
+  @override
+  Future<void> onCustomAction(String name, arguments) async {
+    switch (name) {
+      case SET_QUEUE:
+          _setQueue(arguments as List<MediaItem>);
+        break;
+      default:
+    }
+  }
+
+  Future<void> _setQueue(List<MediaItem> queue) async {
+
   }
 }
 

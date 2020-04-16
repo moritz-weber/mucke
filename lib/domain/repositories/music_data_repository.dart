@@ -6,6 +6,7 @@ import '../entities/song.dart';
 
 abstract class MusicDataRepository {
   Future<Either<Failure, List<Song>>> getSongs();
+  Future<Either<Failure, List<Song>>> getSongsFromAlbum(Album album);
   Future<Either<Failure, List<Album>>> getAlbums();
   Future<void> updateDatabase();
 }

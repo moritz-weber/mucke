@@ -12,19 +12,22 @@ class LibraryTabContainer extends StatelessWidget {
       length: 3,
       child: SafeArea(
         child: Column(
-          children: const <Widget>[
-            TabBar(
-              tabs: <Tab>[
-                Tab(
-                  text: 'Artists',
-                ),
-                Tab(
-                  text: 'Albums',
-                ),
-                Tab(
-                  text: 'Songs',
-                ),
-              ],
+          children: <Widget>[
+            Container(
+              color: Colors.grey[900],
+              child: TabBar(
+                tabs: <Tab>[
+                  Tab(
+                    text: 'Artists',
+                  ),
+                  Tab(
+                    text: 'Albums',
+                  ),
+                  Tab(
+                    text: 'Songs',
+                  ),
+                ],
+              ),
             ),
             Expanded(
               child: TabBarView(

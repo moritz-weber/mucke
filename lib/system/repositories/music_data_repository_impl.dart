@@ -31,6 +31,12 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
         (List<SongModel> songs) => Right<Failure, List<SongModel>>(songs));
   }
 
+    @override
+  Future<Either<Failure, List<Song>>> getSongsFromAlbum(Album album) async {
+    return musicDataSource.getSongsFromAlbum(album as AlbumModel).then(
+        (List<SongModel> songs) => Right<Failure, List<SongModel>>(songs));
+  }
+
   // TODO: should remove albums that are not longer on the device
   @override
   Future<void> updateDatabase() async {

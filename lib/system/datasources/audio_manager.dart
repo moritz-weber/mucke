@@ -37,7 +37,9 @@ class AudioManagerImpl implements AudioManager {
     await _startAudioService();
     final List<MediaItem> queue = songList.map((s) => s.toMediaItem()).toList();
 
-    await AudioService.addQueueItem(queue[index]);
+    await AudioService.customAction(SET_QUEUE, queue);
+
+    // await AudioService.addQueueItem(queue[index]);
     AudioService.playFromMediaId(queue[index].id);
   }
 
