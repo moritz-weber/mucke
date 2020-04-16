@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:mosh/domain/entities/song.dart';
-import 'package:mosh/domain/repositories/music_data_repository.dart';
-import 'package:mosh/domain/usecases/get_songs.dart';
+import 'package:mucke/domain/entities/song.dart';
+import 'package:mucke/domain/repositories/music_data_repository.dart';
+import 'package:mucke/domain/usecases/get_songs.dart';
 
 import '../../test_constants.dart';
 

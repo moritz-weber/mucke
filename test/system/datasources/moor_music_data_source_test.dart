@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:moor_ffi/moor_ffi.dart';
-import 'package:mosh/system/datasources/moor_music_data_source.dart';
-import 'package:mosh/system/models/album_model.dart';
-import 'package:mosh/system/models/song_model.dart';
+import 'package:mucke/system/datasources/moor_music_data_source.dart';
+import 'package:mucke/system/models/album_model.dart';
+import 'package:mucke/system/models/song_model.dart';
 
 import '../../test_constants.dart';
 

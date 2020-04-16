@@ -1,4 +1,4 @@
-package com.example.mosh
+package com.example.mucke
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

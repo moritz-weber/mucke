@@ -1,9 +1,9 @@
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:mosh/system/datasources/local_music_fetcher.dart';
-import 'package:mosh/system/models/album_model.dart';
-import 'package:mosh/system/models/song_model.dart';
+import 'package:mucke/system/datasources/local_music_fetcher.dart';
+import 'package:mucke/system/models/album_model.dart';
+import 'package:mucke/system/models/song_model.dart';
 import '../../test_constants.dart';
 
 class MockFlutterAudioQuery extends Mock implements FlutterAudioQuery {}

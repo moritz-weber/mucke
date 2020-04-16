@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:mosh/system/datasources/audio_manager_contract.dart';
-import 'package:mosh/system/models/song_model.dart';
-import 'package:mosh/system/repositories/audio_repository_impl.dart';
+import 'package:mucke/system/datasources/audio_manager_contract.dart';
+import 'package:mucke/system/models/song_model.dart';
+import 'package:mucke/system/repositories/audio_repository_impl.dart';
 
 import '../../test_constants.dart';
 

@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:meta/meta.dart';
-import 'package:mosh/domain/entities/song.dart';
-import 'package:mosh/system/models/song_model.dart';
+import 'package:mucke/domain/entities/song.dart';
+import 'package:mucke/system/models/song_model.dart';
 
 import '../../core/error/failures.dart';
 import '../../domain/entities/album.dart';
