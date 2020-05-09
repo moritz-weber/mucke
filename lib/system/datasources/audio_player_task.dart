@@ -76,14 +76,9 @@ class AudioPlayerTask extends BackgroundAudioTask {
   Future<void> onCustomAction(String name, arguments) async {
     switch (name) {
       case SET_QUEUE:
-          _setQueue(arguments as List<MediaItem>);
         break;
       default:
     }
-  }
-
-  Future<void> _setQueue(List<MediaItem> queue) async {
-
   }
 }
 
