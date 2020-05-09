@@ -14,8 +14,8 @@ class LibraryTabContainer extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Container(
-              color: Colors.grey[900],
-              child: TabBar(
+              color: Theme.of(context).primaryColor,
+              child: const TabBar(
                 tabs: <Tab>[
                   Tab(
                     text: 'Artists',
@@ -29,7 +29,7 @@ class LibraryTabContainer extends StatelessWidget {
                 ],
               ),
             ),
-            Expanded(
+            const Expanded(
               child: TabBarView(
                 children: <Widget>[
                   Center(

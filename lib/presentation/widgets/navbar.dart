@@ -21,17 +21,17 @@ class _NavBarState extends State<NavBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.grey[900],
+      color: Theme.of(context).primaryColor,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           const CurrentlyPlayingBar(),
           Container(
-            color: Colors.grey[850],
+            color: Theme.of(context).primaryColorLight,
             height: 1.0,
           ),
           BottomNavigationBar(
-            backgroundColor: Colors.grey[900],
+            backgroundColor: Theme.of(context).primaryColor,
             currentIndex: widget.currentIndex,
             onTap: widget.onTap,
             items: [

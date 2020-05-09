@@ -7,7 +7,6 @@ import '../state/audio_store.dart';
 import '../theming.dart';
 import '../widgets/album_art.dart';
 import '../widgets/play_pause_button.dart';
-import '../widgets/queue_card.dart';
 import '../widgets/time_progress_indicator.dart';
 
 class CurrentlyPlayingPage extends StatelessWidget {
@@ -27,99 +26,123 @@ class CurrentlyPlayingPage extends StatelessWidget {
               print('CurrentlyPlayingPage.build -> Observer.build');
               final Song song = audioStore.song;
 
-              return Stack(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      left: 12.0,
-                      right: 12.0,
-                      top: 8.0,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+              return Padding(
+                padding: const EdgeInsets.only(
+                  left: 12.0,
+                  right: 12.0,
+                  top: 8.0,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
                       children: [
-                        Row(
-                          children: [
-                            IconButton(
-                              icon: Icon(Icons.expand_more),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.more_vert),
-                              onPressed: () {},
-                            )
-                          ],
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        IconButton(
+                          icon: Icon(Icons.expand_more),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
                         ),
-                        const Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: AlbumArt(
-                            song: song,
-                          ),
-                        ),
-                        const Spacer(
-                          flex: 4,
-                        ),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.link,
-                              size: 20.0,
-                            ),
-                            Container(
-                              width: 40,
-                            ),
-                            Icon(
-                              Icons.favorite,
-                              size: 20.0,
-                              color: RASPBERRY,
-                            ),
-                            Container(
-                              width: 40,
-                            ),
-                            Icon(
-                              Icons.remove_circle_outline,
-                              size: 20.0,
-                            ),
-                          ],
-                          mainAxisAlignment: MainAxisAlignment.center,
-                        ),
-                        const Spacer(
-                          flex: 3,
-                        ),
-                        const TimeProgressIndicator(),
-                        const Spacer(
-                          flex: 3,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Row(
-                            children: [
-                              Icon(Icons.repeat, size: 20.0),
-                              Icon(Icons.skip_previous, size: 32.0),
-                              const PlayPauseButton(
-                                circle: true,
-                                iconSize: 52.0,
-                              ),
-                              Icon(Icons.skip_next, size: 32.0),
-                              Icon(Icons.shuffle, size: 20.0),
-                            ],
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          ),
+                        IconButton(
+                          icon: Icon(Icons.more_vert),
+                          onPressed: () {},
+                        )
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    ),
+                    const Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: AlbumArt(
+                        song: song,
+                      ),
+                    ),
+                    const Spacer(
+                      flex: 4,
+                    ),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.link,
+                          size: 20.0,
                         ),
                         Container(
-                          height: 64,
+                          width: 40,
+                        ),
+                        Icon(
+                          Icons.favorite,
+                          size: 20.0,
+                          color: RASPBERRY,
+                        ),
+                        Container(
+                          width: 40,
+                        ),
+                        Icon(
+                          Icons.remove_circle_outline,
+                          size: 20.0,
                         ),
                       ],
+                      mainAxisAlignment: MainAxisAlignment.center,
                     ),
-                  ),
-                  QueueCard(
-                    boxConstraints: constraints,
-                  ),
-                ],
+                    const Spacer(
+                      flex: 3,
+                    ),
+                    const TimeProgressIndicator(),
+                    const Spacer(
+                      flex: 3,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Row(
+                        children: [
+                          Icon(Icons.repeat, size: 20.0),
+                          Icon(Icons.skip_previous, size: 32.0),
+                          const PlayPauseButton(
+                            circle: true,
+                            iconSize: 52.0,
+                          ),
+                          Icon(Icons.skip_next, size: 32.0),
+                          Icon(Icons.shuffle, size: 20.0),
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      ),
+                    ),
+                    const Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.expand_less,
+                              color: Colors.white70,
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.white70,
+                                ),
+                                children: [
+                                  const TextSpan(text: 'Fire'),
+                                  const TextSpan(text: ' • '),
+                                  TextSpan(
+                                    text: 'Beartooth',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w300,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               );
             },
           ),

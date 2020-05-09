@@ -26,7 +26,7 @@ class AlbumDetailsPage extends StatelessWidget {
             brightness: Brightness.dark,
             pinned: true,
             expandedHeight: 250.0,
-            backgroundColor: Colors.grey[900],
+            backgroundColor: Theme.of(context).primaryColor,
             iconTheme: IconThemeData(
               color: Colors.white,
             ),

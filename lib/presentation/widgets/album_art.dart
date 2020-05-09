@@ -60,7 +60,7 @@ class AlbumArt extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       song.title,
-                      style: Theme.of(context).textTheme.title,
+                      style: Theme.of(context).textTheme.headline6,
                     ),
                     Container(
                       height: 4.0,
