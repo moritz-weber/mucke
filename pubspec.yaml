@@ -12,19 +12,20 @@ dependencies:
     sdk: flutter
 
   equatable: ^1.1.0
-  dartz: ^0.8.9
+  dartz: ^0.9.1
   mockito: ^4.1.1
   
-  flutter_audio_query: "0.3.3"
+  flutter_audio_query: 0.3.3
 
-  audio_service: ^0.6.2
+  audio_service: ^0.8.0
   just_audio: ^0.1.0
 
+  get_it: ^4.0.2
   provider: ^4.0.4
-  moor: ^2.4.2
-  moor_ffi: ^0.4.0
+  moor: ^3.0.2
+  moor_ffi: ^0.5.0
   path_provider:
-  path:
+  path: 
 
   mobx: ^1.1.1
   flutter_mobx: ^1.1.0
@@ -32,7 +33,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  moor_generator: ^2.4.0
+  moor_generator: ^3.0.0
   build_runner:
   mobx_codegen: ^1.0.3
 

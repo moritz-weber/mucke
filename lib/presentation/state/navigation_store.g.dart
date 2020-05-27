@@ -26,15 +26,18 @@ mixin _$NavigationStore on _NavigationStore, Store {
     }, _$navIndexAtom, name: '${_$navIndexAtom.name}_set');
   }
 
-  final _$initAsyncAction = AsyncAction('init');
-
-  @override
-  Future<void> init() {
-    return _$initAsyncAction.run(() => super.init());
-  }
-
   final _$_NavigationStoreActionController =
       ActionController(name: '_NavigationStore');
+
+  @override
+  void init() {
+    final _$actionInfo = _$_NavigationStoreActionController.startAction();
+    try {
+      return super.init();
+    } finally {
+      _$_NavigationStoreActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void setNavIndex(int i) {

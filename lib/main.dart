@@ -3,19 +3,22 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
+import 'injection_container.dart';
 import 'presentation/pages/currently_playing.dart';
 import 'presentation/pages/home_page.dart';
 import 'presentation/pages/library_page.dart';
 import 'presentation/pages/settings_page.dart';
 import 'presentation/state/audio_store.dart';
-import 'presentation/state/music_data_store.dart';
 import 'presentation/state/navigation_store.dart';
 import 'presentation/theming.dart';
 import 'presentation/widgets/audio_service_widget.dart';
 import 'presentation/widgets/injection_widget.dart';
 import 'presentation/widgets/navbar.dart';
 
-void main() => runApp(MyApp());
+Future<void> main() async {
+  await setupGetIt();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -58,17 +61,6 @@ class _RootPageState extends State<RootPage> {
       key: PageStorageKey('SettingsPage'),
     ),
   ];
-
-  @override
-  void didChangeDependencies() {
-    final MusicDataStore _musicStore = Provider.of<MusicDataStore>(context);
-    _musicStore.init();
-
-    final AudioStore _audioStore = Provider.of<AudioStore>(context);
-    _audioStore.init();
-
-    super.didChangeDependencies();
-  }
 
   @override
   void dispose() {

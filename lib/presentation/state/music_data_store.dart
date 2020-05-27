@@ -47,7 +47,7 @@ abstract class _MusicDataStore with Store {
   ObservableList<Song> albumSongs = <Song>[].asObservable();
 
   @action
-  Future<void> init() async {
+  void init() {
     if (!_initialized) {
       print('MusicDataStore.init');
       fetchAlbums();

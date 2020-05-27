@@ -96,13 +96,6 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
     }, _$albumSongsAtom, name: '${_$albumSongsAtom.name}_set');
   }
 
-  final _$initAsyncAction = AsyncAction('init');
-
-  @override
-  Future<void> init() {
-    return _$initAsyncAction.run(() => super.init());
-  }
-
   final _$updateDatabaseAsyncAction = AsyncAction('updateDatabase');
 
   @override
@@ -130,6 +123,19 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
   Future<void> fetchSongsFromAlbum(Album album) {
     return _$fetchSongsFromAlbumAsyncAction
         .run(() => super.fetchSongsFromAlbum(album));
+  }
+
+  final _$_MusicDataStoreActionController =
+      ActionController(name: '_MusicDataStore');
+
+  @override
+  void init() {
+    final _$actionInfo = _$_MusicDataStoreActionController.startAction();
+    try {
+      return super.init();
+    } finally {
+      _$_MusicDataStoreActionController.endAction(_$actionInfo);
+    }
   }
 
   @override

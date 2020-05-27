@@ -83,13 +83,6 @@ mixin _$AudioStore on _AudioStore, Store {
         name: '${_$currentPositionStreamAtom.name}_set');
   }
 
-  final _$initAsyncAction = AsyncAction('init');
-
-  @override
-  Future<void> init() {
-    return _$initAsyncAction.run(() => super.init());
-  }
-
   final _$playSongAsyncAction = AsyncAction('playSong');
 
   @override
@@ -116,6 +109,18 @@ mixin _$AudioStore on _AudioStore, Store {
   @override
   Future<void> updateSong(Song streamValue) {
     return _$updateSongAsyncAction.run(() => super.updateSong(streamValue));
+  }
+
+  final _$_AudioStoreActionController = ActionController(name: '_AudioStore');
+
+  @override
+  void init() {
+    final _$actionInfo = _$_AudioStoreActionController.startAction();
+    try {
+      return super.init();
+    } finally {
+      _$_AudioStoreActionController.endAction(_$actionInfo);
+    }
   }
 
   @override

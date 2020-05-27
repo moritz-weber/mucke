@@ -14,7 +14,7 @@ abstract class _NavigationStore with Store {
   @observable int navIndex = 1;
 
   @action
-  Future<void> init() async {
+  void init() {
     if (!_initialized) {
       print('NavigationStore.init');
       _initialized = true;
