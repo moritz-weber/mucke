@@ -32,6 +32,24 @@ class MoorAlbum extends DataClass implements Insertable<MoorAlbum> {
       year: intType.mapFromDatabaseResponse(data['${effectivePrefix}year']),
     );
   }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || title != null) {
+      map['title'] = Variable<String>(title);
+    }
+    if (!nullToAbsent || artist != null) {
+      map['artist'] = Variable<String>(artist);
+    }
+    if (!nullToAbsent || albumArtPath != null) {
+      map['album_art_path'] = Variable<String>(albumArtPath);
+    }
+    if (!nullToAbsent || year != null) {
+      map['year'] = Variable<int>(year);
+    }
+    return map;
+  }
+
   factory MoorAlbum.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
@@ -51,20 +69,6 @@ class MoorAlbum extends DataClass implements Insertable<MoorAlbum> {
       'albumArtPath': serializer.toJson<String>(albumArtPath),
       'year': serializer.toJson<int>(year),
     };
-  }
-
-  @override
-  AlbumsCompanion createCompanion(bool nullToAbsent) {
-    return AlbumsCompanion(
-      title:
-          title == null && nullToAbsent ? const Value.absent() : Value(title),
-      artist:
-          artist == null && nullToAbsent ? const Value.absent() : Value(artist),
-      albumArtPath: albumArtPath == null && nullToAbsent
-          ? const Value.absent()
-          : Value(albumArtPath),
-      year: year == null && nullToAbsent ? const Value.absent() : Value(year),
-    );
   }
 
   MoorAlbum copyWith(
@@ -117,6 +121,20 @@ class AlbumsCompanion extends UpdateCompanion<MoorAlbum> {
     this.year = const Value.absent(),
   })  : title = Value(title),
         artist = Value(artist);
+  static Insertable<MoorAlbum> custom({
+    Expression<String> title,
+    Expression<String> artist,
+    Expression<String> albumArtPath,
+    Expression<int> year,
+  }) {
+    return RawValuesInsertable({
+      if (title != null) 'title': title,
+      if (artist != null) 'artist': artist,
+      if (albumArtPath != null) 'album_art_path': albumArtPath,
+      if (year != null) 'year': year,
+    });
+  }
+
   AlbumsCompanion copyWith(
       {Value<String> title,
       Value<String> artist,
@@ -128,6 +146,24 @@ class AlbumsCompanion extends UpdateCompanion<MoorAlbum> {
       albumArtPath: albumArtPath ?? this.albumArtPath,
       year: year ?? this.year,
     );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (artist.present) {
+      map['artist'] = Variable<String>(artist.value);
+    }
+    if (albumArtPath.present) {
+      map['album_art_path'] = Variable<String>(albumArtPath.value);
+    }
+    if (year.present) {
+      map['year'] = Variable<int>(year.value);
+    }
+    return map;
   }
 }
 
@@ -194,30 +230,31 @@ class $AlbumsTable extends Albums with TableInfo<$AlbumsTable, MoorAlbum> {
   @override
   final String actualTableName = 'albums';
   @override
-  VerificationContext validateIntegrity(AlbumsCompanion d,
+  VerificationContext validateIntegrity(Insertable<MoorAlbum> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
-    if (d.title.present) {
+    final data = instance.toColumns(true);
+    if (data.containsKey('title')) {
       context.handle(
-          _titleMeta, title.isAcceptableValue(d.title.value, _titleMeta));
+          _titleMeta, title.isAcceptableOrUnknown(data['title'], _titleMeta));
     } else if (isInserting) {
       context.missing(_titleMeta);
     }
-    if (d.artist.present) {
-      context.handle(
-          _artistMeta, artist.isAcceptableValue(d.artist.value, _artistMeta));
+    if (data.containsKey('artist')) {
+      context.handle(_artistMeta,
+          artist.isAcceptableOrUnknown(data['artist'], _artistMeta));
     } else if (isInserting) {
       context.missing(_artistMeta);
     }
-    if (d.albumArtPath.present) {
+    if (data.containsKey('album_art_path')) {
       context.handle(
           _albumArtPathMeta,
-          albumArtPath.isAcceptableValue(
-              d.albumArtPath.value, _albumArtPathMeta));
+          albumArtPath.isAcceptableOrUnknown(
+              data['album_art_path'], _albumArtPathMeta));
     }
-    if (d.year.present) {
+    if (data.containsKey('year')) {
       context.handle(
-          _yearMeta, year.isAcceptableValue(d.year.value, _yearMeta));
+          _yearMeta, year.isAcceptableOrUnknown(data['year'], _yearMeta));
     }
     return context;
   }
@@ -228,25 +265,6 @@ class $AlbumsTable extends Albums with TableInfo<$AlbumsTable, MoorAlbum> {
   MoorAlbum map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
     return MoorAlbum.fromData(data, _db, prefix: effectivePrefix);
-  }
-
-  @override
-  Map<String, Variable> entityToSql(AlbumsCompanion d) {
-    final map = <String, Variable>{};
-    if (d.title.present) {
-      map['title'] = Variable<String, StringType>(d.title.value);
-    }
-    if (d.artist.present) {
-      map['artist'] = Variable<String, StringType>(d.artist.value);
-    }
-    if (d.albumArtPath.present) {
-      map['album_art_path'] =
-          Variable<String, StringType>(d.albumArtPath.value);
-    }
-    if (d.year.present) {
-      map['year'] = Variable<int, IntType>(d.year.value);
-    }
-    return map;
   }
 
   @override
@@ -292,6 +310,33 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
           .mapFromDatabaseResponse(data['${effectivePrefix}track_number']),
     );
   }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || title != null) {
+      map['title'] = Variable<String>(title);
+    }
+    if (!nullToAbsent || album != null) {
+      map['album'] = Variable<String>(album);
+    }
+    if (!nullToAbsent || artist != null) {
+      map['artist'] = Variable<String>(artist);
+    }
+    if (!nullToAbsent || path != null) {
+      map['path'] = Variable<String>(path);
+    }
+    if (!nullToAbsent || duration != null) {
+      map['duration'] = Variable<int>(duration);
+    }
+    if (!nullToAbsent || albumArtPath != null) {
+      map['album_art_path'] = Variable<String>(albumArtPath);
+    }
+    if (!nullToAbsent || trackNumber != null) {
+      map['track_number'] = Variable<int>(trackNumber);
+    }
+    return map;
+  }
+
   factory MoorSong.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
@@ -317,28 +362,6 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
       'albumArtPath': serializer.toJson<String>(albumArtPath),
       'trackNumber': serializer.toJson<int>(trackNumber),
     };
-  }
-
-  @override
-  SongsCompanion createCompanion(bool nullToAbsent) {
-    return SongsCompanion(
-      title:
-          title == null && nullToAbsent ? const Value.absent() : Value(title),
-      album:
-          album == null && nullToAbsent ? const Value.absent() : Value(album),
-      artist:
-          artist == null && nullToAbsent ? const Value.absent() : Value(artist),
-      path: path == null && nullToAbsent ? const Value.absent() : Value(path),
-      duration: duration == null && nullToAbsent
-          ? const Value.absent()
-          : Value(duration),
-      albumArtPath: albumArtPath == null && nullToAbsent
-          ? const Value.absent()
-          : Value(albumArtPath),
-      trackNumber: trackNumber == null && nullToAbsent
-          ? const Value.absent()
-          : Value(trackNumber),
-    );
   }
 
   MoorSong copyWith(
@@ -425,6 +448,26 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
         album = Value(album),
         artist = Value(artist),
         path = Value(path);
+  static Insertable<MoorSong> custom({
+    Expression<String> title,
+    Expression<String> album,
+    Expression<String> artist,
+    Expression<String> path,
+    Expression<int> duration,
+    Expression<String> albumArtPath,
+    Expression<int> trackNumber,
+  }) {
+    return RawValuesInsertable({
+      if (title != null) 'title': title,
+      if (album != null) 'album': album,
+      if (artist != null) 'artist': artist,
+      if (path != null) 'path': path,
+      if (duration != null) 'duration': duration,
+      if (albumArtPath != null) 'album_art_path': albumArtPath,
+      if (trackNumber != null) 'track_number': trackNumber,
+    });
+  }
+
   SongsCompanion copyWith(
       {Value<String> title,
       Value<String> album,
@@ -442,6 +485,33 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
       albumArtPath: albumArtPath ?? this.albumArtPath,
       trackNumber: trackNumber ?? this.trackNumber,
     );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (album.present) {
+      map['album'] = Variable<String>(album.value);
+    }
+    if (artist.present) {
+      map['artist'] = Variable<String>(artist.value);
+    }
+    if (path.present) {
+      map['path'] = Variable<String>(path.value);
+    }
+    if (duration.present) {
+      map['duration'] = Variable<int>(duration.value);
+    }
+    if (albumArtPath.present) {
+      map['album_art_path'] = Variable<String>(albumArtPath.value);
+    }
+    if (trackNumber.present) {
+      map['track_number'] = Variable<int>(trackNumber.value);
+    }
+    return map;
   }
 }
 
@@ -547,46 +617,49 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
   @override
   final String actualTableName = 'songs';
   @override
-  VerificationContext validateIntegrity(SongsCompanion d,
+  VerificationContext validateIntegrity(Insertable<MoorSong> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
-    if (d.title.present) {
+    final data = instance.toColumns(true);
+    if (data.containsKey('title')) {
       context.handle(
-          _titleMeta, title.isAcceptableValue(d.title.value, _titleMeta));
+          _titleMeta, title.isAcceptableOrUnknown(data['title'], _titleMeta));
     } else if (isInserting) {
       context.missing(_titleMeta);
     }
-    if (d.album.present) {
+    if (data.containsKey('album')) {
       context.handle(
-          _albumMeta, album.isAcceptableValue(d.album.value, _albumMeta));
+          _albumMeta, album.isAcceptableOrUnknown(data['album'], _albumMeta));
     } else if (isInserting) {
       context.missing(_albumMeta);
     }
-    if (d.artist.present) {
-      context.handle(
-          _artistMeta, artist.isAcceptableValue(d.artist.value, _artistMeta));
+    if (data.containsKey('artist')) {
+      context.handle(_artistMeta,
+          artist.isAcceptableOrUnknown(data['artist'], _artistMeta));
     } else if (isInserting) {
       context.missing(_artistMeta);
     }
-    if (d.path.present) {
+    if (data.containsKey('path')) {
       context.handle(
-          _pathMeta, path.isAcceptableValue(d.path.value, _pathMeta));
+          _pathMeta, path.isAcceptableOrUnknown(data['path'], _pathMeta));
     } else if (isInserting) {
       context.missing(_pathMeta);
     }
-    if (d.duration.present) {
+    if (data.containsKey('duration')) {
       context.handle(_durationMeta,
-          duration.isAcceptableValue(d.duration.value, _durationMeta));
+          duration.isAcceptableOrUnknown(data['duration'], _durationMeta));
     }
-    if (d.albumArtPath.present) {
+    if (data.containsKey('album_art_path')) {
       context.handle(
           _albumArtPathMeta,
-          albumArtPath.isAcceptableValue(
-              d.albumArtPath.value, _albumArtPathMeta));
+          albumArtPath.isAcceptableOrUnknown(
+              data['album_art_path'], _albumArtPathMeta));
     }
-    if (d.trackNumber.present) {
-      context.handle(_trackNumberMeta,
-          trackNumber.isAcceptableValue(d.trackNumber.value, _trackNumberMeta));
+    if (data.containsKey('track_number')) {
+      context.handle(
+          _trackNumberMeta,
+          trackNumber.isAcceptableOrUnknown(
+              data['track_number'], _trackNumberMeta));
     }
     return context;
   }
@@ -600,34 +673,6 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
   }
 
   @override
-  Map<String, Variable> entityToSql(SongsCompanion d) {
-    final map = <String, Variable>{};
-    if (d.title.present) {
-      map['title'] = Variable<String, StringType>(d.title.value);
-    }
-    if (d.album.present) {
-      map['album'] = Variable<String, StringType>(d.album.value);
-    }
-    if (d.artist.present) {
-      map['artist'] = Variable<String, StringType>(d.artist.value);
-    }
-    if (d.path.present) {
-      map['path'] = Variable<String, StringType>(d.path.value);
-    }
-    if (d.duration.present) {
-      map['duration'] = Variable<int, IntType>(d.duration.value);
-    }
-    if (d.albumArtPath.present) {
-      map['album_art_path'] =
-          Variable<String, StringType>(d.albumArtPath.value);
-    }
-    if (d.trackNumber.present) {
-      map['track_number'] = Variable<int, IntType>(d.trackNumber.value);
-    }
-    return map;
-  }
-
-  @override
   $SongsTable createAlias(String alias) {
     return $SongsTable(_db, alias);
   }
@@ -636,6 +681,7 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
 abstract class _$MoorMusicDataSource extends GeneratedDatabase {
   _$MoorMusicDataSource(QueryExecutor e)
       : super(SqlTypeSystem.defaultInstance, e);
+  _$MoorMusicDataSource.connect(DatabaseConnection c) : super.connect(c);
   $AlbumsTable _albums;
   $AlbumsTable get albums => _albums ??= $AlbumsTable(this);
   $SongsTable _songs;
