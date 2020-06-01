@@ -60,6 +60,7 @@ Future<void> setupGetIt() async {
   );
 
   // data sources
+  // TODO: start background isolate here
   getIt.registerLazySingleton<MusicDataSource>(() => MoorMusicDataSource());
   getIt.registerLazySingleton<LocalMusicFetcher>(
     () => LocalMusicFetcherImpl(
