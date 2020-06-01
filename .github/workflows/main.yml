@@ -25,6 +25,10 @@ jobs:
     - uses: actions/setup-java@v1
       with:
         java-version: '12.x'
+        
+    # install sqlite3
+    - run: sudo apt-get install sqlite3
+      
     - uses: subosito/flutter-action@v1
       with:
         channel: 'stable'
