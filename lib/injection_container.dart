@@ -1,5 +1,7 @@
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:get_it/get_it.dart';
+import 'package:moor/isolate.dart';
+import 'package:moor/moor.dart';
 
 import 'domain/repositories/audio_repository.dart';
 import 'domain/repositories/music_data_repository.dart';
@@ -18,6 +20,8 @@ import 'system/repositories/music_data_repository_impl.dart';
 final GetIt getIt = GetIt.instance;
 
 Future<void> setupGetIt() async {
+  print('setupGetIt');
+
   // stores
   getIt.registerFactory<MusicDataStore>(
     () {
@@ -60,8 +64,10 @@ Future<void> setupGetIt() async {
   );
 
   // data sources
-  // TODO: start background isolate here
-  getIt.registerLazySingleton<MusicDataSource>(() => MoorMusicDataSource());
+  final MoorIsolate moorIsolate = await createMoorIsolate();
+  final DatabaseConnection databaseConnection = await moorIsolate.connect();
+  final MoorMusicDataSource moorMusicDataSource = MoorMusicDataSource.connect(databaseConnection);
+  getIt.registerLazySingleton<MusicDataSource>(() => moorMusicDataSource);
   getIt.registerLazySingleton<LocalMusicFetcher>(
     () => LocalMusicFetcherImpl(
       getIt(),

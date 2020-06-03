@@ -16,6 +16,7 @@ import 'presentation/widgets/injection_widget.dart';
 import 'presentation/widgets/navbar.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await setupGetIt();
   runApp(MyApp());
 }
