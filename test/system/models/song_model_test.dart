@@ -77,7 +77,7 @@ void main() {
           title: SONG_TITLE_3,
           album: ALBUM_TITLE_3,
           artist: ARTIST_3,
-          duration: DURATION_3,
+          duration: Duration(milliseconds: DURATION_3),
           artUri: 'file://$ALBUM_ART_PATH_3',
         );
 

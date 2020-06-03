@@ -54,10 +54,10 @@ class AudioManagerImpl implements AudioManager {
   }
 
   Future<void> _startAudioService() async {
-    if (!await AudioService.running) {
+    if (!AudioService.running) {
       await AudioService.start(
         backgroundTaskEntrypoint: _backgroundTaskEntrypoint,
-        enableQueue: true,
+        androidEnableQueue: true,
       );
     }
   }
@@ -75,24 +75,24 @@ class AudioManagerImpl implements AudioManager {
   }
 
   Stream<int> _position() async* {
-    BasicPlaybackState state;
-    int updateTime;
-    int statePosition;
+    PlaybackState state;
+    Duration updateTime;
+    Duration statePosition;
 
     // should this class get an init method for this?
     _sourcePlaybackStateStream.listen((currentState) {
-      state = currentState?.basicState;
+      state = currentState;
       updateTime = currentState?.updateTime;
       statePosition = currentState?.position;
     });
 
     while (true) {
       if (statePosition != null && updateTime != null && state != null) {
-        if (state == BasicPlaybackState.playing) {
-          yield statePosition +
-              (DateTime.now().millisecondsSinceEpoch - updateTime);
+        if (state.playing) {
+          yield statePosition.inMilliseconds +
+              (DateTime.now().millisecondsSinceEpoch - updateTime.inMilliseconds);
         } else {
-          yield statePosition;
+          yield statePosition.inMilliseconds;
         }
       } else {
         yield 0;

@@ -64,7 +64,7 @@ class SongModel extends Song {
       album: mediaItem.album,
       artist: mediaItem.artist,
       path: mediaItem.id,
-      duration: mediaItem.duration,
+      duration: mediaItem.duration.inMilliseconds,
       albumArtPath: artUri,
     );
   }
@@ -86,7 +86,7 @@ class SongModel extends Song {
         title: title,
         album: album,
         artist: artist,
-        duration: duration,
+        duration: Duration(milliseconds: duration),
         artUri: 'file://$albumArtPath',
       );
 }

@@ -9,15 +9,15 @@ class PlaybackStateModel {
       return null;
     }
 
-    switch (playbackState.basicState) {
-      case BasicPlaybackState.none:
-        return entity.PlaybackState.none;
-      case BasicPlaybackState.stopped:
+    if (playbackState.playing) {
+      return entity.PlaybackState.playing;
+    } else if (playbackState.processingState == AudioProcessingState.ready) {
+      return entity.PlaybackState.paused;
+    }
+
+    switch (playbackState.processingState) {
+      case AudioProcessingState.stopped:
         return entity.PlaybackState.stopped;
-      case BasicPlaybackState.paused:
-        return entity.PlaybackState.paused;
-      case BasicPlaybackState.playing:
-        return entity.PlaybackState.playing;
       default:
         return entity.PlaybackState.none;
     }

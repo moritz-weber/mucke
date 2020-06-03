@@ -17,13 +17,13 @@ dependencies:
   
   flutter_audio_query: 0.3.3
 
-  audio_service: ^0.8.0
+  audio_service: ^0.9.0
   just_audio: ^0.1.0
 
   get_it: ^4.0.2
   provider: ^4.0.4
   moor: ^3.0.2
-  moor_ffi: ^0.5.0
+  moor_ffi: ^0.6.0
   path_provider:
   path: 
 

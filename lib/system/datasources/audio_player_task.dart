@@ -15,7 +15,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
   Duration _position;
 
   @override
-  Future<void> onStart() async {
+  Future<void> onStart(Map<String, dynamic> params) async {
     _audioPlayer.getPositionStream().listen((duration) => _position = duration);
 
     // AudioServiceBackground.setState(
@@ -40,8 +40,8 @@ class AudioPlayerTask extends BackgroundAudioTask {
   Future<void> onPlayFromMediaId(String mediaId) async {
     AudioServiceBackground.setState(
       controls: [pauseControl, stopControl],
-      basicState: BasicPlaybackState.playing,
-      updateTime: DateTime.now().millisecondsSinceEpoch,
+      playing: true,
+      processingState: AudioProcessingState.ready,
     );
 
     await AudioServiceBackground.setMediaItem(_mediaItems[mediaId]);
@@ -54,9 +54,10 @@ class AudioPlayerTask extends BackgroundAudioTask {
   Future<void> onPlay() async {
     AudioServiceBackground.setState(
       controls: [pauseControl, stopControl],
-      basicState: BasicPlaybackState.playing,
-      updateTime: DateTime.now().millisecondsSinceEpoch,
-      position: _position.inMilliseconds,
+      processingState: AudioProcessingState.ready,
+      updateTime: Duration(milliseconds: DateTime.now().millisecondsSinceEpoch),
+      position: _position,
+      playing: true,
     );
     _audioPlayer.play();
   }
@@ -65,9 +66,10 @@ class AudioPlayerTask extends BackgroundAudioTask {
   Future<void> onPause() async {
     AudioServiceBackground.setState(
       controls: [playControl, stopControl],
-      basicState: BasicPlaybackState.paused,
-      updateTime: DateTime.now().millisecondsSinceEpoch,
-      position: _position.inMilliseconds,
+      processingState: AudioProcessingState.ready,
+      updateTime: Duration(milliseconds: DateTime.now().millisecondsSinceEpoch),
+      position: _position,
+      playing: false,
     );
     await _audioPlayer.pause();
   }
