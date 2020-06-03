@@ -34,4 +34,4 @@ jobs:
         channel: 'stable'
     - run: flutter pub get
     - run: flutter test
-    - run: flutter build --debug
+    - run: flutter build apk --debug
