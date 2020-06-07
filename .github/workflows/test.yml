@@ -33,4 +33,8 @@ jobs:
       with:
         channel: 'stable'
     - run: flutter pub get
-    - run: flutter test
+    - run: flutter test --coverage
+    - name: Coveralls GitHub Action
+      uses: coverallsapp/github-action@v1.1.1
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
