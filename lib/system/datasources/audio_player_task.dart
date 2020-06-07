@@ -1,13 +1,19 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:moor/isolate.dart';
+import 'package:moor/moor.dart';
+
+import 'moor_music_data_source.dart';
 
 const String SET_QUEUE = 'SET_QUEUE';
 
 class AudioPlayerTask extends BackgroundAudioTask {
   final _audioPlayer = AudioPlayer();
   final _completer = Completer();
+  MoorMusicDataSource _moorMusicDataSource;
 
   final _mediaItems = <String, MediaItem>{};
   final _queue = <MediaItem>[];
@@ -18,10 +24,11 @@ class AudioPlayerTask extends BackgroundAudioTask {
   Future<void> onStart(Map<String, dynamic> params) async {
     _audioPlayer.getPositionStream().listen((duration) => _position = duration);
 
-    // AudioServiceBackground.setState(
-    //   controls: [],
-    //   basicState: BasicPlaybackState.none,
-    // );
+    final connectPort = IsolateNameServer.lookupPortByName(MOOR_ISOLATE);
+    final MoorIsolate moorIsolate = MoorIsolate.fromConnectPort(connectPort);
+    final DatabaseConnection databaseConnection = await moorIsolate.connect();
+    _moorMusicDataSource = MoorMusicDataSource.connect(databaseConnection);
+
     await _completer.future;
   }
 
@@ -78,9 +85,13 @@ class AudioPlayerTask extends BackgroundAudioTask {
   Future<void> onCustomAction(String name, arguments) async {
     switch (name) {
       case SET_QUEUE:
-        break;
+        return _setQueue(List<String>.from(arguments as List<dynamic>));
       default:
     }
+  }
+
+  Future<void> _setQueue(List<String> queue) async {
+
   }
 }
 

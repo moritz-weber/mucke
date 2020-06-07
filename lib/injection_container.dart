@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:get_it/get_it.dart';
 import 'package:moor/isolate.dart';
@@ -65,6 +67,8 @@ Future<void> setupGetIt() async {
 
   // data sources
   final MoorIsolate moorIsolate = await createMoorIsolate();
+  IsolateNameServer.registerPortWithName(moorIsolate.connectPort, MOOR_ISOLATE);
+
   final DatabaseConnection databaseConnection = await moorIsolate.connect();
   final MoorMusicDataSource moorMusicDataSource = MoorMusicDataSource.connect(databaseConnection);
   getIt.registerLazySingleton<MusicDataSource>(() => moorMusicDataSource);

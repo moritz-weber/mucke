@@ -35,12 +35,11 @@ class AudioManagerImpl implements AudioManager {
   @override
   Future<void> playSong(int index, List<SongModel> songList) async {
     await _startAudioService();
-    final List<MediaItem> queue = songList.map((s) => s.toMediaItem()).toList();
+    final List<String> queue = songList.map((s) => s.path).toList();
 
-    // await AudioService.customAction(SET_QUEUE, listofids);
+    await AudioService.customAction(SET_QUEUE, queue);
 
-    await AudioService.addQueueItem(queue[index]);
-    AudioService.playFromMediaId(queue[index].id);
+    AudioService.playFromMediaId(queue[index]);
   }
 
   @override

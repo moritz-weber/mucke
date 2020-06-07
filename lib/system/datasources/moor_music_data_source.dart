@@ -13,6 +13,8 @@ import 'music_data_source_contract.dart';
 
 part 'moor_music_data_source.g.dart';
 
+const String MOOR_ISOLATE = 'MOOR_ISOLATE';
+
 @DataClassName('MoorAlbum')
 class Albums extends Table {
   TextColumn get title => text()();
