@@ -17,24 +17,31 @@ const String MOOR_ISOLATE = 'MOOR_ISOLATE';
 
 @DataClassName('MoorAlbum')
 class Albums extends Table {
+  IntColumn get id => integer().autoIncrement()();
   TextColumn get title => text()();
   TextColumn get artist => text()();
   TextColumn get albumArtPath => text().nullable()();
   IntColumn get year => integer().nullable()();
+  BoolColumn get present => boolean().withDefault(const Constant(true))();
 
   @override
-  Set<Column> get primaryKey => {title, artist};
+  Set<Column> get primaryKey => {id};
 }
 
 @DataClassName('MoorSong')
 class Songs extends Table {
   TextColumn get title => text()();
-  TextColumn get album => text()();
+  TextColumn get albumTitle => text()();
+  IntColumn get albumId => integer()();
   TextColumn get artist => text()();
   TextColumn get path => text()();
   IntColumn get duration => integer().nullable()();
   TextColumn get albumArtPath => text().nullable()();
   IntColumn get trackNumber => integer().nullable()();
+  BoolColumn get present => boolean().withDefault(const Constant(true))();
+
+  @override
+  Set<Column> get primaryKey => {path};
 }
 
 @UseMoor(tables: [Albums, Songs])
@@ -42,10 +49,13 @@ class MoorMusicDataSource extends _$MoorMusicDataSource
     implements MusicDataSource {
   /// Use MoorMusicDataSource in main isolate only.
   MoorMusicDataSource() : super(_openConnection());
+
   /// Used for testing with in-memory database.
   MoorMusicDataSource.withQueryExecutor(QueryExecutor e) : super(e);
+
   /// Used to connect to a database on another isolate.
-  MoorMusicDataSource.connect(DatabaseConnection connection) : super.connect(connection);
+  MoorMusicDataSource.connect(DatabaseConnection connection)
+      : super.connect(connection);
 
   @override
   int get schemaVersion => 1;
@@ -59,9 +69,8 @@ class MoorMusicDataSource extends _$MoorMusicDataSource
 
   // TODO: insert can throw exception -> implications?
   @override
-  Future<void> insertAlbum(AlbumModel albumModel) async {
-    await into(albums).insert(albumModel.toAlbumsCompanion());
-    return;
+  Future<int> insertAlbum(AlbumModel albumModel) async {
+    return await into(albums).insert(albumModel.toAlbumsCompanion());
   }
 
   @override
@@ -77,23 +86,107 @@ class MoorMusicDataSource extends _$MoorMusicDataSource
         .toList());
   }
 
-    @override
+  @override
   Future<List<SongModel>> getSongsFromAlbum(AlbumModel album) {
-    return (select(songs)..where((tbl) => tbl.album.equals(album.title))).get().then((moorSongList) => moorSongList
-        .map((moorSong) => SongModel.fromMoorSong(moorSong))
-        .toList());
+    return (select(songs)..where((tbl) => tbl.albumTitle.equals(album.title)))
+        .get()
+        .then((moorSongList) => moorSongList
+            .map((moorSong) => SongModel.fromMoorSong(moorSong))
+            .toList());
   }
 
   @override
   Future<void> insertSong(SongModel songModel) async {
     await into(songs).insert(songModel.toSongsCompanion());
-    return;
   }
 
   @override
   Future<bool> songExists(SongModel songModel) async {
     final List<SongModel> songList = await getSongs();
     return songList.contains(songModel);
+  }
+
+  @override
+  Future<void> flagAlbumPresent(AlbumModel albumModel) async {
+    if (albumModel.id != null) {
+      (update(albums)..where((t) => t.id.equals(albumModel.id)))
+          .write(const AlbumsCompanion(present: Value(true)));
+    } else {
+      throw UnimplementedError();
+    }
+  }
+
+  @override
+  Future<AlbumModel> getAlbumByTitleArtist(String title, String artist) {
+    return (select(albums)
+          ..where((t) => t.title.equals(title) & t.artist.equals(artist)))
+        .getSingle()
+        .then(
+      (moorAlbum) {
+        if (moorAlbum == null) {
+          return null;
+        }
+        return AlbumModel.fromMoorAlbum(moorAlbum);
+      },
+    );
+  }
+
+  @override
+  Future<void> removeNonpresentAlbums() async {
+    (delete(albums)..where((t) => t.present.not())).go();
+  }
+
+  @override
+  Future<void> resetAlbumsPresentFlag() async {
+    update(albums).write(const AlbumsCompanion(present: Value(false)));
+    // return;
+  }
+
+  @override
+  Future<void> flagSongPresent(SongModel songModel) async {
+    (update(songs)..where((t) => t.path.equals(songModel.path)))
+        .write(const SongsCompanion(present: Value(true)));
+  }
+
+  @override
+  Future<SongModel> getSongByPath(String path) async {
+    return (select(songs)..where((t) => t.path.equals(path))).getSingle().then(
+      (moorSong) {
+        if (moorSong == null) {
+          return null;
+        }
+        return SongModel.fromMoorSong(moorSong);
+      },
+    );
+  }
+
+  @override
+  Future<SongModel> getSongByTitleAlbumArtist(
+      String title, String album, String artist) async {
+    return (select(songs)
+          ..where((t) =>
+              t.title.equals(title) &
+              t.albumTitle.equals(album) &
+              t.artist.equals(artist)))
+        .getSingle()
+        .then(
+      (moorSong) {
+        if (moorSong == null) {
+          return null;
+        }
+        return SongModel.fromMoorSong(moorSong);
+      },
+    );
+  }
+
+  @override
+  Future<void> removeNonpresentSongs() async {
+    (delete(songs)..where((t) => t.present.not())).go();
+  }
+
+  @override
+  Future<void> resetSongsPresentFlag() async {
+    update(songs).write(const SongsCompanion(present: Value(false)));
   }
 }
 
@@ -144,7 +237,7 @@ void _startBackground(_IsolateStartRequest request) {
 // functions can only take one parameter.
 class _IsolateStartRequest {
   _IsolateStartRequest(this.sendMoorIsolate, this.targetPath);
-  
+
   final SendPort sendMoorIsolate;
   final String targetPath;
 }

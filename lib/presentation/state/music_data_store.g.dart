@@ -13,51 +13,45 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
 
   @override
   ObservableFuture<List<Album>> get albumsFuture {
-    _$albumsFutureAtom.context.enforceReadPolicy(_$albumsFutureAtom);
-    _$albumsFutureAtom.reportObserved();
+    _$albumsFutureAtom.reportRead();
     return super.albumsFuture;
   }
 
   @override
   set albumsFuture(ObservableFuture<List<Album>> value) {
-    _$albumsFutureAtom.context.conditionallyRunInAction(() {
+    _$albumsFutureAtom.reportWrite(value, super.albumsFuture, () {
       super.albumsFuture = value;
-      _$albumsFutureAtom.reportChanged();
-    }, _$albumsFutureAtom, name: '${_$albumsFutureAtom.name}_set');
+    });
   }
 
   final _$songsAtom = Atom(name: '_MusicDataStore.songs');
 
   @override
   ObservableList<Song> get songs {
-    _$songsAtom.context.enforceReadPolicy(_$songsAtom);
-    _$songsAtom.reportObserved();
+    _$songsAtom.reportRead();
     return super.songs;
   }
 
   @override
   set songs(ObservableList<Song> value) {
-    _$songsAtom.context.conditionallyRunInAction(() {
+    _$songsAtom.reportWrite(value, super.songs, () {
       super.songs = value;
-      _$songsAtom.reportChanged();
-    }, _$songsAtom, name: '${_$songsAtom.name}_set');
+    });
   }
 
   final _$isFetchingSongsAtom = Atom(name: '_MusicDataStore.isFetchingSongs');
 
   @override
   bool get isFetchingSongs {
-    _$isFetchingSongsAtom.context.enforceReadPolicy(_$isFetchingSongsAtom);
-    _$isFetchingSongsAtom.reportObserved();
+    _$isFetchingSongsAtom.reportRead();
     return super.isFetchingSongs;
   }
 
   @override
   set isFetchingSongs(bool value) {
-    _$isFetchingSongsAtom.context.conditionallyRunInAction(() {
+    _$isFetchingSongsAtom.reportWrite(value, super.isFetchingSongs, () {
       super.isFetchingSongs = value;
-      _$isFetchingSongsAtom.reportChanged();
-    }, _$isFetchingSongsAtom, name: '${_$isFetchingSongsAtom.name}_set');
+    });
   }
 
   final _$isUpdatingDatabaseAtom =
@@ -65,59 +59,56 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
 
   @override
   bool get isUpdatingDatabase {
-    _$isUpdatingDatabaseAtom.context
-        .enforceReadPolicy(_$isUpdatingDatabaseAtom);
-    _$isUpdatingDatabaseAtom.reportObserved();
+    _$isUpdatingDatabaseAtom.reportRead();
     return super.isUpdatingDatabase;
   }
 
   @override
   set isUpdatingDatabase(bool value) {
-    _$isUpdatingDatabaseAtom.context.conditionallyRunInAction(() {
+    _$isUpdatingDatabaseAtom.reportWrite(value, super.isUpdatingDatabase, () {
       super.isUpdatingDatabase = value;
-      _$isUpdatingDatabaseAtom.reportChanged();
-    }, _$isUpdatingDatabaseAtom, name: '${_$isUpdatingDatabaseAtom.name}_set');
+    });
   }
 
   final _$albumSongsAtom = Atom(name: '_MusicDataStore.albumSongs');
 
   @override
   ObservableList<Song> get albumSongs {
-    _$albumSongsAtom.context.enforceReadPolicy(_$albumSongsAtom);
-    _$albumSongsAtom.reportObserved();
+    _$albumSongsAtom.reportRead();
     return super.albumSongs;
   }
 
   @override
   set albumSongs(ObservableList<Song> value) {
-    _$albumSongsAtom.context.conditionallyRunInAction(() {
+    _$albumSongsAtom.reportWrite(value, super.albumSongs, () {
       super.albumSongs = value;
-      _$albumSongsAtom.reportChanged();
-    }, _$albumSongsAtom, name: '${_$albumSongsAtom.name}_set');
+    });
   }
 
-  final _$updateDatabaseAsyncAction = AsyncAction('updateDatabase');
+  final _$updateDatabaseAsyncAction =
+      AsyncAction('_MusicDataStore.updateDatabase');
 
   @override
   Future<void> updateDatabase() {
     return _$updateDatabaseAsyncAction.run(() => super.updateDatabase());
   }
 
-  final _$fetchAlbumsAsyncAction = AsyncAction('fetchAlbums');
+  final _$fetchAlbumsAsyncAction = AsyncAction('_MusicDataStore.fetchAlbums');
 
   @override
   Future<void> fetchAlbums() {
     return _$fetchAlbumsAsyncAction.run(() => super.fetchAlbums());
   }
 
-  final _$fetchSongsAsyncAction = AsyncAction('fetchSongs');
+  final _$fetchSongsAsyncAction = AsyncAction('_MusicDataStore.fetchSongs');
 
   @override
   Future<void> fetchSongs() {
     return _$fetchSongsAsyncAction.run(() => super.fetchSongs());
   }
 
-  final _$fetchSongsFromAlbumAsyncAction = AsyncAction('fetchSongsFromAlbum');
+  final _$fetchSongsFromAlbumAsyncAction =
+      AsyncAction('_MusicDataStore.fetchSongsFromAlbum');
 
   @override
   Future<void> fetchSongsFromAlbum(Album album) {
@@ -130,7 +121,8 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
 
   @override
   void init() {
-    final _$actionInfo = _$_MusicDataStoreActionController.startAction();
+    final _$actionInfo = _$_MusicDataStoreActionController.startAction(
+        name: '_MusicDataStore.init');
     try {
       return super.init();
     } finally {
@@ -140,8 +132,12 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
 
   @override
   String toString() {
-    final string =
-        'albumsFuture: ${albumsFuture.toString()},songs: ${songs.toString()},isFetchingSongs: ${isFetchingSongs.toString()},isUpdatingDatabase: ${isUpdatingDatabase.toString()},albumSongs: ${albumSongs.toString()}';
-    return '{$string}';
+    return '''
+albumsFuture: ${albumsFuture},
+songs: ${songs},
+isFetchingSongs: ${isFetchingSongs},
+isUpdatingDatabase: ${isUpdatingDatabase},
+albumSongs: ${albumSongs}
+    ''';
   }
 }

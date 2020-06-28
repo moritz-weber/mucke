@@ -7,8 +7,7 @@ import '../../domain/entities/song.dart';
 import '../datasources/moor_music_data_source.dart';
 
 class SongModel extends Song {
-  const SongModel({
-    this.id,
+  SongModel({
     @required String title,
     @required String album,
     @required String artist,
@@ -16,6 +15,7 @@ class SongModel extends Song {
     @required int duration,
     int trackNumber,
     String albumArtPath,
+    this.albumId
   }) : super(
           title: title,
           album: album,
@@ -29,7 +29,8 @@ class SongModel extends Song {
   factory SongModel.fromMoorSong(MoorSong moorSong) => SongModel(
         title: moorSong.title,
         artist: moorSong.artist,
-        album: moorSong.album,
+        album: moorSong.albumTitle,
+        albumId: moorSong.albumId,
         path: moorSong.path,
         duration: moorSong.duration,
         albumArtPath: moorSong.albumArtPath,
@@ -44,6 +45,7 @@ class SongModel extends Song {
       title: songInfo.title,
       artist: songInfo.artist,
       album: songInfo.album,
+      albumId: int.parse(songInfo.albumId),
       path: songInfo.filePath,
       duration: duration == null ? null : int.parse(duration),
       albumArtPath: songInfo.albumArtwork,
@@ -69,10 +71,11 @@ class SongModel extends Song {
     );
   }
 
-  final int id;
+  int albumId;
 
   SongsCompanion toSongsCompanion() => SongsCompanion(
-        album: Value(album),
+        albumTitle: Value(album),
+        albumId: Value(albumId),
         artist: Value(artist),
         title: Value(title),
         path: Value(path),

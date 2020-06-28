@@ -13,17 +13,15 @@ mixin _$NavigationStore on _NavigationStore, Store {
 
   @override
   int get navIndex {
-    _$navIndexAtom.context.enforceReadPolicy(_$navIndexAtom);
-    _$navIndexAtom.reportObserved();
+    _$navIndexAtom.reportRead();
     return super.navIndex;
   }
 
   @override
   set navIndex(int value) {
-    _$navIndexAtom.context.conditionallyRunInAction(() {
+    _$navIndexAtom.reportWrite(value, super.navIndex, () {
       super.navIndex = value;
-      _$navIndexAtom.reportChanged();
-    }, _$navIndexAtom, name: '${_$navIndexAtom.name}_set');
+    });
   }
 
   final _$_NavigationStoreActionController =
@@ -31,7 +29,8 @@ mixin _$NavigationStore on _NavigationStore, Store {
 
   @override
   void init() {
-    final _$actionInfo = _$_NavigationStoreActionController.startAction();
+    final _$actionInfo = _$_NavigationStoreActionController.startAction(
+        name: '_NavigationStore.init');
     try {
       return super.init();
     } finally {
@@ -41,7 +40,8 @@ mixin _$NavigationStore on _NavigationStore, Store {
 
   @override
   void setNavIndex(int i) {
-    final _$actionInfo = _$_NavigationStoreActionController.startAction();
+    final _$actionInfo = _$_NavigationStoreActionController.startAction(
+        name: '_NavigationStore.setNavIndex');
     try {
       return super.setNavIndex(i);
     } finally {
@@ -51,7 +51,8 @@ mixin _$NavigationStore on _NavigationStore, Store {
 
   @override
   String toString() {
-    final string = 'navIndex: ${navIndex.toString()}';
-    return '{$string}';
+    return '''
+navIndex: ${navIndex}
+    ''';
   }
 }

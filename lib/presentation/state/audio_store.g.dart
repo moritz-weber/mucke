@@ -13,34 +13,30 @@ mixin _$AudioStore on _AudioStore, Store {
 
   @override
   ObservableStream<Song> get currentSong {
-    _$currentSongAtom.context.enforceReadPolicy(_$currentSongAtom);
-    _$currentSongAtom.reportObserved();
+    _$currentSongAtom.reportRead();
     return super.currentSong;
   }
 
   @override
   set currentSong(ObservableStream<Song> value) {
-    _$currentSongAtom.context.conditionallyRunInAction(() {
+    _$currentSongAtom.reportWrite(value, super.currentSong, () {
       super.currentSong = value;
-      _$currentSongAtom.reportChanged();
-    }, _$currentSongAtom, name: '${_$currentSongAtom.name}_set');
+    });
   }
 
   final _$songAtom = Atom(name: '_AudioStore.song');
 
   @override
   Song get song {
-    _$songAtom.context.enforceReadPolicy(_$songAtom);
-    _$songAtom.reportObserved();
+    _$songAtom.reportRead();
     return super.song;
   }
 
   @override
   set song(Song value) {
-    _$songAtom.context.conditionallyRunInAction(() {
+    _$songAtom.reportWrite(value, super.song, () {
       super.song = value;
-      _$songAtom.reportChanged();
-    }, _$songAtom, name: '${_$songAtom.name}_set');
+    });
   }
 
   final _$playbackStateStreamAtom =
@@ -48,19 +44,15 @@ mixin _$AudioStore on _AudioStore, Store {
 
   @override
   ObservableStream<PlaybackState> get playbackStateStream {
-    _$playbackStateStreamAtom.context
-        .enforceReadPolicy(_$playbackStateStreamAtom);
-    _$playbackStateStreamAtom.reportObserved();
+    _$playbackStateStreamAtom.reportRead();
     return super.playbackStateStream;
   }
 
   @override
   set playbackStateStream(ObservableStream<PlaybackState> value) {
-    _$playbackStateStreamAtom.context.conditionallyRunInAction(() {
+    _$playbackStateStreamAtom.reportWrite(value, super.playbackStateStream, () {
       super.playbackStateStream = value;
-      _$playbackStateStreamAtom.reportChanged();
-    }, _$playbackStateStreamAtom,
-        name: '${_$playbackStateStreamAtom.name}_set');
+    });
   }
 
   final _$currentPositionStreamAtom =
@@ -68,43 +60,40 @@ mixin _$AudioStore on _AudioStore, Store {
 
   @override
   ObservableStream<int> get currentPositionStream {
-    _$currentPositionStreamAtom.context
-        .enforceReadPolicy(_$currentPositionStreamAtom);
-    _$currentPositionStreamAtom.reportObserved();
+    _$currentPositionStreamAtom.reportRead();
     return super.currentPositionStream;
   }
 
   @override
   set currentPositionStream(ObservableStream<int> value) {
-    _$currentPositionStreamAtom.context.conditionallyRunInAction(() {
+    _$currentPositionStreamAtom.reportWrite(value, super.currentPositionStream,
+        () {
       super.currentPositionStream = value;
-      _$currentPositionStreamAtom.reportChanged();
-    }, _$currentPositionStreamAtom,
-        name: '${_$currentPositionStreamAtom.name}_set');
+    });
   }
 
-  final _$playSongAsyncAction = AsyncAction('playSong');
+  final _$playSongAsyncAction = AsyncAction('_AudioStore.playSong');
 
   @override
   Future<void> playSong(int index, List<Song> songList) {
     return _$playSongAsyncAction.run(() => super.playSong(index, songList));
   }
 
-  final _$playAsyncAction = AsyncAction('play');
+  final _$playAsyncAction = AsyncAction('_AudioStore.play');
 
   @override
   Future<void> play() {
     return _$playAsyncAction.run(() => super.play());
   }
 
-  final _$pauseAsyncAction = AsyncAction('pause');
+  final _$pauseAsyncAction = AsyncAction('_AudioStore.pause');
 
   @override
   Future<void> pause() {
     return _$pauseAsyncAction.run(() => super.pause());
   }
 
-  final _$updateSongAsyncAction = AsyncAction('updateSong');
+  final _$updateSongAsyncAction = AsyncAction('_AudioStore.updateSong');
 
   @override
   Future<void> updateSong(Song streamValue) {
@@ -115,7 +104,8 @@ mixin _$AudioStore on _AudioStore, Store {
 
   @override
   void init() {
-    final _$actionInfo = _$_AudioStoreActionController.startAction();
+    final _$actionInfo =
+        _$_AudioStoreActionController.startAction(name: '_AudioStore.init');
     try {
       return super.init();
     } finally {
@@ -125,8 +115,11 @@ mixin _$AudioStore on _AudioStore, Store {
 
   @override
   String toString() {
-    final string =
-        'currentSong: ${currentSong.toString()},song: ${song.toString()},playbackStateStream: ${playbackStateStream.toString()},currentPositionStream: ${currentPositionStream.toString()}';
-    return '{$string}';
+    return '''
+currentSong: ${currentSong},
+song: ${song},
+playbackStateStream: ${playbackStateStream},
+currentPositionStream: ${currentPositionStream}
+    ''';
   }
 }

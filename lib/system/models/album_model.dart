@@ -6,7 +6,7 @@ import '../../domain/entities/album.dart';
 import '../datasources/moor_music_data_source.dart';
 
 class AlbumModel extends Album {
-  AlbumModel({
+  const AlbumModel({
     this.id,
     @required String title,
     @required String artist,
@@ -20,6 +20,7 @@ class AlbumModel extends Album {
         );
 
   factory AlbumModel.fromMoorAlbum(MoorAlbum moorAlbum) => AlbumModel(
+        id: moorAlbum.id,
         title: moorAlbum.title,
         artist: moorAlbum.artist,
         albumArtPath: moorAlbum.albumArtPath,
@@ -30,6 +31,7 @@ class AlbumModel extends Album {
     final String _year = albumInfo.firstYear;
 
     return AlbumModel(
+      id: int.parse(albumInfo.id),
       title: albumInfo.title,
       artist: albumInfo.artist,
       albumArtPath: albumInfo.albumArt,

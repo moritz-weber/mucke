@@ -21,6 +21,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
   Future<List<SongModel>> getSongs() async {
     final List<SongInfo> songInfoList = await flutterAudioQuery.getSongs();
     return songInfoList
+        .where((songInfo) => songInfo.isMusic)
         .map((SongInfo songInfo) => SongModel.fromSongInfo(songInfo))
         .toList();
   }
