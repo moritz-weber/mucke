@@ -7,16 +7,16 @@ import '../../domain/entities/song.dart';
 import '../datasources/moor_music_data_source.dart';
 
 class SongModel extends Song {
-  SongModel({
-    @required String title,
-    @required String album,
-    @required String artist,
-    @required String path,
-    @required int duration,
-    int trackNumber,
-    String albumArtPath,
-    this.albumId
-  }) : super(
+  const SongModel(
+      {@required String title,
+      @required String album,
+      @required this.albumId,
+      @required String artist,
+      @required String path,
+      @required int duration,
+      int trackNumber,
+      String albumArtPath})
+      : super(
           title: title,
           album: album,
           artist: artist,
@@ -53,25 +53,55 @@ class SongModel extends Song {
     );
   }
 
-  // TODO: test
   factory SongModel.fromMediaItem(MediaItem mediaItem) {
     if (mediaItem == null) {
       return null;
     }
 
     final String artUri = mediaItem.artUri?.replaceFirst('file://', '');
+    final tn = mediaItem.extras['trackNumber'];
+    int trackNumber;
+
+    if (tn == null) {
+      trackNumber = null;
+    } else {
+      trackNumber = tn as int;
+    }
 
     return SongModel(
       title: mediaItem.title,
       album: mediaItem.album,
+      albumId: mediaItem.extras['albumId'] as int,
       artist: mediaItem.artist,
       path: mediaItem.id,
       duration: mediaItem.duration.inMilliseconds,
       albumArtPath: artUri,
+      trackNumber: trackNumber,
     );
   }
 
-  int albumId;
+  final int albumId;
+
+  SongModel copyWith({
+    String title,
+    String album,
+    String artist,
+    String path,
+    int duration,
+    int trackNumber,
+    String albumArtPath,
+    int albumId,
+  }) =>
+      SongModel(
+        album: album ?? this.album,
+        artist: artist ?? this.artist,
+        duration: duration ?? this.duration,
+        path: path ?? this.path,
+        title: title ?? this.title,
+        trackNumber: trackNumber ?? this.trackNumber,
+        albumArtPath: albumArtPath ?? this.albumArtPath,
+        albumId: albumId ?? this.albumId,
+      );
 
   SongsCompanion toSongsCompanion() => SongsCompanion(
         albumTitle: Value(album),
@@ -91,5 +121,9 @@ class SongModel extends Song {
         artist: artist,
         duration: Duration(milliseconds: duration),
         artUri: 'file://$albumArtPath',
+        extras: {
+          'albumId': albumId,
+          'trackNumber': trackNumber,
+        }
       );
 }

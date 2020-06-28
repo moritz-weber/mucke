@@ -19,12 +19,13 @@ void main() {
       title: ALBUM_TITLE_1,
       artist: ARTIST_1,
       albumArtPath: ALBUM_ART_PATH_1,
-      pubYear: YEAR_1,
+      year: YEAR_1,
     );
 
     songModel = SongModel(
       title: SONG_TITLE_3,
       album: ALBUM_TITLE_3,
+      albumId: ALBUM_ID_3,
       artist: ARTIST_3,
       path: PATH_3,
       duration: DURATION_3,

@@ -69,8 +69,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
       if (storedSong != null) {
         await musicDataSource.flagSongPresent(storedSong);
       } else {
-        final SongModel songToInsert = song;
-        songToInsert.albumId = albumIdMap[song.albumId];        
+        final SongModel songToInsert = song.copyWith(albumId: albumIdMap[song.albumId]);
 
         // TODO: fails if albumId is null
         await musicDataSource.insertSong(songToInsert);

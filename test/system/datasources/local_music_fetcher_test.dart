@@ -27,6 +27,7 @@ void main() {
     setUp(() {
       mockAlbumInfo = MockAlbumInfo();
       when(mockAlbumInfo.title).thenReturn(ALBUM_TITLE_1);
+      when(mockAlbumInfo.id).thenReturn(ID_1.toString());
       when(mockAlbumInfo.albumArt).thenReturn(ALBUM_ART_PATH_1);
       when(mockAlbumInfo.artist).thenReturn(ARTIST_1);
       when(mockAlbumInfo.firstYear).thenReturn(FIRST_YEAR_1.toString());
@@ -70,8 +71,11 @@ void main() {
 
     setUp(() {
       mockSongInfo = MockSongInfo();
+      when(mockSongInfo.isMusic).thenReturn(true);
+
       when(mockSongInfo.title).thenReturn(SONG_TITLE_3);
       when(mockSongInfo.album).thenReturn(ALBUM_TITLE_3);
+      when(mockSongInfo.albumId).thenReturn(ALBUM_ID_3.toString());
       when(mockSongInfo.artist).thenReturn(ARTIST_3);
       when(mockSongInfo.filePath).thenReturn(PATH_3);
       when(mockSongInfo.track).thenReturn(TRACKNUMBER_3.toString());

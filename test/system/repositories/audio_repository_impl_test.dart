@@ -37,6 +37,7 @@ List<SongModel> setupSongList() => [
       SongModel(
         title: SONG_TITLE_3,
         album: ALBUM_TITLE_3,
+        albumId: ALBUM_ID_3,
         artist: ARTIST_3,
         path: PATH_3,
         duration: DURATION_3,
@@ -46,6 +47,7 @@ List<SongModel> setupSongList() => [
       SongModel(
         title: SONG_TITLE_4,
         album: ALBUM_TITLE_4,
+        albumId: ALBUM_ID_4,
         artist: ARTIST_4,
         path: PATH_4,
         duration: DURATION_4,

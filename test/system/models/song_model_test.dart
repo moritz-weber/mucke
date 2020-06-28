@@ -15,6 +15,7 @@ void main() {
   final tSongModel = SongModel(
     title: SONG_TITLE_3,
     album: ALBUM_TITLE_3,
+    albumId: ALBUM_ID_3,
     artist: ARTIST_3,
     path: PATH_3,
     duration: DURATION_3,
@@ -23,7 +24,7 @@ void main() {
   );
 
   test(
-    'should be subclass of Album entity',
+    'should be subclass of Song entity',
     () async {
       // assert
       expect(tSongModel, isA<Song>());
@@ -36,7 +37,8 @@ void main() {
       () async {
         // arrange
         final expected = SongsCompanion(
-          album: Value(ALBUM_TITLE_3),
+          albumTitle: Value(ALBUM_TITLE_3),
+          albumId: Value(ALBUM_ID_3),
           artist: Value(ARTIST_3),
           title: Value(SONG_TITLE_3),
           path: Value(PATH_3),
@@ -47,6 +49,7 @@ void main() {
 
         final songModel = SongModel(
           album: ALBUM_TITLE_3,
+          albumId: ALBUM_ID_3,
           artist: ARTIST_3,
           title: SONG_TITLE_3,
           path: PATH_3,
@@ -57,7 +60,8 @@ void main() {
         // act
         final result = songModel.toSongsCompanion();
         // assert
-        expect(result.album.value, expected.album.value);
+        expect(result.albumTitle.value, expected.albumTitle.value);
+        expect(result.albumId.value, expected.albumId.value);
         expect(result.artist.value, expected.artist.value);
         expect(result.title.value, expected.title.value);
         expect(result.path.value, expected.path.value);
@@ -73,16 +77,20 @@ void main() {
       () async {
         // arrange
         final expected = MediaItem(
-          id: PATH_3,
-          title: SONG_TITLE_3,
-          album: ALBUM_TITLE_3,
-          artist: ARTIST_3,
-          duration: Duration(milliseconds: DURATION_3),
-          artUri: 'file://$ALBUM_ART_PATH_3',
-        );
+            id: PATH_3,
+            title: SONG_TITLE_3,
+            album: ALBUM_TITLE_3,
+            artist: ARTIST_3,
+            duration: Duration(milliseconds: DURATION_3),
+            artUri: 'file://$ALBUM_ART_PATH_3',
+            extras: {
+              'albumId': ALBUM_ID_3,
+              'trackNumber': TRACKNUMBER_3,
+            });
 
         final songModel = SongModel(
           album: ALBUM_TITLE_3,
+          albumId: ALBUM_ID_3,
           artist: ARTIST_3,
           title: SONG_TITLE_3,
           path: PATH_3,
@@ -99,6 +107,7 @@ void main() {
         expect(result.id, expected.id);
         expect(result.duration, expected.duration);
         expect(result.artUri, expected.artUri);
+        expect(result.extras, expected.extras);
       },
     );
   });
@@ -109,17 +118,20 @@ void main() {
       () async {
         // arrange
         final moorSong = MoorSong(
-          album: ALBUM_TITLE_3,
+          albumTitle: ALBUM_TITLE_3,
+          albumId: ALBUM_ID_3,
           artist: ARTIST_3,
           title: SONG_TITLE_3,
           path: PATH_3,
           duration: DURATION_3,
           albumArtPath: ALBUM_ART_PATH_3,
           trackNumber: TRACKNUMBER_3,
+          present: PRESENT_3,
         );
 
         final expected = SongModel(
           album: ALBUM_TITLE_3,
+          albumId: ALBUM_ID_3,
           artist: ARTIST_3,
           title: SONG_TITLE_3,
           path: PATH_3,
@@ -135,12 +147,13 @@ void main() {
     );
   });
 
-  group('fromAlbumInfo', () {
+  group('fromSongInfo', () {
     MockSongInfo mockSongInfo;
 
     setUp(() {
       mockSongInfo = MockSongInfo();
       when(mockSongInfo.album).thenReturn(ALBUM_TITLE_3);
+      when(mockSongInfo.albumId).thenReturn(ALBUM_ID_3.toString());
       when(mockSongInfo.artist).thenReturn(ARTIST_3);
       when(mockSongInfo.title).thenReturn(SONG_TITLE_3);
       when(mockSongInfo.albumArtwork).thenReturn(ALBUM_ART_PATH_3);
@@ -155,6 +168,7 @@ void main() {
         // arrange
         final expected = SongModel(
           album: ALBUM_TITLE_3,
+          albumId: ALBUM_ID_3,
           artist: ARTIST_3,
           title: SONG_TITLE_3,
           path: PATH_3,
@@ -164,6 +178,117 @@ void main() {
         );
         // act
         final result = SongModel.fromSongInfo(mockSongInfo);
+        // assert
+        expect(result, expected);
+      },
+    );
+  });
+
+  group('fromMediaItem', () {
+    test(
+      'should create valid SongModel from MediaItem',
+      () async {
+        // arrange
+        final mediaItem = MediaItem(
+          id: PATH_3,
+          title: SONG_TITLE_3,
+          album: ALBUM_TITLE_3,
+          artist: ARTIST_3,
+          duration: Duration(milliseconds: DURATION_3),
+          artUri: 'file://$ALBUM_ART_PATH_3',
+          extras: {
+            'albumId': ALBUM_ID_3,
+            'trackNumber': TRACKNUMBER_3,
+          },
+        );
+
+        final expected = SongModel(
+          album: ALBUM_TITLE_3,
+          albumId: ALBUM_ID_3,
+          artist: ARTIST_3,
+          title: SONG_TITLE_3,
+          path: PATH_3,
+          duration: DURATION_3,
+          albumArtPath: ALBUM_ART_PATH_3,
+          trackNumber: TRACKNUMBER_3,
+        );
+        // act
+        final result = SongModel.fromMediaItem(mediaItem);
+        // assert
+        expect(result, expected);
+      },
+    );
+
+    test(
+      'should return null',
+      () async {
+        // arrange
+        const mediaItem = null;
+        const expected = null;
+        // act
+        final result = SongModel.fromMediaItem(mediaItem as MediaItem);
+        // assert
+        expect(result, expected);
+      },
+    );
+  });
+
+  group('copyWith', () {
+    SongModel songModel;
+
+    setUp(() {
+      songModel = SongModel(
+        album: ALBUM_TITLE_3,
+        albumId: ALBUM_ID_3,
+        artist: ARTIST_3,
+        title: SONG_TITLE_3,
+        path: PATH_3,
+        duration: DURATION_3,
+        albumArtPath: ALBUM_ART_PATH_3,
+        trackNumber: TRACKNUMBER_3,
+      );
+    });
+
+    test(
+      'should create SongModel with same values',
+      () async {
+        // arrange
+        final expected = SongModel(
+          album: ALBUM_TITLE_3,
+          albumId: ALBUM_ID_3,
+          artist: ARTIST_3,
+          title: SONG_TITLE_3,
+          path: PATH_3,
+          duration: DURATION_3,
+          albumArtPath: ALBUM_ART_PATH_3,
+          trackNumber: TRACKNUMBER_3,
+        );
+        // act
+        final result = songModel.copyWith();
+        // assert
+        expect(result, expected);
+      },
+    );
+
+    test(
+      'should create SongModel with different album and albumId',
+      () async {
+        // arrange
+        final expected = SongModel(
+          album: ALBUM_TITLE_4,
+          albumId: ALBUM_ID_4,
+          artist: ARTIST_3,
+          title: SONG_TITLE_3,
+          path: PATH_3,
+          duration: DURATION_3,
+          albumArtPath: ALBUM_ART_PATH_3,
+          trackNumber: TRACKNUMBER_3,
+        );
+        // act
+        final result = songModel.copyWith(
+          album: ALBUM_TITLE_4,
+          albumId: ALBUM_ID_4,
+        );
         // assert
         expect(result, expected);
       },

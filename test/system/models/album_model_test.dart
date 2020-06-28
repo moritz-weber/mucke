@@ -15,7 +15,7 @@ void main() {
     title: ALBUM_TITLE_1,
     artist: ARTIST_1,
     albumArtPath: ALBUM_ART_PATH_1,
-    pubYear: YEAR_1,
+    year: YEAR_1,
   );
 
   test(
@@ -42,7 +42,7 @@ void main() {
           artist: ARTIST_1,
           title: ALBUM_TITLE_1,
           albumArtPath: ALBUM_ART_PATH_1,
-          pubYear: YEAR_1,
+          year: YEAR_1,
         );
         // act
         final result = albumModel.toAlbumsCompanion();
@@ -61,17 +61,20 @@ void main() {
       () async {
         // arrange
         final moorAlbum = MoorAlbum(
+          id: ID_1,
           artist: ARTIST_1,
           title: ALBUM_TITLE_1,
           albumArtPath: ALBUM_ART_PATH_1,
           year: YEAR_1,
+          present: PRESENT_1,
         );
 
         final expected = AlbumModel(
+          id: ID_1,
           artist: ARTIST_1,
           title: ALBUM_TITLE_1,
           albumArtPath: ALBUM_ART_PATH_1,
-          pubYear: YEAR_1,
+          year: YEAR_1,
         );
         // act
         final result = AlbumModel.fromMoorAlbum(moorAlbum);
@@ -85,15 +88,18 @@ void main() {
       () async {
         // arrange
         final moorAlbum = MoorAlbum(
+          id: ID_1,
           artist: ARTIST_1,
           title: ALBUM_TITLE_1,
           year: YEAR_1,
+          present: PRESENT_1,
         );
 
         final expected = AlbumModel(
+          id: ID_1,
           artist: ARTIST_1,
           title: ALBUM_TITLE_1,
-          pubYear: YEAR_1,
+          year: YEAR_1,
         );
         // act
         final result = AlbumModel.fromMoorAlbum(moorAlbum);
@@ -107,9 +113,11 @@ void main() {
       () async {
         // arrange
         final moorAlbum = MoorAlbum(
+          id: ID_1,
           artist: ARTIST_1,
           title: ALBUM_TITLE_1,
           albumArtPath: ALBUM_ART_PATH_1,
+          present: PRESENT_1,
         );
 
         final expected = AlbumModel(
@@ -130,6 +138,7 @@ void main() {
 
     setUp(() {
       mockAlbumInfo = MockAlbumInfo();
+      when(mockAlbumInfo.id).thenReturn(ID_1.toString());
       when(mockAlbumInfo.title).thenReturn(ALBUM_TITLE_1);
       when(mockAlbumInfo.albumArt).thenReturn(ALBUM_ART_PATH_1);
       when(mockAlbumInfo.artist).thenReturn(ARTIST_1);
@@ -143,10 +152,11 @@ void main() {
       () async {
         // arrange
         final expected = AlbumModel(
+          id: ID_1,
           title: ALBUM_TITLE_1,
           artist: ARTIST_1,
           albumArtPath: ALBUM_ART_PATH_1,
-          pubYear: FIRST_YEAR_1,
+          year: FIRST_YEAR_1,
         );
         // act
         final result = AlbumModel.fromAlbumInfo(mockAlbumInfo);

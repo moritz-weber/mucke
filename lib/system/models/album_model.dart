@@ -11,12 +11,12 @@ class AlbumModel extends Album {
     @required String title,
     @required String artist,
     String albumArtPath,
-    int pubYear,
+    int year,
   }) : super(
           title: title,
           artist: artist,
           albumArtPath: albumArtPath,
-          pubYear: pubYear,
+          pubYear: year,
         );
 
   factory AlbumModel.fromMoorAlbum(MoorAlbum moorAlbum) => AlbumModel(
@@ -24,7 +24,7 @@ class AlbumModel extends Album {
         title: moorAlbum.title,
         artist: moorAlbum.artist,
         albumArtPath: moorAlbum.albumArtPath,
-        pubYear: moorAlbum.year,
+        year: moorAlbum.year,
       );
 
   factory AlbumModel.fromAlbumInfo(AlbumInfo albumInfo) {
@@ -35,7 +35,7 @@ class AlbumModel extends Album {
       title: albumInfo.title,
       artist: albumInfo.artist,
       albumArtPath: albumInfo.albumArt,
-      pubYear: _year == null ? null : int.parse(_year),
+      year: _year == null ? null : int.parse(_year),
     );
   }
 
