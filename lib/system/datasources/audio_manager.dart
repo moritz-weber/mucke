@@ -10,11 +10,30 @@ import 'audio_player_task.dart';
 
 typedef Conversion<S, T> = T Function(S);
 
+// index geht verloren, wenn noch kein Subscriber vorhanden ist, weil die events nicht gebuffert werden (kann ich nicht ändern)
+// deshalb sollte sofort ein listener erstellt werden, der den jeweils letzten wert speichert
+// der fertige Stream nimmt dann diesen letzten Wert, wenn er keinen im source stream findet
+// so sollte kein memory leak entstehen, weil immer nur ein wert gebuffert wird
+
 class AudioManagerImpl implements AudioManager {
+  AudioManagerImpl() {
+    AudioService.customEventStream.listen((event) {
+      final data = event as Map<String, dynamic>;
+      if (data.containsKey(KEY_INDEX)) {
+        _queueIndex = data[KEY_INDEX] as int;
+      }
+    });
+  }
+
   final Stream<MediaItem> _currentMediaItemStream =
       AudioService.currentMediaItemStream;
   final Stream<PlaybackState> _sourcePlaybackStateStream =
       AudioService.playbackStateStream;
+  final Stream<List<MediaItem>> _queue = AudioService.queueStream;
+  @override
+  final Stream customEventStream = AudioService.customEventStream;
+
+  int _queueIndex;
 
   @override
   Stream<SongModel> get currentSongStream =>
@@ -29,6 +48,30 @@ class AudioManagerImpl implements AudioManager {
         (PlaybackState ps) => PlaybackStateModel.fromASPlaybackState(ps),
       );
 
+  // TODO: test
+  @override
+  Stream<List<SongModel>> get queueStream {
+    return _queue.map((mediaItems) =>
+        mediaItems.map((m) => SongModel.fromMediaItem(m)).toList());
+  }
+
+  @override
+  Stream<int> get queueIndexStream =>
+      _queueIndexStream(AudioService.customEventStream.cast());
+
+  // TODO: test
+  Stream<int> _queueIndexStream(Stream<Map<String, dynamic>> source) async* {
+    if (_queueIndex != null) {
+      yield _queueIndex;
+    }
+
+    await for (final data in source) {
+      if (data.containsKey(KEY_INDEX)) {
+        yield data[KEY_INDEX] as int;
+      }
+    }
+  }
+
   @override
   Stream<int> get currentPositionStream => _position().distinct();
 
@@ -36,10 +79,7 @@ class AudioManagerImpl implements AudioManager {
   Future<void> playSong(int index, List<SongModel> songList) async {
     await _startAudioService();
     final List<String> queue = songList.map((s) => s.path).toList();
-
-    await AudioService.customAction(SET_QUEUE, queue);
-
-    AudioService.playFromMediaId(queue[index]);
+    await AudioService.customAction(PLAY_WITH_CONTEXT, [queue, index]);
   }
 
   @override
@@ -58,7 +98,18 @@ class AudioManagerImpl implements AudioManager {
         backgroundTaskEntrypoint: _backgroundTaskEntrypoint,
         androidEnableQueue: true,
       );
+      await AudioService.customAction(INIT);
     }
+  }
+
+  @override
+  Future<void> skipToNext() async {
+    await AudioService.skipToNext();
+  }
+
+  @override
+  Future<void> skipToPrevious() async {
+    await AudioService.skipToPrevious();
   }
 
   Stream<T> _filterStream<S, T>(Stream<S> stream, Conversion<S, T> fn) async* {
@@ -89,7 +140,8 @@ class AudioManagerImpl implements AudioManager {
       if (statePosition != null && updateTime != null && state != null) {
         if (state.playing) {
           yield statePosition.inMilliseconds +
-              (DateTime.now().millisecondsSinceEpoch - updateTime.inMilliseconds);
+              (DateTime.now().millisecondsSinceEpoch -
+                  updateTime.inMilliseconds);
         } else {
           yield statePosition.inMilliseconds;
         }

@@ -35,6 +35,12 @@ abstract class _AudioStore with Store {
   @observable
   ObservableStream<int> currentPositionStream;
 
+  @observable
+  ObservableStream<List<Song>> queueStream;
+
+  @observable
+  ObservableStream<int> queueIndexStream;
+
   @action
   void init() {
     if (!_initialized) {
@@ -43,6 +49,10 @@ abstract class _AudioStore with Store {
 
       currentPositionStream =
           _audioRepository.currentPositionStream.asObservable(initialValue: 0);
+
+      queueStream = _audioRepository.queueStream.asObservable(initialValue: []);
+
+      queueIndexStream = _audioRepository.queueIndexStream.asObservable();
 
       _disposers.add(autorun((_) {
         updateSong(currentSong.value);
@@ -72,6 +82,16 @@ abstract class _AudioStore with Store {
   @action
   Future<void> pause() async {
     _audioRepository.pause();
+  }
+
+  @action
+  Future<void> skipToNext() async {
+    _audioRepository.skipToNext();
+  }
+
+  @action
+  Future<void> skipToPrevious() async {
+    _audioRepository.skipToPrevious();
   }
 
   @action

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mucke/presentation/widgets/next_indicator.dart';
+import 'package:mucke/presentation/widgets/playback_control.dart';
 import 'package:provider/provider.dart';
 
 import '../../domain/entities/song.dart';
@@ -25,6 +27,8 @@ class CurrentlyPlayingPage extends StatelessWidget {
             builder: (BuildContext context) {
               print('CurrentlyPlayingPage.build -> Observer.build');
               final Song song = audioStore.song;
+
+              print(audioStore.queueIndexStream.value);
 
               return Padding(
                 padding: const EdgeInsets.only(
@@ -91,56 +95,9 @@ class CurrentlyPlayingPage extends StatelessWidget {
                     const Spacer(
                       flex: 3,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Row(
-                        children: [
-                          Icon(Icons.repeat, size: 20.0),
-                          Icon(Icons.skip_previous, size: 32.0),
-                          const PlayPauseButton(
-                            circle: true,
-                            iconSize: 52.0,
-                          ),
-                          Icon(Icons.skip_next, size: 32.0),
-                          Icon(Icons.shuffle, size: 20.0),
-                        ],
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      ),
-                    ),
+                    const PlaybackControl(),
                     const Spacer(),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.expand_less,
-                              color: Colors.white70,
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.white70,
-                                ),
-                                children: [
-                                  const TextSpan(text: 'Fire'),
-                                  const TextSpan(text: ' • '),
-                                  TextSpan(
-                                    text: 'Beartooth',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w300,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    const NextIndicator(),
                   ],
                 ),
               );

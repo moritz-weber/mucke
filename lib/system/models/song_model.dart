@@ -82,6 +82,11 @@ class SongModel extends Song {
 
   final int albumId;
 
+  @override
+  String toString() {
+    return '$title';
+  }
+
   SongModel copyWith({
     String title,
     String album,
@@ -115,15 +120,14 @@ class SongModel extends Song {
       );
 
   MediaItem toMediaItem() => MediaItem(
-        id: path,
-        title: title,
-        album: album,
-        artist: artist,
-        duration: Duration(milliseconds: duration),
-        artUri: 'file://$albumArtPath',
-        extras: {
-          'albumId': albumId,
-          'trackNumber': trackNumber,
-        }
-      );
+          id: path,
+          title: title,
+          album: album,
+          artist: artist,
+          duration: Duration(milliseconds: duration),
+          artUri: 'file://$albumArtPath',
+          extras: {
+            'albumId': albumId,
+            'trackNumber': trackNumber,
+          });
 }

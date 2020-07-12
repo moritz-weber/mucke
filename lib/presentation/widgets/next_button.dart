@@ -1,0 +1,41 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:provider/provider.dart';
+
+import '../state/audio_store.dart';
+
+class NextButton extends StatelessWidget {
+  const NextButton({Key key, this.iconSize = 24.0}) : super(key: key);
+
+  final double iconSize;
+
+  @override
+  Widget build(BuildContext context) {
+    final AudioStore audioStore = Provider.of<AudioStore>(context);
+
+    return Observer(
+      builder: (BuildContext context) {
+        final queue = audioStore.queueStream.value; //
+        final int index = audioStore.queueIndexStream.value; //
+
+        if (index != null && index < queue.length - 1) { //
+          return IconButton(
+            icon: Icon(Icons.skip_next), //
+            iconSize: iconSize,
+            onPressed: () {
+              audioStore.skipToNext(); //
+            },
+            
+          );
+        }
+        return IconButton(
+          icon: Icon(
+            Icons.skip_next,
+          ),
+          iconSize: iconSize,
+          onPressed: null,
+        );
+      },
+    );
+  }
+}

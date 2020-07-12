@@ -23,7 +23,7 @@ dependencies:
   get_it: ^4.0.2
   provider: ^4.0.4
   moor: ^3.0.2
-  moor_ffi: ^0.6.0
+  moor_ffi: ^0.5.0
   path_provider:
   path: 
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mucke/presentation/widgets/next_button.dart';
 import 'package:provider/provider.dart';
 
 import '../../domain/entities/song.dart';
@@ -53,17 +54,10 @@ class CurrentlyPlayingBar extends StatelessWidget {
                       ],
                     ),
                     const Spacer(),
-                    // IconButton(
-                    //   icon: Icon(Icons.favorite_border),
-                    //   onPressed: () {},
-                    // ),
                     const PlayPauseButton(
                       circle: false,
                     ),
-                    // IconButton(
-                    //   icon: Icon(Icons.skip_next),
-                    //   onPressed: () {},
-                    // ),
+                    const NextButton(),
                   ],
                 ),
               ),

@@ -88,7 +88,9 @@ class MoorMusicDataSource extends _$MoorMusicDataSource
 
   @override
   Future<List<SongModel>> getSongsFromAlbum(AlbumModel album) {
-    return (select(songs)..where((tbl) => tbl.albumTitle.equals(album.title)))
+    return (select(songs)
+          ..where((tbl) => tbl.albumTitle.equals(album.title))
+          ..orderBy([(t) => OrderingTerm(expression: t.trackNumber)]))
         .get()
         .then((moorSongList) => moorSongList
             .map((moorSong) => SongModel.fromMoorSong(moorSong))

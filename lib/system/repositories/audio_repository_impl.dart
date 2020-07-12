@@ -20,9 +20,13 @@ class AudioRepositoryImpl implements AudioRepository {
       _audioManager.playbackStateStream;
 
   @override
-  Stream<int> get currentPositionStream {
-    return _audioManager.currentPositionStream;
-  }
+  Stream<List<Song>> get queueStream => _audioManager.queueStream;
+
+  @override
+  Stream<int> get queueIndexStream => _audioManager.queueIndexStream;
+
+  @override
+  Stream<int> get currentPositionStream => _audioManager.currentPositionStream;
 
   @override
   Future<Either<Failure, void>> playSong(int index, List<Song> songList) async {
@@ -31,7 +35,7 @@ class AudioRepositoryImpl implements AudioRepository {
 
     if (0 <= index && index < songList.length) {
       await _audioManager.playSong(index, songModelList);
-      return Right(null);
+      return const Right(null);
     }
     return Left(IndexFailure());
   }
@@ -39,12 +43,24 @@ class AudioRepositoryImpl implements AudioRepository {
   @override
   Future<Either<Failure, void>> play() async {
     await _audioManager.play();
-    return Right(null);
+    return const Right(null);
   }
 
   @override
   Future<Either<Failure, void>> pause() async {
     await _audioManager.pause();
-    return Right(null);
+    return const Right(null);
+  }
+
+  @override
+  Future<Either<Failure, void>> skipToNext() async {
+    await _audioManager.skipToNext();
+    return const Right(null);
+  }
+
+  @override
+  Future<Either<Failure, void>> skipToPrevious() async {
+    await _audioManager.skipToPrevious();
+    return const Right(null);
   }
 }
