@@ -1,8 +1,6 @@
-import 'package:dartz/dartz.dart';
 import 'package:meta/meta.dart';
 import 'package:mobx/mobx.dart';
 
-import '../../core/error/failures.dart';
 import '../../domain/entities/album.dart';
 import '../../domain/entities/song.dart';
 import '../../domain/repositories/music_data_repository.dart';
@@ -18,16 +16,16 @@ abstract class _MusicDataStore with Store {
   _MusicDataStore(this._musicDataRepository);
 
   final MusicDataRepository _musicDataRepository;
-  
+
   bool _initialized = false;
 
-
   @observable
-  ObservableFuture<List<Album>> albumsFuture;
+  ObservableList<Album> albums = <Album>[].asObservable();
+  @observable
+  bool isFetchingAlbums = false;
 
   @observable
   ObservableList<Song> songs = <Song>[].asObservable();
-
   @observable
   bool isFetchingSongs = false;
 
@@ -61,14 +59,18 @@ abstract class _MusicDataStore with Store {
 
   @action
   Future<void> fetchAlbums() async {
-    albumsFuture = ObservableFuture<List<Album>>(
-      _musicDataRepository.getAlbums().then(
-        (Either<Failure, List<Album>> either) => either.fold(
-          (_) => [],
-          (List<Album> a) => a,
-        ),
-      ),
+    isFetchingAlbums = true;
+    final result = await _musicDataRepository.getAlbums();
+
+    result.fold(
+      (_) => albums = <Album>[].asObservable(),
+      (albumList) {
+        albums.clear();
+        albums.addAll(albumList);
+      },
     );
+
+    isFetchingAlbums = false;
   }
 
   @action

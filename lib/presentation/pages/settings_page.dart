@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 
-import '../../domain/entities/album.dart';
 import '../state/music_data_store.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -34,12 +32,11 @@ class SettingsPage extends StatelessWidget {
         ListTile(
           title: const Text('Update library'),
           subtitle: Observer(builder: (_) {
-            final ObservableFuture<List<Album>> albumsFuture =
-                store.albumsFuture;
+            final bool isFetchingAlbums = store.isFetchingAlbums;
             final bool isFetchingSongs = store.isFetchingSongs;
-            if (albumsFuture.status == FutureStatus.fulfilled &&
-                !isFetchingSongs) {
-              final int albumCount = (albumsFuture.result as List).length;
+
+            if (!isFetchingAlbums && !isFetchingSongs) {
+              final int albumCount = store.albums.length;
               final int songCount = store.songs.length;
               return Text('XX artists, $albumCount albums, $songCount songs');
             }

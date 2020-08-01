@@ -9,18 +9,33 @@ part of 'music_data_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$MusicDataStore on _MusicDataStore, Store {
-  final _$albumsFutureAtom = Atom(name: '_MusicDataStore.albumsFuture');
+  final _$albumsAtom = Atom(name: '_MusicDataStore.albums');
 
   @override
-  ObservableFuture<List<Album>> get albumsFuture {
-    _$albumsFutureAtom.reportRead();
-    return super.albumsFuture;
+  ObservableList<Album> get albums {
+    _$albumsAtom.reportRead();
+    return super.albums;
   }
 
   @override
-  set albumsFuture(ObservableFuture<List<Album>> value) {
-    _$albumsFutureAtom.reportWrite(value, super.albumsFuture, () {
-      super.albumsFuture = value;
+  set albums(ObservableList<Album> value) {
+    _$albumsAtom.reportWrite(value, super.albums, () {
+      super.albums = value;
+    });
+  }
+
+  final _$isFetchingAlbumsAtom = Atom(name: '_MusicDataStore.isFetchingAlbums');
+
+  @override
+  bool get isFetchingAlbums {
+    _$isFetchingAlbumsAtom.reportRead();
+    return super.isFetchingAlbums;
+  }
+
+  @override
+  set isFetchingAlbums(bool value) {
+    _$isFetchingAlbumsAtom.reportWrite(value, super.isFetchingAlbums, () {
+      super.isFetchingAlbums = value;
     });
   }
 
@@ -133,7 +148,8 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
   @override
   String toString() {
     return '''
-albumsFuture: ${albumsFuture},
+albums: ${albums},
+isFetchingAlbums: ${isFetchingAlbums},
 songs: ${songs},
 isFetchingSongs: ${isFetchingSongs},
 isUpdatingDatabase: ${isUpdatingDatabase},

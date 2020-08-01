@@ -72,6 +72,36 @@ mixin _$AudioStore on _AudioStore, Store {
     });
   }
 
+  final _$queueStreamAtom = Atom(name: '_AudioStore.queueStream');
+
+  @override
+  ObservableStream<List<Song>> get queueStream {
+    _$queueStreamAtom.reportRead();
+    return super.queueStream;
+  }
+
+  @override
+  set queueStream(ObservableStream<List<Song>> value) {
+    _$queueStreamAtom.reportWrite(value, super.queueStream, () {
+      super.queueStream = value;
+    });
+  }
+
+  final _$queueIndexStreamAtom = Atom(name: '_AudioStore.queueIndexStream');
+
+  @override
+  ObservableStream<int> get queueIndexStream {
+    _$queueIndexStreamAtom.reportRead();
+    return super.queueIndexStream;
+  }
+
+  @override
+  set queueIndexStream(ObservableStream<int> value) {
+    _$queueIndexStreamAtom.reportWrite(value, super.queueIndexStream, () {
+      super.queueIndexStream = value;
+    });
+  }
+
   final _$playSongAsyncAction = AsyncAction('_AudioStore.playSong');
 
   @override
@@ -91,6 +121,20 @@ mixin _$AudioStore on _AudioStore, Store {
   @override
   Future<void> pause() {
     return _$pauseAsyncAction.run(() => super.pause());
+  }
+
+  final _$skipToNextAsyncAction = AsyncAction('_AudioStore.skipToNext');
+
+  @override
+  Future<void> skipToNext() {
+    return _$skipToNextAsyncAction.run(() => super.skipToNext());
+  }
+
+  final _$skipToPreviousAsyncAction = AsyncAction('_AudioStore.skipToPrevious');
+
+  @override
+  Future<void> skipToPrevious() {
+    return _$skipToPreviousAsyncAction.run(() => super.skipToPrevious());
   }
 
   final _$updateSongAsyncAction = AsyncAction('_AudioStore.updateSong');
@@ -119,7 +163,9 @@ mixin _$AudioStore on _AudioStore, Store {
 currentSong: ${currentSong},
 song: ${song},
 playbackStateStream: ${playbackStateStream},
-currentPositionStream: ${currentPositionStream}
+currentPositionStream: ${currentPositionStream},
+queueStream: ${queueStream},
+queueIndexStream: ${queueIndexStream}
     ''';
   }
 }
