@@ -6,9 +6,6 @@ import '../../core/error/failures.dart';
 import '../../domain/entities/album.dart';
 import '../../domain/entities/song.dart';
 import '../../domain/repositories/music_data_repository.dart';
-import '../../domain/usecases/get_albums.dart';
-import '../../domain/usecases/get_songs.dart';
-import '../../domain/usecases/update_database.dart';
 
 part 'music_data_store.g.dart';
 
@@ -18,18 +15,12 @@ class MusicDataStore extends _MusicDataStore with _$MusicDataStore {
 }
 
 abstract class _MusicDataStore with Store {
-  _MusicDataStore(this._musicDataRepository)
-      : _updateDatabase = UpdateDatabase(_musicDataRepository),
-        _getAlbums = GetAlbums(_musicDataRepository),
-        _getSongs = GetSongs(_musicDataRepository);
+  _MusicDataStore(this._musicDataRepository);
 
   final MusicDataRepository _musicDataRepository;
   
   bool _initialized = false;
 
-  final UpdateDatabase _updateDatabase;
-  final GetAlbums _getAlbums;
-  final GetSongs _getSongs;
 
   @observable
   ObservableFuture<List<Album>> albumsFuture;
@@ -60,7 +51,7 @@ abstract class _MusicDataStore with Store {
   @action
   Future<void> updateDatabase() async {
     isUpdatingDatabase = true;
-    await _updateDatabase();
+    await _musicDataRepository.updateDatabase();
     await Future.wait([
       fetchAlbums(),
       fetchSongs(),
@@ -71,7 +62,7 @@ abstract class _MusicDataStore with Store {
   @action
   Future<void> fetchAlbums() async {
     albumsFuture = ObservableFuture<List<Album>>(
-      _getAlbums().then(
+      _musicDataRepository.getAlbums().then(
         (Either<Failure, List<Album>> either) => either.fold(
           (_) => [],
           (List<Album> a) => a,
@@ -83,7 +74,7 @@ abstract class _MusicDataStore with Store {
   @action
   Future<void> fetchSongs() async {
     isFetchingSongs = true;
-    final result = await _getSongs();
+    final result = await _musicDataRepository.getSongs();
 
     result.fold(
       (_) => songs = <Song>[].asObservable(),
