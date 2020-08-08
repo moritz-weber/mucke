@@ -2,6 +2,7 @@ import 'package:meta/meta.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../domain/entities/album.dart';
+import '../../domain/entities/artist.dart';
 import '../../domain/entities/song.dart';
 import '../../domain/repositories/music_data_repository.dart';
 
@@ -18,6 +19,11 @@ abstract class _MusicDataStore with Store {
   final MusicDataRepository _musicDataRepository;
 
   bool _initialized = false;
+
+  @observable
+  ObservableList<Artist> artists = <Artist>[].asObservable();
+  @observable
+  bool isFetchingArtists = false;
 
   @observable
   ObservableList<Album> albums = <Album>[].asObservable();
@@ -39,6 +45,7 @@ abstract class _MusicDataStore with Store {
   void init() {
     if (!_initialized) {
       print('MusicDataStore.init');
+      fetchArtists();
       fetchAlbums();
       fetchSongs();
 
@@ -55,6 +62,22 @@ abstract class _MusicDataStore with Store {
       fetchSongs(),
     ]);
     isUpdatingDatabase = false;
+  }
+
+  @action
+  Future<void> fetchArtists() async {
+    isFetchingArtists = true;
+    final result = await _musicDataRepository.getArtists();
+
+    result.fold(
+      (_) => artists = <Artist>[].asObservable(),
+      (artistList) {
+        artists.clear();
+        artists.addAll(artistList);
+      },
+    );
+
+    isFetchingArtists = false;
   }
 
   @action

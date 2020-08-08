@@ -8,12 +8,21 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 import '../models/album_model.dart';
+import '../models/artist_model.dart';
 import '../models/song_model.dart';
 import 'music_data_source_contract.dart';
 
 part 'moor_music_data_source.g.dart';
 
 const String MOOR_ISOLATE = 'MOOR_ISOLATE';
+
+@DataClassName('MoorArtist')
+class Artists extends Table {
+  TextColumn get name => text()();
+
+  @override
+  Set<Column> get primaryKey => {name};
+}
 
 @DataClassName('MoorAlbum')
 class Albums extends Table {
@@ -23,9 +32,6 @@ class Albums extends Table {
   TextColumn get albumArtPath => text().nullable()();
   IntColumn get year => integer().nullable()();
   BoolColumn get present => boolean().withDefault(const Constant(true))();
-
-  @override
-  Set<Column> get primaryKey => {id};
 }
 
 @DataClassName('MoorSong')
@@ -44,7 +50,7 @@ class Songs extends Table {
   Set<Column> get primaryKey => {path};
 }
 
-@UseMoor(tables: [Albums, Songs])
+@UseMoor(tables: [Artists, Albums, Songs])
 class MoorMusicDataSource extends _$MoorMusicDataSource
     implements MusicDataSource {
   /// Use MoorMusicDataSource in main isolate only.
@@ -189,6 +195,33 @@ class MoorMusicDataSource extends _$MoorMusicDataSource
   @override
   Future<void> resetSongsPresentFlag() async {
     update(songs).write(const SongsCompanion(present: Value(false)));
+  }
+
+  @override
+  Future<void> deleteAllArtists() async {
+    delete(artists).go();
+  }
+
+  @override
+  Future<int> insertArtist(ArtistModel artistModel) async {
+    return into(artists).insert(artistModel.toArtistsCompanion());
+  }
+
+  @override
+  Future<void> deleteAllAlbums() async {
+    delete(albums).go();
+  }
+
+  @override
+  Future<void> deleteAllSongs() async {
+    delete(songs).go();
+  }
+
+  @override
+  Future<List<ArtistModel>> getArtists() {
+    return select(artists).get().then((moorArtistList) => moorArtistList
+        .map((moorArtist) => ArtistModel.fromMoorArtist(moorArtist))
+        .toList());
   }
 }
 

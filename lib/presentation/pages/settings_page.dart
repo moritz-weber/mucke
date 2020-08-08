@@ -16,8 +16,8 @@ class SettingsPage extends StatelessWidget {
         Container(
           height: 12.0,
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(
+        const Padding(
+          padding: EdgeInsets.symmetric(
             horizontal: 16.0,
             vertical: 4.0,
           ),
@@ -32,13 +32,15 @@ class SettingsPage extends StatelessWidget {
         ListTile(
           title: const Text('Update library'),
           subtitle: Observer(builder: (_) {
+            final bool isFetchingArtists = store.isFetchingArtists;
             final bool isFetchingAlbums = store.isFetchingAlbums;
             final bool isFetchingSongs = store.isFetchingSongs;
 
-            if (!isFetchingAlbums && !isFetchingSongs) {
+            if (!isFetchingArtists && !isFetchingAlbums && !isFetchingSongs) {
+              final int artistCount = store.artists.length;
               final int albumCount = store.albums.length;
               final int songCount = store.songs.length;
-              return Text('XX artists, $albumCount albums, $songCount songs');
+              return Text('$artistCount artists, $albumCount albums, $songCount songs');
             }
             return const Text('');
           }),

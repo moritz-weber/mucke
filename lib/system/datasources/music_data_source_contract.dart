@@ -1,4 +1,5 @@
 import '../models/album_model.dart';
+import '../models/artist_model.dart';
 import '../models/song_model.dart';
 
 abstract class MusicDataSource {
@@ -26,4 +27,12 @@ abstract class MusicDataSource {
       String title, String album, String artist);
   Future<void> flagSongPresent(SongModel songModel);
   Future<void> removeNonpresentSongs();
+
+  Future<void> deleteAllArtists();
+  Future<int> insertArtist(ArtistModel artistModel);
+
+  Future<void> deleteAllAlbums();
+  Future<void> deleteAllSongs();
+
+  Future<List<ArtistModel>> getArtists();
 }

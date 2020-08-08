@@ -7,6 +7,154 @@ part of 'moor_music_data_source.dart';
 // **************************************************************************
 
 // ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
+class MoorArtist extends DataClass implements Insertable<MoorArtist> {
+  final String name;
+  MoorArtist({@required this.name});
+  factory MoorArtist.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final stringType = db.typeSystem.forDartType<String>();
+    return MoorArtist(
+      name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || name != null) {
+      map['name'] = Variable<String>(name);
+    }
+    return map;
+  }
+
+  ArtistsCompanion toCompanion(bool nullToAbsent) {
+    return ArtistsCompanion(
+      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
+    );
+  }
+
+  factory MoorArtist.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return MoorArtist(
+      name: serializer.fromJson<String>(json['name']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'name': serializer.toJson<String>(name),
+    };
+  }
+
+  MoorArtist copyWith({String name}) => MoorArtist(
+        name: name ?? this.name,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('MoorArtist(')..write('name: $name')..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf(name.hashCode);
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is MoorArtist && other.name == this.name);
+}
+
+class ArtistsCompanion extends UpdateCompanion<MoorArtist> {
+  final Value<String> name;
+  const ArtistsCompanion({
+    this.name = const Value.absent(),
+  });
+  ArtistsCompanion.insert({
+    @required String name,
+  }) : name = Value(name);
+  static Insertable<MoorArtist> custom({
+    Expression<String> name,
+  }) {
+    return RawValuesInsertable({
+      if (name != null) 'name': name,
+    });
+  }
+
+  ArtistsCompanion copyWith({Value<String> name}) {
+    return ArtistsCompanion(
+      name: name ?? this.name,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ArtistsCompanion(')..write('name: $name')..write(')'))
+        .toString();
+  }
+}
+
+class $ArtistsTable extends Artists with TableInfo<$ArtistsTable, MoorArtist> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $ArtistsTable(this._db, [this._alias]);
+  final VerificationMeta _nameMeta = const VerificationMeta('name');
+  GeneratedTextColumn _name;
+  @override
+  GeneratedTextColumn get name => _name ??= _constructName();
+  GeneratedTextColumn _constructName() {
+    return GeneratedTextColumn(
+      'name',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [name];
+  @override
+  $ArtistsTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'artists';
+  @override
+  final String actualTableName = 'artists';
+  @override
+  VerificationContext validateIntegrity(Insertable<MoorArtist> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name'], _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {name};
+  @override
+  MoorArtist map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return MoorArtist.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  $ArtistsTable createAlias(String alias) {
+    return $ArtistsTable(_db, alias);
+  }
+}
+
 class MoorAlbum extends DataClass implements Insertable<MoorAlbum> {
   final int id;
   final String title;
@@ -236,6 +384,19 @@ class AlbumsCompanion extends UpdateCompanion<MoorAlbum> {
       map['present'] = Variable<bool>(present.value);
     }
     return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AlbumsCompanion(')
+          ..write('id: $id, ')
+          ..write('title: $title, ')
+          ..write('artist: $artist, ')
+          ..write('albumArtPath: $albumArtPath, ')
+          ..write('year: $year, ')
+          ..write('present: $present')
+          ..write(')'))
+        .toString();
   }
 }
 
@@ -693,6 +854,22 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
     }
     return map;
   }
+
+  @override
+  String toString() {
+    return (StringBuffer('SongsCompanion(')
+          ..write('title: $title, ')
+          ..write('albumTitle: $albumTitle, ')
+          ..write('albumId: $albumId, ')
+          ..write('artist: $artist, ')
+          ..write('path: $path, ')
+          ..write('duration: $duration, ')
+          ..write('albumArtPath: $albumArtPath, ')
+          ..write('trackNumber: $trackNumber, ')
+          ..write('present: $present')
+          ..write(')'))
+        .toString();
+  }
 }
 
 class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
@@ -904,6 +1081,8 @@ abstract class _$MoorMusicDataSource extends GeneratedDatabase {
   _$MoorMusicDataSource(QueryExecutor e)
       : super(SqlTypeSystem.defaultInstance, e);
   _$MoorMusicDataSource.connect(DatabaseConnection c) : super.connect(c);
+  $ArtistsTable _artists;
+  $ArtistsTable get artists => _artists ??= $ArtistsTable(this);
   $AlbumsTable _albums;
   $AlbumsTable get albums => _albums ??= $AlbumsTable(this);
   $SongsTable _songs;
@@ -911,5 +1090,5 @@ abstract class _$MoorMusicDataSource extends GeneratedDatabase {
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [albums, songs];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [artists, albums, songs];
 }

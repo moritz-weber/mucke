@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'albums_page.dart';
+import 'artists_page.dart';
 import 'songs_page.dart';
 
 class LibraryTabContainer extends StatelessWidget {
@@ -32,8 +33,8 @@ class LibraryTabContainer extends StatelessWidget {
             const Expanded(
               child: TabBarView(
                 children: <Widget>[
-                  Center(
-                    child: Text('Artists'),
+                  ArtistsPage(
+                    key: PageStorageKey('ArtistsPage'),
                   ),
                   AlbumsPage(
                     key: PageStorageKey('AlbumsPage'),

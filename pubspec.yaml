@@ -4,8 +4,8 @@ description: The frustration-free music player.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.6.0 <3.0.0"
-  flutter: ">=1.12.0"
+  sdk: ">=2.9.0 <3.0.0"
+  flutter: ">=1.20.0"
 
 dependencies:
   flutter:
@@ -34,7 +34,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   moor_generator: ^3.0.0
-  build_runner:
+  build_runner: 1.10.1
   mobx_codegen: ^1.0.3
 
 

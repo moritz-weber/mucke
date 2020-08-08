@@ -1,6 +1,7 @@
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 
 import '../models/album_model.dart';
+import '../models/artist_model.dart';
 import '../models/song_model.dart';
 import 'local_music_fetcher_contract.dart';
 
@@ -8,6 +9,15 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
   LocalMusicFetcherImpl(this.flutterAudioQuery);
 
   final FlutterAudioQuery flutterAudioQuery;
+
+  @override
+  Future<List<ArtistModel>> getArtists() async {
+    final List<ArtistInfo> artistInfoList =
+        await flutterAudioQuery.getArtists();
+    return artistInfoList
+        .map((ArtistInfo artistInfo) => ArtistModel.fromArtistInfo(artistInfo))
+        .toList();
+  }
 
   @override
   Future<List<AlbumModel>> getAlbums() async {

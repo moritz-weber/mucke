@@ -6,9 +6,40 @@ part of 'music_data_store.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$MusicDataStore on _MusicDataStore, Store {
+  final _$artistsAtom = Atom(name: '_MusicDataStore.artists');
+
+  @override
+  ObservableList<Artist> get artists {
+    _$artistsAtom.reportRead();
+    return super.artists;
+  }
+
+  @override
+  set artists(ObservableList<Artist> value) {
+    _$artistsAtom.reportWrite(value, super.artists, () {
+      super.artists = value;
+    });
+  }
+
+  final _$isFetchingArtistsAtom =
+      Atom(name: '_MusicDataStore.isFetchingArtists');
+
+  @override
+  bool get isFetchingArtists {
+    _$isFetchingArtistsAtom.reportRead();
+    return super.isFetchingArtists;
+  }
+
+  @override
+  set isFetchingArtists(bool value) {
+    _$isFetchingArtistsAtom.reportWrite(value, super.isFetchingArtists, () {
+      super.isFetchingArtists = value;
+    });
+  }
+
   final _$albumsAtom = Atom(name: '_MusicDataStore.albums');
 
   @override
@@ -108,6 +139,13 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
     return _$updateDatabaseAsyncAction.run(() => super.updateDatabase());
   }
 
+  final _$fetchArtistsAsyncAction = AsyncAction('_MusicDataStore.fetchArtists');
+
+  @override
+  Future<void> fetchArtists() {
+    return _$fetchArtistsAsyncAction.run(() => super.fetchArtists());
+  }
+
   final _$fetchAlbumsAsyncAction = AsyncAction('_MusicDataStore.fetchAlbums');
 
   @override
@@ -148,6 +186,8 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
   @override
   String toString() {
     return '''
+artists: ${artists},
+isFetchingArtists: ${isFetchingArtists},
 albums: ${albums},
 isFetchingAlbums: ${isFetchingAlbums},
 songs: ${songs},

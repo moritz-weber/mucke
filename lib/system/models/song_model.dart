@@ -38,7 +38,6 @@ class SongModel extends Song {
       );
 
   factory SongModel.fromSongInfo(SongInfo songInfo) {
-    final String trackNumber = songInfo.track;
     final String duration = songInfo.duration;
 
     return SongModel(
@@ -49,7 +48,7 @@ class SongModel extends Song {
       path: songInfo.filePath,
       duration: duration == null ? null : int.parse(duration),
       albumArtPath: songInfo.albumArtwork,
-      trackNumber: trackNumber == null ? null : int.parse(trackNumber),
+      trackNumber: _parseTrackNumber(songInfo.track),
     );
   }
 
@@ -130,4 +129,19 @@ class SongModel extends Song {
             'albumId': albumId,
             'trackNumber': trackNumber,
           });
+
+  static int _parseTrackNumber(String trackNumberString) {
+    int trackNumber;
+    if (trackNumberString == null) {
+      return null;
+    }
+
+    trackNumber = int.tryParse(trackNumberString);
+    if (trackNumber == null) {
+      if (trackNumberString.contains('/')) {
+        trackNumber = int.tryParse(trackNumberString.split('/')[0]);
+      }
+    }
+    return trackNumber;
+  }
 }
