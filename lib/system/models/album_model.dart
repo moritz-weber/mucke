@@ -41,6 +41,11 @@ class AlbumModel extends Album {
 
   final int id;
 
+  @override
+  String toString() {
+    return '$title';
+  }
+
   AlbumsCompanion toAlbumsCompanion() => AlbumsCompanion(
         title: Value(title),
         artist: Value(artist),

@@ -16,6 +16,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
         await flutterAudioQuery.getArtists();
     return artistInfoList
         .map((ArtistInfo artistInfo) => ArtistModel.fromArtistInfo(artistInfo))
+        .toSet()
         .toList();
   }
 

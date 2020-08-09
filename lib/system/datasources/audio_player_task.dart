@@ -10,6 +10,7 @@ import 'moor_music_data_source.dart';
 
 const String INIT = 'INIT';
 const String PLAY_WITH_CONTEXT = 'PLAY_WITH_CONTEXT';
+const String APP_LIFECYCLE_RESUMED = 'APP_LIFECYCLE_RESUMED';
 
 const String KEY_INDEX = 'INDEX';
 
@@ -112,6 +113,8 @@ class AudioPlayerTask extends BackgroundAudioTask {
         final _context = List<String>.from(args[0] as List<dynamic>);
         final index = args[1] as int;
         return _playWithContext(_context, index);
+      case APP_LIFECYCLE_RESUMED:
+        return _onAppLifecycleResumed();
       default:
     }
   }
@@ -134,6 +137,11 @@ class AudioPlayerTask extends BackgroundAudioTask {
     playbackIndex = index;
     AudioServiceBackground.setQueue(_playbackContext);
     _startPlayback(index);
+  }
+
+  Future<void> _onAppLifecycleResumed() async {
+    playbackIndex = playbackIndex;
+    // AudioServiceBackground.setQueue(_playbackContext);
   }
 
   // TODO: test

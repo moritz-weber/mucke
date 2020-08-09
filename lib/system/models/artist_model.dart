@@ -22,6 +22,11 @@ class ArtistModel extends Artist {
     );
   }
 
+  @override
+  String toString() {
+    return name;
+  }
+
   ArtistsCompanion toArtistsCompanion() => ArtistsCompanion(
         name: Value(name),
       );

@@ -1,6 +1,8 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 
+import '../../system/datasources/audio_player_task.dart';
+
 class AudioServiceWidget extends StatefulWidget {
   const AudioServiceWidget({@required this.child});
 
@@ -31,9 +33,12 @@ class _AudioServiceWidgetState extends State<AudioServiceWidget>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     switch (state) {
       case AppLifecycleState.resumed:
+        print('AppLifecycleState.resumed');
         AudioService.connect();
+        AudioService.customAction(APP_LIFECYCLE_RESUMED);
         break;
       case AppLifecycleState.paused:
+        print('AppLifecycleState.paused');
         AudioService.disconnect();
         break;
       default:
