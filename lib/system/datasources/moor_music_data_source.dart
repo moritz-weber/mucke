@@ -80,12 +80,6 @@ class MoorMusicDataSource extends _$MoorMusicDataSource
   }
 
   @override
-  Future<bool> albumExists(AlbumModel albumModel) async {
-    final List<AlbumModel> albumList = await getAlbums();
-    return albumList.contains(albumModel);
-  }
-
-  @override
   Future<List<SongModel>> getSongs() {
     return select(songs).get().then((moorSongList) => moorSongList
         .map((moorSong) => SongModel.fromMoorSong(moorSong))
@@ -109,54 +103,6 @@ class MoorMusicDataSource extends _$MoorMusicDataSource
   }
 
   @override
-  Future<bool> songExists(SongModel songModel) async {
-    final List<SongModel> songList = await getSongs();
-    return songList.contains(songModel);
-  }
-
-  @override
-  Future<void> flagAlbumPresent(AlbumModel albumModel) async {
-    if (albumModel.id != null) {
-      (update(albums)..where((t) => t.id.equals(albumModel.id)))
-          .write(const AlbumsCompanion(present: Value(true)));
-    } else {
-      throw UnimplementedError();
-    }
-  }
-
-  @override
-  Future<AlbumModel> getAlbumByTitleArtist(String title, String artist) {
-    return (select(albums)
-          ..where((t) => t.title.equals(title) & t.artist.equals(artist)))
-        .getSingle()
-        .then(
-      (moorAlbum) {
-        if (moorAlbum == null) {
-          return null;
-        }
-        return AlbumModel.fromMoorAlbum(moorAlbum);
-      },
-    );
-  }
-
-  @override
-  Future<void> removeNonpresentAlbums() async {
-    (delete(albums)..where((t) => t.present.not())).go();
-  }
-
-  @override
-  Future<void> resetAlbumsPresentFlag() async {
-    update(albums).write(const AlbumsCompanion(present: Value(false)));
-    // return;
-  }
-
-  @override
-  Future<void> flagSongPresent(SongModel songModel) async {
-    (update(songs)..where((t) => t.path.equals(songModel.path)))
-        .write(const SongsCompanion(present: Value(true)));
-  }
-
-  @override
   Future<SongModel> getSongByPath(String path) async {
     return (select(songs)..where((t) => t.path.equals(path))).getSingle().then(
       (moorSong) {
@@ -166,35 +112,6 @@ class MoorMusicDataSource extends _$MoorMusicDataSource
         return SongModel.fromMoorSong(moorSong);
       },
     );
-  }
-
-  @override
-  Future<SongModel> getSongByTitleAlbumArtist(
-      String title, String album, String artist) async {
-    return (select(songs)
-          ..where((t) =>
-              t.title.equals(title) &
-              t.albumTitle.equals(album) &
-              t.artist.equals(artist)))
-        .getSingle()
-        .then(
-      (moorSong) {
-        if (moorSong == null) {
-          return null;
-        }
-        return SongModel.fromMoorSong(moorSong);
-      },
-    );
-  }
-
-  @override
-  Future<void> removeNonpresentSongs() async {
-    (delete(songs)..where((t) => t.present.not())).go();
-  }
-
-  @override
-  Future<void> resetSongsPresentFlag() async {
-    update(songs).write(const SongsCompanion(present: Value(false)));
   }
 
   @override

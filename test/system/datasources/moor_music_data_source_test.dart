@@ -51,30 +51,6 @@ void main() {
     );
   });
 
-  group('albumExists', () {
-    test(
-      'should return true when album exists in data source',
-      () async {
-        // arrange
-        moorMusicDataSource.insertAlbum(albumModel);
-        // act
-        final bool result = await moorMusicDataSource.albumExists(albumModel);
-        // assert
-        assert(result);
-      },
-    );
-
-    test(
-      'should return false when album does not exists in data source',
-      () async {
-        // act
-        final bool result = await moorMusicDataSource.albumExists(albumModel);
-        // assert
-        assert(!result);
-      },
-    );
-  });
-
   group('insertSong and getSongs', () {
     test(
       'should return the song that was inserted',
@@ -84,30 +60,6 @@ void main() {
         // assert
         final List<SongModel> songs = await moorMusicDataSource.getSongs();
         expect(songs.first, songModel);
-      },
-    );
-  });
-
-  group('songExists', () {
-    test(
-      'should return true when song exists in data source',
-      () async {
-        // arrange
-        moorMusicDataSource.insertSong(songModel);
-        // act
-        final bool result = await moorMusicDataSource.songExists(songModel);
-        // assert
-        assert(result);
-      },
-    );
-
-    test(
-      'should return false when song does not exists in data source',
-      () async {
-        // act
-        final bool result = await moorMusicDataSource.songExists(songModel);
-        // assert
-        assert(!result);
       },
     );
   });
