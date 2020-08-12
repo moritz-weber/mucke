@@ -27,7 +27,7 @@ class AlbumDetailsPage extends StatelessWidget {
             pinned: true,
             expandedHeight: 250.0,
             backgroundColor: Theme.of(context).primaryColor,
-            iconTheme: IconThemeData(
+            iconTheme: const IconThemeData(
               color: Colors.white,
             ),
             flexibleSpace: FlexibleSpaceBar(
@@ -39,7 +39,7 @@ class AlbumDetailsPage extends StatelessWidget {
               ),
               title: Text(
                 album.title,
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.w300,
                   fontSize: 16.0,
                   color: Colors.white,

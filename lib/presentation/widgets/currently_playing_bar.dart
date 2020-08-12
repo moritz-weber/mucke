@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mucke/presentation/widgets/next_button.dart';
 import 'package:provider/provider.dart';
 
 import '../../domain/entities/song.dart';
 import '../pages/currently_playing.dart';
 import '../state/audio_store.dart';
 import '../utils.dart';
+import 'next_button.dart';
 import 'play_pause_button.dart';
 
 class CurrentlyPlayingBar extends StatelessWidget {
@@ -46,7 +46,7 @@ class CurrentlyPlayingBar extends StatelessWidget {
                         Text(song.title),
                         Text(
                           song.artist,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 12.0,
                             color: Colors.white70,
                           ),

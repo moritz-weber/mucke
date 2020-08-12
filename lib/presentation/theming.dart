@@ -24,10 +24,10 @@ ThemeData theme() => ThemeData(
       textTheme: const TextTheme(
         headline6: TextStyle(fontSize: 20.0),
       ),
-      tabBarTheme: TabBarTheme(
+      tabBarTheme: const TabBarTheme(
         labelColor: Colors.white,
       ),
-      iconTheme: IconThemeData(
+      iconTheme: const IconThemeData(
         color: Colors.white,
       ),
       cardColor: DARK3,

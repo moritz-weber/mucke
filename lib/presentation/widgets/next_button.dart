@@ -20,7 +20,7 @@ class NextButton extends StatelessWidget {
 
         if (index != null && index < queue.length - 1) { //
           return IconButton(
-            icon: Icon(Icons.skip_next), //
+            icon: const Icon(Icons.skip_next), //
             iconSize: iconSize,
             onPressed: () {
               audioStore.skipToNext(); //
@@ -29,7 +29,7 @@ class NextButton extends StatelessWidget {
           );
         }
         return IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.skip_next,
           ),
           iconSize: iconSize,

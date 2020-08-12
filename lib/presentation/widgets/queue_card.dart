@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class QueueCard extends StatefulWidget {
-  QueueCard({Key key, this.boxConstraints}) : super(key: key);
+  const QueueCard({Key key, this.boxConstraints}) : super(key: key);
 
   final BoxConstraints boxConstraints;
 
@@ -49,19 +49,19 @@ class _QueueCardState extends State<QueueCard> {
                 children: [
                   Row(
                     children: <Widget>[
-                      Icon(Icons.expand_less),
+                      const Icon(Icons.expand_less),
                       Container(
                         width: 4.0,
                       ),
                       RichText(
                         text: TextSpan(
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 16,
                           ),
                           children: [
-                            TextSpan(text: "$title"),
-                            TextSpan(text: " • ", style: TextStyle(color: Colors.white70)),
-                            TextSpan(text: "$artist", style: TextStyle(fontWeight: FontWeight.w300, color: Colors.white70)),
+                            TextSpan(text: '$title'),
+                            const TextSpan(text: ' • ', style: TextStyle(color: Colors.white70)),
+                            TextSpan(text: '$artist', style: const TextStyle(fontWeight: FontWeight.w300, color: Colors.white70)),
                           ],
                         ),
                       ),
@@ -74,7 +74,7 @@ class _QueueCardState extends State<QueueCard> {
           ),
         ),
       ),
-      duration: Duration(milliseconds: 250),
+      duration: const Duration(milliseconds: 250),
       curve: Curves.fastOutSlowIn,
     );
   }

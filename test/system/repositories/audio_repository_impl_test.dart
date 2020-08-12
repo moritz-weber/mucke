@@ -34,7 +34,7 @@ void main() {
 }
 
 List<SongModel> setupSongList() => [
-      SongModel(
+      const SongModel(
         title: SONG_TITLE_3,
         album: ALBUM_TITLE_3,
         albumId: ALBUM_ID_3,
@@ -44,7 +44,7 @@ List<SongModel> setupSongList() => [
         trackNumber: TRACKNUMBER_3,
         albumArtPath: ALBUM_ART_PATH_3,
       ),
-      SongModel(
+      const SongModel(
         title: SONG_TITLE_4,
         album: ALBUM_TITLE_4,
         albumId: ALBUM_ID_4,

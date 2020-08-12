@@ -105,13 +105,13 @@ void main() {
 }
 
 List<AlbumModel> setupAlbumList() => [
-      AlbumModel(
+      const AlbumModel(
         artist: ARTIST_1,
         title: ALBUM_TITLE_1,
         albumArtPath: ALBUM_ART_PATH_1,
         year: YEAR_1,
       ),
-      AlbumModel(
+      const AlbumModel(
         artist: ARTIST_2,
         title: ALBUM_TITLE_2,
         albumArtPath: ALBUM_ART_PATH_2,
@@ -120,7 +120,7 @@ List<AlbumModel> setupAlbumList() => [
     ];
 
 List<SongModel> setupSongList() => [
-      SongModel(
+      const SongModel(
         title: SONG_TITLE_3,
         album: ALBUM_TITLE_3,
         albumId: ALBUM_ID_3,
@@ -130,7 +130,7 @@ List<SongModel> setupSongList() => [
         trackNumber: TRACKNUMBER_3,
         albumArtPath: ALBUM_ART_PATH_3,
       ),
-      SongModel(
+      const SongModel(
         title: SONG_TITLE_4,
         album: ALBUM_TITLE_4,
         albumId: ALBUM_ID_4,

@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mucke/presentation/widgets/next_indicator.dart';
-import 'package:mucke/presentation/widgets/playback_control.dart';
 import 'package:provider/provider.dart';
 
 import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
 import '../theming.dart';
 import '../widgets/album_art.dart';
-import '../widgets/play_pause_button.dart';
+import '../widgets/next_indicator.dart';
+import '../widgets/playback_control.dart';
 import '../widgets/time_progress_indicator.dart';
 
 class CurrentlyPlayingPage extends StatelessWidget {
@@ -42,13 +41,13 @@ class CurrentlyPlayingPage extends StatelessWidget {
                     Row(
                       children: [
                         IconButton(
-                          icon: Icon(Icons.expand_more),
+                          icon: const Icon(Icons.expand_more),
                           onPressed: () {
                             Navigator.pop(context);
                           },
                         ),
                         IconButton(
-                          icon: Icon(Icons.more_vert),
+                          icon: const Icon(Icons.more_vert),
                           onPressed: () {},
                         )
                       ],
@@ -66,14 +65,14 @@ class CurrentlyPlayingPage extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.link,
                           size: 20.0,
                         ),
                         Container(
                           width: 40,
                         ),
-                        Icon(
+                        const Icon(
                           Icons.favorite,
                           size: 20.0,
                           color: RASPBERRY,
@@ -81,7 +80,7 @@ class CurrentlyPlayingPage extends StatelessWidget {
                         Container(
                           width: 40,
                         ),
-                        Icon(
+                        const Icon(
                           Icons.remove_circle_outline,
                           size: 20.0,
                         ),
@@ -97,7 +96,9 @@ class CurrentlyPlayingPage extends StatelessWidget {
                     ),
                     const PlaybackControl(),
                     const Spacer(),
-                    const NextIndicator(),
+                    NextIndicator(
+                      onTapAction: openQueue,
+                    ),
                   ],
                 ),
               );
@@ -106,5 +107,9 @@ class CurrentlyPlayingPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void openQueue(BuildContext context) {
+    print('Hello World');
   }
 }

@@ -15,14 +15,14 @@ void main() {
     moorMusicDataSource =
         MoorMusicDataSource.withQueryExecutor(VmDatabase.memory());
 
-    albumModel = AlbumModel(
+    albumModel = const AlbumModel(
       title: ALBUM_TITLE_1,
       artist: ARTIST_1,
       albumArtPath: ALBUM_ART_PATH_1,
       year: YEAR_1,
     );
 
-    songModel = SongModel(
+    songModel = const SongModel(
       title: SONG_TITLE_3,
       album: ALBUM_TITLE_3,
       albumId: ALBUM_ID_3,

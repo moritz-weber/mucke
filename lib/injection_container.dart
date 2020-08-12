@@ -38,7 +38,6 @@ Future<void> setupGetIt() async {
     () {
       final audioStore = AudioStore(
         audioRepository: getIt(),
-        musicDataRepository: getIt(),
       );
       audioStore.init();
       return audioStore;

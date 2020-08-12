@@ -12,7 +12,7 @@ import '../../test_constants.dart';
 class MockSongInfo extends Mock implements SongInfo {}
 
 void main() {
-  final tSongModel = SongModel(
+  const tSongModel = SongModel(
     title: SONG_TITLE_3,
     album: ALBUM_TITLE_3,
     albumId: ALBUM_ID_3,
@@ -36,7 +36,7 @@ void main() {
       'should return valid SongsCompanion',
       () async {
         // arrange
-        final expected = SongsCompanion(
+        const expected = SongsCompanion(
           albumTitle: Value(ALBUM_TITLE_3),
           albumId: Value(ALBUM_ID_3),
           artist: Value(ARTIST_3),
@@ -47,7 +47,7 @@ void main() {
           trackNumber: Value(TRACKNUMBER_3),
         );
 
-        final songModel = SongModel(
+        const songModel = SongModel(
           album: ALBUM_TITLE_3,
           albumId: ALBUM_ID_3,
           artist: ARTIST_3,
@@ -76,7 +76,7 @@ void main() {
       'should return valid MediaItem',
       () async {
         // arrange
-        final expected = MediaItem(
+        const expected = MediaItem(
             id: PATH_3,
             title: SONG_TITLE_3,
             album: ALBUM_TITLE_3,
@@ -88,7 +88,7 @@ void main() {
               'trackNumber': TRACKNUMBER_3,
             });
 
-        final songModel = SongModel(
+        const songModel = SongModel(
           album: ALBUM_TITLE_3,
           albumId: ALBUM_ID_3,
           artist: ARTIST_3,
@@ -129,7 +129,7 @@ void main() {
           present: PRESENT_3,
         );
 
-        final expected = SongModel(
+        const expected = SongModel(
           album: ALBUM_TITLE_3,
           albumId: ALBUM_ID_3,
           artist: ARTIST_3,
@@ -166,7 +166,7 @@ void main() {
       'should create SongModel from AlbumInfo',
       () async {
         // arrange
-        final expected = SongModel(
+        const expected = SongModel(
           album: ALBUM_TITLE_3,
           albumId: ALBUM_ID_3,
           artist: ARTIST_3,
@@ -189,7 +189,7 @@ void main() {
       'should create valid SongModel from MediaItem',
       () async {
         // arrange
-        final mediaItem = MediaItem(
+        const mediaItem = MediaItem(
           id: PATH_3,
           title: SONG_TITLE_3,
           album: ALBUM_TITLE_3,
@@ -202,7 +202,7 @@ void main() {
           },
         );
 
-        final expected = SongModel(
+        const expected = SongModel(
           album: ALBUM_TITLE_3,
           albumId: ALBUM_ID_3,
           artist: ARTIST_3,
@@ -237,7 +237,7 @@ void main() {
     SongModel songModel;
 
     setUp(() {
-      songModel = SongModel(
+      songModel = const SongModel(
         album: ALBUM_TITLE_3,
         albumId: ALBUM_ID_3,
         artist: ARTIST_3,
@@ -253,7 +253,7 @@ void main() {
       'should create SongModel with same values',
       () async {
         // arrange
-        final expected = SongModel(
+        const expected = SongModel(
           album: ALBUM_TITLE_3,
           albumId: ALBUM_ID_3,
           artist: ARTIST_3,
@@ -274,7 +274,7 @@ void main() {
       'should create SongModel with different album and albumId',
       () async {
         // arrange
-        final expected = SongModel(
+        const expected = SongModel(
           album: ALBUM_TITLE_4,
           albumId: ALBUM_ID_4,
           artist: ARTIST_3,

@@ -11,7 +11,7 @@ import '../../test_constants.dart';
 class MockAlbumInfo extends Mock implements AlbumInfo {}
 
 void main() {
-  final tAlbumModel = AlbumModel(
+  const tAlbumModel = AlbumModel(
     title: ALBUM_TITLE_1,
     artist: ARTIST_1,
     albumArtPath: ALBUM_ART_PATH_1,
@@ -31,14 +31,14 @@ void main() {
       'should return valid AlbumsCompanion',
       () async {
         // arrange
-        final expected = AlbumsCompanion(
+        const expected = AlbumsCompanion(
           artist: Value(ARTIST_1),
           title: Value(ALBUM_TITLE_1),
           albumArtPath: Value(ALBUM_ART_PATH_1),
           year: Value(YEAR_1),
         );
 
-        final albumModel = AlbumModel(
+        const albumModel = AlbumModel(
           artist: ARTIST_1,
           title: ALBUM_TITLE_1,
           albumArtPath: ALBUM_ART_PATH_1,
@@ -69,7 +69,7 @@ void main() {
           present: PRESENT_1,
         );
 
-        final expected = AlbumModel(
+        const expected = AlbumModel(
           id: ID_1,
           artist: ARTIST_1,
           title: ALBUM_TITLE_1,
@@ -95,7 +95,7 @@ void main() {
           present: PRESENT_1,
         );
 
-        final expected = AlbumModel(
+        const expected = AlbumModel(
           id: ID_1,
           artist: ARTIST_1,
           title: ALBUM_TITLE_1,
@@ -120,7 +120,7 @@ void main() {
           present: PRESENT_1,
         );
 
-        final expected = AlbumModel(
+        const expected = AlbumModel(
           artist: ARTIST_1,
           title: ALBUM_TITLE_1,
           albumArtPath: ALBUM_ART_PATH_1,
@@ -151,7 +151,7 @@ void main() {
       'should create AlbumModel from AlbumInfo',
       () async {
         // arrange
-        final expected = AlbumModel(
+        const expected = AlbumModel(
           id: ID_1,
           title: ALBUM_TITLE_1,
           artist: ARTIST_1,

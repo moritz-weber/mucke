@@ -11,7 +11,7 @@ class NextSong extends StatelessWidget {
   Widget build(BuildContext context) {
     return RichText(
       text: TextSpan(
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 14,
           color: Colors.white70,
         ),
@@ -20,7 +20,7 @@ class NextSong extends StatelessWidget {
           const TextSpan(text: ' • '),
           TextSpan(
             text: '${song.artist}',
-            style: TextStyle(
+            style: const TextStyle(
               fontWeight: FontWeight.w300,
             ),
           ),

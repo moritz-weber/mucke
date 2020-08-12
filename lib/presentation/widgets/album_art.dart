@@ -31,17 +31,17 @@ class AlbumArt extends StatelessWidget {
               right: 0,
               height: 250,
               child: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: const [
+                      colors: [
                         Color(0x00555555),
                         Color(0x77333333),
                         Color(0xCC111111),
                         Color(0xEE000000)
                       ],
-                      stops: const [
+                      stops: [
                         0.0,
                         0.6,
                         0.8,
@@ -67,13 +67,13 @@ class AlbumArt extends StatelessWidget {
                     ),
                     Text(
                       song.artist,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white70,
                       ),
                     ),
                     Text(
                       song.album,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.w300,
                         color: Colors.white70,
                       ),

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mucke/presentation/state/audio_store.dart';
-import 'package:mucke/presentation/widgets/next_song.dart';
 import 'package:provider/provider.dart';
 
+import '../state/audio_store.dart';
+import 'next_song.dart';
+
 class NextIndicator extends StatelessWidget {
-  const NextIndicator({Key key}) : super(key: key);
+  const NextIndicator({Key key, this.onTapAction}) : super(key: key);
+
+  final void Function(BuildContext) onTapAction;
 
   @override
   Widget build(BuildContext context) {
@@ -16,19 +19,23 @@ class NextIndicator extends StatelessWidget {
         final queue = audioStore.queueStream.value;
         final int index = audioStore.queueIndexStream.value;
 
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.expand_less,
-                  color: Colors.white70,
-                ),
-                if (index < queue.length - 1) NextSong(song: queue[index + 1]),
-              ],
+        return GestureDetector(
+          onTap: () => onTapAction(context),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.expand_less,
+                    color: Colors.white70,
+                  ),
+                  if (index < queue.length - 1)
+                    NextSong(song: queue[index + 1]),
+                ],
+              ),
             ),
           ),
         );

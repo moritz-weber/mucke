@@ -62,7 +62,7 @@ class SettingsPage extends StatelessWidget {
         ),
         ListTile(
           title: const Text('Select library folders'),
-          trailing: Icon(Icons.chevron_right),
+          trailing: const Icon(Icons.chevron_right),
           onTap: () {},
         ),
         const Divider(
