@@ -79,6 +79,50 @@ void main() {
     );
   });
 
+  group('updateDatabase', () {
+
+    MockMusicDataRepository mockMusicDataRepository;
+
+    setUp(() {
+      mockMusicDataRepository = MockMusicDataRepository();
+    });
+
+    test(
+      'should trigger update',
+      () async {
+        // arrange
+        final MockInitMusicDataStore mockInitMusicDataStore =
+            MockInitMusicDataStore(
+                musicDataRepository: mockMusicDataRepository);
+
+        // act
+        await mockInitMusicDataStore.updateDatabase();
+
+        // assert
+        verify(mockMusicDataRepository.updateDatabase());
+      },
+    );
+
+    test(
+      'should fetch artists, albums and songs into store',
+      () async {
+        // arrange
+        final MockInitMusicDataStore mockInitMusicDataStore =
+            MockInitMusicDataStore(
+                musicDataRepository: mockMusicDataRepository);
+
+        // act
+        await mockInitMusicDataStore.updateDatabase();
+
+        // assert
+        expect(mockInitMusicDataStore.fetchArtistsCalled, 1);
+        expect(mockInitMusicDataStore.fetchAlbumsCalled, 1);
+        expect(mockInitMusicDataStore.fetchSongsCalled, 1);
+      },
+    );
+
+  });
+
   group('fetchArtists', () {
     MockMusicDataRepository mockMusicDataRepository;
     const List<Artist> artists = [

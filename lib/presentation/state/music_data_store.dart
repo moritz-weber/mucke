@@ -58,6 +58,7 @@ abstract class _MusicDataStore with Store {
     isUpdatingDatabase = true;
     await _musicDataRepository.updateDatabase();
     await Future.wait([
+      fetchArtists(),
       fetchAlbums(),
       fetchSongs(),
     ]);
