@@ -20,6 +20,7 @@ abstract class _AudioStore with Store {
   bool _initialized = false;
   final List<ReactionDisposer> _disposers = [];
 
+  // TODO: naming and usage confusing!
   @observable
   ObservableStream<Song> currentSong;
   @observable

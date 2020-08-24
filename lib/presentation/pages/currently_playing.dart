@@ -9,6 +9,7 @@ import '../widgets/album_art.dart';
 import '../widgets/next_indicator.dart';
 import '../widgets/playback_control.dart';
 import '../widgets/time_progress_indicator.dart';
+import 'queue_page.dart';
 
 class CurrentlyPlayingPage extends StatelessWidget {
   const CurrentlyPlayingPage({Key key}) : super(key: key);
@@ -110,6 +111,11 @@ class CurrentlyPlayingPage extends StatelessWidget {
   }
 
   void openQueue(BuildContext context) {
-    print('Hello World');
+    Navigator.push(
+      context,
+      MaterialPageRoute<Widget>(
+        builder: (BuildContext context) => const QueuePage(),
+      ),
+    );
   }
 }

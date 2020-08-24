@@ -14,6 +14,8 @@ class TimeProgressIndicator extends StatelessWidget {
 
     return Observer(
       builder: (BuildContext context) {
+        final int duration = audioStore.song?.duration ?? 1000;
+
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Row(
@@ -24,14 +26,14 @@ class TimeProgressIndicator extends StatelessWidget {
               ),
               Expanded(
                 child: Container(
-                  child: LinearProgressIndicator(value: audioStore.currentPositionStream.value / audioStore.currentSong.value.duration),
+                  child: LinearProgressIndicator(value: audioStore.currentPositionStream.value / duration),
                   height: 3.0,
                 ),
               ),
               Container(
                 width: 10,
               ),
-              Text(msToTimeString(audioStore.currentSong.value.duration)),
+              Text(msToTimeString(duration)),
             ],
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           ),
