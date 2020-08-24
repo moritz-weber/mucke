@@ -16,7 +16,6 @@ const String KEY_INDEX = 'INDEX';
 
 class AudioPlayerTask extends BackgroundAudioTask {
   final _audioPlayer = AudioPlayer();
-  final _completer = Completer();
   MoorMusicDataSource _moorMusicDataSource;
 
   final _mediaItems = <String, MediaItem>{};
@@ -33,18 +32,13 @@ class AudioPlayerTask extends BackgroundAudioTask {
   Duration _position;
 
   @override
-  Future<void> onStart(Map<String, dynamic> params) async {
-    await _completer.future;
+  Future<void> onStop() async {
+    await _audioPlayer.stop();
+    await super.onStop();
   }
 
   @override
-  void onStop() {
-    _audioPlayer.stop();
-    _completer.complete();
-  }
-
-  @override
-  void onAddQueueItem(MediaItem mediaItem) {
+  Future<void> onAddQueueItem(MediaItem mediaItem) async {
     _mediaItems[mediaItem.id] = mediaItem;
   }
 
@@ -121,7 +115,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
 
   Future<void> _init() async {
     print('AudioPlayerTask._init');
-    _audioPlayer.getPositionStream().listen((duration) => _position = duration);
+    _audioPlayer.positionStream.listen((duration) => _position = duration);
 
     final connectPort = IsolateNameServer.lookupPortByName(MOOR_ISOLATE);
     final MoorIsolate moorIsolate = MoorIsolate.fromConnectPort(connectPort);
@@ -192,8 +186,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
 
     // exploration: this works, but has to be used every time play() is called; maybe stateStream is the better option
     _audioPlayer.play().then((_) {
-      print(_audioPlayer.playbackState);
-      if (_audioPlayer.playbackState == AudioPlaybackState.completed)
+      if (_audioPlayer.processingState == ProcessingState.completed)
         onSkipToNext();
     });
   }
