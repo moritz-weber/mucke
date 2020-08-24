@@ -22,7 +22,7 @@ class NextIndicator extends StatelessWidget {
         return GestureDetector(
           onTap: () => onTapAction(context),
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(10.0),
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -32,8 +32,10 @@ class NextIndicator extends StatelessWidget {
                     Icons.expand_less,
                     color: Colors.white70,
                   ),
-                  if (index < queue.length - 1)
-                    NextSong(song: queue[index + 1]),
+                  NextSong(
+                    queue: queue,
+                    index: index,
+                  ),
                 ],
               ),
             ),

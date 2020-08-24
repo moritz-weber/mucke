@@ -6,11 +6,13 @@ import 'package:just_audio/just_audio.dart';
 import 'package:moor/isolate.dart';
 import 'package:moor/moor.dart';
 
+import '../../domain/entities/shuffle_mode.dart';
 import 'moor_music_data_source.dart';
 
 const String INIT = 'INIT';
 const String PLAY_WITH_CONTEXT = 'PLAY_WITH_CONTEXT';
 const String APP_LIFECYCLE_RESUMED = 'APP_LIFECYCLE_RESUMED';
+const String SET_SHUFFLE_MODE = 'SET_SHUFFLE_MODE';
 
 const String KEY_INDEX = 'INDEX';
 
@@ -21,6 +23,9 @@ class AudioPlayerTask extends BackgroundAudioTask {
   final _mediaItems = <String, MediaItem>{};
   List<MediaItem> _originalPlaybackContext = <MediaItem>[];
   List<MediaItem> _playbackContext = <MediaItem>[];
+
+  ShuffleMode _shuffleMode = ShuffleMode.none;
+
   int _index = -1;
   int get playbackIndex => _index;
   set playbackIndex(int i) {
@@ -84,7 +89,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
   Future<void> onSkipToNext() async {
     if (_incrementIndex()) {
       await _audioPlayer.stop();
-      _startPlayback(_index);
+      _startPlayback(playbackIndex);
     }
   }
 
@@ -92,7 +97,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
   Future<void> onSkipToPrevious() async {
     if (_decrementIndex()) {
       await _audioPlayer.stop();
-      _startPlayback(_index);
+      _startPlayback(playbackIndex);
     }
   }
 
@@ -109,6 +114,8 @@ class AudioPlayerTask extends BackgroundAudioTask {
         return _playWithContext(_context, index);
       case APP_LIFECYCLE_RESUMED:
         return _onAppLifecycleResumed();
+      case SET_SHUFFLE_MODE:
+        return _setShuffleMode((arguments as String).toShuffleMode());
       default:
     }
   }
@@ -126,16 +133,25 @@ class AudioPlayerTask extends BackgroundAudioTask {
   Future<void> _playWithContext(List<String> context, int index) async {
     print('AudioPlayerTask._playWithContext');
     final _mediaItems = await _getMediaItemsFromPaths(context);
-    final permutation = _generateSongPermutation(_mediaItems);
+    final permutation = _generateSongPermutation(_mediaItems.length, index);
     _playbackContext = _getPermutatedSongs(_mediaItems, permutation);
-    playbackIndex = index;
+    if (_shuffleMode == ShuffleMode.none)
+      playbackIndex = index;
+    else
+      playbackIndex = 0;
     AudioServiceBackground.setQueue(_playbackContext);
-    _startPlayback(index);
+    _startPlayback(playbackIndex);
   }
 
   Future<void> _onAppLifecycleResumed() async {
     playbackIndex = playbackIndex;
     // AudioServiceBackground.setQueue(_playbackContext);
+  }
+
+  Future<void> _setShuffleMode(ShuffleMode mode) async {
+    _shuffleMode = mode;
+    AudioServiceBackground.sendCustomEvent({SET_SHUFFLE_MODE: _shuffleMode.toString()});
+    // TODO: adapt queue
   }
 
   // TODO: test
@@ -146,19 +162,29 @@ class AudioPlayerTask extends BackgroundAudioTask {
       final song = await _moorMusicDataSource.getSongByPath(path);
       mediaItems.add(song.toMediaItem());
     }
+    // TODO: not good, side effects...
     _originalPlaybackContext = mediaItems;
 
     return mediaItems;
   }
 
   // TODO: test
-  // TODO: needs implementation for shuffle mode
-  List<int> _generateSongPermutation(List<MediaItem> songs) {
+  List<int> _generateSongPermutation(int length, int startIndex) {
     // permutation[i] = j; => song j is on the i-th position in the permutated list
-    final permutation = <int>[];
+    List<int> permutation;
 
-    for (var i = 0; i < songs.length; i++) {
-      permutation.add(i);
+    switch (_shuffleMode) {
+      case ShuffleMode.none:
+        permutation = List<int>.generate(length, (i) => i);
+        break;
+      case ShuffleMode.standard:
+        final tmp = List<int>.generate(length, (i) => i)
+          ..removeAt(startIndex)
+          ..shuffle();
+        permutation = [startIndex] + tmp;
+        break;
+      case ShuffleMode.plus:
+        break;
     }
 
     return permutation;
@@ -179,7 +205,6 @@ class AudioPlayerTask extends BackgroundAudioTask {
       processingState: AudioProcessingState.ready,
     );
 
-    // TODO: needs implementation for shuffle mode (play first song)
     final _mediaItem = _playbackContext[index];
     await AudioServiceBackground.setMediaItem(_mediaItem);
     await _audioPlayer.setFilePath(_mediaItem.id);

@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 
 import '../../core/error/failures.dart';
 import '../../domain/entities/playback_state.dart';
+import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/entities/song.dart';
 import '../../domain/repositories/audio_repository.dart';
 import '../datasources/audio_manager_contract.dart';
@@ -24,6 +25,9 @@ class AudioRepositoryImpl implements AudioRepository {
 
   @override
   Stream<int> get queueIndexStream => _audioManager.queueIndexStream;
+
+  @override
+  Stream<ShuffleMode> get shuffleModeStream => _audioManager.shuffleModeStream;
 
   @override
   Stream<int> get currentPositionStream => _audioManager.currentPositionStream;
@@ -61,6 +65,12 @@ class AudioRepositoryImpl implements AudioRepository {
   @override
   Future<Either<Failure, void>> skipToPrevious() async {
     await _audioManager.skipToPrevious();
+    return const Right(null);
+  }
+
+  @override
+  Future<Either<Failure, void>> setShuffleMode(ShuffleMode shuffleMode) async {
+    await _audioManager.setShuffleMode(shuffleMode);
     return const Right(null);
   }
 }

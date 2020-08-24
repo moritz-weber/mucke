@@ -51,6 +51,7 @@ class QueuePage extends StatelessWidget {
                   );
                 case StreamStatus.waiting:
                 case StreamStatus.done:
+                default:
                   return Container();
               }
             },

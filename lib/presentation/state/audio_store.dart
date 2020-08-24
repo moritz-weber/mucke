@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:mobx/mobx.dart';
+import 'package:mucke/domain/entities/shuffle_mode.dart';
 
 import '../../domain/entities/playback_state.dart';
 import '../../domain/entities/song.dart';
@@ -38,6 +39,9 @@ abstract class _AudioStore with Store {
   @observable
   ObservableStream<int> queueIndexStream;
 
+  @observable
+  ObservableStream<ShuffleMode> shuffleModeStream;
+
   @action
   void init() {
     if (!_initialized) {
@@ -50,6 +54,8 @@ abstract class _AudioStore with Store {
       queueStream = _audioRepository.queueStream.asObservable(initialValue: []);
 
       queueIndexStream = _audioRepository.queueIndexStream.asObservable();
+
+      shuffleModeStream = _audioRepository.shuffleModeStream.asObservable(initialValue: ShuffleMode.none);
 
       _disposers.add(autorun((_) {
         updateSong(currentSong.value);
@@ -91,6 +97,10 @@ abstract class _AudioStore with Store {
   @action
   Future<void> skipToPrevious() async {
     _audioRepository.skipToPrevious();
+  }
+
+  Future<void> setShuffleMode(ShuffleMode shuffleMode) async {
+    _audioRepository.setShuffleMode(shuffleMode);
   }
 
   @action

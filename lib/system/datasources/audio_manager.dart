@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:audio_service/audio_service.dart';
 
 import '../../domain/entities/playback_state.dart' as entity;
+import '../../domain/entities/shuffle_mode.dart';
 import '../models/playback_state_model.dart';
 import '../models/song_model.dart';
 import 'audio_manager_contract.dart';
@@ -10,17 +11,18 @@ import 'audio_player_task.dart';
 
 typedef Conversion<S, T> = T Function(S);
 
-// index geht verloren, wenn noch kein Subscriber vorhanden ist, weil die events nicht gebuffert werden (kann ich nicht ändern)
-// deshalb sollte sofort ein listener erstellt werden, der den jeweils letzten wert speichert
-// der fertige Stream nimmt dann diesen letzten Wert, wenn er keinen im source stream findet
-// so sollte kein memory leak entstehen, weil immer nur ein wert gebuffert wird
-
 class AudioManagerImpl implements AudioManager {
   AudioManagerImpl() {
+    // this listener prevents the loss of data, when custom events are sent but not used yet
+    // the customEventStream only works, when there is a listener
     AudioService.customEventStream.listen((event) {
       final data = event as Map<String, dynamic>;
       if (data.containsKey(KEY_INDEX)) {
         _queueIndex = data[KEY_INDEX] as int;
+      }
+      if (data.containsKey(SET_SHUFFLE_MODE)) {
+        final modeString = data[SET_SHUFFLE_MODE] as String;
+        _shuffleMode = modeString.toShuffleMode();
       }
     });
   }
@@ -34,6 +36,7 @@ class AudioManagerImpl implements AudioManager {
   final Stream customEventStream = AudioService.customEventStream;
 
   int _queueIndex;
+  ShuffleMode _shuffleMode;
 
   @override
   Stream<SongModel> get currentSongStream =>
@@ -68,6 +71,22 @@ class AudioManagerImpl implements AudioManager {
     await for (final data in source) {
       if (data.containsKey(KEY_INDEX)) {
         yield data[KEY_INDEX] as int;
+      }
+    }
+  }
+
+  @override
+  Stream<ShuffleMode> get shuffleModeStream => _shuffleModeStream(AudioService.customEventStream.cast());
+
+  Stream<ShuffleMode> _shuffleModeStream(Stream<Map<String, dynamic>> source) async* {
+    if (_shuffleMode != null) {
+      yield _shuffleMode;
+    }
+
+    await for (final data in source) {
+      if (data.containsKey(SET_SHUFFLE_MODE)) {
+        final modeString = data[SET_SHUFFLE_MODE] as String;
+        yield modeString.toShuffleMode();
       }
     }
   }
@@ -110,6 +129,11 @@ class AudioManagerImpl implements AudioManager {
   @override
   Future<void> skipToPrevious() async {
     await AudioService.skipToPrevious();
+  }
+
+  @override
+  Future<void> setShuffleMode(ShuffleMode shuffleMode) async {
+    await AudioService.customAction(SET_SHUFFLE_MODE, shuffleMode.toString());
   }
 
   Stream<T> _filterStream<S, T>(Stream<S> stream, Conversion<S, T> fn) async* {
