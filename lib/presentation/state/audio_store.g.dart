@@ -102,6 +102,21 @@ mixin _$AudioStore on _AudioStore, Store {
     });
   }
 
+  final _$shuffleModeStreamAtom = Atom(name: '_AudioStore.shuffleModeStream');
+
+  @override
+  ObservableStream<ShuffleMode> get shuffleModeStream {
+    _$shuffleModeStreamAtom.reportRead();
+    return super.shuffleModeStream;
+  }
+
+  @override
+  set shuffleModeStream(ObservableStream<ShuffleMode> value) {
+    _$shuffleModeStreamAtom.reportWrite(value, super.shuffleModeStream, () {
+      super.shuffleModeStream = value;
+    });
+  }
+
   final _$playSongAsyncAction = AsyncAction('_AudioStore.playSong');
 
   @override
@@ -165,7 +180,8 @@ song: ${song},
 playbackStateStream: ${playbackStateStream},
 currentPositionStream: ${currentPositionStream},
 queueStream: ${queueStream},
-queueIndexStream: ${queueIndexStream}
+queueIndexStream: ${queueIndexStream},
+shuffleModeStream: ${shuffleModeStream}
     ''';
   }
 }

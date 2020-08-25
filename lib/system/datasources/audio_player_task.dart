@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:audio_service/audio_service.dart';
@@ -7,12 +8,14 @@ import 'package:moor/isolate.dart';
 import 'package:moor/moor.dart';
 
 import '../../domain/entities/shuffle_mode.dart';
+import '../models/song_model.dart';
 import 'moor_music_data_source.dart';
 
 const String INIT = 'INIT';
 const String PLAY_WITH_CONTEXT = 'PLAY_WITH_CONTEXT';
 const String APP_LIFECYCLE_RESUMED = 'APP_LIFECYCLE_RESUMED';
 const String SET_SHUFFLE_MODE = 'SET_SHUFFLE_MODE';
+const String SHUFFLE_ALL = 'SHUFFLE_ALL';
 
 const String KEY_INDEX = 'INDEX';
 
@@ -25,13 +28,18 @@ class AudioPlayerTask extends BackgroundAudioTask {
   List<MediaItem> _playbackContext = <MediaItem>[];
 
   ShuffleMode _shuffleMode = ShuffleMode.none;
+  ShuffleMode get shuffleMode => _shuffleMode;
+  set shuffleMode(ShuffleMode s) {
+    _shuffleMode = s;
+    AudioServiceBackground.sendCustomEvent({SET_SHUFFLE_MODE: s.toString()});
+  }
 
-  int _index = -1;
-  int get playbackIndex => _index;
+  int _playbackIndex = -1;
+  int get playbackIndex => _playbackIndex;
   set playbackIndex(int i) {
     print('setting index');
-    _index = i;
-    AudioServiceBackground.sendCustomEvent({KEY_INDEX: _index});
+    _playbackIndex = i;
+    AudioServiceBackground.sendCustomEvent({KEY_INDEX: _playbackIndex});
   }
 
   Duration _position;
@@ -50,7 +58,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
   @override
   Future<void> onPlayFromMediaId(String mediaId) async {
     AudioServiceBackground.setState(
-      controls: [pauseControl, stopControl],
+      controls: [MediaControl.pause, MediaControl.skipToNext],
       playing: true,
       processingState: AudioProcessingState.ready,
     );
@@ -64,7 +72,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
   @override
   Future<void> onPlay() async {
     AudioServiceBackground.setState(
-      controls: [pauseControl, stopControl],
+      controls: [MediaControl.pause, MediaControl.skipToNext],
       processingState: AudioProcessingState.ready,
       updateTime: Duration(milliseconds: DateTime.now().millisecondsSinceEpoch),
       position: _position,
@@ -76,7 +84,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
   @override
   Future<void> onPause() async {
     AudioServiceBackground.setState(
-      controls: [playControl, stopControl],
+      controls: [MediaControl.play, MediaControl.skipToNext],
       processingState: AudioProcessingState.ready,
       updateTime: Duration(milliseconds: DateTime.now().millisecondsSinceEpoch),
       position: _position,
@@ -116,6 +124,8 @@ class AudioPlayerTask extends BackgroundAudioTask {
         return _onAppLifecycleResumed();
       case SET_SHUFFLE_MODE:
         return _setShuffleMode((arguments as String).toShuffleMode());
+      case SHUFFLE_ALL:
+        return shuffleAll();
       default:
     }
   }
@@ -135,7 +145,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
     final _mediaItems = await _getMediaItemsFromPaths(context);
     final permutation = _generateSongPermutation(_mediaItems.length, index);
     _playbackContext = _getPermutatedSongs(_mediaItems, permutation);
-    if (_shuffleMode == ShuffleMode.none)
+    if (shuffleMode == ShuffleMode.none)
       playbackIndex = index;
     else
       playbackIndex = 0;
@@ -149,21 +159,40 @@ class AudioPlayerTask extends BackgroundAudioTask {
   }
 
   Future<void> _setShuffleMode(ShuffleMode mode) async {
-    _shuffleMode = mode;
-    AudioServiceBackground.sendCustomEvent({SET_SHUFFLE_MODE: _shuffleMode.toString()});
+    shuffleMode = mode;
     // TODO: adapt queue
+  }
+
+  // TODO: pasted code -> reformat!
+  Future<void> shuffleAll() async {
+    final start = DateTime.now();
+    shuffleMode = ShuffleMode.standard;
+    final List<SongModel> songs = await _moorMusicDataSource.getSongs();
+    final mediaItems = <MediaItem>[];
+    for (final song in songs) {
+      mediaItems.add(song.toMediaItem());
+    }
+    final rng = Random();
+    final index = rng.nextInt(mediaItems.length);
+
+    final permutation = _generateSongPermutation(mediaItems.length, index);
+    _playbackContext = _getPermutatedSongs(mediaItems, permutation);
+    playbackIndex = 0;
+    AudioServiceBackground.setQueue(_playbackContext);
+    final end = DateTime.now();
+    print(end.difference(start).inMilliseconds);
+    _startPlayback(playbackIndex);
   }
 
   // TODO: test
   // TODO: optimize -> too slow for whole library
+  // fetching all songs together and preparing playback takes ~500ms compared to ~10.000ms individually
   Future<List<MediaItem>> _getMediaItemsFromPaths(List<String> paths) async {
     final mediaItems = <MediaItem>[];
     for (final path in paths) {
       final song = await _moorMusicDataSource.getSongByPath(path);
       mediaItems.add(song.toMediaItem());
     }
-    // TODO: not good, side effects...
-    _originalPlaybackContext = mediaItems;
 
     return mediaItems;
   }
@@ -173,7 +202,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
     // permutation[i] = j; => song j is on the i-th position in the permutated list
     List<int> permutation;
 
-    switch (_shuffleMode) {
+    switch (shuffleMode) {
       case ShuffleMode.none:
         permutation = List<int>.generate(length, (i) => i);
         break;
@@ -200,7 +229,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
   Future<void> _startPlayback(int index) async {
     // TODO: DRY
     AudioServiceBackground.setState(
-      controls: [pauseControl, stopControl],
+      controls: [MediaControl.pause, MediaControl.skipToNext],
       playing: true,
       processingState: AudioProcessingState.ready,
     );
@@ -232,19 +261,3 @@ class AudioPlayerTask extends BackgroundAudioTask {
     return false;
   }
 }
-
-MediaControl playControl = const MediaControl(
-  androidIcon: 'drawable/ic_action_play_arrow',
-  label: 'Play',
-  action: MediaAction.play,
-);
-MediaControl pauseControl = const MediaControl(
-  androidIcon: 'drawable/ic_action_pause',
-  label: 'Pause',
-  action: MediaAction.pause,
-);
-MediaControl stopControl = const MediaControl(
-  androidIcon: 'drawable/ic_action_stop',
-  label: 'Stop',
-  action: MediaAction.stop,
-);

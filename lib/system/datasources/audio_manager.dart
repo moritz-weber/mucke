@@ -76,9 +76,11 @@ class AudioManagerImpl implements AudioManager {
   }
 
   @override
-  Stream<ShuffleMode> get shuffleModeStream => _shuffleModeStream(AudioService.customEventStream.cast());
+  Stream<ShuffleMode> get shuffleModeStream =>
+      _shuffleModeStream(AudioService.customEventStream.cast());
 
-  Stream<ShuffleMode> _shuffleModeStream(Stream<Map<String, dynamic>> source) async* {
+  Stream<ShuffleMode> _shuffleModeStream(
+      Stream<Map<String, dynamic>> source) async* {
     if (_shuffleMode != null) {
       yield _shuffleMode;
     }
@@ -116,6 +118,7 @@ class AudioManagerImpl implements AudioManager {
       await AudioService.start(
         backgroundTaskEntrypoint: _backgroundTaskEntrypoint,
         androidEnableQueue: true,
+        androidStopForegroundOnPause: true,
       );
       await AudioService.customAction(INIT);
     }
@@ -153,7 +156,7 @@ class AudioManagerImpl implements AudioManager {
     Duration updateTime;
     Duration statePosition;
 
-    // should this class get an init method for this?
+    // TODO: should this class get an init method for this?
     _sourcePlaybackStateStream.listen((currentState) {
       state = currentState;
       updateTime = currentState?.updateTime;
@@ -174,6 +177,12 @@ class AudioManagerImpl implements AudioManager {
       }
       await Future.delayed(const Duration(milliseconds: 200));
     }
+  }
+
+  @override
+  Future<void> shuffleAll() async {
+    await _startAudioService();
+    await AudioService.customAction(SHUFFLE_ALL);
   }
 }
 

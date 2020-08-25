@@ -19,4 +19,5 @@ abstract class AudioRepository {
   Future<Either<Failure, void>> skipToNext();
   Future<Either<Failure, void>> skipToPrevious();
   Future<Either<Failure, void>> setShuffleMode(ShuffleMode shuffleMode);
+  Future<Either<Failure, void>> shuffleAll();
 }

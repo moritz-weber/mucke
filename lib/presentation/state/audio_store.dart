@@ -1,8 +1,8 @@
 import 'package:meta/meta.dart';
 import 'package:mobx/mobx.dart';
-import 'package:mucke/domain/entities/shuffle_mode.dart';
 
 import '../../domain/entities/playback_state.dart';
+import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/entities/song.dart';
 import '../../domain/repositories/audio_repository.dart';
 
@@ -101,6 +101,10 @@ abstract class _AudioStore with Store {
 
   Future<void> setShuffleMode(ShuffleMode shuffleMode) async {
     _audioRepository.setShuffleMode(shuffleMode);
+  }
+
+  Future<void> shuffleAll() async {
+    _audioRepository.shuffleAll();
   }
 
   @action

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/shuffle_all_button.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
 
@@ -13,7 +15,7 @@ class _HomePageState extends State<HomePage> {
     print('HomePage.build');
     return Container(
       child: const Center(
-        child: Text('Home Page'),
+        child: ShuffleAllButton(),
       ),
     );
   }

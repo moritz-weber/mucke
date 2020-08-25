@@ -73,4 +73,10 @@ class AudioRepositoryImpl implements AudioRepository {
     await _audioManager.setShuffleMode(shuffleMode);
     return const Right(null);
   }
+
+  @override
+  Future<Either<Failure, void>> shuffleAll() async {
+    await _audioManager.shuffleAll();
+    return const Right(null);
+  }
 }
