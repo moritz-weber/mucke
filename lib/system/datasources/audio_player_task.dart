@@ -10,22 +10,22 @@ import 'package:moor/moor.dart';
 import '../../domain/entities/shuffle_mode.dart';
 import '../models/song_model.dart';
 import 'moor_music_data_source.dart';
+import 'queue_manager.dart';
 
 const String INIT = 'INIT';
 const String PLAY_WITH_CONTEXT = 'PLAY_WITH_CONTEXT';
 const String APP_LIFECYCLE_RESUMED = 'APP_LIFECYCLE_RESUMED';
 const String SET_SHUFFLE_MODE = 'SET_SHUFFLE_MODE';
 const String SHUFFLE_ALL = 'SHUFFLE_ALL';
-
 const String KEY_INDEX = 'INDEX';
 
 class AudioPlayerTask extends BackgroundAudioTask {
-  final _audioPlayer = AudioPlayer();
-  MoorMusicDataSource _moorMusicDataSource;
+  final audioPlayer = AudioPlayer();
+  MoorMusicDataSource moorMusicDataSource;
+  QueueManager qm;
 
-  final _mediaItems = <String, MediaItem>{};
-  List<MediaItem> _originalPlaybackContext = <MediaItem>[];
-  List<MediaItem> _playbackContext = <MediaItem>[];
+  List<MediaItem> originalPlaybackContext = <MediaItem>[];
+  List<MediaItem> playbackContext = <MediaItem>[];
 
   ShuffleMode _shuffleMode = ShuffleMode.none;
   ShuffleMode get shuffleMode => _shuffleMode;
@@ -37,227 +37,166 @@ class AudioPlayerTask extends BackgroundAudioTask {
   int _playbackIndex = -1;
   int get playbackIndex => _playbackIndex;
   set playbackIndex(int i) {
-    print('setting index');
-    _playbackIndex = i;
-    AudioServiceBackground.sendCustomEvent({KEY_INDEX: _playbackIndex});
+    if (i != null) {
+      _playbackIndex = i;
+      AudioServiceBackground.setMediaItem(playbackContext[i]);
+      AudioServiceBackground.sendCustomEvent({KEY_INDEX: i});
+
+      AudioServiceBackground.setState(
+        controls: [
+          MediaControl.skipToPrevious,
+          MediaControl.pause,
+          MediaControl.skipToNext
+        ],
+        playing: true,
+        processingState: AudioProcessingState.ready,
+        updateTime:
+            Duration(milliseconds: DateTime.now().millisecondsSinceEpoch),
+        position: const Duration(milliseconds: 0),
+      );
+    }
   }
 
-  Duration _position;
+  Duration position;
 
   @override
   Future<void> onStop() async {
-    await _audioPlayer.stop();
+    await audioPlayer.stop();
+    await audioPlayer.dispose();
     await super.onStop();
   }
 
   @override
-  Future<void> onAddQueueItem(MediaItem mediaItem) async {
-    _mediaItems[mediaItem.id] = mediaItem;
-  }
-
-  @override
-  Future<void> onPlayFromMediaId(String mediaId) async {
-    AudioServiceBackground.setState(
-      controls: [MediaControl.pause, MediaControl.skipToNext],
-      playing: true,
-      processingState: AudioProcessingState.ready,
-    );
-
-    await AudioServiceBackground.setMediaItem(_mediaItems[mediaId]);
-    await _audioPlayer.setFilePath(mediaId);
-
-    _audioPlayer.play();
-  }
-
-  @override
   Future<void> onPlay() async {
-    AudioServiceBackground.setState(
-      controls: [MediaControl.pause, MediaControl.skipToNext],
-      processingState: AudioProcessingState.ready,
-      updateTime: Duration(milliseconds: DateTime.now().millisecondsSinceEpoch),
-      position: _position,
-      playing: true,
-    );
-    _audioPlayer.play();
+    audioPlayer.play();
   }
 
   @override
   Future<void> onPause() async {
-    AudioServiceBackground.setState(
-      controls: [MediaControl.play, MediaControl.skipToNext],
-      processingState: AudioProcessingState.ready,
-      updateTime: Duration(milliseconds: DateTime.now().millisecondsSinceEpoch),
-      position: _position,
-      playing: false,
-    );
-    await _audioPlayer.pause();
+    await audioPlayer.pause();
   }
 
   @override
   Future<void> onSkipToNext() async {
-    if (_incrementIndex()) {
-      await _audioPlayer.stop();
-      _startPlayback(playbackIndex);
-    }
+    audioPlayer.seekToNext();
   }
 
   @override
   Future<void> onSkipToPrevious() async {
-    if (_decrementIndex()) {
-      await _audioPlayer.stop();
-      _startPlayback(playbackIndex);
-    }
+    audioPlayer.seekToPrevious();
   }
 
   @override
   Future<void> onCustomAction(String name, arguments) async {
     switch (name) {
       case INIT:
-        return _init();
+        return init();
       case PLAY_WITH_CONTEXT:
         // arguments: [List<String>, int]
         final args = arguments as List<dynamic>;
-        final _context = List<String>.from(args[0] as List<dynamic>);
+        final context = List<String>.from(args[0] as List<dynamic>);
         final index = args[1] as int;
-        return _playWithContext(_context, index);
+        return playWithContext(context, index);
       case APP_LIFECYCLE_RESUMED:
-        return _onAppLifecycleResumed();
+        return onAppLifecycleResumed();
       case SET_SHUFFLE_MODE:
-        return _setShuffleMode((arguments as String).toShuffleMode());
+        return setShuffleMode((arguments as String).toShuffleMode());
       case SHUFFLE_ALL:
         return shuffleAll();
       default:
     }
   }
 
-  Future<void> _init() async {
-    print('AudioPlayerTask._init');
-    _audioPlayer.positionStream.listen((duration) => _position = duration);
+  Future<void> init() async {
+    print('AudioPlayerTask.init');
+    audioPlayer.positionStream.listen((position) => handlePosition(position));
+    audioPlayer.playerStateStream.listen((event) => handlePlayerState(event));
+    audioPlayer.currentIndexStream.listen((event) => playbackIndex = event);
 
     final connectPort = IsolateNameServer.lookupPortByName(MOOR_ISOLATE);
     final MoorIsolate moorIsolate = MoorIsolate.fromConnectPort(connectPort);
     final DatabaseConnection databaseConnection = await moorIsolate.connect();
-    _moorMusicDataSource = MoorMusicDataSource.connect(databaseConnection);
+    moorMusicDataSource = MoorMusicDataSource.connect(databaseConnection);
+
+    qm = QueueManager(moorMusicDataSource);
   }
 
-  Future<void> _playWithContext(List<String> context, int index) async {
-    print('AudioPlayerTask._playWithContext');
-    final _mediaItems = await _getMediaItemsFromPaths(context);
-    final permutation = _generateSongPermutation(_mediaItems.length, index);
-    _playbackContext = _getPermutatedSongs(_mediaItems, permutation);
-    if (shuffleMode == ShuffleMode.none)
-      playbackIndex = index;
-    else
-      playbackIndex = 0;
-    AudioServiceBackground.setQueue(_playbackContext);
-    _startPlayback(playbackIndex);
+  Future<void> playWithContext(List<String> context, int index) async {
+    final mediaItems = await qm.getMediaItemsFromPaths(context);
+    playPlaylist(mediaItems, index);
   }
 
-  Future<void> _onAppLifecycleResumed() async {
-    playbackIndex = playbackIndex;
-    // AudioServiceBackground.setQueue(_playbackContext);
+  Future<void> onAppLifecycleResumed() async {
+    AudioServiceBackground.sendCustomEvent({KEY_INDEX: playbackIndex});
+    AudioServiceBackground.sendCustomEvent(
+        {SET_SHUFFLE_MODE: shuffleMode.toString()});
   }
 
-  Future<void> _setShuffleMode(ShuffleMode mode) async {
+  Future<void> setShuffleMode(ShuffleMode mode) async {
     shuffleMode = mode;
-    // TODO: adapt queue
+    // TODO: this starts playback new from current index, also wrong index from shuffle to normal
+    playPlaylist(originalPlaybackContext, playbackIndex);
   }
 
-  // TODO: pasted code -> reformat!
   Future<void> shuffleAll() async {
-    final start = DateTime.now();
     shuffleMode = ShuffleMode.standard;
-    final List<SongModel> songs = await _moorMusicDataSource.getSongs();
-    final mediaItems = <MediaItem>[];
-    for (final song in songs) {
-      mediaItems.add(song.toMediaItem());
-    }
+    final List<SongModel> songs = await moorMusicDataSource.getSongs();
+    final List<MediaItem> mediaItems =
+        songs.map((song) => song.toMediaItem()).toList();
+
     final rng = Random();
     final index = rng.nextInt(mediaItems.length);
 
-    final permutation = _generateSongPermutation(mediaItems.length, index);
-    _playbackContext = _getPermutatedSongs(mediaItems, permutation);
-    playbackIndex = 0;
-    AudioServiceBackground.setQueue(_playbackContext);
-    final end = DateTime.now();
-    print(end.difference(start).inMilliseconds);
-    _startPlayback(playbackIndex);
+    playPlaylist(mediaItems, index);
   }
 
-  // TODO: test
-  // TODO: optimize -> too slow for whole library
-  // fetching all songs together and preparing playback takes ~500ms compared to ~10.000ms individually
-  Future<List<MediaItem>> _getMediaItemsFromPaths(List<String> paths) async {
-    final mediaItems = <MediaItem>[];
-    for (final path in paths) {
-      final song = await _moorMusicDataSource.getSongByPath(path);
-      mediaItems.add(song.toMediaItem());
+  Future<void> playPlaylist(List<MediaItem> mediaItems, int index) async {
+    final permutation =
+        qm.generatePermutation(shuffleMode, mediaItems.length, index);
+    playbackContext = qm.getPermutatedSongs(mediaItems, permutation);
+    originalPlaybackContext = mediaItems;
+
+    AudioServiceBackground.setQueue(playbackContext);
+    await audioPlayer.load(qm.mediaItemsToAudioSource(playbackContext));
+
+    if (shuffleMode == ShuffleMode.none) {
+      await audioPlayer.seek(const Duration(milliseconds: 0), index: index);
     }
 
-    return mediaItems;
+    audioPlayer.play();
   }
 
-  // TODO: test
-  List<int> _generateSongPermutation(int length, int startIndex) {
-    // permutation[i] = j; => song j is on the i-th position in the permutated list
-    List<int> permutation;
+  void handlePosition(Duration position) {
+    this.position = position;
+  }
 
-    switch (shuffleMode) {
-      case ShuffleMode.none:
-        permutation = List<int>.generate(length, (i) => i);
-        break;
-      case ShuffleMode.standard:
-        final tmp = List<int>.generate(length, (i) => i)
-          ..removeAt(startIndex)
-          ..shuffle();
-        permutation = [startIndex] + tmp;
-        break;
-      case ShuffleMode.plus:
-        break;
+  void handlePlayerState(PlayerState ps) {
+    if (ps.processingState == ProcessingState.ready && ps.playing) {
+      AudioServiceBackground.setState(
+        controls: [
+          MediaControl.skipToPrevious,
+          MediaControl.pause,
+          MediaControl.skipToNext
+        ],
+        playing: true,
+        processingState: AudioProcessingState.ready,
+        updateTime:
+            Duration(milliseconds: DateTime.now().millisecondsSinceEpoch),
+        position: position,
+      );
+    } else if (ps.processingState == ProcessingState.ready && !ps.playing) {
+      AudioServiceBackground.setState(
+        controls: [
+          MediaControl.skipToPrevious,
+          MediaControl.play,
+          MediaControl.skipToNext
+        ],
+        processingState: AudioProcessingState.ready,
+        updateTime:
+            Duration(milliseconds: DateTime.now().millisecondsSinceEpoch),
+        position: position,
+        playing: false,
+      );
     }
-
-    return permutation;
-  }
-
-  List<MediaItem> _getPermutatedSongs(
-      List<MediaItem> songs, List<int> permutation) {
-    return List.generate(
-        permutation.length, (index) => songs[permutation[index]]);
-  }
-
-  // TODO: cleanup and test
-  Future<void> _startPlayback(int index) async {
-    // TODO: DRY
-    AudioServiceBackground.setState(
-      controls: [MediaControl.pause, MediaControl.skipToNext],
-      playing: true,
-      processingState: AudioProcessingState.ready,
-    );
-
-    final _mediaItem = _playbackContext[index];
-    await AudioServiceBackground.setMediaItem(_mediaItem);
-    await _audioPlayer.setFilePath(_mediaItem.id);
-
-    // exploration: this works, but has to be used every time play() is called; maybe stateStream is the better option
-    _audioPlayer.play().then((_) {
-      if (_audioPlayer.processingState == ProcessingState.completed)
-        onSkipToNext();
-    });
-  }
-
-  bool _incrementIndex() {
-    if (playbackIndex < _playbackContext.length - 1) {
-      playbackIndex++;
-      return true;
-    }
-    return false;
-  }
-
-  bool _decrementIndex() {
-    if (playbackIndex > 0) {
-      playbackIndex--;
-      return true;
-    }
-    return false;
   }
 }
