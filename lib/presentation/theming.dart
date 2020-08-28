@@ -19,10 +19,16 @@ ThemeData theme() => ThemeData(
       primaryColorBrightness: Brightness.dark,
       primaryColorLight: DARK2,
       accentColor: LIGHT1,
+      highlightColor: TURQUOISE,
       scaffoldBackgroundColor: DARK2,
       // https://api.flutter.dev/flutter/material/TextTheme-class.html
       textTheme: const TextTheme(
-        headline6: TextStyle(fontSize: 20.0),
+        headline1: TextStyle(fontSize: 28.0, fontWeight: FontWeight.w900, color: LIGHT1),
+        headline2: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w900, color: Colors.white),
+        headline3: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w900, color: Colors.white),
+        headline4: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600, color: Colors.white),
+        headline5: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w400, color: Colors.white70),
+        headline6: TextStyle(fontSize: 18.0),
       ),
       tabBarTheme: const TabBarTheme(
         labelColor: Colors.white,

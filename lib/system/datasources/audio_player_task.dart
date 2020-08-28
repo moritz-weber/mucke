@@ -111,7 +111,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
     print('AudioPlayerTask.init');
     audioPlayer.positionStream.listen((position) => handlePosition(position));
     audioPlayer.playerStateStream.listen((event) => handlePlayerState(event));
-    audioPlayer.currentIndexStream.listen((event) => playbackIndex = event);
+    audioPlayer.sequenceStateStream.listen((event) => playbackIndex = event.currentIndex);
 
     final connectPort = IsolateNameServer.lookupPortByName(MOOR_ISOLATE);
     final MoorIsolate moorIsolate = MoorIsolate.fromConnectPort(connectPort);

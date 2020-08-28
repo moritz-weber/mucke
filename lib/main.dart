@@ -1,3 +1,4 @@
+import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -18,6 +19,10 @@ import 'presentation/widgets/navbar.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await setupGetIt();
+
+  final session = await AudioSession.instance;
+  await session.configure(const AudioSessionConfiguration.music());
+
   runApp(MyApp());
 }
 
