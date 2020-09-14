@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mucke/presentation/widgets/shuffle_indicator.dart';
 
 import '../widgets/highlight.dart';
 import '../widgets/shuffle_all_button.dart';
@@ -35,6 +36,10 @@ class _HomePageState extends State<HomePage> {
           ),
           const Highlight(),
           const ShuffleAllButton(
+            verticalPad: 10.0,
+            horizontalPad: 12.0,
+          ),
+          const ShuffleIndicator(
             verticalPad: 10.0,
             horizontalPad: 12.0,
           ),

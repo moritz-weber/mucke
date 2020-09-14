@@ -16,6 +16,7 @@ import 'system/datasources/local_music_fetcher.dart';
 import 'system/datasources/local_music_fetcher_contract.dart';
 import 'system/datasources/moor_music_data_source.dart';
 import 'system/datasources/music_data_source_contract.dart';
+import 'system/datasources/persistence_manager.dart';
 import 'system/repositories/audio_repository_impl.dart';
 import 'system/repositories/music_data_repository_impl.dart';
 
@@ -38,6 +39,7 @@ Future<void> setupGetIt() async {
     () {
       final audioStore = AudioStore(
         audioRepository: getIt(),
+        persistenceManager: getIt(),
       );
       audioStore.init();
       return audioStore;
@@ -69,7 +71,8 @@ Future<void> setupGetIt() async {
   IsolateNameServer.registerPortWithName(moorIsolate.connectPort, MOOR_ISOLATE);
 
   final DatabaseConnection databaseConnection = await moorIsolate.connect();
-  final MoorMusicDataSource moorMusicDataSource = MoorMusicDataSource.connect(databaseConnection);
+  final MoorMusicDataSource moorMusicDataSource =
+      MoorMusicDataSource.connect(databaseConnection);
   getIt.registerLazySingleton<MusicDataSource>(() => moorMusicDataSource);
   getIt.registerLazySingleton<LocalMusicFetcher>(
     () => LocalMusicFetcherImpl(
@@ -77,6 +80,11 @@ Future<void> setupGetIt() async {
     ),
   );
   getIt.registerLazySingleton<AudioManager>(() => AudioManagerImpl());
+
+  // TODO: does this fit here???
+  final PersistenceManager persistenceManager = PersistenceManager(getIt());
+  // await persistenceManager.init();
+  getIt.registerLazySingleton<PersistenceManager>(() => persistenceManager);
 
   // external
   getIt.registerLazySingleton<FlutterAudioQuery>(() => FlutterAudioQuery());

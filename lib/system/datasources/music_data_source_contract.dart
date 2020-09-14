@@ -22,4 +22,8 @@ abstract class MusicDataSource {
   Future<void> deleteAllSongs();
 
   Future<List<ArtistModel>> getArtists();
+
+  Future<String> getValue(String key);
+  Future<void> setValue(String key, String value);
+  Stream<String> watchValue(String key);
 }

@@ -1077,6 +1077,199 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
   }
 }
 
+class StringValue extends DataClass implements Insertable<StringValue> {
+  final String key;
+  final String value;
+  StringValue({@required this.key, this.value});
+  factory StringValue.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final stringType = db.typeSystem.forDartType<String>();
+    return StringValue(
+      key: stringType.mapFromDatabaseResponse(data['${effectivePrefix}key']),
+      value:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}value']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || key != null) {
+      map['key'] = Variable<String>(key);
+    }
+    if (!nullToAbsent || value != null) {
+      map['value'] = Variable<String>(value);
+    }
+    return map;
+  }
+
+  StringValuesCompanion toCompanion(bool nullToAbsent) {
+    return StringValuesCompanion(
+      key: key == null && nullToAbsent ? const Value.absent() : Value(key),
+      value:
+          value == null && nullToAbsent ? const Value.absent() : Value(value),
+    );
+  }
+
+  factory StringValue.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return StringValue(
+      key: serializer.fromJson<String>(json['key']),
+      value: serializer.fromJson<String>(json['value']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'key': serializer.toJson<String>(key),
+      'value': serializer.toJson<String>(value),
+    };
+  }
+
+  StringValue copyWith({String key, String value}) => StringValue(
+        key: key ?? this.key,
+        value: value ?? this.value,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('StringValue(')
+          ..write('key: $key, ')
+          ..write('value: $value')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf($mrjc(key.hashCode, value.hashCode));
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is StringValue &&
+          other.key == this.key &&
+          other.value == this.value);
+}
+
+class StringValuesCompanion extends UpdateCompanion<StringValue> {
+  final Value<String> key;
+  final Value<String> value;
+  const StringValuesCompanion({
+    this.key = const Value.absent(),
+    this.value = const Value.absent(),
+  });
+  StringValuesCompanion.insert({
+    @required String key,
+    this.value = const Value.absent(),
+  }) : key = Value(key);
+  static Insertable<StringValue> custom({
+    Expression<String> key,
+    Expression<String> value,
+  }) {
+    return RawValuesInsertable({
+      if (key != null) 'key': key,
+      if (value != null) 'value': value,
+    });
+  }
+
+  StringValuesCompanion copyWith({Value<String> key, Value<String> value}) {
+    return StringValuesCompanion(
+      key: key ?? this.key,
+      value: value ?? this.value,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (key.present) {
+      map['key'] = Variable<String>(key.value);
+    }
+    if (value.present) {
+      map['value'] = Variable<String>(value.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('StringValuesCompanion(')
+          ..write('key: $key, ')
+          ..write('value: $value')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $StringValuesTable extends StringValues
+    with TableInfo<$StringValuesTable, StringValue> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $StringValuesTable(this._db, [this._alias]);
+  final VerificationMeta _keyMeta = const VerificationMeta('key');
+  GeneratedTextColumn _key;
+  @override
+  GeneratedTextColumn get key => _key ??= _constructKey();
+  GeneratedTextColumn _constructKey() {
+    return GeneratedTextColumn(
+      'key',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _valueMeta = const VerificationMeta('value');
+  GeneratedTextColumn _value;
+  @override
+  GeneratedTextColumn get value => _value ??= _constructValue();
+  GeneratedTextColumn _constructValue() {
+    return GeneratedTextColumn(
+      'value',
+      $tableName,
+      true,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [key, value];
+  @override
+  $StringValuesTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'string_values';
+  @override
+  final String actualTableName = 'string_values';
+  @override
+  VerificationContext validateIntegrity(Insertable<StringValue> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('key')) {
+      context.handle(
+          _keyMeta, key.isAcceptableOrUnknown(data['key'], _keyMeta));
+    } else if (isInserting) {
+      context.missing(_keyMeta);
+    }
+    if (data.containsKey('value')) {
+      context.handle(
+          _valueMeta, value.isAcceptableOrUnknown(data['value'], _valueMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {key};
+  @override
+  StringValue map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return StringValue.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  $StringValuesTable createAlias(String alias) {
+    return $StringValuesTable(_db, alias);
+  }
+}
+
 abstract class _$MoorMusicDataSource extends GeneratedDatabase {
   _$MoorMusicDataSource(QueryExecutor e)
       : super(SqlTypeSystem.defaultInstance, e);
@@ -1087,8 +1280,12 @@ abstract class _$MoorMusicDataSource extends GeneratedDatabase {
   $AlbumsTable get albums => _albums ??= $AlbumsTable(this);
   $SongsTable _songs;
   $SongsTable get songs => _songs ??= $SongsTable(this);
+  $StringValuesTable _stringValues;
+  $StringValuesTable get stringValues =>
+      _stringValues ??= $StringValuesTable(this);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [artists, albums, songs];
+  List<DatabaseSchemaEntity> get allSchemaEntities =>
+      [artists, albums, songs, stringValues];
 }

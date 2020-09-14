@@ -50,7 +50,15 @@ class Songs extends Table {
   Set<Column> get primaryKey => {path};
 }
 
-@UseMoor(tables: [Artists, Albums, Songs])
+class StringValues extends Table {
+  TextColumn get key => text()();
+  TextColumn get value => text().nullable()();
+
+  @override
+  Set<Column> get primaryKey => {key};
+}
+
+@UseMoor(tables: [Artists, Albums, Songs, StringValues])
 class MoorMusicDataSource extends _$MoorMusicDataSource
     implements MusicDataSource {
   /// Use MoorMusicDataSource in main isolate only.
@@ -139,6 +147,33 @@ class MoorMusicDataSource extends _$MoorMusicDataSource
     return select(artists).get().then((moorArtistList) => moorArtistList
         .map((moorArtist) => ArtistModel.fromMoorArtist(moorArtist))
         .toList());
+  }
+
+  @override
+  Future<String> getValue(String key) {
+    return (select(stringValues)..where((t) => t.key.equals(key)))
+        .getSingle()
+        .then((str) => str?.value);
+  }
+
+  @override
+  Future<void> setValue(String key, String value) async {
+    final results = await (select(stringValues)..where((t) => t.key.equals(key))).get();
+    if (results.isNotEmpty) {
+      update(stringValues)
+        .replace(StringValuesCompanion(key: Value(key), value: Value(value)));
+    } else {
+      into(stringValues).insert(StringValuesCompanion(key: Value(key), value: Value(value)));
+    }
+
+    
+  }
+
+  @override
+  Stream<String> watchValue(String key) {
+    return (select(stringValues)..where((t) => t.key.equals(key)))
+        .watchSingle()
+        .map((event) => event.value);
   }
 }
 

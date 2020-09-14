@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:mobx/mobx.dart';
+import 'package:mucke/system/datasources/persistence_manager.dart';
 
 import '../../domain/entities/playback_state.dart';
 import '../../domain/entities/shuffle_mode.dart';
@@ -9,14 +10,17 @@ import '../../domain/repositories/audio_repository.dart';
 part 'audio_store.g.dart';
 
 class AudioStore extends _AudioStore with _$AudioStore {
-  AudioStore({@required AudioRepository audioRepository})
-      : super(audioRepository);
+  AudioStore({@required AudioRepository audioRepository, @required PersistenceManager persistenceManager})
+      : super(audioRepository, persistenceManager);
 }
 
 abstract class _AudioStore with Store {
-  _AudioStore(this._audioRepository);
+  _AudioStore(this._audioRepository, this._pm);
 
   final AudioRepository _audioRepository;
+
+  // FIXME: IMPORTANT!!!! EXPLORATORY CODE!!!!!
+  final PersistenceManager _pm;
 
   bool _initialized = false;
   final List<ReactionDisposer> _disposers = [];
@@ -43,7 +47,7 @@ abstract class _AudioStore with Store {
   ObservableStream<ShuffleMode> shuffleModeStream;
 
   @action
-  void init() {
+  Future<void> init() async {
     if (!_initialized) {
       print('AudioStore.init');
       currentSong = _audioRepository.currentSongStream.asObservable();
@@ -55,7 +59,7 @@ abstract class _AudioStore with Store {
 
       queueIndexStream = _audioRepository.queueIndexStream.asObservable();
 
-      shuffleModeStream = _audioRepository.shuffleModeStream.asObservable(initialValue: ShuffleMode.none);
+      shuffleModeStream = _audioRepository.shuffleModeStream.asObservable(initialValue: await _pm.getShuffleMode());
 
       _disposers.add(autorun((_) {
         updateSong(currentSong.value);
@@ -101,6 +105,7 @@ abstract class _AudioStore with Store {
 
   Future<void> setShuffleMode(ShuffleMode shuffleMode) async {
     _audioRepository.setShuffleMode(shuffleMode);
+    _pm.setShuffleMode(shuffleMode);
   }
 
   Future<void> shuffleAll() async {
