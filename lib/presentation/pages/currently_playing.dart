@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
 import '../../domain/entities/song.dart';
@@ -14,9 +15,11 @@ import 'queue_page.dart';
 class CurrentlyPlayingPage extends StatelessWidget {
   const CurrentlyPlayingPage({Key key}) : super(key: key);
 
+  static final _log = Logger('CurrentlyPlayingPage');
+
   @override
   Widget build(BuildContext context) {
-    print('CurrentlyPlayingPage.build');
+    _log.info('build started');
     final AudioStore audioStore = Provider.of<AudioStore>(context);
 
     return Scaffold(
@@ -25,10 +28,8 @@ class CurrentlyPlayingPage extends StatelessWidget {
           builder: (BuildContext context, BoxConstraints constraints) =>
               Observer(
             builder: (BuildContext context) {
-              print('CurrentlyPlayingPage.build -> Observer.build');
-              final Song song = audioStore.song;
-
-              print(audioStore.queueIndexStream.value);
+              _log.info('Observer.build');
+              final Song song = audioStore.currentSongStream.value;
 
               return Padding(
                 padding: const EdgeInsets.only(

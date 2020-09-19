@@ -2,6 +2,7 @@ import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
 import 'injection_container.dart';
@@ -9,7 +10,6 @@ import 'presentation/pages/currently_playing.dart';
 import 'presentation/pages/home_page.dart';
 import 'presentation/pages/library_page.dart';
 import 'presentation/pages/settings_page.dart';
-import 'presentation/state/audio_store.dart';
 import 'presentation/state/navigation_store.dart';
 import 'presentation/theming.dart';
 import 'presentation/widgets/audio_service_widget.dart';
@@ -22,6 +22,10 @@ Future<void> main() async {
 
   final session = await AudioSession.instance;
   await session.configure(const AudioSessionConfiguration.music());
+
+  Logger.root.onRecord.listen((record) {
+    print('${record.time} [${record.level.name}] ${record.loggerName}: ${record.message}');
+  });
 
   runApp(MyApp());
 }
@@ -70,8 +74,6 @@ class _RootPageState extends State<RootPage> {
 
   @override
   void dispose() {
-    final AudioStore _audioStore = Provider.of<AudioStore>(context);
-    _audioStore.dispose();
     super.dispose();
   }
 

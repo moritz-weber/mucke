@@ -9,33 +9,18 @@ part of 'audio_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$AudioStore on _AudioStore, Store {
-  final _$currentSongAtom = Atom(name: '_AudioStore.currentSong');
+  final _$currentSongStreamAtom = Atom(name: '_AudioStore.currentSongStream');
 
   @override
-  ObservableStream<Song> get currentSong {
-    _$currentSongAtom.reportRead();
-    return super.currentSong;
+  ObservableStream<Song> get currentSongStream {
+    _$currentSongStreamAtom.reportRead();
+    return super.currentSongStream;
   }
 
   @override
-  set currentSong(ObservableStream<Song> value) {
-    _$currentSongAtom.reportWrite(value, super.currentSong, () {
-      super.currentSong = value;
-    });
-  }
-
-  final _$songAtom = Atom(name: '_AudioStore.song');
-
-  @override
-  Song get song {
-    _$songAtom.reportRead();
-    return super.song;
-  }
-
-  @override
-  set song(Song value) {
-    _$songAtom.reportWrite(value, super.song, () {
-      super.song = value;
+  set currentSongStream(ObservableStream<Song> value) {
+    _$currentSongStreamAtom.reportWrite(value, super.currentSongStream, () {
+      super.currentSongStream = value;
     });
   }
 
@@ -152,18 +137,10 @@ mixin _$AudioStore on _AudioStore, Store {
     return _$skipToPreviousAsyncAction.run(() => super.skipToPrevious());
   }
 
-  final _$updateSongAsyncAction = AsyncAction('_AudioStore.updateSong');
-
-  @override
-  Future<void> updateSong(Song streamValue) {
-    return _$updateSongAsyncAction.run(() => super.updateSong(streamValue));
-  }
-
   @override
   String toString() {
     return '''
-currentSong: ${currentSong},
-song: ${song},
+currentSongStream: ${currentSongStream},
 playbackStateStream: ${playbackStateStream},
 currentPositionStream: ${currentPositionStream},
 queueStream: ${queueStream},

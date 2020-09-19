@@ -15,7 +15,7 @@ class AudioStore extends _AudioStore with _$AudioStore {
 
 abstract class _AudioStore with Store {
   _AudioStore(this._audioRepository) {
-    currentSong = _audioRepository.currentSongStream.asObservable();
+    currentSongStream = _audioRepository.currentSongStream.distinct().asObservable();
 
     currentPositionStream =
         _audioRepository.currentPositionStream.asObservable(initialValue: 0);
@@ -27,22 +27,13 @@ abstract class _AudioStore with Store {
     shuffleModeStream = _audioRepository.shuffleModeStream
         .asObservable(initialValue: ShuffleMode.none);
 
-    _disposers.add(autorun((_) {
-      updateSong(currentSong.value);
-    }));
-
     playbackStateStream = _audioRepository.playbackStateStream.asObservable();
   }
 
   final AudioRepository _audioRepository;
 
-  final List<ReactionDisposer> _disposers = [];
-
-  // TODO: naming and usage confusing!
   @observable
-  ObservableStream<Song> currentSong;
-  @observable
-  Song song;
+  ObservableStream<Song> currentSongStream;
 
   @observable
   ObservableStream<PlaybackState> playbackStateStream;
@@ -58,13 +49,6 @@ abstract class _AudioStore with Store {
 
   @observable
   ObservableStream<ShuffleMode> shuffleModeStream;
-
-  void dispose() {
-    print('AudioStore.dispose');
-    for (final ReactionDisposer d in _disposers) {
-      d();
-    }
-  }
 
   @action
   Future<void> playSong(int index, List<Song> songList) async {
@@ -97,14 +81,5 @@ abstract class _AudioStore with Store {
 
   Future<void> shuffleAll() async {
     _audioRepository.shuffleAll();
-  }
-
-  @action
-  Future<void> updateSong(Song streamValue) async {
-    print('updateSong');
-    if (streamValue != null && streamValue != song) {
-      print('actually updating...');
-      song = streamValue;
-    }
   }
 }

@@ -18,14 +18,14 @@ class CurrentlyPlayingBar extends StatelessWidget {
 
     return Observer(
       builder: (BuildContext context) {
-        if (audioStore.currentSong.value != null) {
-          final Song song = audioStore.currentSong.value;
+        if (audioStore.currentSongStream.value != null) {
+          final Song song = audioStore.currentSongStream.value;
 
           return Column(
             children: <Widget>[
               Container(
                 child: LinearProgressIndicator(
-                  value: audioStore.currentPositionStream.value / audioStore.currentSong.value.duration,
+                  value: audioStore.currentPositionStream.value / audioStore.currentSongStream.value.duration,
                 ),
                 height: 2,
               ),
