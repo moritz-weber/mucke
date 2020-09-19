@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 
 import '../../core/error/failures.dart';
@@ -20,6 +21,8 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
 
   final LocalMusicFetcher localMusicFetcher;
   final MusicDataSource musicDataSource;
+
+  static final _log = Logger('MusicDataRepository');
 
   @override
   Future<Either<Failure, List<Artist>>> getArtists() async {
@@ -47,6 +50,8 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
 
   @override
   Future<void> updateDatabase() async {
+    _log.info('updataDatabase called');
+
     await musicDataSource.deleteAllArtists();
     final List<ArtistModel> artists = await localMusicFetcher.getArtists();
 
@@ -63,21 +68,19 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
       albumIdMap[album.id] = newAlbumId;
     }
 
-    await musicDataSource.deleteAllSongs();
     final List<SongModel> songs = await localMusicFetcher.getSongs();
 
+    final List<SongModel> songsToInsert = [];
     for (final SongModel song in songs) {
-      final SongModel songToInsert =
-          song.copyWith(albumId: albumIdMap[song.albumId]);
-
-      // TODO: fails if albumId is null
-      await musicDataSource.insertSong(songToInsert);
+      songsToInsert.add(song.copyWith(albumId: albumIdMap[song.albumId]));
     }
+    await musicDataSource.insertSongs(songsToInsert);
+
+    _log.info('updataDatabase finished');
   }
 
   @override
-  Future<void> setSongBlocked(Song song, bool blocked) {
-    // TODO: implement setSongBlocked
-    throw UnimplementedError();
+  Future<void> setSongBlocked(Song song, bool blocked) async {
+    await musicDataSource.setSongBlocked(song as SongModel, blocked);
   }
 }

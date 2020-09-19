@@ -35,7 +35,8 @@ class _AudioServiceWidgetState extends State<AudioServiceWidget>
       case AppLifecycleState.resumed:
         print('AppLifecycleState.resumed');
         AudioService.connect();
-        AudioService.customAction(APP_LIFECYCLE_RESUMED);
+        if (AudioService.running)
+          AudioService.customAction(APP_LIFECYCLE_RESUMED);
         break;
       case AppLifecycleState.paused:
         print('AppLifecycleState.paused');

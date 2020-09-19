@@ -44,6 +44,7 @@ class Songs extends Table {
   TextColumn get albumArtPath => text().nullable()();
   IntColumn get trackNumber => integer().nullable()();
   BoolColumn get blocked => boolean().withDefault(const Constant(false))();
+  BoolColumn get present => boolean().withDefault(const Constant(true))();
 
   @override
   Set<Column> get primaryKey => {path};
@@ -138,6 +139,29 @@ class MoorMusicDataSource extends _$MoorMusicDataSource
     return select(artists).get().then((moorArtistList) => moorArtistList
         .map((moorArtist) => ArtistModel.fromMoorArtist(moorArtist))
         .toList());
+  }
+
+  @override
+  Future<void> insertSongs(List<SongModel> songModels) async {
+
+    await update(songs).write(const SongsCompanion(present: Value(false)));
+
+    await batch((batch) {
+      batch.insertAllOnConflictUpdate(
+        songs,
+        songModels
+            .map((e) => e.toMoorInsert())
+            .toList(),
+      );
+    });
+
+    await (delete(songs)..where((tbl) => tbl.present.equals(false))).go();
+  }
+
+  @override
+  Future<void> setSongBlocked(SongModel song, bool blocked) async {
+    await (update(songs)..where((tbl) => tbl.path.equals(song.path)))
+        .write(SongsCompanion(blocked: Value(blocked)));
   }
 }
 

@@ -126,6 +126,19 @@ class SongModel extends Song {
         trackNumber: Value(trackNumber),
       );
 
+  SongsCompanion toMoorInsert() => SongsCompanion(
+        albumTitle: Value(album),
+        albumId: Value(albumId),
+        artist: Value(artist),
+        title: Value(title),
+        path: Value(path),
+        duration: Value(duration),
+        albumArtPath: Value(albumArtPath),
+        trackNumber: Value(trackNumber),
+        // blocked: Value(blocked),
+        present: const Value(true),
+      );
+
   MediaItem toMediaItem() => MediaItem(
           id: path,
           title: title,
