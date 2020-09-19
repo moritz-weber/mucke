@@ -169,20 +169,6 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
         .run(() => super.fetchSongsFromAlbum(album));
   }
 
-  final _$_MusicDataStoreActionController =
-      ActionController(name: '_MusicDataStore');
-
-  @override
-  void init() {
-    final _$actionInfo = _$_MusicDataStoreActionController.startAction(
-        name: '_MusicDataStore.init');
-    try {
-      return super.init();
-    } finally {
-      _$_MusicDataStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
   @override
   String toString() {
     return '''

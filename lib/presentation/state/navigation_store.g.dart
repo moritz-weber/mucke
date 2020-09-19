@@ -28,17 +28,6 @@ mixin _$NavigationStore on _NavigationStore, Store {
       ActionController(name: '_NavigationStore');
 
   @override
-  void init() {
-    final _$actionInfo = _$_NavigationStoreActionController.startAction(
-        name: '_NavigationStore.init');
-    try {
-      return super.init();
-    } finally {
-      _$_NavigationStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void setNavIndex(int i) {
     final _$actionInfo = _$_NavigationStoreActionController.startAction(
         name: '_NavigationStore.setNavIndex');

@@ -14,11 +14,28 @@ class AudioStore extends _AudioStore with _$AudioStore {
 }
 
 abstract class _AudioStore with Store {
-  _AudioStore(this._audioRepository);
+  _AudioStore(this._audioRepository) {
+    currentSong = _audioRepository.currentSongStream.asObservable();
+
+    currentPositionStream =
+        _audioRepository.currentPositionStream.asObservable(initialValue: 0);
+
+    queueStream = _audioRepository.queueStream.asObservable(initialValue: []);
+
+    queueIndexStream = _audioRepository.queueIndexStream.asObservable();
+
+    shuffleModeStream = _audioRepository.shuffleModeStream
+        .asObservable(initialValue: ShuffleMode.none);
+
+    _disposers.add(autorun((_) {
+      updateSong(currentSong.value);
+    }));
+
+    playbackStateStream = _audioRepository.playbackStateStream.asObservable();
+  }
 
   final AudioRepository _audioRepository;
 
-  bool _initialized = false;
   final List<ReactionDisposer> _disposers = [];
 
   // TODO: naming and usage confusing!
@@ -41,31 +58,6 @@ abstract class _AudioStore with Store {
 
   @observable
   ObservableStream<ShuffleMode> shuffleModeStream;
-
-  @action
-  void init() {
-    if (!_initialized) {
-      print('AudioStore.init');
-      currentSong = _audioRepository.currentSongStream.asObservable();
-
-      currentPositionStream =
-          _audioRepository.currentPositionStream.asObservable(initialValue: 0);
-
-      queueStream = _audioRepository.queueStream.asObservable(initialValue: []);
-
-      queueIndexStream = _audioRepository.queueIndexStream.asObservable();
-
-      shuffleModeStream = _audioRepository.shuffleModeStream.asObservable(initialValue: ShuffleMode.none);
-
-      _disposers.add(autorun((_) {
-        updateSong(currentSong.value);
-      }));
-
-      playbackStateStream = _audioRepository.playbackStateStream.asObservable();
-
-      _initialized = true;
-    }
-  }
 
   void dispose() {
     print('AudioStore.dispose');

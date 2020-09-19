@@ -74,4 +74,10 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
       await musicDataSource.insertSong(songToInsert);
     }
   }
+
+  @override
+  Future<void> setSongBlocked(Song song, bool blocked) {
+    // TODO: implement setSongBlocked
+    throw UnimplementedError();
+  }
 }

@@ -24,9 +24,10 @@ class QueueManager {
 
   // TODO: test
   List<int> generatePermutation(
-      ShuffleMode shuffleMode, int length, int startIndex) {
+      ShuffleMode shuffleMode, List<MediaItem> mediaItems, int startIndex) {
     // permutation[i] = j; => song j is on the i-th position in the permutated list
     List<int> permutation;
+    final int length = mediaItems.length;
 
     switch (shuffleMode) {
       case ShuffleMode.none:
@@ -39,7 +40,7 @@ class QueueManager {
         permutation = [startIndex] + tmp;
         break;
       case ShuffleMode.plus:
-        break;
+        permutation = generatePlusPermutation(mediaItems, startIndex);
     }
 
     return permutation;
@@ -56,5 +57,16 @@ class QueueManager {
         children: mediaItems
             .map((MediaItem m) => AudioSource.uri(Uri.file(m.id)))
             .toList());
+  }
+
+  List<int> generatePlusPermutation(
+      List<MediaItem> mediaItems, int startIndex) {
+    final List<int> indices = [];
+    for (var i = 0; i < mediaItems.length; i++) {
+      if (!(mediaItems[i].extras['blocked'] as bool)) {
+        indices.add(i);
+      }
+    }
+    return [startIndex] + indices..removeAt(startIndex)..shuffle();
   }
 }

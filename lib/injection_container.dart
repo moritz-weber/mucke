@@ -30,7 +30,6 @@ Future<void> setupGetIt() async {
       final musicDataStore = MusicDataStore(
         musicDataRepository: getIt(),
       );
-      musicDataStore.init();
       return musicDataStore;
     },
   );
@@ -39,14 +38,12 @@ Future<void> setupGetIt() async {
       final audioStore = AudioStore(
         audioRepository: getIt(),
       );
-      audioStore.init();
       return audioStore;
     },
   );
   getIt.registerFactory<NavigationStore>(
     () {
       final navigationStore = NavigationStore();
-      navigationStore.init();
       return navigationStore;
     },
   );

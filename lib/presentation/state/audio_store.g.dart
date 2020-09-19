@@ -159,19 +159,6 @@ mixin _$AudioStore on _AudioStore, Store {
     return _$updateSongAsyncAction.run(() => super.updateSong(streamValue));
   }
 
-  final _$_AudioStoreActionController = ActionController(name: '_AudioStore');
-
-  @override
-  void init() {
-    final _$actionInfo =
-        _$_AudioStoreActionController.startAction(name: '_AudioStore.init');
-    try {
-      return super.init();
-    } finally {
-      _$_AudioStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
   @override
   String toString() {
     return '''

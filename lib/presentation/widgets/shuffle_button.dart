@@ -16,41 +16,44 @@ class ShuffleButton extends StatelessWidget {
 
     return Observer(
       builder: (BuildContext context) {
-        switch (audioStore.shuffleModeStream.value) {
-          case ShuffleMode.none:
-            return IconButton(
-              icon: const Icon(
-                Icons.shuffle,
-                color: Colors.white24,
-              ),
-              iconSize: iconSize,
-              onPressed: () {
-                audioStore.setShuffleMode(ShuffleMode.standard);
-              },
-            );
-          case ShuffleMode.standard:
-            return IconButton(
-              icon: const Icon(
-                Icons.shuffle,
-                color: Colors.white,
-              ),
-              iconSize: iconSize,
-              onPressed: () {
-                audioStore.setShuffleMode(ShuffleMode.none);
-              },
-            );
-          default:
-            return IconButton(
-              icon: const Icon(
-                Icons.shuffle,
-                color: Colors.blue,
-              ),
-              iconSize: iconSize,
-              onPressed: () {
-                audioStore.setShuffleMode(ShuffleMode.none);
-              },
-            );
+        if (audioStore.shuffleModeStream != null) {
+          switch (audioStore.shuffleModeStream.value) {
+            case ShuffleMode.none:
+              return IconButton(
+                icon: const Icon(
+                  Icons.shuffle,
+                  color: Colors.white24,
+                ),
+                iconSize: iconSize,
+                onPressed: () {
+                  audioStore.setShuffleMode(ShuffleMode.standard);
+                },
+              );
+            case ShuffleMode.standard:
+              return IconButton(
+                icon: const Icon(
+                  Icons.shuffle,
+                  color: Colors.white,
+                ),
+                iconSize: iconSize,
+                onPressed: () {
+                  audioStore.setShuffleMode(ShuffleMode.plus);
+                },
+              );
+            case ShuffleMode.plus:
+              return IconButton(
+                icon: const Icon(
+                  Icons.fingerprint,
+                  color: Colors.white,
+                ),
+                iconSize: iconSize,
+                onPressed: () {
+                  audioStore.setShuffleMode(ShuffleMode.none);
+                },
+              );
+          }
         }
+        return Container();
       },
     );
   }

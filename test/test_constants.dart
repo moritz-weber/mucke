@@ -26,7 +26,7 @@ const String PATH_3 = '/music/parkwaydrive/bottom_feeder.mp3';
 const int DURATION_3 = 180000;
 const String ALBUM_ART_PATH_3 = '/music/parkwaydrive/ire.jpg';
 const int TRACKNUMBER_3 = 7;
-const bool PRESENT_3 = true;
+const bool BLOCKED_3 = false;
 
 const String SONG_TITLE_4 = 'Black Flame';
 const String ALBUM_TITLE_4 = 'Black Flame';
@@ -36,4 +36,4 @@ const String PATH_4 = '/music/burytomorrow/blackflame.mp3';
 const int DURATION_4 = 240000;
 const String ALBUM_ART_PATH_4 = '/music/parkwaydrive/blackflame.jpg';
 const int TRACKNUMBER_4 = 3;
-const bool PRESENT_4 = false;
+const bool BLOCKED_4 = false;

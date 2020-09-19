@@ -8,6 +8,7 @@ class Song extends Equatable {
     @required this.artist,
     @required this.path,
     @required this.duration,
+    @required this.blocked,
     this.trackNumber,
     this.albumArtPath,
   });
@@ -20,6 +21,8 @@ class Song extends Equatable {
   final int duration;
   final int trackNumber;
   final String albumArtPath;
+  /// Is this song blocked in shuffle mode?
+  final bool blocked;
 
   @override
   List<Object> get props => [title, album, artist];

@@ -14,6 +14,7 @@ class SongModel extends Song {
       @required String artist,
       @required String path,
       @required int duration,
+      @required bool blocked,
       int trackNumber,
       String albumArtPath})
       : super(
@@ -22,6 +23,7 @@ class SongModel extends Song {
           artist: artist,
           path: path,
           duration: duration,
+          blocked: blocked,
           trackNumber: trackNumber,
           albumArtPath: albumArtPath,
         );
@@ -33,8 +35,9 @@ class SongModel extends Song {
         albumId: moorSong.albumId,
         path: moorSong.path,
         duration: moorSong.duration,
-        albumArtPath: moorSong.albumArtPath,
+        blocked: moorSong.blocked,
         trackNumber: moorSong.trackNumber,
+        albumArtPath: moorSong.albumArtPath,
       );
 
   factory SongModel.fromSongInfo(SongInfo songInfo) {
@@ -47,6 +50,7 @@ class SongModel extends Song {
       albumId: int.parse(songInfo.albumId),
       path: songInfo.filePath,
       duration: duration == null ? null : int.parse(duration),
+      blocked: false,
       albumArtPath: songInfo.albumArtwork,
       trackNumber: _parseTrackNumber(songInfo.track),
     );
@@ -74,6 +78,7 @@ class SongModel extends Song {
       artist: mediaItem.artist,
       path: mediaItem.id,
       duration: mediaItem.duration.inMilliseconds,
+      blocked: mediaItem.extras['blocked'] == 'true',
       albumArtPath: artUri,
       trackNumber: trackNumber,
     );
@@ -92,6 +97,7 @@ class SongModel extends Song {
     String artist,
     String path,
     int duration,
+    bool blocked,
     int trackNumber,
     String albumArtPath,
     int albumId,
@@ -102,6 +108,7 @@ class SongModel extends Song {
         duration: duration ?? this.duration,
         path: path ?? this.path,
         title: title ?? this.title,
+        blocked: blocked ?? this.blocked,
         trackNumber: trackNumber ?? this.trackNumber,
         albumArtPath: albumArtPath ?? this.albumArtPath,
         albumId: albumId ?? this.albumId,
@@ -114,6 +121,7 @@ class SongModel extends Song {
         title: Value(title),
         path: Value(path),
         duration: Value(duration),
+        blocked: Value(blocked),
         albumArtPath: Value(albumArtPath),
         trackNumber: Value(trackNumber),
       );
@@ -127,6 +135,7 @@ class SongModel extends Song {
           artUri: 'file://$albumArtPath',
           extras: {
             'albumId': albumId,
+            'blocked': blocked.toString(),
             'trackNumber': trackNumber,
           });
 

@@ -29,6 +29,7 @@ void main() {
       artist: ARTIST_3,
       path: PATH_3,
       duration: DURATION_3,
+      blocked: BLOCKED_3,
       trackNumber: TRACKNUMBER_3,
       albumArtPath: ALBUM_ART_PATH_3,
     );

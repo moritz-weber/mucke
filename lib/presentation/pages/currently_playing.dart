@@ -4,10 +4,10 @@ import 'package:provider/provider.dart';
 
 import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
-import '../theming.dart';
 import '../widgets/album_art.dart';
 import '../widgets/next_indicator.dart';
 import '../widgets/playback_control.dart';
+import '../widgets/song_customization_buttons.dart';
 import '../widgets/time_progress_indicator.dart';
 import 'queue_page.dart';
 
@@ -64,30 +64,7 @@ class CurrentlyPlayingPage extends StatelessWidget {
                     const Spacer(
                       flex: 4,
                     ),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.link,
-                          size: 20.0,
-                        ),
-                        Container(
-                          width: 40,
-                        ),
-                        const Icon(
-                          Icons.favorite,
-                          size: 20.0,
-                          color: RASPBERRY,
-                        ),
-                        Container(
-                          width: 40,
-                        ),
-                        const Icon(
-                          Icons.remove_circle_outline,
-                          size: 20.0,
-                        ),
-                      ],
-                      mainAxisAlignment: MainAxisAlignment.center,
-                    ),
+                    const SongCustomizationButtons(),
                     const Spacer(
                       flex: 3,
                     ),

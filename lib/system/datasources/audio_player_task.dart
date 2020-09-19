@@ -66,6 +66,13 @@ class AudioPlayerTask extends BackgroundAudioTask {
     await super.onStop();
   }
 
+  // @override
+  // Future<void> onClose() async {
+  //   audioPlayer.stop();
+  //   AudioServiceBackground.setState(controls: null, processingState: null, playing: false);
+  //   AudioServiceBackground.setMediaItem(null);
+  // }
+
   @override
   Future<void> onPlay() async {
     audioPlayer.play();
@@ -152,7 +159,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
 
   Future<void> playPlaylist(List<MediaItem> mediaItems, int index) async {
     final permutation =
-        qm.generatePermutation(shuffleMode, mediaItems.length, index);
+        qm.generatePermutation(shuffleMode, mediaItems, index);
     playbackContext = qm.getPermutatedSongs(mediaItems, permutation);
     originalPlaybackContext = mediaItems;
 

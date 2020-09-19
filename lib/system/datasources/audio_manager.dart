@@ -105,6 +105,7 @@ class AudioManagerImpl implements AudioManager {
 
   @override
   Future<void> play() async {
+    await _startAudioService();
     await AudioService.play();
   }
 

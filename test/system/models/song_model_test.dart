@@ -19,6 +19,7 @@ void main() {
     artist: ARTIST_3,
     path: PATH_3,
     duration: DURATION_3,
+    blocked: BLOCKED_3,
     trackNumber: TRACKNUMBER_3,
     albumArtPath: ALBUM_ART_PATH_3,
   );
@@ -43,6 +44,7 @@ void main() {
           title: Value(SONG_TITLE_3),
           path: Value(PATH_3),
           duration: Value(DURATION_3),
+          blocked: Value(BLOCKED_3),
           albumArtPath: Value(ALBUM_ART_PATH_3),
           trackNumber: Value(TRACKNUMBER_3),
         );
@@ -54,6 +56,7 @@ void main() {
           title: SONG_TITLE_3,
           path: PATH_3,
           duration: DURATION_3,
+          blocked: BLOCKED_3,
           albumArtPath: ALBUM_ART_PATH_3,
           trackNumber: TRACKNUMBER_3,
         );
@@ -86,6 +89,7 @@ void main() {
             extras: {
               'albumId': ALBUM_ID_3,
               'trackNumber': TRACKNUMBER_3,
+              'blocked': BLOCKED_3
             });
 
         const songModel = SongModel(
@@ -95,6 +99,7 @@ void main() {
           title: SONG_TITLE_3,
           path: PATH_3,
           duration: DURATION_3,
+          blocked: BLOCKED_3,
           albumArtPath: ALBUM_ART_PATH_3,
           trackNumber: TRACKNUMBER_3,
         );
@@ -126,7 +131,7 @@ void main() {
           duration: DURATION_3,
           albumArtPath: ALBUM_ART_PATH_3,
           trackNumber: TRACKNUMBER_3,
-          present: PRESENT_3,
+          blocked: BLOCKED_3,
         );
 
         const expected = SongModel(
@@ -136,6 +141,7 @@ void main() {
           title: SONG_TITLE_3,
           path: PATH_3,
           duration: DURATION_3,
+          blocked: BLOCKED_3,
           albumArtPath: ALBUM_ART_PATH_3,
           trackNumber: TRACKNUMBER_3,
         );
@@ -163,7 +169,7 @@ void main() {
     });
 
     test(
-      'should create SongModel from AlbumInfo',
+      'should create SongModel from SongInfo',
       () async {
         // arrange
         const expected = SongModel(
@@ -173,6 +179,7 @@ void main() {
           title: SONG_TITLE_3,
           path: PATH_3,
           duration: DURATION_3,
+          blocked: false,
           albumArtPath: ALBUM_ART_PATH_3,
           trackNumber: TRACKNUMBER_3,
         );
@@ -199,6 +206,7 @@ void main() {
           extras: {
             'albumId': ALBUM_ID_3,
             'trackNumber': TRACKNUMBER_3,
+            'blocked': BLOCKED_3,
           },
         );
 
@@ -209,6 +217,7 @@ void main() {
           title: SONG_TITLE_3,
           path: PATH_3,
           duration: DURATION_3,
+          blocked: BLOCKED_3,
           albumArtPath: ALBUM_ART_PATH_3,
           trackNumber: TRACKNUMBER_3,
         );
@@ -244,6 +253,7 @@ void main() {
         title: SONG_TITLE_3,
         path: PATH_3,
         duration: DURATION_3,
+        blocked: BLOCKED_3,
         albumArtPath: ALBUM_ART_PATH_3,
         trackNumber: TRACKNUMBER_3,
       );
@@ -260,6 +270,7 @@ void main() {
           title: SONG_TITLE_3,
           path: PATH_3,
           duration: DURATION_3,
+          blocked: BLOCKED_3,
           albumArtPath: ALBUM_ART_PATH_3,
           trackNumber: TRACKNUMBER_3,
         );
@@ -281,6 +292,7 @@ void main() {
           title: SONG_TITLE_3,
           path: PATH_3,
           duration: DURATION_3,
+          blocked: BLOCKED_3,
           albumArtPath: ALBUM_ART_PATH_3,
           trackNumber: TRACKNUMBER_3,
         );

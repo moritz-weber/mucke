@@ -31,7 +31,6 @@ class Albums extends Table {
   TextColumn get artist => text()();
   TextColumn get albumArtPath => text().nullable()();
   IntColumn get year => integer().nullable()();
-  BoolColumn get present => boolean().withDefault(const Constant(true))();
 }
 
 @DataClassName('MoorSong')
@@ -44,7 +43,7 @@ class Songs extends Table {
   IntColumn get duration => integer().nullable()();
   TextColumn get albumArtPath => text().nullable()();
   IntColumn get trackNumber => integer().nullable()();
-  BoolColumn get present => boolean().withDefault(const Constant(true))();
+  BoolColumn get blocked => boolean().withDefault(const Constant(false))();
 
   @override
   Set<Column> get primaryKey => {path};

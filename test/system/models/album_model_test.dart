@@ -66,7 +66,6 @@ void main() {
           title: ALBUM_TITLE_1,
           albumArtPath: ALBUM_ART_PATH_1,
           year: YEAR_1,
-          present: PRESENT_1,
         );
 
         const expected = AlbumModel(
@@ -92,7 +91,6 @@ void main() {
           artist: ARTIST_1,
           title: ALBUM_TITLE_1,
           year: YEAR_1,
-          present: PRESENT_1,
         );
 
         const expected = AlbumModel(
@@ -117,7 +115,6 @@ void main() {
           artist: ARTIST_1,
           title: ALBUM_TITLE_1,
           albumArtPath: ALBUM_ART_PATH_1,
-          present: PRESENT_1,
         );
 
         const expected = AlbumModel(

@@ -11,4 +11,6 @@ abstract class MusicDataRepository {
   Future<Either<Failure, List<Album>>> getAlbums();
   Future<Either<Failure, List<Artist>>> getArtists();
   Future<void> updateDatabase();
+
+  Future<void> setSongBlocked(Song song, bool blocked);
 }
