@@ -14,13 +14,11 @@ class MusicDataStore extends _MusicDataStore with _$MusicDataStore {
 }
 
 abstract class _MusicDataStore with Store {
-  _MusicDataStore(this._musicDataRepository) {
-    fetchArtists();
-    fetchAlbums();
-    fetchSongs();
-  }
+  _MusicDataStore(this._musicDataRepository);
 
   final MusicDataRepository _musicDataRepository;
+
+  bool _initialized = false;
 
   @observable
   ObservableList<Artist> artists = <Artist>[].asObservable();
@@ -42,6 +40,15 @@ abstract class _MusicDataStore with Store {
 
   @observable
   ObservableList<Song> albumSongs = <Song>[].asObservable();
+
+  void init() {
+    if (!_initialized) {
+      fetchArtists();
+      fetchAlbums();
+      fetchSongs();
+    }
+    _initialized = true;
+  }
 
   @action
   Future<void> updateDatabase() async {

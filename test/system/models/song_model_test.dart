@@ -79,17 +79,17 @@ void main() {
       'should return valid MediaItem',
       () async {
         // arrange
-        const expected = MediaItem(
+        final expected = MediaItem(
             id: PATH_3,
             title: SONG_TITLE_3,
             album: ALBUM_TITLE_3,
             artist: ARTIST_3,
-            duration: Duration(milliseconds: DURATION_3),
+            duration: const Duration(milliseconds: DURATION_3),
             artUri: 'file://$ALBUM_ART_PATH_3',
             extras: {
               'albumId': ALBUM_ID_3,
+              'blocked': BLOCKED_3.toString(),
               'trackNumber': TRACKNUMBER_3,
-              'blocked': BLOCKED_3
             });
 
         const songModel = SongModel(

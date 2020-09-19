@@ -30,6 +30,7 @@ Future<void> setupGetIt() async {
       final musicDataStore = MusicDataStore(
         musicDataRepository: getIt(),
       );
+      musicDataStore.init();
       return musicDataStore;
     },
   );
