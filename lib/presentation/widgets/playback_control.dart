@@ -15,7 +15,11 @@ class PlaybackControl extends StatelessWidget {
       child: Row(
         children: const [
           IconButton(
-            icon: Icon(Icons.repeat, size: 20.0),
+            icon: Icon(
+              Icons.repeat,
+              size: 20.0,
+              color: Colors.white10,
+            ),
             onPressed: null,
           ),
           PreviousButton(iconSize: 32.0),

@@ -22,7 +22,7 @@ class ShuffleButton extends StatelessWidget {
               return IconButton(
                 icon: const Icon(
                   Icons.shuffle,
-                  color: Colors.white24,
+                  color: Colors.white30,
                 ),
                 iconSize: iconSize,
                 onPressed: () {

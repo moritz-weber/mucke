@@ -63,10 +63,11 @@ class QueueManager {
       List<MediaItem> mediaItems, int startIndex) {
     final List<int> indices = [];
     for (var i = 0; i < mediaItems.length; i++) {
-      if (mediaItems[i].extras['blocked'] == 'false') {
+      if (i != startIndex && mediaItems[i].extras['blocked'] == 'false') {
         indices.add(i);
       }
     }
-    return [startIndex] + indices..removeAt(startIndex)..shuffle();
+    indices.shuffle();
+    return [startIndex] + indices;
   }
 }

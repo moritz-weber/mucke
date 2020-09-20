@@ -27,6 +27,9 @@ class AudioPlayerTask extends BackgroundAudioTask {
   List<MediaItem> originalPlaybackContext = <MediaItem>[];
   List<MediaItem> playbackContext = <MediaItem>[];
 
+  ConcatenatingAudioSource queue;
+  List<int> permutation;
+
   ShuffleMode _shuffleMode = ShuffleMode.none;
   ShuffleMode get shuffleMode => _shuffleMode;
   set shuffleMode(ShuffleMode s) {
@@ -48,11 +51,12 @@ class AudioPlayerTask extends BackgroundAudioTask {
           MediaControl.pause,
           MediaControl.skipToNext
         ],
-        playing: true,
+        playing: true, // FIXME: not necessarily true
         processingState: AudioProcessingState.ready,
         updateTime:
             Duration(milliseconds: DateTime.now().millisecondsSinceEpoch),
-        position: const Duration(milliseconds: 0),
+        position: const Duration(
+            milliseconds: 0), // FIXME: not true for shuffle mode changes
       );
     }
   }
@@ -118,7 +122,8 @@ class AudioPlayerTask extends BackgroundAudioTask {
     print('AudioPlayerTask.init');
     audioPlayer.positionStream.listen((position) => handlePosition(position));
     audioPlayer.playerStateStream.listen((event) => handlePlayerState(event));
-    audioPlayer.sequenceStateStream.listen((event) => playbackIndex = event?.currentIndex);
+    audioPlayer.sequenceStateStream
+        .listen((event) => playbackIndex = event?.currentIndex);
 
     final connectPort = IsolateNameServer.lookupPortByName(MOOR_ISOLATE);
     final MoorIsolate moorIsolate = MoorIsolate.fromConnectPort(connectPort);
@@ -139,10 +144,29 @@ class AudioPlayerTask extends BackgroundAudioTask {
         {SET_SHUFFLE_MODE: shuffleMode.toString()});
   }
 
+  // FIXME: position (duration) reset when changing mode
   Future<void> setShuffleMode(ShuffleMode mode) async {
     shuffleMode = mode;
-    // TODO: this starts playback new from current index, also wrong index from shuffle to normal
-    playPlaylist(originalPlaybackContext, playbackIndex);
+
+    final index = permutation[playbackIndex];
+    permutation =
+        qm.generatePermutation(shuffleMode, originalPlaybackContext, index);
+    playbackContext =
+        qm.getPermutatedSongs(originalPlaybackContext, permutation);
+
+    AudioServiceBackground.setQueue(playbackContext);
+
+    final newQueue = qm.mediaItemsToAudioSource(playbackContext);
+    queue.removeRange(0, playbackIndex);
+    queue.removeRange(1, queue.length);
+
+    if (shuffleMode == ShuffleMode.none) {
+      queue.insertAll(0, newQueue.children.sublist(0, index));
+      queue.addAll(newQueue.children.sublist(index + 1));
+      playbackIndex = index;
+    } else {
+      queue.addAll(newQueue.children.sublist(1));
+    }
   }
 
   Future<void> shuffleAll() async {
@@ -158,13 +182,13 @@ class AudioPlayerTask extends BackgroundAudioTask {
   }
 
   Future<void> playPlaylist(List<MediaItem> mediaItems, int index) async {
-    final permutation =
-        qm.generatePermutation(shuffleMode, mediaItems, index);
+    permutation = qm.generatePermutation(shuffleMode, mediaItems, index);
     playbackContext = qm.getPermutatedSongs(mediaItems, permutation);
     originalPlaybackContext = mediaItems;
 
     AudioServiceBackground.setQueue(playbackContext);
-    await audioPlayer.load(qm.mediaItemsToAudioSource(playbackContext));
+    queue = qm.mediaItemsToAudioSource(playbackContext);
+    await audioPlayer.load(queue);
 
     if (shuffleMode == ShuffleMode.none) {
       await audioPlayer.seek(const Duration(milliseconds: 0), index: index);
