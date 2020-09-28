@@ -15,6 +15,7 @@ class SongModel extends Song {
       @required String path,
       @required int duration,
       @required bool blocked,
+      int discNumber,
       int trackNumber,
       String albumArtPath})
       : super(
@@ -24,6 +25,7 @@ class SongModel extends Song {
           path: path,
           duration: duration,
           blocked: blocked,
+          discNumber: discNumber,
           trackNumber: trackNumber,
           albumArtPath: albumArtPath,
         );
@@ -36,12 +38,14 @@ class SongModel extends Song {
         path: moorSong.path,
         duration: moorSong.duration,
         blocked: moorSong.blocked,
+        discNumber: moorSong.discNumber,
         trackNumber: moorSong.trackNumber,
         albumArtPath: moorSong.albumArtPath,
       );
 
   factory SongModel.fromSongInfo(SongInfo songInfo) {
     final String duration = songInfo.duration;
+    final List<int> numbers = _parseTrackNumber(songInfo.track);
 
     return SongModel(
       title: songInfo.title,
@@ -51,8 +55,9 @@ class SongModel extends Song {
       path: songInfo.filePath,
       duration: duration == null ? null : int.parse(duration),
       blocked: false,
+      discNumber: numbers[0],
+      trackNumber: numbers[1],
       albumArtPath: songInfo.albumArtwork,
-      trackNumber: _parseTrackNumber(songInfo.track),
     );
   }
 
@@ -62,6 +67,9 @@ class SongModel extends Song {
     }
 
     final String artUri = mediaItem.artUri?.replaceFirst('file://', '');
+    
+    final dn = mediaItem.extras['discNumber'];
+    int discNumber;
     final tn = mediaItem.extras['trackNumber'];
     int trackNumber;
 
@@ -69,6 +77,12 @@ class SongModel extends Song {
       trackNumber = null;
     } else {
       trackNumber = tn as int;
+    }
+
+    if (dn == null) {
+      discNumber = null;
+    } else {
+      discNumber = dn as int;
     }
 
     return SongModel(
@@ -79,8 +93,9 @@ class SongModel extends Song {
       path: mediaItem.id,
       duration: mediaItem.duration.inMilliseconds,
       blocked: mediaItem.extras['blocked'] == 'true',
-      albumArtPath: artUri,
+      discNumber: discNumber,
       trackNumber: trackNumber,
+      albumArtPath: artUri,
     );
   }
 
@@ -98,6 +113,7 @@ class SongModel extends Song {
     String path,
     int duration,
     bool blocked,
+    int discNumber,
     int trackNumber,
     String albumArtPath,
     int albumId,
@@ -109,6 +125,7 @@ class SongModel extends Song {
         path: path ?? this.path,
         title: title ?? this.title,
         blocked: blocked ?? this.blocked,
+        discNumber: discNumber ?? this.discNumber,
         trackNumber: trackNumber ?? this.trackNumber,
         albumArtPath: albumArtPath ?? this.albumArtPath,
         albumId: albumId ?? this.albumId,
@@ -122,8 +139,9 @@ class SongModel extends Song {
         path: Value(path),
         duration: Value(duration),
         blocked: Value(blocked),
-        albumArtPath: Value(albumArtPath),
+        discNumber: Value(discNumber),
         trackNumber: Value(trackNumber),
+        albumArtPath: Value(albumArtPath),
       );
 
   SongsCompanion toMoorInsert() => SongsCompanion(
@@ -134,6 +152,7 @@ class SongModel extends Song {
         path: Value(path),
         duration: Value(duration),
         albumArtPath: Value(albumArtPath),
+        discNumber: Value(discNumber),
         trackNumber: Value(trackNumber),
         // blocked: Value(blocked),
         present: const Value(true),
@@ -149,21 +168,28 @@ class SongModel extends Song {
           extras: {
             'albumId': albumId,
             'blocked': blocked.toString(),
+            'discNumber': discNumber,
             'trackNumber': trackNumber,
           });
 
-  static int _parseTrackNumber(String trackNumberString) {
+  static List<int> _parseTrackNumber(String trackNumberString) {
+    int discNumber = 1;
     int trackNumber;
+  
     if (trackNumberString == null) {
-      return null;
+      return [null, null];
     }
 
     trackNumber = int.tryParse(trackNumberString);
     if (trackNumber == null) {
       if (trackNumberString.contains('/')) {
-        trackNumber = int.tryParse(trackNumberString.split('/')[0]);
+        discNumber = int.tryParse(trackNumberString.split('/')[0]);
+        trackNumber = int.tryParse(trackNumberString.split('/')[1]);
       }
+    } else if (trackNumber > 1000) {
+      discNumber = int.tryParse(trackNumberString.substring(0, 1));
+      trackNumber = int.tryParse(trackNumberString.substring(1));
     }
-    return trackNumber;
+    return [discNumber, trackNumber];
   }
 }

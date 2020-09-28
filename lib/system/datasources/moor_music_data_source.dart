@@ -42,6 +42,7 @@ class Songs extends Table {
   TextColumn get path => text()();
   IntColumn get duration => integer().nullable()();
   TextColumn get albumArtPath => text().nullable()();
+  IntColumn get discNumber => integer().nullable()();
   IntColumn get trackNumber => integer().nullable()();
   BoolColumn get blocked => boolean().withDefault(const Constant(false))();
   BoolColumn get present => boolean().withDefault(const Constant(true))();
@@ -90,7 +91,10 @@ class MoorMusicDataSource extends _$MoorMusicDataSource
   Future<List<SongModel>> getSongsFromAlbum(AlbumModel album) {
     return (select(songs)
           ..where((tbl) => tbl.albumTitle.equals(album.title))
-          ..orderBy([(t) => OrderingTerm(expression: t.trackNumber)]))
+          ..orderBy([
+            (t) => OrderingTerm(expression: t.discNumber),
+            (t) => OrderingTerm(expression: t.trackNumber)
+          ]))
         .get()
         .then((moorSongList) => moorSongList
             .map((moorSong) => SongModel.fromMoorSong(moorSong))
@@ -143,15 +147,12 @@ class MoorMusicDataSource extends _$MoorMusicDataSource
 
   @override
   Future<void> insertSongs(List<SongModel> songModels) async {
-
     await update(songs).write(const SongsCompanion(present: Value(false)));
 
     await batch((batch) {
       batch.insertAllOnConflictUpdate(
         songs,
-        songModels
-            .map((e) => e.toMoorInsert())
-            .toList(),
+        songModels.map((e) => e.toMoorInsert()).toList(),
       );
     });
 

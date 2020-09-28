@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
 import '../state/music_data_store.dart';
-import '../widgets/album_art_list_tile.dart';
+import '../widgets/song_list_tile.dart';
 
 class SongsPage extends StatefulWidget {
   const SongsPage({Key key}) : super(key: key);
@@ -42,11 +42,11 @@ class _SongsPageState extends State<SongsPage>
           itemCount: songs.length,
           itemBuilder: (_, int index) {
             final Song song = songs[index];
-            return AlbumArtListTile(
-              title: song.title,
-              subtitle: '${song.artist} • ${song.album}',
-              albumArtPath: song.albumArtPath,
+            return SongListTile(
+              song: song,
+              inAlbum: false,
               onTap: () => audioStore.playSong(index, songs),
+              onTapMore: () => print('Hello World'),
             );
           },
           separatorBuilder: (BuildContext context, int index) => const Divider(

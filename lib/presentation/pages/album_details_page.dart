@@ -7,7 +7,7 @@ import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
 import '../state/music_data_store.dart';
 import '../utils.dart' as utils;
-import '../widgets/album_art_list_tile.dart';
+import '../widgets/song_list_tile.dart';
 
 class AlbumDetailsPage extends StatelessWidget {
   const AlbumDetailsPage({Key key, @required this.album}) : super(key: key);
@@ -69,10 +69,9 @@ class AlbumDetailsPage extends StatelessWidget {
                   final songIndex = (index / 2).round();
 
                   final Song song = musicDataStore.albumSongs[songIndex];
-                  return AlbumArtListTile(
-                    title: song.title,
-                    subtitle: '${song.artist}',
-                    albumArtPath: song.albumArtPath,
+                  return SongListTile(
+                    song: song,
+                    inAlbum: true,
                     onTap: () => audioStore.playSong(songIndex, musicDataStore.albumSongs),
                   );
                 }

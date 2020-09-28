@@ -51,17 +51,14 @@ class AudioPlayerTask extends BackgroundAudioTask {
           MediaControl.pause,
           MediaControl.skipToNext
         ],
-        playing: true, // FIXME: not necessarily true
+        playing: audioPlayer.playing,
         processingState: AudioProcessingState.ready,
         updateTime:
             Duration(milliseconds: DateTime.now().millisecondsSinceEpoch),
-        position: const Duration(
-            milliseconds: 0), // FIXME: not true for shuffle mode changes
+        position: audioPlayer.position,
       );
     }
   }
-
-  Duration position;
 
   @override
   Future<void> onStop() async {
@@ -69,13 +66,6 @@ class AudioPlayerTask extends BackgroundAudioTask {
     await audioPlayer.dispose();
     await super.onStop();
   }
-
-  // @override
-  // Future<void> onClose() async {
-  //   audioPlayer.stop();
-  //   AudioServiceBackground.setState(controls: null, processingState: null, playing: false);
-  //   AudioServiceBackground.setMediaItem(null);
-  // }
 
   @override
   Future<void> onPlay() async {
@@ -120,7 +110,6 @@ class AudioPlayerTask extends BackgroundAudioTask {
 
   Future<void> init() async {
     print('AudioPlayerTask.init');
-    audioPlayer.positionStream.listen((position) => handlePosition(position));
     audioPlayer.playerStateStream.listen((event) => handlePlayerState(event));
     audioPlayer.sequenceStateStream
         .listen((event) => playbackIndex = event?.currentIndex);
@@ -144,7 +133,6 @@ class AudioPlayerTask extends BackgroundAudioTask {
         {SET_SHUFFLE_MODE: shuffleMode.toString()});
   }
 
-  // FIXME: position (duration) reset when changing mode
   Future<void> setShuffleMode(ShuffleMode mode) async {
     shuffleMode = mode;
 
@@ -197,10 +185,6 @@ class AudioPlayerTask extends BackgroundAudioTask {
     audioPlayer.play();
   }
 
-  void handlePosition(Duration position) {
-    this.position = position;
-  }
-
   void handlePlayerState(PlayerState ps) {
     if (ps.processingState == ProcessingState.ready && ps.playing) {
       AudioServiceBackground.setState(
@@ -213,7 +197,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
         processingState: AudioProcessingState.ready,
         updateTime:
             Duration(milliseconds: DateTime.now().millisecondsSinceEpoch),
-        position: position,
+        position: audioPlayer.position,
       );
     } else if (ps.processingState == ProcessingState.ready && !ps.playing) {
       AudioServiceBackground.setState(
@@ -225,7 +209,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
         processingState: AudioProcessingState.ready,
         updateTime:
             Duration(milliseconds: DateTime.now().millisecondsSinceEpoch),
-        position: position,
+        position: audioPlayer.position,
         playing: false,
       );
     }

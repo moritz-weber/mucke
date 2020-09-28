@@ -496,6 +496,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
   final String path;
   final int duration;
   final String albumArtPath;
+  final int discNumber;
   final int trackNumber;
   final bool blocked;
   final bool present;
@@ -507,6 +508,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
       @required this.path,
       this.duration,
       this.albumArtPath,
+      this.discNumber,
       this.trackNumber,
       @required this.blocked,
       @required this.present});
@@ -530,6 +532,8 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
           intType.mapFromDatabaseResponse(data['${effectivePrefix}duration']),
       albumArtPath: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}album_art_path']),
+      discNumber: intType
+          .mapFromDatabaseResponse(data['${effectivePrefix}disc_number']),
       trackNumber: intType
           .mapFromDatabaseResponse(data['${effectivePrefix}track_number']),
       blocked:
@@ -562,6 +566,9 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
     if (!nullToAbsent || albumArtPath != null) {
       map['album_art_path'] = Variable<String>(albumArtPath);
     }
+    if (!nullToAbsent || discNumber != null) {
+      map['disc_number'] = Variable<int>(discNumber);
+    }
     if (!nullToAbsent || trackNumber != null) {
       map['track_number'] = Variable<int>(trackNumber);
     }
@@ -593,6 +600,9 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
       albumArtPath: albumArtPath == null && nullToAbsent
           ? const Value.absent()
           : Value(albumArtPath),
+      discNumber: discNumber == null && nullToAbsent
+          ? const Value.absent()
+          : Value(discNumber),
       trackNumber: trackNumber == null && nullToAbsent
           ? const Value.absent()
           : Value(trackNumber),
@@ -616,6 +626,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
       path: serializer.fromJson<String>(json['path']),
       duration: serializer.fromJson<int>(json['duration']),
       albumArtPath: serializer.fromJson<String>(json['albumArtPath']),
+      discNumber: serializer.fromJson<int>(json['discNumber']),
       trackNumber: serializer.fromJson<int>(json['trackNumber']),
       blocked: serializer.fromJson<bool>(json['blocked']),
       present: serializer.fromJson<bool>(json['present']),
@@ -632,6 +643,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
       'path': serializer.toJson<String>(path),
       'duration': serializer.toJson<int>(duration),
       'albumArtPath': serializer.toJson<String>(albumArtPath),
+      'discNumber': serializer.toJson<int>(discNumber),
       'trackNumber': serializer.toJson<int>(trackNumber),
       'blocked': serializer.toJson<bool>(blocked),
       'present': serializer.toJson<bool>(present),
@@ -646,6 +658,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
           String path,
           int duration,
           String albumArtPath,
+          int discNumber,
           int trackNumber,
           bool blocked,
           bool present}) =>
@@ -657,6 +670,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
         path: path ?? this.path,
         duration: duration ?? this.duration,
         albumArtPath: albumArtPath ?? this.albumArtPath,
+        discNumber: discNumber ?? this.discNumber,
         trackNumber: trackNumber ?? this.trackNumber,
         blocked: blocked ?? this.blocked,
         present: present ?? this.present,
@@ -671,6 +685,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
           ..write('path: $path, ')
           ..write('duration: $duration, ')
           ..write('albumArtPath: $albumArtPath, ')
+          ..write('discNumber: $discNumber, ')
           ..write('trackNumber: $trackNumber, ')
           ..write('blocked: $blocked, ')
           ..write('present: $present')
@@ -694,9 +709,11 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
                           $mrjc(
                               albumArtPath.hashCode,
                               $mrjc(
-                                  trackNumber.hashCode,
-                                  $mrjc(blocked.hashCode,
-                                      present.hashCode))))))))));
+                                  discNumber.hashCode,
+                                  $mrjc(
+                                      trackNumber.hashCode,
+                                      $mrjc(blocked.hashCode,
+                                          present.hashCode)))))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -708,6 +725,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
           other.path == this.path &&
           other.duration == this.duration &&
           other.albumArtPath == this.albumArtPath &&
+          other.discNumber == this.discNumber &&
           other.trackNumber == this.trackNumber &&
           other.blocked == this.blocked &&
           other.present == this.present);
@@ -721,6 +739,7 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
   final Value<String> path;
   final Value<int> duration;
   final Value<String> albumArtPath;
+  final Value<int> discNumber;
   final Value<int> trackNumber;
   final Value<bool> blocked;
   final Value<bool> present;
@@ -732,6 +751,7 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
     this.path = const Value.absent(),
     this.duration = const Value.absent(),
     this.albumArtPath = const Value.absent(),
+    this.discNumber = const Value.absent(),
     this.trackNumber = const Value.absent(),
     this.blocked = const Value.absent(),
     this.present = const Value.absent(),
@@ -744,6 +764,7 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
     @required String path,
     this.duration = const Value.absent(),
     this.albumArtPath = const Value.absent(),
+    this.discNumber = const Value.absent(),
     this.trackNumber = const Value.absent(),
     this.blocked = const Value.absent(),
     this.present = const Value.absent(),
@@ -760,6 +781,7 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
     Expression<String> path,
     Expression<int> duration,
     Expression<String> albumArtPath,
+    Expression<int> discNumber,
     Expression<int> trackNumber,
     Expression<bool> blocked,
     Expression<bool> present,
@@ -772,6 +794,7 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
       if (path != null) 'path': path,
       if (duration != null) 'duration': duration,
       if (albumArtPath != null) 'album_art_path': albumArtPath,
+      if (discNumber != null) 'disc_number': discNumber,
       if (trackNumber != null) 'track_number': trackNumber,
       if (blocked != null) 'blocked': blocked,
       if (present != null) 'present': present,
@@ -786,6 +809,7 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
       Value<String> path,
       Value<int> duration,
       Value<String> albumArtPath,
+      Value<int> discNumber,
       Value<int> trackNumber,
       Value<bool> blocked,
       Value<bool> present}) {
@@ -797,6 +821,7 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
       path: path ?? this.path,
       duration: duration ?? this.duration,
       albumArtPath: albumArtPath ?? this.albumArtPath,
+      discNumber: discNumber ?? this.discNumber,
       trackNumber: trackNumber ?? this.trackNumber,
       blocked: blocked ?? this.blocked,
       present: present ?? this.present,
@@ -827,6 +852,9 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
     if (albumArtPath.present) {
       map['album_art_path'] = Variable<String>(albumArtPath.value);
     }
+    if (discNumber.present) {
+      map['disc_number'] = Variable<int>(discNumber.value);
+    }
     if (trackNumber.present) {
       map['track_number'] = Variable<int>(trackNumber.value);
     }
@@ -849,6 +877,7 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
           ..write('path: $path, ')
           ..write('duration: $duration, ')
           ..write('albumArtPath: $albumArtPath, ')
+          ..write('discNumber: $discNumber, ')
           ..write('trackNumber: $trackNumber, ')
           ..write('blocked: $blocked, ')
           ..write('present: $present')
@@ -947,6 +976,18 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
     );
   }
 
+  final VerificationMeta _discNumberMeta = const VerificationMeta('discNumber');
+  GeneratedIntColumn _discNumber;
+  @override
+  GeneratedIntColumn get discNumber => _discNumber ??= _constructDiscNumber();
+  GeneratedIntColumn _constructDiscNumber() {
+    return GeneratedIntColumn(
+      'disc_number',
+      $tableName,
+      true,
+    );
+  }
+
   final VerificationMeta _trackNumberMeta =
       const VerificationMeta('trackNumber');
   GeneratedIntColumn _trackNumber;
@@ -988,6 +1029,7 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
         path,
         duration,
         albumArtPath,
+        discNumber,
         trackNumber,
         blocked,
         present
@@ -1044,6 +1086,12 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
           _albumArtPathMeta,
           albumArtPath.isAcceptableOrUnknown(
               data['album_art_path'], _albumArtPathMeta));
+    }
+    if (data.containsKey('disc_number')) {
+      context.handle(
+          _discNumberMeta,
+          discNumber.isAcceptableOrUnknown(
+              data['disc_number'], _discNumberMeta));
     }
     if (data.containsKey('track_number')) {
       context.handle(

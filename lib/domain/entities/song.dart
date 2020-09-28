@@ -9,6 +9,7 @@ class Song extends Equatable {
     @required this.path,
     @required this.duration,
     @required this.blocked,
+    this.discNumber,
     this.trackNumber,
     this.albumArtPath,
   });
@@ -19,6 +20,7 @@ class Song extends Equatable {
   final String path;
   /// Duration in milliseconds.
   final int duration;
+  final int discNumber;
   final int trackNumber;
   final String albumArtPath;
   /// Is this song blocked in shuffle mode?
