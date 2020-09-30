@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../core/error/failures.dart';
 import '../../domain/entities/album.dart';
@@ -50,37 +53,73 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
 
   @override
   Future<void> updateDatabase() async {
-    _log.info('updataDatabase called');
+    _log.info('updateDatabase called');
 
+    updateArtists();
+    final albumIdMap = await updateAlbums();
+    await updateSongs(albumIdMap);
+
+    _log.info('updateDatabase finished');
+  }
+
+  @override
+  Future<void> setSongBlocked(Song song, bool blocked) async {
+    await musicDataSource.setSongBlocked(song as SongModel, blocked);
+  }
+
+  Future<void> updateArtists() async {
     await musicDataSource.deleteAllArtists();
     final List<ArtistModel> artists = await localMusicFetcher.getArtists();
 
     for (final ArtistModel artist in artists) {
       await musicDataSource.insertArtist(artist);
     }
+  }
 
+  Future<Map<int, int>> updateAlbums() async {
     await musicDataSource.deleteAllAlbums();
     final List<AlbumModel> albums = await localMusicFetcher.getAlbums();
     final Map<int, int> albumIdMap = {};
 
+    final Directory dir = await getApplicationSupportDirectory();
     for (final AlbumModel album in albums) {
-      final int newAlbumId = await musicDataSource.insertAlbum(album);
+      int newAlbumId;
+
+      if (album.albumArtPath == null) {
+        final String albumArtPath = '${dir.path}/${album.id}';
+        final file = File(albumArtPath);
+        final artwork = await localMusicFetcher.getAlbumArtwork(album.id);
+        if (artwork.isNotEmpty) {
+          file.writeAsBytesSync(artwork);
+          final newAlbum = album.copyWith(albumArtPath: albumArtPath);
+          newAlbumId = await musicDataSource.insertAlbum(newAlbum);
+        } else {
+          newAlbumId = await musicDataSource.insertAlbum(album);
+        }
+      } else {
+        newAlbumId = await musicDataSource.insertAlbum(album);
+      }
       albumIdMap[album.id] = newAlbumId;
     }
 
+    return albumIdMap;
+  }
+
+  Future<void> updateSongs(Map<int, int> albumIdMap) async {
+    final Directory dir = await getApplicationSupportDirectory();
     final List<SongModel> songs = await localMusicFetcher.getSongs();
 
     final List<SongModel> songsToInsert = [];
     for (final SongModel song in songs) {
-      songsToInsert.add(song.copyWith(albumId: albumIdMap[song.albumId]));
+      if (song.albumArtPath == null) {
+        songsToInsert.add(song.copyWith(
+          albumId: albumIdMap[song.albumId],
+          albumArtPath: '${dir.path}/${song.albumId}',
+        ));
+      } else {
+        songsToInsert.add(song.copyWith(albumId: albumIdMap[song.albumId]));
+      }
     }
     await musicDataSource.insertSongs(songsToInsert);
-
-    _log.info('updataDatabase finished');
-  }
-
-  @override
-  Future<void> setSongBlocked(Song song, bool blocked) async {
-    await musicDataSource.setSongBlocked(song as SongModel, blocked);
   }
 }

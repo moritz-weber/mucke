@@ -1,3 +1,6 @@
+import 'dart:typed_data';
+import 'dart:ui';
+
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 
 import '../models/album_model.dart';
@@ -35,5 +38,11 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
         .where((songInfo) => songInfo.isMusic)
         .map((SongInfo songInfo) => SongModel.fromSongInfo(songInfo))
         .toList();
+  }
+
+  @override
+  Future<Uint8List> getAlbumArtwork(int id) async {
+    return flutterAudioQuery.getArtwork(
+        type: ResourceType.ALBUM, id: id.toString(), size: const Size(500.0, 500.0));
   }
 }

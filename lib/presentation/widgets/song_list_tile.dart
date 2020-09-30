@@ -19,7 +19,7 @@ class SongListTile extends StatelessWidget {
     final Widget leading = inAlbum
         ? Center(child: Text('${song.discNumber} - ${song.trackNumber}'))
         : Image(
-            image: utils.getAlbumImage(null), // FIXME
+            image: utils.getAlbumImage(song.albumArtPath),
             fit: BoxFit.cover,
           );
 

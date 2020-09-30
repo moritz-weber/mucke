@@ -46,6 +46,20 @@ class AlbumModel extends Album {
     return '$title';
   }
 
+  AlbumModel copyWith({
+    String artist,
+    String title,
+    int id,
+    int year,
+    String albumArtPath,
+  }) =>
+      AlbumModel(
+          artist: artist ?? this.artist,
+          title: title ?? this.title,
+          id: id ?? this.id,
+          year: year ?? pubYear,
+          albumArtPath: albumArtPath ?? this.albumArtPath);
+
   AlbumsCompanion toAlbumsCompanion() => AlbumsCompanion(
         title: Value(title),
         artist: Value(artist),

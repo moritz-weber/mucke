@@ -89,6 +89,7 @@ void main() {
             extras: {
               'albumId': ALBUM_ID_3,
               'blocked': BLOCKED_3.toString(),
+              'discNumber': null,
               'trackNumber': TRACKNUMBER_3,
             });
 
@@ -131,6 +132,7 @@ void main() {
           duration: DURATION_3,
           albumArtPath: ALBUM_ART_PATH_3,
           trackNumber: TRACKNUMBER_3,
+          present: PRESENT_3,
           blocked: BLOCKED_3,
         );
 
