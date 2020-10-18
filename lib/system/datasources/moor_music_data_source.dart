@@ -3,7 +3,7 @@ import 'dart:isolate';
 
 import 'package:moor/isolate.dart';
 import 'package:moor/moor.dart';
-import 'package:moor_ffi/moor_ffi.dart';
+import 'package:moor/ffi.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
@@ -46,6 +46,9 @@ class Songs extends Table {
   IntColumn get trackNumber => integer().nullable()();
   BoolColumn get blocked => boolean().withDefault(const Constant(false))();
   BoolColumn get present => boolean().withDefault(const Constant(true))();
+
+  TextColumn get previous => text().nullable()();
+  TextColumn get next => text().nullable()();
 
   @override
   Set<Column> get primaryKey => {path};
@@ -163,6 +166,40 @@ class MoorMusicDataSource extends _$MoorMusicDataSource
   Future<void> setSongBlocked(SongModel song, bool blocked) async {
     await (update(songs)..where((tbl) => tbl.path.equals(song.path)))
         .write(SongsCompanion(blocked: Value(blocked)));
+  }
+
+  // EXPLORATORY CODE!!!
+  @override
+  Future<void> toggleNextSongLink(SongModel song) async {
+    if (song.next == null) {
+      final albumSongs = await (select(songs)
+          ..where((tbl) => tbl.albumId.equals(song.albumId))
+          ..orderBy([
+            (t) => OrderingTerm(expression: t.discNumber),
+            (t) => OrderingTerm(expression: t.trackNumber)
+          ]))
+        .get()
+        .then((moorSongList) => moorSongList
+            .map((moorSong) => SongModel.fromMoorSong(moorSong))
+            .toList());
+
+      bool current = false;
+      SongModel nextSong;
+      for (final s in albumSongs) {
+        if (current) {
+          nextSong = s;
+          break;
+        }
+        if (s.path == song.path) {
+          current = true;
+        }
+      }
+      await (update(songs)..where((tbl) => tbl.path.equals(song.path)))
+        .write(SongsCompanion(next: Value(nextSong.path)));
+    } else {
+      await (update(songs)..where((tbl) => tbl.path.equals(song.path)))
+        .write(const SongsCompanion(next: Value(null)));
+    }   
   }
 }
 

@@ -122,4 +122,9 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
     }
     await musicDataSource.insertSongs(songsToInsert);
   }
+
+  @override
+  Future<void> toggleNextSongLink(Song song) async {
+    musicDataSource.toggleNextSongLink(song as SongModel);
+  }
 }

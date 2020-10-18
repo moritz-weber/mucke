@@ -123,4 +123,8 @@ abstract class _MusicDataStore with Store {
   Future<void> setSongBlocked(Song song, bool blocked) async {
     await _musicDataRepository.setSongBlocked(song, blocked);
   }
+
+  Future<void> toggleNextSongLink(Song song) async {
+    await _musicDataRepository.toggleNextSongLink(song);
+  }
 }

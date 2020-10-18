@@ -500,6 +500,8 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
   final int trackNumber;
   final bool blocked;
   final bool present;
+  final String previous;
+  final String next;
   MoorSong(
       {@required this.title,
       @required this.albumTitle,
@@ -511,7 +513,9 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
       this.discNumber,
       this.trackNumber,
       @required this.blocked,
-      @required this.present});
+      @required this.present,
+      this.previous,
+      this.next});
   factory MoorSong.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -540,6 +544,9 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
           boolType.mapFromDatabaseResponse(data['${effectivePrefix}blocked']),
       present:
           boolType.mapFromDatabaseResponse(data['${effectivePrefix}present']),
+      previous: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}previous']),
+      next: stringType.mapFromDatabaseResponse(data['${effectivePrefix}next']),
     );
   }
   @override
@@ -578,6 +585,12 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
     if (!nullToAbsent || present != null) {
       map['present'] = Variable<bool>(present);
     }
+    if (!nullToAbsent || previous != null) {
+      map['previous'] = Variable<String>(previous);
+    }
+    if (!nullToAbsent || next != null) {
+      map['next'] = Variable<String>(next);
+    }
     return map;
   }
 
@@ -612,6 +625,10 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
       present: present == null && nullToAbsent
           ? const Value.absent()
           : Value(present),
+      previous: previous == null && nullToAbsent
+          ? const Value.absent()
+          : Value(previous),
+      next: next == null && nullToAbsent ? const Value.absent() : Value(next),
     );
   }
 
@@ -630,6 +647,8 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
       trackNumber: serializer.fromJson<int>(json['trackNumber']),
       blocked: serializer.fromJson<bool>(json['blocked']),
       present: serializer.fromJson<bool>(json['present']),
+      previous: serializer.fromJson<String>(json['previous']),
+      next: serializer.fromJson<String>(json['next']),
     );
   }
   @override
@@ -647,6 +666,8 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
       'trackNumber': serializer.toJson<int>(trackNumber),
       'blocked': serializer.toJson<bool>(blocked),
       'present': serializer.toJson<bool>(present),
+      'previous': serializer.toJson<String>(previous),
+      'next': serializer.toJson<String>(next),
     };
   }
 
@@ -661,7 +682,9 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
           int discNumber,
           int trackNumber,
           bool blocked,
-          bool present}) =>
+          bool present,
+          String previous,
+          String next}) =>
       MoorSong(
         title: title ?? this.title,
         albumTitle: albumTitle ?? this.albumTitle,
@@ -674,6 +697,8 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
         trackNumber: trackNumber ?? this.trackNumber,
         blocked: blocked ?? this.blocked,
         present: present ?? this.present,
+        previous: previous ?? this.previous,
+        next: next ?? this.next,
       );
   @override
   String toString() {
@@ -688,7 +713,9 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
           ..write('discNumber: $discNumber, ')
           ..write('trackNumber: $trackNumber, ')
           ..write('blocked: $blocked, ')
-          ..write('present: $present')
+          ..write('present: $present, ')
+          ..write('previous: $previous, ')
+          ..write('next: $next')
           ..write(')'))
         .toString();
   }
@@ -712,8 +739,12 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
                                   discNumber.hashCode,
                                   $mrjc(
                                       trackNumber.hashCode,
-                                      $mrjc(blocked.hashCode,
-                                          present.hashCode)))))))))));
+                                      $mrjc(
+                                          blocked.hashCode,
+                                          $mrjc(
+                                              present.hashCode,
+                                              $mrjc(previous.hashCode,
+                                                  next.hashCode)))))))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -728,7 +759,9 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
           other.discNumber == this.discNumber &&
           other.trackNumber == this.trackNumber &&
           other.blocked == this.blocked &&
-          other.present == this.present);
+          other.present == this.present &&
+          other.previous == this.previous &&
+          other.next == this.next);
 }
 
 class SongsCompanion extends UpdateCompanion<MoorSong> {
@@ -743,6 +776,8 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
   final Value<int> trackNumber;
   final Value<bool> blocked;
   final Value<bool> present;
+  final Value<String> previous;
+  final Value<String> next;
   const SongsCompanion({
     this.title = const Value.absent(),
     this.albumTitle = const Value.absent(),
@@ -755,6 +790,8 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
     this.trackNumber = const Value.absent(),
     this.blocked = const Value.absent(),
     this.present = const Value.absent(),
+    this.previous = const Value.absent(),
+    this.next = const Value.absent(),
   });
   SongsCompanion.insert({
     @required String title,
@@ -768,6 +805,8 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
     this.trackNumber = const Value.absent(),
     this.blocked = const Value.absent(),
     this.present = const Value.absent(),
+    this.previous = const Value.absent(),
+    this.next = const Value.absent(),
   })  : title = Value(title),
         albumTitle = Value(albumTitle),
         albumId = Value(albumId),
@@ -785,6 +824,8 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
     Expression<int> trackNumber,
     Expression<bool> blocked,
     Expression<bool> present,
+    Expression<String> previous,
+    Expression<String> next,
   }) {
     return RawValuesInsertable({
       if (title != null) 'title': title,
@@ -798,6 +839,8 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
       if (trackNumber != null) 'track_number': trackNumber,
       if (blocked != null) 'blocked': blocked,
       if (present != null) 'present': present,
+      if (previous != null) 'previous': previous,
+      if (next != null) 'next': next,
     });
   }
 
@@ -812,7 +855,9 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
       Value<int> discNumber,
       Value<int> trackNumber,
       Value<bool> blocked,
-      Value<bool> present}) {
+      Value<bool> present,
+      Value<String> previous,
+      Value<String> next}) {
     return SongsCompanion(
       title: title ?? this.title,
       albumTitle: albumTitle ?? this.albumTitle,
@@ -825,6 +870,8 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
       trackNumber: trackNumber ?? this.trackNumber,
       blocked: blocked ?? this.blocked,
       present: present ?? this.present,
+      previous: previous ?? this.previous,
+      next: next ?? this.next,
     );
   }
 
@@ -864,6 +911,12 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
     if (present.present) {
       map['present'] = Variable<bool>(present.value);
     }
+    if (previous.present) {
+      map['previous'] = Variable<String>(previous.value);
+    }
+    if (next.present) {
+      map['next'] = Variable<String>(next.value);
+    }
     return map;
   }
 
@@ -880,7 +933,9 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
           ..write('discNumber: $discNumber, ')
           ..write('trackNumber: $trackNumber, ')
           ..write('blocked: $blocked, ')
-          ..write('present: $present')
+          ..write('present: $present, ')
+          ..write('previous: $previous, ')
+          ..write('next: $next')
           ..write(')'))
         .toString();
   }
@@ -1020,6 +1075,30 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
         defaultValue: const Constant(true));
   }
 
+  final VerificationMeta _previousMeta = const VerificationMeta('previous');
+  GeneratedTextColumn _previous;
+  @override
+  GeneratedTextColumn get previous => _previous ??= _constructPrevious();
+  GeneratedTextColumn _constructPrevious() {
+    return GeneratedTextColumn(
+      'previous',
+      $tableName,
+      true,
+    );
+  }
+
+  final VerificationMeta _nextMeta = const VerificationMeta('next');
+  GeneratedTextColumn _next;
+  @override
+  GeneratedTextColumn get next => _next ??= _constructNext();
+  GeneratedTextColumn _constructNext() {
+    return GeneratedTextColumn(
+      'next',
+      $tableName,
+      true,
+    );
+  }
+
   @override
   List<GeneratedColumn> get $columns => [
         title,
@@ -1032,7 +1111,9 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
         discNumber,
         trackNumber,
         blocked,
-        present
+        present,
+        previous,
+        next
       ];
   @override
   $SongsTable get asDslTable => this;
@@ -1106,6 +1187,14 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
     if (data.containsKey('present')) {
       context.handle(_presentMeta,
           present.isAcceptableOrUnknown(data['present'], _presentMeta));
+    }
+    if (data.containsKey('previous')) {
+      context.handle(_previousMeta,
+          previous.isAcceptableOrUnknown(data['previous'], _previousMeta));
+    }
+    if (data.containsKey('next')) {
+      context.handle(
+          _nextMeta, next.isAcceptableOrUnknown(data['next'], _nextMeta));
     }
     return context;
   }

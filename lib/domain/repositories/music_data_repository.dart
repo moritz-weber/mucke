@@ -13,4 +13,5 @@ abstract class MusicDataRepository {
   Future<void> updateDatabase();
 
   Future<void> setSongBlocked(Song song, bool blocked);
+  Future<void> toggleNextSongLink(Song song);
 }

@@ -40,6 +40,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
   int _playbackIndex = -1;
   int get playbackIndex => _playbackIndex;
   set playbackIndex(int i) {
+    print(i);
     if (i != null) {
       _playbackIndex = i;
       AudioServiceBackground.setMediaItem(playbackContext[i]);
@@ -176,13 +177,9 @@ class AudioPlayerTask extends BackgroundAudioTask {
 
     AudioServiceBackground.setQueue(playbackContext);
     queue = qm.mediaItemsToAudioSource(playbackContext);
-    await audioPlayer.load(queue);
-
-    if (shuffleMode == ShuffleMode.none) {
-      await audioPlayer.seek(const Duration(milliseconds: 0), index: index);
-    }
-
     audioPlayer.play();
+    final int startIndex = shuffleMode == ShuffleMode.none ? index : 0;
+    await audioPlayer.load(queue, initialIndex: startIndex);
   }
 
   void handlePlayerState(PlayerState ps) {

@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:moor_ffi/moor_ffi.dart';
+import 'package:moor/ffi.dart';
 import 'package:mucke/system/datasources/moor_music_data_source.dart';
 import 'package:mucke/system/models/album_model.dart';
 import 'package:mucke/system/models/song_model.dart';

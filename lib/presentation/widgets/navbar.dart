@@ -14,10 +14,6 @@ class NavBar extends StatefulWidget {
 }
 
 class _NavBarState extends State<NavBar> {
-  final TextStyle _optionTextStyle = const TextStyle(
-    fontWeight: FontWeight.w300,
-  );
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -34,27 +30,18 @@ class _NavBarState extends State<NavBar> {
             backgroundColor: Theme.of(context).primaryColor,
             currentIndex: widget.currentIndex,
             onTap: widget.onTap,
-            items: [
+            items: const [
               BottomNavigationBarItem(
-                icon: const Icon(Icons.home),
-                title: Text(
-                  'Home',
-                  style: _optionTextStyle,
-                ),
+                icon: Icon(Icons.home),
+                label: 'Home',
               ),
               BottomNavigationBarItem(
-                icon: const Icon(Icons.library_music),
-                title: Text(
-                  'Library',
-                  style: _optionTextStyle,
-                ),
+                icon: Icon(Icons.library_music),
+                label: 'Library',
               ),
               BottomNavigationBarItem(
-                icon: const Icon(Icons.settings),
-                title: Text(
-                  'Settings',
-                  style: _optionTextStyle,
-                ),
+                icon: Icon(Icons.settings),
+                label: 'Settings',
               ),
             ],
           )

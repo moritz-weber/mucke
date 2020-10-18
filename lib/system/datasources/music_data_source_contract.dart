@@ -13,6 +13,7 @@ abstract class MusicDataSource {
   Future<void> insertSong(SongModel songModel);
   Future<void> insertSongs(List<SongModel> songModels);
   Future<void> setSongBlocked(SongModel song, bool blocked);
+  Future<void> toggleNextSongLink(SongModel song);
 
   Future<SongModel> getSongByPath(String path);
 

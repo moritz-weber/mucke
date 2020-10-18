@@ -20,13 +20,13 @@ class SongCustomizationButtons extends StatelessWidget {
         final Song song = audioStore.currentSongStream.value;
         return Row(
           children: [
-            const IconButton(
+            IconButton(
               icon: Icon(
                 Icons.link,
                 size: 20.0,
-                color: Colors.white10,
+                color: song.next == null ? Colors.white70 : LIGHT1,
               ),
-              onPressed: null,
+              onPressed: () => musicDataStore.toggleNextSongLink(song),
             ),
             Container(
               width: 40,
