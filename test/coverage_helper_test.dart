@@ -3,13 +3,13 @@
 import 'package:mucke/injection_container.dart';
 import 'package:mucke/system/repositories/audio_repository_impl.dart';
 import 'package:mucke/system/repositories/music_data_repository_impl.dart';
-import 'package:mucke/system/datasources/audio_manager_contract.dart';
+import 'package:mucke/system/audio/audio_manager_contract.dart';
 import 'package:mucke/system/datasources/local_music_fetcher.dart';
-import 'package:mucke/system/datasources/audio_player_task.dart';
+import 'package:mucke/system/audio/audio_player_task.dart';
 import 'package:mucke/system/datasources/local_music_fetcher_contract.dart';
-import 'package:mucke/system/datasources/audio_manager.dart';
+import 'package:mucke/system/audio/audio_manager.dart';
 import 'package:mucke/system/datasources/moor_music_data_source.dart';
-import 'package:mucke/system/datasources/queue_manager.dart';
+import 'package:mucke/system/audio/queue_generator.dart';
 import 'package:mucke/system/datasources/music_data_source_contract.dart';
 import 'package:mucke/system/models/artist_model.dart';
 import 'package:mucke/system/models/album_model.dart';

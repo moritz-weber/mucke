@@ -4,13 +4,15 @@ import 'dart:ui';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:logging/logging.dart';
 import 'package:moor/isolate.dart';
 import 'package:moor/moor.dart';
 
 import '../../domain/entities/shuffle_mode.dart';
+import '../datasources/moor_music_data_source.dart';
+import '../models/queue_item.dart';
 import '../models/song_model.dart';
-import 'moor_music_data_source.dart';
-import 'queue_manager.dart';
+import 'queue_generator.dart';
 
 const String INIT = 'INIT';
 const String PLAY_WITH_CONTEXT = 'PLAY_WITH_CONTEXT';
@@ -22,13 +24,15 @@ const String KEY_INDEX = 'INDEX';
 class AudioPlayerTask extends BackgroundAudioTask {
   final audioPlayer = AudioPlayer();
   MoorMusicDataSource moorMusicDataSource;
-  QueueManager qm;
+  QueueGenerator queueGenerator;
 
+  // TODO: confusing naming
   List<MediaItem> originalPlaybackContext = <MediaItem>[];
-  List<MediaItem> playbackContext = <MediaItem>[];
+  List<QueueItem> playbackContext = <QueueItem>[];
 
+  // TODO: this is not trivial: queue is loaded by audioplayer
+  // this reference enables direct manipulation of the loaded queue
   ConcatenatingAudioSource queue;
-  List<int> permutation;
 
   ShuffleMode _shuffleMode = ShuffleMode.none;
   ShuffleMode get shuffleMode => _shuffleMode;
@@ -40,10 +44,9 @@ class AudioPlayerTask extends BackgroundAudioTask {
   int _playbackIndex = -1;
   int get playbackIndex => _playbackIndex;
   set playbackIndex(int i) {
-    print(i);
     if (i != null) {
       _playbackIndex = i;
-      AudioServiceBackground.setMediaItem(playbackContext[i]);
+      AudioServiceBackground.setMediaItem(playbackContext[i].mediaItem);
       AudioServiceBackground.sendCustomEvent({KEY_INDEX: i});
 
       AudioServiceBackground.setState(
@@ -60,6 +63,12 @@ class AudioPlayerTask extends BackgroundAudioTask {
       );
     }
   }
+
+  static final _log = Logger('AudioPlayerTask')
+    ..onRecord.listen((record) {
+      print(
+          '${record.time} [${record.level.name}] ${record.loggerName}: ${record.message}');
+    });
 
   @override
   Future<void> onStop() async {
@@ -112,19 +121,20 @@ class AudioPlayerTask extends BackgroundAudioTask {
   Future<void> init() async {
     print('AudioPlayerTask.init');
     audioPlayer.playerStateStream.listen((event) => handlePlayerState(event));
+    audioPlayer.currentIndexStream.listen((event) => playbackIndex = event);
     audioPlayer.sequenceStateStream
-        .listen((event) => playbackIndex = event?.currentIndex);
+        .listen((event) => handleSequenceState(event));
 
     final connectPort = IsolateNameServer.lookupPortByName(MOOR_ISOLATE);
     final MoorIsolate moorIsolate = MoorIsolate.fromConnectPort(connectPort);
     final DatabaseConnection databaseConnection = await moorIsolate.connect();
     moorMusicDataSource = MoorMusicDataSource.connect(databaseConnection);
 
-    qm = QueueManager(moorMusicDataSource);
+    queueGenerator = QueueGenerator(moorMusicDataSource);
   }
 
   Future<void> playWithContext(List<String> context, int index) async {
-    final mediaItems = await qm.getMediaItemsFromPaths(context);
+    final mediaItems = await queueGenerator.getMediaItemsFromPaths(context);
     playPlaylist(mediaItems, index);
   }
 
@@ -137,22 +147,44 @@ class AudioPlayerTask extends BackgroundAudioTask {
   Future<void> setShuffleMode(ShuffleMode mode) async {
     shuffleMode = mode;
 
-    final index = permutation[playbackIndex];
-    permutation =
-        qm.generatePermutation(shuffleMode, originalPlaybackContext, index);
+    final QueueItem currentQueueItem = playbackContext[playbackIndex];
+    final int index = currentQueueItem.originalIndex;
     playbackContext =
-        qm.getPermutatedSongs(originalPlaybackContext, permutation);
+        await queueGenerator.generateQueue(shuffleMode, originalPlaybackContext, index);
+    final queuedMediaItems = playbackContext.map((e) => e.mediaItem).toList();
 
-    AudioServiceBackground.setQueue(playbackContext);
+    // FIXME: this does not react correctly when inserted track is currently played
+    AudioServiceBackground.setQueue(queuedMediaItems);
 
-    final newQueue = qm.mediaItemsToAudioSource(playbackContext);
+    final newQueue = queueGenerator.mediaItemsToAudioSource(queuedMediaItems);
+    _updateQueue(newQueue, currentQueueItem);
+  }
+
+  void _updateQueue(ConcatenatingAudioSource newQueue, QueueItem currentQueueItem) {
+    final int index = currentQueueItem.originalIndex;
+
     queue.removeRange(0, playbackIndex);
     queue.removeRange(1, queue.length);
 
     if (shuffleMode == ShuffleMode.none) {
-      queue.insertAll(0, newQueue.children.sublist(0, index));
-      queue.addAll(newQueue.children.sublist(index + 1));
-      playbackIndex = index;
+      switch (currentQueueItem.type) {
+        case QueueItemType.standard:
+          queue.insertAll(0, newQueue.children.sublist(0, index));
+          queue.addAll(newQueue.children.sublist(index + 1));
+          playbackIndex = index;
+          break;
+        case QueueItemType.predecessor:
+          queue.insertAll(0, newQueue.children.sublist(0, index));
+          queue.addAll(newQueue.children.sublist(index));
+          playbackIndex = index;
+          break;
+        case QueueItemType.successor:
+          queue.insertAll(0, newQueue.children.sublist(0, index + 1));
+          queue.addAll(newQueue.children.sublist(index + 1));
+          playbackIndex = index;
+          break;
+      }
+      
     } else {
       queue.addAll(newQueue.children.sublist(1));
     }
@@ -171,18 +203,20 @@ class AudioPlayerTask extends BackgroundAudioTask {
   }
 
   Future<void> playPlaylist(List<MediaItem> mediaItems, int index) async {
-    permutation = qm.generatePermutation(shuffleMode, mediaItems, index);
-    playbackContext = qm.getPermutatedSongs(mediaItems, permutation);
     originalPlaybackContext = mediaItems;
 
-    AudioServiceBackground.setQueue(playbackContext);
-    queue = qm.mediaItemsToAudioSource(playbackContext);
+    playbackContext = await queueGenerator.generateQueue(shuffleMode, mediaItems, index);
+    final queuedMediaItems = playbackContext.map((e) => e.mediaItem).toList();
+
+    AudioServiceBackground.setQueue(queuedMediaItems);
+    queue = queueGenerator.mediaItemsToAudioSource(queuedMediaItems);
     audioPlayer.play();
     final int startIndex = shuffleMode == ShuffleMode.none ? index : 0;
     await audioPlayer.load(queue, initialIndex: startIndex);
   }
 
   void handlePlayerState(PlayerState ps) {
+    _log.info('handlePlayerState called');
     if (ps.processingState == ProcessingState.ready && ps.playing) {
       AudioServiceBackground.setState(
         controls: [
@@ -209,6 +243,16 @@ class AudioPlayerTask extends BackgroundAudioTask {
         position: audioPlayer.position,
         playing: false,
       );
+    }
+  }
+
+  // TODO: this can only be a temporary solution! gets called too often.
+  void handleSequenceState(SequenceState st) {
+    _log.info('handleSequenceState called');
+    if (0 <= playbackIndex && playbackIndex < playbackContext.length) {
+      _log.info('handleSequenceState: setting MediaItem');
+      AudioServiceBackground.setMediaItem(
+          playbackContext[playbackIndex].mediaItem);
     }
   }
 }

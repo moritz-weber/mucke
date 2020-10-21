@@ -5,7 +5,7 @@ import '../../domain/entities/playback_state.dart';
 import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/entities/song.dart';
 import '../../domain/repositories/audio_repository.dart';
-import '../datasources/audio_manager_contract.dart';
+import '../audio/audio_manager_contract.dart';
 import '../models/song_model.dart';
 
 class AudioRepositoryImpl implements AudioRepository {

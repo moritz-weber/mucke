@@ -1,7 +1,7 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 
-import '../../system/datasources/audio_player_task.dart';
+import '../../system/audio/audio_player_task.dart';
 
 class AudioServiceWidget extends StatefulWidget {
   const AudioServiceWidget({@required this.child});

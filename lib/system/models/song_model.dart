@@ -209,3 +209,9 @@ class SongModel extends Song {
     return [discNumber, trackNumber];
   }
 }
+
+// TODO: maybe move to another file
+extension SongModelExtension on MediaItem {
+  String get previous => extras['previous'] as String;
+  String get next => extras['next'] as String;
+}
