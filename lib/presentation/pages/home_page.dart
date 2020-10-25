@@ -17,22 +17,6 @@ class _HomePageState extends State<HomePage> {
     return SafeArea(
       child: Column(
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 8.0,
-                    horizontal: 12.0,
-                  ),
-                  child: Text(
-                    'mucke',
-                    style: Theme.of(context).textTheme.headline1,
-                  ),
-                ),
-              ),
-            ],
-          ),
           const Highlight(),
           const ShuffleAllButton(
             verticalPad: 10.0,

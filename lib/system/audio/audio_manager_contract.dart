@@ -19,4 +19,7 @@ abstract class AudioManager {
   Future<void> skipToPrevious();
   Future<void> setShuffleMode(ShuffleMode shuffleMode);
   Future<void> shuffleAll();
+  Future<void> addToQueue(SongModel songModel);
+  Future<void> moveQueueItem(int oldIndex, int newIndex);
+  Future<void> removeQueueItem(int index);
 }

@@ -16,7 +16,6 @@ class SongsPage extends StatefulWidget {
 
 class _SongsPageState extends State<SongsPage>
     with AutomaticKeepAliveClientMixin {
-
   @override
   Widget build(BuildContext context) {
     print('SongsPage.build');
@@ -46,7 +45,7 @@ class _SongsPageState extends State<SongsPage>
               song: song,
               inAlbum: false,
               onTap: () => audioStore.playSong(index, songs),
-              onTapMore: () => print('Hello World'),
+              onTapMore: () => _openBottomSheet(song),
             );
           },
           separatorBuilder: (BuildContext context, int index) => const Divider(
@@ -59,4 +58,26 @@ class _SongsPageState extends State<SongsPage>
 
   @override
   bool get wantKeepAlive => true;
+
+  void _openBottomSheet(Song song) {
+    final AudioStore audioStore = Provider.of<AudioStore>(context, listen: false);
+
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+            child: Column(
+              children: [
+                ListTile(
+                  title: const Text('Add to queue'),
+                  onTap: () {
+                    audioStore.addToQueue(song);
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+          );
+        });
+  }
 }

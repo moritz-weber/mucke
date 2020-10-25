@@ -185,6 +185,21 @@ class AudioManagerImpl implements AudioManager {
     await _startAudioService();
     await AudioService.customAction(SHUFFLE_ALL);
   }
+
+  @override
+  Future<void> addToQueue(SongModel songModel) async {
+    await AudioService.addQueueItem(songModel.toMediaItem());
+  }
+
+  @override
+  Future<void> moveQueueItem(int oldIndex, int newIndex) async {
+    await AudioService.customAction(MOVE_QUEUE_ITEM, [oldIndex, newIndex]);
+  }
+
+  @override
+  Future<void> removeQueueItem(int index) async {
+    await AudioService.customAction(REMOVE_QUEUE_ITEM, index);
+  }  
 }
 
 void _backgroundTaskEntrypoint() {

@@ -82,4 +82,16 @@ abstract class _AudioStore with Store {
   Future<void> shuffleAll() async {
     _audioRepository.shuffleAll();
   }
+
+  Future<void> addToQueue(Song song) async {
+    _audioRepository.addToQueue(song);
+  }
+
+  Future<void> moveQueueItem(int oldIndex, int newIndex) async {
+    _audioRepository.moveQueueItem(oldIndex, newIndex);
+  }
+
+  Future<void> removeQueueItem(int index) async {
+    _audioRepository.removeQueueItem(index);
+  }
 }

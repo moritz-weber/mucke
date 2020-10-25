@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
+import 'package:mobx/mobx.dart';
 import 'package:moor/isolate.dart';
 import 'package:moor/moor.dart';
 
@@ -14,14 +15,20 @@ import '../models/queue_item.dart';
 import '../models/song_model.dart';
 import 'queue_generator.dart';
 
+part 'audio_player_task.g.dart';
+
 const String INIT = 'INIT';
 const String PLAY_WITH_CONTEXT = 'PLAY_WITH_CONTEXT';
 const String APP_LIFECYCLE_RESUMED = 'APP_LIFECYCLE_RESUMED';
 const String SET_SHUFFLE_MODE = 'SET_SHUFFLE_MODE';
 const String SHUFFLE_ALL = 'SHUFFLE_ALL';
 const String KEY_INDEX = 'INDEX';
+const String MOVE_QUEUE_ITEM = 'MOVE_QUEUE_ITEM';
+const String REMOVE_QUEUE_ITEM = 'REMOVE_QUEUE_ITEM';
 
-class AudioPlayerTask extends BackgroundAudioTask {
+class AudioPlayerTask = AudioPlayerTaskBase with _$AudioPlayerTask;
+
+abstract class AudioPlayerTaskBase extends BackgroundAudioTask with Store {
   final audioPlayer = AudioPlayer();
   MoorMusicDataSource moorMusicDataSource;
   QueueGenerator queueGenerator;
@@ -33,6 +40,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
   // TODO: this is not trivial: queue is loaded by audioplayer
   // this reference enables direct manipulation of the loaded queue
   ConcatenatingAudioSource queue;
+  List<MediaItem> mediaItemQueue;
 
   ShuffleMode _shuffleMode = ShuffleMode.none;
   ShuffleMode get shuffleMode => _shuffleMode;
@@ -46,7 +54,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
   set playbackIndex(int i) {
     if (i != null) {
       _playbackIndex = i;
-      AudioServiceBackground.setMediaItem(playbackContext[i].mediaItem);
+      AudioServiceBackground.setMediaItem(mediaItemQueue[i]);
       AudioServiceBackground.sendCustomEvent({KEY_INDEX: i});
 
       AudioServiceBackground.setState(
@@ -98,6 +106,13 @@ class AudioPlayerTask extends BackgroundAudioTask {
   }
 
   @override
+  Future<void> onAddQueueItem(MediaItem mediaItem) async {
+    await queue.add(AudioSource.uri(Uri.file(mediaItem.id)));
+    mediaItemQueue.add(mediaItem);
+    AudioServiceBackground.setQueue(mediaItemQueue);
+  }
+
+  @override
   Future<void> onCustomAction(String name, arguments) async {
     switch (name) {
       case INIT:
@@ -114,6 +129,11 @@ class AudioPlayerTask extends BackgroundAudioTask {
         return setShuffleMode((arguments as String).toShuffleMode());
       case SHUFFLE_ALL:
         return shuffleAll();
+      case MOVE_QUEUE_ITEM:
+        final args = arguments as List<dynamic>;
+        return moveQueueItem(args[0] as int, args[1] as int);
+      case REMOVE_QUEUE_ITEM:
+        return removeQueueItem(arguments as int);
       default:
     }
   }
@@ -151,12 +171,12 @@ class AudioPlayerTask extends BackgroundAudioTask {
     final int index = currentQueueItem.originalIndex;
     playbackContext =
         await queueGenerator.generateQueue(shuffleMode, originalPlaybackContext, index);
-    final queuedMediaItems = playbackContext.map((e) => e.mediaItem).toList();
+    mediaItemQueue = playbackContext.map((e) => e.mediaItem).toList();
 
     // FIXME: this does not react correctly when inserted track is currently played
-    AudioServiceBackground.setQueue(queuedMediaItems);
+    AudioServiceBackground.setQueue(mediaItemQueue);
 
-    final newQueue = queueGenerator.mediaItemsToAudioSource(queuedMediaItems);
+    final newQueue = queueGenerator.mediaItemsToAudioSource(mediaItemQueue);
     _updateQueue(newQueue, currentQueueItem);
   }
 
@@ -206,13 +226,28 @@ class AudioPlayerTask extends BackgroundAudioTask {
     originalPlaybackContext = mediaItems;
 
     playbackContext = await queueGenerator.generateQueue(shuffleMode, mediaItems, index);
-    final queuedMediaItems = playbackContext.map((e) => e.mediaItem).toList();
+    mediaItemQueue = playbackContext.map((e) => e.mediaItem).toList();
 
-    AudioServiceBackground.setQueue(queuedMediaItems);
-    queue = queueGenerator.mediaItemsToAudioSource(queuedMediaItems);
+    AudioServiceBackground.setQueue(mediaItemQueue);
+    queue = queueGenerator.mediaItemsToAudioSource(mediaItemQueue);
     audioPlayer.play();
     final int startIndex = shuffleMode == ShuffleMode.none ? index : 0;
     await audioPlayer.load(queue, initialIndex: startIndex);
+  }
+
+  Future<void> moveQueueItem(int oldIndex, int newIndex) async {
+    _log.info('move: $oldIndex -> $newIndex');
+    final MediaItem mediaItem = mediaItemQueue.removeAt(oldIndex);
+    final index = newIndex < oldIndex ? newIndex : newIndex - 1;
+    mediaItemQueue.insert(index, mediaItem);
+    AudioServiceBackground.setQueue(mediaItemQueue);
+    queue.move(oldIndex, index);
+  }
+
+  Future<void> removeQueueItem(int index) async {
+    mediaItemQueue.removeAt(index);
+    AudioServiceBackground.setQueue(mediaItemQueue);
+    queue.removeAt(index);
   }
 
   void handlePlayerState(PlayerState ps) {
@@ -252,7 +287,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
     if (0 <= playbackIndex && playbackIndex < playbackContext.length) {
       _log.info('handleSequenceState: setting MediaItem');
       AudioServiceBackground.setMediaItem(
-          playbackContext[playbackIndex].mediaItem);
+          mediaItemQueue[playbackIndex]);
     }
   }
 }

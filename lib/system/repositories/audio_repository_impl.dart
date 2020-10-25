@@ -79,4 +79,22 @@ class AudioRepositoryImpl implements AudioRepository {
     await _audioManager.shuffleAll();
     return const Right(null);
   }
+
+  @override
+  Future<Either<Failure, void>> addToQueue(Song song) async {
+    await _audioManager.addToQueue(song as SongModel);
+    return const Right(null);
+  }
+
+  @override
+  Future<Either<Failure, void>> moveQueueItem(int oldIndex, int newIndex) async {
+    await _audioManager.moveQueueItem(oldIndex, newIndex);
+    return const Right(null);
+  }
+
+  @override
+  Future<Either<Failure, void>> removeQueueItem(int index) async {
+    await _audioManager.removeQueueItem(index);
+    return const Right(null);
+  }
 }
