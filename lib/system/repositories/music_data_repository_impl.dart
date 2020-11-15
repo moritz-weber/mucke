@@ -46,6 +46,12 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   }
 
   @override
+  Stream<List<Song>> get songStream => musicDataSource.songStream;
+
+  @override
+  Stream<List<Song>> getAlbumSongStream(Album album) => musicDataSource.getAlbumSongStream(album as AlbumModel);
+
+  @override
   Future<Either<Failure, List<Song>>> getSongsFromAlbum(Album album) async {
     return musicDataSource.getSongsFromAlbum(album as AlbumModel).then(
         (List<SongModel> songs) => Right<Failure, List<SongModel>>(songs));
@@ -127,4 +133,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   Future<void> toggleNextSongLink(Song song) async {
     musicDataSource.toggleNextSongLink(song as SongModel);
   }
+
+  @override
+  Stream<List<Song>> get queueStream => musicDataSource.queueStream;
 }

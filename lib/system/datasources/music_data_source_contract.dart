@@ -5,6 +5,12 @@ import '../models/song_model.dart';
 abstract class MusicDataSource {
   Future<List<AlbumModel>> getAlbums();
 
+  Stream<List<SongModel>> get songStream;
+  Stream<List<SongModel>> getAlbumSongStream(AlbumModel album);
+
+  Future<void> setQueue(List<SongModel> queue);
+  Stream<List<SongModel>> get queueStream;
+
   /// Insert album into the database. Return the ID of the inserted album.
   Future<int> insertAlbum(AlbumModel albumModel);
 

@@ -68,11 +68,14 @@ class AlbumDetailsPage extends StatelessWidget {
                 if (index.isEven) {
                   final songIndex = (index / 2).round();
 
-                  final Song song = musicDataStore.albumSongs[songIndex];
+                  final Song song =
+                      musicDataStore.albumSongStream.value[songIndex];
                   return SongListTile(
                     song: song,
                     inAlbum: true,
-                    onTap: () => audioStore.playSong(songIndex, musicDataStore.albumSongs),
+                    onTap: () => audioStore.playSong(
+                        songIndex, musicDataStore.albumSongStream.value),
+                    onTapMore: () => _openBottomSheet(song, context),
                   );
                 }
                 return const Divider(
@@ -85,11 +88,45 @@ class AlbumDetailsPage extends StatelessWidget {
                 }
                 return null;
               },
-              childCount: musicDataStore.albumSongs.length * 2,
+              childCount: musicDataStore.albumSongStream.value.length * 2,
             ),
           ),
         ],
       ),
     );
+  }
+
+  void _openBottomSheet(Song song, BuildContext context) {
+    final AudioStore audioStore =
+        Provider.of<AudioStore>(context, listen: false);
+    final MusicDataStore musicDataStore =
+        Provider.of<MusicDataStore>(context, listen: false);
+
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+            child: Column(
+              children: [
+                ListTile(
+                  title: const Text('Add to queue'),
+                  onTap: () {
+                    audioStore.addToQueue(song);
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  title: song.blocked
+                      ? const Text('Unblock song')
+                      : const Text('Block song'),
+                  onTap: () {
+                    musicDataStore.setSongBlocked(song, !song.blocked);
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+          );
+        });
   }
 }

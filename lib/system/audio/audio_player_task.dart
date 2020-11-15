@@ -109,7 +109,7 @@ abstract class AudioPlayerTaskBase extends BackgroundAudioTask with Store {
   Future<void> onAddQueueItem(MediaItem mediaItem) async {
     await queue.add(AudioSource.uri(Uri.file(mediaItem.id)));
     mediaItemQueue.add(mediaItem);
-    AudioServiceBackground.setQueue(mediaItemQueue);
+    handleSetQueue(mediaItemQueue);
   }
 
   @override
@@ -136,6 +136,12 @@ abstract class AudioPlayerTaskBase extends BackgroundAudioTask with Store {
         return removeQueueItem(arguments as int);
       default:
     }
+  }
+
+  Future<void> handleSetQueue(List<MediaItem> mediaItemQueue) async {
+    final songModels = mediaItemQueue.map((e) => SongModel.fromMediaItem(e)).toList();
+    AudioServiceBackground.setQueue(mediaItemQueue);
+    moorMusicDataSource.setQueue(songModels);
   }
 
   Future<void> init() async {
@@ -174,7 +180,7 @@ abstract class AudioPlayerTaskBase extends BackgroundAudioTask with Store {
     mediaItemQueue = playbackContext.map((e) => e.mediaItem).toList();
 
     // FIXME: this does not react correctly when inserted track is currently played
-    AudioServiceBackground.setQueue(mediaItemQueue);
+    handleSetQueue(mediaItemQueue);
 
     final newQueue = queueGenerator.mediaItemsToAudioSource(mediaItemQueue);
     _updateQueue(newQueue, currentQueueItem);
@@ -228,7 +234,7 @@ abstract class AudioPlayerTaskBase extends BackgroundAudioTask with Store {
     playbackContext = await queueGenerator.generateQueue(shuffleMode, mediaItems, index);
     mediaItemQueue = playbackContext.map((e) => e.mediaItem).toList();
 
-    AudioServiceBackground.setQueue(mediaItemQueue);
+    handleSetQueue(mediaItemQueue);
     queue = queueGenerator.mediaItemsToAudioSource(mediaItemQueue);
     audioPlayer.play();
     final int startIndex = shuffleMode == ShuffleMode.none ? index : 0;
@@ -240,13 +246,13 @@ abstract class AudioPlayerTaskBase extends BackgroundAudioTask with Store {
     final MediaItem mediaItem = mediaItemQueue.removeAt(oldIndex);
     final index = newIndex < oldIndex ? newIndex : newIndex - 1;
     mediaItemQueue.insert(index, mediaItem);
-    AudioServiceBackground.setQueue(mediaItemQueue);
+    handleSetQueue(mediaItemQueue);
     queue.move(oldIndex, index);
   }
 
   Future<void> removeQueueItem(int index) async {
     mediaItemQueue.removeAt(index);
-    AudioServiceBackground.setQueue(mediaItemQueue);
+    handleSetQueue(mediaItemQueue);
     queue.removeAt(index);
   }
 

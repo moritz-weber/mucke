@@ -17,7 +17,9 @@ class SongCustomizationButtons extends StatelessWidget {
 
     return Observer(
       builder: (BuildContext context) {
-        final Song song = audioStore.currentSongStream.value;
+        print('building buttons');
+        final Song song = audioStore.currentSong;
+        final bool isBlocked = audioStore.currentSong.blocked;
         return Row(
           children: [
             IconButton(
@@ -46,10 +48,10 @@ class SongCustomizationButtons extends StatelessWidget {
               icon: Icon(
                 Icons.remove_circle_outline,
                 size: 20.0,
-                color: song.blocked ? RASPBERRY : Colors.white70,
+                color: isBlocked ? RASPBERRY : Colors.white70,
               ),
               onPressed: () =>
-                  musicDataStore.setSongBlocked(song, !song.blocked),
+                  musicDataStore.setSongBlocked(song, !isBlocked),
             ),
           ],
           mainAxisAlignment: MainAxisAlignment.center,

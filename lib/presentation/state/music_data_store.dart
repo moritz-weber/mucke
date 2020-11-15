@@ -14,11 +14,19 @@ class MusicDataStore extends _MusicDataStore with _$MusicDataStore {
 }
 
 abstract class _MusicDataStore with Store {
-  _MusicDataStore(this._musicDataRepository);
+  _MusicDataStore(this._musicDataRepository) {
+    songStream = _musicDataRepository.songStream.asObservable(initialValue: []);
+  }
 
   final MusicDataRepository _musicDataRepository;
 
   bool _initialized = false;
+
+  @observable
+  ObservableStream<List<Song>> songStream;
+
+  @observable
+  ObservableStream<List<Song>> albumSongStream;
 
   @observable
   ObservableList<Artist> artists = <Artist>[].asObservable();
@@ -112,12 +120,14 @@ abstract class _MusicDataStore with Store {
 
   @action
   Future<void> fetchSongsFromAlbum(Album album) async {
-    final result = await _musicDataRepository.getSongsFromAlbum(album);
-    albumSongs.clear();
-    result.fold(
-      (_) => albumSongs = <Song>[].asObservable(),
-      (songList) => albumSongs.addAll(songList),
-    );
+    albumSongStream = _musicDataRepository.getAlbumSongStream(album).asObservable(initialValue: []);
+
+    // final result = await _musicDataRepository.getSongsFromAlbum(album);
+    // albumSongs.clear();
+    // result.fold(
+    //   (_) => albumSongs = <Song>[].asObservable(),
+    //   (songList) => albumSongs.addAll(songList),
+    // );
   }
 
   Future<void> setSongBlocked(Song song, bool blocked) async {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 
 import '../../domain/entities/song.dart';
@@ -25,34 +26,39 @@ class _SongsPageState extends State<SongsPage>
     super.build(context);
     return Observer(builder: (_) {
       print('SongsPage.build -> Observer.builder');
-      final bool isFetching = musicDataStore.isFetchingSongs;
 
-      if (isFetching) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const <Widget>[
-            CircularProgressIndicator(),
-            Text('Loading items...'),
-          ],
-        );
-      } else {
-        final List<Song> songs = musicDataStore.songs;
-        return ListView.separated(
-          itemCount: songs.length,
-          itemBuilder: (_, int index) {
-            final Song song = songs[index];
-            return SongListTile(
-              song: song,
-              inAlbum: false,
-              onTap: () => audioStore.playSong(index, songs),
-              onTapMore: () => _openBottomSheet(song),
-            );
-          },
-          separatorBuilder: (BuildContext context, int index) => const Divider(
-            height: 4.0,
-          ),
-        );
+      final songStream = musicDataStore.songStream;
+
+      switch (songStream.status) {
+        case StreamStatus.active:
+          final List<Song> songs = songStream.value;
+          return ListView.separated(
+            itemCount: songs.length,
+            itemBuilder: (_, int index) {
+              final Song song = songs[index];
+              return SongListTile(
+                song: song,
+                inAlbum: false,
+                onTap: () => audioStore.playSong(index, songs),
+                onTapMore: () => _openBottomSheet(song),
+              );
+            },
+            separatorBuilder: (BuildContext context, int index) =>
+                const Divider(
+              height: 4.0,
+            ),
+          );
+        case StreamStatus.waiting:
+        case StreamStatus.done:
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const <Widget>[
+              CircularProgressIndicator(),
+              Text('Loading items...'),
+            ],
+          );
       }
+      return Container();
     });
   }
 
@@ -60,7 +66,10 @@ class _SongsPageState extends State<SongsPage>
   bool get wantKeepAlive => true;
 
   void _openBottomSheet(Song song) {
-    final AudioStore audioStore = Provider.of<AudioStore>(context, listen: false);
+    final AudioStore audioStore =
+        Provider.of<AudioStore>(context, listen: false);
+    final MusicDataStore musicDataStore =
+        Provider.of<MusicDataStore>(context, listen: false);
 
     showModalBottomSheet(
         context: context,
@@ -72,6 +81,15 @@ class _SongsPageState extends State<SongsPage>
                   title: const Text('Add to queue'),
                   onTap: () {
                     audioStore.addToQueue(song);
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  title: song.blocked
+                      ? const Text('Unblock song')
+                      : const Text('Block song'),
+                  onTap: () {
+                    musicDataStore.setSongBlocked(song, !song.blocked);
                     Navigator.pop(context);
                   },
                 ),

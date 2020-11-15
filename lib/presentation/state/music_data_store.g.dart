@@ -9,6 +9,36 @@ part of 'music_data_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$MusicDataStore on _MusicDataStore, Store {
+  final _$songStreamAtom = Atom(name: '_MusicDataStore.songStream');
+
+  @override
+  ObservableStream<List<Song>> get songStream {
+    _$songStreamAtom.reportRead();
+    return super.songStream;
+  }
+
+  @override
+  set songStream(ObservableStream<List<Song>> value) {
+    _$songStreamAtom.reportWrite(value, super.songStream, () {
+      super.songStream = value;
+    });
+  }
+
+  final _$albumSongStreamAtom = Atom(name: '_MusicDataStore.albumSongStream');
+
+  @override
+  ObservableStream<List<Song>> get albumSongStream {
+    _$albumSongStreamAtom.reportRead();
+    return super.albumSongStream;
+  }
+
+  @override
+  set albumSongStream(ObservableStream<List<Song>> value) {
+    _$albumSongStreamAtom.reportWrite(value, super.albumSongStream, () {
+      super.albumSongStream = value;
+    });
+  }
+
   final _$artistsAtom = Atom(name: '_MusicDataStore.artists');
 
   @override
@@ -172,6 +202,8 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
   @override
   String toString() {
     return '''
+songStream: ${songStream},
+albumSongStream: ${albumSongStream},
 artists: ${artists},
 isFetchingArtists: ${isFetchingArtists},
 albums: ${albums},

@@ -54,7 +54,16 @@ class Songs extends Table {
   Set<Column> get primaryKey => {path};
 }
 
-@UseMoor(tables: [Artists, Albums, Songs])
+@DataClassName('QueueEntry')
+class QueueEntries extends Table {
+  IntColumn get index => integer()();
+  TextColumn get path => text()();
+
+  @override
+  Set<Column> get primaryKey => {index};
+}
+
+@UseMoor(tables: [Artists, Albums, Songs, QueueEntries])
 class MoorMusicDataSource extends _$MoorMusicDataSource
     implements MusicDataSource {
   /// Use MoorMusicDataSource in main isolate only.
@@ -84,10 +93,31 @@ class MoorMusicDataSource extends _$MoorMusicDataSource
   }
 
   @override
+  Stream<List<SongModel>> get songStream {
+    return select(songs).watch().map((moorSongList) => moorSongList
+        .map((moorSong) => SongModel.fromMoorSong(moorSong))
+        .toList());
+  }
+
+  @override
   Future<List<SongModel>> getSongs() {
     return select(songs).get().then((moorSongList) => moorSongList
         .map((moorSong) => SongModel.fromMoorSong(moorSong))
         .toList());
+  }
+
+  @override
+  Stream<List<SongModel>> getAlbumSongStream(AlbumModel album) {
+    return (select(songs)
+          ..where((tbl) => tbl.albumId.equals(album.id))
+          ..orderBy([
+            (t) => OrderingTerm(expression: t.discNumber),
+            (t) => OrderingTerm(expression: t.trackNumber)
+          ]))
+        .watch()
+        .map((moorSongList) => moorSongList
+            .map((moorSong) => SongModel.fromMoorSong(moorSong))
+            .toList());
   }
 
   @override
@@ -173,15 +203,15 @@ class MoorMusicDataSource extends _$MoorMusicDataSource
   Future<void> toggleNextSongLink(SongModel song) async {
     if (song.next == null) {
       final albumSongs = await (select(songs)
-          ..where((tbl) => tbl.albumId.equals(song.albumId))
-          ..orderBy([
-            (t) => OrderingTerm(expression: t.discNumber),
-            (t) => OrderingTerm(expression: t.trackNumber)
-          ]))
-        .get()
-        .then((moorSongList) => moorSongList
-            .map((moorSong) => SongModel.fromMoorSong(moorSong))
-            .toList());
+            ..where((tbl) => tbl.albumId.equals(song.albumId))
+            ..orderBy([
+              (t) => OrderingTerm(expression: t.discNumber),
+              (t) => OrderingTerm(expression: t.trackNumber)
+            ]))
+          .get()
+          .then((moorSongList) => moorSongList
+              .map((moorSong) => SongModel.fromMoorSong(moorSong))
+              .toList());
 
       bool current = false;
       SongModel nextSong;
@@ -195,11 +225,41 @@ class MoorMusicDataSource extends _$MoorMusicDataSource
         }
       }
       await (update(songs)..where((tbl) => tbl.path.equals(song.path)))
-        .write(SongsCompanion(next: Value(nextSong.path)));
+          .write(SongsCompanion(next: Value(nextSong.path)));
     } else {
       await (update(songs)..where((tbl) => tbl.path.equals(song.path)))
-        .write(const SongsCompanion(next: Value(null)));
-    }   
+          .write(const SongsCompanion(next: Value(null)));
+    }
+  }
+
+  @override
+  Stream<List<SongModel>> get queueStream {
+    final query = (select(queueEntries)
+          ..orderBy([(t) => OrderingTerm(expression: t.index)]))
+        .join([innerJoin(songs, songs.path.equalsExp(queueEntries.path))]);
+
+    return query.watch().map((rows) {
+      return rows
+          .map((row) => SongModel.fromMoorSong(row.readTable(songs)))
+          .toList();
+    });
+  }
+
+  @override
+  Future<void> setQueue(List<SongModel> queue) async {
+    final _queueEntries = <Insertable<QueueEntry>>[];
+    
+    for (var i = 0; i < queue.length; i++) {
+      _queueEntries.add(QueueEntriesCompanion(index: Value(i), path: Value(queue[i].path)));
+    }
+
+    await delete(queueEntries).go();
+    await batch((batch) {
+      batch.insertAll(
+        queueEntries,
+        _queueEntries
+      );
+    });
   }
 }
 

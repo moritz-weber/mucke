@@ -1213,6 +1213,199 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
   }
 }
 
+class QueueEntry extends DataClass implements Insertable<QueueEntry> {
+  final int index;
+  final String path;
+  QueueEntry({@required this.index, @required this.path});
+  factory QueueEntry.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    final stringType = db.typeSystem.forDartType<String>();
+    return QueueEntry(
+      index: intType.mapFromDatabaseResponse(data['${effectivePrefix}index']),
+      path: stringType.mapFromDatabaseResponse(data['${effectivePrefix}path']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || index != null) {
+      map['index'] = Variable<int>(index);
+    }
+    if (!nullToAbsent || path != null) {
+      map['path'] = Variable<String>(path);
+    }
+    return map;
+  }
+
+  QueueEntriesCompanion toCompanion(bool nullToAbsent) {
+    return QueueEntriesCompanion(
+      index:
+          index == null && nullToAbsent ? const Value.absent() : Value(index),
+      path: path == null && nullToAbsent ? const Value.absent() : Value(path),
+    );
+  }
+
+  factory QueueEntry.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return QueueEntry(
+      index: serializer.fromJson<int>(json['index']),
+      path: serializer.fromJson<String>(json['path']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'index': serializer.toJson<int>(index),
+      'path': serializer.toJson<String>(path),
+    };
+  }
+
+  QueueEntry copyWith({int index, String path}) => QueueEntry(
+        index: index ?? this.index,
+        path: path ?? this.path,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('QueueEntry(')
+          ..write('index: $index, ')
+          ..write('path: $path')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf($mrjc(index.hashCode, path.hashCode));
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is QueueEntry &&
+          other.index == this.index &&
+          other.path == this.path);
+}
+
+class QueueEntriesCompanion extends UpdateCompanion<QueueEntry> {
+  final Value<int> index;
+  final Value<String> path;
+  const QueueEntriesCompanion({
+    this.index = const Value.absent(),
+    this.path = const Value.absent(),
+  });
+  QueueEntriesCompanion.insert({
+    this.index = const Value.absent(),
+    @required String path,
+  }) : path = Value(path);
+  static Insertable<QueueEntry> custom({
+    Expression<int> index,
+    Expression<String> path,
+  }) {
+    return RawValuesInsertable({
+      if (index != null) 'index': index,
+      if (path != null) 'path': path,
+    });
+  }
+
+  QueueEntriesCompanion copyWith({Value<int> index, Value<String> path}) {
+    return QueueEntriesCompanion(
+      index: index ?? this.index,
+      path: path ?? this.path,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (index.present) {
+      map['index'] = Variable<int>(index.value);
+    }
+    if (path.present) {
+      map['path'] = Variable<String>(path.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('QueueEntriesCompanion(')
+          ..write('index: $index, ')
+          ..write('path: $path')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $QueueEntriesTable extends QueueEntries
+    with TableInfo<$QueueEntriesTable, QueueEntry> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $QueueEntriesTable(this._db, [this._alias]);
+  final VerificationMeta _indexMeta = const VerificationMeta('index');
+  GeneratedIntColumn _index;
+  @override
+  GeneratedIntColumn get index => _index ??= _constructIndex();
+  GeneratedIntColumn _constructIndex() {
+    return GeneratedIntColumn(
+      'index',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _pathMeta = const VerificationMeta('path');
+  GeneratedTextColumn _path;
+  @override
+  GeneratedTextColumn get path => _path ??= _constructPath();
+  GeneratedTextColumn _constructPath() {
+    return GeneratedTextColumn(
+      'path',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [index, path];
+  @override
+  $QueueEntriesTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'queue_entries';
+  @override
+  final String actualTableName = 'queue_entries';
+  @override
+  VerificationContext validateIntegrity(Insertable<QueueEntry> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('index')) {
+      context.handle(
+          _indexMeta, index.isAcceptableOrUnknown(data['index'], _indexMeta));
+    }
+    if (data.containsKey('path')) {
+      context.handle(
+          _pathMeta, path.isAcceptableOrUnknown(data['path'], _pathMeta));
+    } else if (isInserting) {
+      context.missing(_pathMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {index};
+  @override
+  QueueEntry map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return QueueEntry.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  $QueueEntriesTable createAlias(String alias) {
+    return $QueueEntriesTable(_db, alias);
+  }
+}
+
 abstract class _$MoorMusicDataSource extends GeneratedDatabase {
   _$MoorMusicDataSource(QueryExecutor e)
       : super(SqlTypeSystem.defaultInstance, e);
@@ -1223,8 +1416,12 @@ abstract class _$MoorMusicDataSource extends GeneratedDatabase {
   $AlbumsTable get albums => _albums ??= $AlbumsTable(this);
   $SongsTable _songs;
   $SongsTable get songs => _songs ??= $SongsTable(this);
+  $QueueEntriesTable _queueEntries;
+  $QueueEntriesTable get queueEntries =>
+      _queueEntries ??= $QueueEntriesTable(this);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [artists, albums, songs];
+  List<DatabaseSchemaEntity> get allSchemaEntities =>
+      [artists, albums, songs, queueEntries];
 }

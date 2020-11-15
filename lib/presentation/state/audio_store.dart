@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:mobx/mobx.dart';
+import 'package:mucke/domain/repositories/music_data_repository.dart';
 
 import '../../domain/entities/playback_state.dart';
 import '../../domain/entities/shuffle_mode.dart';
@@ -9,18 +10,22 @@ import '../../domain/repositories/audio_repository.dart';
 part 'audio_store.g.dart';
 
 class AudioStore extends _AudioStore with _$AudioStore {
-  AudioStore({@required AudioRepository audioRepository})
-      : super(audioRepository);
+  AudioStore({
+    @required AudioRepository audioRepository,
+    @required MusicDataRepository musicDataRepository,
+  }) : super(audioRepository, musicDataRepository);
 }
 
 abstract class _AudioStore with Store {
-  _AudioStore(this._audioRepository) {
-    currentSongStream = _audioRepository.currentSongStream.distinct().asObservable();
+  _AudioStore(this._audioRepository, this._musicDataRepository) {
+    currentSongStream =
+        _audioRepository.currentSongStream.distinct().asObservable();
 
     currentPositionStream =
         _audioRepository.currentPositionStream.asObservable(initialValue: 0);
 
-    queueStream = _audioRepository.queueStream.asObservable(initialValue: []);
+    queueStream =
+        _musicDataRepository.queueStream.asObservable(initialValue: []);
 
     queueIndexStream = _audioRepository.queueIndexStream.asObservable();
 
@@ -31,9 +36,21 @@ abstract class _AudioStore with Store {
   }
 
   final AudioRepository _audioRepository;
+  final MusicDataRepository _musicDataRepository;
 
   @observable
   ObservableStream<Song> currentSongStream;
+
+  @computed
+  Song get currentSong {
+    print('currentSong!!!');
+    if (queueStream.value != [] && queueIndexStream.status == StreamStatus.active) {
+      final song = queueStream.value[queueIndexStream.value];
+      return song;
+    }
+
+    return null;
+  }
 
   @observable
   ObservableStream<PlaybackState> playbackStateStream;

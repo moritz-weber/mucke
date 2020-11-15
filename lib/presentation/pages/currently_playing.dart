@@ -29,7 +29,7 @@ class CurrentlyPlayingPage extends StatelessWidget {
               Observer(
             builder: (BuildContext context) {
               _log.info('Observer.build');
-              final Song song = audioStore.currentSongStream.value;
+              final Song song = audioStore.currentSong;
 
               return Padding(
                 padding: const EdgeInsets.only(
