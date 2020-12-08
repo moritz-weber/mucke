@@ -8,7 +8,10 @@ environment:
   flutter: ">=1.20.0"
 
 dependencies:
-  audio_service: ^0.15.0
+  audio_service: # ^0.15.0
+    git: 
+      url: https://github.com/ryanheise/audio_service.git
+      ref: one-isolate
   audio_session: ^0.0.3
   dartz: ^0.9.1
   equatable: ^1.1.0
@@ -17,8 +20,7 @@ dependencies:
   flutter_audio_query: ^0.3.5
   flutter_mobx: ^1.1.0
   get_it: ^4.0.2
-  just_audio: # ^0.4.0
-    path: ../just_audio/just_audio
+  just_audio: ^0.5.0
   logging: ^0.11.4
   mobx: ^1.1.1
   mockito: ^4.1.1

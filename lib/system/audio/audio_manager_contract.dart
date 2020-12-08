@@ -6,7 +6,6 @@ abstract class AudioManager {
   Stream<SongModel> get currentSongStream;
   Stream<PlaybackState> get playbackStateStream;
   Stream<List<SongModel>> get queueStream;
-  Stream get customEventStream;
   Stream<int> get queueIndexStream;
   /// Current position in the song in milliseconds.
   Stream<int> get currentPositionStream;
@@ -21,5 +20,5 @@ abstract class AudioManager {
   Future<void> shuffleAll();
   Future<void> addToQueue(SongModel songModel);
   Future<void> moveQueueItem(int oldIndex, int newIndex);
-  Future<void> removeQueueItem(int index);
+  Future<void> removeQueueIndex(int index);
 }

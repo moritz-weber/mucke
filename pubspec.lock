@@ -39,10 +39,12 @@ packages:
   audio_service:
     dependency: "direct main"
     description:
-      name: audio_service
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.15.2"
+      path: "."
+      ref: one-isolate
+      resolved-ref: "88559958955f17c54097f34b9a6365a23eac4899"
+      url: "https://github.com/ryanheise/audio_service.git"
+    source: git
+    version: "0.15.3"
   audio_session:
     dependency: "direct main"
     description:
@@ -358,28 +360,28 @@ packages:
       name: json_annotation
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.0"
+    version: "3.1.1"
   just_audio:
     dependency: "direct main"
     description:
-      path: "../just_audio/just_audio"
-      relative: true
-    source: path
-    version: "0.5.4+1"
+      name: just_audio
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.5.7"
   just_audio_platform_interface:
     dependency: transitive
     description:
-      path: "../just_audio/just_audio_platform_interface"
-      relative: true
-    source: path
-    version: "1.2.0"
+      name: just_audio_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.1"
   just_audio_web:
     dependency: transitive
     description:
-      path: "../just_audio/just_audio_web"
-      relative: true
-    source: path
-    version: "0.1.0"
+      name: just_audio_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.1"
   logging:
     dependency: "direct main"
     description:
@@ -414,28 +416,28 @@ packages:
       name: mobx
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.1+3"
+    version: "1.2.1+4"
   mobx_codegen:
     dependency: "direct dev"
     description:
       name: mobx_codegen
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.1+1"
+    version: "1.1.2"
   mockito:
     dependency: "direct main"
     description:
       name: mockito
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.1.2"
+    version: "4.1.3"
   moor:
     dependency: "direct main"
     description:
       name: moor
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.3.1"
+    version: "3.4.0"
   moor_generator:
     dependency: "direct dev"
     description:
@@ -456,14 +458,14 @@ packages:
       name: node_interop
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.1"
+    version: "1.2.1"
   node_io:
     dependency: transitive
     description:
       name: node_io
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.1"
+    version: "1.2.0"
   package_config:
     dependency: transitive
     description:
@@ -484,7 +486,7 @@ packages:
       name: path_provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.6.21"
+    version: "1.6.24"
   path_provider_linux:
     dependency: transitive
     description:
@@ -498,21 +500,21 @@ packages:
       name: path_provider_macos
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.4+4"
+    version: "0.0.4+6"
   path_provider_platform_interface:
     dependency: transitive
     description:
       name: path_provider_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.3"
+    version: "1.0.4"
   path_provider_windows:
     dependency: transitive
     description:
       name: path_provider_windows
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.4+1"
+    version: "0.0.4+3"
   pedantic:
     dependency: transitive
     description:
@@ -554,7 +556,7 @@ packages:
       name: provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.3.2+2"
+    version: "4.3.2+3"
   pub_semver:
     dependency: transitive
     description:
@@ -575,14 +577,14 @@ packages:
       name: quiver
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.3"
+    version: "2.1.5"
   recase:
     dependency: transitive
     description:
       name: recase
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.0"
+    version: "3.0.1"
   rxdart:
     dependency: transitive
     description:
@@ -629,7 +631,7 @@ packages:
       name: sqflite
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.3.1+1"
+    version: "1.3.2+1"
   sqflite_common:
     dependency: transitive
     description:
@@ -643,7 +645,7 @@ packages:
       name: sqlite3
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.7"
+    version: "0.1.8"
   sqlite3_flutter_libs:
     dependency: "direct main"
     description:
@@ -755,7 +757,7 @@ packages:
       name: win32
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.7.3"
+    version: "1.7.4"
   xdg_directories:
     dependency: transitive
     description:
@@ -771,5 +773,5 @@ packages:
     source: hosted
     version: "2.2.1"
 sdks:
-  dart: ">=2.10.0-110 <2.11.0"
-  flutter: ">=1.20.0 <2.0.0"
+  dart: ">=2.10.2 <2.11.0"
+  flutter: ">=1.22.2 <2.0.0"

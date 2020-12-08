@@ -93,8 +93,8 @@ class AudioRepositoryImpl implements AudioRepository {
   }
 
   @override
-  Future<Either<Failure, void>> removeQueueItem(int index) async {
-    await _audioManager.removeQueueItem(index);
+  Future<Either<Failure, void>> removeQueueIndex(int index) async {
+    await _audioManager.removeQueueIndex(index);
     return const Right(null);
   }
 }

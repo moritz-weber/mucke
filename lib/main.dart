@@ -12,7 +12,7 @@ import 'presentation/pages/library_page.dart';
 import 'presentation/pages/settings_page.dart';
 import 'presentation/state/navigation_store.dart';
 import 'presentation/theming.dart';
-import 'presentation/widgets/audio_service_widget.dart';
+// import 'presentation/widgets/audio_service_widget.dart';
 import 'presentation/widgets/injection_widget.dart';
 import 'presentation/widgets/navbar.dart';
 
@@ -24,7 +24,8 @@ Future<void> main() async {
   await session.configure(const AudioSessionConfiguration.music());
 
   Logger.root.onRecord.listen((record) {
-    print('${record.time} [${record.level.name}] ${record.loggerName}: ${record.message}');
+    print(
+        '${record.time} [${record.level.name}] ${record.loggerName}: ${record.message}');
   });
 
   runApp(MyApp());
@@ -39,16 +40,14 @@ class MyApp extends StatelessWidget {
     ]);
 
     return InjectionWidget(
-      child: AudioServiceWidget(
-        child: MaterialApp(
-          title: 'mucke',
-          theme: theme(),
-          initialRoute: '/',
-          routes: {
-            '/': (context) => const RootPage(),
-            '/playing': (context) => const CurrentlyPlayingPage(),
-          },
-        ),
+      child: MaterialApp(
+        title: 'mucke',
+        theme: theme(),
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const RootPage(),
+          '/playing': (context) => const CurrentlyPlayingPage(),
+        },
       ),
     );
   }

@@ -108,7 +108,7 @@ abstract class _AudioStore with Store {
     _audioRepository.moveQueueItem(oldIndex, newIndex);
   }
 
-  Future<void> removeQueueItem(int index) async {
-    _audioRepository.removeQueueItem(index);
+  Future<void> removeQueueIndex(int index) async {
+    _audioRepository.removeQueueIndex(index);
   }
 }

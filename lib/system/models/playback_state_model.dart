@@ -16,7 +16,7 @@ class PlaybackStateModel {
     }
 
     switch (playbackState.processingState) {
-      case AudioProcessingState.stopped:
+      case AudioProcessingState.completed:
         return entity.PlaybackState.stopped;
       default:
         return entity.PlaybackState.none;

@@ -6,63 +6,54 @@ import '../../domain/entities/playback_state.dart' as entity;
 import '../../domain/entities/shuffle_mode.dart';
 import '../models/playback_state_model.dart';
 import '../models/song_model.dart';
+import 'audio_handler.dart';
 import 'audio_manager_contract.dart';
-import 'audio_player_task.dart';
 
 typedef Conversion<S, T> = T Function(S);
 
 class AudioManagerImpl implements AudioManager {
-  AudioManagerImpl() {
-    // this listener prevents the loss of data, when custom events are sent but not used yet
-    // the customEventStream only works, when there is a listener
-    AudioService.customEventStream.listen((event) {
+  AudioManagerImpl(this._audioHandler) {
+    _audioHandler.customAction(INIT, null);
+
+    _audioHandler.customEventStream.listen((event) {
       final data = event as Map<String, dynamic>;
       if (data.containsKey(KEY_INDEX)) {
         _queueIndex = data[KEY_INDEX] as int;
       }
-      if (data.containsKey(SET_SHUFFLE_MODE)) {
-        final modeString = data[SET_SHUFFLE_MODE] as String;
-        _shuffleMode = modeString.toShuffleMode();
+      if (data.containsKey(SHUFFLE_MODE)) {
+        _shuffleMode = data[SHUFFLE_MODE] as ShuffleMode;
       }
     });
   }
 
-  final Stream<MediaItem> _currentMediaItemStream =
-      AudioService.currentMediaItemStream;
-  final Stream<PlaybackState> _sourcePlaybackStateStream =
-      AudioService.playbackStateStream;
-  final Stream<List<MediaItem>> _queue = AudioService.queueStream;
-  @override
-  final Stream customEventStream = AudioService.customEventStream;
-
+  final AudioHandler _audioHandler;
   int _queueIndex;
   ShuffleMode _shuffleMode;
 
   @override
   Stream<SongModel> get currentSongStream =>
       _filterStream<MediaItem, SongModel>(
-        _currentMediaItemStream,
+        _audioHandler.mediaItem.stream,
         (MediaItem mi) => SongModel.fromMediaItem(mi),
       );
 
   @override
   Stream<entity.PlaybackState> get playbackStateStream => _filterStream(
-        _sourcePlaybackStateStream,
+        _audioHandler.playbackState.stream,
         (PlaybackState ps) => PlaybackStateModel.fromASPlaybackState(ps),
       );
 
   // TODO: test
   @override
   Stream<List<SongModel>> get queueStream {
-    return _queue.map((mediaItems) =>
+    return _audioHandler.queue.stream.map((mediaItems) =>
         mediaItems.map((m) => SongModel.fromMediaItem(m)).toList());
   }
 
   @override
   Stream<int> get queueIndexStream =>
-      _queueIndexStream(AudioService.customEventStream.cast());
+      _queueIndexStream(_audioHandler.customEventStream.cast());
 
-  // TODO: test
   Stream<int> _queueIndexStream(Stream<Map<String, dynamic>> source) async* {
     if (_queueIndex != null) {
       yield _queueIndex;
@@ -77,7 +68,7 @@ class AudioManagerImpl implements AudioManager {
 
   @override
   Stream<ShuffleMode> get shuffleModeStream =>
-      _shuffleModeStream(AudioService.customEventStream.cast());
+      _shuffleModeStream(_audioHandler.customEventStream.cast());
 
   Stream<ShuffleMode> _shuffleModeStream(
       Stream<Map<String, dynamic>> source) async* {
@@ -86,9 +77,8 @@ class AudioManagerImpl implements AudioManager {
     }
 
     await for (final data in source) {
-      if (data.containsKey(SET_SHUFFLE_MODE)) {
-        final modeString = data[SET_SHUFFLE_MODE] as String;
-        yield modeString.toShuffleMode();
+      if (data.containsKey(SHUFFLE_MODE)) {
+        yield data[SHUFFLE_MODE] as ShuffleMode;
       }
     }
   }
@@ -98,46 +88,33 @@ class AudioManagerImpl implements AudioManager {
 
   @override
   Future<void> playSong(int index, List<SongModel> songList) async {
-    await _startAudioService();
-    final List<String> queue = songList.map((s) => s.path).toList();
-    await AudioService.customAction(PLAY_WITH_CONTEXT, [queue, index]);
+    final List<String> context = songList.map((s) => s.path).toList();
+    await _audioHandler.customAction(PLAY_WITH_CONTEXT, {'CONTEXT': context, 'INDEX': index});
   }
 
   @override
   Future<void> play() async {
-    await _startAudioService();
-    await AudioService.play();
+    _audioHandler.play();
   }
 
   @override
   Future<void> pause() async {
-    await AudioService.pause();
-  }
-
-  Future<void> _startAudioService() async {
-    if (!AudioService.running) {
-      await AudioService.start(
-        backgroundTaskEntrypoint: _backgroundTaskEntrypoint,
-        androidEnableQueue: true,
-        androidStopForegroundOnPause: true,
-      );
-      await AudioService.customAction(INIT);
-    }
+    await _audioHandler.pause();
   }
 
   @override
   Future<void> skipToNext() async {
-    await AudioService.skipToNext();
+    await _audioHandler.skipToNext();
   }
 
   @override
   Future<void> skipToPrevious() async {
-    await AudioService.skipToPrevious();
+    await _audioHandler.skipToPrevious();
   }
 
   @override
   Future<void> setShuffleMode(ShuffleMode shuffleMode) async {
-    await AudioService.customAction(SET_SHUFFLE_MODE, shuffleMode.toString());
+    await _audioHandler.customAction(SET_SHUFFLE_MODE, {'SHUFFLE_MODE': shuffleMode});
   }
 
   Stream<T> _filterStream<S, T>(Stream<S> stream, Conversion<S, T> fn) async* {
@@ -154,11 +131,11 @@ class AudioManagerImpl implements AudioManager {
 
   Stream<int> _position() async* {
     PlaybackState state;
-    Duration updateTime;
+    DateTime updateTime;
     Duration statePosition;
 
     // TODO: should this class get an init method for this?
-    _sourcePlaybackStateStream.listen((currentState) {
+    _audioHandler.playbackState.stream.listen((currentState) {
       state = currentState;
       updateTime = currentState?.updateTime;
       statePosition = currentState?.position;
@@ -169,7 +146,7 @@ class AudioManagerImpl implements AudioManager {
         if (state.playing) {
           yield statePosition.inMilliseconds +
               (DateTime.now().millisecondsSinceEpoch -
-                  updateTime.inMilliseconds);
+                  updateTime.millisecondsSinceEpoch);
         } else {
           yield statePosition.inMilliseconds;
         }
@@ -182,26 +159,21 @@ class AudioManagerImpl implements AudioManager {
 
   @override
   Future<void> shuffleAll() async {
-    await _startAudioService();
-    await AudioService.customAction(SHUFFLE_ALL);
+    await _audioHandler.customAction(SHUFFLE_ALL, null);
   }
 
   @override
   Future<void> addToQueue(SongModel songModel) async {
-    await AudioService.addQueueItem(songModel.toMediaItem());
+    await _audioHandler.addQueueItem(songModel.toMediaItem());
   }
 
   @override
   Future<void> moveQueueItem(int oldIndex, int newIndex) async {
-    await AudioService.customAction(MOVE_QUEUE_ITEM, [oldIndex, newIndex]);
+    await _audioHandler.customAction(MOVE_QUEUE_ITEM, {'OLD_INDEX': oldIndex, 'NEW_INDEX': newIndex});
   }
 
   @override
-  Future<void> removeQueueItem(int index) async {
-    await AudioService.customAction(REMOVE_QUEUE_ITEM, index);
-  }  
-}
-
-void _backgroundTaskEntrypoint() {
-  AudioServiceBackground.run(() => AudioPlayerTask());
+  Future<void> removeQueueIndex(int index) async {
+    await _audioHandler.customAction(REMOVE_QUEUE_ITEM, {'INDEX': index});
+  }
 }

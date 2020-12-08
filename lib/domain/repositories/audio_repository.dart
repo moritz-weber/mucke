@@ -22,5 +22,5 @@ abstract class AudioRepository {
   Future<Either<Failure, void>> shuffleAll();
   Future<Either<Failure, void>> addToQueue(Song song);
   Future<Either<Failure, void>> moveQueueItem(int oldIndex, int newIndex);
-  Future<Either<Failure, void>> removeQueueItem(int index);
+  Future<Either<Failure, void>> removeQueueIndex(int index);
 }

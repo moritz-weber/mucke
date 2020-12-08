@@ -1,9 +1,11 @@
 import 'dart:ui';
 
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:get_it/get_it.dart';
 import 'package:moor/isolate.dart';
 import 'package:moor/moor.dart';
+import 'package:mucke/system/audio/audio_handler.dart';
 
 import 'domain/repositories/audio_repository.dart';
 import 'domain/repositories/music_data_repository.dart';
@@ -64,18 +66,23 @@ Future<void> setupGetIt() async {
   );
 
   // data sources
-  final MoorIsolate moorIsolate = await createMoorIsolate();
-  IsolateNameServer.registerPortWithName(moorIsolate.connectPort, MOOR_ISOLATE);
-
-  final DatabaseConnection databaseConnection = await moorIsolate.connect();
-  final MoorMusicDataSource moorMusicDataSource = MoorMusicDataSource.connect(databaseConnection);
+  final MoorMusicDataSource moorMusicDataSource = MoorMusicDataSource();
   getIt.registerLazySingleton<MusicDataSource>(() => moorMusicDataSource);
   getIt.registerLazySingleton<LocalMusicFetcher>(
     () => LocalMusicFetcherImpl(
       getIt(),
     ),
   );
-  getIt.registerLazySingleton<AudioManager>(() => AudioManagerImpl());
+  getIt.registerLazySingleton<AudioManager>(() => AudioManagerImpl(getIt()));
+
+  final _audioHandler = await AudioService.init(
+        builder: () => MyAudioHandler(getIt()),
+        config: AudioServiceConfig(
+          androidNotificationChannelName: 'mucke',
+          androidEnableQueue: true,
+        ),
+      );
+  getIt.registerLazySingleton<AudioHandler>(() => _audioHandler);
 
   // external
   getIt.registerLazySingleton<FlutterAudioQuery>(() => FlutterAudioQuery());

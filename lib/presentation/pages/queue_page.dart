@@ -42,7 +42,7 @@ class QueuePage extends StatelessWidget {
                           highlight: index == queueIndexStream.value,
                         ),
                         onDismissed: (direction) {
-                          audioStore.removeQueueItem(index);
+                          audioStore.removeQueueIndex(index);
                           Scaffold.of(context).showSnackBar(
                             SnackBar(
                               content: Text('${song.title} dismissed'),
