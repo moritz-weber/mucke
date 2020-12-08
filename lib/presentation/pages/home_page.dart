@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/header.dart';
 import '../widgets/highlight.dart';
 import '../widgets/shuffle_all_button.dart';
 
@@ -15,14 +16,18 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     print('HomePage.build');
     return SafeArea(
-      child: Column(
-        children: [
-          const Highlight(),
-          const ShuffleAllButton(
-            verticalPad: 10.0,
-            horizontalPad: 12.0,
-          ),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: Column(
+          children: [
+            const Header(),
+            const Highlight(),
+            const ShuffleAllButton(
+              verticalPad: 10.0,
+              horizontalPad: 0.0,
+            ),
+          ],
+        ),
       ),
     );
   }

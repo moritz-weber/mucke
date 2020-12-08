@@ -27,7 +27,7 @@ class ShuffleAllButton extends StatelessWidget {
           color: Theme.of(context).accentColor,
           highlightColor: Theme.of(context).highlightColor,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(6.0),
+            borderRadius: BorderRadius.circular(24.0),
           ),
         ),
       ),

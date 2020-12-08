@@ -9,7 +9,7 @@ class NavigationStore extends _NavigationStore with _$NavigationStore {
 abstract class _NavigationStore with Store {
   _NavigationStore();
 
-  @observable int navIndex = 1;
+  @observable int navIndex = 0;
 
   @action
   void setNavIndex(int i) {

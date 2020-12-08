@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mucke/presentation/theming.dart';
 
 import '../../domain/entities/song.dart';
 import '../utils.dart';
@@ -13,7 +14,7 @@ class AlbumArt extends StatelessWidget {
     return AspectRatio(
       aspectRatio: 1.0,
       child: Card(
-        elevation: 2.0,
+        elevation: 6.0,
         clipBehavior: Clip.antiAlias,
         margin: const EdgeInsets.all(0),
         shape: RoundedRectangleBorder(
@@ -29,22 +30,18 @@ class AlbumArt extends StatelessWidget {
               bottom: 0,
               left: 0,
               right: 0,
-              height: 250,
+              height: 140,
               child: Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        Color(0x00555555),
-                        Color(0x77333333),
-                        Color(0xCC111111),
-                        Color(0xEE000000)
+                        Color(0x00000000),
+                        Color(0xCC000000)
                       ],
                       stops: [
                         0.0,
-                        0.6,
-                        0.8,
                         1.0
                       ]),
                 ),
@@ -60,24 +57,13 @@ class AlbumArt extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       song.title,
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                    Container(
-                      height: 4.0,
+                      style: TEXT_BIG,
                     ),
                     Text(
                       song.artist,
-                      style: const TextStyle(
-                        color: Colors.white70,
-                      ),
+                      style: TEXT_SUBTITLE.copyWith(color: Colors.white70),
                     ),
-                    Text(
-                      song.album,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w300,
-                        color: Colors.white70,
-                      ),
-                    ),
+
                   ],
                 ),
               ),
