@@ -25,14 +25,13 @@ class SongCustomizationButtons extends StatelessWidget {
             IconButton(
               icon: Icon(
                 Icons.link,
-                size: 20.0,
+                // size: 20.0,
                 color: song.next == null ? Colors.white70 : LIGHT1,
               ),
+              iconSize: 20.0,
               onPressed: () => musicDataStore.toggleNextSongLink(song),
             ),
-            Container(
-              width: 40,
-            ),
+            const Spacer(),
             const IconButton(
               icon: Icon(
                 Icons.favorite,
@@ -41,17 +40,14 @@ class SongCustomizationButtons extends StatelessWidget {
               ),
               onPressed: null,
             ),
-            Container(
-              width: 40,
-            ),
+            const Spacer(),
             IconButton(
               icon: Icon(
                 Icons.remove_circle_outline,
                 size: 20.0,
                 color: isBlocked ? RASPBERRY : Colors.white70,
               ),
-              onPressed: () =>
-                  musicDataStore.setSongBlocked(song, !isBlocked),
+              onPressed: () => musicDataStore.setSongBlocked(song, !isBlocked),
             ),
           ],
           mainAxisAlignment: MainAxisAlignment.center,

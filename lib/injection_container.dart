@@ -1,17 +1,14 @@
-import 'dart:ui';
-
 import 'package:audio_service/audio_service.dart';
+import 'package:device_info/device_info.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:get_it/get_it.dart';
-import 'package:moor/isolate.dart';
-import 'package:moor/moor.dart';
-import 'package:mucke/system/audio/audio_handler.dart';
 
 import 'domain/repositories/audio_repository.dart';
 import 'domain/repositories/music_data_repository.dart';
 import 'presentation/state/audio_store.dart';
 import 'presentation/state/music_data_store.dart';
 import 'presentation/state/navigation_store.dart';
+import 'system/audio/audio_handler.dart';
 import 'system/audio/audio_manager.dart';
 import 'system/audio/audio_manager_contract.dart';
 import 'system/datasources/local_music_fetcher.dart';
@@ -71,6 +68,7 @@ Future<void> setupGetIt() async {
   getIt.registerLazySingleton<LocalMusicFetcher>(
     () => LocalMusicFetcherImpl(
       getIt(),
+      getIt(),
     ),
   );
   getIt.registerLazySingleton<AudioManager>(() => AudioManagerImpl(getIt()));
@@ -86,4 +84,6 @@ Future<void> setupGetIt() async {
 
   // external
   getIt.registerLazySingleton<FlutterAudioQuery>(() => FlutterAudioQuery());
+
+  getIt.registerLazySingleton<DeviceInfoPlugin>(() => DeviceInfoPlugin());
 }

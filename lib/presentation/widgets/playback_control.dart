@@ -10,30 +10,27 @@ class PlaybackControl extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Row(
-        children: const [
-          IconButton(
-            icon: Icon(
-              Icons.repeat,
-              size: 20.0,
-              color: Colors.white10,
-            ),
-            onPressed: null,
+    return Row(
+      children: const [
+        IconButton(
+          icon: Icon(
+            Icons.repeat,
+            size: 20.0,
+            color: Colors.white10,
           ),
-          PreviousButton(iconSize: 32.0),
-          PlayPauseButton(
-            circle: true,
-            iconSize: 52.0,
-          ),
-          NextButton(iconSize: 32.0),
-          ShuffleButton(
-            iconSize: 20.0,
-          ),
-        ],
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      ),
+          onPressed: null,
+        ),
+        PreviousButton(iconSize: 32.0),
+        PlayPauseButton(
+          circle: true,
+          iconSize: 52.0,
+        ),
+        NextButton(iconSize: 32.0),
+        ShuffleButton(
+          iconSize: 20.0,
+        ),
+      ],
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
     );
   }
 }

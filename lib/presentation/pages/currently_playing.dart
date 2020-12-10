@@ -58,26 +58,47 @@ class CurrentlyPlayingPage extends StatelessWidget {
                         ],
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       ),
-                      const Spacer(),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: AlbumArt(
-                          song: song,
+                      const Spacer(
+                        flex: 1,
+                      ),
+                      Expanded(
+                        flex: 1000,
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0,
+                              vertical: 0.0,
+                            ),
+                            child: AlbumArt(
+                              song: song,
+                            ),
+                          ),
                         ),
                       ),
                       const Spacer(
-                        flex: 4,
+                        flex: 80,
                       ),
-                      const SongCustomizationButtons(),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 2.0, right: 2.0, bottom: 10.0),
+                        child: SongCustomizationButtons(),
+                      ),
                       const Spacer(
-                        flex: 3,
+                        flex: 50,
                       ),
-                      const TimeProgressIndicator(),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.0),
+                        child: TimeProgressIndicator(),
+                      ),
                       const Spacer(
-                        flex: 3,
+                        flex: 50,
                       ),
-                      const PlaybackControl(),
-                      const Spacer(),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 2.0),
+                        child: PlaybackControl(),
+                      ),
+                      const Spacer(
+                        flex: 40,
+                      ),
                       NextIndicator(
                         onTapAction: openQueue,
                       ),

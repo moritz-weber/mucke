@@ -16,27 +16,44 @@ class TimeProgressIndicator extends StatelessWidget {
       builder: (BuildContext context) {
         final int duration = audioStore.currentSong?.duration ?? 1000;
 
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Row(
-            children: [
-              Text(msToTimeString(audioStore.currentPositionStream.value)),
-              Container(
-                width: 10,
+        return Row(
+          children: [
+            Container(
+              width: 48,
+              child: Text(
+                msToTimeString(audioStore.currentPositionStream.value),
               ),
-              Expanded(
-                child: Container(
-                  child: LinearProgressIndicator(value: audioStore.currentPositionStream.value / duration),
-                  height: 3.0,
+            ),
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                height: 3.0,
+                decoration: const BoxDecoration(
+                  color: Colors.white10,
+                  borderRadius: BorderRadius.all(Radius.circular(2)),
+                ),
+                alignment: Alignment.centerLeft,
+                child: FractionallySizedBox(
+                  widthFactor:
+                      audioStore.currentPositionStream.value / duration,
+                  heightFactor: 1.0,
+                  child: Container(
+                    height: double.infinity,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(2)),
+                    ),
+                  ),
                 ),
               ),
-              Container(
-                width: 10,
-              ),
-              Text(msToTimeString(duration)),
-            ],
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          ),
+            ),
+            Container(
+              width: 48,
+              alignment: Alignment.centerRight,
+              child: Text(msToTimeString(duration)),
+            ),
+          ],
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         );
       },
     );

@@ -22,9 +22,13 @@ class AlbumArt extends StatelessWidget {
         ),
         child: Stack(
           children: [
-            Image(
-              image: getAlbumImage(song.albumArtPath),
-              fit: BoxFit.cover,
+            Container(
+              width: double.infinity,
+              height: double.infinity,
+              child: Image(
+                image: getAlbumImage(song.albumArtPath),
+                fit: BoxFit.cover,
+              ),
             ),
             Positioned(
               bottom: 0,
@@ -63,7 +67,6 @@ class AlbumArt extends StatelessWidget {
                       song.artist,
                       style: TEXT_SUBTITLE.copyWith(color: Colors.white70),
                     ),
-
                   ],
                 ),
               ),
