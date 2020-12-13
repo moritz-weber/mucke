@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
@@ -34,8 +36,8 @@ class TimeProgressIndicator extends StatelessWidget {
                 ),
                 alignment: Alignment.centerLeft,
                 child: FractionallySizedBox(
-                  widthFactor:
-                      audioStore.currentPositionStream.value / duration,
+                  widthFactor: min(
+                      audioStore.currentPositionStream.value / duration, 1.0),
                   heightFactor: 1.0,
                   child: Container(
                     height: double.infinity,

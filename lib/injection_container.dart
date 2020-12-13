@@ -2,6 +2,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:get_it/get_it.dart';
+import 'package:just_audio/just_audio.dart' as ja;
 
 import 'domain/repositories/audio_repository.dart';
 import 'domain/repositories/music_data_repository.dart';
@@ -11,6 +12,9 @@ import 'presentation/state/navigation_store.dart';
 import 'system/audio/audio_handler.dart';
 import 'system/audio/audio_manager.dart';
 import 'system/audio/audio_manager_contract.dart';
+import 'system/audio/audio_player_contract.dart';
+import 'system/audio/audio_player_impl.dart';
+import 'system/audio/queue_generator.dart';
 import 'system/datasources/local_music_fetcher.dart';
 import 'system/datasources/local_music_fetcher_contract.dart';
 import 'system/datasources/moor_music_data_source.dart';
@@ -73,16 +77,26 @@ Future<void> setupGetIt() async {
   );
   getIt.registerLazySingleton<AudioManager>(() => AudioManagerImpl(getIt()));
 
+  final AudioPlayer audioPlayer = AudioPlayerImpl(
+    ja.AudioPlayer(),
+    QueueGenerator(getIt()),
+  );
+  getIt.registerLazySingleton<AudioPlayer>(() => audioPlayer);
+
   final _audioHandler = await AudioService.init(
-        builder: () => MyAudioHandler(getIt()),
-        config: AudioServiceConfig(
-          androidNotificationChannelName: 'mucke',
-          androidEnableQueue: true,
-        ),
-      );
+    builder: () => MyAudioHandler(getIt(), getIt()),
+    config: AudioServiceConfig(
+      androidNotificationChannelName: 'mucke',
+      androidEnableQueue: true,
+    ),
+  );
   getIt.registerLazySingleton<AudioHandler>(() => _audioHandler);
 
+  getIt.registerLazySingleton<QueueGenerator>(() => QueueGenerator(getIt()));
+
   // external
+  getIt.registerFactory<ja.AudioPlayer>(() => ja.AudioPlayer());
+
   getIt.registerLazySingleton<FlutterAudioQuery>(() => FlutterAudioQuery());
 
   getIt.registerLazySingleton<DeviceInfoPlugin>(() => DeviceInfoPlugin());

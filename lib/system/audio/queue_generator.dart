@@ -11,35 +11,22 @@ class QueueGenerator {
 
   final MusicDataSource _musicDataSource;
 
-  // TODO: test
-  // TODO: optimize -> too slow for whole library
-  // fetching all songs together and preparing playback takes ~500ms compared to ~10.000ms individually
-  Future<List<MediaItem>> getMediaItemsFromPaths(List<String> paths) async {
-    final mediaItems = <MediaItem>[];
-    for (final path in paths) {
-      final song = await _musicDataSource.getSongByPath(path);
-      mediaItems.add(song.toMediaItem());
-    }
-
-    return mediaItems;
-  }
-
   Future<List<QueueItem>> generateQueue(
     ShuffleMode shuffleMode,
-    List<MediaItem> mediaItems,
+    List<SongModel> songModels,
     int startIndex,
   ) async {
     List<QueueItem> queue;
 
     switch (shuffleMode) {
       case ShuffleMode.none:
-        queue = _generateNormalQueue(mediaItems);
+        queue = _generateNormalQueue(songModels);
         break;
       case ShuffleMode.standard:
-        queue = _generateShuffleQueue(mediaItems, startIndex);
+        queue = _generateShuffleQueue(songModels, startIndex);
         break;
       case ShuffleMode.plus:
-        queue = await _generateShufflePlusQueue(mediaItems, startIndex);
+        queue = await _generateShufflePlusQueue(songModels, startIndex);
     }
 
     return queue;
@@ -47,55 +34,60 @@ class QueueGenerator {
 
   ConcatenatingAudioSource mediaItemsToAudioSource(List<MediaItem> mediaItems) {
     return ConcatenatingAudioSource(
-        children: mediaItems
-            .map((MediaItem m) => AudioSource.uri(Uri.file(m.id)))
-            .toList());
+      children: mediaItems.map((MediaItem m) => AudioSource.uri(Uri.file(m.id))).toList(),
+    );
   }
 
-  List<QueueItem> _generateNormalQueue(List<MediaItem> mediaItems) {
+  ConcatenatingAudioSource songModelsToAudioSource(List<SongModel> songModels) {
+    return ConcatenatingAudioSource(
+      children: songModels.map((SongModel m) => AudioSource.uri(Uri.file(m.path))).toList(),
+    );
+  }
+
+  List<QueueItem> _generateNormalQueue(List<SongModel> songs) {
     return List<QueueItem>.generate(
-      mediaItems.length,
+      songs.length,
       (i) => QueueItem(
-        mediaItems[i],
+        songs[i],
         originalIndex: i,
       ),
     );
   }
 
   List<QueueItem> _generateShuffleQueue(
-    List<MediaItem> mediaItems,
+    List<SongModel> songs,
     int startIndex,
   ) {
     final List<QueueItem> queue = List<QueueItem>.generate(
-      mediaItems.length,
+      songs.length,
       (i) => QueueItem(
-        mediaItems[i],
+        songs[i],
         originalIndex: i,
       ),
     );
     queue.removeAt(startIndex);
     queue.shuffle();
     final first = QueueItem(
-      mediaItems[startIndex],
+      songs[startIndex],
       originalIndex: startIndex,
     );
     return [first] + queue;
   }
 
   Future<List<QueueItem>> _generateShufflePlusQueue(
-    List<MediaItem> mediaItems,
+    List<SongModel> songs,
     int startIndex,
   ) async {
     final List<QueueItem> queue = await _getQueueItemWithLinks(
-      mediaItems[startIndex],
+      songs[startIndex],
       startIndex,
     );
     final List<int> indices = [];
 
     // filter mediaitem list
     // TODO: multiply higher rated songs
-    for (var i = 0; i < mediaItems.length; i++) {
-      if (i != startIndex && !(mediaItems[i].extras['blocked'] as bool)) {
+    for (var i = 0; i < songs.length; i++) {
+      if (i != startIndex && !songs[i].blocked) {
         indices.add(i);
       }
     }
@@ -104,9 +96,9 @@ class QueueGenerator {
 
     for (var i = 0; i < indices.length; i++) {
       final int index = indices[i];
-      final MediaItem mediaItem = mediaItems[index];
+      final SongModel song = songs[index];
 
-      queue.addAll(await _getQueueItemWithLinks(mediaItem, index));
+      queue.addAll(await _getQueueItemWithLinks(song, index));
     }
 
     return queue;
@@ -114,13 +106,13 @@ class QueueGenerator {
 
   // TODO: naming things is hard
   Future<List<QueueItem>> _getQueueItemWithLinks(
-    MediaItem mediaItem,
+    SongModel song,
     int index,
   ) async {
     final List<QueueItem> queueItems = [];
 
-    final predecessors = await _getPredecessors(mediaItem);
-    final successors = await _getSuccessors(mediaItem);
+    final predecessors = await _getPredecessors(song);
+    final successors = await _getSuccessors(song);
 
     for (final p in predecessors) {
       queueItems.add(QueueItem(
@@ -131,7 +123,7 @@ class QueueGenerator {
     }
 
     queueItems.add(QueueItem(
-      mediaItem,
+      song,
       originalIndex: index,
     ));
 
@@ -146,31 +138,27 @@ class QueueGenerator {
     return queueItems;
   }
 
-  Future<List<MediaItem>> _getPredecessors(MediaItem mediaItem) async {
-    final List<MediaItem> mediaItems = [];
-    MediaItem currentMediaItem = mediaItem;
+  Future<List<SongModel>> _getPredecessors(SongModel song) async {
+    final List<SongModel> songs = [];
+    SongModel currentSong = song;
 
-    while (currentMediaItem.previous != null) {
-      currentMediaItem =
-          (await _musicDataSource.getSongByPath(currentMediaItem.previous))
-              .toMediaItem();
-      mediaItems.add(currentMediaItem);
+    while (currentSong.previous != null) {
+      currentSong = await _musicDataSource.getSongByPath(currentSong.previous);
+      songs.add(currentSong);
     }
 
-    return mediaItems.reversed.toList();
+    return songs.reversed.toList();
   }
 
-  Future<List<MediaItem>> _getSuccessors(MediaItem mediaItem) async {
-    final List<MediaItem> mediaItems = [];
-    MediaItem currentMediaItem = mediaItem;
+  Future<List<SongModel>> _getSuccessors(SongModel song) async {
+    final List<SongModel> songs = [];
+    SongModel currentSong = song;
 
-    while (currentMediaItem.next != null) {
-      currentMediaItem =
-          (await _musicDataSource.getSongByPath(currentMediaItem.next))
-              .toMediaItem();
-      mediaItems.add(currentMediaItem);
+    while (currentSong.next != null) {
+      currentSong = await _musicDataSource.getSongByPath(currentSong.next);
+      songs.add(currentSong);
     }
 
-    return mediaItems.toList();
+    return songs.toList();
   }
 }

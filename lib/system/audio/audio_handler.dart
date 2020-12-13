@@ -1,79 +1,45 @@
 import 'dart:math';
 
 import 'package:audio_service/audio_service.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
 
+import '../../domain/entities/player_state.dart';
 import '../../domain/entities/shuffle_mode.dart';
 import '../datasources/music_data_source_contract.dart';
-import '../models/queue_item.dart';
 import '../models/song_model.dart';
-import 'queue_generator.dart';
-
-const String KEY_INDEX = 'INDEX';
-const String SHUFFLE_MODE = 'SHUFFLE_MODE';
-
-const String PLAY_WITH_CONTEXT = 'PLAY_WITH_CONTEXT';
-const String INIT = 'INIT';
-const String APP_LIFECYCLE_RESUMED = 'APP_LIFECYCLE_RESUMED';
-const String SHUFFLE_ALL = 'SHUFFLE_ALL';
-const String SET_SHUFFLE_MODE = 'SET_SHUFFLE_MODE';
-const String MOVE_QUEUE_ITEM = 'MOVE_QUEUE_ITEM';
-const String REMOVE_QUEUE_ITEM = 'REMOVE_QUEUE_ITEM';
+import 'audio_player_contract.dart';
+import 'stream_constants.dart';
 
 class MyAudioHandler extends BaseAudioHandler {
-  MyAudioHandler(this._musicDataSource);
+  MyAudioHandler(this._musicDataSource, this._audioPlayer) {
+    _audioPlayer.queueStream.listen((event) {
+      _handleSetQueue(event);
+    });
 
+    _audioPlayer.currentIndexStream.listen((event) => _handleIndexChange(event));
 
-  final _audioPlayer = AudioPlayer();
+    _audioPlayer.currentSongStream.listen((songModel) {
+      mediaItemSubject.add(songModel.toMediaItem());
+    });
+
+    _audioPlayer.playerStateStream.listen((event) {
+      _handlePlayerState(event);
+    });
+
+    _audioPlayer.shuffleModeStream.listen((shuffleMode) {
+      customEventSubject.add({SHUFFLE_MODE: shuffleMode});
+    });
+  }
+
+  final AudioPlayer _audioPlayer;
   final MusicDataSource _musicDataSource;
-  QueueGenerator queueGenerator;
-
-  // TODO: confusing naming
-  List<MediaItem> originalPlaybackContext = <MediaItem>[];
-  List<QueueItem> playbackContext = <QueueItem>[];
-
-  // TODO: this is not trivial: queue is loaded by audioplayer
-  // this reference enables direct manipulation of the loaded queue
-  ConcatenatingAudioSource _queue;
-  List<MediaItem> mediaItemQueue;
-
-  ShuffleMode _shuffleMode = ShuffleMode.none;
-
-  ShuffleMode get shuffleMode => _shuffleMode;
-  set shuffleMode(ShuffleMode s) {
-    _shuffleMode = s;
-    customEventSubject.add({SHUFFLE_MODE: s});
-  }
-
-  int _playbackIndex = -1;
-  int get playbackIndex => _playbackIndex;
-  set playbackIndex(int i) {
-    _log.info('index: $i');
-    if (i != null) {
-      _playbackIndex = i;
-      mediaItemSubject.add(mediaItemQueue[i]);
-      customEventSubject.add({KEY_INDEX: i});
-
-      playbackStateSubject.add(playbackState.value.copyWith(
-        controls: [
-          MediaControl.skipToPrevious,
-          MediaControl.pause,
-          MediaControl.skipToNext
-        ],
-        playing: _audioPlayer.playing,
-        processingState: AudioProcessingState.ready,
-        updatePosition: _audioPlayer.position,
-      ));
-    }
-  }
 
   static final _log = Logger('AudioHandler');
 
   @override
   Future<void> stop() async {
     await _audioPlayer.stop();
-    await _audioPlayer.dispose();
+    // await _audioPlayer.dispose();
     await super.stop();
   }
 
@@ -99,16 +65,12 @@ class MyAudioHandler extends BaseAudioHandler {
 
   @override
   Future<void> addQueueItem(MediaItem mediaItem) async {
-    await _queue.add(AudioSource.uri(Uri.file(mediaItem.id)));
-    mediaItemQueue.add(mediaItem);
-    handleSetQueue(mediaItemQueue);
+    _audioPlayer.addToQueue(SongModel.fromMediaItem(mediaItem));
   }
 
   @override
   Future<void> customAction(String name, Map<String, dynamic> arguments) async {
     switch (name) {
-      case INIT:
-        return init();
       case PLAY_WITH_CONTEXT:
         final context = arguments['CONTEXT'] as List<String>;
         final index = arguments['INDEX'] as int;
@@ -127,161 +89,84 @@ class MyAudioHandler extends BaseAudioHandler {
     }
   }
 
-  Future<void> handleSetQueue(List<MediaItem> mediaItemQueue) async {
-    queueSubject.add(mediaItemQueue);
-    final songModels =
-        mediaItemQueue.map((e) => SongModel.fromMediaItem(e)).toList();
-    _musicDataSource.setQueue(songModels);
-  }
-
-  Future<void> init() async {
-    print('AudioPlayerTask.init');
-    _audioPlayer.playerStateStream.listen((event) => handlePlayerState(event));
-    _audioPlayer.currentIndexStream.listen((event) => playbackIndex = event);
-    _audioPlayer.sequenceStateStream
-        .listen((event) => handleSequenceState(event));
-
-    queueGenerator = QueueGenerator(_musicDataSource);
-  }
-
   Future<void> playWithContext(List<String> context, int index) async {
-    final mediaItems = await queueGenerator.getMediaItemsFromPaths(context);
-    playPlaylist(mediaItems, index);
+    final songs = <SongModel>[];
+    for (final path in context) {
+      final song = await _musicDataSource.getSongByPath(path);
+      songs.add(song);
+    }
+
+    _audioPlayer.playSongList(songs, index);
   }
 
   Future<void> onAppLifecycleResumed() async {
-    customEventSubject.add({SHUFFLE_MODE: shuffleMode});
-    customEventSubject.add({KEY_INDEX: playbackIndex});
+    // customEventSubject.add({SHUFFLE_MODE: shuffleMode});
+    // customEventSubject.add({KEY_INDEX: playbackIndex});
   }
 
   Future<void> setCustomShuffleMode(ShuffleMode mode) async {
-    shuffleMode = mode;
-
-    final QueueItem currentQueueItem = playbackContext[playbackIndex];
-    final int index = currentQueueItem.originalIndex;
-    playbackContext = await queueGenerator.generateQueue(
-        shuffleMode, originalPlaybackContext, index);
-    mediaItemQueue = playbackContext.map((e) => e.mediaItem).toList();
-
-    // FIXME: this does not react correctly when inserted track is currently played
-    handleSetQueue(mediaItemQueue);
-
-    final newQueue = queueGenerator.mediaItemsToAudioSource(mediaItemQueue);
-    _updateQueue(newQueue, currentQueueItem);
-  }
-
-  void _updateQueue(
-      ConcatenatingAudioSource newQueue, QueueItem currentQueueItem) {
-    final int index = currentQueueItem.originalIndex;
-
-    _queue.removeRange(0, playbackIndex);
-    _queue.removeRange(1, _queue.length);
-
-    if (shuffleMode == ShuffleMode.none) {
-      switch (currentQueueItem.type) {
-        case QueueItemType.standard:
-          _queue.insertAll(0, newQueue.children.sublist(0, index));
-          _queue.addAll(newQueue.children.sublist(index + 1));
-          playbackIndex = index;
-          break;
-        case QueueItemType.predecessor:
-          _queue.insertAll(0, newQueue.children.sublist(0, index));
-          _queue.addAll(newQueue.children.sublist(index));
-          playbackIndex = index;
-          break;
-        case QueueItemType.successor:
-          _queue.insertAll(0, newQueue.children.sublist(0, index + 1));
-          _queue.addAll(newQueue.children.sublist(index + 1));
-          playbackIndex = index;
-          break;
-      }
-    } else {
-      _queue.addAll(newQueue.children.sublist(1));
-    }
+    _audioPlayer.setShuffleMode(mode, true);
   }
 
   Future<void> shuffleAll() async {
-    shuffleMode = ShuffleMode.standard;
+    _audioPlayer.setShuffleMode(ShuffleMode.plus, false);
+
     final List<SongModel> songs = await _musicDataSource.getSongs();
-    final List<MediaItem> mediaItems =
-        songs.map((song) => song.toMediaItem()).toList();
-
     final rng = Random();
-    final index = rng.nextInt(mediaItems.length);
+    final index = rng.nextInt(songs.length);
 
-    playPlaylist(mediaItems, index);
-  }
-
-  Future<void> playPlaylist(List<MediaItem> mediaItems, int index) async {
-    final firstMediaItem = mediaItems.sublist(index, index + 1);
-    mediaItemQueue = firstMediaItem;
-    handleSetQueue(firstMediaItem);
-    _queue = queueGenerator.mediaItemsToAudioSource(firstMediaItem);
-    _audioPlayer.play();
-    await _audioPlayer.load(_queue, initialIndex: 0);
-
-
-    originalPlaybackContext = mediaItems;
-
-    playbackContext =
-        await queueGenerator.generateQueue(shuffleMode, mediaItems, index);
-    mediaItemQueue = playbackContext.map((e) => e.mediaItem).toList();
-
-    handleSetQueue(mediaItemQueue);
-    final int splitIndex = shuffleMode == ShuffleMode.none ? index : 0;
-    final newQueue = queueGenerator.mediaItemsToAudioSource(mediaItemQueue);
-    _queue.insertAll(0, newQueue.children.sublist(0, splitIndex));
-    _queue.addAll(newQueue.children.sublist(splitIndex + 1, newQueue.length));
+    _audioPlayer.playSongList(songs, index);
   }
 
   Future<void> moveQueueItem(int oldIndex, int newIndex) async {
-    _log.info('move: $oldIndex -> $newIndex');
-    final MediaItem mediaItem = mediaItemQueue.removeAt(oldIndex);
-    final index = newIndex < oldIndex ? newIndex : newIndex - 1;
-    mediaItemQueue.insert(index, mediaItem);
-    handleSetQueue(mediaItemQueue);
-    _queue.move(oldIndex, index);
+    _audioPlayer.moveQueueItem(oldIndex, newIndex);
   }
 
   Future<void> removeQueueIndex(int index) async {
-    mediaItemQueue.removeAt(index);
-    handleSetQueue(mediaItemQueue);
-    _queue.removeAt(index);
+    _audioPlayer.removeQueueIndex(index);
   }
 
-  void handlePlayerState(PlayerState ps) {
-    _log.info('handlePlayerState called');
-    if (ps.processingState == ProcessingState.ready && ps.playing) {
+  void _handleSetQueue(List<SongModel> queue) {
+    _musicDataSource.setQueue(queue);
+
+    final mediaItems = queue.map((e) => e.toMediaItem()).toList();
+    queueSubject.add(mediaItems);
+  }
+
+  void _handleIndexChange(int index) {
+    _log.info('index: $index');
+    if (index != null) {
+      customEventSubject.add({KEY_INDEX: index});
+
       playbackStateSubject.add(playbackState.value.copyWith(
         controls: [
           MediaControl.skipToPrevious,
           MediaControl.pause,
-          MediaControl.skipToNext
+          MediaControl.skipToNext,
         ],
-        playing: true,
+        playing: _audioPlayer.playerStateStream.value.playing,
         processingState: AudioProcessingState.ready,
-        updatePosition: _audioPlayer.position,
-      ));
-    } else if (ps.processingState == ProcessingState.ready && !ps.playing) {
-      playbackStateSubject.add(playbackState.value.copyWith(
-        controls: [
-          MediaControl.skipToPrevious,
-          MediaControl.play,
-          MediaControl.skipToNext
-        ],
-        processingState: AudioProcessingState.ready,
-        updatePosition: _audioPlayer.position,
-        playing: false,
+        updatePosition: const Duration(milliseconds: 0), // _audioPlayer.positionStream.value,
       ));
     }
   }
 
-  // TODO: this can only be a temporary solution! gets called too often.
-  void handleSequenceState(SequenceState st) {
-    _log.info('handleSequenceState called');
-    if (0 <= playbackIndex && playbackIndex < playbackContext.length) {
-      _log.info('handleSequenceState: setting MediaItem');
-      mediaItemSubject.add(mediaItemQueue[playbackIndex]);
+  void _handlePlayerState(PlayerState ps) {
+    _log.info('handlePlayerState called');
+    if (ps.processingState == ProcessingState.ready && ps.playing) {
+      playbackStateSubject.add(playbackState.value.copyWith(
+        controls: [MediaControl.skipToPrevious, MediaControl.pause, MediaControl.skipToNext],
+        playing: true,
+        processingState: AudioProcessingState.ready,
+        updatePosition: _audioPlayer.positionStream.value,
+      ));
+    } else if (ps.processingState == ProcessingState.ready && !ps.playing) {
+      playbackStateSubject.add(playbackState.value.copyWith(
+        controls: [MediaControl.skipToPrevious, MediaControl.play, MediaControl.skipToNext],
+        processingState: AudioProcessingState.ready,
+        updatePosition: _audioPlayer.positionStream.value,
+        playing: false,
+      ));
     }
   }
 }

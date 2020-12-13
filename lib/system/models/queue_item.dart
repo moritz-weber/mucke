@@ -1,11 +1,15 @@
-import 'package:audio_service/audio_service.dart';
+import 'song_model.dart';
 
 class QueueItem {
-  QueueItem(this.mediaItem, {this.originalIndex, this.type = QueueItemType.standard});
+  QueueItem(
+    this.song, {
+    this.originalIndex,
+    this.type = QueueItemType.standard,
+  });
 
-  final MediaItem mediaItem;
+  final SongModel song;
   final int originalIndex;
   final QueueItemType type;
 }
 
-enum QueueItemType { standard, predecessor, successor }
+enum QueueItemType { standard, predecessor, successor, added }

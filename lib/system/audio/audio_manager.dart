@@ -6,15 +6,13 @@ import '../../domain/entities/playback_state.dart' as entity;
 import '../../domain/entities/shuffle_mode.dart';
 import '../models/playback_state_model.dart';
 import '../models/song_model.dart';
-import 'audio_handler.dart';
 import 'audio_manager_contract.dart';
+import 'stream_constants.dart';
 
 typedef Conversion<S, T> = T Function(S);
 
 class AudioManagerImpl implements AudioManager {
   AudioManagerImpl(this._audioHandler) {
-    _audioHandler.customAction(INIT, null);
-
     _audioHandler.customEventStream.listen((event) {
       final data = event as Map<String, dynamic>;
       if (data.containsKey(KEY_INDEX)) {
