@@ -1,14 +1,15 @@
 import 'dart:io';
 import 'dart:isolate';
 
+import 'package:moor/ffi.dart';
 import 'package:moor/isolate.dart';
 import 'package:moor/moor.dart';
-import 'package:moor/ffi.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 import '../models/album_model.dart';
 import '../models/artist_model.dart';
+import '../models/queue_item_model.dart';
 import '../models/song_model.dart';
 import 'music_data_source_contract.dart';
 
@@ -54,18 +55,24 @@ class Songs extends Table {
   Set<Column> get primaryKey => {path};
 }
 
-@DataClassName('QueueEntry')
+@DataClassName('MoorQueueEntry')
 class QueueEntries extends Table {
   IntColumn get index => integer()();
   TextColumn get path => text()();
+  IntColumn get originalIndex => integer()();
+  IntColumn get type => integer()();
 
   @override
   Set<Column> get primaryKey => {index};
 }
 
-@UseMoor(tables: [Artists, Albums, Songs, QueueEntries])
-class MoorMusicDataSource extends _$MoorMusicDataSource
-    implements MusicDataSource {
+@DataClassName('PersistentPlayerState')
+class PlayerState extends Table {
+  IntColumn get index => integer()();
+}
+
+@UseMoor(tables: [Artists, Albums, Songs, QueueEntries, PlayerState])
+class MoorMusicDataSource extends _$MoorMusicDataSource implements MusicDataSource {
   /// Use MoorMusicDataSource in main isolate only.
   MoorMusicDataSource() : super(_openConnection());
 
@@ -73,17 +80,15 @@ class MoorMusicDataSource extends _$MoorMusicDataSource
   MoorMusicDataSource.withQueryExecutor(QueryExecutor e) : super(e);
 
   /// Used to connect to a database on another isolate.
-  MoorMusicDataSource.connect(DatabaseConnection connection)
-      : super.connect(connection);
+  MoorMusicDataSource.connect(DatabaseConnection connection) : super.connect(connection);
 
   @override
   int get schemaVersion => 1;
 
   @override
   Future<List<AlbumModel>> getAlbums() async {
-    return select(albums).get().then((moorAlbumList) => moorAlbumList
-        .map((moorAlbum) => AlbumModel.fromMoorAlbum(moorAlbum))
-        .toList());
+    return select(albums).get().then((moorAlbumList) =>
+        moorAlbumList.map((moorAlbum) => AlbumModel.fromMoorAlbum(moorAlbum)).toList());
   }
 
   // TODO: insert can throw exception -> implications?
@@ -94,16 +99,14 @@ class MoorMusicDataSource extends _$MoorMusicDataSource
 
   @override
   Stream<List<SongModel>> get songStream {
-    return select(songs).watch().map((moorSongList) => moorSongList
-        .map((moorSong) => SongModel.fromMoorSong(moorSong))
-        .toList());
+    return select(songs).watch().map((moorSongList) =>
+        moorSongList.map((moorSong) => SongModel.fromMoorSong(moorSong)).toList());
   }
 
   @override
   Future<List<SongModel>> getSongs() {
-    return select(songs).get().then((moorSongList) => moorSongList
-        .map((moorSong) => SongModel.fromMoorSong(moorSong))
-        .toList());
+    return select(songs).get().then((moorSongList) =>
+        moorSongList.map((moorSong) => SongModel.fromMoorSong(moorSong)).toList());
   }
 
   @override
@@ -115,9 +118,8 @@ class MoorMusicDataSource extends _$MoorMusicDataSource
             (t) => OrderingTerm(expression: t.trackNumber)
           ]))
         .watch()
-        .map((moorSongList) => moorSongList
-            .map((moorSong) => SongModel.fromMoorSong(moorSong))
-            .toList());
+        .map((moorSongList) =>
+            moorSongList.map((moorSong) => SongModel.fromMoorSong(moorSong)).toList());
   }
 
   @override
@@ -129,9 +131,8 @@ class MoorMusicDataSource extends _$MoorMusicDataSource
             (t) => OrderingTerm(expression: t.trackNumber)
           ]))
         .get()
-        .then((moorSongList) => moorSongList
-            .map((moorSong) => SongModel.fromMoorSong(moorSong))
-            .toList());
+        .then((moorSongList) =>
+            moorSongList.map((moorSong) => SongModel.fromMoorSong(moorSong)).toList());
   }
 
   @override
@@ -173,9 +174,8 @@ class MoorMusicDataSource extends _$MoorMusicDataSource
 
   @override
   Future<List<ArtistModel>> getArtists() {
-    return select(artists).get().then((moorArtistList) => moorArtistList
-        .map((moorArtist) => ArtistModel.fromMoorArtist(moorArtist))
-        .toList());
+    return select(artists).get().then((moorArtistList) =>
+        moorArtistList.map((moorArtist) => ArtistModel.fromMoorArtist(moorArtist)).toList());
   }
 
   @override
@@ -209,9 +209,8 @@ class MoorMusicDataSource extends _$MoorMusicDataSource
               (t) => OrderingTerm(expression: t.trackNumber)
             ]))
           .get()
-          .then((moorSongList) => moorSongList
-              .map((moorSong) => SongModel.fromMoorSong(moorSong))
-              .toList());
+          .then((moorSongList) =>
+              moorSongList.map((moorSong) => SongModel.fromMoorSong(moorSong)).toList());
 
       bool current = false;
       SongModel nextSong;
@@ -233,33 +232,66 @@ class MoorMusicDataSource extends _$MoorMusicDataSource
   }
 
   @override
-  Stream<List<SongModel>> get queueStream {
-    final query = (select(queueEntries)
-          ..orderBy([(t) => OrderingTerm(expression: t.index)]))
+  Stream<List<SongModel>> get songQueueStream {
+    final query = (select(queueEntries)..orderBy([(t) => OrderingTerm(expression: t.index)]))
         .join([innerJoin(songs, songs.path.equalsExp(queueEntries.path))]);
 
     return query.watch().map((rows) {
-      return rows
-          .map((row) => SongModel.fromMoorSong(row.readTable(songs)))
-          .toList();
+      print('rows: ${rows.length}');
+      return rows.map((row) => SongModel.fromMoorSong(row.readTable(songs))).toList();
     });
   }
 
   @override
-  Future<void> setQueue(List<SongModel> queue) async {
-    final _queueEntries = <Insertable<QueueEntry>>[];
-    
+  Stream<List<QueueItemModel>> get queueStream {
+    final query = (select(queueEntries)..orderBy([(t) => OrderingTerm(expression: t.index)]))
+        .join([innerJoin(songs, songs.path.equalsExp(queueEntries.path))]);
+
+    return query.watch().map((rows) {
+      return rows.map((row) {
+        return QueueItemModel(
+          SongModel.fromMoorSong(row.readTable(songs)),
+          originalIndex: row.readTable(queueEntries).originalIndex,
+          type: row.readTable(queueEntries).type.toQueueItemType(),
+        );
+      }).toList();
+    });
+  }
+
+  @override
+  Future<void> setQueue(List<QueueItemModel> queue) async {
+    print('setQueue');
+    final _queueEntries = <Insertable<MoorQueueEntry>>[];
+
     for (var i = 0; i < queue.length; i++) {
-      _queueEntries.add(QueueEntriesCompanion(index: Value(i), path: Value(queue[i].path)));
+      _queueEntries.add(QueueEntriesCompanion(
+        index: Value(i),
+        path: Value(queue[i].song.path),
+        originalIndex: Value(queue[i].originalIndex),
+        type: Value(queue[i].type.toInt()),
+      ));
     }
 
     await delete(queueEntries).go();
     await batch((batch) {
-      batch.insertAll(
-        queueEntries,
-        _queueEntries
-      );
+      batch.insertAll(queueEntries, _queueEntries);
     });
+  }
+
+  @override
+  Stream<int> get currentIndexStream {
+    return select(playerState).watchSingle().map((event) => event.index);
+  }
+
+  @override
+  Future<void> setCurrentIndex(int index) async {
+    print('setCurrentIndex: $index');
+    final currentState = await select(playerState).getSingle();
+    if (currentState != null) {
+      update(playerState).write(PlayerStateCompanion(index: Value(index)));
+    } else {
+      into(playerState).insert(PlayerStateCompanion(index: Value(index)));
+    }
   }
 }
 

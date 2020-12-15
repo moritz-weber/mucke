@@ -18,19 +18,17 @@ class AudioStore extends _AudioStore with _$AudioStore {
 
 abstract class _AudioStore with Store {
   _AudioStore(this._audioRepository, this._musicDataRepository) {
-    currentSongStream =
-        _audioRepository.currentSongStream.distinct().asObservable();
+    currentSongStream = _audioRepository.currentSongStream.distinct().asObservable();
 
-    currentPositionStream =
-        _audioRepository.currentPositionStream.asObservable(initialValue: 0);
+    currentPositionStream = _audioRepository.currentPositionStream.asObservable(initialValue: 0);
 
-    queueStream =
-        _musicDataRepository.queueStream.asObservable(initialValue: []);
+    queueStream = _musicDataRepository.queueStream.asObservable();
 
-    queueIndexStream = _audioRepository.queueIndexStream.asObservable();
+    queueIndexStream = _musicDataRepository.currentIndexStream.asObservable();
+    // queueIndexStream = _audioRepository.queueIndexStream.asObservable();
 
-    shuffleModeStream = _audioRepository.shuffleModeStream
-        .asObservable(initialValue: ShuffleMode.none);
+    shuffleModeStream =
+        _audioRepository.shuffleModeStream.asObservable(initialValue: ShuffleMode.none);
 
     playbackStateStream = _audioRepository.playbackStateStream.asObservable();
   }
@@ -44,9 +42,14 @@ abstract class _AudioStore with Store {
   @computed
   Song get currentSong {
     print('currentSong!!!');
-    if (queueStream.value != [] && queueIndexStream.status == StreamStatus.active) {
-      final song = queueStream.value[queueIndexStream.value];
-      return song;
+    print(queueStream.value);
+    print(queueIndexStream.value);
+
+    if (queueStream.value != null && queueIndexStream.value != null) {  
+      if (queueIndexStream.value < queueStream.value.length) {
+        final song = queueStream.value[queueIndexStream.value];
+        return song;
+      }
     }
 
     return null;

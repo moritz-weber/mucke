@@ -1,4 +1,4 @@
-import 'song_model.dart';
+import 'song.dart';
 
 class QueueItem {
   QueueItem(
@@ -7,7 +7,7 @@ class QueueItem {
     this.type = QueueItemType.standard,
   });
 
-  final SongModel song;
+  final Song song;
   final int originalIndex;
   final QueueItemType type;
 }

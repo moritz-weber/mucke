@@ -1213,18 +1213,28 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
   }
 }
 
-class QueueEntry extends DataClass implements Insertable<QueueEntry> {
+class MoorQueueEntry extends DataClass implements Insertable<MoorQueueEntry> {
   final int index;
   final String path;
-  QueueEntry({@required this.index, @required this.path});
-  factory QueueEntry.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+  final int originalIndex;
+  final int type;
+  MoorQueueEntry(
+      {@required this.index,
+      @required this.path,
+      @required this.originalIndex,
+      @required this.type});
+  factory MoorQueueEntry.fromData(
+      Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
     final intType = db.typeSystem.forDartType<int>();
     final stringType = db.typeSystem.forDartType<String>();
-    return QueueEntry(
+    return MoorQueueEntry(
       index: intType.mapFromDatabaseResponse(data['${effectivePrefix}index']),
       path: stringType.mapFromDatabaseResponse(data['${effectivePrefix}path']),
+      originalIndex: intType
+          .mapFromDatabaseResponse(data['${effectivePrefix}original_index']),
+      type: intType.mapFromDatabaseResponse(data['${effectivePrefix}type']),
     );
   }
   @override
@@ -1236,6 +1246,12 @@ class QueueEntry extends DataClass implements Insertable<QueueEntry> {
     if (!nullToAbsent || path != null) {
       map['path'] = Variable<String>(path);
     }
+    if (!nullToAbsent || originalIndex != null) {
+      map['original_index'] = Variable<int>(originalIndex);
+    }
+    if (!nullToAbsent || type != null) {
+      map['type'] = Variable<int>(type);
+    }
     return map;
   }
 
@@ -1244,15 +1260,21 @@ class QueueEntry extends DataClass implements Insertable<QueueEntry> {
       index:
           index == null && nullToAbsent ? const Value.absent() : Value(index),
       path: path == null && nullToAbsent ? const Value.absent() : Value(path),
+      originalIndex: originalIndex == null && nullToAbsent
+          ? const Value.absent()
+          : Value(originalIndex),
+      type: type == null && nullToAbsent ? const Value.absent() : Value(type),
     );
   }
 
-  factory QueueEntry.fromJson(Map<String, dynamic> json,
+  factory MoorQueueEntry.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
-    return QueueEntry(
+    return MoorQueueEntry(
       index: serializer.fromJson<int>(json['index']),
       path: serializer.fromJson<String>(json['path']),
+      originalIndex: serializer.fromJson<int>(json['originalIndex']),
+      type: serializer.fromJson<int>(json['type']),
     );
   }
   @override
@@ -1261,57 +1283,86 @@ class QueueEntry extends DataClass implements Insertable<QueueEntry> {
     return <String, dynamic>{
       'index': serializer.toJson<int>(index),
       'path': serializer.toJson<String>(path),
+      'originalIndex': serializer.toJson<int>(originalIndex),
+      'type': serializer.toJson<int>(type),
     };
   }
 
-  QueueEntry copyWith({int index, String path}) => QueueEntry(
+  MoorQueueEntry copyWith(
+          {int index, String path, int originalIndex, int type}) =>
+      MoorQueueEntry(
         index: index ?? this.index,
         path: path ?? this.path,
+        originalIndex: originalIndex ?? this.originalIndex,
+        type: type ?? this.type,
       );
   @override
   String toString() {
-    return (StringBuffer('QueueEntry(')
+    return (StringBuffer('MoorQueueEntry(')
           ..write('index: $index, ')
-          ..write('path: $path')
+          ..write('path: $path, ')
+          ..write('originalIndex: $originalIndex, ')
+          ..write('type: $type')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(index.hashCode, path.hashCode));
+  int get hashCode => $mrjf($mrjc(index.hashCode,
+      $mrjc(path.hashCode, $mrjc(originalIndex.hashCode, type.hashCode))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
-      (other is QueueEntry &&
+      (other is MoorQueueEntry &&
           other.index == this.index &&
-          other.path == this.path);
+          other.path == this.path &&
+          other.originalIndex == this.originalIndex &&
+          other.type == this.type);
 }
 
-class QueueEntriesCompanion extends UpdateCompanion<QueueEntry> {
+class QueueEntriesCompanion extends UpdateCompanion<MoorQueueEntry> {
   final Value<int> index;
   final Value<String> path;
+  final Value<int> originalIndex;
+  final Value<int> type;
   const QueueEntriesCompanion({
     this.index = const Value.absent(),
     this.path = const Value.absent(),
+    this.originalIndex = const Value.absent(),
+    this.type = const Value.absent(),
   });
   QueueEntriesCompanion.insert({
     this.index = const Value.absent(),
     @required String path,
-  }) : path = Value(path);
-  static Insertable<QueueEntry> custom({
+    @required int originalIndex,
+    @required int type,
+  })  : path = Value(path),
+        originalIndex = Value(originalIndex),
+        type = Value(type);
+  static Insertable<MoorQueueEntry> custom({
     Expression<int> index,
     Expression<String> path,
+    Expression<int> originalIndex,
+    Expression<int> type,
   }) {
     return RawValuesInsertable({
       if (index != null) 'index': index,
       if (path != null) 'path': path,
+      if (originalIndex != null) 'original_index': originalIndex,
+      if (type != null) 'type': type,
     });
   }
 
-  QueueEntriesCompanion copyWith({Value<int> index, Value<String> path}) {
+  QueueEntriesCompanion copyWith(
+      {Value<int> index,
+      Value<String> path,
+      Value<int> originalIndex,
+      Value<int> type}) {
     return QueueEntriesCompanion(
       index: index ?? this.index,
       path: path ?? this.path,
+      originalIndex: originalIndex ?? this.originalIndex,
+      type: type ?? this.type,
     );
   }
 
@@ -1324,6 +1375,12 @@ class QueueEntriesCompanion extends UpdateCompanion<QueueEntry> {
     if (path.present) {
       map['path'] = Variable<String>(path.value);
     }
+    if (originalIndex.present) {
+      map['original_index'] = Variable<int>(originalIndex.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<int>(type.value);
+    }
     return map;
   }
 
@@ -1331,14 +1388,16 @@ class QueueEntriesCompanion extends UpdateCompanion<QueueEntry> {
   String toString() {
     return (StringBuffer('QueueEntriesCompanion(')
           ..write('index: $index, ')
-          ..write('path: $path')
+          ..write('path: $path, ')
+          ..write('originalIndex: $originalIndex, ')
+          ..write('type: $type')
           ..write(')'))
         .toString();
   }
 }
 
 class $QueueEntriesTable extends QueueEntries
-    with TableInfo<$QueueEntriesTable, QueueEntry> {
+    with TableInfo<$QueueEntriesTable, MoorQueueEntry> {
   final GeneratedDatabase _db;
   final String _alias;
   $QueueEntriesTable(this._db, [this._alias]);
@@ -1366,8 +1425,34 @@ class $QueueEntriesTable extends QueueEntries
     );
   }
 
+  final VerificationMeta _originalIndexMeta =
+      const VerificationMeta('originalIndex');
+  GeneratedIntColumn _originalIndex;
   @override
-  List<GeneratedColumn> get $columns => [index, path];
+  GeneratedIntColumn get originalIndex =>
+      _originalIndex ??= _constructOriginalIndex();
+  GeneratedIntColumn _constructOriginalIndex() {
+    return GeneratedIntColumn(
+      'original_index',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _typeMeta = const VerificationMeta('type');
+  GeneratedIntColumn _type;
+  @override
+  GeneratedIntColumn get type => _type ??= _constructType();
+  GeneratedIntColumn _constructType() {
+    return GeneratedIntColumn(
+      'type',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [index, path, originalIndex, type];
   @override
   $QueueEntriesTable get asDslTable => this;
   @override
@@ -1375,7 +1460,7 @@ class $QueueEntriesTable extends QueueEntries
   @override
   final String actualTableName = 'queue_entries';
   @override
-  VerificationContext validateIntegrity(Insertable<QueueEntry> instance,
+  VerificationContext validateIntegrity(Insertable<MoorQueueEntry> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -1389,20 +1474,191 @@ class $QueueEntriesTable extends QueueEntries
     } else if (isInserting) {
       context.missing(_pathMeta);
     }
+    if (data.containsKey('original_index')) {
+      context.handle(
+          _originalIndexMeta,
+          originalIndex.isAcceptableOrUnknown(
+              data['original_index'], _originalIndexMeta));
+    } else if (isInserting) {
+      context.missing(_originalIndexMeta);
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+          _typeMeta, type.isAcceptableOrUnknown(data['type'], _typeMeta));
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
     return context;
   }
 
   @override
   Set<GeneratedColumn> get $primaryKey => {index};
   @override
-  QueueEntry map(Map<String, dynamic> data, {String tablePrefix}) {
+  MoorQueueEntry map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return QueueEntry.fromData(data, _db, prefix: effectivePrefix);
+    return MoorQueueEntry.fromData(data, _db, prefix: effectivePrefix);
   }
 
   @override
   $QueueEntriesTable createAlias(String alias) {
     return $QueueEntriesTable(_db, alias);
+  }
+}
+
+class PersistentPlayerState extends DataClass
+    implements Insertable<PersistentPlayerState> {
+  final int index;
+  PersistentPlayerState({@required this.index});
+  factory PersistentPlayerState.fromData(
+      Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    return PersistentPlayerState(
+      index: intType.mapFromDatabaseResponse(data['${effectivePrefix}index']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || index != null) {
+      map['index'] = Variable<int>(index);
+    }
+    return map;
+  }
+
+  PlayerStateCompanion toCompanion(bool nullToAbsent) {
+    return PlayerStateCompanion(
+      index:
+          index == null && nullToAbsent ? const Value.absent() : Value(index),
+    );
+  }
+
+  factory PersistentPlayerState.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return PersistentPlayerState(
+      index: serializer.fromJson<int>(json['index']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'index': serializer.toJson<int>(index),
+    };
+  }
+
+  PersistentPlayerState copyWith({int index}) => PersistentPlayerState(
+        index: index ?? this.index,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('PersistentPlayerState(')
+          ..write('index: $index')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf(index.hashCode);
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is PersistentPlayerState && other.index == this.index);
+}
+
+class PlayerStateCompanion extends UpdateCompanion<PersistentPlayerState> {
+  final Value<int> index;
+  const PlayerStateCompanion({
+    this.index = const Value.absent(),
+  });
+  PlayerStateCompanion.insert({
+    @required int index,
+  }) : index = Value(index);
+  static Insertable<PersistentPlayerState> custom({
+    Expression<int> index,
+  }) {
+    return RawValuesInsertable({
+      if (index != null) 'index': index,
+    });
+  }
+
+  PlayerStateCompanion copyWith({Value<int> index}) {
+    return PlayerStateCompanion(
+      index: index ?? this.index,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (index.present) {
+      map['index'] = Variable<int>(index.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PlayerStateCompanion(')
+          ..write('index: $index')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $PlayerStateTable extends PlayerState
+    with TableInfo<$PlayerStateTable, PersistentPlayerState> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $PlayerStateTable(this._db, [this._alias]);
+  final VerificationMeta _indexMeta = const VerificationMeta('index');
+  GeneratedIntColumn _index;
+  @override
+  GeneratedIntColumn get index => _index ??= _constructIndex();
+  GeneratedIntColumn _constructIndex() {
+    return GeneratedIntColumn(
+      'index',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [index];
+  @override
+  $PlayerStateTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'player_state';
+  @override
+  final String actualTableName = 'player_state';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<PersistentPlayerState> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('index')) {
+      context.handle(
+          _indexMeta, index.isAcceptableOrUnknown(data['index'], _indexMeta));
+    } else if (isInserting) {
+      context.missing(_indexMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => <GeneratedColumn>{};
+  @override
+  PersistentPlayerState map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return PersistentPlayerState.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  $PlayerStateTable createAlias(String alias) {
+    return $PlayerStateTable(_db, alias);
   }
 }
 
@@ -1419,9 +1675,11 @@ abstract class _$MoorMusicDataSource extends GeneratedDatabase {
   $QueueEntriesTable _queueEntries;
   $QueueEntriesTable get queueEntries =>
       _queueEntries ??= $QueueEntriesTable(this);
+  $PlayerStateTable _playerState;
+  $PlayerStateTable get playerState => _playerState ??= $PlayerStateTable(this);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [artists, albums, songs, queueEntries];
+      [artists, albums, songs, queueEntries, playerState];
 }

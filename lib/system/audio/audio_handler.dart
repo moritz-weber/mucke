@@ -6,6 +6,7 @@ import 'package:logging/logging.dart';
 import '../../domain/entities/player_state.dart';
 import '../../domain/entities/shuffle_mode.dart';
 import '../datasources/music_data_source_contract.dart';
+import '../models/queue_item_model.dart';
 import '../models/song_model.dart';
 import 'audio_player_contract.dart';
 import 'stream_constants.dart';
@@ -29,6 +30,15 @@ class MyAudioHandler extends BaseAudioHandler {
     _audioPlayer.shuffleModeStream.listen((shuffleMode) {
       customEventSubject.add({SHUFFLE_MODE: shuffleMode});
     });
+
+    _initAudioPlayer();
+  }
+
+  Future<void> _initAudioPlayer() async {
+    _audioPlayer.loadQueue(
+      queue: await _musicDataSource.queueStream.first,
+      startIndex: await _musicDataSource.currentIndexStream.first,
+    );
   }
 
   final AudioPlayer _audioPlayer;
@@ -126,18 +136,20 @@ class MyAudioHandler extends BaseAudioHandler {
     _audioPlayer.removeQueueIndex(index);
   }
 
-  void _handleSetQueue(List<SongModel> queue) {
+  void _handleSetQueue(List<QueueItemModel> queue) {
+    print('handleSetQueue');
     _musicDataSource.setQueue(queue);
 
-    final mediaItems = queue.map((e) => e.toMediaItem()).toList();
+    final mediaItems = queue.map((e) => e.song.toMediaItem()).toList();
     queueSubject.add(mediaItems);
   }
 
   void _handleIndexChange(int index) {
     _log.info('index: $index');
     if (index != null) {
-      customEventSubject.add({KEY_INDEX: index});
+      _musicDataSource.setCurrentIndex(index);
 
+      customEventSubject.add({KEY_INDEX: index});
       playbackStateSubject.add(playbackState.value.copyWith(
         controls: [
           MediaControl.skipToPrevious,

@@ -1,5 +1,6 @@
 import '../models/album_model.dart';
 import '../models/artist_model.dart';
+import '../models/queue_item_model.dart';
 import '../models/song_model.dart';
 
 abstract class MusicDataSource {
@@ -8,8 +9,11 @@ abstract class MusicDataSource {
   Stream<List<SongModel>> get songStream;
   Stream<List<SongModel>> getAlbumSongStream(AlbumModel album);
 
-  Future<void> setQueue(List<SongModel> queue);
-  Stream<List<SongModel>> get queueStream;
+  Future<void> setQueue(List<QueueItemModel> queue);
+  Stream<List<SongModel>> get songQueueStream;
+  Stream<List<QueueItemModel>> get queueStream;
+  Future<void> setCurrentIndex(int index);
+  Stream<int> get currentIndexStream;
 
   /// Insert album into the database. Return the ID of the inserted album.
   Future<int> insertAlbum(AlbumModel albumModel);

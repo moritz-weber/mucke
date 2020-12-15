@@ -9,6 +9,7 @@ abstract class MusicDataRepository {
   Stream<List<Song>> get songStream;
   Stream<List<Song>> getAlbumSongStream(Album album);
   Stream<List<Song>> get queueStream;
+  Stream<int> get currentIndexStream;
   
   Future<Either<Failure, List<Song>>> getSongs();
   Future<Either<Failure, List<Song>>> getSongsFromAlbum(Album album);

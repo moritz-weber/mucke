@@ -1,9 +1,10 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
 
+import '../../domain/entities/queue_item.dart';
 import '../../domain/entities/shuffle_mode.dart';
 import '../datasources/music_data_source_contract.dart';
-import '../models/queue_item.dart';
+import '../models/queue_item_model.dart';
 import '../models/song_model.dart';
 
 class QueueGenerator {
@@ -11,12 +12,12 @@ class QueueGenerator {
 
   final MusicDataSource _musicDataSource;
 
-  Future<List<QueueItem>> generateQueue(
+  Future<List<QueueItemModel>> generateQueue(
     ShuffleMode shuffleMode,
     List<SongModel> songModels,
     int startIndex,
   ) async {
-    List<QueueItem> queue;
+    List<QueueItemModel> queue;
 
     switch (shuffleMode) {
       case ShuffleMode.none:
@@ -44,41 +45,41 @@ class QueueGenerator {
     );
   }
 
-  List<QueueItem> _generateNormalQueue(List<SongModel> songs) {
-    return List<QueueItem>.generate(
+  List<QueueItemModel> _generateNormalQueue(List<SongModel> songs) {
+    return List<QueueItemModel>.generate(
       songs.length,
-      (i) => QueueItem(
+      (i) => QueueItemModel(
         songs[i],
         originalIndex: i,
       ),
     );
   }
 
-  List<QueueItem> _generateShuffleQueue(
+  List<QueueItemModel> _generateShuffleQueue(
     List<SongModel> songs,
     int startIndex,
   ) {
-    final List<QueueItem> queue = List<QueueItem>.generate(
+    final List<QueueItemModel> queue = List<QueueItemModel>.generate(
       songs.length,
-      (i) => QueueItem(
+      (i) => QueueItemModel(
         songs[i],
         originalIndex: i,
       ),
     );
     queue.removeAt(startIndex);
     queue.shuffle();
-    final first = QueueItem(
+    final first = QueueItemModel(
       songs[startIndex],
       originalIndex: startIndex,
     );
     return [first] + queue;
   }
 
-  Future<List<QueueItem>> _generateShufflePlusQueue(
+  Future<List<QueueItemModel>> _generateShufflePlusQueue(
     List<SongModel> songs,
     int startIndex,
   ) async {
-    final List<QueueItem> queue = await _getQueueItemWithLinks(
+    final List<QueueItemModel> queue = await _getQueueItemWithLinks(
       songs[startIndex],
       startIndex,
     );
@@ -105,30 +106,30 @@ class QueueGenerator {
   }
 
   // TODO: naming things is hard
-  Future<List<QueueItem>> _getQueueItemWithLinks(
+  Future<List<QueueItemModel>> _getQueueItemWithLinks(
     SongModel song,
     int index,
   ) async {
-    final List<QueueItem> queueItems = [];
+    final List<QueueItemModel> queueItems = [];
 
     final predecessors = await _getPredecessors(song);
     final successors = await _getSuccessors(song);
 
     for (final p in predecessors) {
-      queueItems.add(QueueItem(
+      queueItems.add(QueueItemModel(
         p,
         originalIndex: index,
         type: QueueItemType.predecessor,
       ));
     }
 
-    queueItems.add(QueueItem(
+    queueItems.add(QueueItemModel(
       song,
       originalIndex: index,
     ));
 
     for (final p in successors) {
-      queueItems.add(QueueItem(
+      queueItems.add(QueueItemModel(
         p,
         originalIndex: index,
         type: QueueItemType.successor,

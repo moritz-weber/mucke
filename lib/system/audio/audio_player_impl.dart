@@ -1,9 +1,10 @@
 import 'package:just_audio/just_audio.dart' as ja;
 import 'package:rxdart/rxdart.dart';
 
+import '../../domain/entities/queue_item.dart';
 import '../../domain/entities/shuffle_mode.dart';
 import '../models/player_state_model.dart';
-import '../models/queue_item.dart';
+import '../models/queue_item_model.dart';
 import '../models/song_model.dart';
 import 'audio_player_contract.dart';
 import 'queue_generator.dart';
@@ -12,7 +13,7 @@ class AudioPlayerImpl implements AudioPlayer {
   AudioPlayerImpl(this._audioPlayer, this._queueGenerator) {
     _audioPlayer.currentIndexStream.listen((event) {
       _currentIndexSubject.add(event);
-      _currentSongSubject.add(_queueSubject.value[event]);
+      _currentSongSubject.add(_queueSubject.value[event].song);
     });
 
     _audioPlayer.positionStream.listen((event) {
@@ -24,7 +25,7 @@ class AudioPlayerImpl implements AudioPlayer {
     });
 
     _queueSubject.listen((event) {
-      _currentSongSubject.add(event[_currentIndexSubject.value]);
+      _currentSongSubject.add(event[_currentIndexSubject.value].song);
     });
   }
 
@@ -33,13 +34,13 @@ class AudioPlayerImpl implements AudioPlayer {
   final QueueGenerator _queueGenerator;
 
   List<SongModel> _inputQueue;
-  List<QueueItem> _queue;
+  List<QueueItemModel> _queue;
 
   final BehaviorSubject<int> _currentIndexSubject = BehaviorSubject();
   final BehaviorSubject<SongModel> _currentSongSubject = BehaviorSubject();
   final BehaviorSubject<PlayerStateModel> _playerStateSubject = BehaviorSubject();
   final BehaviorSubject<Duration> _positionSubject = BehaviorSubject();
-  final BehaviorSubject<List<SongModel>> _queueSubject = BehaviorSubject.seeded([]);
+  final BehaviorSubject<List<QueueItemModel>> _queueSubject = BehaviorSubject();
   final BehaviorSubject<ShuffleMode> _shuffleModeSubject = BehaviorSubject.seeded(ShuffleMode.none);
 
   @override
@@ -55,7 +56,7 @@ class AudioPlayerImpl implements AudioPlayer {
   ValueStream<Duration> get positionStream => _positionSubject.stream;
 
   @override
-  ValueStream<List<SongModel>> get queueStream => _queueSubject.stream;
+  ValueStream<List<QueueItemModel>> get queueStream => _queueSubject.stream;
 
   @override
   ValueStream<ShuffleMode> get shuffleModeStream => _shuffleModeSubject.stream;
@@ -66,9 +67,21 @@ class AudioPlayerImpl implements AudioPlayer {
   }
 
   @override
-  Future<void> loadQueue(List<QueueItem> queue) {
-    // TODO: implement loadQueue
-    throw UnimplementedError();
+  Future<void> loadQueue({List<QueueItemModel> queue, int startIndex = 0}) async {
+    if (queue == null || queue.isEmpty) {
+      return;
+    }
+    _audioSource = _queueGenerator.songModelsToAudioSource([queue[startIndex].song]);
+    await _audioPlayer.load(_audioSource);
+
+    final songModelQueue = queue.map((e) => e.song).toList();
+    _queueSubject.add(queue);
+
+    final completeAudioSource = _queueGenerator.songModelsToAudioSource(songModelQueue);
+    _audioSource.insertAll(0, completeAudioSource.children.sublist(0, startIndex));
+    _audioSource.addAll(
+      completeAudioSource.children.sublist(startIndex + 1, completeAudioSource.length),
+    );
   }
 
   @override
@@ -85,15 +98,15 @@ class AudioPlayerImpl implements AudioPlayer {
   Future<void> playSongList(List<SongModel> songs, int startIndex) async {
     _inputQueue = songs;
 
-    final firstSong = songs.sublist(startIndex, startIndex + 1);
-    _queueSubject.add(firstSong);
-    _audioSource = _queueGenerator.songModelsToAudioSource(firstSong);
+    final firstSong = songs[startIndex]; // .sublist(startIndex, startIndex + 1);
+    _queueSubject.add([QueueItemModel(firstSong, originalIndex: startIndex)]);
+    _audioSource = _queueGenerator.songModelsToAudioSource([firstSong]);
     _audioPlayer.play();
     await _audioPlayer.load(_audioSource, initialIndex: 0);
 
     _queue = await _queueGenerator.generateQueue(_shuffleModeSubject.value, songs, startIndex);
     final songModelQueue = _queue.map((e) => e.song).toList();
-    _queueSubject.add(songModelQueue);
+    _queueSubject.add(_queue);
 
     final int splitIndex = _shuffleModeSubject.value == ShuffleMode.none ? startIndex : 0;
     final newQueue = _queueGenerator.songModelsToAudioSource(songModelQueue);
@@ -124,23 +137,23 @@ class AudioPlayerImpl implements AudioPlayer {
   @override
   Future<void> addToQueue(SongModel song) async {
     await _audioSource.add(ja.AudioSource.uri(Uri.file(song.path)));
-    _queue.add(QueueItem(song, originalIndex: -1, type: QueueItemType.added));
-    _queueSubject.add(_queue.map((e) => e.song).toList());
+    _queue.add(QueueItemModel(song, originalIndex: -1, type: QueueItemType.added));
+    _queueSubject.add(_queue);
   }
 
   @override
   Future<void> moveQueueItem(int oldIndex, int newIndex) async {
-    final QueueItem queueItem = _queue.removeAt(oldIndex);
+    final QueueItemModel queueItem = _queue.removeAt(oldIndex);
     final index = newIndex < oldIndex ? newIndex : newIndex - 1;
     _queue.insert(index, queueItem);
-    _queueSubject.add(_queue.map((e) => e.song).toList());
+    _queueSubject.add(_queue);
     await _audioSource.move(oldIndex, index);
   }
 
   @override
   Future<void> removeQueueIndex(int index) async {
     _queue.removeAt(index);
-    _queueSubject.add(_queue.map((e) => e.song).toList());
+    _queueSubject.add(_queue);
     await _audioSource.removeAt(index);
   }
 
@@ -154,7 +167,7 @@ class AudioPlayerImpl implements AudioPlayer {
       _queue = await _queueGenerator.generateQueue(shuffleMode, _inputQueue, index);
       // TODO: maybe refactor _queue to a subject and listen for changes
       final songModelQueue = _queue.map((e) => e.song).toList();
-      _queueSubject.add(songModelQueue);
+      _queueSubject.add(_queue);
 
       final newQueue = _queueGenerator.songModelsToAudioSource(songModelQueue);
       _updateQueue(newQueue, currentQueueItem);

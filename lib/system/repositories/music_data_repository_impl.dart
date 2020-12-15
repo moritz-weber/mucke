@@ -135,5 +135,8 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   }
 
   @override
-  Stream<List<Song>> get queueStream => musicDataSource.queueStream;
+  Stream<List<Song>> get queueStream => musicDataSource.songQueueStream;
+
+  @override
+  Stream<int> get currentIndexStream => musicDataSource.currentIndexStream;
 }
