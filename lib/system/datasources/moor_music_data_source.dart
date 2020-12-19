@@ -7,8 +7,11 @@ import 'package:moor/moor.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
+import '../../domain/entities/loop_mode.dart';
+import '../../domain/entities/shuffle_mode.dart';
 import '../models/album_model.dart';
 import '../models/artist_model.dart';
+import '../models/loop_mode_model.dart';
 import '../models/queue_item_model.dart';
 import '../models/song_model.dart';
 import 'music_data_source_contract.dart';
@@ -69,6 +72,8 @@ class QueueEntries extends Table {
 @DataClassName('PersistentPlayerState')
 class PlayerState extends Table {
   IntColumn get index => integer()();
+  IntColumn get shuffleMode => integer().withDefault(const Constant(0))();
+  IntColumn get loopMode => integer().withDefault(const Constant(0))();
 }
 
 @UseMoor(tables: [Artists, Albums, Songs, QueueEntries, PlayerState])
@@ -293,6 +298,32 @@ class MoorMusicDataSource extends _$MoorMusicDataSource implements MusicDataSour
       into(playerState).insert(PlayerStateCompanion(index: Value(index)));
     }
   }
+
+  @override
+  Stream<LoopMode> get loopModeStream {
+    return select(playerState).watchSingle().map((event) => event.loopMode.toLoopMode());
+  }
+
+  @override
+  Future<void> setLoopMode(LoopMode loopMode) async {
+    print('setLoopMode!!!');
+    final currentState = await select(playerState).getSingle();
+    if (currentState != null) {
+      update(playerState).write(PlayerStateCompanion(loopMode: Value(loopMode.toInt())));
+    } else {
+      into(playerState).insert(PlayerStateCompanion(loopMode: Value(loopMode.toInt())));
+    }
+  }
+
+  @override
+  Future<void> setShuffleMode(ShuffleMode shuffleMode) {
+    // TODO: implement setShuffleMode
+    throw UnimplementedError();
+  }
+
+  @override
+  // TODO: implement shuffleModeStream
+  Stream<ShuffleMode> get shuffleModeStream => throw UnimplementedError();
 }
 
 LazyDatabase _openConnection() {

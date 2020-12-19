@@ -1,8 +1,10 @@
 import 'package:just_audio/just_audio.dart' as ja;
 import 'package:rxdart/rxdart.dart';
 
+import '../../domain/entities/loop_mode.dart';
 import '../../domain/entities/queue_item.dart';
 import '../../domain/entities/shuffle_mode.dart';
+import '../models/loop_mode_model.dart';
 import '../models/player_state_model.dart';
 import '../models/queue_item_model.dart';
 import '../models/song_model.dart';
@@ -24,6 +26,10 @@ class AudioPlayerImpl implements AudioPlayer {
       _playerStateSubject.add(PlayerStateModel.fromJAPlayerState(event));
     });
 
+    _audioPlayer.loopModeStream.listen((event) {
+      _loopModeSubject.add(event.toEntity());
+    });
+
     _queueSubject.listen((event) {
       _currentSongSubject.add(event[_currentIndexSubject.value].song);
     });
@@ -42,6 +48,7 @@ class AudioPlayerImpl implements AudioPlayer {
   final BehaviorSubject<Duration> _positionSubject = BehaviorSubject();
   final BehaviorSubject<List<QueueItemModel>> _queueSubject = BehaviorSubject();
   final BehaviorSubject<ShuffleMode> _shuffleModeSubject = BehaviorSubject.seeded(ShuffleMode.none);
+  final BehaviorSubject<LoopMode> _loopModeSubject = BehaviorSubject();
 
   @override
   ValueStream<int> get currentIndexStream => _currentIndexSubject.stream;
@@ -62,7 +69,17 @@ class AudioPlayerImpl implements AudioPlayer {
   ValueStream<ShuffleMode> get shuffleModeStream => _shuffleModeSubject.stream;
 
   @override
+  ValueStream<LoopMode> get loopModeStream => _loopModeSubject.stream;
+
+  @override
   Future<void> dispose() async {
+    await _currentIndexSubject.close();
+    await _currentSongSubject.close();
+    await _playerStateSubject.close();
+    await _positionSubject.close();
+    await _queueSubject.close();
+    await _shuffleModeSubject.close();
+    await _loopModeSubject.close();
     await _audioPlayer.dispose();
   }
 
@@ -172,6 +189,12 @@ class AudioPlayerImpl implements AudioPlayer {
       final newQueue = _queueGenerator.songModelsToAudioSource(songModelQueue);
       _updateQueue(newQueue, currentQueueItem);
     }
+  }
+
+  @override
+  Future<void> setLoopMode(LoopMode loopMode) async {
+    print('ap loopmode');
+    await _audioPlayer.setLoopMode(loopMode.toJA());
   }
 
   void _updateQueue(ja.ConcatenatingAudioSource newQueue, QueueItem currentQueueItem) {

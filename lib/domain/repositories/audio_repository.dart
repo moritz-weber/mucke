@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../core/error/failures.dart';
+import '../entities/loop_mode.dart';
 import '../entities/playback_state.dart';
 import '../entities/shuffle_mode.dart';
 import '../entities/song.dart';
@@ -19,6 +20,9 @@ abstract class AudioRepository {
   Future<Either<Failure, void>> skipToNext();
   Future<Either<Failure, void>> skipToPrevious();
   Future<Either<Failure, void>> setShuffleMode(ShuffleMode shuffleMode);
+
+  Future<void> setLoopMode(LoopMode loopMode);
+
   Future<Either<Failure, void>> shuffleAll();
   Future<Either<Failure, void>> addToQueue(Song song);
   Future<Either<Failure, void>> moveQueueItem(int oldIndex, int newIndex);

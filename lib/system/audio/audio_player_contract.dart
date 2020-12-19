@@ -1,5 +1,6 @@
 import 'package:rxdart/rxdart.dart';
 
+import '../../domain/entities/loop_mode.dart';
 import '../../domain/entities/shuffle_mode.dart';
 import '../models/player_state_model.dart';
 import '../models/queue_item_model.dart';
@@ -12,6 +13,7 @@ abstract class AudioPlayer {
   ValueStream<Duration> get positionStream;
   ValueStream<List<QueueItemModel>> get queueStream;
   ValueStream<ShuffleMode> get shuffleModeStream;
+  ValueStream<LoopMode> get loopModeStream;
 
   Future<void> play();
   Future<void> pause();
@@ -28,6 +30,7 @@ abstract class AudioPlayer {
 
 
   Future<void> setShuffleMode(ShuffleMode shuffleMode, bool updateQueue);
+  Future<void> setLoopMode(LoopMode loopMode);
 
   Future<void> playSongList(List<SongModel> songs, int startIndex);
 }

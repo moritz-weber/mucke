@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../core/error/failures.dart';
+import '../../domain/entities/loop_mode.dart';
 import '../../domain/entities/playback_state.dart';
 import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/entities/song.dart';
@@ -96,5 +97,11 @@ class AudioRepositoryImpl implements AudioRepository {
   Future<Either<Failure, void>> removeQueueIndex(int index) async {
     await _audioManager.removeQueueIndex(index);
     return const Right(null);
+  }
+
+  @override
+  Future<void> setLoopMode(LoopMode loopMode) async {
+    print('setLoopMode!');
+    await _audioManager.setLoopMode(loopMode);
   }
 }

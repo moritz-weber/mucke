@@ -110,6 +110,21 @@ mixin _$AudioStore on _AudioStore, Store {
     });
   }
 
+  final _$loopModeStreamAtom = Atom(name: '_AudioStore.loopModeStream');
+
+  @override
+  ObservableStream<LoopMode> get loopModeStream {
+    _$loopModeStreamAtom.reportRead();
+    return super.loopModeStream;
+  }
+
+  @override
+  set loopModeStream(ObservableStream<LoopMode> value) {
+    _$loopModeStreamAtom.reportWrite(value, super.loopModeStream, () {
+      super.loopModeStream = value;
+    });
+  }
+
   final _$playSongAsyncAction = AsyncAction('_AudioStore.playSong');
 
   @override
@@ -154,6 +169,7 @@ currentPositionStream: ${currentPositionStream},
 queueStream: ${queueStream},
 queueIndexStream: ${queueIndexStream},
 shuffleModeStream: ${shuffleModeStream},
+loopModeStream: ${loopModeStream},
 currentSong: ${currentSong}
     ''';
   }

@@ -1,3 +1,4 @@
+import '../../domain/entities/loop_mode.dart';
 import '../../domain/entities/playback_state.dart';
 import '../../domain/entities/shuffle_mode.dart';
 import '../models/song_model.dart';
@@ -17,6 +18,7 @@ abstract class AudioManager {
   Future<void> skipToNext();
   Future<void> skipToPrevious();
   Future<void> setShuffleMode(ShuffleMode shuffleMode);
+  Future<void> setLoopMode(LoopMode loopMode);
   Future<void> shuffleAll();
   Future<void> addToQueue(SongModel songModel);
   Future<void> moveQueueItem(int oldIndex, int newIndex);

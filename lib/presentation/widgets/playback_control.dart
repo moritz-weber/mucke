@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'loop_button.dart';
 import 'next_button.dart';
 import 'play_pause_button.dart';
 import 'previous_button.dart';
@@ -12,14 +13,7 @@ class PlaybackControl extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: const [
-        IconButton(
-          icon: Icon(
-            Icons.repeat,
-            size: 20.0,
-            color: Colors.white10,
-          ),
-          onPressed: null,
-        ),
+        LoopButton(iconSize: 20.0),
         PreviousButton(iconSize: 32.0),
         PlayPauseButton(
           circle: true,

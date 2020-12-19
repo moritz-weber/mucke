@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:audio_service/audio_service.dart';
 import 'package:logging/logging.dart';
 
+import '../../domain/entities/loop_mode.dart';
 import '../../domain/entities/player_state.dart';
 import '../../domain/entities/shuffle_mode.dart';
 import '../datasources/music_data_source_contract.dart';
@@ -31,14 +32,20 @@ class MyAudioHandler extends BaseAudioHandler {
       customEventSubject.add({SHUFFLE_MODE: shuffleMode});
     });
 
+    _audioPlayer.loopModeStream.listen((event) {
+      _musicDataSource.setLoopMode(event);
+    });
+
     _initAudioPlayer();
   }
 
   Future<void> _initAudioPlayer() async {
-    _audioPlayer.loadQueue(
-      queue: await _musicDataSource.queueStream.first,
-      startIndex: await _musicDataSource.currentIndexStream.first,
-    );
+    if (_musicDataSource.queueStream != null && _musicDataSource.currentIndexStream != null) {
+      _audioPlayer.loadQueue(
+        queue: await _musicDataSource.queueStream.first,
+        startIndex: await _musicDataSource.currentIndexStream.first,
+      );
+    }
   }
 
   final AudioPlayer _audioPlayer;
@@ -89,6 +96,8 @@ class MyAudioHandler extends BaseAudioHandler {
         return onAppLifecycleResumed();
       case SET_SHUFFLE_MODE:
         return setCustomShuffleMode(arguments['SHUFFLE_MODE'] as ShuffleMode);
+      case SET_LOOP_MODE:
+        return setCustomLoopMode(arguments['LOOP_MODE'] as LoopMode);
       case SHUFFLE_ALL:
         return shuffleAll();
       case MOVE_QUEUE_ITEM:
@@ -116,6 +125,11 @@ class MyAudioHandler extends BaseAudioHandler {
 
   Future<void> setCustomShuffleMode(ShuffleMode mode) async {
     _audioPlayer.setShuffleMode(mode, true);
+  }
+
+  Future<void> setCustomLoopMode(LoopMode mode) async {
+
+    _audioPlayer.setLoopMode(mode);
   }
 
   Future<void> shuffleAll() async {

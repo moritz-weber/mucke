@@ -1,11 +1,12 @@
 import 'package:meta/meta.dart';
 import 'package:mobx/mobx.dart';
-import 'package:mucke/domain/repositories/music_data_repository.dart';
 
+import '../../domain/entities/loop_mode.dart';
 import '../../domain/entities/playback_state.dart';
 import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/entities/song.dart';
 import '../../domain/repositories/audio_repository.dart';
+import '../../domain/repositories/music_data_repository.dart';
 
 part 'audio_store.g.dart';
 
@@ -29,6 +30,8 @@ abstract class _AudioStore with Store {
 
     shuffleModeStream =
         _audioRepository.shuffleModeStream.asObservable(initialValue: ShuffleMode.none);
+
+    loopModeStream = _musicDataRepository.loopModeStream.asObservable();
 
     playbackStateStream = _audioRepository.playbackStateStream.asObservable();
   }
@@ -70,6 +73,9 @@ abstract class _AudioStore with Store {
   @observable
   ObservableStream<ShuffleMode> shuffleModeStream;
 
+  @observable
+  ObservableStream<LoopMode> loopModeStream;
+
   @action
   Future<void> playSong(int index, List<Song> songList) async {
     _audioRepository.playSong(index, songList);
@@ -97,6 +103,11 @@ abstract class _AudioStore with Store {
 
   Future<void> setShuffleMode(ShuffleMode shuffleMode) async {
     _audioRepository.setShuffleMode(shuffleMode);
+  }
+
+  Future<void> setLoopMode(LoopMode loopMode) async {
+    print('setLoopMode');
+    _audioRepository.setLoopMode(loopMode);
   }
 
   Future<void> shuffleAll() async {

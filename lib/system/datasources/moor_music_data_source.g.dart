@@ -1508,7 +1508,12 @@ class $QueueEntriesTable extends QueueEntries
 class PersistentPlayerState extends DataClass
     implements Insertable<PersistentPlayerState> {
   final int index;
-  PersistentPlayerState({@required this.index});
+  final int shuffleMode;
+  final int loopMode;
+  PersistentPlayerState(
+      {@required this.index,
+      @required this.shuffleMode,
+      @required this.loopMode});
   factory PersistentPlayerState.fromData(
       Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
@@ -1516,6 +1521,10 @@ class PersistentPlayerState extends DataClass
     final intType = db.typeSystem.forDartType<int>();
     return PersistentPlayerState(
       index: intType.mapFromDatabaseResponse(data['${effectivePrefix}index']),
+      shuffleMode: intType
+          .mapFromDatabaseResponse(data['${effectivePrefix}shuffle_mode']),
+      loopMode:
+          intType.mapFromDatabaseResponse(data['${effectivePrefix}loop_mode']),
     );
   }
   @override
@@ -1524,6 +1533,12 @@ class PersistentPlayerState extends DataClass
     if (!nullToAbsent || index != null) {
       map['index'] = Variable<int>(index);
     }
+    if (!nullToAbsent || shuffleMode != null) {
+      map['shuffle_mode'] = Variable<int>(shuffleMode);
+    }
+    if (!nullToAbsent || loopMode != null) {
+      map['loop_mode'] = Variable<int>(loopMode);
+    }
     return map;
   }
 
@@ -1531,6 +1546,12 @@ class PersistentPlayerState extends DataClass
     return PlayerStateCompanion(
       index:
           index == null && nullToAbsent ? const Value.absent() : Value(index),
+      shuffleMode: shuffleMode == null && nullToAbsent
+          ? const Value.absent()
+          : Value(shuffleMode),
+      loopMode: loopMode == null && nullToAbsent
+          ? const Value.absent()
+          : Value(loopMode),
     );
   }
 
@@ -1539,6 +1560,8 @@ class PersistentPlayerState extends DataClass
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return PersistentPlayerState(
       index: serializer.fromJson<int>(json['index']),
+      shuffleMode: serializer.fromJson<int>(json['shuffleMode']),
+      loopMode: serializer.fromJson<int>(json['loopMode']),
     );
   }
   @override
@@ -1546,47 +1569,71 @@ class PersistentPlayerState extends DataClass
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'index': serializer.toJson<int>(index),
+      'shuffleMode': serializer.toJson<int>(shuffleMode),
+      'loopMode': serializer.toJson<int>(loopMode),
     };
   }
 
-  PersistentPlayerState copyWith({int index}) => PersistentPlayerState(
+  PersistentPlayerState copyWith({int index, int shuffleMode, int loopMode}) =>
+      PersistentPlayerState(
         index: index ?? this.index,
+        shuffleMode: shuffleMode ?? this.shuffleMode,
+        loopMode: loopMode ?? this.loopMode,
       );
   @override
   String toString() {
     return (StringBuffer('PersistentPlayerState(')
-          ..write('index: $index')
+          ..write('index: $index, ')
+          ..write('shuffleMode: $shuffleMode, ')
+          ..write('loopMode: $loopMode')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => $mrjf(index.hashCode);
+  int get hashCode => $mrjf(
+      $mrjc(index.hashCode, $mrjc(shuffleMode.hashCode, loopMode.hashCode)));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
-      (other is PersistentPlayerState && other.index == this.index);
+      (other is PersistentPlayerState &&
+          other.index == this.index &&
+          other.shuffleMode == this.shuffleMode &&
+          other.loopMode == this.loopMode);
 }
 
 class PlayerStateCompanion extends UpdateCompanion<PersistentPlayerState> {
   final Value<int> index;
+  final Value<int> shuffleMode;
+  final Value<int> loopMode;
   const PlayerStateCompanion({
     this.index = const Value.absent(),
+    this.shuffleMode = const Value.absent(),
+    this.loopMode = const Value.absent(),
   });
   PlayerStateCompanion.insert({
     @required int index,
+    this.shuffleMode = const Value.absent(),
+    this.loopMode = const Value.absent(),
   }) : index = Value(index);
   static Insertable<PersistentPlayerState> custom({
     Expression<int> index,
+    Expression<int> shuffleMode,
+    Expression<int> loopMode,
   }) {
     return RawValuesInsertable({
       if (index != null) 'index': index,
+      if (shuffleMode != null) 'shuffle_mode': shuffleMode,
+      if (loopMode != null) 'loop_mode': loopMode,
     });
   }
 
-  PlayerStateCompanion copyWith({Value<int> index}) {
+  PlayerStateCompanion copyWith(
+      {Value<int> index, Value<int> shuffleMode, Value<int> loopMode}) {
     return PlayerStateCompanion(
       index: index ?? this.index,
+      shuffleMode: shuffleMode ?? this.shuffleMode,
+      loopMode: loopMode ?? this.loopMode,
     );
   }
 
@@ -1596,13 +1643,21 @@ class PlayerStateCompanion extends UpdateCompanion<PersistentPlayerState> {
     if (index.present) {
       map['index'] = Variable<int>(index.value);
     }
+    if (shuffleMode.present) {
+      map['shuffle_mode'] = Variable<int>(shuffleMode.value);
+    }
+    if (loopMode.present) {
+      map['loop_mode'] = Variable<int>(loopMode.value);
+    }
     return map;
   }
 
   @override
   String toString() {
     return (StringBuffer('PlayerStateCompanion(')
-          ..write('index: $index')
+          ..write('index: $index, ')
+          ..write('shuffleMode: $shuffleMode, ')
+          ..write('loopMode: $loopMode')
           ..write(')'))
         .toString();
   }
@@ -1625,8 +1680,28 @@ class $PlayerStateTable extends PlayerState
     );
   }
 
+  final VerificationMeta _shuffleModeMeta =
+      const VerificationMeta('shuffleMode');
+  GeneratedIntColumn _shuffleMode;
   @override
-  List<GeneratedColumn> get $columns => [index];
+  GeneratedIntColumn get shuffleMode =>
+      _shuffleMode ??= _constructShuffleMode();
+  GeneratedIntColumn _constructShuffleMode() {
+    return GeneratedIntColumn('shuffle_mode', $tableName, false,
+        defaultValue: const Constant(0));
+  }
+
+  final VerificationMeta _loopModeMeta = const VerificationMeta('loopMode');
+  GeneratedIntColumn _loopMode;
+  @override
+  GeneratedIntColumn get loopMode => _loopMode ??= _constructLoopMode();
+  GeneratedIntColumn _constructLoopMode() {
+    return GeneratedIntColumn('loop_mode', $tableName, false,
+        defaultValue: const Constant(0));
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [index, shuffleMode, loopMode];
   @override
   $PlayerStateTable get asDslTable => this;
   @override
@@ -1644,6 +1719,16 @@ class $PlayerStateTable extends PlayerState
           _indexMeta, index.isAcceptableOrUnknown(data['index'], _indexMeta));
     } else if (isInserting) {
       context.missing(_indexMeta);
+    }
+    if (data.containsKey('shuffle_mode')) {
+      context.handle(
+          _shuffleModeMeta,
+          shuffleMode.isAcceptableOrUnknown(
+              data['shuffle_mode'], _shuffleModeMeta));
+    }
+    if (data.containsKey('loop_mode')) {
+      context.handle(_loopModeMeta,
+          loopMode.isAcceptableOrUnknown(data['loop_mode'], _loopModeMeta));
     }
     return context;
   }

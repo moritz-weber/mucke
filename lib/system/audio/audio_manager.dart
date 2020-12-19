@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
 
+import '../../domain/entities/loop_mode.dart';
 import '../../domain/entities/playback_state.dart' as entity;
 import '../../domain/entities/shuffle_mode.dart';
 import '../models/playback_state_model.dart';
@@ -113,6 +114,12 @@ class AudioManagerImpl implements AudioManager {
   @override
   Future<void> setShuffleMode(ShuffleMode shuffleMode) async {
     await _audioHandler.customAction(SET_SHUFFLE_MODE, {'SHUFFLE_MODE': shuffleMode});
+  }
+
+  @override
+  Future<void> setLoopMode(LoopMode loopMode) async {
+    print('setLoopMode!!');
+    await _audioHandler.customAction(SET_LOOP_MODE, {'LOOP_MODE': loopMode});
   }
 
   Stream<T> _filterStream<S, T>(Stream<S> stream, Conversion<S, T> fn) async* {
