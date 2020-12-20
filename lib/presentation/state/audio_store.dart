@@ -106,7 +106,6 @@ abstract class _AudioStore with Store {
   }
 
   Future<void> setLoopMode(LoopMode loopMode) async {
-    print('setLoopMode');
     _audioRepository.setLoopMode(loopMode);
   }
 

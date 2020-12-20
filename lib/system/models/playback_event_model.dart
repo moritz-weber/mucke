@@ -1,15 +1,29 @@
 import 'package:just_audio/just_audio.dart' as ja;
 
-import '../../domain/entities/player_state.dart';
+import '../../domain/entities/playback_event.dart';
 
-class PlayerStateModel extends PlayerState {
-  PlayerStateModel(bool playing, ProcessingState processingState)
-      : super(playing, processingState);
+class PlaybackEventModel extends PlaybackEvent {
+  PlaybackEventModel({
+    Duration duration,
+    int index,
+    ProcessingState processingState,
+    Duration updatePosition,
+    DateTime updateTime,
+  }) : super(
+          duration: duration,
+          index: index,
+          processingState: processingState,
+          updatePosition: updatePosition,
+          updateTime: updateTime,
+        );
 
-  factory PlayerStateModel.fromJAPlayerState(ja.PlayerState playerState) =>
-      PlayerStateModel(
-        playerState.playing,
-        playerState.processingState.toProcessingState(),
+  factory PlaybackEventModel.fromJAPlaybackEvent(ja.PlaybackEvent playbackEvent) =>
+      PlaybackEventModel(
+        duration: playbackEvent.duration,
+        index: playbackEvent.currentIndex,
+        processingState: playbackEvent.processingState.toProcessingState(),
+        updatePosition: playbackEvent.updatePosition,
+        updateTime: playbackEvent.updateTime,
       );
 }
 

@@ -2,14 +2,15 @@ import 'package:rxdart/rxdart.dart';
 
 import '../../domain/entities/loop_mode.dart';
 import '../../domain/entities/shuffle_mode.dart';
-import '../models/player_state_model.dart';
+import '../models/playback_event_model.dart';
 import '../models/queue_item_model.dart';
 import '../models/song_model.dart';
 
 abstract class AudioPlayer {
   ValueStream<int> get currentIndexStream;
   ValueStream<SongModel> get currentSongStream;
-  ValueStream<PlayerStateModel> get playerStateStream;
+  ValueStream<PlaybackEventModel> get playbackEventStream;
+  ValueStream<bool> get playingStream;
   ValueStream<Duration> get positionStream;
   ValueStream<List<QueueItemModel>> get queueStream;
   ValueStream<ShuffleMode> get shuffleModeStream;

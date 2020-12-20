@@ -4,9 +4,10 @@ import 'package:audio_service/audio_service.dart';
 import 'package:logging/logging.dart';
 
 import '../../domain/entities/loop_mode.dart';
-import '../../domain/entities/player_state.dart';
+import '../../domain/entities/playback_event.dart';
 import '../../domain/entities/shuffle_mode.dart';
 import '../datasources/music_data_source_contract.dart';
+import '../models/playback_event_model.dart';
 import '../models/queue_item_model.dart';
 import '../models/song_model.dart';
 import 'audio_player_contract.dart';
@@ -18,17 +19,16 @@ class MyAudioHandler extends BaseAudioHandler {
       _handleSetQueue(event);
     });
 
-    _audioPlayer.currentIndexStream.listen((event) => _handleIndexChange(event));
-
     _audioPlayer.currentSongStream.listen((songModel) {
       mediaItemSubject.add(songModel.toMediaItem());
     });
 
-    _audioPlayer.playerStateStream.listen((event) {
-      _handlePlayerState(event);
+    _audioPlayer.playbackEventStream.listen((event) {
+      _handlePlaybackEvent(event);
     });
 
     _audioPlayer.shuffleModeStream.listen((shuffleMode) {
+      _musicDataSource.setShuffleMode(shuffleMode);
       customEventSubject.add({SHUFFLE_MODE: shuffleMode});
     });
 
@@ -40,6 +40,14 @@ class MyAudioHandler extends BaseAudioHandler {
   }
 
   Future<void> _initAudioPlayer() async {
+    if (_musicDataSource.loopModeStream != null) {
+      _audioPlayer.setLoopMode(await _musicDataSource.loopModeStream.first);
+    }
+
+    if (_musicDataSource.shuffleModeStream != null) {
+      _audioPlayer.setShuffleMode(await _musicDataSource.shuffleModeStream.first, false);
+    }
+
     if (_musicDataSource.queueStream != null && _musicDataSource.currentIndexStream != null) {
       _audioPlayer.loadQueue(
         queue: await _musicDataSource.queueStream.first,
@@ -56,7 +64,7 @@ class MyAudioHandler extends BaseAudioHandler {
   @override
   Future<void> stop() async {
     await _audioPlayer.stop();
-    // await _audioPlayer.dispose();
+    await _audioPlayer.dispose();
     await super.stop();
   }
 
@@ -128,7 +136,6 @@ class MyAudioHandler extends BaseAudioHandler {
   }
 
   Future<void> setCustomLoopMode(LoopMode mode) async {
-
     _audioPlayer.setLoopMode(mode);
   }
 
@@ -151,48 +158,34 @@ class MyAudioHandler extends BaseAudioHandler {
   }
 
   void _handleSetQueue(List<QueueItemModel> queue) {
-    print('handleSetQueue');
     _musicDataSource.setQueue(queue);
 
     final mediaItems = queue.map((e) => e.song.toMediaItem()).toList();
     queueSubject.add(mediaItems);
   }
 
-  void _handleIndexChange(int index) {
-    _log.info('index: $index');
-    if (index != null) {
-      _musicDataSource.setCurrentIndex(index);
-
-      customEventSubject.add({KEY_INDEX: index});
-      playbackStateSubject.add(playbackState.value.copyWith(
-        controls: [
-          MediaControl.skipToPrevious,
-          MediaControl.pause,
-          MediaControl.skipToNext,
-        ],
-        playing: _audioPlayer.playerStateStream.value.playing,
-        processingState: AudioProcessingState.ready,
-        updatePosition: const Duration(milliseconds: 0), // _audioPlayer.positionStream.value,
-      ));
+  void _handlePlaybackEvent(PlaybackEventModel pe) {
+    if (pe.index != null) {
+      _musicDataSource.setCurrentIndex(pe.index);
+      customEventSubject.add({KEY_INDEX: pe.index});
     }
-  }
 
-  void _handlePlayerState(PlayerState ps) {
-    _log.info('handlePlayerState called');
-    if (ps.processingState == ProcessingState.ready && ps.playing) {
-      playbackStateSubject.add(playbackState.value.copyWith(
-        controls: [MediaControl.skipToPrevious, MediaControl.pause, MediaControl.skipToNext],
-        playing: true,
-        processingState: AudioProcessingState.ready,
-        updatePosition: _audioPlayer.positionStream.value,
-      ));
-    } else if (ps.processingState == ProcessingState.ready && !ps.playing) {
-      playbackStateSubject.add(playbackState.value.copyWith(
-        controls: [MediaControl.skipToPrevious, MediaControl.play, MediaControl.skipToNext],
-        processingState: AudioProcessingState.ready,
-        updatePosition: _audioPlayer.positionStream.value,
-        playing: false,
-      ));
+    if (pe.processingState == ProcessingState.ready) {
+      if (_audioPlayer.playingStream.value) {
+        playbackStateSubject.add(playbackState.value.copyWith(
+          controls: [MediaControl.skipToPrevious, MediaControl.pause, MediaControl.skipToNext],
+          playing: true,
+          processingState: AudioProcessingState.ready,
+          updatePosition: pe.updatePosition,
+        ));
+      } else {
+        playbackStateSubject.add(playbackState.value.copyWith(
+          controls: [MediaControl.skipToPrevious, MediaControl.play, MediaControl.skipToNext],
+          processingState: AudioProcessingState.ready,
+          updatePosition: pe.updatePosition,
+          playing: false,
+        ));
+      }
     }
   }
 }

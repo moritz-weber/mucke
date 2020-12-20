@@ -118,7 +118,6 @@ class AudioManagerImpl implements AudioManager {
 
   @override
   Future<void> setLoopMode(LoopMode loopMode) async {
-    print('setLoopMode!!');
     await _audioHandler.customAction(SET_LOOP_MODE, {'LOOP_MODE': loopMode});
   }
 

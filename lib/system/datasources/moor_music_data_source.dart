@@ -13,6 +13,7 @@ import '../models/album_model.dart';
 import '../models/artist_model.dart';
 import '../models/loop_mode_model.dart';
 import '../models/queue_item_model.dart';
+import '../models/shuffle_mode_model.dart';
 import '../models/song_model.dart';
 import 'music_data_source_contract.dart';
 
@@ -242,7 +243,6 @@ class MoorMusicDataSource extends _$MoorMusicDataSource implements MusicDataSour
         .join([innerJoin(songs, songs.path.equalsExp(queueEntries.path))]);
 
     return query.watch().map((rows) {
-      print('rows: ${rows.length}');
       return rows.map((row) => SongModel.fromMoorSong(row.readTable(songs))).toList();
     });
   }
@@ -265,7 +265,6 @@ class MoorMusicDataSource extends _$MoorMusicDataSource implements MusicDataSour
 
   @override
   Future<void> setQueue(List<QueueItemModel> queue) async {
-    print('setQueue');
     final _queueEntries = <Insertable<MoorQueueEntry>>[];
 
     for (var i = 0; i < queue.length; i++) {
@@ -290,7 +289,6 @@ class MoorMusicDataSource extends _$MoorMusicDataSource implements MusicDataSour
 
   @override
   Future<void> setCurrentIndex(int index) async {
-    print('setCurrentIndex: $index');
     final currentState = await select(playerState).getSingle();
     if (currentState != null) {
       update(playerState).write(PlayerStateCompanion(index: Value(index)));
@@ -306,7 +304,6 @@ class MoorMusicDataSource extends _$MoorMusicDataSource implements MusicDataSour
 
   @override
   Future<void> setLoopMode(LoopMode loopMode) async {
-    print('setLoopMode!!!');
     final currentState = await select(playerState).getSingle();
     if (currentState != null) {
       update(playerState).write(PlayerStateCompanion(loopMode: Value(loopMode.toInt())));
@@ -316,14 +313,19 @@ class MoorMusicDataSource extends _$MoorMusicDataSource implements MusicDataSour
   }
 
   @override
-  Future<void> setShuffleMode(ShuffleMode shuffleMode) {
-    // TODO: implement setShuffleMode
-    throw UnimplementedError();
+  Future<void> setShuffleMode(ShuffleMode shuffleMode) async {
+    final currentState = await select(playerState).getSingle();
+    if (currentState != null) {
+      update(playerState).write(PlayerStateCompanion(shuffleMode: Value(shuffleMode.toInt())));
+    } else {
+      into(playerState).insert(PlayerStateCompanion(shuffleMode: Value(shuffleMode.toInt())));
+    }
   }
 
   @override
-  // TODO: implement shuffleModeStream
-  Stream<ShuffleMode> get shuffleModeStream => throw UnimplementedError();
+  Stream<ShuffleMode> get shuffleModeStream {
+    return select(playerState).watchSingle().map((event) => event.shuffleMode.toShuffleMode());
+  }
 }
 
 LazyDatabase _openConnection() {
