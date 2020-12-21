@@ -18,8 +18,7 @@ class AudioStore extends _AudioStore with _$AudioStore {
 }
 
 abstract class _AudioStore with Store {
-  _AudioStore(
-      this._audioRepository, this._persistentPlayerStateRepository) {
+  _AudioStore(this._audioRepository, this._persistentPlayerStateRepository) {
     currentSongStream = _audioRepository.currentSongStream.distinct().asObservable();
 
     currentPositionStream = _audioRepository.currentPositionStream.asObservable(initialValue: 0);
@@ -29,8 +28,7 @@ abstract class _AudioStore with Store {
     queueIndexStream = _persistentPlayerStateRepository.currentIndexStream.asObservable();
     // queueIndexStream = _audioRepository.queueIndexStream.asObservable();
 
-    shuffleModeStream =
-        _audioRepository.shuffleModeStream.asObservable(initialValue: ShuffleMode.none);
+    shuffleModeStream = _persistentPlayerStateRepository.shuffleModeStream.asObservable();
 
     loopModeStream = _persistentPlayerStateRepository.loopModeStream.asObservable();
 
