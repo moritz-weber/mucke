@@ -1762,6 +1762,9 @@ abstract class _$MoorMusicDataSource extends GeneratedDatabase {
       _queueEntries ??= $QueueEntriesTable(this);
   $PlayerStateTable _playerState;
   $PlayerStateTable get playerState => _playerState ??= $PlayerStateTable(this);
+  PlayerStateDao _playerStateDao;
+  PlayerStateDao get playerStateDao =>
+      _playerStateDao ??= PlayerStateDao(this as MoorMusicDataSource);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override

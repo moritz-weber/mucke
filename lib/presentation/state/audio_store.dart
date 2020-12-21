@@ -6,38 +6,39 @@ import '../../domain/entities/playback_state.dart';
 import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/entities/song.dart';
 import '../../domain/repositories/audio_repository.dart';
-import '../../domain/repositories/music_data_repository.dart';
+import '../../domain/repositories/persistent_player_state_repository.dart';
 
 part 'audio_store.g.dart';
 
 class AudioStore extends _AudioStore with _$AudioStore {
   AudioStore({
     @required AudioRepository audioRepository,
-    @required MusicDataRepository musicDataRepository,
-  }) : super(audioRepository, musicDataRepository);
+    @required PlayerStateRepository persistentPlayerStateRepository,
+  }) : super(audioRepository, persistentPlayerStateRepository);
 }
 
 abstract class _AudioStore with Store {
-  _AudioStore(this._audioRepository, this._musicDataRepository) {
+  _AudioStore(
+      this._audioRepository, this._persistentPlayerStateRepository) {
     currentSongStream = _audioRepository.currentSongStream.distinct().asObservable();
 
     currentPositionStream = _audioRepository.currentPositionStream.asObservable(initialValue: 0);
 
-    queueStream = _musicDataRepository.queueStream.asObservable();
+    queueStream = _persistentPlayerStateRepository.queueStream.asObservable();
 
-    queueIndexStream = _musicDataRepository.currentIndexStream.asObservable();
+    queueIndexStream = _persistentPlayerStateRepository.currentIndexStream.asObservable();
     // queueIndexStream = _audioRepository.queueIndexStream.asObservable();
 
     shuffleModeStream =
         _audioRepository.shuffleModeStream.asObservable(initialValue: ShuffleMode.none);
 
-    loopModeStream = _musicDataRepository.loopModeStream.asObservable();
+    loopModeStream = _persistentPlayerStateRepository.loopModeStream.asObservable();
 
     playbackStateStream = _audioRepository.playbackStateStream.asObservable();
   }
 
   final AudioRepository _audioRepository;
-  final MusicDataRepository _musicDataRepository;
+  final PlayerStateRepository _persistentPlayerStateRepository;
 
   @observable
   ObservableStream<Song> currentSongStream;
@@ -48,7 +49,7 @@ abstract class _AudioStore with Store {
     print(queueStream.value);
     print(queueIndexStream.value);
 
-    if (queueStream.value != null && queueIndexStream.value != null) {  
+    if (queueStream.value != null && queueIndexStream.value != null) {
       if (queueIndexStream.value < queueStream.value.length) {
         final song = queueStream.value[queueIndexStream.value];
         return song;

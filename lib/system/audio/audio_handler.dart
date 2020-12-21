@@ -7,6 +7,7 @@ import '../../domain/entities/loop_mode.dart';
 import '../../domain/entities/playback_event.dart';
 import '../../domain/entities/shuffle_mode.dart';
 import '../datasources/music_data_source_contract.dart';
+import '../datasources/player_state_data_source.dart';
 import '../models/playback_event_model.dart';
 import '../models/queue_item_model.dart';
 import '../models/song_model.dart';
@@ -14,7 +15,7 @@ import 'audio_player_contract.dart';
 import 'stream_constants.dart';
 
 class MyAudioHandler extends BaseAudioHandler {
-  MyAudioHandler(this._musicDataSource, this._audioPlayer) {
+  MyAudioHandler(this._musicDataSource, this._audioPlayer, this._playerStateDataSource) {
     _audioPlayer.queueStream.listen((event) {
       _handleSetQueue(event);
     });
@@ -28,36 +29,37 @@ class MyAudioHandler extends BaseAudioHandler {
     });
 
     _audioPlayer.shuffleModeStream.listen((shuffleMode) {
-      _musicDataSource.setShuffleMode(shuffleMode);
+      _playerStateDataSource.setShuffleMode(shuffleMode);
       customEventSubject.add({SHUFFLE_MODE: shuffleMode});
     });
 
     _audioPlayer.loopModeStream.listen((event) {
-      _musicDataSource.setLoopMode(event);
+      _playerStateDataSource.setLoopMode(event);
     });
 
     _initAudioPlayer();
   }
 
   Future<void> _initAudioPlayer() async {
-    if (_musicDataSource.loopModeStream != null) {
-      _audioPlayer.setLoopMode(await _musicDataSource.loopModeStream.first);
+    if (_playerStateDataSource.loopModeStream != null) {
+      _audioPlayer.setLoopMode(await _playerStateDataSource.loopModeStream.first);
     }
 
-    if (_musicDataSource.shuffleModeStream != null) {
-      _audioPlayer.setShuffleMode(await _musicDataSource.shuffleModeStream.first, false);
+    if (_playerStateDataSource.shuffleModeStream != null) {
+      _audioPlayer.setShuffleMode(await _playerStateDataSource.shuffleModeStream.first, false);
     }
 
-    if (_musicDataSource.queueStream != null && _musicDataSource.currentIndexStream != null) {
+    if (_playerStateDataSource.queueStream != null && _playerStateDataSource.currentIndexStream != null) {
       _audioPlayer.loadQueue(
-        queue: await _musicDataSource.queueStream.first,
-        startIndex: await _musicDataSource.currentIndexStream.first,
+        queue: await _playerStateDataSource.queueStream.first,
+        startIndex: await _playerStateDataSource.currentIndexStream.first,
       );
     }
   }
 
   final AudioPlayer _audioPlayer;
   final MusicDataSource _musicDataSource;
+  final PlayerStateDataSource _playerStateDataSource;
 
   static final _log = Logger('AudioHandler');
 
@@ -158,7 +160,7 @@ class MyAudioHandler extends BaseAudioHandler {
   }
 
   void _handleSetQueue(List<QueueItemModel> queue) {
-    _musicDataSource.setQueue(queue);
+    _playerStateDataSource.setQueue(queue);
 
     final mediaItems = queue.map((e) => e.song.toMediaItem()).toList();
     queueSubject.add(mediaItems);
@@ -166,7 +168,7 @@ class MyAudioHandler extends BaseAudioHandler {
 
   void _handlePlaybackEvent(PlaybackEventModel pe) {
     if (pe.index != null) {
-      _musicDataSource.setCurrentIndex(pe.index);
+      _playerStateDataSource.setCurrentIndex(pe.index);
       customEventSubject.add({KEY_INDEX: pe.index});
     }
 

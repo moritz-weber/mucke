@@ -8,7 +8,6 @@ import 'package:path_provider/path_provider.dart';
 import '../../core/error/failures.dart';
 import '../../domain/entities/album.dart';
 import '../../domain/entities/artist.dart';
-import '../../domain/entities/loop_mode.dart';
 import '../../domain/entities/song.dart';
 import '../../domain/repositories/music_data_repository.dart';
 import '../datasources/local_music_fetcher_contract.dart';
@@ -134,13 +133,4 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   Future<void> toggleNextSongLink(Song song) async {
     musicDataSource.toggleNextSongLink(song as SongModel);
   }
-
-  @override
-  Stream<List<Song>> get queueStream => musicDataSource.songQueueStream;
-
-  @override
-  Stream<int> get currentIndexStream => musicDataSource.currentIndexStream;
-
-  @override
-  Stream<LoopMode> get loopModeStream => musicDataSource.loopModeStream;
 }
