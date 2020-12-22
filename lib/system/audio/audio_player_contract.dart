@@ -23,7 +23,7 @@ abstract class AudioPlayer {
   Future<void> seekToPrevious();
   Future<void> dispose();
 
-  Future<void> loadQueue({List<QueueItemModel> queue, int startIndex});
+  Future<void> loadQueue({List<QueueItemModel> queue, int initialIndex});
   Future<void> addToQueue(SongModel song);
   Future<void> moveQueueItem(int oldIndex, int newIndex);
   Future<void> removeQueueIndex(int index);

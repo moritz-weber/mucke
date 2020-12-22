@@ -14,7 +14,6 @@ import 'queue_generator.dart';
 class AudioPlayerImpl implements AudioPlayer {
   AudioPlayerImpl(this._audioPlayer, this._queueGenerator) {
     _audioPlayer.currentIndexStream.listen((event) {
-      print('currentIndex: $event');
       _currentIndexSubject.add(event);
       if (_queueSubject.value != null) {
         _currentSongSubject.add(_queueSubject.value[event].song);
@@ -95,26 +94,18 @@ class AudioPlayerImpl implements AudioPlayer {
   }
 
   @override
-  Future<void> loadQueue({List<QueueItemModel> queue, int startIndex = 0}) async {
-    if (queue == null || queue.isEmpty ) {
+  Future<void> loadQueue({List<QueueItemModel> queue, int initialIndex = 0}) async {
+    // Not adding to the queue subject as this is meant to load an initial state from the persistent state data source.
+    // This means that the UI already knows the queue.
+    if (queue == null || initialIndex >= queue.length) {
       return;
     }
-    if (startIndex >= queue.length) {
-      print('$startIndex >= ${queue.length}');
-      return;
-    }
-    _audioSource = _queueGenerator.songModelsToAudioSource([queue[startIndex].song]);
-    await _audioPlayer.setAudioSource(_audioSource);
-    // await _audioPlayer.load();
+
+    // final smallQueue = queue.sublist(max(initialIndex - 10, 0), min(initialIndex + 140, queue.length));
 
     final songModelQueue = queue.map((e) => e.song).toList();
-    _queueSubject.add(queue);
-
-    final completeAudioSource = _queueGenerator.songModelsToAudioSource(songModelQueue);
-    _audioSource.insertAll(0, completeAudioSource.children.sublist(0, startIndex));
-    _audioSource.addAll(
-      completeAudioSource.children.sublist(startIndex + 1, completeAudioSource.length),
-    );
+    _audioSource = _queueGenerator.songModelsToAudioSource(songModelQueue);
+    _audioPlayer.setAudioSource(_audioSource, initialIndex: initialIndex);
   }
 
   @override
@@ -124,7 +115,7 @@ class AudioPlayerImpl implements AudioPlayer {
 
   @override
   Future<void> play() async {
-    await _audioPlayer.play();
+    _audioPlayer.play();
   }
 
   @override
@@ -214,7 +205,8 @@ class AudioPlayerImpl implements AudioPlayer {
     await _audioPlayer.setLoopMode(loopMode.toJA());
   }
 
-  Future<void> _updateQueue(ja.ConcatenatingAudioSource newQueue, QueueItem currentQueueItem) async {
+  Future<void> _updateQueue(
+      ja.ConcatenatingAudioSource newQueue, QueueItem currentQueueItem) async {
     final int index = currentQueueItem.originalIndex;
 
     _audioSource.removeRange(0, _currentIndexSubject.value);

@@ -41,7 +41,7 @@ packages:
     description:
       path: "."
       ref: one-isolate
-      resolved-ref: "88559958955f17c54097f34b9a6365a23eac4899"
+      resolved-ref: d647578d5264ff465fd7bd686b7caa2b9e7373df
       url: "https://github.com/ryanheise/audio_service.git"
     source: git
     version: "0.15.3"
@@ -65,14 +65,14 @@ packages:
       name: build
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.5.2"
+    version: "1.6.0"
   build_config:
     dependency: transitive
     description:
       name: build_config
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.2"
+    version: "0.4.5"
   build_daemon:
     dependency: transitive
     description:
@@ -86,7 +86,7 @@ packages:
       name: build_resolvers
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.4.4"
+    version: "1.5.1"
   build_runner:
     dependency: "direct dev"
     description:
@@ -100,7 +100,7 @@ packages:
       name: build_runner_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.0.3"
+    version: "6.1.5"
   built_collection:
     dependency: transitive
     description:
@@ -135,7 +135,7 @@ packages:
       name: checked_yaml
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.2"
+    version: "1.0.4"
   cli_util:
     dependency: transitive
     description:
@@ -260,13 +260,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.4.2"
-  flutter_isolate:
-    dependency: transitive
-    description:
-      name: flutter_isolate
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0+14"
   flutter_mobx:
     dependency: "direct main"
     description:
@@ -297,7 +290,7 @@ packages:
       name: get_it
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.4"
+    version: "5.0.3"
   glob:
     dependency: transitive
     description:
@@ -364,12 +357,10 @@ packages:
   just_audio:
     dependency: "direct main"
     description:
-      path: just_audio
-      ref: HEAD
-      resolved-ref: "62c369527f749ff06428c8de26d318e77e803cdf"
-      url: "https://github.com/ryanheise/just_audio.git"
-    source: git
-    version: "0.6.1"
+      name: just_audio
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.6.2"
   just_audio_platform_interface:
     dependency: transitive
     description:
@@ -383,7 +374,7 @@ packages:
       name: just_audio_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.0"
+    version: "0.2.1"
   logging:
     dependency: "direct main"
     description:
@@ -572,7 +563,7 @@ packages:
       name: pubspec_parse
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.5"
+    version: "0.1.7"
   quiver:
     dependency: transitive
     description:
@@ -619,7 +610,7 @@ packages:
       name: source_gen
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.9.7+1"
+    version: "0.9.10+1"
   source_span:
     dependency: transitive
     description:
@@ -654,7 +645,7 @@ packages:
       name: sqlite3_flutter_libs
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.0"
+    version: "0.3.0"
   sqlparser:
     dependency: transitive
     description:
@@ -717,7 +708,7 @@ packages:
       name: timing
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.1+2"
+    version: "0.1.1+3"
   typed_data:
     dependency: transitive
     description:

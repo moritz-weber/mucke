@@ -21,7 +21,7 @@ class MyAudioHandler extends BaseAudioHandler {
     });
 
     _audioPlayer.currentSongStream.listen((songModel) {
-      mediaItemSubject.add(songModel.toMediaItem());
+      mediaItem.add(songModel.toMediaItem());
     });
 
     _audioPlayer.playbackEventStream.listen((event) {
@@ -52,7 +52,7 @@ class MyAudioHandler extends BaseAudioHandler {
     if (_playerStateDataSource.queueStream != null && _playerStateDataSource.currentIndexStream != null) {
       _audioPlayer.loadQueue(
         queue: await _playerStateDataSource.queueStream.first,
-        startIndex: await _playerStateDataSource.currentIndexStream.first,
+        initialIndex: await _playerStateDataSource.currentIndexStream.first,
       );
     }
   }
@@ -159,11 +159,11 @@ class MyAudioHandler extends BaseAudioHandler {
     _audioPlayer.removeQueueIndex(index);
   }
 
-  void _handleSetQueue(List<QueueItemModel> queue) {
-    _playerStateDataSource.setQueue(queue);
+  void _handleSetQueue(List<QueueItemModel> queueItems) {
+    _playerStateDataSource.setQueue(queueItems);
 
-    final mediaItems = queue.map((e) => e.song.toMediaItem()).toList();
-    queueSubject.add(mediaItems);
+    final mediaItems = queueItems.map((e) => e.song.toMediaItem()).toList();
+    queue.add(mediaItems);
   }
 
   void _handlePlaybackEvent(PlaybackEventModel pe) {
@@ -174,14 +174,14 @@ class MyAudioHandler extends BaseAudioHandler {
 
     if (pe.processingState == ProcessingState.ready) {
       if (_audioPlayer.playingStream.value) {
-        playbackStateSubject.add(playbackState.value.copyWith(
+        playbackState.add(playbackState.value.copyWith(
           controls: [MediaControl.skipToPrevious, MediaControl.pause, MediaControl.skipToNext],
           playing: true,
           processingState: AudioProcessingState.ready,
           updatePosition: pe.updatePosition,
         ));
       } else {
-        playbackStateSubject.add(playbackState.value.copyWith(
+        playbackState.add(playbackState.value.copyWith(
           controls: [MediaControl.skipToPrevious, MediaControl.play, MediaControl.skipToNext],
           processingState: AudioProcessingState.ready,
           updatePosition: pe.updatePosition,
