@@ -16,7 +16,7 @@ import 'stream_constants.dart';
 
 class MyAudioHandler extends BaseAudioHandler {
   MyAudioHandler(this._musicDataSource, this._audioPlayer, this._playerStateDataSource) {
-    _audioPlayer.queueStream.listen((event) {
+    _audioPlayer.queueStream.skip(1).listen((event) {
       _handleSetQueue(event);
     });
 

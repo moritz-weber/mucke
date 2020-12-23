@@ -95,11 +95,10 @@ class AudioPlayerImpl implements AudioPlayer {
 
   @override
   Future<void> loadQueue({List<QueueItemModel> queue, int initialIndex = 0}) async {
-    // Not adding to the queue subject as this is meant to load an initial state from the persistent state data source.
-    // This means that the UI already knows the queue.
     if (queue == null || initialIndex >= queue.length) {
       return;
     }
+    _queueSubject.add(queue);
 
     // final smallQueue = queue.sublist(max(initialIndex - 10, 0), min(initialIndex + 140, queue.length));
 
