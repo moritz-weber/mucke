@@ -61,7 +61,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   Future<void> updateDatabase() async {
     _log.info('updateDatabase called');
 
-    updateArtists();
+    await updateArtists();
     final albumIdMap = await updateAlbums();
     await updateSongs(albumIdMap);
 

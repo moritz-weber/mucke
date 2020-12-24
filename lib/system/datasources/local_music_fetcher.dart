@@ -24,8 +24,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
 
   @override
   Future<List<ArtistModel>> getArtists() async {
-    final List<ArtistInfo> artistInfoList =
-        await _flutterAudioQuery.getArtists();
+    final List<ArtistInfo> artistInfoList = await _flutterAudioQuery.getArtists();
     return artistInfoList
         .map((ArtistInfo artistInfo) => ArtistModel.fromArtistInfo(artistInfo))
         .toSet()
@@ -35,9 +34,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
   @override
   Future<List<AlbumModel>> getAlbums() async {
     final List<AlbumInfo> albumInfoList = await _flutterAudioQuery.getAlbums();
-    return albumInfoList
-        .map((AlbumInfo albumInfo) => AlbumModel.fromAlbumInfo(albumInfo))
-        .toList();
+    return albumInfoList.map((AlbumInfo albumInfo) => AlbumModel.fromAlbumInfo(albumInfo)).toList();
   }
 
   @override

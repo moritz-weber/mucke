@@ -11,8 +11,10 @@ import '../player_state_data_source.dart';
 
 part 'player_state_dao.g.dart';
 
-@UseDao(tables: [Songs, QueueEntries, PlayerState])
-class PlayerStateDao extends DatabaseAccessor<MoorMusicDataSource> with _$PlayerStateDaoMixin implements PlayerStateDataSource  {
+@UseDao(tables: [Songs, QueueEntries, PersistentIndex, PersistentShuffleMode, PersistentLoopMode])
+class PlayerStateDao extends DatabaseAccessor<MoorMusicDataSource>
+    with _$PlayerStateDaoMixin
+    implements PlayerStateDataSource {
   PlayerStateDao(MoorMusicDataSource db) : super(db);
 
   @override
@@ -62,46 +64,52 @@ class PlayerStateDao extends DatabaseAccessor<MoorMusicDataSource> with _$Player
 
   @override
   Stream<int> get currentIndexStream {
-    return select(playerState).watchSingle().map((event) => event.index);
+    return select(persistentIndex).watchSingle().map((event) => event?.index);
   }
 
   @override
   Future<void> setCurrentIndex(int index) async {
-    final currentState = await select(playerState).getSingle();
+    final currentState = await select(persistentIndex).getSingle();
     if (currentState != null) {
-      update(playerState).write(PlayerStateCompanion(index: Value(index)));
+      update(persistentIndex).write(PersistentIndexCompanion(index: Value(index)));
     } else {
-      into(playerState).insert(PlayerStateCompanion(index: Value(index)));
+      into(persistentIndex).insert(PersistentIndexCompanion(index: Value(index)));
     }
   }
 
   @override
   Stream<LoopMode> get loopModeStream {
-    return select(playerState).watchSingle().map((event) => event.loopMode.toLoopMode());
+    return select(persistentLoopMode).watchSingle().map((event) => event?.loopMode?.toLoopMode());
   }
 
   @override
   Future<void> setLoopMode(LoopMode loopMode) async {
-    final currentState = await select(playerState).getSingle();
+    final currentState = await select(persistentLoopMode).getSingle();
     if (currentState != null) {
-      update(playerState).write(PlayerStateCompanion(loopMode: Value(loopMode.toInt())));
+      update(persistentLoopMode)
+          .write(PersistentLoopModeCompanion(loopMode: Value(loopMode.toInt())));
     } else {
-      into(playerState).insert(PlayerStateCompanion(loopMode: Value(loopMode.toInt())));
+      into(persistentLoopMode)
+          .insert(PersistentLoopModeCompanion(loopMode: Value(loopMode.toInt())));
     }
   }
 
   @override
   Future<void> setShuffleMode(ShuffleMode shuffleMode) async {
-    final currentState = await select(playerState).getSingle();
+    final currentState = await select(persistentShuffleMode).getSingle();
     if (currentState != null) {
-      update(playerState).write(PlayerStateCompanion(shuffleMode: Value(shuffleMode.toInt())));
+      update(persistentShuffleMode)
+          .write(PersistentShuffleModeCompanion(shuffleMode: Value(shuffleMode.toInt())));
     } else {
-      into(playerState).insert(PlayerStateCompanion(shuffleMode: Value(shuffleMode.toInt())));
+      into(persistentShuffleMode)
+          .insert(PersistentShuffleModeCompanion(shuffleMode: Value(shuffleMode.toInt())));
     }
   }
 
   @override
   Stream<ShuffleMode> get shuffleModeStream {
-    return select(playerState).watchSingle().map((event) => event.shuffleMode.toShuffleMode());
+    return select(persistentShuffleMode)
+        .watchSingle()
+        .map((event) => event?.shuffleMode?.toShuffleMode());
   }
 }

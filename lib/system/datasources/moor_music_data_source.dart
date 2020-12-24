@@ -66,14 +66,32 @@ class QueueEntries extends Table {
   Set<Column> get primaryKey => {index};
 }
 
-@DataClassName('PersistentPlayerState')
-class PlayerState extends Table {
-  IntColumn get index => integer()();
+class PersistentIndex extends Table {
+  IntColumn get index => integer().nullable()();
+}
+
+class PersistentShuffleMode extends Table {
   IntColumn get shuffleMode => integer().withDefault(const Constant(0))();
+}
+
+class PersistentLoopMode extends Table {
   IntColumn get loopMode => integer().withDefault(const Constant(0))();
 }
 
-@UseMoor(tables: [Artists, Albums, Songs, QueueEntries, PlayerState], daos: [PlayerStateDao])
+@UseMoor(
+  tables: [
+    Artists,
+    Albums,
+    Songs,
+    QueueEntries,
+    PersistentIndex,
+    PersistentShuffleMode,
+    PersistentLoopMode,
+  ],
+  daos: [
+    PlayerStateDao,
+  ],
+)
 class MoorMusicDataSource extends _$MoorMusicDataSource implements MusicDataSource {
   /// Use MoorMusicDataSource in main isolate only.
   MoorMusicDataSource() : super(_openConnection());

@@ -1,4 +1,6 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
@@ -44,9 +46,7 @@ class SettingsPage extends StatelessWidget {
             }
             return const Text('');
           }),
-          onTap: () {
-            store.updateDatabase();
-          },
+          onTap: () => store.updateDatabase(),
           trailing: Observer(builder: (_) {
             if (store.isUpdatingDatabase) {
               return const CircularProgressIndicator();
@@ -63,12 +63,23 @@ class SettingsPage extends StatelessWidget {
         ListTile(
           title: const Text('Select library folders'),
           trailing: const Icon(Icons.chevron_right),
-          onTap: () {},
+          onTap: () => _openFilePicker(),
         ),
         const Divider(
           height: 4.0,
         ),
       ],
     );
+  }
+
+  Future<void> _openFilePicker() async {
+    try {
+      var _path = await FilePicker.platform.getDirectoryPath();
+      print(_path);
+    } on PlatformException catch (e) {
+      print('Unsupported operation' + e.toString());
+    } catch (ex) {
+      print(ex);
+    }
   }
 }

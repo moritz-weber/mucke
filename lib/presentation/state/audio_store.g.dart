@@ -125,41 +125,6 @@ mixin _$AudioStore on _AudioStore, Store {
     });
   }
 
-  final _$playSongAsyncAction = AsyncAction('_AudioStore.playSong');
-
-  @override
-  Future<void> playSong(int index, List<Song> songList) {
-    return _$playSongAsyncAction.run(() => super.playSong(index, songList));
-  }
-
-  final _$playAsyncAction = AsyncAction('_AudioStore.play');
-
-  @override
-  Future<void> play() {
-    return _$playAsyncAction.run(() => super.play());
-  }
-
-  final _$pauseAsyncAction = AsyncAction('_AudioStore.pause');
-
-  @override
-  Future<void> pause() {
-    return _$pauseAsyncAction.run(() => super.pause());
-  }
-
-  final _$skipToNextAsyncAction = AsyncAction('_AudioStore.skipToNext');
-
-  @override
-  Future<void> skipToNext() {
-    return _$skipToNextAsyncAction.run(() => super.skipToNext());
-  }
-
-  final _$skipToPreviousAsyncAction = AsyncAction('_AudioStore.skipToPrevious');
-
-  @override
-  Future<void> skipToPrevious() {
-    return _$skipToPreviousAsyncAction.run(() => super.skipToPrevious());
-  }
-
   @override
   String toString() {
     return '''

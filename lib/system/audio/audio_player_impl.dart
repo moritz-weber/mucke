@@ -95,7 +95,7 @@ class AudioPlayerImpl implements AudioPlayer {
 
   @override
   Future<void> loadQueue({List<QueueItemModel> queue, int initialIndex = 0}) async {
-    if (queue == null || initialIndex >= queue.length) {
+    if (queue == null || initialIndex == null || initialIndex >= queue.length) {
       return;
     }
     _queue = queue;

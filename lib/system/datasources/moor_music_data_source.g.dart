@@ -1505,26 +1505,17 @@ class $QueueEntriesTable extends QueueEntries
   }
 }
 
-class PersistentPlayerState extends DataClass
-    implements Insertable<PersistentPlayerState> {
+class PersistentIndexData extends DataClass
+    implements Insertable<PersistentIndexData> {
   final int index;
-  final int shuffleMode;
-  final int loopMode;
-  PersistentPlayerState(
-      {@required this.index,
-      @required this.shuffleMode,
-      @required this.loopMode});
-  factory PersistentPlayerState.fromData(
+  PersistentIndexData({this.index});
+  factory PersistentIndexData.fromData(
       Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
     final intType = db.typeSystem.forDartType<int>();
-    return PersistentPlayerState(
+    return PersistentIndexData(
       index: intType.mapFromDatabaseResponse(data['${effectivePrefix}index']),
-      shuffleMode: intType
-          .mapFromDatabaseResponse(data['${effectivePrefix}shuffle_mode']),
-      loopMode:
-          intType.mapFromDatabaseResponse(data['${effectivePrefix}loop_mode']),
     );
   }
   @override
@@ -1533,35 +1524,21 @@ class PersistentPlayerState extends DataClass
     if (!nullToAbsent || index != null) {
       map['index'] = Variable<int>(index);
     }
-    if (!nullToAbsent || shuffleMode != null) {
-      map['shuffle_mode'] = Variable<int>(shuffleMode);
-    }
-    if (!nullToAbsent || loopMode != null) {
-      map['loop_mode'] = Variable<int>(loopMode);
-    }
     return map;
   }
 
-  PlayerStateCompanion toCompanion(bool nullToAbsent) {
-    return PlayerStateCompanion(
+  PersistentIndexCompanion toCompanion(bool nullToAbsent) {
+    return PersistentIndexCompanion(
       index:
           index == null && nullToAbsent ? const Value.absent() : Value(index),
-      shuffleMode: shuffleMode == null && nullToAbsent
-          ? const Value.absent()
-          : Value(shuffleMode),
-      loopMode: loopMode == null && nullToAbsent
-          ? const Value.absent()
-          : Value(loopMode),
     );
   }
 
-  factory PersistentPlayerState.fromJson(Map<String, dynamic> json,
+  factory PersistentIndexData.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
-    return PersistentPlayerState(
+    return PersistentIndexData(
       index: serializer.fromJson<int>(json['index']),
-      shuffleMode: serializer.fromJson<int>(json['shuffleMode']),
-      loopMode: serializer.fromJson<int>(json['loopMode']),
     );
   }
   @override
@@ -1569,71 +1546,47 @@ class PersistentPlayerState extends DataClass
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'index': serializer.toJson<int>(index),
-      'shuffleMode': serializer.toJson<int>(shuffleMode),
-      'loopMode': serializer.toJson<int>(loopMode),
     };
   }
 
-  PersistentPlayerState copyWith({int index, int shuffleMode, int loopMode}) =>
-      PersistentPlayerState(
+  PersistentIndexData copyWith({int index}) => PersistentIndexData(
         index: index ?? this.index,
-        shuffleMode: shuffleMode ?? this.shuffleMode,
-        loopMode: loopMode ?? this.loopMode,
       );
   @override
   String toString() {
-    return (StringBuffer('PersistentPlayerState(')
-          ..write('index: $index, ')
-          ..write('shuffleMode: $shuffleMode, ')
-          ..write('loopMode: $loopMode')
+    return (StringBuffer('PersistentIndexData(')
+          ..write('index: $index')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => $mrjf(
-      $mrjc(index.hashCode, $mrjc(shuffleMode.hashCode, loopMode.hashCode)));
+  int get hashCode => $mrjf(index.hashCode);
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
-      (other is PersistentPlayerState &&
-          other.index == this.index &&
-          other.shuffleMode == this.shuffleMode &&
-          other.loopMode == this.loopMode);
+      (other is PersistentIndexData && other.index == this.index);
 }
 
-class PlayerStateCompanion extends UpdateCompanion<PersistentPlayerState> {
+class PersistentIndexCompanion extends UpdateCompanion<PersistentIndexData> {
   final Value<int> index;
-  final Value<int> shuffleMode;
-  final Value<int> loopMode;
-  const PlayerStateCompanion({
+  const PersistentIndexCompanion({
     this.index = const Value.absent(),
-    this.shuffleMode = const Value.absent(),
-    this.loopMode = const Value.absent(),
   });
-  PlayerStateCompanion.insert({
-    @required int index,
-    this.shuffleMode = const Value.absent(),
-    this.loopMode = const Value.absent(),
-  }) : index = Value(index);
-  static Insertable<PersistentPlayerState> custom({
+  PersistentIndexCompanion.insert({
+    this.index = const Value.absent(),
+  });
+  static Insertable<PersistentIndexData> custom({
     Expression<int> index,
-    Expression<int> shuffleMode,
-    Expression<int> loopMode,
   }) {
     return RawValuesInsertable({
       if (index != null) 'index': index,
-      if (shuffleMode != null) 'shuffle_mode': shuffleMode,
-      if (loopMode != null) 'loop_mode': loopMode,
     });
   }
 
-  PlayerStateCompanion copyWith(
-      {Value<int> index, Value<int> shuffleMode, Value<int> loopMode}) {
-    return PlayerStateCompanion(
+  PersistentIndexCompanion copyWith({Value<int> index}) {
+    return PersistentIndexCompanion(
       index: index ?? this.index,
-      shuffleMode: shuffleMode ?? this.shuffleMode,
-      loopMode: loopMode ?? this.loopMode,
     );
   }
 
@@ -1643,31 +1596,23 @@ class PlayerStateCompanion extends UpdateCompanion<PersistentPlayerState> {
     if (index.present) {
       map['index'] = Variable<int>(index.value);
     }
-    if (shuffleMode.present) {
-      map['shuffle_mode'] = Variable<int>(shuffleMode.value);
-    }
-    if (loopMode.present) {
-      map['loop_mode'] = Variable<int>(loopMode.value);
-    }
     return map;
   }
 
   @override
   String toString() {
-    return (StringBuffer('PlayerStateCompanion(')
-          ..write('index: $index, ')
-          ..write('shuffleMode: $shuffleMode, ')
-          ..write('loopMode: $loopMode')
+    return (StringBuffer('PersistentIndexCompanion(')
+          ..write('index: $index')
           ..write(')'))
         .toString();
   }
 }
 
-class $PlayerStateTable extends PlayerState
-    with TableInfo<$PlayerStateTable, PersistentPlayerState> {
+class $PersistentIndexTable extends PersistentIndex
+    with TableInfo<$PersistentIndexTable, PersistentIndexData> {
   final GeneratedDatabase _db;
   final String _alias;
-  $PlayerStateTable(this._db, [this._alias]);
+  $PersistentIndexTable(this._db, [this._alias]);
   final VerificationMeta _indexMeta = const VerificationMeta('index');
   GeneratedIntColumn _index;
   @override
@@ -1676,10 +1621,158 @@ class $PlayerStateTable extends PlayerState
     return GeneratedIntColumn(
       'index',
       $tableName,
-      false,
+      true,
     );
   }
 
+  @override
+  List<GeneratedColumn> get $columns => [index];
+  @override
+  $PersistentIndexTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'persistent_index';
+  @override
+  final String actualTableName = 'persistent_index';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<PersistentIndexData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('index')) {
+      context.handle(
+          _indexMeta, index.isAcceptableOrUnknown(data['index'], _indexMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => <GeneratedColumn>{};
+  @override
+  PersistentIndexData map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return PersistentIndexData.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  $PersistentIndexTable createAlias(String alias) {
+    return $PersistentIndexTable(_db, alias);
+  }
+}
+
+class PersistentShuffleModeData extends DataClass
+    implements Insertable<PersistentShuffleModeData> {
+  final int shuffleMode;
+  PersistentShuffleModeData({@required this.shuffleMode});
+  factory PersistentShuffleModeData.fromData(
+      Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    return PersistentShuffleModeData(
+      shuffleMode: intType
+          .mapFromDatabaseResponse(data['${effectivePrefix}shuffle_mode']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || shuffleMode != null) {
+      map['shuffle_mode'] = Variable<int>(shuffleMode);
+    }
+    return map;
+  }
+
+  PersistentShuffleModeCompanion toCompanion(bool nullToAbsent) {
+    return PersistentShuffleModeCompanion(
+      shuffleMode: shuffleMode == null && nullToAbsent
+          ? const Value.absent()
+          : Value(shuffleMode),
+    );
+  }
+
+  factory PersistentShuffleModeData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return PersistentShuffleModeData(
+      shuffleMode: serializer.fromJson<int>(json['shuffleMode']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'shuffleMode': serializer.toJson<int>(shuffleMode),
+    };
+  }
+
+  PersistentShuffleModeData copyWith({int shuffleMode}) =>
+      PersistentShuffleModeData(
+        shuffleMode: shuffleMode ?? this.shuffleMode,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('PersistentShuffleModeData(')
+          ..write('shuffleMode: $shuffleMode')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf(shuffleMode.hashCode);
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is PersistentShuffleModeData &&
+          other.shuffleMode == this.shuffleMode);
+}
+
+class PersistentShuffleModeCompanion
+    extends UpdateCompanion<PersistentShuffleModeData> {
+  final Value<int> shuffleMode;
+  const PersistentShuffleModeCompanion({
+    this.shuffleMode = const Value.absent(),
+  });
+  PersistentShuffleModeCompanion.insert({
+    this.shuffleMode = const Value.absent(),
+  });
+  static Insertable<PersistentShuffleModeData> custom({
+    Expression<int> shuffleMode,
+  }) {
+    return RawValuesInsertable({
+      if (shuffleMode != null) 'shuffle_mode': shuffleMode,
+    });
+  }
+
+  PersistentShuffleModeCompanion copyWith({Value<int> shuffleMode}) {
+    return PersistentShuffleModeCompanion(
+      shuffleMode: shuffleMode ?? this.shuffleMode,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (shuffleMode.present) {
+      map['shuffle_mode'] = Variable<int>(shuffleMode.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PersistentShuffleModeCompanion(')
+          ..write('shuffleMode: $shuffleMode')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $PersistentShuffleModeTable extends PersistentShuffleMode
+    with TableInfo<$PersistentShuffleModeTable, PersistentShuffleModeData> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $PersistentShuffleModeTable(this._db, [this._alias]);
   final VerificationMeta _shuffleModeMeta =
       const VerificationMeta('shuffleMode');
   GeneratedIntColumn _shuffleMode;
@@ -1691,6 +1784,156 @@ class $PlayerStateTable extends PlayerState
         defaultValue: const Constant(0));
   }
 
+  @override
+  List<GeneratedColumn> get $columns => [shuffleMode];
+  @override
+  $PersistentShuffleModeTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'persistent_shuffle_mode';
+  @override
+  final String actualTableName = 'persistent_shuffle_mode';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<PersistentShuffleModeData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('shuffle_mode')) {
+      context.handle(
+          _shuffleModeMeta,
+          shuffleMode.isAcceptableOrUnknown(
+              data['shuffle_mode'], _shuffleModeMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => <GeneratedColumn>{};
+  @override
+  PersistentShuffleModeData map(Map<String, dynamic> data,
+      {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return PersistentShuffleModeData.fromData(data, _db,
+        prefix: effectivePrefix);
+  }
+
+  @override
+  $PersistentShuffleModeTable createAlias(String alias) {
+    return $PersistentShuffleModeTable(_db, alias);
+  }
+}
+
+class PersistentLoopModeData extends DataClass
+    implements Insertable<PersistentLoopModeData> {
+  final int loopMode;
+  PersistentLoopModeData({@required this.loopMode});
+  factory PersistentLoopModeData.fromData(
+      Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    return PersistentLoopModeData(
+      loopMode:
+          intType.mapFromDatabaseResponse(data['${effectivePrefix}loop_mode']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || loopMode != null) {
+      map['loop_mode'] = Variable<int>(loopMode);
+    }
+    return map;
+  }
+
+  PersistentLoopModeCompanion toCompanion(bool nullToAbsent) {
+    return PersistentLoopModeCompanion(
+      loopMode: loopMode == null && nullToAbsent
+          ? const Value.absent()
+          : Value(loopMode),
+    );
+  }
+
+  factory PersistentLoopModeData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return PersistentLoopModeData(
+      loopMode: serializer.fromJson<int>(json['loopMode']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'loopMode': serializer.toJson<int>(loopMode),
+    };
+  }
+
+  PersistentLoopModeData copyWith({int loopMode}) => PersistentLoopModeData(
+        loopMode: loopMode ?? this.loopMode,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('PersistentLoopModeData(')
+          ..write('loopMode: $loopMode')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf(loopMode.hashCode);
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is PersistentLoopModeData && other.loopMode == this.loopMode);
+}
+
+class PersistentLoopModeCompanion
+    extends UpdateCompanion<PersistentLoopModeData> {
+  final Value<int> loopMode;
+  const PersistentLoopModeCompanion({
+    this.loopMode = const Value.absent(),
+  });
+  PersistentLoopModeCompanion.insert({
+    this.loopMode = const Value.absent(),
+  });
+  static Insertable<PersistentLoopModeData> custom({
+    Expression<int> loopMode,
+  }) {
+    return RawValuesInsertable({
+      if (loopMode != null) 'loop_mode': loopMode,
+    });
+  }
+
+  PersistentLoopModeCompanion copyWith({Value<int> loopMode}) {
+    return PersistentLoopModeCompanion(
+      loopMode: loopMode ?? this.loopMode,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (loopMode.present) {
+      map['loop_mode'] = Variable<int>(loopMode.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PersistentLoopModeCompanion(')
+          ..write('loopMode: $loopMode')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $PersistentLoopModeTable extends PersistentLoopMode
+    with TableInfo<$PersistentLoopModeTable, PersistentLoopModeData> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $PersistentLoopModeTable(this._db, [this._alias]);
   final VerificationMeta _loopModeMeta = const VerificationMeta('loopMode');
   GeneratedIntColumn _loopMode;
   @override
@@ -1701,31 +1944,19 @@ class $PlayerStateTable extends PlayerState
   }
 
   @override
-  List<GeneratedColumn> get $columns => [index, shuffleMode, loopMode];
+  List<GeneratedColumn> get $columns => [loopMode];
   @override
-  $PlayerStateTable get asDslTable => this;
+  $PersistentLoopModeTable get asDslTable => this;
   @override
-  String get $tableName => _alias ?? 'player_state';
+  String get $tableName => _alias ?? 'persistent_loop_mode';
   @override
-  final String actualTableName = 'player_state';
+  final String actualTableName = 'persistent_loop_mode';
   @override
   VerificationContext validateIntegrity(
-      Insertable<PersistentPlayerState> instance,
+      Insertable<PersistentLoopModeData> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('index')) {
-      context.handle(
-          _indexMeta, index.isAcceptableOrUnknown(data['index'], _indexMeta));
-    } else if (isInserting) {
-      context.missing(_indexMeta);
-    }
-    if (data.containsKey('shuffle_mode')) {
-      context.handle(
-          _shuffleModeMeta,
-          shuffleMode.isAcceptableOrUnknown(
-              data['shuffle_mode'], _shuffleModeMeta));
-    }
     if (data.containsKey('loop_mode')) {
       context.handle(_loopModeMeta,
           loopMode.isAcceptableOrUnknown(data['loop_mode'], _loopModeMeta));
@@ -1736,14 +1967,14 @@ class $PlayerStateTable extends PlayerState
   @override
   Set<GeneratedColumn> get $primaryKey => <GeneratedColumn>{};
   @override
-  PersistentPlayerState map(Map<String, dynamic> data, {String tablePrefix}) {
+  PersistentLoopModeData map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return PersistentPlayerState.fromData(data, _db, prefix: effectivePrefix);
+    return PersistentLoopModeData.fromData(data, _db, prefix: effectivePrefix);
   }
 
   @override
-  $PlayerStateTable createAlias(String alias) {
-    return $PlayerStateTable(_db, alias);
+  $PersistentLoopModeTable createAlias(String alias) {
+    return $PersistentLoopModeTable(_db, alias);
   }
 }
 
@@ -1760,14 +1991,28 @@ abstract class _$MoorMusicDataSource extends GeneratedDatabase {
   $QueueEntriesTable _queueEntries;
   $QueueEntriesTable get queueEntries =>
       _queueEntries ??= $QueueEntriesTable(this);
-  $PlayerStateTable _playerState;
-  $PlayerStateTable get playerState => _playerState ??= $PlayerStateTable(this);
+  $PersistentIndexTable _persistentIndex;
+  $PersistentIndexTable get persistentIndex =>
+      _persistentIndex ??= $PersistentIndexTable(this);
+  $PersistentShuffleModeTable _persistentShuffleMode;
+  $PersistentShuffleModeTable get persistentShuffleMode =>
+      _persistentShuffleMode ??= $PersistentShuffleModeTable(this);
+  $PersistentLoopModeTable _persistentLoopMode;
+  $PersistentLoopModeTable get persistentLoopMode =>
+      _persistentLoopMode ??= $PersistentLoopModeTable(this);
   PlayerStateDao _playerStateDao;
   PlayerStateDao get playerStateDao =>
       _playerStateDao ??= PlayerStateDao(this as MoorMusicDataSource);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [artists, albums, songs, queueEntries, playerState];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+        artists,
+        albums,
+        songs,
+        queueEntries,
+        persistentIndex,
+        persistentShuffleMode,
+        persistentLoopMode
+      ];
 }

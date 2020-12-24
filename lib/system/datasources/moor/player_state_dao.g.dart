@@ -9,5 +9,9 @@ part of 'player_state_dao.dart';
 mixin _$PlayerStateDaoMixin on DatabaseAccessor<MoorMusicDataSource> {
   $SongsTable get songs => attachedDatabase.songs;
   $QueueEntriesTable get queueEntries => attachedDatabase.queueEntries;
-  $PlayerStateTable get playerState => attachedDatabase.playerState;
+  $PersistentIndexTable get persistentIndex => attachedDatabase.persistentIndex;
+  $PersistentShuffleModeTable get persistentShuffleMode =>
+      attachedDatabase.persistentShuffleMode;
+  $PersistentLoopModeTable get persistentLoopMode =>
+      attachedDatabase.persistentLoopMode;
 }

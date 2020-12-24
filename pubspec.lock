@@ -41,7 +41,7 @@ packages:
     description:
       path: "."
       ref: one-isolate
-      resolved-ref: d647578d5264ff465fd7bd686b7caa2b9e7373df
+      resolved-ref: "58fb50a383c2f86a5491c5c8f3dc833e65d9c915"
       url: "https://github.com/ryanheise/audio_service.git"
     source: git
     version: "0.15.3"
@@ -51,7 +51,7 @@ packages:
       name: audio_session
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.9"
+    version: "0.0.10"
   boolean_selector:
     dependency: transitive
     description:
@@ -234,6 +234,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.2.1"
+  file_picker:
+    dependency: "direct main"
+    description:
+      name: file_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.4"
   fixnum:
     dependency: transitive
     description:
@@ -360,7 +367,7 @@ packages:
       name: just_audio
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.2"
+    version: "0.6.3"
   just_audio_platform_interface:
     dependency: transitive
     description:
