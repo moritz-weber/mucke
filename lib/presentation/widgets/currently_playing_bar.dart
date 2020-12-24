@@ -31,34 +31,37 @@ class CurrentlyPlayingBar extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () => _onTap(context),
-                child: Row(
-                  children: <Widget>[
-                    Image(
-                      image: getAlbumImage(song.albumArtPath),
-                      height: 64.0,
-                    ),
-                    Container(
-                      width: 10.0,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(song.title),
-                        Text(
-                          song.artist,
-                          style: const TextStyle(
-                            fontSize: 12.0,
-                            color: Colors.white70,
-                          ),
-                        )
-                      ],
-                    ),
-                    const Spacer(),
-                    const PlayPauseButton(
-                      circle: false,
-                    ),
-                    const NextButton(),
-                  ],
+                child: Container(
+                  color: Colors.transparent,
+                  child: Row(
+                    children: <Widget>[
+                      Image(
+                        image: getAlbumImage(song.albumArtPath),
+                        height: 64.0,
+                      ),
+                      Container(
+                        width: 10.0,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(song.title),
+                          Text(
+                            song.artist,
+                            style: const TextStyle(
+                              fontSize: 12.0,
+                              color: Colors.white70,
+                            ),
+                          )
+                        ],
+                      ),
+                      const Spacer(),
+                      const PlayPauseButton(
+                        circle: false,
+                      ),
+                      const NextButton(),
+                    ],
+                  ),
                 ),
               ),
             ],
