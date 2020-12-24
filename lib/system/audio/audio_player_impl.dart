@@ -98,6 +98,7 @@ class AudioPlayerImpl implements AudioPlayer {
     if (queue == null || initialIndex >= queue.length) {
       return;
     }
+    _queue = queue;
     _queueSubject.add(queue);
 
     // final smallQueue = queue.sublist(max(initialIndex - 10, 0), min(initialIndex + 140, queue.length));

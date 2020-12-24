@@ -49,7 +49,8 @@ class MyAudioHandler extends BaseAudioHandler {
       _audioPlayer.setShuffleMode(await _playerStateDataSource.shuffleModeStream.first, false);
     }
 
-    if (_playerStateDataSource.queueStream != null && _playerStateDataSource.currentIndexStream != null) {
+    if (_playerStateDataSource.queueStream != null &&
+        _playerStateDataSource.currentIndexStream != null) {
       _audioPlayer.loadQueue(
         queue: await _playerStateDataSource.queueStream.first,
         initialIndex: await _playerStateDataSource.currentIndexStream.first,
@@ -96,6 +97,11 @@ class MyAudioHandler extends BaseAudioHandler {
   }
 
   @override
+  Future<void> removeQueueItemAt(int index) async {
+    _audioPlayer.removeQueueIndex(index);
+  }
+
+  @override
   Future<void> customAction(String name, Map<String, dynamic> arguments) async {
     switch (name) {
       case PLAY_WITH_CONTEXT:
@@ -112,8 +118,8 @@ class MyAudioHandler extends BaseAudioHandler {
         return shuffleAll();
       case MOVE_QUEUE_ITEM:
         return moveQueueItem(arguments['OLD_INDEX'] as int, arguments['NEW_INDEX'] as int);
-      case REMOVE_QUEUE_ITEM:
-        return removeQueueIndex(arguments as int);
+      case SET_INDEX:
+        return setIndex(arguments['INDEX'] as int);
       default:
     }
   }
@@ -155,8 +161,8 @@ class MyAudioHandler extends BaseAudioHandler {
     _audioPlayer.moveQueueItem(oldIndex, newIndex);
   }
 
-  Future<void> removeQueueIndex(int index) async {
-    _audioPlayer.removeQueueIndex(index);
+  Future<void> setIndex(int index) async {
+    _audioPlayer.setIndex(index);
   }
 
   void _handleSetQueue(List<QueueItemModel> queueItems) {

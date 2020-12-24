@@ -103,4 +103,9 @@ class AudioRepositoryImpl implements AudioRepository {
   Future<void> setLoopMode(LoopMode loopMode) async {
     await _audioManager.setLoopMode(loopMode);
   }
+
+  @override
+  Future<void> setIndex(int index) async {
+   await _audioManager.setIndex(index);
+  }
 }

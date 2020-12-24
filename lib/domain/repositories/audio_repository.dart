@@ -19,6 +19,7 @@ abstract class AudioRepository {
   Future<Either<Failure, void>> pause();
   Future<Either<Failure, void>> skipToNext();
   Future<Either<Failure, void>> skipToPrevious();
+  Future<void> setIndex(int index);
 
   Future<Either<Failure, void>> setShuffleMode(ShuffleMode shuffleMode);
   Future<void> setLoopMode(LoopMode loopMode);

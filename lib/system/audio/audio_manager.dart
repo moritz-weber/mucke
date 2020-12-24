@@ -112,6 +112,11 @@ class AudioManagerImpl implements AudioManager {
   }
 
   @override
+  Future<void> setIndex(int index) async {
+    await _audioHandler.customAction(SET_INDEX, {'INDEX': index});
+  }
+
+  @override
   Future<void> setShuffleMode(ShuffleMode shuffleMode) async {
     await _audioHandler.customAction(SET_SHUFFLE_MODE, {'SHUFFLE_MODE': shuffleMode});
   }
@@ -178,6 +183,6 @@ class AudioManagerImpl implements AudioManager {
 
   @override
   Future<void> removeQueueIndex(int index) async {
-    await _audioHandler.customAction(REMOVE_QUEUE_ITEM, {'INDEX': index});
+    await _audioHandler.removeQueueItemAt(index);
   }
 }

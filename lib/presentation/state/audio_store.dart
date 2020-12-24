@@ -75,29 +75,28 @@ abstract class _AudioStore with Store {
   @observable
   ObservableStream<LoopMode> loopModeStream;
 
-  @action
   Future<void> playSong(int index, List<Song> songList) async {
     _audioRepository.playSong(index, songList);
   }
 
-  @action
   Future<void> play() async {
     _audioRepository.play();
   }
 
-  @action
   Future<void> pause() async {
     _audioRepository.pause();
   }
 
-  @action
   Future<void> skipToNext() async {
     _audioRepository.skipToNext();
   }
 
-  @action
   Future<void> skipToPrevious() async {
     _audioRepository.skipToPrevious();
+  }
+
+  Future<void> setIndex(int index) async {
+    _audioRepository.setIndex(index);
   }
 
   Future<void> setShuffleMode(ShuffleMode shuffleMode) async {

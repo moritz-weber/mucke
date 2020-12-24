@@ -17,6 +17,7 @@ abstract class AudioManager {
   Future<void> pause();
   Future<void> skipToNext();
   Future<void> skipToPrevious();
+  Future<void> setIndex(int index);
   Future<void> setShuffleMode(ShuffleMode shuffleMode);
   Future<void> setLoopMode(LoopMode loopMode);
   Future<void> shuffleAll();
