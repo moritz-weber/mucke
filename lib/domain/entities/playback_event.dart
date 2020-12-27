@@ -1,14 +1,14 @@
 class PlaybackEvent {
   PlaybackEvent({
-    this.duration,
     this.index,
+    this.playing,
     this.processingState,
     this.updatePosition,
     this.updateTime,
   });
 
-  final Duration duration;
   final int index;
+  final bool playing;
   final ProcessingState processingState;
   final Duration updatePosition;
   final DateTime updateTime;

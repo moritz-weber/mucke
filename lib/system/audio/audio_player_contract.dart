@@ -9,7 +9,7 @@ import '../models/song_model.dart';
 abstract class AudioPlayer {
   ValueStream<int> get currentIndexStream;
   ValueStream<SongModel> get currentSongStream;
-  ValueStream<PlaybackEventModel> get playbackEventStream;
+  Stream<PlaybackEventModel> get playbackEventStream;
   ValueStream<bool> get playingStream;
   ValueStream<Duration> get positionStream;
   ValueStream<List<QueueItemModel>> get queueStream;

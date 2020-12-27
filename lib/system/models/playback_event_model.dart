@@ -4,45 +4,28 @@ import '../../domain/entities/playback_event.dart';
 
 class PlaybackEventModel extends PlaybackEvent {
   PlaybackEventModel({
-    Duration duration,
     int index,
+    bool playing,
     ProcessingState processingState,
     Duration updatePosition,
     DateTime updateTime,
   }) : super(
-          duration: duration,
           index: index,
+          playing: playing,
           processingState: processingState,
           updatePosition: updatePosition,
           updateTime: updateTime,
         );
 
-  factory PlaybackEventModel.fromJAPlaybackEvent(ja.PlaybackEvent playbackEvent) =>
+  factory PlaybackEventModel.fromJAPlaybackEvent(ja.PlaybackEvent playbackEvent, bool playing) =>
       PlaybackEventModel(
-        duration: playbackEvent.duration,
         index: playbackEvent.currentIndex,
+        playing: playing,
         processingState: playbackEvent.processingState.toProcessingState(),
         updatePosition: playbackEvent.updatePosition,
         updateTime: playbackEvent.updateTime,
       );
 }
-
-// extension JAProcessingStateExt on ProcessingState {
-//   ProcessingState fromJAProcessingState(ja.ProcessingState processingState) {
-//     switch (processingState) {
-//       case ja.ProcessingState.loading:
-//         return ProcessingState.loading;
-//       case ja.ProcessingState.buffering:
-//         return ProcessingState.buffering;
-//       case ja.ProcessingState.ready:
-//         return ProcessingState.ready;
-//       case ja.ProcessingState.completed:
-//         return ProcessingState.completed;
-//       default:
-//         return ProcessingState.none;
-//     }
-//   }
-// }
 
 extension ProcessingStateExt on ja.ProcessingState {
   ProcessingState toProcessingState() {

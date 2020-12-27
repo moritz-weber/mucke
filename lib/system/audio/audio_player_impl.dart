@@ -1,4 +1,5 @@
 import 'package:just_audio/just_audio.dart' as ja;
+import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../domain/entities/loop_mode.dart';
@@ -14,16 +15,16 @@ import 'queue_generator.dart';
 class AudioPlayerImpl implements AudioPlayer {
   AudioPlayerImpl(this._audioPlayer, this._queueGenerator) {
     _audioPlayer.currentIndexStream.listen((event) {
+      _log.info('currentIndex: $event');
       _currentIndexSubject.add(event);
       if (_queueSubject.value != null) {
         _currentSongSubject.add(_queueSubject.value[event].song);
       }
     });
 
-    _audioPlayer.playingStream.listen((event) => _playingSubject.add(event));
-
-    _audioPlayer.playbackEventStream.listen((event) {
-      _playbackEventSubject.add(PlaybackEventModel.fromJAPlaybackEvent(event));
+    _audioPlayer.playingStream.listen((event) {
+      _log.info('playing: $event');
+      _playingSubject.add(event);
     });
 
     _audioPlayer.positionStream.listen((event) {
@@ -31,6 +32,7 @@ class AudioPlayerImpl implements AudioPlayer {
     });
 
     _audioPlayer.loopModeStream.listen((event) {
+      _log.info('loopMode: $event');
       _loopModeSubject.add(event.toEntity());
     });
 
@@ -39,6 +41,12 @@ class AudioPlayerImpl implements AudioPlayer {
         _currentSongSubject.add(event[_currentIndexSubject.value].song);
       }
     });
+
+    _playbackEventModelStream = Rx.combineLatest2<ja.PlaybackEvent, bool, PlaybackEventModel>(
+      _audioPlayer.playbackEventStream,
+      _audioPlayer.playingStream,
+      (a, b) => PlaybackEventModel.fromJAPlaybackEvent(a, b),
+    ).distinct();
   }
 
   final ja.AudioPlayer _audioPlayer;
@@ -47,6 +55,8 @@ class AudioPlayerImpl implements AudioPlayer {
 
   List<SongModel> _inputQueue;
   List<QueueItemModel> _queue;
+
+  static final _log = Logger('AudioPlayer');
 
   final BehaviorSubject<int> _currentIndexSubject = BehaviorSubject();
   final BehaviorSubject<SongModel> _currentSongSubject = BehaviorSubject();
@@ -57,6 +67,8 @@ class AudioPlayerImpl implements AudioPlayer {
   final BehaviorSubject<ShuffleMode> _shuffleModeSubject = BehaviorSubject.seeded(ShuffleMode.none);
   final BehaviorSubject<LoopMode> _loopModeSubject = BehaviorSubject();
 
+  Stream<PlaybackEventModel> _playbackEventModelStream;
+
   @override
   ValueStream<int> get currentIndexStream => _currentIndexSubject.stream;
 
@@ -64,7 +76,7 @@ class AudioPlayerImpl implements AudioPlayer {
   ValueStream<SongModel> get currentSongStream => _currentSongSubject.stream;
 
   @override
-  ValueStream<PlaybackEventModel> get playbackEventStream => _playbackEventSubject.stream;
+  Stream<PlaybackEventModel> get playbackEventStream => _playbackEventModelStream;
 
   @override
   ValueStream<Duration> get positionStream => _positionSubject.stream;
