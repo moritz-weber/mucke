@@ -17,21 +17,6 @@ mixin _$AudioStore on _AudioStore, Store {
               name: '_AudioStore.currentSong'))
           .value;
 
-  final _$currentSongStreamAtom = Atom(name: '_AudioStore.currentSongStream');
-
-  @override
-  ObservableStream<Song> get currentSongStream {
-    _$currentSongStreamAtom.reportRead();
-    return super.currentSongStream;
-  }
-
-  @override
-  set currentSongStream(ObservableStream<Song> value) {
-    _$currentSongStreamAtom.reportWrite(value, super.currentSongStream, () {
-      super.currentSongStream = value;
-    });
-  }
-
   final _$playbackStateStreamAtom =
       Atom(name: '_AudioStore.playbackStateStream');
 
@@ -128,7 +113,6 @@ mixin _$AudioStore on _AudioStore, Store {
   @override
   String toString() {
     return '''
-currentSongStream: ${currentSongStream},
 playbackStateStream: ${playbackStateStream},
 currentPositionStream: ${currentPositionStream},
 queueStream: ${queueStream},

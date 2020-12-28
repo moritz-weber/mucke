@@ -22,15 +22,6 @@ class AudioRepositoryImpl implements AudioRepository {
       _audioManager.playbackStateStream;
 
   @override
-  Stream<List<Song>> get queueStream => _audioManager.queueStream;
-
-  @override
-  Stream<int> get queueIndexStream => _audioManager.queueIndexStream;
-
-  @override
-  Stream<ShuffleMode> get shuffleModeStream => _audioManager.shuffleModeStream;
-
-  @override
   Stream<int> get currentPositionStream => _audioManager.currentPositionStream;
 
   @override

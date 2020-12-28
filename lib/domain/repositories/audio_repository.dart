@@ -9,10 +9,7 @@ import '../entities/song.dart';
 abstract class AudioRepository {
   Stream<Song> get currentSongStream;
   Stream<PlaybackState> get playbackStateStream;
-  Stream<List<Song>> get queueStream;
-  Stream<int> get queueIndexStream;
   Stream<int> get currentPositionStream;
-  Stream<ShuffleMode> get shuffleModeStream;
 
   Future<Either<Failure, void>> playSong(int index, List<Song> songList);
   Future<Either<Failure, void>> play();
@@ -21,7 +18,7 @@ abstract class AudioRepository {
   Future<Either<Failure, void>> skipToPrevious();
   Future<void> setIndex(int index);
 
-  Future<Either<Failure, void>> setShuffleMode(ShuffleMode shuffleMode);
+  Future<void> setShuffleMode(ShuffleMode shuffleMode);
   Future<void> setLoopMode(LoopMode loopMode);
 
   Future<Either<Failure, void>> shuffleAll();

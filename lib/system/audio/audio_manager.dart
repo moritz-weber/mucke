@@ -13,25 +13,12 @@ import 'stream_constants.dart';
 typedef Conversion<S, T> = T Function(S);
 
 class AudioManagerImpl implements AudioManager {
-  AudioManagerImpl(this._audioHandler) {
-    _audioHandler.customEventStream.listen((event) {
-      final data = event as Map<String, dynamic>;
-      if (data.containsKey(KEY_INDEX)) {
-        _queueIndex = data[KEY_INDEX] as int;
-      }
-      if (data.containsKey(SHUFFLE_MODE)) {
-        _shuffleMode = data[SHUFFLE_MODE] as ShuffleMode;
-      }
-    });
-  }
+  AudioManagerImpl(this._audioHandler);
 
   final AudioHandler _audioHandler;
-  int _queueIndex;
-  ShuffleMode _shuffleMode;
 
   @override
-  Stream<SongModel> get currentSongStream =>
-      _filterStream<MediaItem, SongModel>(
+  Stream<SongModel> get currentSongStream => _filterStream<MediaItem, SongModel>(
         _audioHandler.mediaItem.stream,
         (MediaItem mi) => SongModel.fromMediaItem(mi),
       );
@@ -41,46 +28,6 @@ class AudioManagerImpl implements AudioManager {
         _audioHandler.playbackState.stream,
         (PlaybackState ps) => PlaybackStateModel.fromASPlaybackState(ps),
       );
-
-  // TODO: test
-  @override
-  Stream<List<SongModel>> get queueStream {
-    return _audioHandler.queue.stream.map((mediaItems) =>
-        mediaItems.map((m) => SongModel.fromMediaItem(m)).toList());
-  }
-
-  @override
-  Stream<int> get queueIndexStream =>
-      _queueIndexStream(_audioHandler.customEventStream.cast());
-
-  Stream<int> _queueIndexStream(Stream<Map<String, dynamic>> source) async* {
-    if (_queueIndex != null) {
-      yield _queueIndex;
-    }
-
-    await for (final data in source) {
-      if (data.containsKey(KEY_INDEX)) {
-        yield data[KEY_INDEX] as int;
-      }
-    }
-  }
-
-  @override
-  Stream<ShuffleMode> get shuffleModeStream =>
-      _shuffleModeStream(_audioHandler.customEventStream.cast());
-
-  Stream<ShuffleMode> _shuffleModeStream(
-      Stream<Map<String, dynamic>> source) async* {
-    if (_shuffleMode != null) {
-      yield _shuffleMode;
-    }
-
-    await for (final data in source) {
-      if (data.containsKey(SHUFFLE_MODE)) {
-        yield data[SHUFFLE_MODE] as ShuffleMode;
-      }
-    }
-  }
 
   @override
   Stream<int> get currentPositionStream => _position().distinct();
@@ -154,8 +101,7 @@ class AudioManagerImpl implements AudioManager {
       if (statePosition != null && updateTime != null && state != null) {
         if (state.playing) {
           yield statePosition.inMilliseconds +
-              (DateTime.now().millisecondsSinceEpoch -
-                  updateTime.millisecondsSinceEpoch);
+              (DateTime.now().millisecondsSinceEpoch - updateTime.millisecondsSinceEpoch);
         } else {
           yield statePosition.inMilliseconds;
         }
@@ -178,7 +124,10 @@ class AudioManagerImpl implements AudioManager {
 
   @override
   Future<void> moveQueueItem(int oldIndex, int newIndex) async {
-    await _audioHandler.customAction(MOVE_QUEUE_ITEM, {'OLD_INDEX': oldIndex, 'NEW_INDEX': newIndex});
+    await _audioHandler.customAction(MOVE_QUEUE_ITEM, {
+      'OLD_INDEX': oldIndex,
+      'NEW_INDEX': newIndex,
+    });
   }
 
   @override

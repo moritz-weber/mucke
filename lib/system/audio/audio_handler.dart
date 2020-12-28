@@ -30,7 +30,6 @@ class MyAudioHandler extends BaseAudioHandler {
 
     _audioPlayer.shuffleModeStream.listen((shuffleMode) {
       _playerStateDataSource.setShuffleMode(shuffleMode);
-      customEventSubject.add({SHUFFLE_MODE: shuffleMode});
     });
 
     _audioPlayer.loopModeStream.listen((event) {
@@ -108,8 +107,6 @@ class MyAudioHandler extends BaseAudioHandler {
         final context = arguments['CONTEXT'] as List<String>;
         final index = arguments['INDEX'] as int;
         return playWithContext(context, index);
-      case APP_LIFECYCLE_RESUMED:
-        return onAppLifecycleResumed();
       case SET_SHUFFLE_MODE:
         return setCustomShuffleMode(arguments['SHUFFLE_MODE'] as ShuffleMode);
       case SET_LOOP_MODE:
@@ -132,11 +129,6 @@ class MyAudioHandler extends BaseAudioHandler {
     }
 
     _audioPlayer.playSongList(songs, index);
-  }
-
-  Future<void> onAppLifecycleResumed() async {
-    // customEventSubject.add({SHUFFLE_MODE: shuffleMode});
-    // customEventSubject.add({KEY_INDEX: playbackIndex});
   }
 
   Future<void> setCustomShuffleMode(ShuffleMode mode) async {
@@ -175,7 +167,6 @@ class MyAudioHandler extends BaseAudioHandler {
   void _handlePlaybackEvent(PlaybackEventModel pe) {
     if (pe.index != null) {
       _playerStateDataSource.setCurrentIndex(pe.index);
-      customEventSubject.add({KEY_INDEX: pe.index});
     }
 
     if (pe.processingState == ProcessingState.ready) {

@@ -6,11 +6,9 @@ import '../models/song_model.dart';
 abstract class AudioManager {
   Stream<SongModel> get currentSongStream;
   Stream<PlaybackState> get playbackStateStream;
-  Stream<List<SongModel>> get queueStream;
-  Stream<int> get queueIndexStream;
+
   /// Current position in the song in milliseconds.
   Stream<int> get currentPositionStream;
-  Stream<ShuffleMode> get shuffleModeStream;
 
   Future<void> playSong(int index, List<SongModel> songList);
   Future<void> play();
