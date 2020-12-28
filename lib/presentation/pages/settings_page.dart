@@ -63,7 +63,7 @@ class SettingsPage extends StatelessWidget {
         ListTile(
           title: const Text('Select library folders'),
           trailing: const Icon(Icons.chevron_right),
-          onTap: () => _openFilePicker(),
+          onTap: () => _openFilePicker(store),
         ),
         const Divider(
           height: 4.0,
@@ -72,10 +72,9 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
-  Future<void> _openFilePicker() async {
+  Future<void> _openFilePicker(MusicDataStore store) async {
     try {
-      var _path = await FilePicker.platform.getDirectoryPath();
-      print(_path);
+      store.addLibraryFolder(await FilePicker.platform.getDirectoryPath());
     } on PlatformException catch (e) {
       print('Unsupported operation' + e.toString());
     } catch (ex) {

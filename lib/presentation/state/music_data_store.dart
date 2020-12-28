@@ -5,20 +5,24 @@ import '../../domain/entities/album.dart';
 import '../../domain/entities/artist.dart';
 import '../../domain/entities/song.dart';
 import '../../domain/repositories/music_data_repository.dart';
+import '../../domain/repositories/settings_repository.dart';
 
 part 'music_data_store.g.dart';
 
 class MusicDataStore extends _MusicDataStore with _$MusicDataStore {
-  MusicDataStore({@required MusicDataRepository musicDataRepository})
-      : super(musicDataRepository);
+  MusicDataStore({
+    @required MusicDataRepository musicDataRepository,
+    @required SettingsRepository settingsRepository,
+  }) : super(musicDataRepository, settingsRepository);
 }
 
 abstract class _MusicDataStore with Store {
-  _MusicDataStore(this._musicDataRepository) {
+  _MusicDataStore(this._musicDataRepository, this._settingsRepository) {
     songStream = _musicDataRepository.songStream.asObservable(initialValue: []);
   }
 
   final MusicDataRepository _musicDataRepository;
+  final SettingsRepository _settingsRepository;
 
   bool _initialized = false;
 
@@ -121,13 +125,6 @@ abstract class _MusicDataStore with Store {
   @action
   Future<void> fetchSongsFromAlbum(Album album) async {
     albumSongStream = _musicDataRepository.getAlbumSongStream(album).asObservable(initialValue: []);
-
-    // final result = await _musicDataRepository.getSongsFromAlbum(album);
-    // albumSongs.clear();
-    // result.fold(
-    //   (_) => albumSongs = <Song>[].asObservable(),
-    //   (songList) => albumSongs.addAll(songList),
-    // );
   }
 
   Future<void> setSongBlocked(Song song, bool blocked) async {
@@ -136,5 +133,9 @@ abstract class _MusicDataStore with Store {
 
   Future<void> toggleNextSongLink(Song song) async {
     await _musicDataRepository.toggleNextSongLink(song);
+  }
+
+  Future<void> addLibraryFolder(String path) async {
+    await _settingsRepository.addLibraryFolder(path);
   }
 }

@@ -7,154 +7,6 @@ part of 'moor_music_data_source.dart';
 // **************************************************************************
 
 // ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
-class MoorArtist extends DataClass implements Insertable<MoorArtist> {
-  final String name;
-  MoorArtist({@required this.name});
-  factory MoorArtist.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String prefix}) {
-    final effectivePrefix = prefix ?? '';
-    final stringType = db.typeSystem.forDartType<String>();
-    return MoorArtist(
-      name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
-    );
-  }
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (!nullToAbsent || name != null) {
-      map['name'] = Variable<String>(name);
-    }
-    return map;
-  }
-
-  ArtistsCompanion toCompanion(bool nullToAbsent) {
-    return ArtistsCompanion(
-      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
-    );
-  }
-
-  factory MoorArtist.fromJson(Map<String, dynamic> json,
-      {ValueSerializer serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
-    return MoorArtist(
-      name: serializer.fromJson<String>(json['name']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'name': serializer.toJson<String>(name),
-    };
-  }
-
-  MoorArtist copyWith({String name}) => MoorArtist(
-        name: name ?? this.name,
-      );
-  @override
-  String toString() {
-    return (StringBuffer('MoorArtist(')..write('name: $name')..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => $mrjf(name.hashCode);
-  @override
-  bool operator ==(dynamic other) =>
-      identical(this, other) ||
-      (other is MoorArtist && other.name == this.name);
-}
-
-class ArtistsCompanion extends UpdateCompanion<MoorArtist> {
-  final Value<String> name;
-  const ArtistsCompanion({
-    this.name = const Value.absent(),
-  });
-  ArtistsCompanion.insert({
-    @required String name,
-  }) : name = Value(name);
-  static Insertable<MoorArtist> custom({
-    Expression<String> name,
-  }) {
-    return RawValuesInsertable({
-      if (name != null) 'name': name,
-    });
-  }
-
-  ArtistsCompanion copyWith({Value<String> name}) {
-    return ArtistsCompanion(
-      name: name ?? this.name,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (name.present) {
-      map['name'] = Variable<String>(name.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('ArtistsCompanion(')..write('name: $name')..write(')'))
-        .toString();
-  }
-}
-
-class $ArtistsTable extends Artists with TableInfo<$ArtistsTable, MoorArtist> {
-  final GeneratedDatabase _db;
-  final String _alias;
-  $ArtistsTable(this._db, [this._alias]);
-  final VerificationMeta _nameMeta = const VerificationMeta('name');
-  GeneratedTextColumn _name;
-  @override
-  GeneratedTextColumn get name => _name ??= _constructName();
-  GeneratedTextColumn _constructName() {
-    return GeneratedTextColumn(
-      'name',
-      $tableName,
-      false,
-    );
-  }
-
-  @override
-  List<GeneratedColumn> get $columns => [name];
-  @override
-  $ArtistsTable get asDslTable => this;
-  @override
-  String get $tableName => _alias ?? 'artists';
-  @override
-  final String actualTableName = 'artists';
-  @override
-  VerificationContext validateIntegrity(Insertable<MoorArtist> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('name')) {
-      context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name'], _nameMeta));
-    } else if (isInserting) {
-      context.missing(_nameMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {name};
-  @override
-  MoorArtist map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return MoorArtist.fromData(data, _db, prefix: effectivePrefix);
-  }
-
-  @override
-  $ArtistsTable createAlias(String alias) {
-    return $ArtistsTable(_db, alias);
-  }
-}
-
 class MoorAlbum extends DataClass implements Insertable<MoorAlbum> {
   final int id;
   final String title;
@@ -485,6 +337,1071 @@ class $AlbumsTable extends Albums with TableInfo<$AlbumsTable, MoorAlbum> {
   @override
   $AlbumsTable createAlias(String alias) {
     return $AlbumsTable(_db, alias);
+  }
+}
+
+class MoorArtist extends DataClass implements Insertable<MoorArtist> {
+  final String name;
+  MoorArtist({@required this.name});
+  factory MoorArtist.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final stringType = db.typeSystem.forDartType<String>();
+    return MoorArtist(
+      name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || name != null) {
+      map['name'] = Variable<String>(name);
+    }
+    return map;
+  }
+
+  ArtistsCompanion toCompanion(bool nullToAbsent) {
+    return ArtistsCompanion(
+      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
+    );
+  }
+
+  factory MoorArtist.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return MoorArtist(
+      name: serializer.fromJson<String>(json['name']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'name': serializer.toJson<String>(name),
+    };
+  }
+
+  MoorArtist copyWith({String name}) => MoorArtist(
+        name: name ?? this.name,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('MoorArtist(')..write('name: $name')..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf(name.hashCode);
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is MoorArtist && other.name == this.name);
+}
+
+class ArtistsCompanion extends UpdateCompanion<MoorArtist> {
+  final Value<String> name;
+  const ArtistsCompanion({
+    this.name = const Value.absent(),
+  });
+  ArtistsCompanion.insert({
+    @required String name,
+  }) : name = Value(name);
+  static Insertable<MoorArtist> custom({
+    Expression<String> name,
+  }) {
+    return RawValuesInsertable({
+      if (name != null) 'name': name,
+    });
+  }
+
+  ArtistsCompanion copyWith({Value<String> name}) {
+    return ArtistsCompanion(
+      name: name ?? this.name,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ArtistsCompanion(')..write('name: $name')..write(')'))
+        .toString();
+  }
+}
+
+class $ArtistsTable extends Artists with TableInfo<$ArtistsTable, MoorArtist> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $ArtistsTable(this._db, [this._alias]);
+  final VerificationMeta _nameMeta = const VerificationMeta('name');
+  GeneratedTextColumn _name;
+  @override
+  GeneratedTextColumn get name => _name ??= _constructName();
+  GeneratedTextColumn _constructName() {
+    return GeneratedTextColumn(
+      'name',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [name];
+  @override
+  $ArtistsTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'artists';
+  @override
+  final String actualTableName = 'artists';
+  @override
+  VerificationContext validateIntegrity(Insertable<MoorArtist> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name'], _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {name};
+  @override
+  MoorArtist map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return MoorArtist.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  $ArtistsTable createAlias(String alias) {
+    return $ArtistsTable(_db, alias);
+  }
+}
+
+class LibraryFolder extends DataClass implements Insertable<LibraryFolder> {
+  final String path;
+  LibraryFolder({@required this.path});
+  factory LibraryFolder.fromData(
+      Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final stringType = db.typeSystem.forDartType<String>();
+    return LibraryFolder(
+      path: stringType.mapFromDatabaseResponse(data['${effectivePrefix}path']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || path != null) {
+      map['path'] = Variable<String>(path);
+    }
+    return map;
+  }
+
+  LibraryFoldersCompanion toCompanion(bool nullToAbsent) {
+    return LibraryFoldersCompanion(
+      path: path == null && nullToAbsent ? const Value.absent() : Value(path),
+    );
+  }
+
+  factory LibraryFolder.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return LibraryFolder(
+      path: serializer.fromJson<String>(json['path']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'path': serializer.toJson<String>(path),
+    };
+  }
+
+  LibraryFolder copyWith({String path}) => LibraryFolder(
+        path: path ?? this.path,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('LibraryFolder(')..write('path: $path')..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf(path.hashCode);
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is LibraryFolder && other.path == this.path);
+}
+
+class LibraryFoldersCompanion extends UpdateCompanion<LibraryFolder> {
+  final Value<String> path;
+  const LibraryFoldersCompanion({
+    this.path = const Value.absent(),
+  });
+  LibraryFoldersCompanion.insert({
+    @required String path,
+  }) : path = Value(path);
+  static Insertable<LibraryFolder> custom({
+    Expression<String> path,
+  }) {
+    return RawValuesInsertable({
+      if (path != null) 'path': path,
+    });
+  }
+
+  LibraryFoldersCompanion copyWith({Value<String> path}) {
+    return LibraryFoldersCompanion(
+      path: path ?? this.path,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (path.present) {
+      map['path'] = Variable<String>(path.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('LibraryFoldersCompanion(')
+          ..write('path: $path')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $LibraryFoldersTable extends LibraryFolders
+    with TableInfo<$LibraryFoldersTable, LibraryFolder> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $LibraryFoldersTable(this._db, [this._alias]);
+  final VerificationMeta _pathMeta = const VerificationMeta('path');
+  GeneratedTextColumn _path;
+  @override
+  GeneratedTextColumn get path => _path ??= _constructPath();
+  GeneratedTextColumn _constructPath() {
+    return GeneratedTextColumn(
+      'path',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [path];
+  @override
+  $LibraryFoldersTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'library_folders';
+  @override
+  final String actualTableName = 'library_folders';
+  @override
+  VerificationContext validateIntegrity(Insertable<LibraryFolder> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('path')) {
+      context.handle(
+          _pathMeta, path.isAcceptableOrUnknown(data['path'], _pathMeta));
+    } else if (isInserting) {
+      context.missing(_pathMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => <GeneratedColumn>{};
+  @override
+  LibraryFolder map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return LibraryFolder.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  $LibraryFoldersTable createAlias(String alias) {
+    return $LibraryFoldersTable(_db, alias);
+  }
+}
+
+class MoorQueueEntry extends DataClass implements Insertable<MoorQueueEntry> {
+  final int index;
+  final String path;
+  final int originalIndex;
+  final int type;
+  MoorQueueEntry(
+      {@required this.index,
+      @required this.path,
+      @required this.originalIndex,
+      @required this.type});
+  factory MoorQueueEntry.fromData(
+      Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    final stringType = db.typeSystem.forDartType<String>();
+    return MoorQueueEntry(
+      index: intType.mapFromDatabaseResponse(data['${effectivePrefix}index']),
+      path: stringType.mapFromDatabaseResponse(data['${effectivePrefix}path']),
+      originalIndex: intType
+          .mapFromDatabaseResponse(data['${effectivePrefix}original_index']),
+      type: intType.mapFromDatabaseResponse(data['${effectivePrefix}type']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || index != null) {
+      map['index'] = Variable<int>(index);
+    }
+    if (!nullToAbsent || path != null) {
+      map['path'] = Variable<String>(path);
+    }
+    if (!nullToAbsent || originalIndex != null) {
+      map['original_index'] = Variable<int>(originalIndex);
+    }
+    if (!nullToAbsent || type != null) {
+      map['type'] = Variable<int>(type);
+    }
+    return map;
+  }
+
+  QueueEntriesCompanion toCompanion(bool nullToAbsent) {
+    return QueueEntriesCompanion(
+      index:
+          index == null && nullToAbsent ? const Value.absent() : Value(index),
+      path: path == null && nullToAbsent ? const Value.absent() : Value(path),
+      originalIndex: originalIndex == null && nullToAbsent
+          ? const Value.absent()
+          : Value(originalIndex),
+      type: type == null && nullToAbsent ? const Value.absent() : Value(type),
+    );
+  }
+
+  factory MoorQueueEntry.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return MoorQueueEntry(
+      index: serializer.fromJson<int>(json['index']),
+      path: serializer.fromJson<String>(json['path']),
+      originalIndex: serializer.fromJson<int>(json['originalIndex']),
+      type: serializer.fromJson<int>(json['type']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'index': serializer.toJson<int>(index),
+      'path': serializer.toJson<String>(path),
+      'originalIndex': serializer.toJson<int>(originalIndex),
+      'type': serializer.toJson<int>(type),
+    };
+  }
+
+  MoorQueueEntry copyWith(
+          {int index, String path, int originalIndex, int type}) =>
+      MoorQueueEntry(
+        index: index ?? this.index,
+        path: path ?? this.path,
+        originalIndex: originalIndex ?? this.originalIndex,
+        type: type ?? this.type,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('MoorQueueEntry(')
+          ..write('index: $index, ')
+          ..write('path: $path, ')
+          ..write('originalIndex: $originalIndex, ')
+          ..write('type: $type')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf($mrjc(index.hashCode,
+      $mrjc(path.hashCode, $mrjc(originalIndex.hashCode, type.hashCode))));
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is MoorQueueEntry &&
+          other.index == this.index &&
+          other.path == this.path &&
+          other.originalIndex == this.originalIndex &&
+          other.type == this.type);
+}
+
+class QueueEntriesCompanion extends UpdateCompanion<MoorQueueEntry> {
+  final Value<int> index;
+  final Value<String> path;
+  final Value<int> originalIndex;
+  final Value<int> type;
+  const QueueEntriesCompanion({
+    this.index = const Value.absent(),
+    this.path = const Value.absent(),
+    this.originalIndex = const Value.absent(),
+    this.type = const Value.absent(),
+  });
+  QueueEntriesCompanion.insert({
+    this.index = const Value.absent(),
+    @required String path,
+    @required int originalIndex,
+    @required int type,
+  })  : path = Value(path),
+        originalIndex = Value(originalIndex),
+        type = Value(type);
+  static Insertable<MoorQueueEntry> custom({
+    Expression<int> index,
+    Expression<String> path,
+    Expression<int> originalIndex,
+    Expression<int> type,
+  }) {
+    return RawValuesInsertable({
+      if (index != null) 'index': index,
+      if (path != null) 'path': path,
+      if (originalIndex != null) 'original_index': originalIndex,
+      if (type != null) 'type': type,
+    });
+  }
+
+  QueueEntriesCompanion copyWith(
+      {Value<int> index,
+      Value<String> path,
+      Value<int> originalIndex,
+      Value<int> type}) {
+    return QueueEntriesCompanion(
+      index: index ?? this.index,
+      path: path ?? this.path,
+      originalIndex: originalIndex ?? this.originalIndex,
+      type: type ?? this.type,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (index.present) {
+      map['index'] = Variable<int>(index.value);
+    }
+    if (path.present) {
+      map['path'] = Variable<String>(path.value);
+    }
+    if (originalIndex.present) {
+      map['original_index'] = Variable<int>(originalIndex.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<int>(type.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('QueueEntriesCompanion(')
+          ..write('index: $index, ')
+          ..write('path: $path, ')
+          ..write('originalIndex: $originalIndex, ')
+          ..write('type: $type')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $QueueEntriesTable extends QueueEntries
+    with TableInfo<$QueueEntriesTable, MoorQueueEntry> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $QueueEntriesTable(this._db, [this._alias]);
+  final VerificationMeta _indexMeta = const VerificationMeta('index');
+  GeneratedIntColumn _index;
+  @override
+  GeneratedIntColumn get index => _index ??= _constructIndex();
+  GeneratedIntColumn _constructIndex() {
+    return GeneratedIntColumn(
+      'index',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _pathMeta = const VerificationMeta('path');
+  GeneratedTextColumn _path;
+  @override
+  GeneratedTextColumn get path => _path ??= _constructPath();
+  GeneratedTextColumn _constructPath() {
+    return GeneratedTextColumn(
+      'path',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _originalIndexMeta =
+      const VerificationMeta('originalIndex');
+  GeneratedIntColumn _originalIndex;
+  @override
+  GeneratedIntColumn get originalIndex =>
+      _originalIndex ??= _constructOriginalIndex();
+  GeneratedIntColumn _constructOriginalIndex() {
+    return GeneratedIntColumn(
+      'original_index',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _typeMeta = const VerificationMeta('type');
+  GeneratedIntColumn _type;
+  @override
+  GeneratedIntColumn get type => _type ??= _constructType();
+  GeneratedIntColumn _constructType() {
+    return GeneratedIntColumn(
+      'type',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [index, path, originalIndex, type];
+  @override
+  $QueueEntriesTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'queue_entries';
+  @override
+  final String actualTableName = 'queue_entries';
+  @override
+  VerificationContext validateIntegrity(Insertable<MoorQueueEntry> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('index')) {
+      context.handle(
+          _indexMeta, index.isAcceptableOrUnknown(data['index'], _indexMeta));
+    }
+    if (data.containsKey('path')) {
+      context.handle(
+          _pathMeta, path.isAcceptableOrUnknown(data['path'], _pathMeta));
+    } else if (isInserting) {
+      context.missing(_pathMeta);
+    }
+    if (data.containsKey('original_index')) {
+      context.handle(
+          _originalIndexMeta,
+          originalIndex.isAcceptableOrUnknown(
+              data['original_index'], _originalIndexMeta));
+    } else if (isInserting) {
+      context.missing(_originalIndexMeta);
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+          _typeMeta, type.isAcceptableOrUnknown(data['type'], _typeMeta));
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {index};
+  @override
+  MoorQueueEntry map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return MoorQueueEntry.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  $QueueEntriesTable createAlias(String alias) {
+    return $QueueEntriesTable(_db, alias);
+  }
+}
+
+class PersistentIndexData extends DataClass
+    implements Insertable<PersistentIndexData> {
+  final int index;
+  PersistentIndexData({this.index});
+  factory PersistentIndexData.fromData(
+      Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    return PersistentIndexData(
+      index: intType.mapFromDatabaseResponse(data['${effectivePrefix}index']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || index != null) {
+      map['index'] = Variable<int>(index);
+    }
+    return map;
+  }
+
+  PersistentIndexCompanion toCompanion(bool nullToAbsent) {
+    return PersistentIndexCompanion(
+      index:
+          index == null && nullToAbsent ? const Value.absent() : Value(index),
+    );
+  }
+
+  factory PersistentIndexData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return PersistentIndexData(
+      index: serializer.fromJson<int>(json['index']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'index': serializer.toJson<int>(index),
+    };
+  }
+
+  PersistentIndexData copyWith({int index}) => PersistentIndexData(
+        index: index ?? this.index,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('PersistentIndexData(')
+          ..write('index: $index')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf(index.hashCode);
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is PersistentIndexData && other.index == this.index);
+}
+
+class PersistentIndexCompanion extends UpdateCompanion<PersistentIndexData> {
+  final Value<int> index;
+  const PersistentIndexCompanion({
+    this.index = const Value.absent(),
+  });
+  PersistentIndexCompanion.insert({
+    this.index = const Value.absent(),
+  });
+  static Insertable<PersistentIndexData> custom({
+    Expression<int> index,
+  }) {
+    return RawValuesInsertable({
+      if (index != null) 'index': index,
+    });
+  }
+
+  PersistentIndexCompanion copyWith({Value<int> index}) {
+    return PersistentIndexCompanion(
+      index: index ?? this.index,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (index.present) {
+      map['index'] = Variable<int>(index.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PersistentIndexCompanion(')
+          ..write('index: $index')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $PersistentIndexTable extends PersistentIndex
+    with TableInfo<$PersistentIndexTable, PersistentIndexData> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $PersistentIndexTable(this._db, [this._alias]);
+  final VerificationMeta _indexMeta = const VerificationMeta('index');
+  GeneratedIntColumn _index;
+  @override
+  GeneratedIntColumn get index => _index ??= _constructIndex();
+  GeneratedIntColumn _constructIndex() {
+    return GeneratedIntColumn(
+      'index',
+      $tableName,
+      true,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [index];
+  @override
+  $PersistentIndexTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'persistent_index';
+  @override
+  final String actualTableName = 'persistent_index';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<PersistentIndexData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('index')) {
+      context.handle(
+          _indexMeta, index.isAcceptableOrUnknown(data['index'], _indexMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => <GeneratedColumn>{};
+  @override
+  PersistentIndexData map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return PersistentIndexData.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  $PersistentIndexTable createAlias(String alias) {
+    return $PersistentIndexTable(_db, alias);
+  }
+}
+
+class PersistentLoopModeData extends DataClass
+    implements Insertable<PersistentLoopModeData> {
+  final int loopMode;
+  PersistentLoopModeData({@required this.loopMode});
+  factory PersistentLoopModeData.fromData(
+      Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    return PersistentLoopModeData(
+      loopMode:
+          intType.mapFromDatabaseResponse(data['${effectivePrefix}loop_mode']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || loopMode != null) {
+      map['loop_mode'] = Variable<int>(loopMode);
+    }
+    return map;
+  }
+
+  PersistentLoopModeCompanion toCompanion(bool nullToAbsent) {
+    return PersistentLoopModeCompanion(
+      loopMode: loopMode == null && nullToAbsent
+          ? const Value.absent()
+          : Value(loopMode),
+    );
+  }
+
+  factory PersistentLoopModeData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return PersistentLoopModeData(
+      loopMode: serializer.fromJson<int>(json['loopMode']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'loopMode': serializer.toJson<int>(loopMode),
+    };
+  }
+
+  PersistentLoopModeData copyWith({int loopMode}) => PersistentLoopModeData(
+        loopMode: loopMode ?? this.loopMode,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('PersistentLoopModeData(')
+          ..write('loopMode: $loopMode')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf(loopMode.hashCode);
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is PersistentLoopModeData && other.loopMode == this.loopMode);
+}
+
+class PersistentLoopModeCompanion
+    extends UpdateCompanion<PersistentLoopModeData> {
+  final Value<int> loopMode;
+  const PersistentLoopModeCompanion({
+    this.loopMode = const Value.absent(),
+  });
+  PersistentLoopModeCompanion.insert({
+    this.loopMode = const Value.absent(),
+  });
+  static Insertable<PersistentLoopModeData> custom({
+    Expression<int> loopMode,
+  }) {
+    return RawValuesInsertable({
+      if (loopMode != null) 'loop_mode': loopMode,
+    });
+  }
+
+  PersistentLoopModeCompanion copyWith({Value<int> loopMode}) {
+    return PersistentLoopModeCompanion(
+      loopMode: loopMode ?? this.loopMode,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (loopMode.present) {
+      map['loop_mode'] = Variable<int>(loopMode.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PersistentLoopModeCompanion(')
+          ..write('loopMode: $loopMode')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $PersistentLoopModeTable extends PersistentLoopMode
+    with TableInfo<$PersistentLoopModeTable, PersistentLoopModeData> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $PersistentLoopModeTable(this._db, [this._alias]);
+  final VerificationMeta _loopModeMeta = const VerificationMeta('loopMode');
+  GeneratedIntColumn _loopMode;
+  @override
+  GeneratedIntColumn get loopMode => _loopMode ??= _constructLoopMode();
+  GeneratedIntColumn _constructLoopMode() {
+    return GeneratedIntColumn('loop_mode', $tableName, false,
+        defaultValue: const Constant(0));
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [loopMode];
+  @override
+  $PersistentLoopModeTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'persistent_loop_mode';
+  @override
+  final String actualTableName = 'persistent_loop_mode';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<PersistentLoopModeData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('loop_mode')) {
+      context.handle(_loopModeMeta,
+          loopMode.isAcceptableOrUnknown(data['loop_mode'], _loopModeMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => <GeneratedColumn>{};
+  @override
+  PersistentLoopModeData map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return PersistentLoopModeData.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  $PersistentLoopModeTable createAlias(String alias) {
+    return $PersistentLoopModeTable(_db, alias);
+  }
+}
+
+class PersistentShuffleModeData extends DataClass
+    implements Insertable<PersistentShuffleModeData> {
+  final int shuffleMode;
+  PersistentShuffleModeData({@required this.shuffleMode});
+  factory PersistentShuffleModeData.fromData(
+      Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    return PersistentShuffleModeData(
+      shuffleMode: intType
+          .mapFromDatabaseResponse(data['${effectivePrefix}shuffle_mode']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || shuffleMode != null) {
+      map['shuffle_mode'] = Variable<int>(shuffleMode);
+    }
+    return map;
+  }
+
+  PersistentShuffleModeCompanion toCompanion(bool nullToAbsent) {
+    return PersistentShuffleModeCompanion(
+      shuffleMode: shuffleMode == null && nullToAbsent
+          ? const Value.absent()
+          : Value(shuffleMode),
+    );
+  }
+
+  factory PersistentShuffleModeData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return PersistentShuffleModeData(
+      shuffleMode: serializer.fromJson<int>(json['shuffleMode']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'shuffleMode': serializer.toJson<int>(shuffleMode),
+    };
+  }
+
+  PersistentShuffleModeData copyWith({int shuffleMode}) =>
+      PersistentShuffleModeData(
+        shuffleMode: shuffleMode ?? this.shuffleMode,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('PersistentShuffleModeData(')
+          ..write('shuffleMode: $shuffleMode')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf(shuffleMode.hashCode);
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is PersistentShuffleModeData &&
+          other.shuffleMode == this.shuffleMode);
+}
+
+class PersistentShuffleModeCompanion
+    extends UpdateCompanion<PersistentShuffleModeData> {
+  final Value<int> shuffleMode;
+  const PersistentShuffleModeCompanion({
+    this.shuffleMode = const Value.absent(),
+  });
+  PersistentShuffleModeCompanion.insert({
+    this.shuffleMode = const Value.absent(),
+  });
+  static Insertable<PersistentShuffleModeData> custom({
+    Expression<int> shuffleMode,
+  }) {
+    return RawValuesInsertable({
+      if (shuffleMode != null) 'shuffle_mode': shuffleMode,
+    });
+  }
+
+  PersistentShuffleModeCompanion copyWith({Value<int> shuffleMode}) {
+    return PersistentShuffleModeCompanion(
+      shuffleMode: shuffleMode ?? this.shuffleMode,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (shuffleMode.present) {
+      map['shuffle_mode'] = Variable<int>(shuffleMode.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PersistentShuffleModeCompanion(')
+          ..write('shuffleMode: $shuffleMode')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $PersistentShuffleModeTable extends PersistentShuffleMode
+    with TableInfo<$PersistentShuffleModeTable, PersistentShuffleModeData> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $PersistentShuffleModeTable(this._db, [this._alias]);
+  final VerificationMeta _shuffleModeMeta =
+      const VerificationMeta('shuffleMode');
+  GeneratedIntColumn _shuffleMode;
+  @override
+  GeneratedIntColumn get shuffleMode =>
+      _shuffleMode ??= _constructShuffleMode();
+  GeneratedIntColumn _constructShuffleMode() {
+    return GeneratedIntColumn('shuffle_mode', $tableName, false,
+        defaultValue: const Constant(0));
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [shuffleMode];
+  @override
+  $PersistentShuffleModeTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'persistent_shuffle_mode';
+  @override
+  final String actualTableName = 'persistent_shuffle_mode';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<PersistentShuffleModeData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('shuffle_mode')) {
+      context.handle(
+          _shuffleModeMeta,
+          shuffleMode.isAcceptableOrUnknown(
+              data['shuffle_mode'], _shuffleModeMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => <GeneratedColumn>{};
+  @override
+  PersistentShuffleModeData map(Map<String, dynamic> data,
+      {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return PersistentShuffleModeData.fromData(data, _db,
+        prefix: effectivePrefix);
+  }
+
+  @override
+  $PersistentShuffleModeTable createAlias(String alias) {
+    return $PersistentShuffleModeTable(_db, alias);
   }
 }
 
@@ -1213,806 +2130,48 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
   }
 }
 
-class MoorQueueEntry extends DataClass implements Insertable<MoorQueueEntry> {
-  final int index;
-  final String path;
-  final int originalIndex;
-  final int type;
-  MoorQueueEntry(
-      {@required this.index,
-      @required this.path,
-      @required this.originalIndex,
-      @required this.type});
-  factory MoorQueueEntry.fromData(
-      Map<String, dynamic> data, GeneratedDatabase db,
-      {String prefix}) {
-    final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    final stringType = db.typeSystem.forDartType<String>();
-    return MoorQueueEntry(
-      index: intType.mapFromDatabaseResponse(data['${effectivePrefix}index']),
-      path: stringType.mapFromDatabaseResponse(data['${effectivePrefix}path']),
-      originalIndex: intType
-          .mapFromDatabaseResponse(data['${effectivePrefix}original_index']),
-      type: intType.mapFromDatabaseResponse(data['${effectivePrefix}type']),
-    );
-  }
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (!nullToAbsent || index != null) {
-      map['index'] = Variable<int>(index);
-    }
-    if (!nullToAbsent || path != null) {
-      map['path'] = Variable<String>(path);
-    }
-    if (!nullToAbsent || originalIndex != null) {
-      map['original_index'] = Variable<int>(originalIndex);
-    }
-    if (!nullToAbsent || type != null) {
-      map['type'] = Variable<int>(type);
-    }
-    return map;
-  }
-
-  QueueEntriesCompanion toCompanion(bool nullToAbsent) {
-    return QueueEntriesCompanion(
-      index:
-          index == null && nullToAbsent ? const Value.absent() : Value(index),
-      path: path == null && nullToAbsent ? const Value.absent() : Value(path),
-      originalIndex: originalIndex == null && nullToAbsent
-          ? const Value.absent()
-          : Value(originalIndex),
-      type: type == null && nullToAbsent ? const Value.absent() : Value(type),
-    );
-  }
-
-  factory MoorQueueEntry.fromJson(Map<String, dynamic> json,
-      {ValueSerializer serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
-    return MoorQueueEntry(
-      index: serializer.fromJson<int>(json['index']),
-      path: serializer.fromJson<String>(json['path']),
-      originalIndex: serializer.fromJson<int>(json['originalIndex']),
-      type: serializer.fromJson<int>(json['type']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'index': serializer.toJson<int>(index),
-      'path': serializer.toJson<String>(path),
-      'originalIndex': serializer.toJson<int>(originalIndex),
-      'type': serializer.toJson<int>(type),
-    };
-  }
-
-  MoorQueueEntry copyWith(
-          {int index, String path, int originalIndex, int type}) =>
-      MoorQueueEntry(
-        index: index ?? this.index,
-        path: path ?? this.path,
-        originalIndex: originalIndex ?? this.originalIndex,
-        type: type ?? this.type,
-      );
-  @override
-  String toString() {
-    return (StringBuffer('MoorQueueEntry(')
-          ..write('index: $index, ')
-          ..write('path: $path, ')
-          ..write('originalIndex: $originalIndex, ')
-          ..write('type: $type')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => $mrjf($mrjc(index.hashCode,
-      $mrjc(path.hashCode, $mrjc(originalIndex.hashCode, type.hashCode))));
-  @override
-  bool operator ==(dynamic other) =>
-      identical(this, other) ||
-      (other is MoorQueueEntry &&
-          other.index == this.index &&
-          other.path == this.path &&
-          other.originalIndex == this.originalIndex &&
-          other.type == this.type);
-}
-
-class QueueEntriesCompanion extends UpdateCompanion<MoorQueueEntry> {
-  final Value<int> index;
-  final Value<String> path;
-  final Value<int> originalIndex;
-  final Value<int> type;
-  const QueueEntriesCompanion({
-    this.index = const Value.absent(),
-    this.path = const Value.absent(),
-    this.originalIndex = const Value.absent(),
-    this.type = const Value.absent(),
-  });
-  QueueEntriesCompanion.insert({
-    this.index = const Value.absent(),
-    @required String path,
-    @required int originalIndex,
-    @required int type,
-  })  : path = Value(path),
-        originalIndex = Value(originalIndex),
-        type = Value(type);
-  static Insertable<MoorQueueEntry> custom({
-    Expression<int> index,
-    Expression<String> path,
-    Expression<int> originalIndex,
-    Expression<int> type,
-  }) {
-    return RawValuesInsertable({
-      if (index != null) 'index': index,
-      if (path != null) 'path': path,
-      if (originalIndex != null) 'original_index': originalIndex,
-      if (type != null) 'type': type,
-    });
-  }
-
-  QueueEntriesCompanion copyWith(
-      {Value<int> index,
-      Value<String> path,
-      Value<int> originalIndex,
-      Value<int> type}) {
-    return QueueEntriesCompanion(
-      index: index ?? this.index,
-      path: path ?? this.path,
-      originalIndex: originalIndex ?? this.originalIndex,
-      type: type ?? this.type,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (index.present) {
-      map['index'] = Variable<int>(index.value);
-    }
-    if (path.present) {
-      map['path'] = Variable<String>(path.value);
-    }
-    if (originalIndex.present) {
-      map['original_index'] = Variable<int>(originalIndex.value);
-    }
-    if (type.present) {
-      map['type'] = Variable<int>(type.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('QueueEntriesCompanion(')
-          ..write('index: $index, ')
-          ..write('path: $path, ')
-          ..write('originalIndex: $originalIndex, ')
-          ..write('type: $type')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $QueueEntriesTable extends QueueEntries
-    with TableInfo<$QueueEntriesTable, MoorQueueEntry> {
-  final GeneratedDatabase _db;
-  final String _alias;
-  $QueueEntriesTable(this._db, [this._alias]);
-  final VerificationMeta _indexMeta = const VerificationMeta('index');
-  GeneratedIntColumn _index;
-  @override
-  GeneratedIntColumn get index => _index ??= _constructIndex();
-  GeneratedIntColumn _constructIndex() {
-    return GeneratedIntColumn(
-      'index',
-      $tableName,
-      false,
-    );
-  }
-
-  final VerificationMeta _pathMeta = const VerificationMeta('path');
-  GeneratedTextColumn _path;
-  @override
-  GeneratedTextColumn get path => _path ??= _constructPath();
-  GeneratedTextColumn _constructPath() {
-    return GeneratedTextColumn(
-      'path',
-      $tableName,
-      false,
-    );
-  }
-
-  final VerificationMeta _originalIndexMeta =
-      const VerificationMeta('originalIndex');
-  GeneratedIntColumn _originalIndex;
-  @override
-  GeneratedIntColumn get originalIndex =>
-      _originalIndex ??= _constructOriginalIndex();
-  GeneratedIntColumn _constructOriginalIndex() {
-    return GeneratedIntColumn(
-      'original_index',
-      $tableName,
-      false,
-    );
-  }
-
-  final VerificationMeta _typeMeta = const VerificationMeta('type');
-  GeneratedIntColumn _type;
-  @override
-  GeneratedIntColumn get type => _type ??= _constructType();
-  GeneratedIntColumn _constructType() {
-    return GeneratedIntColumn(
-      'type',
-      $tableName,
-      false,
-    );
-  }
-
-  @override
-  List<GeneratedColumn> get $columns => [index, path, originalIndex, type];
-  @override
-  $QueueEntriesTable get asDslTable => this;
-  @override
-  String get $tableName => _alias ?? 'queue_entries';
-  @override
-  final String actualTableName = 'queue_entries';
-  @override
-  VerificationContext validateIntegrity(Insertable<MoorQueueEntry> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('index')) {
-      context.handle(
-          _indexMeta, index.isAcceptableOrUnknown(data['index'], _indexMeta));
-    }
-    if (data.containsKey('path')) {
-      context.handle(
-          _pathMeta, path.isAcceptableOrUnknown(data['path'], _pathMeta));
-    } else if (isInserting) {
-      context.missing(_pathMeta);
-    }
-    if (data.containsKey('original_index')) {
-      context.handle(
-          _originalIndexMeta,
-          originalIndex.isAcceptableOrUnknown(
-              data['original_index'], _originalIndexMeta));
-    } else if (isInserting) {
-      context.missing(_originalIndexMeta);
-    }
-    if (data.containsKey('type')) {
-      context.handle(
-          _typeMeta, type.isAcceptableOrUnknown(data['type'], _typeMeta));
-    } else if (isInserting) {
-      context.missing(_typeMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {index};
-  @override
-  MoorQueueEntry map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return MoorQueueEntry.fromData(data, _db, prefix: effectivePrefix);
-  }
-
-  @override
-  $QueueEntriesTable createAlias(String alias) {
-    return $QueueEntriesTable(_db, alias);
-  }
-}
-
-class PersistentIndexData extends DataClass
-    implements Insertable<PersistentIndexData> {
-  final int index;
-  PersistentIndexData({this.index});
-  factory PersistentIndexData.fromData(
-      Map<String, dynamic> data, GeneratedDatabase db,
-      {String prefix}) {
-    final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    return PersistentIndexData(
-      index: intType.mapFromDatabaseResponse(data['${effectivePrefix}index']),
-    );
-  }
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (!nullToAbsent || index != null) {
-      map['index'] = Variable<int>(index);
-    }
-    return map;
-  }
-
-  PersistentIndexCompanion toCompanion(bool nullToAbsent) {
-    return PersistentIndexCompanion(
-      index:
-          index == null && nullToAbsent ? const Value.absent() : Value(index),
-    );
-  }
-
-  factory PersistentIndexData.fromJson(Map<String, dynamic> json,
-      {ValueSerializer serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
-    return PersistentIndexData(
-      index: serializer.fromJson<int>(json['index']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'index': serializer.toJson<int>(index),
-    };
-  }
-
-  PersistentIndexData copyWith({int index}) => PersistentIndexData(
-        index: index ?? this.index,
-      );
-  @override
-  String toString() {
-    return (StringBuffer('PersistentIndexData(')
-          ..write('index: $index')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => $mrjf(index.hashCode);
-  @override
-  bool operator ==(dynamic other) =>
-      identical(this, other) ||
-      (other is PersistentIndexData && other.index == this.index);
-}
-
-class PersistentIndexCompanion extends UpdateCompanion<PersistentIndexData> {
-  final Value<int> index;
-  const PersistentIndexCompanion({
-    this.index = const Value.absent(),
-  });
-  PersistentIndexCompanion.insert({
-    this.index = const Value.absent(),
-  });
-  static Insertable<PersistentIndexData> custom({
-    Expression<int> index,
-  }) {
-    return RawValuesInsertable({
-      if (index != null) 'index': index,
-    });
-  }
-
-  PersistentIndexCompanion copyWith({Value<int> index}) {
-    return PersistentIndexCompanion(
-      index: index ?? this.index,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (index.present) {
-      map['index'] = Variable<int>(index.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('PersistentIndexCompanion(')
-          ..write('index: $index')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $PersistentIndexTable extends PersistentIndex
-    with TableInfo<$PersistentIndexTable, PersistentIndexData> {
-  final GeneratedDatabase _db;
-  final String _alias;
-  $PersistentIndexTable(this._db, [this._alias]);
-  final VerificationMeta _indexMeta = const VerificationMeta('index');
-  GeneratedIntColumn _index;
-  @override
-  GeneratedIntColumn get index => _index ??= _constructIndex();
-  GeneratedIntColumn _constructIndex() {
-    return GeneratedIntColumn(
-      'index',
-      $tableName,
-      true,
-    );
-  }
-
-  @override
-  List<GeneratedColumn> get $columns => [index];
-  @override
-  $PersistentIndexTable get asDslTable => this;
-  @override
-  String get $tableName => _alias ?? 'persistent_index';
-  @override
-  final String actualTableName = 'persistent_index';
-  @override
-  VerificationContext validateIntegrity(
-      Insertable<PersistentIndexData> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('index')) {
-      context.handle(
-          _indexMeta, index.isAcceptableOrUnknown(data['index'], _indexMeta));
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => <GeneratedColumn>{};
-  @override
-  PersistentIndexData map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return PersistentIndexData.fromData(data, _db, prefix: effectivePrefix);
-  }
-
-  @override
-  $PersistentIndexTable createAlias(String alias) {
-    return $PersistentIndexTable(_db, alias);
-  }
-}
-
-class PersistentShuffleModeData extends DataClass
-    implements Insertable<PersistentShuffleModeData> {
-  final int shuffleMode;
-  PersistentShuffleModeData({@required this.shuffleMode});
-  factory PersistentShuffleModeData.fromData(
-      Map<String, dynamic> data, GeneratedDatabase db,
-      {String prefix}) {
-    final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    return PersistentShuffleModeData(
-      shuffleMode: intType
-          .mapFromDatabaseResponse(data['${effectivePrefix}shuffle_mode']),
-    );
-  }
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (!nullToAbsent || shuffleMode != null) {
-      map['shuffle_mode'] = Variable<int>(shuffleMode);
-    }
-    return map;
-  }
-
-  PersistentShuffleModeCompanion toCompanion(bool nullToAbsent) {
-    return PersistentShuffleModeCompanion(
-      shuffleMode: shuffleMode == null && nullToAbsent
-          ? const Value.absent()
-          : Value(shuffleMode),
-    );
-  }
-
-  factory PersistentShuffleModeData.fromJson(Map<String, dynamic> json,
-      {ValueSerializer serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
-    return PersistentShuffleModeData(
-      shuffleMode: serializer.fromJson<int>(json['shuffleMode']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'shuffleMode': serializer.toJson<int>(shuffleMode),
-    };
-  }
-
-  PersistentShuffleModeData copyWith({int shuffleMode}) =>
-      PersistentShuffleModeData(
-        shuffleMode: shuffleMode ?? this.shuffleMode,
-      );
-  @override
-  String toString() {
-    return (StringBuffer('PersistentShuffleModeData(')
-          ..write('shuffleMode: $shuffleMode')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => $mrjf(shuffleMode.hashCode);
-  @override
-  bool operator ==(dynamic other) =>
-      identical(this, other) ||
-      (other is PersistentShuffleModeData &&
-          other.shuffleMode == this.shuffleMode);
-}
-
-class PersistentShuffleModeCompanion
-    extends UpdateCompanion<PersistentShuffleModeData> {
-  final Value<int> shuffleMode;
-  const PersistentShuffleModeCompanion({
-    this.shuffleMode = const Value.absent(),
-  });
-  PersistentShuffleModeCompanion.insert({
-    this.shuffleMode = const Value.absent(),
-  });
-  static Insertable<PersistentShuffleModeData> custom({
-    Expression<int> shuffleMode,
-  }) {
-    return RawValuesInsertable({
-      if (shuffleMode != null) 'shuffle_mode': shuffleMode,
-    });
-  }
-
-  PersistentShuffleModeCompanion copyWith({Value<int> shuffleMode}) {
-    return PersistentShuffleModeCompanion(
-      shuffleMode: shuffleMode ?? this.shuffleMode,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (shuffleMode.present) {
-      map['shuffle_mode'] = Variable<int>(shuffleMode.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('PersistentShuffleModeCompanion(')
-          ..write('shuffleMode: $shuffleMode')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $PersistentShuffleModeTable extends PersistentShuffleMode
-    with TableInfo<$PersistentShuffleModeTable, PersistentShuffleModeData> {
-  final GeneratedDatabase _db;
-  final String _alias;
-  $PersistentShuffleModeTable(this._db, [this._alias]);
-  final VerificationMeta _shuffleModeMeta =
-      const VerificationMeta('shuffleMode');
-  GeneratedIntColumn _shuffleMode;
-  @override
-  GeneratedIntColumn get shuffleMode =>
-      _shuffleMode ??= _constructShuffleMode();
-  GeneratedIntColumn _constructShuffleMode() {
-    return GeneratedIntColumn('shuffle_mode', $tableName, false,
-        defaultValue: const Constant(0));
-  }
-
-  @override
-  List<GeneratedColumn> get $columns => [shuffleMode];
-  @override
-  $PersistentShuffleModeTable get asDslTable => this;
-  @override
-  String get $tableName => _alias ?? 'persistent_shuffle_mode';
-  @override
-  final String actualTableName = 'persistent_shuffle_mode';
-  @override
-  VerificationContext validateIntegrity(
-      Insertable<PersistentShuffleModeData> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('shuffle_mode')) {
-      context.handle(
-          _shuffleModeMeta,
-          shuffleMode.isAcceptableOrUnknown(
-              data['shuffle_mode'], _shuffleModeMeta));
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => <GeneratedColumn>{};
-  @override
-  PersistentShuffleModeData map(Map<String, dynamic> data,
-      {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return PersistentShuffleModeData.fromData(data, _db,
-        prefix: effectivePrefix);
-  }
-
-  @override
-  $PersistentShuffleModeTable createAlias(String alias) {
-    return $PersistentShuffleModeTable(_db, alias);
-  }
-}
-
-class PersistentLoopModeData extends DataClass
-    implements Insertable<PersistentLoopModeData> {
-  final int loopMode;
-  PersistentLoopModeData({@required this.loopMode});
-  factory PersistentLoopModeData.fromData(
-      Map<String, dynamic> data, GeneratedDatabase db,
-      {String prefix}) {
-    final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    return PersistentLoopModeData(
-      loopMode:
-          intType.mapFromDatabaseResponse(data['${effectivePrefix}loop_mode']),
-    );
-  }
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (!nullToAbsent || loopMode != null) {
-      map['loop_mode'] = Variable<int>(loopMode);
-    }
-    return map;
-  }
-
-  PersistentLoopModeCompanion toCompanion(bool nullToAbsent) {
-    return PersistentLoopModeCompanion(
-      loopMode: loopMode == null && nullToAbsent
-          ? const Value.absent()
-          : Value(loopMode),
-    );
-  }
-
-  factory PersistentLoopModeData.fromJson(Map<String, dynamic> json,
-      {ValueSerializer serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
-    return PersistentLoopModeData(
-      loopMode: serializer.fromJson<int>(json['loopMode']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'loopMode': serializer.toJson<int>(loopMode),
-    };
-  }
-
-  PersistentLoopModeData copyWith({int loopMode}) => PersistentLoopModeData(
-        loopMode: loopMode ?? this.loopMode,
-      );
-  @override
-  String toString() {
-    return (StringBuffer('PersistentLoopModeData(')
-          ..write('loopMode: $loopMode')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => $mrjf(loopMode.hashCode);
-  @override
-  bool operator ==(dynamic other) =>
-      identical(this, other) ||
-      (other is PersistentLoopModeData && other.loopMode == this.loopMode);
-}
-
-class PersistentLoopModeCompanion
-    extends UpdateCompanion<PersistentLoopModeData> {
-  final Value<int> loopMode;
-  const PersistentLoopModeCompanion({
-    this.loopMode = const Value.absent(),
-  });
-  PersistentLoopModeCompanion.insert({
-    this.loopMode = const Value.absent(),
-  });
-  static Insertable<PersistentLoopModeData> custom({
-    Expression<int> loopMode,
-  }) {
-    return RawValuesInsertable({
-      if (loopMode != null) 'loop_mode': loopMode,
-    });
-  }
-
-  PersistentLoopModeCompanion copyWith({Value<int> loopMode}) {
-    return PersistentLoopModeCompanion(
-      loopMode: loopMode ?? this.loopMode,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (loopMode.present) {
-      map['loop_mode'] = Variable<int>(loopMode.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('PersistentLoopModeCompanion(')
-          ..write('loopMode: $loopMode')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $PersistentLoopModeTable extends PersistentLoopMode
-    with TableInfo<$PersistentLoopModeTable, PersistentLoopModeData> {
-  final GeneratedDatabase _db;
-  final String _alias;
-  $PersistentLoopModeTable(this._db, [this._alias]);
-  final VerificationMeta _loopModeMeta = const VerificationMeta('loopMode');
-  GeneratedIntColumn _loopMode;
-  @override
-  GeneratedIntColumn get loopMode => _loopMode ??= _constructLoopMode();
-  GeneratedIntColumn _constructLoopMode() {
-    return GeneratedIntColumn('loop_mode', $tableName, false,
-        defaultValue: const Constant(0));
-  }
-
-  @override
-  List<GeneratedColumn> get $columns => [loopMode];
-  @override
-  $PersistentLoopModeTable get asDslTable => this;
-  @override
-  String get $tableName => _alias ?? 'persistent_loop_mode';
-  @override
-  final String actualTableName = 'persistent_loop_mode';
-  @override
-  VerificationContext validateIntegrity(
-      Insertable<PersistentLoopModeData> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('loop_mode')) {
-      context.handle(_loopModeMeta,
-          loopMode.isAcceptableOrUnknown(data['loop_mode'], _loopModeMeta));
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => <GeneratedColumn>{};
-  @override
-  PersistentLoopModeData map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return PersistentLoopModeData.fromData(data, _db, prefix: effectivePrefix);
-  }
-
-  @override
-  $PersistentLoopModeTable createAlias(String alias) {
-    return $PersistentLoopModeTable(_db, alias);
-  }
-}
-
 abstract class _$MoorMusicDataSource extends GeneratedDatabase {
   _$MoorMusicDataSource(QueryExecutor e)
       : super(SqlTypeSystem.defaultInstance, e);
   _$MoorMusicDataSource.connect(DatabaseConnection c) : super.connect(c);
-  $ArtistsTable _artists;
-  $ArtistsTable get artists => _artists ??= $ArtistsTable(this);
   $AlbumsTable _albums;
   $AlbumsTable get albums => _albums ??= $AlbumsTable(this);
-  $SongsTable _songs;
-  $SongsTable get songs => _songs ??= $SongsTable(this);
+  $ArtistsTable _artists;
+  $ArtistsTable get artists => _artists ??= $ArtistsTable(this);
+  $LibraryFoldersTable _libraryFolders;
+  $LibraryFoldersTable get libraryFolders =>
+      _libraryFolders ??= $LibraryFoldersTable(this);
   $QueueEntriesTable _queueEntries;
   $QueueEntriesTable get queueEntries =>
       _queueEntries ??= $QueueEntriesTable(this);
   $PersistentIndexTable _persistentIndex;
   $PersistentIndexTable get persistentIndex =>
       _persistentIndex ??= $PersistentIndexTable(this);
-  $PersistentShuffleModeTable _persistentShuffleMode;
-  $PersistentShuffleModeTable get persistentShuffleMode =>
-      _persistentShuffleMode ??= $PersistentShuffleModeTable(this);
   $PersistentLoopModeTable _persistentLoopMode;
   $PersistentLoopModeTable get persistentLoopMode =>
       _persistentLoopMode ??= $PersistentLoopModeTable(this);
+  $PersistentShuffleModeTable _persistentShuffleMode;
+  $PersistentShuffleModeTable get persistentShuffleMode =>
+      _persistentShuffleMode ??= $PersistentShuffleModeTable(this);
+  $SongsTable _songs;
+  $SongsTable get songs => _songs ??= $SongsTable(this);
   PlayerStateDao _playerStateDao;
   PlayerStateDao get playerStateDao =>
       _playerStateDao ??= PlayerStateDao(this as MoorMusicDataSource);
+  SettingsDao _settingsDao;
+  SettingsDao get settingsDao =>
+      _settingsDao ??= SettingsDao(this as MoorMusicDataSource);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [
-        artists,
         albums,
-        songs,
+        artists,
+        libraryFolders,
         queueEntries,
         persistentIndex,
+        persistentLoopMode,
         persistentShuffleMode,
-        persistentLoopMode
+        songs
       ];
 }

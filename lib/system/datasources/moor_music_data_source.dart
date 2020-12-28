@@ -11,6 +11,7 @@ import '../models/album_model.dart';
 import '../models/artist_model.dart';
 import '../models/song_model.dart';
 import 'moor/player_state_dao.dart';
+import 'moor/settings_dao.dart';
 import 'music_data_source_contract.dart';
 
 part 'moor_music_data_source.g.dart';
@@ -78,18 +79,24 @@ class PersistentLoopMode extends Table {
   IntColumn get loopMode => integer().withDefault(const Constant(0))();
 }
 
+class LibraryFolders extends Table {
+  TextColumn get path => text()();
+}
+
 @UseMoor(
   tables: [
-    Artists,
     Albums,
-    Songs,
+    Artists,
+    LibraryFolders,
     QueueEntries,
     PersistentIndex,
-    PersistentShuffleMode,
     PersistentLoopMode,
+    PersistentShuffleMode,
+    Songs,
   ],
   daos: [
     PlayerStateDao,
+    SettingsDao,
   ],
 )
 class MoorMusicDataSource extends _$MoorMusicDataSource implements MusicDataSource {
