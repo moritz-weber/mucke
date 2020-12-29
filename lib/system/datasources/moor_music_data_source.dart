@@ -150,6 +150,18 @@ class MoorMusicDataSource extends _$MoorMusicDataSource implements MusicDataSour
   }
 
   @override
+  Stream<List<AlbumModel>> getArtistAlbumStream(ArtistModel artist) {
+    return (select(albums)
+          ..where((tbl) => tbl.artist.equals(artist.name))
+          ..orderBy([
+            (t) => OrderingTerm(expression: t.title),
+          ]))
+        .watch()
+        .map((moorAlbumList) =>
+            moorAlbumList.map((moorAlbum) => AlbumModel.fromMoorAlbum(moorAlbum)).toList());
+  }
+
+  @override
   Future<List<SongModel>> getSongsFromAlbum(AlbumModel album) {
     return (select(songs)
           ..where((tbl) => tbl.albumTitle.equals(album.title))

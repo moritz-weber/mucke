@@ -7,6 +7,7 @@ import 'package:just_audio/just_audio.dart' as ja;
 import 'domain/repositories/audio_repository.dart';
 import 'domain/repositories/music_data_repository.dart';
 import 'domain/repositories/persistent_player_state_repository.dart';
+import 'domain/repositories/settings_repository.dart';
 import 'presentation/state/audio_store.dart';
 import 'presentation/state/music_data_store.dart';
 import 'presentation/state/navigation_store.dart';
@@ -21,9 +22,11 @@ import 'system/datasources/local_music_fetcher_contract.dart';
 import 'system/datasources/moor_music_data_source.dart';
 import 'system/datasources/music_data_source_contract.dart';
 import 'system/datasources/player_state_data_source.dart';
+import 'system/datasources/settings_data_source.dart';
 import 'system/repositories/audio_repository_impl.dart';
 import 'system/repositories/music_data_repository_impl.dart';
 import 'system/repositories/persistent_player_state_repository_impl.dart';
+import 'system/repositories/settings_repository_impl.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -35,6 +38,7 @@ Future<void> setupGetIt() async {
     () {
       final musicDataStore = MusicDataStore(
         musicDataRepository: getIt(),
+        settingsRepository: getIt(),
       );
       musicDataStore.init();
       return musicDataStore;
@@ -71,13 +75,16 @@ Future<void> setupGetIt() async {
   getIt.registerLazySingleton<PlayerStateRepository>(
     () => PlayerStateRepositoryImpl(getIt()),
   );
+  getIt.registerLazySingleton<SettingsRepository>(() => SettingsRepositoryImpl(getIt()));
 
   // data sources
   final MoorMusicDataSource moorMusicDataSource = MoorMusicDataSource();
   getIt.registerLazySingleton<MusicDataSource>(() => moorMusicDataSource);
   getIt.registerLazySingleton<PlayerStateDataSource>(() => moorMusicDataSource.playerStateDao);
+  getIt.registerLazySingleton<SettingsDataSource>(() => moorMusicDataSource.settingsDao);
   getIt.registerLazySingleton<LocalMusicFetcher>(
     () => LocalMusicFetcherImpl(
+      getIt(),
       getIt(),
       getIt(),
     ),

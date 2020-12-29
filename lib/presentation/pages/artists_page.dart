@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../domain/entities/artist.dart';
 import '../state/music_data_store.dart';
+import 'artist_details_page.dart';
 
 class ArtistsPage extends StatefulWidget {
   const ArtistsPage({Key key}) : super(key: key);
@@ -40,6 +41,17 @@ class _ArtistsPageState extends State<ArtistsPage>
             final Artist artist = artists[index];
             return ListTile(
               title: Text(artist.name),
+              onTap: () {
+                musicDataStore.fetchAlbumsFromArtist(artist);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<Widget>(
+                    builder: (BuildContext context) => ArtistDetailsPage(
+                      artist: artist,
+                    ),
+                  ),
+                );
+              },
             );
           },
           separatorBuilder: (BuildContext context, int index) => const Divider(

@@ -33,6 +33,9 @@ abstract class _MusicDataStore with Store {
   ObservableStream<List<Song>> albumSongStream;
 
   @observable
+  ObservableStream<List<Album>> artistAlbumStream;
+
+  @observable
   ObservableList<Artist> artists = <Artist>[].asObservable();
   @observable
   bool isFetchingArtists = false;
@@ -125,6 +128,11 @@ abstract class _MusicDataStore with Store {
   @action
   Future<void> fetchSongsFromAlbum(Album album) async {
     albumSongStream = _musicDataRepository.getAlbumSongStream(album).asObservable(initialValue: []);
+  }
+
+  @action
+  Future<void> fetchAlbumsFromArtist(Artist artist) async {
+    artistAlbumStream = _musicDataRepository.getArtistAlbumStream(artist).asObservable(initialValue: []);
   }
 
   Future<void> setSongBlocked(Song song, bool blocked) async {

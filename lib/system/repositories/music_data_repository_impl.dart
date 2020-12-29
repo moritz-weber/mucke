@@ -61,9 +61,11 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   Future<void> updateDatabase() async {
     _log.info('updateDatabase called');
 
-    await updateArtists();
-    final albumIdMap = await updateAlbums();
-    await updateSongs(albumIdMap);
+    final localMusic = await localMusicFetcher.getLocalMusic();
+
+    await updateArtists(localMusic['ARTISTS'] as List<ArtistModel>);
+    final albumIdMap = await updateAlbums(localMusic['ALBUMS'] as List<AlbumModel>);
+    await updateSongs(localMusic['SONGS'] as List<SongModel>, albumIdMap);
 
     _log.info('updateDatabase finished');
   }
@@ -73,18 +75,15 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
     await musicDataSource.setSongBlocked(song as SongModel, blocked);
   }
 
-  Future<void> updateArtists() async {
+  Future<void> updateArtists(List<ArtistModel> artists) async {
     await musicDataSource.deleteAllArtists();
-    final List<ArtistModel> artists = await localMusicFetcher.getArtists();
-
     for (final ArtistModel artist in artists) {
       await musicDataSource.insertArtist(artist);
     }
   }
 
-  Future<Map<int, int>> updateAlbums() async {
+  Future<Map<int, int>> updateAlbums(List<AlbumModel> albums) async {
     await musicDataSource.deleteAllAlbums();
-    final List<AlbumModel> albums = await localMusicFetcher.getAlbums();
     final Map<int, int> albumIdMap = {};
 
     final Directory dir = await getApplicationSupportDirectory();
@@ -111,9 +110,8 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
     return albumIdMap;
   }
 
-  Future<void> updateSongs(Map<int, int> albumIdMap) async {
+  Future<void> updateSongs(List<SongModel> songs, Map<int, int> albumIdMap) async {
     final Directory dir = await getApplicationSupportDirectory();
-    final List<SongModel> songs = await localMusicFetcher.getSongs();
 
     final List<SongModel> songsToInsert = [];
     for (final SongModel song in songs) {
@@ -132,5 +130,10 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   @override
   Future<void> toggleNextSongLink(Song song) async {
     musicDataSource.toggleNextSongLink(song as SongModel);
+  }
+
+  @override
+  Stream<List<Album>> getArtistAlbumStream(Artist artist) {
+    return musicDataSource.getArtistAlbumStream(artist as ArtistModel);
   }
 }

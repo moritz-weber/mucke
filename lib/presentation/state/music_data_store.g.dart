@@ -39,6 +39,22 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
     });
   }
 
+  final _$artistAlbumStreamAtom =
+      Atom(name: '_MusicDataStore.artistAlbumStream');
+
+  @override
+  ObservableStream<List<Album>> get artistAlbumStream {
+    _$artistAlbumStreamAtom.reportRead();
+    return super.artistAlbumStream;
+  }
+
+  @override
+  set artistAlbumStream(ObservableStream<List<Album>> value) {
+    _$artistAlbumStreamAtom.reportWrite(value, super.artistAlbumStream, () {
+      super.artistAlbumStream = value;
+    });
+  }
+
   final _$artistsAtom = Atom(name: '_MusicDataStore.artists');
 
   @override
@@ -199,11 +215,21 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
         .run(() => super.fetchSongsFromAlbum(album));
   }
 
+  final _$fetchAlbumsFromArtistAsyncAction =
+      AsyncAction('_MusicDataStore.fetchAlbumsFromArtist');
+
+  @override
+  Future<void> fetchAlbumsFromArtist(Artist artist) {
+    return _$fetchAlbumsFromArtistAsyncAction
+        .run(() => super.fetchAlbumsFromArtist(artist));
+  }
+
   @override
   String toString() {
     return '''
 songStream: ${songStream},
 albumSongStream: ${albumSongStream},
+artistAlbumStream: ${artistAlbumStream},
 artists: ${artists},
 isFetchingArtists: ${isFetchingArtists},
 albums: ${albums},

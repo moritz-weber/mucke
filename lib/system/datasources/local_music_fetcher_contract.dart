@@ -5,6 +5,8 @@ import '../models/artist_model.dart';
 import '../models/song_model.dart';
 
 abstract class LocalMusicFetcher {
+  Future<Map<String, List>> getLocalMusic();
+
   Future<List<ArtistModel>> getArtists();
   Future<List<AlbumModel>> getAlbums();
   Future<List<SongModel>> getSongs();

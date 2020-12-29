@@ -7,6 +7,7 @@ abstract class MusicDataSource {
 
   Stream<List<SongModel>> get songStream;
   Stream<List<SongModel>> getAlbumSongStream(AlbumModel album);
+  Stream<List<AlbumModel>> getArtistAlbumStream(ArtistModel artist);
 
   /// Insert album into the database. Return the ID of the inserted album.
   Future<int> insertAlbum(AlbumModel albumModel);
