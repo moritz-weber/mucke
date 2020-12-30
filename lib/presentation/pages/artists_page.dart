@@ -13,8 +13,7 @@ class ArtistsPage extends StatefulWidget {
   _ArtistsPageState createState() => _ArtistsPageState();
 }
 
-class _ArtistsPageState extends State<ArtistsPage>
-    with AutomaticKeepAliveClientMixin {
+class _ArtistsPageState extends State<ArtistsPage> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     print('ArtistsPage.build');
@@ -23,42 +22,30 @@ class _ArtistsPageState extends State<ArtistsPage>
     super.build(context);
     return Observer(builder: (_) {
       print('ArtistsPage.build -> Observer.builder');
-      final bool isFetching = musicDataStore.isFetchingArtists;
-
-      if (isFetching) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const <Widget>[
-            CircularProgressIndicator(),
-            Text('Loading items...'),
-          ],
-        );
-      } else {
-        final List<Artist> artists = musicDataStore.artists;
-        return ListView.separated(
-          itemCount: artists.length,
-          itemBuilder: (_, int index) {
-            final Artist artist = artists[index];
-            return ListTile(
-              title: Text(artist.name),
-              onTap: () {
-                musicDataStore.fetchAlbumsFromArtist(artist);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute<Widget>(
-                    builder: (BuildContext context) => ArtistDetailsPage(
-                      artist: artist,
-                    ),
+      final List<Artist> artists = musicDataStore.artistStream.value;
+      return ListView.separated(
+        itemCount: artists.length,
+        itemBuilder: (_, int index) {
+          final Artist artist = artists[index];
+          return ListTile(
+            title: Text(artist.name),
+            onTap: () {
+              musicDataStore.fetchAlbumsFromArtist(artist);
+              Navigator.push(
+                context,
+                MaterialPageRoute<Widget>(
+                  builder: (BuildContext context) => ArtistDetailsPage(
+                    artist: artist,
                   ),
-                );
-              },
-            );
-          },
-          separatorBuilder: (BuildContext context, int index) => const Divider(
-            height: 4.0,
-          ),
-        );
-      }
+                ),
+              );
+            },
+          );
+        },
+        separatorBuilder: (BuildContext context, int index) => const Divider(
+          height: 4.0,
+        ),
+      );
     });
   }
 

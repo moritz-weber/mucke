@@ -40,7 +40,6 @@ Future<void> setupGetIt() async {
         musicDataRepository: getIt(),
         settingsRepository: getIt(),
       );
-      musicDataStore.init();
       return musicDataStore;
     },
   );
@@ -63,8 +62,8 @@ Future<void> setupGetIt() async {
   // repositories
   getIt.registerLazySingleton<MusicDataRepository>(
     () => MusicDataRepositoryImpl(
-      localMusicFetcher: getIt(),
-      musicDataSource: getIt(),
+      getIt(),
+      getIt(),
     ),
   );
   getIt.registerLazySingleton<AudioRepository>(

@@ -14,8 +14,7 @@ class AlbumsPage extends StatefulWidget {
   _AlbumsPageState createState() => _AlbumsPageState();
 }
 
-class _AlbumsPageState extends State<AlbumsPage>
-    with AutomaticKeepAliveClientMixin {
+class _AlbumsPageState extends State<AlbumsPage> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     print('AlbumsPage.build');
@@ -24,44 +23,32 @@ class _AlbumsPageState extends State<AlbumsPage>
     super.build(context);
     return Observer(builder: (_) {
       print('AlbumsPage.build -> Observer.builder');
-      final bool isFetching = store.isFetchingAlbums;
-
-      if (isFetching) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const <Widget>[
-            CircularProgressIndicator(),
-            Text('Loading items...'),
-          ],
-        );
-      } else {
-        final List<Album> albums = store.albums;
-        return ListView.separated(
-          itemCount: albums.length,
-          itemBuilder: (_, int index) {
-            final Album album = albums[index];
-            return AlbumArtListTile(
-              title: album.title,
-              subtitle: album.artist,
-              albumArtPath: album.albumArtPath,
-              onTap: () {
-                store.fetchSongsFromAlbum(album);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute<Widget>(
-                    builder: (BuildContext context) => AlbumDetailsPage(
-                      album: album,
-                    ),
+      final List<Album> albums = store.albumStream.value;
+      return ListView.separated(
+        itemCount: albums.length,
+        itemBuilder: (_, int index) {
+          final Album album = albums[index];
+          return AlbumArtListTile(
+            title: album.title,
+            subtitle: album.artist,
+            albumArtPath: album.albumArtPath,
+            onTap: () {
+              store.fetchSongsFromAlbum(album);
+              Navigator.push(
+                context,
+                MaterialPageRoute<Widget>(
+                  builder: (BuildContext context) => AlbumDetailsPage(
+                    album: album,
                   ),
-                );
-              },
-            );
-          },
-          separatorBuilder: (BuildContext context, int index) => const Divider(
-            height: 4.0,
-          ),
-        );
-      }
+                ),
+              );
+            },
+          );
+        },
+        separatorBuilder: (BuildContext context, int index) => const Divider(
+          height: 4.0,
+        ),
+      );
     });
   }
 

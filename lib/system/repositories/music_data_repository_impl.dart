@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:logging/logging.dart';
-import 'package:meta/meta.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../domain/entities/album.dart';
@@ -15,48 +14,34 @@ import '../models/artist_model.dart';
 import '../models/song_model.dart';
 
 class MusicDataRepositoryImpl implements MusicDataRepository {
-  MusicDataRepositoryImpl({
-    @required this.localMusicFetcher,
-    @required this.musicDataSource,
-  });
+  MusicDataRepositoryImpl(
+    this._localMusicFetcher,
+    this._musicDataSource,
+  );
 
-  final LocalMusicFetcher localMusicFetcher;
-  final MusicDataSource musicDataSource;
+  final LocalMusicFetcher _localMusicFetcher;
+  final MusicDataSource _musicDataSource;
 
   static final _log = Logger('MusicDataRepository');
 
   @override
-  Future<List<Artist>> getArtists() async {
-    return musicDataSource.getArtists();
-  }
+  Stream<List<Song>> get songStream => _musicDataSource.songStream;
 
   @override
-  Future<List<Album>> getAlbums() async {
-    return musicDataSource.getAlbums();
-  }
+  Stream<List<Album>> get albumStream => _musicDataSource.albumStream;
 
   @override
-  Future<List<Song>> getSongs() async {
-    return musicDataSource.getSongs();
-  }
-
-  @override
-  Stream<List<Song>> get songStream => musicDataSource.songStream;
+  Stream<List<Artist>> get artistStream => _musicDataSource.artistStream;
 
   @override
   Stream<List<Song>> getAlbumSongStream(Album album) =>
-      musicDataSource.getAlbumSongStream(album as AlbumModel);
-
-  @override
-  Future<List<Song>> getSongsFromAlbum(Album album) async {
-    return musicDataSource.getSongsFromAlbum(album as AlbumModel);
-  }
+      _musicDataSource.getAlbumSongStream(album as AlbumModel);
 
   @override
   Future<void> updateDatabase() async {
     _log.info('updateDatabase called');
 
-    final localMusic = await localMusicFetcher.getLocalMusic();
+    final localMusic = await _localMusicFetcher.getLocalMusic();
 
     await updateArtists(localMusic['ARTISTS'] as List<ArtistModel>);
     final albumIdMap = await updateAlbums(localMusic['ALBUMS'] as List<AlbumModel>);
@@ -67,18 +52,18 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
 
   @override
   Future<void> setSongBlocked(Song song, bool blocked) async {
-    await musicDataSource.setSongBlocked(song as SongModel, blocked);
+    await _musicDataSource.setSongBlocked(song as SongModel, blocked);
   }
 
   Future<void> updateArtists(List<ArtistModel> artists) async {
-    await musicDataSource.deleteAllArtists();
+    await _musicDataSource.deleteAllArtists();
     for (final ArtistModel artist in artists) {
-      await musicDataSource.insertArtist(artist);
+      await _musicDataSource.insertArtist(artist);
     }
   }
 
   Future<Map<int, int>> updateAlbums(List<AlbumModel> albums) async {
-    await musicDataSource.deleteAllAlbums();
+    await _musicDataSource.deleteAllAlbums();
     final Map<int, int> albumIdMap = {};
 
     final Directory dir = await getApplicationSupportDirectory();
@@ -88,16 +73,16 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
       if (album.albumArtPath == null) {
         final String albumArtPath = '${dir.path}/${album.id}';
         final file = File(albumArtPath);
-        final artwork = await localMusicFetcher.getAlbumArtwork(album.id);
+        final artwork = await _localMusicFetcher.getAlbumArtwork(album.id);
         if (artwork.isNotEmpty) {
           file.writeAsBytesSync(artwork);
           final newAlbum = album.copyWith(albumArtPath: albumArtPath);
-          newAlbumId = await musicDataSource.insertAlbum(newAlbum);
+          newAlbumId = await _musicDataSource.insertAlbum(newAlbum);
         } else {
-          newAlbumId = await musicDataSource.insertAlbum(album);
+          newAlbumId = await _musicDataSource.insertAlbum(album);
         }
       } else {
-        newAlbumId = await musicDataSource.insertAlbum(album);
+        newAlbumId = await _musicDataSource.insertAlbum(album);
       }
       albumIdMap[album.id] = newAlbumId;
     }
@@ -119,16 +104,16 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
         songsToInsert.add(song.copyWith(albumId: albumIdMap[song.albumId]));
       }
     }
-    await musicDataSource.insertSongs(songsToInsert);
+    await _musicDataSource.insertSongs(songsToInsert);
   }
 
   @override
   Future<void> toggleNextSongLink(Song song) async {
-    musicDataSource.toggleNextSongLink(song as SongModel);
+    _musicDataSource.toggleNextSongLink(song as SongModel);
   }
 
   @override
   Stream<List<Album>> getArtistAlbumStream(Artist artist) {
-    return musicDataSource.getArtistAlbumStream(artist as ArtistModel);
+    return _musicDataSource.getArtistAlbumStream(artist as ArtistModel);
   }
 }

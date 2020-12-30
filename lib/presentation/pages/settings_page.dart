@@ -34,17 +34,10 @@ class SettingsPage extends StatelessWidget {
         ListTile(
           title: const Text('Update library'),
           subtitle: Observer(builder: (_) {
-            final bool isFetchingArtists = store.isFetchingArtists;
-            final bool isFetchingAlbums = store.isFetchingAlbums;
-            final bool isFetchingSongs = store.isFetchingSongs;
-
-            if (!isFetchingArtists && !isFetchingAlbums && !isFetchingSongs) {
-              final int artistCount = store.artists.length;
-              final int albumCount = store.albums.length;
-              final int songCount = store.songs.length;
-              return Text('$artistCount artists, $albumCount albums, $songCount songs');
-            }
-            return const Text('');
+            final int artistCount = store.artistStream.value.length;
+            final int albumCount = store.albumStream.value.length;
+            final int songCount = store.songStream.value.length;
+            return Text('$artistCount artists, $albumCount albums, $songCount songs');
           }),
           onTap: () => store.updateDatabase(),
           trailing: Observer(builder: (_) {

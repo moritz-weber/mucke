@@ -131,6 +131,18 @@ class MoorMusicDataSource extends _$MoorMusicDataSource implements MusicDataSour
   }
 
   @override
+  Stream<List<AlbumModel>> get albumStream {
+    return select(albums).watch().map((moorAlbumList) =>
+        moorAlbumList.map((moorAlbum) => AlbumModel.fromMoorAlbum(moorAlbum)).toList());
+  }
+
+  @override
+  Stream<List<ArtistModel>> get artistStream {
+    return select(artists).watch().map((moorArtistList) =>
+        moorArtistList.map((moorArtist) => ArtistModel.fromMoorArtist(moorArtist)).toList());
+  }
+
+  @override
   Future<List<SongModel>> getSongs() {
     return select(songs).get().then((moorSongList) =>
         moorSongList.map((moorSong) => SongModel.fromMoorSong(moorSong)).toList());
@@ -159,19 +171,6 @@ class MoorMusicDataSource extends _$MoorMusicDataSource implements MusicDataSour
         .watch()
         .map((moorAlbumList) =>
             moorAlbumList.map((moorAlbum) => AlbumModel.fromMoorAlbum(moorAlbum)).toList());
-  }
-
-  @override
-  Future<List<SongModel>> getSongsFromAlbum(AlbumModel album) {
-    return (select(songs)
-          ..where((tbl) => tbl.albumTitle.equals(album.title))
-          ..orderBy([
-            (t) => OrderingTerm(expression: t.discNumber),
-            (t) => OrderingTerm(expression: t.trackNumber)
-          ]))
-        .get()
-        .then((moorSongList) =>
-            moorSongList.map((moorSong) => SongModel.fromMoorSong(moorSong)).toList());
   }
 
   @override

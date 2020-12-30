@@ -19,15 +19,21 @@ class MusicDataStore extends _MusicDataStore with _$MusicDataStore {
 abstract class _MusicDataStore with Store {
   _MusicDataStore(this._musicDataRepository, this._settingsRepository) {
     songStream = _musicDataRepository.songStream.asObservable(initialValue: []);
+    albumStream = _musicDataRepository.albumStream.asObservable(initialValue: []);
+    artistStream = _musicDataRepository.artistStream.asObservable(initialValue: []);
   }
 
   final MusicDataRepository _musicDataRepository;
   final SettingsRepository _settingsRepository;
 
-  bool _initialized = false;
-
   @observable
   ObservableStream<List<Song>> songStream;
+
+  @observable
+  ObservableStream<List<Album>> albumStream;
+
+  @observable
+  ObservableStream<List<Artist>> artistStream;
 
   @observable
   ObservableStream<List<Song>> albumSongStream;
@@ -36,76 +42,15 @@ abstract class _MusicDataStore with Store {
   ObservableStream<List<Album>> artistAlbumStream;
 
   @observable
-  ObservableList<Artist> artists = <Artist>[].asObservable();
-  @observable
-  bool isFetchingArtists = false;
-
-  @observable
-  ObservableList<Album> albums = <Album>[].asObservable();
-  @observable
-  bool isFetchingAlbums = false;
-
-  @observable
-  ObservableList<Song> songs = <Song>[].asObservable();
-  @observable
-  bool isFetchingSongs = false;
-
-  @observable
   bool isUpdatingDatabase = false;
-
-  @observable
-  ObservableList<Song> albumSongs = <Song>[].asObservable();
-
-  void init() {
-    if (!_initialized) {
-      fetchArtists();
-      fetchAlbums();
-      fetchSongs();
-    }
-    _initialized = true;
-  }
 
   @action
   Future<void> updateDatabase() async {
     isUpdatingDatabase = true;
     await _musicDataRepository.updateDatabase();
-    await Future.wait([
-      fetchArtists(),
-      fetchAlbums(),
-      fetchSongs(),
-    ]);
     isUpdatingDatabase = false;
   }
 
-  @action
-  Future<void> fetchArtists() async {
-    isFetchingArtists = true;
-    final result = await _musicDataRepository.getArtists();
-    artists.clear();
-    artists.addAll(result);
-
-    isFetchingArtists = false;
-  }
-
-  @action
-  Future<void> fetchAlbums() async {
-    isFetchingAlbums = true;
-    final result = await _musicDataRepository.getAlbums();
-    albums.clear();
-    albums.addAll(result);
-
-    isFetchingAlbums = false;
-  }
-
-  @action
-  Future<void> fetchSongs() async {
-    isFetchingSongs = true;
-    final result = await _musicDataRepository.getSongs();
-    songs.clear();
-    songs.addAll(result);
-
-    isFetchingSongs = false;
-  }
 
   @action
   Future<void> fetchSongsFromAlbum(Album album) async {
