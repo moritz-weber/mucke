@@ -6,6 +6,6 @@ part of 'settings_dao.dart';
 // DaoGenerator
 // **************************************************************************
 
-mixin _$SettingsDaoMixin on DatabaseAccessor<MoorMusicDataSource> {
+mixin _$SettingsDaoMixin on DatabaseAccessor<MoorDatabase> {
   $LibraryFoldersTable get libraryFolders => attachedDatabase.libraryFolders;
 }

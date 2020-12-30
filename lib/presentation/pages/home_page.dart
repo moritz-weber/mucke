@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
             const Header(),
             const Highlight(),
             const ShuffleAllButton(
-              verticalPad: 10.0,
+              verticalPad: 20.0,
               horizontalPad: 0.0,
             ),
           ],

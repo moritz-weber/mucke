@@ -19,7 +19,7 @@ import 'system/audio/audio_player_impl.dart';
 import 'system/audio/queue_generator.dart';
 import 'system/datasources/local_music_fetcher.dart';
 import 'system/datasources/local_music_fetcher_contract.dart';
-import 'system/datasources/moor_music_data_source.dart';
+import 'system/datasources/moor_database.dart';
 import 'system/datasources/music_data_source_contract.dart';
 import 'system/datasources/player_state_data_source.dart';
 import 'system/datasources/settings_data_source.dart';
@@ -77,10 +77,10 @@ Future<void> setupGetIt() async {
   getIt.registerLazySingleton<SettingsRepository>(() => SettingsRepositoryImpl(getIt()));
 
   // data sources
-  final MoorMusicDataSource moorMusicDataSource = MoorMusicDataSource();
-  getIt.registerLazySingleton<MusicDataSource>(() => moorMusicDataSource);
-  getIt.registerLazySingleton<PlayerStateDataSource>(() => moorMusicDataSource.playerStateDao);
-  getIt.registerLazySingleton<SettingsDataSource>(() => moorMusicDataSource.settingsDao);
+  final MoorDatabase moorDatabase = MoorDatabase();
+  getIt.registerLazySingleton<MusicDataSource>(() => moorDatabase.musicDataDao);
+  getIt.registerLazySingleton<PlayerStateDataSource>(() => moorDatabase.playerStateDao);
+  getIt.registerLazySingleton<SettingsDataSource>(() => moorDatabase.settingsDao);
   getIt.registerLazySingleton<LocalMusicFetcher>(
     () => LocalMusicFetcherImpl(
       getIt(),

@@ -6,16 +6,16 @@ import '../../models/loop_mode_model.dart';
 import '../../models/queue_item_model.dart';
 import '../../models/shuffle_mode_model.dart';
 import '../../models/song_model.dart';
-import '../moor_music_data_source.dart';
+import '../moor_database.dart';
 import '../player_state_data_source.dart';
 
 part 'player_state_dao.g.dart';
 
 @UseDao(tables: [Songs, QueueEntries, PersistentIndex, PersistentShuffleMode, PersistentLoopMode])
-class PlayerStateDao extends DatabaseAccessor<MoorMusicDataSource>
+class PlayerStateDao extends DatabaseAccessor<MoorDatabase>
     with _$PlayerStateDaoMixin
     implements PlayerStateDataSource {
-  PlayerStateDao(MoorMusicDataSource db) : super(db);
+  PlayerStateDao(MoorDatabase db) : super(db);
 
   @override
   Stream<List<SongModel>> get songQueueStream {

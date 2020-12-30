@@ -7,7 +7,7 @@ import 'package:mucke/system/audio/audio_manager_contract.dart';
 import 'package:mucke/system/datasources/local_music_fetcher.dart';
 import 'package:mucke/system/datasources/local_music_fetcher_contract.dart';
 import 'package:mucke/system/audio/audio_manager.dart';
-import 'package:mucke/system/datasources/moor_music_data_source.dart';
+import 'package:mucke/system/datasources/moor_database.dart';
 import 'package:mucke/system/audio/queue_generator.dart';
 import 'package:mucke/system/datasources/music_data_source_contract.dart';
 import 'package:mucke/system/models/artist_model.dart';

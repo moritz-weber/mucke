@@ -1,15 +1,15 @@
 import 'package:moor/moor.dart';
 
-import '../moor_music_data_source.dart';
+import '../moor_database.dart';
 import '../settings_data_source.dart';
 
 part 'settings_dao.g.dart';
 
 @UseDao(tables: [LibraryFolders])
-class SettingsDao extends DatabaseAccessor<MoorMusicDataSource>
+class SettingsDao extends DatabaseAccessor<MoorDatabase>
     with _$SettingsDaoMixin
     implements SettingsDataSource {
-  SettingsDao(MoorMusicDataSource attachedDatabase) : super(attachedDatabase);
+  SettingsDao(MoorDatabase attachedDatabase) : super(attachedDatabase);
 
   @override
   Future<void> addLibraryFolder(String path) async {

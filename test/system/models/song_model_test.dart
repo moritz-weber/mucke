@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:moor/moor.dart';
 import 'package:mucke/domain/entities/song.dart';
-import 'package:mucke/system/datasources/moor_music_data_source.dart';
+import 'package:mucke/system/datasources/moor_database.dart';
 import 'package:mucke/system/models/song_model.dart';
 
 import '../../test_constants.dart';

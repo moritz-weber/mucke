@@ -3,7 +3,7 @@ import 'package:meta/meta.dart';
 import 'package:moor/moor.dart';
 
 import '../../domain/entities/album.dart';
-import '../datasources/moor_music_data_source.dart';
+import '../datasources/moor_database.dart';
 
 class AlbumModel extends Album {
   const AlbumModel({

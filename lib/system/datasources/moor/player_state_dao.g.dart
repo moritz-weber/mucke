@@ -6,7 +6,7 @@ part of 'player_state_dao.dart';
 // DaoGenerator
 // **************************************************************************
 
-mixin _$PlayerStateDaoMixin on DatabaseAccessor<MoorMusicDataSource> {
+mixin _$PlayerStateDaoMixin on DatabaseAccessor<MoorDatabase> {
   $SongsTable get songs => attachedDatabase.songs;
   $QueueEntriesTable get queueEntries => attachedDatabase.queueEntries;
   $PersistentIndexTable get persistentIndex => attachedDatabase.persistentIndex;

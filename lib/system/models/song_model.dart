@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 import 'package:moor/moor.dart';
 
 import '../../domain/entities/song.dart';
-import '../datasources/moor_music_data_source.dart';
+import '../datasources/moor_database.dart';
 
 class SongModel extends Song {
   const SongModel({

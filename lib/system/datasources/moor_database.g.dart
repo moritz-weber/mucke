@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'moor_music_data_source.dart';
+part of 'moor_database.dart';
 
 // **************************************************************************
 // MoorGenerator
@@ -2130,10 +2130,9 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
   }
 }
 
-abstract class _$MoorMusicDataSource extends GeneratedDatabase {
-  _$MoorMusicDataSource(QueryExecutor e)
-      : super(SqlTypeSystem.defaultInstance, e);
-  _$MoorMusicDataSource.connect(DatabaseConnection c) : super.connect(c);
+abstract class _$MoorDatabase extends GeneratedDatabase {
+  _$MoorDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
+  _$MoorDatabase.connect(DatabaseConnection c) : super.connect(c);
   $AlbumsTable _albums;
   $AlbumsTable get albums => _albums ??= $AlbumsTable(this);
   $ArtistsTable _artists;
@@ -2157,10 +2156,13 @@ abstract class _$MoorMusicDataSource extends GeneratedDatabase {
   $SongsTable get songs => _songs ??= $SongsTable(this);
   PlayerStateDao _playerStateDao;
   PlayerStateDao get playerStateDao =>
-      _playerStateDao ??= PlayerStateDao(this as MoorMusicDataSource);
+      _playerStateDao ??= PlayerStateDao(this as MoorDatabase);
   SettingsDao _settingsDao;
   SettingsDao get settingsDao =>
-      _settingsDao ??= SettingsDao(this as MoorMusicDataSource);
+      _settingsDao ??= SettingsDao(this as MoorDatabase);
+  MusicDataDao _musicDataDao;
+  MusicDataDao get musicDataDao =>
+      _musicDataDao ??= MusicDataDao(this as MoorDatabase);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override

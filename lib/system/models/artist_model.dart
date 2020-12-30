@@ -3,7 +3,7 @@ import 'package:meta/meta.dart';
 import 'package:moor/moor.dart';
 
 import '../../domain/entities/artist.dart';
-import '../datasources/moor_music_data_source.dart';
+import '../datasources/moor_database.dart';
 
 class ArtistModel extends Artist {
   const ArtistModel({
