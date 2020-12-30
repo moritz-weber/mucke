@@ -1,11 +1,9 @@
 import 'dart:io';
 
-import 'package:dartz/dartz.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../../core/error/failures.dart';
 import '../../domain/entities/album.dart';
 import '../../domain/entities/artist.dart';
 import '../../domain/entities/song.dart';
@@ -28,33 +26,30 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   static final _log = Logger('MusicDataRepository');
 
   @override
-  Future<Either<Failure, List<Artist>>> getArtists() async {
-    return musicDataSource.getArtists().then((List<ArtistModel> artists) =>
-        Right<Failure, List<ArtistModel>>(artists));
+  Future<List<Artist>> getArtists() async {
+    return musicDataSource.getArtists();
   }
 
   @override
-  Future<Either<Failure, List<Album>>> getAlbums() async {
-    return musicDataSource.getAlbums().then(
-        (List<AlbumModel> albums) => Right<Failure, List<AlbumModel>>(albums));
+  Future<List<Album>> getAlbums() async {
+    return musicDataSource.getAlbums();
   }
 
   @override
-  Future<Either<Failure, List<Song>>> getSongs() async {
-    return musicDataSource.getSongs().then(
-        (List<SongModel> songs) => Right<Failure, List<SongModel>>(songs));
+  Future<List<Song>> getSongs() async {
+    return musicDataSource.getSongs();
   }
 
   @override
   Stream<List<Song>> get songStream => musicDataSource.songStream;
 
   @override
-  Stream<List<Song>> getAlbumSongStream(Album album) => musicDataSource.getAlbumSongStream(album as AlbumModel);
+  Stream<List<Song>> getAlbumSongStream(Album album) =>
+      musicDataSource.getAlbumSongStream(album as AlbumModel);
 
   @override
-  Future<Either<Failure, List<Song>>> getSongsFromAlbum(Album album) async {
-    return musicDataSource.getSongsFromAlbum(album as AlbumModel).then(
-        (List<SongModel> songs) => Right<Failure, List<SongModel>>(songs));
+  Future<List<Song>> getSongsFromAlbum(Album album) async {
+    return musicDataSource.getSongsFromAlbum(album as AlbumModel);
   }
 
   @override

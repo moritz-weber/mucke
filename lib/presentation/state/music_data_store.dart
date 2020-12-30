@@ -81,14 +81,8 @@ abstract class _MusicDataStore with Store {
   Future<void> fetchArtists() async {
     isFetchingArtists = true;
     final result = await _musicDataRepository.getArtists();
-
-    result.fold(
-      (_) => artists = <Artist>[].asObservable(),
-      (artistList) {
-        artists.clear();
-        artists.addAll(artistList);
-      },
-    );
+    artists.clear();
+    artists.addAll(result);
 
     isFetchingArtists = false;
   }
@@ -97,14 +91,8 @@ abstract class _MusicDataStore with Store {
   Future<void> fetchAlbums() async {
     isFetchingAlbums = true;
     final result = await _musicDataRepository.getAlbums();
-
-    result.fold(
-      (_) => albums = <Album>[].asObservable(),
-      (albumList) {
-        albums.clear();
-        albums.addAll(albumList);
-      },
-    );
+    albums.clear();
+    albums.addAll(result);
 
     isFetchingAlbums = false;
   }
@@ -113,14 +101,8 @@ abstract class _MusicDataStore with Store {
   Future<void> fetchSongs() async {
     isFetchingSongs = true;
     final result = await _musicDataRepository.getSongs();
-
-    result.fold(
-      (_) => songs = <Song>[].asObservable(),
-      (songList) {
-        songs.clear();
-        songs.addAll(songList);
-      },
-    );
+    songs.clear();
+    songs.addAll(result);
 
     isFetchingSongs = false;
   }
@@ -132,7 +114,8 @@ abstract class _MusicDataStore with Store {
 
   @action
   Future<void> fetchAlbumsFromArtist(Artist artist) async {
-    artistAlbumStream = _musicDataRepository.getArtistAlbumStream(artist).asObservable(initialValue: []);
+    artistAlbumStream =
+        _musicDataRepository.getArtistAlbumStream(artist).asObservable(initialValue: []);
   }
 
   Future<void> setSongBlocked(Song song, bool blocked) async {
