@@ -20,6 +20,9 @@ class SongModel extends Song {
     String next,
     String previous,
     int trackNumber,
+    int likeCount,
+    int skipCount,
+    int playCount,
   }) : super(
           album: album,
           artist: artist,
@@ -32,9 +35,12 @@ class SongModel extends Song {
           next: next,
           previous: previous,
           trackNumber: trackNumber,
+          likeCount: likeCount,
+          skipCount: skipCount,
+          playCount: playCount,
         );
 
-  factory SongModel.fromMoorSong(MoorSong moorSong) => SongModel(
+  factory SongModel.fromMoor(MoorSong moorSong) => SongModel(
         album: moorSong.albumTitle,
         albumId: moorSong.albumId,
         artist: moorSong.artist,
@@ -47,6 +53,9 @@ class SongModel extends Song {
         next: moorSong.next,
         previous: moorSong.previous,
         trackNumber: moorSong.trackNumber,
+        likeCount: moorSong.likeCount,
+        skipCount: moorSong.skipCount,
+        playCount: moorSong.playCount,
       );
 
   factory SongModel.fromSongInfo(SongInfo songInfo) {
@@ -127,6 +136,9 @@ class SongModel extends Song {
     String next,
     String previous,
     int trackNumber,
+    int likeCount,
+    int skipCount,
+    int playCount,
   }) =>
       SongModel(
         album: album ?? this.album,
@@ -141,6 +153,9 @@ class SongModel extends Song {
         next: next ?? this.next,
         previous: previous ?? this.previous,
         trackNumber: trackNumber ?? this.trackNumber,
+        likeCount: likeCount ?? this.likeCount,
+        skipCount: skipCount ?? this.skipCount,
+        playCount: playCount ?? this.playCount,
       );
 
   SongsCompanion toSongsCompanion() => SongsCompanion(
@@ -156,6 +171,9 @@ class SongModel extends Song {
         next: Value(next),
         previous: Value(previous),
         trackNumber: Value(trackNumber),
+        likeCount: Value(likeCount),
+        skipCount: Value(skipCount),
+        playCount: Value(playCount),
       );
 
   SongsCompanion toMoorInsert() => SongsCompanion(

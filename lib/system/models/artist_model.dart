@@ -12,7 +12,7 @@ class ArtistModel extends Artist {
           name: name,
         );
 
-  factory ArtistModel.fromMoorArtist(MoorArtist moorArtist) => ArtistModel(
+  factory ArtistModel.fromMoor(MoorArtist moorArtist) => ArtistModel(
         name: moorArtist.name,
       );
 

@@ -1417,6 +1417,9 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
   final int trackNumber;
   final bool blocked;
   final bool present;
+  final int likeCount;
+  final int skipCount;
+  final int playCount;
   final String previous;
   final String next;
   MoorSong(
@@ -1431,6 +1434,9 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
       this.trackNumber,
       @required this.blocked,
       @required this.present,
+      @required this.likeCount,
+      @required this.skipCount,
+      @required this.playCount,
       this.previous,
       this.next});
   factory MoorSong.fromData(Map<String, dynamic> data, GeneratedDatabase db,
@@ -1461,6 +1467,12 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
           boolType.mapFromDatabaseResponse(data['${effectivePrefix}blocked']),
       present:
           boolType.mapFromDatabaseResponse(data['${effectivePrefix}present']),
+      likeCount:
+          intType.mapFromDatabaseResponse(data['${effectivePrefix}like_count']),
+      skipCount:
+          intType.mapFromDatabaseResponse(data['${effectivePrefix}skip_count']),
+      playCount:
+          intType.mapFromDatabaseResponse(data['${effectivePrefix}play_count']),
       previous: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}previous']),
       next: stringType.mapFromDatabaseResponse(data['${effectivePrefix}next']),
@@ -1502,6 +1514,15 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
     if (!nullToAbsent || present != null) {
       map['present'] = Variable<bool>(present);
     }
+    if (!nullToAbsent || likeCount != null) {
+      map['like_count'] = Variable<int>(likeCount);
+    }
+    if (!nullToAbsent || skipCount != null) {
+      map['skip_count'] = Variable<int>(skipCount);
+    }
+    if (!nullToAbsent || playCount != null) {
+      map['play_count'] = Variable<int>(playCount);
+    }
     if (!nullToAbsent || previous != null) {
       map['previous'] = Variable<String>(previous);
     }
@@ -1542,6 +1563,15 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
       present: present == null && nullToAbsent
           ? const Value.absent()
           : Value(present),
+      likeCount: likeCount == null && nullToAbsent
+          ? const Value.absent()
+          : Value(likeCount),
+      skipCount: skipCount == null && nullToAbsent
+          ? const Value.absent()
+          : Value(skipCount),
+      playCount: playCount == null && nullToAbsent
+          ? const Value.absent()
+          : Value(playCount),
       previous: previous == null && nullToAbsent
           ? const Value.absent()
           : Value(previous),
@@ -1564,6 +1594,9 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
       trackNumber: serializer.fromJson<int>(json['trackNumber']),
       blocked: serializer.fromJson<bool>(json['blocked']),
       present: serializer.fromJson<bool>(json['present']),
+      likeCount: serializer.fromJson<int>(json['likeCount']),
+      skipCount: serializer.fromJson<int>(json['skipCount']),
+      playCount: serializer.fromJson<int>(json['playCount']),
       previous: serializer.fromJson<String>(json['previous']),
       next: serializer.fromJson<String>(json['next']),
     );
@@ -1583,6 +1616,9 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
       'trackNumber': serializer.toJson<int>(trackNumber),
       'blocked': serializer.toJson<bool>(blocked),
       'present': serializer.toJson<bool>(present),
+      'likeCount': serializer.toJson<int>(likeCount),
+      'skipCount': serializer.toJson<int>(skipCount),
+      'playCount': serializer.toJson<int>(playCount),
       'previous': serializer.toJson<String>(previous),
       'next': serializer.toJson<String>(next),
     };
@@ -1600,6 +1636,9 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
           int trackNumber,
           bool blocked,
           bool present,
+          int likeCount,
+          int skipCount,
+          int playCount,
           String previous,
           String next}) =>
       MoorSong(
@@ -1614,6 +1653,9 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
         trackNumber: trackNumber ?? this.trackNumber,
         blocked: blocked ?? this.blocked,
         present: present ?? this.present,
+        likeCount: likeCount ?? this.likeCount,
+        skipCount: skipCount ?? this.skipCount,
+        playCount: playCount ?? this.playCount,
         previous: previous ?? this.previous,
         next: next ?? this.next,
       );
@@ -1631,6 +1673,9 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
           ..write('trackNumber: $trackNumber, ')
           ..write('blocked: $blocked, ')
           ..write('present: $present, ')
+          ..write('likeCount: $likeCount, ')
+          ..write('skipCount: $skipCount, ')
+          ..write('playCount: $playCount, ')
           ..write('previous: $previous, ')
           ..write('next: $next')
           ..write(')'))
@@ -1660,8 +1705,15 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
                                           blocked.hashCode,
                                           $mrjc(
                                               present.hashCode,
-                                              $mrjc(previous.hashCode,
-                                                  next.hashCode)))))))))))));
+                                              $mrjc(
+                                                  likeCount.hashCode,
+                                                  $mrjc(
+                                                      skipCount.hashCode,
+                                                      $mrjc(
+                                                          playCount.hashCode,
+                                                          $mrjc(
+                                                              previous.hashCode,
+                                                              next.hashCode))))))))))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -1677,6 +1729,9 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
           other.trackNumber == this.trackNumber &&
           other.blocked == this.blocked &&
           other.present == this.present &&
+          other.likeCount == this.likeCount &&
+          other.skipCount == this.skipCount &&
+          other.playCount == this.playCount &&
           other.previous == this.previous &&
           other.next == this.next);
 }
@@ -1693,6 +1748,9 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
   final Value<int> trackNumber;
   final Value<bool> blocked;
   final Value<bool> present;
+  final Value<int> likeCount;
+  final Value<int> skipCount;
+  final Value<int> playCount;
   final Value<String> previous;
   final Value<String> next;
   const SongsCompanion({
@@ -1707,6 +1765,9 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
     this.trackNumber = const Value.absent(),
     this.blocked = const Value.absent(),
     this.present = const Value.absent(),
+    this.likeCount = const Value.absent(),
+    this.skipCount = const Value.absent(),
+    this.playCount = const Value.absent(),
     this.previous = const Value.absent(),
     this.next = const Value.absent(),
   });
@@ -1722,6 +1783,9 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
     this.trackNumber = const Value.absent(),
     this.blocked = const Value.absent(),
     this.present = const Value.absent(),
+    this.likeCount = const Value.absent(),
+    this.skipCount = const Value.absent(),
+    this.playCount = const Value.absent(),
     this.previous = const Value.absent(),
     this.next = const Value.absent(),
   })  : title = Value(title),
@@ -1741,6 +1805,9 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
     Expression<int> trackNumber,
     Expression<bool> blocked,
     Expression<bool> present,
+    Expression<int> likeCount,
+    Expression<int> skipCount,
+    Expression<int> playCount,
     Expression<String> previous,
     Expression<String> next,
   }) {
@@ -1756,6 +1823,9 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
       if (trackNumber != null) 'track_number': trackNumber,
       if (blocked != null) 'blocked': blocked,
       if (present != null) 'present': present,
+      if (likeCount != null) 'like_count': likeCount,
+      if (skipCount != null) 'skip_count': skipCount,
+      if (playCount != null) 'play_count': playCount,
       if (previous != null) 'previous': previous,
       if (next != null) 'next': next,
     });
@@ -1773,6 +1843,9 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
       Value<int> trackNumber,
       Value<bool> blocked,
       Value<bool> present,
+      Value<int> likeCount,
+      Value<int> skipCount,
+      Value<int> playCount,
       Value<String> previous,
       Value<String> next}) {
     return SongsCompanion(
@@ -1787,6 +1860,9 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
       trackNumber: trackNumber ?? this.trackNumber,
       blocked: blocked ?? this.blocked,
       present: present ?? this.present,
+      likeCount: likeCount ?? this.likeCount,
+      skipCount: skipCount ?? this.skipCount,
+      playCount: playCount ?? this.playCount,
       previous: previous ?? this.previous,
       next: next ?? this.next,
     );
@@ -1828,6 +1904,15 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
     if (present.present) {
       map['present'] = Variable<bool>(present.value);
     }
+    if (likeCount.present) {
+      map['like_count'] = Variable<int>(likeCount.value);
+    }
+    if (skipCount.present) {
+      map['skip_count'] = Variable<int>(skipCount.value);
+    }
+    if (playCount.present) {
+      map['play_count'] = Variable<int>(playCount.value);
+    }
     if (previous.present) {
       map['previous'] = Variable<String>(previous.value);
     }
@@ -1851,6 +1936,9 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
           ..write('trackNumber: $trackNumber, ')
           ..write('blocked: $blocked, ')
           ..write('present: $present, ')
+          ..write('likeCount: $likeCount, ')
+          ..write('skipCount: $skipCount, ')
+          ..write('playCount: $playCount, ')
           ..write('previous: $previous, ')
           ..write('next: $next')
           ..write(')'))
@@ -1992,6 +2080,33 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
         defaultValue: const Constant(true));
   }
 
+  final VerificationMeta _likeCountMeta = const VerificationMeta('likeCount');
+  GeneratedIntColumn _likeCount;
+  @override
+  GeneratedIntColumn get likeCount => _likeCount ??= _constructLikeCount();
+  GeneratedIntColumn _constructLikeCount() {
+    return GeneratedIntColumn('like_count', $tableName, false,
+        defaultValue: const Constant(0));
+  }
+
+  final VerificationMeta _skipCountMeta = const VerificationMeta('skipCount');
+  GeneratedIntColumn _skipCount;
+  @override
+  GeneratedIntColumn get skipCount => _skipCount ??= _constructSkipCount();
+  GeneratedIntColumn _constructSkipCount() {
+    return GeneratedIntColumn('skip_count', $tableName, false,
+        defaultValue: const Constant(0));
+  }
+
+  final VerificationMeta _playCountMeta = const VerificationMeta('playCount');
+  GeneratedIntColumn _playCount;
+  @override
+  GeneratedIntColumn get playCount => _playCount ??= _constructPlayCount();
+  GeneratedIntColumn _constructPlayCount() {
+    return GeneratedIntColumn('play_count', $tableName, false,
+        defaultValue: const Constant(0));
+  }
+
   final VerificationMeta _previousMeta = const VerificationMeta('previous');
   GeneratedTextColumn _previous;
   @override
@@ -2029,6 +2144,9 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
         trackNumber,
         blocked,
         present,
+        likeCount,
+        skipCount,
+        playCount,
         previous,
         next
       ];
@@ -2104,6 +2222,18 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
     if (data.containsKey('present')) {
       context.handle(_presentMeta,
           present.isAcceptableOrUnknown(data['present'], _presentMeta));
+    }
+    if (data.containsKey('like_count')) {
+      context.handle(_likeCountMeta,
+          likeCount.isAcceptableOrUnknown(data['like_count'], _likeCountMeta));
+    }
+    if (data.containsKey('skip_count')) {
+      context.handle(_skipCountMeta,
+          skipCount.isAcceptableOrUnknown(data['skip_count'], _skipCountMeta));
+    }
+    if (data.containsKey('play_count')) {
+      context.handle(_playCountMeta,
+          playCount.isAcceptableOrUnknown(data['play_count'], _playCountMeta));
     }
     if (data.containsKey('previous')) {
       context.handle(_previousMeta,

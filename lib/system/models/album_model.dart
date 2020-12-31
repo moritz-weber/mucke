@@ -19,7 +19,7 @@ class AlbumModel extends Album {
           pubYear: year,
         );
 
-  factory AlbumModel.fromMoorAlbum(MoorAlbum moorAlbum) => AlbumModel(
+  factory AlbumModel.fromMoor(MoorAlbum moorAlbum) => AlbumModel(
         id: moorAlbum.id,
         title: moorAlbum.title,
         artist: moorAlbum.artist,

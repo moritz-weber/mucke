@@ -45,6 +45,9 @@ class Songs extends Table {
   IntColumn get trackNumber => integer().nullable()();
   BoolColumn get blocked => boolean().withDefault(const Constant(false))();
   BoolColumn get present => boolean().withDefault(const Constant(true))();
+  IntColumn get likeCount => integer().withDefault(const Constant(0))();
+  IntColumn get skipCount => integer().withDefault(const Constant(0))();
+  IntColumn get playCount => integer().withDefault(const Constant(0))();
 
   TextColumn get previous => text().nullable()();
   TextColumn get next => text().nullable()();
@@ -109,8 +112,6 @@ class MoorDatabase extends _$MoorDatabase {
 
   @override
   int get schemaVersion => 1;
-
- 
 }
 
 LazyDatabase _openConnection() {

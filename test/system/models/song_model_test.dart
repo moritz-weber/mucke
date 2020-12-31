@@ -148,7 +148,7 @@ void main() {
           trackNumber: TRACKNUMBER_3,
         );
         // act
-        final result = SongModel.fromMoorSong(moorSong);
+        final result = SongModel.fromMoor(moorSong);
         // assert
         expect(result, expected);
       },

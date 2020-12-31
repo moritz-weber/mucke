@@ -23,7 +23,7 @@ class PlayerStateDao extends DatabaseAccessor<MoorDatabase>
         .join([innerJoin(songs, songs.path.equalsExp(queueEntries.path))]);
 
     return query.watch().map((rows) {
-      return rows.map((row) => SongModel.fromMoorSong(row.readTable(songs))).toList();
+      return rows.map((row) => SongModel.fromMoor(row.readTable(songs))).toList();
     });
   }
 
@@ -35,7 +35,7 @@ class PlayerStateDao extends DatabaseAccessor<MoorDatabase>
     return query.watch().map((rows) {
       return rows.map((row) {
         return QueueItemModel(
-          SongModel.fromMoorSong(row.readTable(songs)),
+          SongModel.fromMoor(row.readTable(songs)),
           originalIndex: row.readTable(queueEntries).originalIndex,
           type: row.readTable(queueEntries).type.toQueueItemType(),
         );

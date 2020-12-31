@@ -17,7 +17,7 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
   @override
   Future<List<AlbumModel>> getAlbums() async {
     return select(albums).get().then((moorAlbumList) =>
-        moorAlbumList.map((moorAlbum) => AlbumModel.fromMoorAlbum(moorAlbum)).toList());
+        moorAlbumList.map((moorAlbum) => AlbumModel.fromMoor(moorAlbum)).toList());
   }
 
   // TODO: insert can throw exception -> implications?
@@ -29,25 +29,25 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
   @override
   Stream<List<SongModel>> get songStream {
     return select(songs).watch().map((moorSongList) =>
-        moorSongList.map((moorSong) => SongModel.fromMoorSong(moorSong)).toList());
+        moorSongList.map((moorSong) => SongModel.fromMoor(moorSong)).toList());
   }
 
   @override
   Stream<List<AlbumModel>> get albumStream {
     return select(albums).watch().map((moorAlbumList) =>
-        moorAlbumList.map((moorAlbum) => AlbumModel.fromMoorAlbum(moorAlbum)).toList());
+        moorAlbumList.map((moorAlbum) => AlbumModel.fromMoor(moorAlbum)).toList());
   }
 
   @override
   Stream<List<ArtistModel>> get artistStream {
     return select(artists).watch().map((moorArtistList) =>
-        moorArtistList.map((moorArtist) => ArtistModel.fromMoorArtist(moorArtist)).toList());
+        moorArtistList.map((moorArtist) => ArtistModel.fromMoor(moorArtist)).toList());
   }
 
   @override
   Future<List<SongModel>> getSongs() {
     return select(songs).get().then((moorSongList) =>
-        moorSongList.map((moorSong) => SongModel.fromMoorSong(moorSong)).toList());
+        moorSongList.map((moorSong) => SongModel.fromMoor(moorSong)).toList());
   }
 
   @override
@@ -60,7 +60,7 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
           ]))
         .watch()
         .map((moorSongList) =>
-            moorSongList.map((moorSong) => SongModel.fromMoorSong(moorSong)).toList());
+            moorSongList.map((moorSong) => SongModel.fromMoor(moorSong)).toList());
   }
 
   @override
@@ -72,7 +72,7 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
           ]))
         .watch()
         .map((moorAlbumList) =>
-            moorAlbumList.map((moorAlbum) => AlbumModel.fromMoorAlbum(moorAlbum)).toList());
+            moorAlbumList.map((moorAlbum) => AlbumModel.fromMoor(moorAlbum)).toList());
   }
 
   @override
@@ -87,7 +87,7 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
         if (moorSong == null) {
           return null;
         }
-        return SongModel.fromMoorSong(moorSong);
+        return SongModel.fromMoor(moorSong);
       },
     );
   }
@@ -115,7 +115,7 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
   @override
   Future<List<ArtistModel>> getArtists() {
     return select(artists).get().then((moorArtistList) =>
-        moorArtistList.map((moorArtist) => ArtistModel.fromMoorArtist(moorArtist)).toList());
+        moorArtistList.map((moorArtist) => ArtistModel.fromMoor(moorArtist)).toList());
   }
 
   @override
@@ -150,7 +150,7 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
             ]))
           .get()
           .then((moorSongList) =>
-              moorSongList.map((moorSong) => SongModel.fromMoorSong(moorSong)).toList());
+              moorSongList.map((moorSong) => SongModel.fromMoor(moorSong)).toList());
 
       bool current = false;
       SongModel nextSong;

@@ -14,16 +14,25 @@ class Song extends Equatable {
     this.next,
     this.previous,
     this.trackNumber,
+    this.likeCount,
+    this.skipCount,
+    this.playCount,
   });
 
   final String album;
   final String artist;
+
   /// Is this song blocked in shuffle mode?
   final bool blocked;
+
   /// Duration in milliseconds.
   final int duration;
   final String path;
   final String title;
+
+  final int likeCount;
+  final int skipCount;
+  final int playCount;
 
   final String albumArtPath;
   final int discNumber;

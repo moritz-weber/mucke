@@ -76,7 +76,7 @@ void main() {
           year: YEAR_1,
         );
         // act
-        final result = AlbumModel.fromMoorAlbum(moorAlbum);
+        final result = AlbumModel.fromMoor(moorAlbum);
         // assert
         expect(result, expected);
       },
@@ -100,7 +100,7 @@ void main() {
           year: YEAR_1,
         );
         // act
-        final result = AlbumModel.fromMoorAlbum(moorAlbum);
+        final result = AlbumModel.fromMoor(moorAlbum);
         // assert
         expect(result, expected);
       },
@@ -123,7 +123,7 @@ void main() {
           albumArtPath: ALBUM_ART_PATH_1,
         );
         // act
-        final result = AlbumModel.fromMoorAlbum(moorAlbum);
+        final result = AlbumModel.fromMoor(moorAlbum);
         // assert
         expect(result, expected);
       },
