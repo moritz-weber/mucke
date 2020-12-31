@@ -22,8 +22,8 @@ class PlayPauseButton extends StatelessWidget {
           case PlaybackState.playing:
             return IconButton(
               icon: circle
-                  ? const Icon(Icons.pause_circle_filled)
-                  : const Icon(Icons.pause),
+                  ? const Icon(Icons.pause_circle_filled_rounded)
+                  : const Icon(Icons.pause_rounded),
               iconSize: iconSize,
               onPressed: () {
                 audioStore.pause();
@@ -33,8 +33,8 @@ class PlayPauseButton extends StatelessWidget {
           default:
             return IconButton(
               icon: circle
-                  ? const Icon(Icons.play_circle_filled)
-                  : const Icon(Icons.play_arrow),
+                  ? const Icon(Icons.play_circle_filled_rounded)
+                  : const Icon(Icons.play_arrow_rounded),
               iconSize: iconSize,
               onPressed: () {
                 audioStore.play();

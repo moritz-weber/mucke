@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
 import '../state/music_data_store.dart';
-import '../theming.dart';
+import 'like_button.dart';
 
 class SongCustomizationButtons extends StatelessWidget {
   const SongCustomizationButtons({Key key}) : super(key: key);
@@ -24,28 +24,20 @@ class SongCustomizationButtons extends StatelessWidget {
           children: [
             IconButton(
               icon: Icon(
-                Icons.link,
-                // size: 20.0,
-                color: song.next == null ? Colors.white70 : LIGHT1,
+                song.next == null ? Icons.link_off : Icons.link,
+                color: song.next == null ? Colors.white24 : Colors.white,
               ),
               iconSize: 20.0,
               onPressed: () => musicDataStore.toggleNextSongLink(song),
             ),
             const Spacer(),
-            const IconButton(
-              icon: Icon(
-                Icons.favorite,
-                size: 20.0,
-                color: Colors.white10,
-              ),
-              onPressed: null,
-            ),
+            const LikeButton(),
             const Spacer(),
             IconButton(
               icon: Icon(
-                Icons.remove_circle_outline,
+                Icons.remove_circle_outline_rounded,
                 size: 20.0,
-                color: isBlocked ? RASPBERRY : Colors.white70,
+                color: isBlocked ? Colors.white : Colors.white24,
               ),
               onPressed: () => musicDataStore.setSongBlocked(song, !isBlocked),
             ),

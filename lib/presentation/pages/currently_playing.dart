@@ -5,9 +5,10 @@ import 'package:provider/provider.dart';
 
 import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
+import '../theming.dart';
 import '../widgets/album_art.dart';
 import '../widgets/album_background.dart';
-import '../widgets/next_indicator.dart';
+import '../widgets/next_song.dart';
 import '../widgets/playback_control.dart';
 import '../widgets/song_customization_buttons.dart';
 import '../widgets/time_progress_indicator.dart';
@@ -25,15 +26,39 @@ class CurrentlyPlayingPage extends StatelessWidget {
 
     return Scaffold(
       body: SafeArea(
-        child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) =>
-              Observer(
+        child: GestureDetector(
+          onVerticalDragEnd: (dragEndDetails) {
+            if (dragEndDetails.primaryVelocity < 0) {
+              _openQueue(context);
+            } else if (dragEndDetails.primaryVelocity > 0) {
+              Navigator.pop(context);
+            }
+          },
+          child: Observer(
             builder: (BuildContext context) {
               _log.info('Observer.build');
               final Song song = audioStore.currentSong;
 
               return AlbumBackground(
                 song: song,
+                gradient: const LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0x55000000),
+                    Color(0x22FFFFFF),
+                    Color(0x22FFFFFF),
+                    Color(0x88000000),
+                    Color(0xBB000000),
+                  ],
+                  stops: [
+                    0.0,
+                    0.1,
+                    0.5,
+                    0.65,
+                    1.0,
+                  ],
+                ),
                 child: Padding(
                   padding: const EdgeInsets.only(
                     left: 12.0,
@@ -50,6 +75,27 @@ class CurrentlyPlayingPage extends StatelessWidget {
                             onPressed: () {
                               Navigator.pop(context);
                             },
+                          ),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () => _openQueue(context),
+                              child: Container(
+                                color: Colors.transparent,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Next up'.toUpperCase(),
+                                      style: TEXT_SMALL_HEADLINE,
+                                    ),
+                                    NextSong(
+                                      queue: audioStore.queueStream.value,
+                                      index: audioStore.queueIndexStream.value,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
                           ),
                           IconButton(
                             icon: const Icon(Icons.more_vert),
@@ -76,31 +122,28 @@ class CurrentlyPlayingPage extends StatelessWidget {
                         ),
                       ),
                       const Spacer(
-                        flex: 80,
+                        flex: 60,
                       ),
                       const Padding(
-                        padding: EdgeInsets.only(left: 2.0, right: 2.0, bottom: 10.0),
+                        padding: EdgeInsets.only(left: 2.0, right: 2.0),
                         child: SongCustomizationButtons(),
                       ),
                       const Spacer(
-                        flex: 50,
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.0),
-                        child: TimeProgressIndicator(),
-                      ),
-                      const Spacer(
-                        flex: 50,
+                        flex: 30,
                       ),
                       const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 2.0),
                         child: PlaybackControl(),
                       ),
                       const Spacer(
-                        flex: 40,
+                        flex: 30,
                       ),
-                      NextIndicator(
-                        onTapAction: openQueue,
+                      const Padding(
+                        padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 10.0),
+                        child: TimeProgressIndicator(),
+                      ),
+                      const Spacer(
+                        flex: 100,
                       ),
                     ],
                   ),
@@ -113,7 +156,7 @@ class CurrentlyPlayingPage extends StatelessWidget {
     );
   }
 
-  void openQueue(BuildContext context) {
+  void _openQueue(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute<Widget>(

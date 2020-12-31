@@ -21,35 +21,29 @@ class ShuffleButton extends StatelessWidget {
             case ShuffleMode.none:
               return IconButton(
                 icon: const Icon(
-                  Icons.shuffle,
+                  Icons.shuffle_rounded,
                   color: Colors.white30,
                 ),
                 iconSize: iconSize,
-                onPressed: () {
-                  audioStore.setShuffleMode(ShuffleMode.standard);
-                },
+                onPressed: () => audioStore.setShuffleMode(ShuffleMode.standard),
               );
             case ShuffleMode.standard:
               return IconButton(
                 icon: const Icon(
-                  Icons.shuffle,
+                  Icons.shuffle_rounded,
                   color: Colors.white,
                 ),
                 iconSize: iconSize,
-                onPressed: () {
-                  audioStore.setShuffleMode(ShuffleMode.plus);
-                },
+                onPressed: () => audioStore.setShuffleMode(ShuffleMode.plus),
               );
             case ShuffleMode.plus:
               return IconButton(
                 icon: const Icon(
-                  Icons.fingerprint,
+                  Icons.fingerprint_rounded,
                   color: Colors.white,
                 ),
                 iconSize: iconSize,
-                onPressed: () {
-                  audioStore.setShuffleMode(ShuffleMode.none);
-                },
+                onPressed: () => audioStore.setShuffleMode(ShuffleMode.none),
               );
           }
         }

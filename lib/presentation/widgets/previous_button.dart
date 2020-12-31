@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
 import '../state/audio_store.dart';
@@ -13,27 +12,11 @@ class PreviousButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final AudioStore audioStore = Provider.of<AudioStore>(context);
 
-    return Observer(
-      builder: (BuildContext context) {
-        final int index = audioStore.queueIndexStream.value; //
-
-        if (index > 0) { //
-          return IconButton(
-            icon: const Icon(Icons.skip_previous), //
-            iconSize: iconSize,
-            onPressed: () {
-              audioStore.skipToPrevious(); //
-            },
-            
-          );
-        }
-        return IconButton(
-          icon: const Icon(
-            Icons.skip_previous,
-          ),
-          iconSize: iconSize,
-          onPressed: null,
-        );
+    return IconButton(
+      icon: const Icon(Icons.skip_previous_rounded),
+      iconSize: iconSize,
+      onPressed: () {
+        audioStore.skipToPrevious();
       },
     );
   }

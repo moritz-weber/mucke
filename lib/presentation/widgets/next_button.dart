@@ -15,16 +15,14 @@ class NextButton extends StatelessWidget {
 
     return Observer(
       builder: (BuildContext context) {
-        final queue = audioStore.queueStream.value; //
-        final int index = audioStore.queueIndexStream.value; //
+        final queue = audioStore.queueStream.value;
+        final int index = audioStore.queueIndexStream.value;
 
-        if (index != null && index < queue.length - 1) { //
+        if (index != null && index < queue.length - 1) {
           return IconButton(
-            icon: const Icon(Icons.skip_next), //
+            icon: const Icon(Icons.skip_next_rounded),
             iconSize: iconSize,
-            onPressed: () {
-              audioStore.skipToNext(); //
-            },
+            onPressed: () => audioStore.skipToNext(),
             
           );
         }

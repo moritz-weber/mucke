@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mucke/presentation/theming.dart';
 
 import '../../domain/entities/song.dart';
+import '../theming.dart';
 import '../utils.dart';
 
 class AlbumArt extends StatelessWidget {
@@ -34,26 +34,22 @@ class AlbumArt extends StatelessWidget {
               bottom: 0,
               left: 0,
               right: 0,
-              height: 140,
+              height: 150,
               child: Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Color(0x00000000),
-                        Color(0xCC000000)
-                      ],
-                      stops: [
-                        0.0,
-                        1.0
-                      ]),
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [Color(0x00000000), Color(0xCC000000)],
+                    stops: [0.0, 1.0],
+                  ),
                 ),
               ),
             ),
             Positioned(
               bottom: 0,
               left: 0,
+              right: 0,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
@@ -61,11 +57,31 @@ class AlbumArt extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       song.title,
-                      style: TEXT_BIG,
+                      overflow: TextOverflow.ellipsis,
+                      // softWrap: false,
+                      maxLines: 2,
+                      style: TEXT_BIG.copyWith(
+                        shadows: [
+                          const Shadow(
+                            blurRadius: 2.0,
+                            color: Colors.black45,
+                            offset: Offset(.5, .5),
+                          ),
+                        ],
+                      ),
                     ),
                     Text(
                       song.artist,
-                      style: TEXT_SUBTITLE.copyWith(color: Colors.white70),
+                      style: TEXT_SUBTITLE.copyWith(
+                        color: Colors.grey[300],
+                        shadows: [
+                          const Shadow(
+                            blurRadius: 2.0,
+                            color: Colors.black45,
+                            offset: Offset(.5, .5),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),

@@ -22,7 +22,7 @@ class LoopButton extends StatelessWidget {
               return IconButton(
                 icon: const Icon(
                   Icons.repeat_rounded,
-                  color: Colors.white30,
+                  color: Colors.white24,
                 ),
                 iconSize: iconSize,
                 onPressed: () {

@@ -13,13 +13,19 @@ class NextSong extends StatelessWidget {
     if (index < queue.length - 1) {
       final Song song = queue[index + 1];
       return RichText(
+        textAlign: TextAlign.center,
         text: TextSpan(
           style: const TextStyle(
             fontSize: 14,
             color: Colors.white70,
           ),
           children: [
-            TextSpan(text: '${song.title}'),
+            TextSpan(
+              text: '${song.title}',
+              style: const TextStyle(
+                fontWeight: FontWeight.w300,
+              ),
+            ),
             const TextSpan(text: ' • '),
             TextSpan(
               text: '${song.artist}',
