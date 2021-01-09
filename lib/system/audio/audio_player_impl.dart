@@ -17,7 +17,7 @@ class AudioPlayerImpl implements AudioPlayer {
     _audioPlayer.currentIndexStream.listen((event) {
       _log.info('currentIndex: $event');
       _currentIndexSubject.add(event);
-      if (_queueSubject.value != null) {
+      if (_queueSubject.value != null && event != null) {
         _currentSongSubject.add(_queueSubject.value[event].song);
       }
     });
@@ -151,13 +151,19 @@ class AudioPlayerImpl implements AudioPlayer {
   }
 
   @override
-  Future<void> seekToNext() async {
+  Future<bool> seekToNext() async {
+    final result = _audioPlayer.hasNext;
     await _audioPlayer.seekToNext();
+    return result;
   }
 
   @override
   Future<void> seekToPrevious() async {
-    await _audioPlayer.seekToPrevious();
+    if (_audioPlayer.position > const Duration(seconds: 3) || !_audioPlayer.hasPrevious) {
+      await _audioPlayer.seek(const Duration(seconds: 0));
+    } else {
+      await _audioPlayer.seekToPrevious();
+    }
   }
 
   @override
@@ -180,10 +186,9 @@ class AudioPlayerImpl implements AudioPlayer {
   @override
   Future<void> moveQueueItem(int oldIndex, int newIndex) async {
     final QueueItemModel queueItem = _queue.removeAt(oldIndex);
-    final index = newIndex < oldIndex ? newIndex : newIndex - 1;
-    _queue.insert(index, queueItem);
+    _queue.insert(newIndex, queueItem);
     _queueSubject.add(_queue);
-    await _audioSource.move(oldIndex, index);
+    await _audioSource.move(oldIndex, newIndex);
   }
 
   @override
@@ -195,6 +200,7 @@ class AudioPlayerImpl implements AudioPlayer {
 
   @override
   Future<void> setShuffleMode(ShuffleMode shuffleMode, bool updateQueue) async {
+    _log.info('setShuffleMode: $shuffleMode');
     if (shuffleMode == null) return;
     _shuffleModeSubject.add(shuffleMode);
 

@@ -50,11 +50,6 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
     _log.info('updateDatabase finished');
   }
 
-  @override
-  Future<void> setSongBlocked(Song song, bool blocked) async {
-    await _musicDataSource.setSongBlocked(song as SongModel, blocked);
-  }
-
   Future<void> updateArtists(List<ArtistModel> artists) async {
     await _musicDataSource.deleteAllArtists();
     for (final ArtistModel artist in artists) {
@@ -105,11 +100,6 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
       }
     }
     await _musicDataSource.insertSongs(songsToInsert);
-  }
-
-  @override
-  Future<void> toggleNextSongLink(Song song) async {
-    _musicDataSource.toggleNextSongLink(song as SongModel);
   }
 
   @override

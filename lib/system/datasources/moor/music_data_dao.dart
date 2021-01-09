@@ -28,8 +28,8 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
 
   @override
   Stream<List<SongModel>> get songStream {
-    return select(songs).watch().map((moorSongList) =>
-        moorSongList.map((moorSong) => SongModel.fromMoor(moorSong)).toList());
+    return select(songs).watch().map(
+        (moorSongList) => moorSongList.map((moorSong) => SongModel.fromMoor(moorSong)).toList());
   }
 
   @override
@@ -46,8 +46,8 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
 
   @override
   Future<List<SongModel>> getSongs() {
-    return select(songs).get().then((moorSongList) =>
-        moorSongList.map((moorSong) => SongModel.fromMoor(moorSong)).toList());
+    return select(songs).get().then(
+        (moorSongList) => moorSongList.map((moorSong) => SongModel.fromMoor(moorSong)).toList());
   }
 
   @override
@@ -169,5 +169,59 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
       await (update(songs)..where((tbl) => tbl.path.equals(song.path)))
           .write(const SongsCompanion(next: Value(null)));
     }
+  }
+
+  @override
+  Future<void> decrementLikeCount(SongModel song) async {
+    final songEntry = await (select(songs)..where((tbl) => tbl.path.equals(song.path))).getSingle();
+
+    if (song.likeCount > 0) {
+      await (update(songs)..where((tbl) => tbl.path.equals(song.path)))
+          .write(SongsCompanion(likeCount: Value(songEntry.likeCount - 1)));
+    }
+  }
+
+  @override
+  Future<void> incrementLikeCount(SongModel song) async {
+    final songEntry = await (select(songs)..where((tbl) => tbl.path.equals(song.path))).getSingle();
+
+    if (song.likeCount < 5) {
+      await (update(songs)..where((tbl) => tbl.path.equals(song.path)))
+          .write(SongsCompanion(likeCount: Value(songEntry.likeCount + 1)));
+    }
+  }
+
+  @override
+  Future<void> incrementPlayCount(SongModel song) async {
+    final songEntry = await (select(songs)..where((tbl) => tbl.path.equals(song.path))).getSingle();
+
+    await (update(songs)..where((tbl) => tbl.path.equals(song.path)))
+        .write(SongsCompanion(playCount: Value(songEntry.playCount + 1)));
+  }
+
+  @override
+  Future<void> incrementSkipCount(SongModel song) async {
+    final songEntry = await (select(songs)..where((tbl) => tbl.path.equals(song.path))).getSingle();
+
+    await (update(songs)..where((tbl) => tbl.path.equals(song.path)))
+        .write(SongsCompanion(skipCount: Value(songEntry.skipCount + 1)));
+  }
+
+  @override
+  Future<void> resetLikeCount(SongModel song) async {
+    await (update(songs)..where((tbl) => tbl.path.equals(song.path)))
+        .write(const SongsCompanion(likeCount: Value(0)));
+  }
+
+  @override
+  Future<void> resetPlayCount(SongModel song) async {
+    await (update(songs)..where((tbl) => tbl.path.equals(song.path)))
+        .write(const SongsCompanion(playCount: Value(0)));
+  }
+
+  @override
+  Future<void> resetSkipCount(SongModel song) async {
+    await (update(songs)..where((tbl) => tbl.path.equals(song.path)))
+        .write(const SongsCompanion(skipCount: Value(0)));
   }
 }

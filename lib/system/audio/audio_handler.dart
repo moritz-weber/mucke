@@ -20,20 +20,20 @@ class MyAudioHandler extends BaseAudioHandler {
       _handleSetQueue(event);
     });
 
-    _audioPlayer.currentSongStream.listen((songModel) {
-      mediaItem.add(songModel.toMediaItem());
-    });
+    _audioPlayer.currentSongStream.listen((songModel) => mediaItem.add(songModel.toMediaItem()));
 
-    _audioPlayer.playbackEventStream.listen((event) {
-      _handlePlaybackEvent(event);
-    });
+    _audioPlayer.playbackEventStream.listen((event) => _handlePlaybackEvent(event));
 
-    _audioPlayer.shuffleModeStream.listen((shuffleMode) {
+    _audioPlayer.shuffleModeStream.skip(1).listen((shuffleMode) {
       _playerStateDataSource.setShuffleMode(shuffleMode);
     });
 
-    _audioPlayer.loopModeStream.listen((event) {
+    _audioPlayer.loopModeStream.skip(1).listen((event) {
       _playerStateDataSource.setLoopMode(event);
+    });
+
+    _audioPlayer.positionStream.listen((event) {
+      _handlePosition(event, _audioPlayer.currentSongStream.value);
     });
 
     _initAudioPlayer();
@@ -63,6 +63,8 @@ class MyAudioHandler extends BaseAudioHandler {
 
   static final _log = Logger('AudioHandler');
 
+  bool _countSongPlayback = true;
+
   @override
   Future<void> stop() async {
     await _audioPlayer.stop();
@@ -82,7 +84,11 @@ class MyAudioHandler extends BaseAudioHandler {
 
   @override
   Future<void> skipToNext() async {
-    _audioPlayer.seekToNext();
+    _audioPlayer.seekToNext().then((value) {
+      if (value) {
+        _musicDataSource.incrementSkipCount(_audioPlayer.currentSongStream.value);
+      }
+    });
   }
 
   @override
@@ -185,6 +191,20 @@ class MyAudioHandler extends BaseAudioHandler {
           playing: false,
         ));
       }
+    }
+  }
+
+  void _handlePosition(Duration position, SongModel song) {
+    if (song == null || position == null) 
+      return;
+
+    final int pos = position.inMilliseconds;
+
+    if (pos < song.duration * 0.05) {
+      _countSongPlayback = true;
+    } else if (pos > song.duration * 0.95 && _countSongPlayback) {
+      _countSongPlayback = false;
+      _musicDataSource.incrementPlayCount(song);
     }
   }
 }

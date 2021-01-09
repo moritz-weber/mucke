@@ -41,5 +41,16 @@ class Song extends Equatable {
   final int trackNumber;
 
   @override
-  List<Object> get props => [title, album, artist, blocked];
+  List<Object> get props => [
+        path,
+        title,
+        album,
+        artist,
+        blocked,
+        next,
+        previous,
+        likeCount,
+        playCount,
+        skipCount,
+      ];
 }

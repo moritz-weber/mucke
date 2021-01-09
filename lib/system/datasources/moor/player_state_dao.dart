@@ -86,11 +86,13 @@ class PlayerStateDao extends DatabaseAccessor<MoorDatabase>
   Future<void> setLoopMode(LoopMode loopMode) async {
     final currentState = await select(persistentLoopMode).getSingle();
     if (currentState != null) {
-      update(persistentLoopMode)
-          .write(PersistentLoopModeCompanion(loopMode: Value(loopMode.toInt())));
+      update(persistentLoopMode).write(PersistentLoopModeCompanion(
+        loopMode: Value(loopMode.toInt()),
+      ));
     } else {
-      into(persistentLoopMode)
-          .insert(PersistentLoopModeCompanion(loopMode: Value(loopMode.toInt())));
+      into(persistentLoopMode).insert(PersistentLoopModeCompanion(
+        loopMode: Value(loopMode.toInt()),
+      ));
     }
   }
 

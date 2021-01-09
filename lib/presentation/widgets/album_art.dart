@@ -40,7 +40,7 @@ class AlbumArt extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Color(0x00000000), Color(0xCC000000)],
+                    colors: [Color(0x00000000), Color(0xBB000000)],
                     stops: [0.0, 1.0],
                   ),
                 ),
@@ -64,8 +64,13 @@ class AlbumArt extends StatelessWidget {
                         shadows: [
                           const Shadow(
                             blurRadius: 2.0,
-                            color: Colors.black45,
+                            color: Colors.black87,
                             offset: Offset(.5, .5),
+                          ),
+                          const Shadow(
+                            blurRadius: 8.0,
+                            color: Colors.black54,
+                            offset: Offset(0, 0),
                           ),
                         ],
                       ),
@@ -73,12 +78,17 @@ class AlbumArt extends StatelessWidget {
                     Text(
                       song.artist,
                       style: TEXT_SUBTITLE.copyWith(
-                        color: Colors.grey[300],
+                        color: Colors.grey[100],
                         shadows: [
                           const Shadow(
                             blurRadius: 2.0,
-                            color: Colors.black45,
+                            color: Colors.black87,
                             offset: Offset(.5, .5),
+                          ),
+                          const Shadow(
+                            blurRadius: 8.0,
+                            color: Colors.black54,
+                            offset: Offset(0, 0),
                           ),
                         ],
                       ),

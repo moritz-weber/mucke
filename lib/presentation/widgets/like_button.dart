@@ -28,7 +28,7 @@ class LikeButton extends StatelessWidget {
               size: iconSize,
               color: Colors.white24,
             ),
-            onPressed: null,
+            onPressed: () => musicDataStore.incrementLikeCount(song),
           );
         } else {
           return IconButton(
@@ -50,7 +50,12 @@ class LikeButton extends StatelessWidget {
               ],
               alignment: AlignmentDirectional.center,
             ),
-            onPressed: null,
+            onPressed: () {
+              if (song.likeCount < 5) {
+                return musicDataStore.incrementLikeCount(song);
+              }
+              return musicDataStore.resetLikeCount(song);
+            },
           );
         }
       },

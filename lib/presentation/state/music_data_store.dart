@@ -4,6 +4,7 @@ import 'package:mobx/mobx.dart';
 import '../../domain/entities/album.dart';
 import '../../domain/entities/artist.dart';
 import '../../domain/entities/song.dart';
+import '../../domain/repositories/music_data_modifier_repository.dart';
 import '../../domain/repositories/music_data_repository.dart';
 import '../../domain/repositories/settings_repository.dart';
 
@@ -13,17 +14,20 @@ class MusicDataStore extends _MusicDataStore with _$MusicDataStore {
   MusicDataStore({
     @required MusicDataRepository musicDataRepository,
     @required SettingsRepository settingsRepository,
-  }) : super(musicDataRepository, settingsRepository);
+    @required MusicDataModifierRepository musicDataModifierRepository,
+  }) : super(musicDataRepository, settingsRepository, musicDataModifierRepository);
 }
 
 abstract class _MusicDataStore with Store {
-  _MusicDataStore(this._musicDataRepository, this._settingsRepository) {
+  _MusicDataStore(
+      this._musicDataRepository, this._settingsRepository, this._musicDataModifierRepository) {
     songStream = _musicDataRepository.songStream.asObservable(initialValue: []);
     albumStream = _musicDataRepository.albumStream.asObservable(initialValue: []);
     artistStream = _musicDataRepository.artistStream.asObservable(initialValue: []);
   }
 
   final MusicDataRepository _musicDataRepository;
+  final MusicDataModifierRepository _musicDataModifierRepository;
   final SettingsRepository _settingsRepository;
 
   @observable
@@ -51,7 +55,6 @@ abstract class _MusicDataStore with Store {
     isUpdatingDatabase = false;
   }
 
-
   @action
   Future<void> fetchSongsFromAlbum(Album album) async {
     albumSongStream = _musicDataRepository.getAlbumSongStream(album).asObservable(initialValue: []);
@@ -64,12 +67,17 @@ abstract class _MusicDataStore with Store {
   }
 
   Future<void> setSongBlocked(Song song, bool blocked) async {
-    await _musicDataRepository.setSongBlocked(song, blocked);
+    await _musicDataModifierRepository.setSongBlocked(song, blocked);
   }
 
   Future<void> toggleNextSongLink(Song song) async {
-    await _musicDataRepository.toggleNextSongLink(song);
+    await _musicDataModifierRepository.toggleNextSongLink(song);
   }
+
+  Future<void> incrementLikeCount(Song song) =>
+      _musicDataModifierRepository.incrementLikeCount(song);
+
+  Future<void> resetLikeCount(Song song) => _musicDataModifierRepository.resetLikeCount(song);
 
   Future<void> addLibraryFolder(String path) async {
     await _settingsRepository.addLibraryFolder(path);

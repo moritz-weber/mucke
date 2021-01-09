@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart' as ja;
 
 import 'domain/repositories/audio_repository.dart';
+import 'domain/repositories/music_data_modifier_repository.dart';
 import 'domain/repositories/music_data_repository.dart';
 import 'domain/repositories/persistent_player_state_repository.dart';
 import 'domain/repositories/settings_repository.dart';
@@ -24,6 +25,7 @@ import 'system/datasources/music_data_source_contract.dart';
 import 'system/datasources/player_state_data_source.dart';
 import 'system/datasources/settings_data_source.dart';
 import 'system/repositories/audio_repository_impl.dart';
+import 'system/repositories/music_data_modifier_repository_impl.dart';
 import 'system/repositories/music_data_repository_impl.dart';
 import 'system/repositories/persistent_player_state_repository_impl.dart';
 import 'system/repositories/settings_repository_impl.dart';
@@ -39,6 +41,7 @@ Future<void> setupGetIt() async {
       final musicDataStore = MusicDataStore(
         musicDataRepository: getIt(),
         settingsRepository: getIt(),
+        musicDataModifierRepository: getIt(),
       );
       return musicDataStore;
     },
@@ -66,15 +69,26 @@ Future<void> setupGetIt() async {
       getIt(),
     ),
   );
+  getIt.registerLazySingleton<MusicDataModifierRepository>(
+    () => MusicDataModifierRepositoryImpl(
+      getIt(),
+    ),
+  );
   getIt.registerLazySingleton<AudioRepository>(
     () => AudioRepositoryImpl(
       getIt(),
     ),
   );
   getIt.registerLazySingleton<PlayerStateRepository>(
-    () => PlayerStateRepositoryImpl(getIt()),
+    () => PlayerStateRepositoryImpl(
+      getIt(),
+    ),
   );
-  getIt.registerLazySingleton<SettingsRepository>(() => SettingsRepositoryImpl(getIt()));
+  getIt.registerLazySingleton<SettingsRepository>(
+    () => SettingsRepositoryImpl(
+      getIt(),
+    ),
+  );
 
   // data sources
   final MoorDatabase moorDatabase = MoorDatabase();

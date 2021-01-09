@@ -12,7 +12,4 @@ abstract class MusicDataRepository {
   Stream<List<Artist>> get artistStream;
 
   Future<void> updateDatabase();
-
-  Future<void> setSongBlocked(Song song, bool blocked);
-  Future<void> toggleNextSongLink(Song song);
 }

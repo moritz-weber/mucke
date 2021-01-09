@@ -19,7 +19,7 @@ abstract class AudioPlayer {
   Future<void> play();
   Future<void> pause();
   Future<void> stop();
-  Future<void> seekToNext();
+  Future<bool> seekToNext();
   Future<void> seekToPrevious();
   Future<void> dispose();
 
