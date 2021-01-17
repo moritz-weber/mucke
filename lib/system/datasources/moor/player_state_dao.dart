@@ -69,12 +69,7 @@ class PlayerStateDao extends DatabaseAccessor<MoorDatabase>
 
   @override
   Future<void> setCurrentIndex(int index) async {
-    final currentState = await select(persistentIndex).getSingle();
-    if (currentState != null) {
-      update(persistentIndex).write(PersistentIndexCompanion(index: Value(index)));
-    } else {
-      into(persistentIndex).insert(PersistentIndexCompanion(index: Value(index)));
-    }
+    update(persistentIndex).write(PersistentIndexCompanion(index: Value(index)));
   }
 
   @override
@@ -84,28 +79,16 @@ class PlayerStateDao extends DatabaseAccessor<MoorDatabase>
 
   @override
   Future<void> setLoopMode(LoopMode loopMode) async {
-    final currentState = await select(persistentLoopMode).getSingle();
-    if (currentState != null) {
-      update(persistentLoopMode).write(PersistentLoopModeCompanion(
-        loopMode: Value(loopMode.toInt()),
-      ));
-    } else {
-      into(persistentLoopMode).insert(PersistentLoopModeCompanion(
-        loopMode: Value(loopMode.toInt()),
-      ));
-    }
+    update(persistentLoopMode).write(
+      PersistentLoopModeCompanion(loopMode: Value(loopMode.toInt())),
+    );
   }
 
   @override
   Future<void> setShuffleMode(ShuffleMode shuffleMode) async {
-    final currentState = await select(persistentShuffleMode).getSingle();
-    if (currentState != null) {
-      update(persistentShuffleMode)
-          .write(PersistentShuffleModeCompanion(shuffleMode: Value(shuffleMode.toInt())));
-    } else {
-      into(persistentShuffleMode)
-          .insert(PersistentShuffleModeCompanion(shuffleMode: Value(shuffleMode.toInt())));
-    }
+    update(persistentShuffleMode).write(
+      PersistentShuffleModeCompanion(shuffleMode: Value(shuffleMode.toInt())),
+    );
   }
 
   @override

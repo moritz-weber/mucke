@@ -112,6 +112,17 @@ class MoorDatabase extends _$MoorDatabase {
 
   @override
   int get schemaVersion => 1;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(beforeOpen: (details) async {
+        if (details.wasCreated) {
+          await into(persistentIndex).insert(const PersistentIndexCompanion(index: Value(0)));
+          await into(persistentLoopMode)
+              .insert(const PersistentLoopModeCompanion(loopMode: Value(0)));
+          await into(persistentShuffleMode)
+              .insert(const PersistentShuffleModeCompanion(shuffleMode: Value(0)));
+        }
+      });
 }
 
 LazyDatabase _openConnection() {
