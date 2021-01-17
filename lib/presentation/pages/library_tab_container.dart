@@ -14,19 +14,35 @@ class LibraryTabContainer extends StatelessWidget {
       child: SafeArea(
         child: Column(
           children: <Widget>[
-            Container(
-              color: Theme.of(context).primaryColor,
-              child: const TabBar(
-                tabs: <Tab>[
-                  Tab(
-                    text: 'Artists',
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0, bottom: 16.0),
+              child: Row(
+                children: [
+                  const Expanded(
+                    child: TabBar(
+                      indicatorSize: TabBarIndicatorSize.label,
+                      indicatorColor: Colors.transparent,
+                      labelStyle: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20.0,
+                      ),
+                      labelPadding: EdgeInsets.only(left: 16.0, right: 8.0),
+                      unselectedLabelColor: Colors.white30,
+                      isScrollable: true,
+                      tabs: [
+                        Tab(
+                          text: 'Artists',
+                        ),
+                        Tab(
+                          text: 'Albums',
+                        ),
+                        Tab(
+                          text: 'Songs',
+                        ),
+                      ],
+                    ),
                   ),
-                  Tab(
-                    text: 'Albums',
-                  ),
-                  Tab(
-                    text: 'Songs',
-                  ),
+                  IconButton(icon: const Icon(Icons.more_vert), onPressed: () => null),
                 ],
               ),
             ),

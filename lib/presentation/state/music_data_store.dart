@@ -48,6 +48,9 @@ abstract class _MusicDataStore with Store {
   @observable
   bool isUpdatingDatabase = false;
 
+  @computed
+  List<Album> get sortedArtistAlbums => artistAlbumStream.value.toList()..sort((a, b) => -a.pubYear.compareTo(b.pubYear));
+
   @action
   Future<void> updateDatabase() async {
     isUpdatingDatabase = true;
