@@ -71,8 +71,20 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
             (t) => OrderingTerm(expression: t.title),
           ]))
         .watch()
-        .map((moorAlbumList) =>
-            moorAlbumList.map((moorAlbum) => AlbumModel.fromMoor(moorAlbum)).toList());
+        .map((moorAlbumList) {
+      return moorAlbumList.map((moorAlbum) => AlbumModel.fromMoor(moorAlbum)).toList();
+    });
+  }
+
+  @override
+  Stream<List<SongModel>> getArtistSongStream(ArtistModel artist) {
+    return (select(albums)..where((tbl) => tbl.artist.equals(artist.name)))
+        .join([innerJoin(songs, songs.albumId.equalsExp(albums.id))])
+        .map((row) => row.readTable(songs))
+        .watch()
+        .map(
+          (moorSongList) => moorSongList.map((moorSong) => SongModel.fromMoor(moorSong)).toList(),
+        );
   }
 
   @override

@@ -49,7 +49,13 @@ abstract class _MusicDataStore with Store {
   bool isUpdatingDatabase = false;
 
   @computed
-  List<Album> get sortedArtistAlbums => artistAlbumStream.value.toList()..sort((a, b) => -a.pubYear.compareTo(b.pubYear));
+  List<Album> get sortedArtistAlbums => artistAlbumStream.value.toList()..sort((a, b) {
+    if (b.pubYear == null)
+      return -1;
+    if (a.pubYear == null)
+      return 1;
+    return -a.pubYear.compareTo(b.pubYear);
+  });
 
   @action
   Future<void> updateDatabase() async {

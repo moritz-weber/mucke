@@ -1,6 +1,8 @@
 import 'package:meta/meta.dart';
 import 'package:mobx/mobx.dart';
 
+import '../../domain/entities/album.dart';
+import '../../domain/entities/artist.dart';
 import '../../domain/entities/loop_mode.dart';
 import '../../domain/entities/playback_state.dart';
 import '../../domain/entities/shuffle_mode.dart';
@@ -111,5 +113,13 @@ abstract class _AudioStore with Store {
 
   Future<void> removeQueueIndex(int index) async {
     _audioRepository.removeQueueIndex(index);
+  }
+
+  Future<void> playAlbum(Album album) async {
+    _audioRepository.playAlbum(album);
+  }
+
+  Future<void> shuffleArtist(Artist artist) async {
+    _audioRepository.playArtist(artist, shuffleMode: ShuffleMode.plus);
   }
 }

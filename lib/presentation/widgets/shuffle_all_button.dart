@@ -20,14 +20,12 @@ class ShuffleAllButton extends StatelessWidget {
           vertical: verticalPad,
           horizontal: horizontalPad,
         ),
-        child: RaisedButton.icon(
+        child: ElevatedButton.icon(
           icon: const Icon(Icons.shuffle),
           label: const Text('SHUFFLE ALL'),
           onPressed: () => audioStore.shuffleAll(),
-          color: Theme.of(context).accentColor,
-          highlightColor: Theme.of(context).highlightColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24.0),
+          style: ElevatedButton.styleFrom(
+            primary: Theme.of(context).accentColor,
           ),
         ),
       ),

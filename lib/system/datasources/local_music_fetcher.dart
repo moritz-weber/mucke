@@ -55,7 +55,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
       return _flutterAudioQuery.getArtwork(
         type: ResourceType.ALBUM,
         id: id.toString(),
-        size: const Size(500.0, 500.0),
+        size: const Size(480.0, 480.0),
       );
     }
     return Uint8List(0);
@@ -70,6 +70,8 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     final albums = await _getFilteredAlbums(albumTitles);
     final artistNames = Set<String>.from(albums.map((album) => album.artist));
     final artists = await _getFilteredArtists(artistNames);
+
+    assert(false);
 
     return {
       'SONGS': songs,

@@ -14,25 +14,19 @@ class AlbumBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: getAlbumImage(song.albumArtPath),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: Container(
-        height: double.infinity,
-        decoration: BoxDecoration(
-          gradient: gradient,
-        ),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 96.0, sigmaY: 96.0),
-          child: Container(
-            child: child,
-            color: Colors.white.withOpacity(0.0),
+    return ImageFiltered(
+      imageFilter: ImageFilter.blur(sigmaX: 96.0, sigmaY: 96.0),
+      child: ShaderMask(
+        shaderCallback: (Rect bounds) => gradient.createShader(bounds),
+        blendMode: BlendMode.srcATop,
+        child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: getAlbumImage(song.albumArtPath),
+              fit: BoxFit.cover,
+            ),
           ),
         ),
       ),

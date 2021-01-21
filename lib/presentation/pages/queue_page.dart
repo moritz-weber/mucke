@@ -34,53 +34,57 @@ class QueuePage extends StatelessWidget {
             switch (queueStream.status) {
               case StreamStatus.active:
                 final int activeIndex = queueIndexStream.value;
-                return AlbumBackground(
-                  song: audioStore.currentSong,
-                  gradient: const LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Color(0x55000000),
-                      Color(0x55000000),
-                    ],
-                    stops: [
-                      0.0,
-                      1.0,
-                    ],
-                  ),
-                  child: CustomScrollView(
-                    controller: _scrollController,
-                    slivers: [
-                      ReorderableSliverList(
-                        delegate: ReorderableSliverChildBuilderDelegate(
-                          (context, int index) {
-                            final song = queueStream.value[index];
-                            return Dismissible(
-                              key: ValueKey(song.path),
-                              child: AlbumArtListTile(
-                                title: song.title,
-                                subtitle: '${song.artist}',
-                                albumArtPath: song.albumArtPath,
-                                highlight: index == activeIndex,
-                                onTap: () => audioStore.setIndex(index),
-                              ),
-                              onDismissed: (direction) {
-                                audioStore.removeQueueIndex(index);
-                                Scaffold.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text('${song.title} removed'),
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                          childCount: queueStream.value.length,
-                        ),
-                        onReorder: (oldIndex, newIndex) =>
-                            audioStore.moveQueueItem(oldIndex, newIndex),
-                      )
-                    ],
-                  ),
+                return Stack(
+                  children: [
+                    AlbumBackground(
+                      song: audioStore.currentSong,
+                      gradient: const LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Color(0x55000000),
+                          Color(0x55000000),
+                        ],
+                        stops: [
+                          0.0,
+                          1.0,
+                        ],
+                      ),
+                    ),
+                    CustomScrollView(
+                      controller: _scrollController,
+                      slivers: [
+                        ReorderableSliverList(
+                          delegate: ReorderableSliverChildBuilderDelegate(
+                            (context, int index) {
+                              final song = queueStream.value[index];
+                              return Dismissible(
+                                key: ValueKey(song.path),
+                                child: AlbumArtListTile(
+                                  title: song.title,
+                                  subtitle: '${song.artist}',
+                                  albumArtPath: song.albumArtPath,
+                                  highlight: index == activeIndex,
+                                  onTap: () => audioStore.setIndex(index),
+                                ),
+                                onDismissed: (direction) {
+                                  audioStore.removeQueueIndex(index);
+                                  Scaffold.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('${song.title} removed'),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                            childCount: queueStream.value.length,
+                          ),
+                          onReorder: (oldIndex, newIndex) =>
+                              audioStore.moveQueueItem(oldIndex, newIndex),
+                        )
+                      ],
+                    ),
+                  ],
                 );
               case StreamStatus.waiting:
               case StreamStatus.done:

@@ -1,9 +1,13 @@
+import '../../domain/entities/album.dart';
+import '../../domain/entities/artist.dart';
 import '../../domain/entities/loop_mode.dart';
 import '../../domain/entities/playback_state.dart';
 import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/entities/song.dart';
 import '../../domain/repositories/audio_repository.dart';
 import '../audio/audio_manager_contract.dart';
+import '../models/album_model.dart';
+import '../models/artist_model.dart';
 import '../models/song_model.dart';
 
 class AudioRepositoryImpl implements AudioRepository {
@@ -82,5 +86,15 @@ class AudioRepositoryImpl implements AudioRepository {
   @override
   Future<void> setIndex(int index) async {
     await _audioManager.setIndex(index);
+  }
+
+  @override
+  Future<void> playAlbum(Album album) async {
+    await _audioManager.playAlbum(album as AlbumModel);
+  }
+
+  @override
+  Future<void> playArtist(Artist artist, {ShuffleMode shuffleMode = ShuffleMode.none}) async {
+    await _audioManager.playArtist(artist as ArtistModel, shuffleMode);
   }
 }

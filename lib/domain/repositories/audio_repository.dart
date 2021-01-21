@@ -1,3 +1,5 @@
+import '../entities/album.dart';
+import '../entities/artist.dart';
 import '../entities/loop_mode.dart';
 import '../entities/playback_state.dart';
 import '../entities/shuffle_mode.dart';
@@ -14,6 +16,9 @@ abstract class AudioRepository {
   Future<void> skipToNext();
   Future<void> skipToPrevious();
   Future<void> setIndex(int index);
+
+  Future<void> playAlbum(Album album);
+  Future<void> playArtist(Artist artist, {ShuffleMode shuffleMode = ShuffleMode.none});
 
   Future<void> setShuffleMode(ShuffleMode shuffleMode);
   Future<void> setLoopMode(LoopMode loopMode);

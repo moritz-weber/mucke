@@ -5,6 +5,8 @@ import 'package:audio_service/audio_service.dart';
 import '../../domain/entities/loop_mode.dart';
 import '../../domain/entities/playback_state.dart' as entity;
 import '../../domain/entities/shuffle_mode.dart';
+import '../models/album_model.dart';
+import '../models/artist_model.dart';
 import '../models/playback_state_model.dart';
 import '../models/song_model.dart';
 import 'audio_manager_contract.dart';
@@ -133,5 +135,18 @@ class AudioManagerImpl implements AudioManager {
   @override
   Future<void> removeQueueIndex(int index) async {
     await _audioHandler.removeQueueItemAt(index);
+  }
+
+  @override
+  Future<void> playAlbum(AlbumModel albumModel) async {
+    await _audioHandler.customAction(PLAY_ALBUM, {'ALBUM': albumModel});
+  }
+
+  @override
+  Future<void> playArtist(ArtistModel artistModel, ShuffleMode shuffleMode) async {
+    await _audioHandler.customAction(PLAY_ARTIST, {
+      'ARTIST': artistModel,
+      'SHUFFLE_MODE': shuffleMode,
+    });
   }
 }

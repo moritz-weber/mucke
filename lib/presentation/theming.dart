@@ -83,3 +83,5 @@ const TextStyle TEXT_SMALL_SUBTITLE = TextStyle(
   fontSize: 12.0,
   fontWeight: FontWeight.w300,
 );
+
+const double HORIZONTAL_PADDING = 16.0;

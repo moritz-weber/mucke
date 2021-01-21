@@ -5,6 +5,7 @@ import '../models/song_model.dart';
 abstract class MusicDataSource {
   Stream<List<SongModel>> get songStream;
   Stream<List<SongModel>> getAlbumSongStream(AlbumModel album);
+  Stream<List<SongModel>> getArtistSongStream(ArtistModel artist);
   Future<List<SongModel>> getSongs();
   Future<SongModel> getSongByPath(String path);
 

@@ -8,6 +8,8 @@ import '../../domain/entities/playback_event.dart';
 import '../../domain/entities/shuffle_mode.dart';
 import '../datasources/music_data_source_contract.dart';
 import '../datasources/player_state_data_source.dart';
+import '../models/album_model.dart';
+import '../models/artist_model.dart';
 import '../models/playback_event_model.dart';
 import '../models/queue_item_model.dart';
 import '../models/song_model.dart';
@@ -123,6 +125,13 @@ class MyAudioHandler extends BaseAudioHandler {
         return moveQueueItem(arguments['OLD_INDEX'] as int, arguments['NEW_INDEX'] as int);
       case SET_INDEX:
         return setIndex(arguments['INDEX'] as int);
+      case PLAY_ALBUM:
+        return playAlbum(arguments['ALBUM'] as AlbumModel);
+      case PLAY_ARTIST:
+        return playArtist(
+          arguments['ARTIST'] as ArtistModel,
+          arguments['SHUFFLE_MODE'] as ShuffleMode,
+        );
       default:
     }
   }
@@ -163,6 +172,23 @@ class MyAudioHandler extends BaseAudioHandler {
     _audioPlayer.setIndex(index);
   }
 
+  Future<void> playAlbum(AlbumModel album) async {
+    _audioPlayer.setShuffleMode(ShuffleMode.none, false);
+    final List<SongModel> songs = await _musicDataSource.getAlbumSongStream(album).first;
+
+    _audioPlayer.playSongList(songs, 0);
+  }
+
+  Future<void> playArtist(ArtistModel artist, ShuffleMode shuffleMode) async {
+    _audioPlayer.setShuffleMode(shuffleMode, false);
+    final List<SongModel> songs = await _musicDataSource.getArtistSongStream(artist).first;
+
+    final rng = Random();
+    final index = rng.nextInt(songs.length);
+
+    _audioPlayer.playSongList(songs, index);
+  }
+
   void _handleSetQueue(List<QueueItemModel> queueItems) {
     _playerStateDataSource.setQueue(queueItems);
 
@@ -195,8 +221,7 @@ class MyAudioHandler extends BaseAudioHandler {
   }
 
   void _handlePosition(Duration position, SongModel song) {
-    if (song == null || position == null) 
-      return;
+    if (song == null || position == null) return;
 
     final int pos = position.inMilliseconds;
 
