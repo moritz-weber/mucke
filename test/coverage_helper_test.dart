@@ -22,7 +22,6 @@ import 'package:mucke/presentation/widgets/next_indicator.dart';
 import 'package:mucke/presentation/widgets/previous_button.dart';
 import 'package:mucke/presentation/widgets/play_pause_button.dart';
 import 'package:mucke/presentation/widgets/album_art.dart';
-import 'package:mucke/presentation/widgets/primary_button.dart';
 import 'package:mucke/presentation/widgets/shuffle_button.dart';
 import 'package:mucke/presentation/widgets/injection_widget.dart';
 import 'package:mucke/presentation/widgets/next_song.dart';
