@@ -13,8 +13,6 @@ import 'presentation/state/audio_store.dart';
 import 'presentation/state/music_data_store.dart';
 import 'presentation/state/navigation_store.dart';
 import 'system/audio/audio_handler.dart';
-import 'system/audio/audio_manager.dart';
-import 'system/audio/audio_manager_contract.dart';
 import 'system/audio/audio_player_contract.dart';
 import 'system/audio/audio_player_impl.dart';
 import 'system/audio/queue_generator.dart';
@@ -102,7 +100,6 @@ Future<void> setupGetIt() async {
       getIt(),
     ),
   );
-  getIt.registerLazySingleton<AudioManager>(() => AudioManagerImpl(getIt()));
 
   final AudioPlayer audioPlayer = AudioPlayerImpl(
     ja.AudioPlayer(),
