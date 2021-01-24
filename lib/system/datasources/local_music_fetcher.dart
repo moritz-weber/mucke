@@ -71,8 +71,6 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     final artistNames = Set<String>.from(albums.map((album) => album.artist));
     final artists = await _getFilteredArtists(artistNames);
 
-    assert(false);
-
     return {
       'SONGS': songs,
       'ALBUMS': albums,
