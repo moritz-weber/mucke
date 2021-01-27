@@ -38,9 +38,9 @@ class ShuffleButton extends StatelessWidget {
               );
             case ShuffleMode.plus:
               return IconButton(
-                icon: const Icon(
+                icon: Icon(
                   Icons.fingerprint_rounded,
-                  color: Colors.white,
+                  color: Theme.of(context).accentColor,
                 ),
                 iconSize: iconSize,
                 onPressed: () => audioStore.setShuffleMode(ShuffleMode.none),

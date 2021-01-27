@@ -29,7 +29,7 @@ class AlbumListTileExtended extends StatelessWidget {
                 height: 72,
                 width: 72,
                 child: Container(
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0)),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(1.0)),
                   clipBehavior: Clip.antiAlias,
                   child: Image(
                     image: utils.getAlbumImage(albumArtPath),

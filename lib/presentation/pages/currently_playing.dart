@@ -43,21 +43,21 @@ class CurrentlyPlayingPage extends StatelessWidget {
                 children: [
                   AlbumBackground(
                     song: song,
-                    gradient: const LinearGradient(
+                    gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        Color(0x99000000),
-                        Color(0x22FFFFFF),
-                        Color(0x22FFFFFF),
-                        Color(0x99000000),
-                        Color(0xCC000000),
+                        Theme.of(context).scaffoldBackgroundColor,
+                        DARK3.withOpacity(0.2),
+                        DARK3.withOpacity(0.2),
+                        Theme.of(context).scaffoldBackgroundColor,
+                        Theme.of(context).scaffoldBackgroundColor,
                       ],
                       stops: [
                         0.0,
                         0.2,
                         0.55,
-                        0.75,
+                        0.7,
                         1.0,
                       ],
                     ),

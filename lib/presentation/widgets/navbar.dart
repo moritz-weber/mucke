@@ -27,7 +27,6 @@ class _NavBarState extends State<NavBar> {
             height: 1.0,
           ),
           BottomNavigationBar(
-            backgroundColor: Theme.of(context).primaryColor,
             currentIndex: widget.currentIndex,
             onTap: widget.onTap,
             items: const [

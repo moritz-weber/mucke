@@ -1,17 +1,10 @@
 import 'package:flutter/material.dart';
 
-const Color RASPBERRY = Color(0xFFea0367);
-const Color TURQUOISE = Color(0xFF30d8f3);
-const Color CRAYOLA = Color(0xfffde189);
-const Color PINEAPPLE = Color(0xff56365e);
-const Color MIDNIGHT = Color(0xff622371);
-const Color MIDDLE_RED_PURPLE = Color(0xff0f0127);
-
-const Color DARK1 = Color(0xff0c1a20);
-const Color DARK2 = Color(0xff0f2020);
-const Color DARK3 = Color(0xff142a35);
-const Color LIGHT1 = Color(0xff57af99);
-const Color LIGHT2 = Color(0xfff28396);
+const Color DARK1 = Color(0xff090711);
+const Color DARK2 = Color(0xff141216);
+const Color DARK3 = Color(0xff645375); // 645375 // 241d2b
+const Color LIGHT1 = Color(0xff913af1);
+const Color LIGHT2 = Color(0xffac5bfb);
 
 ThemeData theme() => ThemeData(
       brightness: Brightness.dark,
@@ -19,8 +12,14 @@ ThemeData theme() => ThemeData(
       primaryColorBrightness: Brightness.dark,
       primaryColorLight: DARK2,
       accentColor: LIGHT1,
-      highlightColor: TURQUOISE,
+      highlightColor: LIGHT2,
       scaffoldBackgroundColor: DARK2,
+      cardColor: DARK3,
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          primary: LIGHT1,
+        ),
+      ),
       // https://api.flutter.dev/flutter/material/TextTheme-class.html
       textTheme: const TextTheme(
         headline1: TextStyle(
@@ -56,7 +55,10 @@ ThemeData theme() => ThemeData(
       iconTheme: const IconThemeData(
         color: Colors.white,
       ),
-      cardColor: DARK3,
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: DARK1,
+        selectedItemColor: LIGHT1,
+      ),
     );
 
 const TextStyle TEXT_HEADER = TextStyle(

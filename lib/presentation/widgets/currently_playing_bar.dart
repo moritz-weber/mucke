@@ -22,13 +22,8 @@ class CurrentlyPlayingBar extends StatelessWidget {
           final Song song = audioStore.currentSong;
 
           return Column(
+            verticalDirection: VerticalDirection.up,
             children: <Widget>[
-              Container(
-                child: LinearProgressIndicator(
-                  value: audioStore.currentPositionStream.value / audioStore.currentSong.duration,
-                ),
-                height: 2,
-              ),
               GestureDetector(
                 onTap: () => _onTap(context),
                 child: Container(
@@ -42,26 +37,44 @@ class CurrentlyPlayingBar extends StatelessWidget {
                       Container(
                         width: 10.0,
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(song.title),
-                          Text(
-                            song.artist,
-                            style: const TextStyle(
-                              fontSize: 12.0,
-                              color: Colors.white70,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              song.title,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
                             ),
-                          )
-                        ],
+                            Text(
+                              song.artist,
+                              style: const TextStyle(
+                                fontSize: 12.0,
+                                color: Colors.white70,
+                              ),
+                            )
+                          ],
+                        ),
                       ),
-                      const Spacer(),
                       const PlayPauseButton(
                         circle: false,
                       ),
                       const NextButton(),
                     ],
                   ),
+                ),
+              ),
+              Container(
+                child: LinearProgressIndicator(
+                  value: audioStore.currentPositionStream.value / audioStore.currentSong.duration,
+                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+                  backgroundColor: Colors.white10,
+                ),
+                height: 2,
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(color: Theme.of(context).primaryColor, blurRadius: 1),
+                  ],
                 ),
               ),
             ],

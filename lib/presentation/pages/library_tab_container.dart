@@ -15,18 +15,18 @@ class LibraryTabContainer extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(top: 8.0, bottom: 16.0),
+              padding: const EdgeInsets.only(top: 8.0, left: 4.0),
               child: Row(
                 children: [
                   const Expanded(
                     child: TabBar(
                       indicatorSize: TabBarIndicatorSize.label,
-                      indicatorColor: Colors.transparent,
+                      indicatorWeight: 3.0,
                       labelStyle: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 20.0,
                       ),
-                      labelPadding: EdgeInsets.only(left: 16.0, right: 8.0),
+                      labelPadding: EdgeInsets.symmetric(horizontal: 12.0),
                       unselectedLabelColor: Colors.white30,
                       isScrollable: true,
                       tabs: [

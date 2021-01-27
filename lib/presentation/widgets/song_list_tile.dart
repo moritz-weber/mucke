@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/song.dart';
-import '../theming.dart';
 import '../utils.dart' as utils;
 
 class SongListTile extends StatelessWidget {
@@ -50,7 +49,7 @@ class SongListTile extends StatelessWidget {
             Icon(
               Icons.remove_circle_outline,
               size: 14.0,
-              color: RASPBERRY.withOpacity(0.4),
+              color: Colors.white.withOpacity(0.4),
             ),
           if (onTapMore != null)
             IconButton(

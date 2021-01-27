@@ -13,12 +13,15 @@ class AlbumArt extends StatelessWidget {
   Widget build(BuildContext context) {
     return AspectRatio(
       aspectRatio: 1.0,
-      child: Card(
-        elevation: 6.0,
+      child: Container(
         clipBehavior: Clip.antiAlias,
-        margin: const EdgeInsets.all(0),
-        shape: RoundedRectangleBorder(
+        decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(2.0),
+          boxShadow: const [
+            BoxShadow(color: Colors.black45, blurRadius: 1, offset: Offset(0, 1)),
+            BoxShadow(color: Colors.black38, blurRadius: 5, offset: Offset(0, 1)),
+            BoxShadow(color: Colors.black26, blurRadius: 8, offset: Offset(0, 1)),
+          ],
         ),
         child: Stack(
           children: [

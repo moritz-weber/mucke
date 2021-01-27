@@ -18,12 +18,10 @@ class Highlight extends StatelessWidget {
                 flex: 10,
                 child: AspectRatio(
                   aspectRatio: 1,
-                  child: Card(
-                    elevation: 2.0,
+                  child: Container(
                     clipBehavior: Clip.antiAlias,
-                    margin: const EdgeInsets.all(0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(1.0),
                     ),
                     child: const Image(
                       image: AssetImage('assets/no_cover.png'),
