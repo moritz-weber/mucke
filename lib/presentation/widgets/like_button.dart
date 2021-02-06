@@ -19,7 +19,7 @@ class LikeButton extends StatelessWidget {
 
     return Observer(
       builder: (BuildContext context) {
-        final Song song = audioStore.currentSong;
+        final Song song = audioStore.currentSongStream.value;
 
         if (song.likeCount == 0) {
           return IconButton(

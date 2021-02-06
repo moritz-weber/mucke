@@ -9,13 +9,20 @@ part of 'audio_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$AudioStore on _AudioStore, Store {
-  Computed<Song> _$currentSongComputed;
+  final _$currentSongStreamAtom = Atom(name: '_AudioStore.currentSongStream');
 
   @override
-  Song get currentSong =>
-      (_$currentSongComputed ??= Computed<Song>(() => super.currentSong,
-              name: '_AudioStore.currentSong'))
-          .value;
+  ObservableStream<Song> get currentSongStream {
+    _$currentSongStreamAtom.reportRead();
+    return super.currentSongStream;
+  }
+
+  @override
+  set currentSongStream(ObservableStream<Song> value) {
+    _$currentSongStreamAtom.reportWrite(value, super.currentSongStream, () {
+      super.currentSongStream = value;
+    });
+  }
 
   final _$playbackStateStreamAtom =
       Atom(name: '_AudioStore.playbackStateStream');
@@ -113,13 +120,13 @@ mixin _$AudioStore on _AudioStore, Store {
   @override
   String toString() {
     return '''
+currentSongStream: ${currentSongStream},
 playbackStateStream: ${playbackStateStream},
 currentPositionStream: ${currentPositionStream},
 queueStream: ${queueStream},
 queueIndexStream: ${queueIndexStream},
 shuffleModeStream: ${shuffleModeStream},
-loopModeStream: ${loopModeStream},
-currentSong: ${currentSong}
+loopModeStream: ${loopModeStream}
     ''';
   }
 }

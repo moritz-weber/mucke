@@ -18,9 +18,8 @@ class CurrentlyPlayingBar extends StatelessWidget {
 
     return Observer(
       builder: (BuildContext context) {
-        if (audioStore.currentSong != null) {
-          final Song song = audioStore.currentSong;
-
+        final Song song = audioStore.currentSongStream.value;
+        if (song != null) {
           return Column(
             verticalDirection: VerticalDirection.up,
             children: <Widget>[
@@ -66,7 +65,7 @@ class CurrentlyPlayingBar extends StatelessWidget {
               ),
               Container(
                 child: LinearProgressIndicator(
-                  value: audioStore.currentPositionStream.value / audioStore.currentSong.duration,
+                  value: audioStore.currentPositionStream.value / song.duration,
                   valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
                   backgroundColor: Colors.white10,
                 ),

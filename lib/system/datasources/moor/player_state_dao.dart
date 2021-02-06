@@ -63,6 +63,16 @@ class PlayerStateDao extends DatabaseAccessor<MoorDatabase>
   }
 
   @override
+  Stream<SongModel> get currentSongStream {
+    final query = select(persistentIndex).join([
+      innerJoin(queueEntries, queueEntries.index.equalsExp(persistentIndex.index)),
+      innerJoin(songs, songs.path.equalsExp(queueEntries.path))
+    ]);
+
+    return query.watchSingle().map((row) => SongModel.fromMoor(row.readTable(songs)));
+  }
+
+  @override
   Stream<int> get currentIndexStream {
     return select(persistentIndex).watchSingle().map((event) => event?.index);
   }

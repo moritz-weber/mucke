@@ -62,7 +62,7 @@ ThemeData theme() => ThemeData(
     );
 
 const TextStyle TEXT_HEADER = TextStyle(
-  fontSize: 18.0,
+  fontSize: 20.0,
   fontWeight: FontWeight.bold,
 );
 

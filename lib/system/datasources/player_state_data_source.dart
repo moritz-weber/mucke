@@ -7,6 +7,8 @@ abstract class PlayerStateDataSource {
   Future<void> setQueue(List<QueueItemModel> queue);
   Stream<List<SongModel>> get songQueueStream;
   Stream<List<QueueItemModel>> get queueStream;
+
+  Stream<SongModel> get currentSongStream;
   
   Future<void> setCurrentIndex(int index);
   Stream<int> get currentIndexStream;

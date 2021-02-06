@@ -27,6 +27,8 @@ abstract class _AudioStore with Store {
 
     queueIndexStream = _persistentPlayerStateRepository.currentIndexStream.asObservable();
 
+    currentSongStream = _persistentPlayerStateRepository.currentSongStream.asObservable();
+
     shuffleModeStream = _persistentPlayerStateRepository.shuffleModeStream.asObservable();
 
     loopModeStream = _persistentPlayerStateRepository.loopModeStream.asObservable();
@@ -37,17 +39,8 @@ abstract class _AudioStore with Store {
   final AudioRepository _audioRepository;
   final PlayerStateRepository _persistentPlayerStateRepository;
 
-  @computed
-  Song get currentSong {
-    if (queueStream.value != null && queueIndexStream.value != null) {
-      if (queueIndexStream.value < queueStream.value.length) {
-        final song = queueStream.value[queueIndexStream.value];
-        return song;
-      }
-    }
-
-    return null;
-  }
+  @observable
+  ObservableStream<Song> currentSongStream;
 
   @observable
   ObservableStream<PlaybackState> playbackStateStream;

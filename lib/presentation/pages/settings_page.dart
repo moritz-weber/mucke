@@ -5,6 +5,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
 import '../state/music_data_store.dart';
+import '../theming.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key key}) : super(key: key);
@@ -25,10 +26,7 @@ class SettingsPage extends StatelessWidget {
           ),
           child: Text(
             'Library',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18.0,
-            ),
+            style: TEXT_HEADER,
           ),
         ),
         ListTile(

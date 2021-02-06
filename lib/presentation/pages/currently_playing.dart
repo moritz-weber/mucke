@@ -37,7 +37,7 @@ class CurrentlyPlayingPage extends StatelessWidget {
           child: Observer(
             builder: (BuildContext context) {
               _log.info('Observer.build');
-              final Song song = audioStore.currentSong;
+              final Song song = audioStore.currentSongStream.value;
 
               return Stack(
                 children: [
@@ -53,7 +53,7 @@ class CurrentlyPlayingPage extends StatelessWidget {
                         Theme.of(context).scaffoldBackgroundColor,
                         Theme.of(context).scaffoldBackgroundColor,
                       ],
-                      stops: [
+                      stops: const [
                         0.0,
                         0.2,
                         0.55,
@@ -102,7 +102,7 @@ class CurrentlyPlayingPage extends StatelessWidget {
                             ),
                             IconButton(
                               icon: const Icon(Icons.more_vert),
-                              onPressed: () {},
+                              onPressed: () => null,
                             )
                           ],
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -8,11 +8,11 @@ class Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: const <Widget>[
-        Text('Home', style: TEXT_HEADER),
+      children: <Widget>[
+        const Text('Home', style: TEXT_HEADER),
         IconButton(
-          icon: Icon(Icons.more_vert),
-          onPressed: null,
+          icon: const Icon(Icons.more_vert),
+          onPressed: () => null,
         ),
       ],
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

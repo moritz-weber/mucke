@@ -13,6 +13,9 @@ class PlayerStateRepositoryImpl implements PlayerStateRepository {
   Stream<int> get currentIndexStream => _playerStateDataSource.currentIndexStream;
 
   @override
+  Stream<Song> get currentSongStream => _playerStateDataSource.currentSongStream;
+
+  @override
   Stream<LoopMode> get loopModeStream => _playerStateDataSource.loopModeStream;
 
   @override

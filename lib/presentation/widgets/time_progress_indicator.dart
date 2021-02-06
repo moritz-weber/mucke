@@ -16,7 +16,7 @@ class TimeProgressIndicator extends StatelessWidget {
 
     return Observer(
       builder: (BuildContext context) {
-        final int duration = audioStore.currentSong?.duration ?? 1000;
+        final int duration = audioStore.currentSongStream.value?.duration ?? 1000;
 
         return Row(
           children: [

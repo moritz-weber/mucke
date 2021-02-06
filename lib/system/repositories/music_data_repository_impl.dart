@@ -38,26 +38,30 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
       _musicDataSource.getAlbumSongStream(album as AlbumModel);
 
   @override
+  Stream<List<Album>> getArtistAlbumStream(Artist artist) =>
+      _musicDataSource.getArtistAlbumStream(artist as ArtistModel);
+
+  @override
   Future<void> updateDatabase() async {
     _log.info('updateDatabase called');
 
     final localMusic = await _localMusicFetcher.getLocalMusic();
 
-    await updateArtists(localMusic['ARTISTS'] as List<ArtistModel>);
-    final albumIdMap = await updateAlbums(localMusic['ALBUMS'] as List<AlbumModel>);
-    await updateSongs(localMusic['SONGS'] as List<SongModel>, albumIdMap);
+    await _updateArtists(localMusic['ARTISTS'] as List<ArtistModel>);
+    final albumIdMap = await _updateAlbums(localMusic['ALBUMS'] as List<AlbumModel>);
+    await _updateSongs(localMusic['SONGS'] as List<SongModel>, albumIdMap);
 
     _log.info('updateDatabase finished');
   }
 
-  Future<void> updateArtists(List<ArtistModel> artists) async {
+  Future<void> _updateArtists(List<ArtistModel> artists) async {
     await _musicDataSource.deleteAllArtists();
     for (final ArtistModel artist in artists) {
       await _musicDataSource.insertArtist(artist);
     }
   }
 
-  Future<Map<int, int>> updateAlbums(List<AlbumModel> albums) async {
+  Future<Map<int, int>> _updateAlbums(List<AlbumModel> albums) async {
     await _musicDataSource.deleteAllAlbums();
     final Map<int, int> albumIdMap = {};
 
@@ -85,7 +89,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
     return albumIdMap;
   }
 
-  Future<void> updateSongs(List<SongModel> songs, Map<int, int> albumIdMap) async {
+  Future<void> _updateSongs(List<SongModel> songs, Map<int, int> albumIdMap) async {
     final Directory dir = await getApplicationSupportDirectory();
 
     final List<SongModel> songsToInsert = [];
@@ -100,10 +104,5 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
       }
     }
     await _musicDataSource.insertSongs(songsToInsert);
-  }
-
-  @override
-  Stream<List<Album>> getArtistAlbumStream(Artist artist) {
-    return _musicDataSource.getArtistAlbumStream(artist as ArtistModel);
   }
 }
