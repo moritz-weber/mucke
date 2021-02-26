@@ -18,70 +18,74 @@ class CurrentlyPlayingBar extends StatelessWidget {
 
     return Observer(
       builder: (BuildContext context) {
-        final Song song = audioStore.currentSongStream.value;
-        if (song != null) {
-          return Column(
-            verticalDirection: VerticalDirection.up,
-            children: <Widget>[
-              GestureDetector(
-                onTap: () => _onTap(context),
-                child: Container(
-                  color: Colors.transparent,
-                  child: Row(
-                    children: <Widget>[
-                      Image(
-                        image: getAlbumImage(song.albumArtPath),
-                        height: 64.0,
-                      ),
-                      Container(
-                        width: 10.0,
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              song.title,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                            ),
-                            Text(
-                              song.artist,
-                              style: const TextStyle(
-                                fontSize: 12.0,
-                                color: Colors.white70,
-                              ),
-                            )
-                          ],
+        if (audioStore.currentSongStream != null) {
+          final Song song = audioStore.currentSongStream.value;
+          final Duration position = audioStore.currentPositionStream?.value ?? const Duration(seconds: 0);
+          if (song != null) {
+            return Column(
+              verticalDirection: VerticalDirection.up,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () => _onTap(context),
+                  child: Container(
+                    color: Colors.transparent,
+                    child: Row(
+                      children: <Widget>[
+                        Image(
+                          image: getAlbumImage(song.albumArtPath),
+                          height: 64.0,
                         ),
-                      ),
-                      const PlayPauseButton(
-                        circle: false,
-                      ),
-                      const NextButton(),
+                        Container(
+                          width: 10.0,
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                song.title,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2,
+                              ),
+                              Text(
+                                song.artist,
+                                style: const TextStyle(
+                                  fontSize: 12.0,
+                                  color: Colors.white70,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        const PlayPauseButton(
+                          circle: false,
+                        ),
+                        const NextButton(),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  child: LinearProgressIndicator(
+                    value: position.inMilliseconds / song.duration,
+                    valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+                    backgroundColor: Colors.white10,
+                  ),
+                  height: 2,
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(color: Theme.of(context).primaryColor, blurRadius: 1),
                     ],
                   ),
                 ),
-              ),
-              Container(
-                child: LinearProgressIndicator(
-                  value: audioStore.currentPositionStream.value / song.duration,
-                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
-                  backgroundColor: Colors.white10,
-                ),
-                height: 2,
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(color: Theme.of(context).primaryColor, blurRadius: 1),
-                  ],
-                ),
-              ),
-            ],
+              ],
+            );
+          }
+          return Container(
+            height: 0,
           );
         }
-        return Container(
-          height: 0,
-        );
+        return Container();
       },
     );
   }

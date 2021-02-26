@@ -1,4 +1,5 @@
 import '../../domain/entities/loop_mode.dart';
+import '../../domain/entities/queue_item.dart';
 import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/entities/song.dart';
 import '../../domain/repositories/persistent_player_state_repository.dart';
@@ -23,4 +24,24 @@ class PlayerStateRepositoryImpl implements PlayerStateRepository {
 
   @override
   Stream<ShuffleMode> get shuffleModeStream => _playerStateDataSource.shuffleModeStream;
+
+  @override
+  void setCurrentIndex(int index) {
+    // TODO: implement setCurrentIndex
+  }
+
+  @override
+  void setLoopMode(LoopMode loopMode) {
+    // TODO: implement setLoopMode
+  }
+
+  @override
+  void setQueue(List<QueueItem> queue) {
+    // TODO: implement setQueue
+  }
+
+  @override
+  void setShuffleMode(ShuffleMode shuffleMode) {
+    // TODO: implement setShuffleMode
+  }
 }

@@ -11,15 +11,13 @@ ImageProvider getAlbumImage(String albumArtPath) {
   return FileImage(File(albumArtPath));
 }
 
-String msToTimeString(int milliseconds) {
+String msToTimeString(Duration duration) {
   String twoDigits(num n) {
     if (n >= 10) {
       return '$n';
     }
     return '0$n';
   }
-
-  final Duration duration = Duration(seconds: (milliseconds / 1000).round());
 
   final int hours = duration.inHours;
   final int minutes = duration.inMinutes.remainder(60) as int;

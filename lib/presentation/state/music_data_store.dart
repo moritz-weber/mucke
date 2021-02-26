@@ -7,26 +7,35 @@ import '../../domain/entities/song.dart';
 import '../../domain/repositories/music_data_modifier_repository.dart';
 import '../../domain/repositories/music_data_repository.dart';
 import '../../domain/repositories/settings_repository.dart';
+import '../../domain/usecases/update_database.dart';
 
 part 'music_data_store.g.dart';
 
 class MusicDataStore extends _MusicDataStore with _$MusicDataStore {
   MusicDataStore({
-    @required MusicDataRepository musicDataRepository,
-    @required SettingsRepository settingsRepository,
+    @required MusicDataInfoRepository musicDataInfoRepository,
     @required MusicDataModifierRepository musicDataModifierRepository,
-  }) : super(musicDataRepository, settingsRepository, musicDataModifierRepository);
+    @required SettingsRepository settingsRepository,
+    @required UpdateDatabase updateDatabase,
+  }) : super(
+          musicDataInfoRepository,
+          settingsRepository,
+          musicDataModifierRepository,
+          updateDatabase,
+        );
 }
 
 abstract class _MusicDataStore with Store {
-  _MusicDataStore(
-      this._musicDataRepository, this._settingsRepository, this._musicDataModifierRepository) {
-    songStream = _musicDataRepository.songStream.asObservable(initialValue: []);
-    albumStream = _musicDataRepository.albumStream.asObservable(initialValue: []);
-    artistStream = _musicDataRepository.artistStream.asObservable(initialValue: []);
+  _MusicDataStore(this._musicDataInfoRepository, this._settingsRepository,
+      this._musicDataModifierRepository, this._updateDatabase) {
+    songStream = _musicDataInfoRepository.songStream.asObservable(initialValue: []);
+    albumStream = _musicDataInfoRepository.albumStream.asObservable(initialValue: []);
+    artistStream = _musicDataInfoRepository.artistStream.asObservable(initialValue: []);
   }
 
-  final MusicDataRepository _musicDataRepository;
+  final UpdateDatabase _updateDatabase;
+
+  final MusicDataInfoRepository _musicDataInfoRepository;
   final MusicDataModifierRepository _musicDataModifierRepository;
   final SettingsRepository _settingsRepository;
 
@@ -49,30 +58,30 @@ abstract class _MusicDataStore with Store {
   bool isUpdatingDatabase = false;
 
   @computed
-  List<Album> get sortedArtistAlbums => artistAlbumStream.value.toList()..sort((a, b) {
-    if (b.pubYear == null)
-      return -1;
-    if (a.pubYear == null)
-      return 1;
-    return -a.pubYear.compareTo(b.pubYear);
-  });
+  List<Album> get sortedArtistAlbums => artistAlbumStream.value.toList()
+    ..sort((a, b) {
+      if (b.pubYear == null) return -1;
+      if (a.pubYear == null) return 1;
+      return -a.pubYear.compareTo(b.pubYear);
+    });
 
   @action
   Future<void> updateDatabase() async {
     isUpdatingDatabase = true;
-    await _musicDataRepository.updateDatabase();
+    await _updateDatabase();
     isUpdatingDatabase = false;
   }
 
   @action
   Future<void> fetchSongsFromAlbum(Album album) async {
-    albumSongStream = _musicDataRepository.getAlbumSongStream(album).asObservable(initialValue: []);
+    albumSongStream =
+        _musicDataInfoRepository.getAlbumSongStream(album).asObservable(initialValue: []);
   }
 
   @action
   Future<void> fetchAlbumsFromArtist(Artist artist) async {
     artistAlbumStream =
-        _musicDataRepository.getArtistAlbumStream(artist).asObservable(initialValue: []);
+        _musicDataInfoRepository.getArtistAlbumStream(artist).asObservable(initialValue: []);
   }
 
   Future<void> setSongBlocked(Song song, bool blocked) async {

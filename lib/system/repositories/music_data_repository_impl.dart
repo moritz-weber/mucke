@@ -7,7 +7,7 @@ import '../../domain/entities/album.dart';
 import '../../domain/entities/artist.dart';
 import '../../domain/entities/song.dart';
 import '../../domain/repositories/music_data_repository.dart';
-import '../datasources/local_music_fetcher_contract.dart';
+import '../datasources/local_music_fetcher.dart';
 import '../datasources/music_data_source_contract.dart';
 import '../models/album_model.dart';
 import '../models/artist_model.dart';
@@ -23,6 +23,11 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   final MusicDataSource _musicDataSource;
 
   static final _log = Logger('MusicDataRepository');
+
+  @override
+  Future<Song> getSongByPath(String path) async {
+    return await _musicDataSource.getSongByPath(path);
+  }
 
   @override
   Stream<List<Song>> get songStream => _musicDataSource.songStream;

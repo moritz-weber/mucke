@@ -4,49 +4,78 @@ import 'package:mobx/mobx.dart';
 import '../../domain/entities/album.dart';
 import '../../domain/entities/artist.dart';
 import '../../domain/entities/loop_mode.dart';
-import '../../domain/entities/playback_state.dart';
 import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/entities/song.dart';
-import '../../domain/repositories/audio_repository.dart';
-import '../../domain/repositories/persistent_player_state_repository.dart';
+import '../../domain/repositories/audio_player_repository.dart';
+import '../../domain/usecases/pause.dart';
+import '../../domain/usecases/play.dart';
+import '../../domain/usecases/play_songs.dart';
+import '../../domain/usecases/seek_to_next.dart';
+import '../../domain/usecases/seek_to_previous.dart';
+import '../../domain/usecases/set_loop_mode.dart';
+import '../../domain/usecases/shuffle_all.dart';
 
 part 'audio_store.g.dart';
 
 class AudioStore extends _AudioStore with _$AudioStore {
   AudioStore({
-    @required AudioRepository audioRepository,
-    @required PlayerStateRepository persistentPlayerStateRepository,
-  }) : super(audioRepository, persistentPlayerStateRepository);
+    @required Pause pause,
+    @required Play play,
+    @required PlaySongs playSongs,
+    @required SeekToNext seekToNext,
+    @required SeekToPrevious seekToPrevious,
+    @required SetLoopMode setLoopMode,
+    @required ShuffleAll shuffleAll,
+    @required AudioPlayerInfoRepository audioPlayerInfoRepository,
+  }) : super(playSongs, audioPlayerInfoRepository, pause, play, seekToNext, seekToPrevious,
+            setLoopMode, shuffleAll);
 }
 
 abstract class _AudioStore with Store {
-  _AudioStore(this._audioRepository, this._persistentPlayerStateRepository) {
-    currentPositionStream = _audioRepository.currentPositionStream.asObservable(initialValue: 0);
+  _AudioStore(
+    this._playSongs,
+    this._audioPlayerInfoRepository,
+    this._pause,
+    this._play,
+    this._seekToNext,
+    this._seekToPrevious,
+    this._setLoopMode,
+    this._shuffleAll,
+  ) {
+    currentPositionStream = _audioPlayerInfoRepository.positionStream
+        .asObservable(initialValue: const Duration(seconds: 0));
 
-    queueStream = _persistentPlayerStateRepository.queueStream.asObservable();
+    queueStream = _audioPlayerInfoRepository.songListStream.asObservable();
 
-    queueIndexStream = _persistentPlayerStateRepository.currentIndexStream.asObservable();
+    queueIndexStream = _audioPlayerInfoRepository.currentIndexStream.asObservable();
 
-    currentSongStream = _persistentPlayerStateRepository.currentSongStream.asObservable();
+    currentSongStream = _audioPlayerInfoRepository.currentSongStream.asObservable();
 
-    shuffleModeStream = _persistentPlayerStateRepository.shuffleModeStream.asObservable();
+    shuffleModeStream = _audioPlayerInfoRepository.shuffleModeStream.asObservable();
 
-    loopModeStream = _persistentPlayerStateRepository.loopModeStream.asObservable();
+    loopModeStream = _audioPlayerInfoRepository.loopModeStream.asObservable();
 
-    playbackStateStream = _audioRepository.playbackStateStream.asObservable();
+    playingStream = _audioPlayerInfoRepository.playingStream.asObservable();
   }
 
-  final AudioRepository _audioRepository;
-  final PlayerStateRepository _persistentPlayerStateRepository;
+  final AudioPlayerInfoRepository _audioPlayerInfoRepository;
+
+  final Pause _pause;
+  final Play _play;
+  final PlaySongs _playSongs;
+  final SeekToNext _seekToNext;
+  final SeekToPrevious _seekToPrevious;
+  final SetLoopMode _setLoopMode;
+  final ShuffleAll _shuffleAll;
 
   @observable
   ObservableStream<Song> currentSongStream;
 
   @observable
-  ObservableStream<PlaybackState> playbackStateStream;
+  ObservableStream<bool> playingStream;
 
   @observable
-  ObservableStream<int> currentPositionStream;
+  ObservableStream<Duration> currentPositionStream;
 
   @observable
   ObservableStream<List<Song>> queueStream;
@@ -61,58 +90,58 @@ abstract class _AudioStore with Store {
   ObservableStream<LoopMode> loopModeStream;
 
   Future<void> playSong(int index, List<Song> songList) async {
-    _audioRepository.playSong(index, songList);
+    _playSongs(songs: songList, initialIndex: index);
   }
 
   Future<void> play() async {
-    _audioRepository.play();
+    _play();
   }
 
   Future<void> pause() async {
-    _audioRepository.pause();
+    _pause();
   }
 
   Future<void> skipToNext() async {
-    _audioRepository.skipToNext();
+    _seekToNext();
   }
 
   Future<void> skipToPrevious() async {
-    _audioRepository.skipToPrevious();
+    _seekToPrevious();
   }
 
   Future<void> setIndex(int index) async {
-    _audioRepository.setIndex(index);
+    // _audioInterface.setIndex(index);
   }
 
   Future<void> setShuffleMode(ShuffleMode shuffleMode) async {
-    _audioRepository.setShuffleMode(shuffleMode);
+    // _audioInterface.setShuffleMode(shuffleMode);
   }
 
   Future<void> setLoopMode(LoopMode loopMode) async {
-    _audioRepository.setLoopMode(loopMode);
+    _setLoopMode(loopMode);
   }
 
   Future<void> shuffleAll() async {
-    _audioRepository.shuffleAll();
+    _shuffleAll();
   }
 
   Future<void> addToQueue(Song song) async {
-    _audioRepository.addToQueue(song);
+    // _audioInterface.addToQueue(song);
   }
 
   Future<void> moveQueueItem(int oldIndex, int newIndex) async {
-    _audioRepository.moveQueueItem(oldIndex, newIndex);
+    // _audioInterface.moveQueueItem(oldIndex, newIndex);
   }
 
   Future<void> removeQueueIndex(int index) async {
-    _audioRepository.removeQueueIndex(index);
+    // _audioInterface.removeQueueIndex(index);
   }
 
   Future<void> playAlbum(Album album) async {
-    _audioRepository.playAlbum(album);
+    // _audioInterface.playAlbum(album);
   }
 
   Future<void> shuffleArtist(Artist artist) async {
-    _audioRepository.playArtist(artist, shuffleMode: ShuffleMode.plus);
+    // _audioInterface.playArtist(artist, shuffleMode: ShuffleMode.plus);
   }
 }

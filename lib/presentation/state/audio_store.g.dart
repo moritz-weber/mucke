@@ -24,19 +24,18 @@ mixin _$AudioStore on _AudioStore, Store {
     });
   }
 
-  final _$playbackStateStreamAtom =
-      Atom(name: '_AudioStore.playbackStateStream');
+  final _$playingStreamAtom = Atom(name: '_AudioStore.playingStream');
 
   @override
-  ObservableStream<PlaybackState> get playbackStateStream {
-    _$playbackStateStreamAtom.reportRead();
-    return super.playbackStateStream;
+  ObservableStream<bool> get playingStream {
+    _$playingStreamAtom.reportRead();
+    return super.playingStream;
   }
 
   @override
-  set playbackStateStream(ObservableStream<PlaybackState> value) {
-    _$playbackStateStreamAtom.reportWrite(value, super.playbackStateStream, () {
-      super.playbackStateStream = value;
+  set playingStream(ObservableStream<bool> value) {
+    _$playingStreamAtom.reportWrite(value, super.playingStream, () {
+      super.playingStream = value;
     });
   }
 
@@ -44,13 +43,13 @@ mixin _$AudioStore on _AudioStore, Store {
       Atom(name: '_AudioStore.currentPositionStream');
 
   @override
-  ObservableStream<int> get currentPositionStream {
+  ObservableStream<Duration> get currentPositionStream {
     _$currentPositionStreamAtom.reportRead();
     return super.currentPositionStream;
   }
 
   @override
-  set currentPositionStream(ObservableStream<int> value) {
+  set currentPositionStream(ObservableStream<Duration> value) {
     _$currentPositionStreamAtom.reportWrite(value, super.currentPositionStream,
         () {
       super.currentPositionStream = value;
@@ -121,7 +120,7 @@ mixin _$AudioStore on _AudioStore, Store {
   String toString() {
     return '''
 currentSongStream: ${currentSongStream},
-playbackStateStream: ${playbackStateStream},
+playingStream: ${playingStream},
 currentPositionStream: ${currentPositionStream},
 queueStream: ${queueStream},
 queueIndexStream: ${queueIndexStream},

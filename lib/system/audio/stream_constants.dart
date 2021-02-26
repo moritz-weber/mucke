@@ -1,8 +1,0 @@
-const String PLAY_WITH_CONTEXT = 'PLAY_WITH_CONTEXT';
-const String SHUFFLE_ALL = 'SHUFFLE_ALL';
-const String SET_SHUFFLE_MODE = 'SET_SHUFFLE_MODE';
-const String SET_LOOP_MODE = 'SET_LOOP_MODE';
-const String SET_INDEX = 'SET_INDEX';
-const String MOVE_QUEUE_ITEM = 'MOVE_QUEUE_ITEM';
-const String PLAY_ALBUM = 'PLAY_ALBUM';
-const String PLAY_ARTIST = 'PLAY_ARTIST';

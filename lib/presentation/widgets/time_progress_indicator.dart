@@ -16,7 +16,8 @@ class TimeProgressIndicator extends StatelessWidget {
 
     return Observer(
       builder: (BuildContext context) {
-        final int duration = audioStore.currentSongStream.value?.duration ?? 1000;
+        final duration =
+            Duration(milliseconds: audioStore.currentSongStream.value?.duration ?? 1000);
 
         return Row(
           children: [
@@ -37,7 +38,9 @@ class TimeProgressIndicator extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: FractionallySizedBox(
                   widthFactor: min(
-                      audioStore.currentPositionStream.value / duration, 1.0),
+                    audioStore.currentPositionStream.value.inMilliseconds / duration.inMilliseconds,
+                    1.0,
+                  ),
                   heightFactor: 1.0,
                   child: Container(
                     height: double.infinity,
