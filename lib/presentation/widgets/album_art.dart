@@ -18,8 +18,6 @@ class AlbumArt extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(2.0),
           boxShadow: const [
-            BoxShadow(color: Colors.black45, blurRadius: 1, offset: Offset(0, 1)),
-            BoxShadow(color: Colors.black38, blurRadius: 5, offset: Offset(0, 1)),
             BoxShadow(color: Colors.black26, blurRadius: 8, offset: Offset(0, 1)),
           ],
         ),
@@ -31,22 +29,6 @@ class AlbumArt extends StatelessWidget {
               child: Image(
                 image: getAlbumImage(song.albumArtPath),
                 fit: BoxFit.cover,
-              ),
-            ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: 150,
-              child: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [Color(0x00000000), Color(0xBB000000)],
-                    stops: [0.0, 1.0],
-                  ),
-                ),
               ),
             ),
             Positioned(

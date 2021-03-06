@@ -3,30 +3,104 @@ import '../entities/shuffle_mode.dart';
 import '../entities/song.dart';
 import '../repositories/music_data_repository.dart';
 
-class QueueGenerationModule {
-  QueueGenerationModule(this._musicDataRepository);
+class QueueManagerModule {
+  QueueManagerModule(this._musicDataRepository);
+
+  List<QueueItem> get queue => _queue;
 
   final MusicDataInfoRepository _musicDataRepository;
 
-  Future<List<QueueItem>> generateQueue(
+  List<Song> _originalSongList = [];
+  List<Song> _addedSongs = [];
+  // this resembles the queue in AudioPlayer
+  List<QueueItem> _queue;
+
+  void addToQueue(Song song) {
+    _addedSongs.add(song);
+    final queueItem = QueueItem(
+      song,
+      originalIndex: _addedSongs.length - 1,
+      type: QueueItemType.added,
+    );
+    _queue.add(queueItem);
+  }
+
+  void insertIntoQueue(Song song, int index) {
+    _addedSongs.add(song);
+    final queueItem = QueueItem(
+      song,
+      originalIndex: _addedSongs.length - 1,
+      type: QueueItemType.added,
+    );
+    _queue.insert(index, queueItem);
+  }
+
+  void moveQueueItem(int oldIndex, int newIndex) {
+    final queueItem = _queue.removeAt(oldIndex);
+    _queue.insert(newIndex, queueItem);
+  }
+
+  void removeQueueIndex(int index) {
+    final queueItem = _queue[index];
+
+    if (queueItem.type == QueueItemType.added) {
+      _addedSongs.removeAt(queueItem.originalIndex);
+    } else if (queueItem.type == QueueItemType.standard) {
+      _originalSongList.removeAt(queueItem.originalIndex);
+    }
+
+    for (int i = 0; i < queue.length; i++) {
+      if (queue[i].type == queueItem.type && queue[i].originalIndex > queueItem.originalIndex) {
+        queue[i] = QueueItem(
+          queue[i].song,
+          originalIndex: queue[i].originalIndex - 1,
+          type: queue[i].type,
+        );
+      }
+    }
+
+    _queue.removeAt(index);
+  }
+
+  Future<void> reshuffleQueue(
+    ShuffleMode shuffleMode,
+    int currentIndex,
+  ) async {
+    final songs = _originalSongList.cast<Song>() + _addedSongs;
+    final currentQueueItem = _queue[currentIndex];
+    int originalIndex = currentQueueItem.originalIndex;
+    if (currentQueueItem.type == QueueItemType.added) {
+      originalIndex += _originalSongList.length;
+    }
+
+    _queue = await _generateQueue(shuffleMode, songs, originalIndex);
+  }
+
+  Future<void> setQueue(
     ShuffleMode shuffleMode,
     List<Song> songs,
     int startIndex,
   ) async {
-    List<QueueItem> queue;
+    _originalSongList = songs;
+    _addedSongs = [];
 
+    _queue = await _generateQueue(shuffleMode, songs, startIndex);
+  }
+
+  // ignore: missing_return
+  Future<List<QueueItem>> _generateQueue(
+    ShuffleMode shuffleMode,
+    List<Song> songs,
+    int startIndex,
+  ) async {
     switch (shuffleMode) {
       case ShuffleMode.none:
-        queue = _generateNormalQueue(songs);
-        break;
+        return _generateNormalQueue(songs);
       case ShuffleMode.standard:
-        queue = _generateShuffleQueue(songs, startIndex);
-        break;
+        return _generateShuffleQueue(songs, startIndex);
       case ShuffleMode.plus:
-        queue = await _generateShufflePlusQueue(songs, startIndex);
+        return await _generateShufflePlusQueue(songs, startIndex);
     }
-
-    return queue;
   }
 
   List<QueueItem> _generateNormalQueue(List<Song> songs) {

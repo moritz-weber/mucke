@@ -6,21 +6,27 @@ import 'package:just_audio/just_audio.dart';
 
 import 'domain/actors/audio_player_actor.dart';
 import 'domain/actors/platform_integration_actor.dart';
-import 'domain/modules/queue_generator.dart';
+import 'domain/modules/queue_manager.dart';
 import 'domain/repositories/audio_player_repository.dart';
 import 'domain/repositories/music_data_modifier_repository.dart';
 import 'domain/repositories/music_data_repository.dart';
 import 'domain/repositories/persistent_player_state_repository.dart';
 import 'domain/repositories/platform_integration_repository.dart';
 import 'domain/repositories/settings_repository.dart';
+import 'domain/usecases/add_to_queue.dart';
 import 'domain/usecases/handle_playback_state.dart';
+import 'domain/usecases/move_queue_item.dart';
 import 'domain/usecases/pause.dart';
 import 'domain/usecases/play.dart';
+import 'domain/usecases/play_next.dart';
 import 'domain/usecases/play_songs.dart';
+import 'domain/usecases/remove_queue_index.dart';
+import 'domain/usecases/seek_to_index.dart';
 import 'domain/usecases/seek_to_next.dart';
 import 'domain/usecases/seek_to_previous.dart';
 import 'domain/usecases/set_current_song.dart';
 import 'domain/usecases/set_loop_mode.dart';
+import 'domain/usecases/set_shuffle_mode.dart';
 import 'domain/usecases/shuffle_all.dart';
 import 'domain/usecases/update_database.dart';
 import 'presentation/state/audio_store.dart';
@@ -64,12 +70,18 @@ Future<void> setupGetIt() async {
     () {
       final audioStore = AudioStore(
         audioPlayerInfoRepository: getIt(),
+        addToQueue: getIt(),
+        moveQueueItem: getIt(),
         pause: getIt(),
         play: getIt(),
+        playNext: getIt(),
         playSongs: getIt(),
+        removeQueueIndex: getIt(),
+        seekToIndex: getIt(),
         seekToNext: getIt(),
         seekToPrevious: getIt(),
         setLoopMode: getIt(),
+        setShuffleMode: getIt(),
         shuffleAll: getIt(),
       );
       return audioStore;
@@ -83,8 +95,24 @@ Future<void> setupGetIt() async {
   );
 
   // use cases
+  getIt.registerLazySingleton<AddToQueue>(
+    () => AddToQueue(
+      getIt(),
+      getIt(),
+      getIt(),
+      getIt(),
+    ),
+  );
   getIt.registerLazySingleton<HandlePlaybackEvent>(
     () => HandlePlaybackEvent(
+      getIt(),
+    ),
+  );
+  getIt.registerLazySingleton<MoveQueueItem>(
+    () => MoveQueueItem(
+      getIt(),
+      getIt(),
+      getIt(),
       getIt(),
     ),
   );
@@ -98,11 +126,32 @@ Future<void> setupGetIt() async {
       getIt(),
     ),
   );
+  getIt.registerLazySingleton<PlayNext>(
+    () => PlayNext(
+      getIt(),
+      getIt(),
+      getIt(),
+      getIt(),
+    ),
+  );
   getIt.registerLazySingleton<PlaySongs>(
     () => PlaySongs(
       getIt(),
       getIt(),
       getIt(),
+      getIt(),
+    ),
+  );
+  getIt.registerLazySingleton<RemoveQueueIndex>(
+    () => RemoveQueueIndex(
+      getIt(),
+      getIt(),
+      getIt(),
+      getIt(),
+    ),
+  );
+  getIt.registerLazySingleton<SeekToIndex>(
+    () => SeekToIndex(
       getIt(),
     ),
   );
@@ -126,6 +175,14 @@ Future<void> setupGetIt() async {
       getIt(),
     ),
   );
+  getIt.registerLazySingleton<SetShuffleMode>(
+    () => SetShuffleMode(
+      getIt(),
+      getIt(),
+      getIt(),
+      getIt(),
+    ),
+  );
   getIt.registerLazySingleton<ShuffleAll>(
     () => ShuffleAll(
       getIt(),
@@ -142,8 +199,8 @@ Future<void> setupGetIt() async {
   );
 
   // modules
-  getIt.registerLazySingleton<QueueGenerationModule>(
-    () => QueueGenerationModule(
+  getIt.registerLazySingleton<QueueManagerModule>(
+    () => QueueManagerModule(
       getIt(),
     ),
   );

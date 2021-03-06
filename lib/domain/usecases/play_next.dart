@@ -1,11 +1,11 @@
-import '../entities/shuffle_mode.dart';
+import '../entities/song.dart';
 import '../modules/queue_manager.dart';
 import '../repositories/audio_player_repository.dart';
 import '../repositories/persistent_player_state_repository.dart';
 import '../repositories/platform_integration_repository.dart';
 
-class SetShuffleMode {
-  SetShuffleMode(
+class PlayNext {
+  PlayNext(
     this._audioPlayerRepository,
     this._platformIntegrationRepository,
     this._playerStateRepository,
@@ -18,23 +18,14 @@ class SetShuffleMode {
 
   final QueueManagerModule _queueManagerModule;
 
-  Future<void> call(ShuffleMode shuffleMode) async {
-    _audioPlayerRepository.setShuffleMode(shuffleMode);
-
+  Future<void> call(Song song) async {
     final currentIndex = _audioPlayerRepository.currentIndexStream.value;
-    final originalIndex = _queueManagerModule.queue[currentIndex].originalIndex;
 
-    await _queueManagerModule.reshuffleQueue(shuffleMode, currentIndex);
-    final queue = _queueManagerModule.queue;
+    _queueManagerModule.insertIntoQueue(song, currentIndex + 1);
+    await _audioPlayerRepository.playNext(song);
 
-    final songList = queue.map((e) => e.song).toList();
-    final splitIndex = shuffleMode == ShuffleMode.none ? originalIndex : 0;
-    _audioPlayerRepository.replaceQueueAroundIndex(
-      index: currentIndex,
-      before: songList.sublist(0, splitIndex),
-      after: songList.sublist(splitIndex + 1),
-    );
-
+    final songList = _audioPlayerRepository.queueStream.value;
+    print(songList.length);
     _platformIntegrationRepository.setQueue(songList);
   }
 }

@@ -47,7 +47,7 @@ class QueuePage extends StatelessWidget {
                               subtitle: '${song.artist}',
                               albumArtPath: song.albumArtPath,
                               highlight: index == activeIndex,
-                              onTap: () => audioStore.setIndex(index),
+                              onTap: () => audioStore.seekToIndex(index),
                             ),
                             onDismissed: (direction) {
                               audioStore.removeQueueIndex(index);

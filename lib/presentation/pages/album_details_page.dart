@@ -109,6 +109,13 @@ class AlbumDetailsPage extends StatelessWidget {
             child: Column(
               children: [
                 ListTile(
+                  title: const Text('Play next'),
+                  onTap: () {
+                    audioStore.playNext(song);
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
                   title: const Text('Add to queue'),
                   onTap: () {
                     audioStore.addToQueue(song);

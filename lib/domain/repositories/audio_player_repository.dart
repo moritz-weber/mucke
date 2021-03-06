@@ -3,7 +3,6 @@ import 'package:rxdart/rxdart.dart';
 import '../entities/event.dart';
 import '../entities/loop_mode.dart';
 import '../entities/playback_event.dart';
-import '../entities/queue_item.dart';
 import '../entities/shuffle_mode.dart';
 import '../entities/song.dart';
 
@@ -12,8 +11,7 @@ abstract class AudioPlayerInfoRepository {
 
   ValueStream<ShuffleMode> get shuffleModeStream;
   ValueStream<LoopMode> get loopModeStream;
-  ValueStream<List<Song>> get songListStream;
-  ValueStream<List<QueueItem>> get queueStream;
+  ValueStream<List<Song>> get queueStream;
 
   ValueStream<int> get currentIndexStream;
   Stream<Song> get currentSongStream;
@@ -28,14 +26,16 @@ abstract class AudioPlayerRepository extends AudioPlayerInfoRepository {
   Future<void> stop();
   Future<bool> seekToNext();
   Future<void> seekToPrevious();
+  Future<void> seekToIndex(int index);
   Future<void> dispose();
 
   Future<void> playSong(Song song);
-  Future<void> loadQueue({List<QueueItem> queue, int initialIndex});
+  Future<void> loadQueue({List<Song> queue, int initialIndex});
   Future<void> addToQueue(Song song);
+  Future<void> playNext(Song song);
   Future<void> moveQueueItem(int oldIndex, int newIndex);
   Future<void> removeQueueIndex(int index);
-  Future<void> setIndex(int index);
+  Future<void> replaceQueueAroundIndex({List<Song> before, List<Song> after, int index});
 
   /// Set the ShuffleMode. Does not affect playback/queue.
   Future<void> setShuffleMode(ShuffleMode shuffleMode);

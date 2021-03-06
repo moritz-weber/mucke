@@ -1,5 +1,6 @@
+import '../entities/shuffle_mode.dart';
 import '../entities/song.dart';
-import '../modules/queue_generator.dart';
+import '../modules/queue_manager.dart';
 import '../repositories/audio_player_repository.dart';
 import '../repositories/persistent_player_state_repository.dart';
 import '../repositories/platform_integration_repository.dart';
@@ -16,27 +17,32 @@ class PlaySongs {
   final PlatformIntegrationRepository _platformIntegrationRepository;
   final PlayerStateRepository _playerStateRepository;
 
-  final QueueGenerationModule _queueGenerationModule;
+  final QueueManagerModule _queueGenerationModule;
 
   Future<void> call({List<Song> songs, int initialIndex}) async {
     if (0 <= initialIndex && initialIndex < songs.length) {
       // _audioPlayerRepository.playSong(songs[initialIndex]);
 
-      final queueItems = await _queueGenerationModule.generateQueue(
-        _audioPlayerRepository.shuffleModeStream.value,
+      final shuffleMode = _audioPlayerRepository.shuffleModeStream.value;
+
+      await _queueGenerationModule.setQueue(
+        shuffleMode,
         songs,
         initialIndex,
       );
 
+      final queueItems = _queueGenerationModule.queue;
+      final songList = queueItems.map((e) => e.song).toList();
+
       await _audioPlayerRepository.loadQueue(
-        initialIndex: initialIndex,
-        queue: queueItems,
+        initialIndex: shuffleMode == ShuffleMode.none ? initialIndex : 0,
+        queue: songList,
       );
       _audioPlayerRepository.play();
 
       _platformIntegrationRepository.setCurrentSong(songs[initialIndex]);
       // _platformIntegrationRepository.play();
-      _platformIntegrationRepository.setQueue(queueItems.map((e) => e.song).toList());
+      _platformIntegrationRepository.setQueue(songList);
     }
   }
 }
