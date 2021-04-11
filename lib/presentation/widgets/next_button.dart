@@ -33,7 +33,7 @@ class NextButton extends StatelessWidget {
         }
         return IconButton(
           icon: const Icon(
-            Icons.skip_next,
+            Icons.skip_next_rounded,
           ),
           iconSize: iconSize,
           onPressed: null,

@@ -17,31 +17,34 @@ class SongCustomizationButtons extends StatelessWidget {
 
     return Observer(
       builder: (BuildContext context) {
-        print('building buttons');
         final Song song = audioStore.currentSongStream.value;
-        return Row(
-          children: [
-            IconButton(
-              icon: Icon(
-                song.next == null ? Icons.link_off : Icons.link,
-                color: song.next == null ? Colors.white24 : Colors.white,
+        return Container(
+          child: Row(
+            children: [
+              IconButton(
+                icon: Icon(
+                  song.next == null ? Icons.link_off : Icons.link,
+                  color: song.next == null ? Colors.white24 : Colors.white,
+                ),
+                iconSize: 20.0,
+                onPressed: () => musicDataStore.toggleNextSongLink(song),
+                visualDensity: VisualDensity.compact,
               ),
-              iconSize: 20.0,
-              onPressed: () => musicDataStore.toggleNextSongLink(song),
-            ),
-            const Spacer(),
-            const LikeButton(),
-            const Spacer(),
-            IconButton(
-              icon: Icon(
-                Icons.remove_circle_outline_rounded,
-                size: 20.0,
-                color: song.blocked ? Colors.white : Colors.white24,
+              const LikeButton(
+                iconSize: 20.0,
               ),
-              onPressed: () => musicDataStore.setSongBlocked(song, !song.blocked),
-            ),
-          ],
-          mainAxisAlignment: MainAxisAlignment.center,
+              IconButton(
+                icon: Icon(
+                  Icons.remove_circle_outline_rounded,
+                  size: 20.0,
+                  color: song.blocked ? Colors.white : Colors.white24,
+                ),
+                onPressed: () => musicDataStore.setSongBlocked(song, !song.blocked),
+                visualDensity: VisualDensity.compact,
+              ),
+            ],
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          ),
         );
       },
     );

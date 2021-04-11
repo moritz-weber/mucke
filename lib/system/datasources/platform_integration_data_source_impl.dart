@@ -25,6 +25,16 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
     _eventSubject.add(PlatformIntegrationEvent(type: PlatformIntegrationEventType.pause));
   }
 
+  @override
+  Future<void> skipToNext() async {
+    _eventSubject.add(PlatformIntegrationEvent(type: PlatformIntegrationEventType.skipNext));
+  }
+
+  @override
+  Future<void> skipToPrevious() async {
+    _eventSubject.add(PlatformIntegrationEvent(type: PlatformIntegrationEventType.skipPrevious));
+  }
+
   // PlatformIntegrationDataSource interface
 
   @override

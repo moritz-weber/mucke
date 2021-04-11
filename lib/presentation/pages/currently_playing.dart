@@ -56,8 +56,8 @@ class CurrentlyPlayingPage extends StatelessWidget {
                       stops: const [
                         0.0,
                         0.2,
-                        0.55,
-                        0.7,
+                        0.6,
+                        0.75,
                         1.0,
                       ],
                     ),
@@ -108,11 +108,11 @@ class CurrentlyPlayingPage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         ),
                         const Spacer(
-                          flex: 1,
+                          flex: 10,
                         ),
                         Expanded(
-                          flex: 1000,
-                          child: Center(
+                          flex: 720,
+                                                  child: Center(
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 8.0,
@@ -125,14 +125,41 @@ class CurrentlyPlayingPage extends StatelessWidget {
                           ),
                         ),
                         const Spacer(
-                          flex: 60,
+                          flex: 50,
                         ),
-                        const Padding(
-                          padding: EdgeInsets.only(left: 2.0, right: 2.0),
-                          child: SongCustomizationButtons(),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 12.0, right: 12.0),
+                          child: Center(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  song.title,
+                                  overflow: TextOverflow.fade,
+                                  softWrap: false,
+                                  maxLines: 1,
+                                  style: TEXT_BIG.copyWith(
+                                      ),
+                                ),
+                                Text(
+                                  song.artist,
+                                  style: TEXT_SUBTITLE.copyWith(
+                                    color: Colors.grey[100],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                         const Spacer(
-                          flex: 30,
+                          flex: 50,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(left: 6.0, right: 6.0),
+                          child:  SongCustomizationButtons(),
+                        ),
+                        const Spacer(
+                          flex: 20,
                         ),
                         const Padding(
                           padding: EdgeInsets.symmetric(horizontal: 2.0),
@@ -146,7 +173,7 @@ class CurrentlyPlayingPage extends StatelessWidget {
                           child: TimeProgressIndicator(),
                         ),
                         const Spacer(
-                          flex: 100,
+                          flex: 60,
                         ),
                       ],
                     ),
