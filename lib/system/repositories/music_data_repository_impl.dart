@@ -43,6 +43,10 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
       _musicDataSource.getAlbumSongStream(album as AlbumModel);
 
   @override
+  Stream<List<Song>> getArtistSongStream(Artist artist) =>
+      _musicDataSource.getArtistSongStream(artist as ArtistModel);
+
+  @override
   Stream<List<Album>> getArtistAlbumStream(Artist artist) =>
       _musicDataSource.getArtistAlbumStream(artist as ArtistModel);
 

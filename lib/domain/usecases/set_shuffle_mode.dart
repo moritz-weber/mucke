@@ -18,23 +18,25 @@ class SetShuffleMode {
 
   final QueueManagerModule _queueManagerModule;
 
-  Future<void> call(ShuffleMode shuffleMode) async {
+  Future<void> call(ShuffleMode shuffleMode, {bool updateQueue = true}) async {
     _audioPlayerRepository.setShuffleMode(shuffleMode);
 
-    final currentIndex = _audioPlayerRepository.currentIndexStream.value;
-    final originalIndex = _queueManagerModule.queue[currentIndex].originalIndex;
+    if (updateQueue) {
+      final currentIndex = _audioPlayerRepository.currentIndexStream.value;
+      final originalIndex = _queueManagerModule.queue[currentIndex].originalIndex;
 
-    await _queueManagerModule.reshuffleQueue(shuffleMode, currentIndex);
-    final queue = _queueManagerModule.queue;
+      await _queueManagerModule.reshuffleQueue(shuffleMode, currentIndex);
+      final queue = _queueManagerModule.queue;
 
-    final songList = queue.map((e) => e.song).toList();
-    final splitIndex = shuffleMode == ShuffleMode.none ? originalIndex : 0;
-    _audioPlayerRepository.replaceQueueAroundIndex(
-      index: currentIndex,
-      before: songList.sublist(0, splitIndex),
-      after: songList.sublist(splitIndex + 1),
-    );
+      final songList = queue.map((e) => e.song).toList();
+      final splitIndex = shuffleMode == ShuffleMode.none ? originalIndex : 0;
+      _audioPlayerRepository.replaceQueueAroundIndex(
+        index: currentIndex,
+        before: songList.sublist(0, splitIndex),
+        after: songList.sublist(splitIndex + 1),
+      );
 
-    _platformIntegrationRepository.setQueue(songList);
+      _platformIntegrationRepository.setQueue(songList);
+    }
   }
 }

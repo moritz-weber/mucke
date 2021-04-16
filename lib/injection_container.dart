@@ -18,6 +18,8 @@ import 'domain/usecases/handle_playback_state.dart';
 import 'domain/usecases/move_queue_item.dart';
 import 'domain/usecases/pause.dart';
 import 'domain/usecases/play.dart';
+import 'domain/usecases/play_album.dart';
+import 'domain/usecases/play_artist.dart';
 import 'domain/usecases/play_next.dart';
 import 'domain/usecases/play_songs.dart';
 import 'domain/usecases/remove_queue_index.dart';
@@ -74,6 +76,8 @@ Future<void> setupGetIt() async {
         moveQueueItem: getIt(),
         pause: getIt(),
         play: getIt(),
+        playAlbum: getIt(),
+        playArtist: getIt(),
         playNext: getIt(),
         playSongs: getIt(),
         removeQueueIndex: getIt(),
@@ -123,6 +127,20 @@ Future<void> setupGetIt() async {
   );
   getIt.registerLazySingleton<Play>(
     () => Play(
+      getIt(),
+    ),
+  );
+  getIt.registerLazySingleton<PlayAlbum>(
+    () => PlayAlbum(
+      getIt(),
+      getIt(),
+      getIt(),
+    ),
+  );
+  getIt.registerLazySingleton<PlayArtist>(
+    () => PlayArtist(
+      getIt(),
+      getIt(),
       getIt(),
     ),
   );
@@ -185,8 +203,6 @@ Future<void> setupGetIt() async {
   );
   getIt.registerLazySingleton<ShuffleAll>(
     () => ShuffleAll(
-      getIt(),
-      getIt(),
       getIt(),
       getIt(),
       getIt(),

@@ -11,6 +11,8 @@ import '../../domain/usecases/add_to_queue.dart';
 import '../../domain/usecases/move_queue_item.dart';
 import '../../domain/usecases/pause.dart';
 import '../../domain/usecases/play.dart';
+import '../../domain/usecases/play_album.dart';
+import '../../domain/usecases/play_artist.dart';
 import '../../domain/usecases/play_next.dart';
 import '../../domain/usecases/play_songs.dart';
 import '../../domain/usecases/remove_queue_index.dart';
@@ -29,6 +31,8 @@ class AudioStore extends _AudioStore with _$AudioStore {
     @required MoveQueueItem moveQueueItem,
     @required Pause pause,
     @required Play play,
+    @required PlayAlbum playAlbum,
+    @required PlayArtist playArtist,
     @required PlayNext playNext,
     @required PlaySongs playSongs,
     @required RemoveQueueIndex removeQueueIndex,
@@ -46,6 +50,8 @@ class AudioStore extends _AudioStore with _$AudioStore {
           audioPlayerInfoRepository,
           pause,
           play,
+          playAlbum,
+          playArtist,
           playNext,
           removeQueueIndex,
           seekToIndex,
@@ -65,6 +71,8 @@ abstract class _AudioStore with Store {
     this._audioPlayerInfoRepository,
     this._pause,
     this._play,
+    this._playAlbum,
+    this._playArtist,
     this._playNext,
     this._removeQueueIndex,
     this._seekToIndex,
@@ -96,6 +104,8 @@ abstract class _AudioStore with Store {
   final MoveQueueItem _moveQueueItem;
   final Pause _pause;
   final Play _play;
+  final PlayAlbum _playAlbum;
+  final PlayArtist _playArtist;
   final PlayNext _playNext;
   final PlaySongs _playSongs;
   final RemoveQueueIndex _removeQueueIndex;
@@ -182,10 +192,10 @@ abstract class _AudioStore with Store {
   }
 
   Future<void> playAlbum(Album album) async {
-    // _audioInterface.playAlbum(album);
+    _playAlbum(album);
   }
 
   Future<void> shuffleArtist(Artist artist) async {
-    // _audioInterface.playArtist(artist, shuffleMode: ShuffleMode.plus);
+    _playArtist(artist);
   }
 }

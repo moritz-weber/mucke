@@ -1,15 +1,13 @@
 import 'dart:math';
 
+import '../entities/artist.dart';
 import '../entities/shuffle_mode.dart';
-import '../entities/song.dart';
 import '../repositories/music_data_repository.dart';
 import 'play_songs.dart';
 import 'set_shuffle_mode.dart';
 
-const SHUFFLE_MODE = ShuffleMode.plus;
-
-class ShuffleAll {
-  ShuffleAll(
+class PlayArtist {
+  PlayArtist(
     this._musicDataRepository,
     this._playSongs,
     this._setShuffleMode,
@@ -20,12 +18,12 @@ class ShuffleAll {
 
   final MusicDataRepository _musicDataRepository;
 
-  Future<void> call() async {
-    final List<Song> songs = await _musicDataRepository.songStream.first;
+  Future<void> call(Artist artist) async {
+    final songs = await _musicDataRepository.getArtistSongStream(artist).first;
     final rng = Random();
     final index = rng.nextInt(songs.length);
 
-    await _setShuffleMode(SHUFFLE_MODE, updateQueue: false);
+    await _setShuffleMode(ShuffleMode.plus, updateQueue: false);
     _playSongs(songs: songs, initialIndex: index);
   }
 }
