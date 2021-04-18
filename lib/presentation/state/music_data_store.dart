@@ -7,6 +7,7 @@ import '../../domain/entities/song.dart';
 import '../../domain/repositories/music_data_modifier_repository.dart';
 import '../../domain/repositories/music_data_repository.dart';
 import '../../domain/repositories/settings_repository.dart';
+import '../../domain/usecases/inrement_like_count.dart';
 import '../../domain/usecases/update_database.dart';
 
 part 'music_data_store.g.dart';
@@ -17,22 +18,30 @@ class MusicDataStore extends _MusicDataStore with _$MusicDataStore {
     @required MusicDataModifierRepository musicDataModifierRepository,
     @required SettingsRepository settingsRepository,
     @required UpdateDatabase updateDatabase,
+    @required IncrementLikeCount incrementLikeCount,
   }) : super(
           musicDataInfoRepository,
           settingsRepository,
           musicDataModifierRepository,
           updateDatabase,
+          incrementLikeCount,
         );
 }
 
 abstract class _MusicDataStore with Store {
-  _MusicDataStore(this._musicDataInfoRepository, this._settingsRepository,
-      this._musicDataModifierRepository, this._updateDatabase) {
+  _MusicDataStore(
+    this._musicDataInfoRepository,
+    this._settingsRepository,
+    this._musicDataModifierRepository,
+    this._updateDatabase,
+    this._incrementLikeCount,
+  ) {
     songStream = _musicDataInfoRepository.songStream.asObservable(initialValue: []);
     albumStream = _musicDataInfoRepository.albumStream.asObservable(initialValue: []);
     artistStream = _musicDataInfoRepository.artistStream.asObservable(initialValue: []);
   }
 
+  final IncrementLikeCount _incrementLikeCount;
   final UpdateDatabase _updateDatabase;
 
   final MusicDataInfoRepository _musicDataInfoRepository;
@@ -92,8 +101,7 @@ abstract class _MusicDataStore with Store {
     await _musicDataModifierRepository.toggleNextSongLink(song);
   }
 
-  Future<void> incrementLikeCount(Song song) =>
-      _musicDataModifierRepository.incrementLikeCount(song);
+  Future<void> incrementLikeCount(Song song) => _incrementLikeCount(song);
 
   Future<void> resetLikeCount(Song song) => _musicDataModifierRepository.resetLikeCount(song);
 

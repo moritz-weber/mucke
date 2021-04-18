@@ -15,6 +15,7 @@ import 'domain/repositories/platform_integration_repository.dart';
 import 'domain/repositories/settings_repository.dart';
 import 'domain/usecases/add_to_queue.dart';
 import 'domain/usecases/handle_playback_state.dart';
+import 'domain/usecases/inrement_like_count.dart';
 import 'domain/usecases/move_queue_item.dart';
 import 'domain/usecases/pause.dart';
 import 'domain/usecases/play.dart';
@@ -63,6 +64,7 @@ Future<void> setupGetIt() async {
         musicDataInfoRepository: getIt(),
         settingsRepository: getIt(),
         musicDataModifierRepository: getIt(),
+        incrementLikeCount: getIt(),
         updateDatabase: getIt(),
       );
       return musicDataStore;
@@ -109,6 +111,11 @@ Future<void> setupGetIt() async {
   );
   getIt.registerLazySingleton<HandlePlaybackEvent>(
     () => HandlePlaybackEvent(
+      getIt(),
+    ),
+  );
+  getIt.registerLazySingleton<IncrementLikeCount>(
+    () => IncrementLikeCount(
       getIt(),
     ),
   );
@@ -318,6 +325,7 @@ Future<void> setupGetIt() async {
 
   getIt.registerSingleton<AudioPlayerActor>(
     AudioPlayerActor(
+      getIt(),
       getIt(),
       getIt(),
       getIt(),

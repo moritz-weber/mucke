@@ -40,6 +40,9 @@ abstract class AudioPlayerRepository extends AudioPlayerInfoRepository {
   /// Set the ShuffleMode. Does not affect playback/queue.
   Future<void> setShuffleMode(ShuffleMode shuffleMode);
   Future<void> setLoopMode(LoopMode loopMode);
+
+  /// Current scope: update song information in queue, don't affect playback/queue.
+  Future<void> updateSongs(Map<String, Song> songs);
 }
 
 class AudioPlayerEvent extends Event {

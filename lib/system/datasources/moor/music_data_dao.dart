@@ -195,12 +195,8 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
 
   @override
   Future<void> incrementLikeCount(SongModel song) async {
-    final songEntry = await (select(songs)..where((tbl) => tbl.path.equals(song.path))).getSingle();
-
-    if (song.likeCount < 5) {
-      await (update(songs)..where((tbl) => tbl.path.equals(song.path)))
-          .write(SongsCompanion(likeCount: Value(songEntry.likeCount + 1)));
-    }
+    await (update(songs)..where((tbl) => tbl.path.equals(song.path)))
+        .write(SongsCompanion(likeCount: Value(song.likeCount + 1)));
   }
 
   @override

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../domain/entities/album.dart';
 import '../../domain/entities/artist.dart';
@@ -17,12 +18,20 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   MusicDataRepositoryImpl(
     this._localMusicFetcher,
     this._musicDataSource,
-  );
+  ) {
+    _musicDataSource.songStream.listen((event) => _songSubject.add(event));
+  }
 
   final LocalMusicFetcher _localMusicFetcher;
   final MusicDataSource _musicDataSource;
 
+  final BehaviorSubject<Map<String, Song>> _songUpdateSubject = BehaviorSubject();
+  final BehaviorSubject<List<Song>> _songSubject = BehaviorSubject();
+
   static final _log = Logger('MusicDataRepository');
+
+  @override
+  Stream<Map<String, Song>> get songUpdateStream => _songUpdateSubject.stream;
 
   @override
   Future<Song> getSongByPath(String path) async {
@@ -30,7 +39,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   }
 
   @override
-  Stream<List<Song>> get songStream => _musicDataSource.songStream;
+  Stream<List<Song>> get songStream => _songSubject.stream;
 
   @override
   Stream<List<Album>> get albumStream => _musicDataSource.albumStream;
@@ -61,6 +70,15 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
     await _updateSongs(localMusic['SONGS'] as List<SongModel>, albumIdMap);
 
     _log.info('updateDatabase finished');
+  }
+
+  @override
+  Future<void> incrementLikeCount(Song song) async {
+    if (song.likeCount < 5) {
+      final newSong = (song as SongModel).copyWith(likeCount: song.likeCount + 1);
+      _songUpdateSubject.add({song.path: newSong});
+      _musicDataSource.incrementLikeCount(song as SongModel);
+    }
   }
 
   Future<void> _updateArtists(List<ArtistModel> artists) async {

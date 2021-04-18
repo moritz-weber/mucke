@@ -25,7 +25,7 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   final AudioPlayerDataSource _audioPlayerDataSource;
 
   // final BehaviorSubject<int> _currentIndexSubject = BehaviorSubject();
-  final BehaviorSubject<Song> _currentSongSubject = BehaviorSubject<Song>();
+  final BehaviorSubject<Song> _currentSongSubject = BehaviorSubject();
   final BehaviorSubject<LoopMode> _loopModeSubject = BehaviorSubject();
   final BehaviorSubject<List<Song>> _queueSubject = BehaviorSubject();
   final BehaviorSubject<ShuffleMode> _shuffleModeSubject = BehaviorSubject();
@@ -170,6 +170,26 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   Future<void> stop() {
     // TODO: implement stop
     throw UnimplementedError();
+  }
+
+  @override
+  Future<void> updateSongs(Map<String, Song> songs) async {
+    if (songs.containsKey(_currentSongSubject.value.path)) {
+      _currentSongSubject.add(songs[_currentSongSubject.value.path]);
+    }
+
+    final queue = _queueSubject.value;
+    bool changed = false;
+
+    for (int i = 0; i < queue.length; i++) {
+      if (songs.containsKey(queue[i].path)) {
+        queue[i] = songs[queue[i].path];
+        changed = true;
+      }
+    }
+
+    if (changed)
+      _queueSubject.add(queue);
   }
 
   void _updateCurrentSong(List<Song> queue, int index) {

@@ -3,6 +3,8 @@ import '../entities/artist.dart';
 import '../entities/song.dart';
 
 abstract class MusicDataInfoRepository {
+  Stream<Map<String, Song>> get songUpdateStream;
+
   Future<Song> getSongByPath(String path);
   Stream<List<Song>> get songStream;
   Stream<List<Song>> getAlbumSongStream(Album album);
@@ -16,4 +18,6 @@ abstract class MusicDataInfoRepository {
 
 abstract class MusicDataRepository extends MusicDataInfoRepository {
   Future<void> updateDatabase();
+
+  Future<void> incrementLikeCount(Song song);
 }
