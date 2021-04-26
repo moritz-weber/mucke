@@ -4,8 +4,7 @@ import '../../domain/entities/song.dart';
 import '../utils.dart' as utils;
 
 class SongListTile extends StatelessWidget {
-  const SongListTile(
-      {Key key, this.song, this.onTap, this.inAlbum, this.onTapMore})
+  const SongListTile({Key key, this.song, this.onTap, this.inAlbum, this.onTapMore})
       : super(key: key);
 
   final Song song;
@@ -16,15 +15,14 @@ class SongListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Widget leading = inAlbum
-        ? Center(child: Text('${song.discNumber} - ${song.trackNumber}'))
+        ? Center(child: Text('${song.trackNumber}'))
         : Image(
             image: utils.getAlbumImage(song.albumArtPath),
             fit: BoxFit.cover,
           );
 
-    final Widget subtitle = inAlbum
-        ? Text('${song.artist}')
-        : Text('${song.artist} • ${song.album}');
+    final Widget subtitle =
+        inAlbum ? Text('${song.artist}') : Text('${song.artist} • ${song.album}');
 
     final EdgeInsets padding = (onTapMore != null)
         ? const EdgeInsets.only(left: 8.0)
