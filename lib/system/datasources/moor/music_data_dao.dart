@@ -145,6 +145,26 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
   }
 
   @override
+  Future<void> insertAlbums(List<AlbumModel> albumModels) async {
+    await batch((batch) {
+      batch.insertAllOnConflictUpdate(
+        albums,
+        albumModels.map((e) => e.toAlbumsCompanion()).toList(),
+      );
+    });
+  }
+
+  @override
+  Future<void> insertArtists(List<ArtistModel> artistModels) async {
+    await batch((batch) {
+      batch.insertAllOnConflictUpdate(
+        artists,
+        artistModels.map((e) => e.toArtistsCompanion()).toList(),
+      );
+    });
+  }
+
+  @override
   Future<void> setSongBlocked(SongModel song, bool blocked) async {
     await (update(songs)..where((tbl) => tbl.path.equals(song.path)))
         .write(SongsCompanion(blocked: Value(blocked)));

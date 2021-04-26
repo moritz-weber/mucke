@@ -1,6 +1,5 @@
 import 'package:audio_service/audio_service.dart';
-import 'package:device_info/device_info.dart';
-import 'package:flutter_audio_query/flutter_audio_query.dart';
+import 'package:audiotagger/audiotagger.dart';
 import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
 
@@ -281,7 +280,6 @@ Future<void> setupGetIt() async {
     () => LocalMusicFetcherImpl(
       getIt(),
       getIt(),
-      getIt(),
     ),
   );
 
@@ -308,9 +306,7 @@ Future<void> setupGetIt() async {
 
   getIt.registerFactory<AudioPlayer>(() => AudioPlayer());
 
-  getIt.registerLazySingleton<FlutterAudioQuery>(() => FlutterAudioQuery());
-
-  getIt.registerLazySingleton<DeviceInfoPlugin>(() => DeviceInfoPlugin());
+  getIt.registerLazySingleton<Audiotagger>(() => Audiotagger());
 
   // actors
   getIt.registerSingleton<PlatformIntegrationActor>(

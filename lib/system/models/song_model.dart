@@ -1,5 +1,6 @@
 import 'package:audio_service/audio_service.dart';
-import 'package:flutter_audio_query/flutter_audio_query.dart';
+import 'package:audiotagger/models/audiofile.dart';
+import 'package:audiotagger/models/tag.dart';
 import 'package:meta/meta.dart';
 import 'package:moor/moor.dart';
 
@@ -58,21 +59,24 @@ class SongModel extends Song {
         playCount: moorSong.playCount,
       );
 
-  factory SongModel.fromSongInfo(SongInfo songInfo) {
-    final String duration = songInfo.duration;
-    final List<int> numbers = _parseTrackNumber(songInfo.track);
-
+  factory SongModel.fromAudiotagger({
+    String path,
+    Tag tag,
+    AudioFile audioFile,
+    String albumArtPath,
+    int albumId,
+  }) {
     return SongModel(
-      title: songInfo.title,
-      artist: songInfo.artist,
-      album: songInfo.album,
-      albumId: int.parse(songInfo.albumId),
-      path: songInfo.filePath,
-      duration: duration == null ? null : int.parse(duration),
+      title: tag.title,
+      artist: tag.artist,
+      album: tag.album,
+      albumId: albumId,
+      path: path,
+      duration: audioFile.length * 1000,
       blocked: false,
-      discNumber: numbers[0],
-      trackNumber: numbers[1],
-      albumArtPath: songInfo.albumArtwork,
+      discNumber: _parseDiscNumber(tag.discNumber),
+      trackNumber: int.parse(tag.trackNumber),
+      albumArtPath: albumArtPath,
     );
   }
 
@@ -225,6 +229,13 @@ class SongModel extends Song {
       trackNumber = int.tryParse(trackNumberString.substring(1));
     }
     return [discNumber, trackNumber];
+  }
+
+  static int _parseDiscNumber(String discNumberString) {
+    if (discNumberString == null || discNumberString == '') {
+      return 1;
+    }
+    return int.parse(discNumberString);
   }
 }
 

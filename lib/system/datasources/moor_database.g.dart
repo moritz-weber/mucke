@@ -231,8 +231,11 @@ class $AlbumsTable extends Albums with TableInfo<$AlbumsTable, MoorAlbum> {
   @override
   GeneratedIntColumn get id => _id ??= _constructId();
   GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
+    return GeneratedIntColumn(
+      'id',
+      $tableName,
+      false,
+    );
   }
 
   final VerificationMeta _titleMeta = const VerificationMeta('title');

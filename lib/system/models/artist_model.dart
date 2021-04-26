@@ -1,4 +1,3 @@
-import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:meta/meta.dart';
 import 'package:moor/moor.dart';
 
@@ -15,12 +14,6 @@ class ArtistModel extends Artist {
   factory ArtistModel.fromMoor(MoorArtist moorArtist) => ArtistModel(
         name: moorArtist.name,
       );
-
-  factory ArtistModel.fromArtistInfo(ArtistInfo artistInfo) {
-    return ArtistModel(
-      name: artistInfo.name,
-    );
-  }
 
   @override
   String toString() {

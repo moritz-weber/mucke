@@ -25,11 +25,14 @@ class Artists extends Table {
 
 @DataClassName('MoorAlbum')
 class Albums extends Table {
-  IntColumn get id => integer().autoIncrement()();
+  IntColumn get id => integer()();
   TextColumn get title => text()();
   TextColumn get artist => text()();
   TextColumn get albumArtPath => text().nullable()();
   IntColumn get year => integer().nullable()();
+
+  @override
+  Set<Column> get primaryKey => {id};
 }
 
 @DataClassName('MoorSong')

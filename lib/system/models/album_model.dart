@@ -1,4 +1,4 @@
-import 'package:flutter_audio_query/flutter_audio_query.dart';
+import 'package:audiotagger/models/tag.dart';
 import 'package:meta/meta.dart';
 import 'package:moor/moor.dart';
 
@@ -27,15 +27,13 @@ class AlbumModel extends Album {
         year: moorAlbum.year,
       );
 
-  factory AlbumModel.fromAlbumInfo(AlbumInfo albumInfo) {
-    final String _year = albumInfo.firstYear;
-
+  factory AlbumModel.fromAudiotagger({Tag tag, int albumId, String albumArtPath}) {
     return AlbumModel(
-      id: int.parse(albumInfo.id),
-      title: albumInfo.title,
-      artist: albumInfo.artist,
-      albumArtPath: albumInfo.albumArt,
-      year: _year == null ? null : int.parse(_year),
+      id: albumId,
+      title: tag.album,
+      artist: tag.albumArtist,
+      albumArtPath: albumArtPath,
+      year: tag.year == null ? null : _parseYear(tag.year),
     );
   }
 
@@ -61,9 +59,22 @@ class AlbumModel extends Album {
           albumArtPath: albumArtPath ?? this.albumArtPath);
 
   AlbumsCompanion toAlbumsCompanion() => AlbumsCompanion(
+        id: Value(id),
         title: Value(title),
         artist: Value(artist),
         albumArtPath: Value(albumArtPath),
         year: Value(pubYear),
       );
+
+  static int _parseYear(String yearString) {
+    if (yearString == null || yearString == '') {
+      return null;
+    }
+    
+    try {
+      return int.parse(yearString);
+    } on FormatException {
+      return int.parse(yearString.split('-')[0]);
+    }
+  }
 }

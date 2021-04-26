@@ -31,8 +31,10 @@ abstract class MusicDataSource {
 
   /// Insert album into the database. Return the ID of the inserted album.
   Future<int> insertAlbum(AlbumModel albumModel);
+  Future<void> insertAlbums(List<AlbumModel> albumModels);
   Future<void> deleteAllAlbums();
 
   Future<int> insertArtist(ArtistModel artistModel);
+  Future<void> insertArtists(List<ArtistModel> artistModels);
   Future<void> deleteAllArtists();
 }

@@ -1,8 +1,7 @@
-import 'dart:typed_data';
-import 'dart:ui';
+import 'dart:io';
 
-import 'package:device_info/device_info.dart';
-import 'package:flutter_audio_query/flutter_audio_query.dart';
+import 'package:audiotagger/audiotagger.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../models/album_model.dart';
 import '../models/artist_model.dart';
@@ -11,99 +10,75 @@ import 'local_music_fetcher.dart';
 import 'settings_data_source.dart';
 
 class LocalMusicFetcherImpl implements LocalMusicFetcher {
-  LocalMusicFetcherImpl(this._flutterAudioQuery, this._settingsDataSource, this._deviceInfo);
+  LocalMusicFetcherImpl(this._settingsDataSource, this._audiotagger);
 
-  final FlutterAudioQuery _flutterAudioQuery;
+  final Audiotagger _audiotagger;
   final SettingsDataSource _settingsDataSource;
-  // CODESMELL: should probably encapsulate the deviceinfoplugin
-  final DeviceInfoPlugin _deviceInfo;
-
-  AndroidDeviceInfo _androidDeviceInfo;
-  Future<AndroidDeviceInfo> get androidDeviceInfo async {
-    _androidDeviceInfo ??= await _deviceInfo.androidInfo;
-    return _androidDeviceInfo;
-  }
-
-  @override
-  Future<List<ArtistModel>> getArtists() async {
-    final List<ArtistInfo> artistInfoList = await _flutterAudioQuery.getArtists();
-    return artistInfoList
-        .map((ArtistInfo artistInfo) => ArtistModel.fromArtistInfo(artistInfo))
-        .toSet()
-        .toList();
-  }
-
-  @override
-  Future<List<AlbumModel>> getAlbums() async {
-    final List<AlbumInfo> albumInfoList = await _flutterAudioQuery.getAlbums();
-    return albumInfoList.map((AlbumInfo albumInfo) => AlbumModel.fromAlbumInfo(albumInfo)).toList();
-  }
-
-  @override
-  Future<List<SongModel>> getSongs() async {
-    final List<SongInfo> songInfoList = await _flutterAudioQuery.getSongs();
-    return songInfoList
-        .where((songInfo) => songInfo.isMusic)
-        .map((SongInfo songInfo) => SongModel.fromSongInfo(songInfo))
-        .toList();
-  }
-
-  @override
-  Future<Uint8List> getAlbumArtwork(int id) async {
-    final info = await androidDeviceInfo;
-    if (info.version.sdkInt >= 29) {
-      return _flutterAudioQuery.getArtwork(
-        type: ResourceType.ALBUM,
-        id: id.toString(),
-        size: const Size(480.0, 480.0),
-      );
-    }
-    return Uint8List(0);
-  }
 
   @override
   Future<Map<String, List>> getLocalMusic() async {
     final musicDirectories = await _settingsDataSource.getLibraryFolders();
+    final libDir = Directory(musicDirectories.first);
 
-    final songs = await _getFilteredSongs(musicDirectories);
-    final albumTitles = Set<String>.from(songs.map((song) => song.album));
-    final albums = await _getFilteredAlbums(albumTitles);
-    final artistNames = Set<String>.from(albums.map((album) => album.artist));
-    final artists = await _getFilteredArtists(artistNames);
+    final List<SongModel> songs = [];
+    final List<AlbumModel> albums = [];
+    final Map<String, int> albumIdMap = {};
+    final Map<String, String> albumArtMap = {};
+    final List<ArtistModel> artists = [];
+    final Set<String> artistSet = {};
+
+    final Directory dir = await getApplicationSupportDirectory();
+    await for (final entity in libDir.list(recursive: true, followLinks: false)) {
+      if (entity is File && entity.path.endsWith('.mp3')) {
+        final tags = await _audiotagger.readTags(path: entity.path);
+        final audioFile = await _audiotagger.readAudioFile(path: entity.path);
+
+        final albumString = '${tags.album}___${tags.albumArtist}__${tags.year}';
+
+        int albumId;
+        String albumArtPath;
+        if (!albumIdMap.containsKey(albumString)) {
+          albumId = albumIdMap.length;
+          albumIdMap[albumString] = albumId;
+
+          final albumArt = await _audiotagger.readArtwork(path: entity.path);
+
+          if (albumArt != null && albumArt.isNotEmpty) {
+            albumArtPath = '${dir.path}/$albumId';
+            final file = File(albumArtPath);
+            file.writeAsBytesSync(albumArt);
+            albumArtMap[albumString] = albumArtPath;
+          }
+
+          albums.add(
+            AlbumModel.fromAudiotagger(albumId: albumId, tag: tags, albumArtPath: albumArtPath),
+          );
+          artistSet.add(tags.albumArtist);
+        } else {
+          albumId = albumIdMap[albumString];
+          albumArtPath = albumArtMap[albumString];
+        }
+
+        songs.add(
+          SongModel.fromAudiotagger(
+            path: entity.path,
+            tag: tags,
+            audioFile: audioFile,
+            albumId: albumId,
+            albumArtPath: albumArtPath,
+          ),
+        );
+      }
+    }
+
+    for (final artist in artistSet) {
+      artists.add(ArtistModel(name: artist));
+    }
 
     return {
       'SONGS': songs,
       'ALBUMS': albums,
       'ARTISTS': artists,
     };
-  }
-
-  Future<List<SongModel>> _getFilteredSongs(Iterable<String> musicDirectories) async {
-    final List<SongInfo> songInfoList = await _flutterAudioQuery.getSongs();
-    return songInfoList
-        .where(
-          (songInfo) =>
-              songInfo.isMusic &&
-              musicDirectories.any((element) => songInfo.filePath.startsWith(element)),
-        )
-        .map((SongInfo songInfo) => SongModel.fromSongInfo(songInfo))
-        .toList();
-  }
-
-  Future<List<AlbumModel>> _getFilteredAlbums(Iterable<String> albumTitles) async {
-    final List<AlbumInfo> albumInfoList = await _flutterAudioQuery.getAlbums();
-    return albumInfoList
-        .where((albumInfo) => albumTitles.contains(albumInfo.title))
-        .map((AlbumInfo albumInfo) => AlbumModel.fromAlbumInfo(albumInfo))
-        .toList();
-  }
-
-  Future<List<ArtistModel>> _getFilteredArtists(Iterable<String> artistNames) async {
-    final List<ArtistInfo> artistInfoList = await _flutterAudioQuery.getArtists();
-    return artistInfoList
-        .where((artistInfo) => artistNames.contains(artistInfo.name))
-        .map((ArtistInfo artistInfo) => ArtistModel.fromArtistInfo(artistInfo))
-        .toSet()
-        .toList();
   }
 }
