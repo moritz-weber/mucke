@@ -91,4 +91,50 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   Future<void> _updateSongs(List<SongModel> songs) async {
     await _musicDataSource.insertSongs(songs);
   }
+
+  @override
+  Future<void> setSongBlocked(Song song, bool blocked) async {
+    if (song.blocked != blocked) {
+      final newSong = (song as SongModel).copyWith(blocked: blocked);
+      _songUpdateSubject.add({song.path: newSong});
+      _musicDataSource.setSongBlocked(song as SongModel, blocked);
+    }
+  }
+
+  @override
+  Future<void> decrementLikeCount(Song song) {
+    // TODO: implement decrementLikeCount
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> incrementPlayCount(Song song) async {
+    final newSong = (song as SongModel).copyWith(playCount: song.playCount + 1);
+    _songUpdateSubject.add({song.path: newSong});
+    _musicDataSource.incrementPlayCount(song as SongModel);
+  }
+
+  @override
+  Future<void> incrementSkipCount(Song song) {
+    // TODO: implement incrementSkipCount
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> resetLikeCount(Song song) {
+    // TODO: implement resetLikeCount
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> resetPlayCount(Song song) {
+    // TODO: implement resetPlayCount
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> resetSkipCount(Song song) {
+    // TODO: implement resetSkipCount
+    throw UnimplementedError();
+  }
 }

@@ -8,6 +8,7 @@ import '../../domain/repositories/music_data_modifier_repository.dart';
 import '../../domain/repositories/music_data_repository.dart';
 import '../../domain/repositories/settings_repository.dart';
 import '../../domain/usecases/inrement_like_count.dart';
+import '../../domain/usecases/set_song_blocked.dart';
 import '../../domain/usecases/update_database.dart';
 
 part 'music_data_store.g.dart';
@@ -19,12 +20,14 @@ class MusicDataStore extends _MusicDataStore with _$MusicDataStore {
     @required SettingsRepository settingsRepository,
     @required UpdateDatabase updateDatabase,
     @required IncrementLikeCount incrementLikeCount,
+    @required SetSongBlocked setSongBlocked,
   }) : super(
           musicDataInfoRepository,
           settingsRepository,
           musicDataModifierRepository,
           updateDatabase,
           incrementLikeCount,
+          setSongBlocked,
         );
 }
 
@@ -35,6 +38,7 @@ abstract class _MusicDataStore with Store {
     this._musicDataModifierRepository,
     this._updateDatabase,
     this._incrementLikeCount,
+    this._setSongBlocked,
   ) {
     songStream = _musicDataInfoRepository.songStream.asObservable(initialValue: []);
     albumStream = _musicDataInfoRepository.albumStream.asObservable(initialValue: []);
@@ -42,6 +46,7 @@ abstract class _MusicDataStore with Store {
   }
 
   final IncrementLikeCount _incrementLikeCount;
+  final SetSongBlocked _setSongBlocked;
   final UpdateDatabase _updateDatabase;
 
   final MusicDataInfoRepository _musicDataInfoRepository;
@@ -93,9 +98,7 @@ abstract class _MusicDataStore with Store {
         _musicDataInfoRepository.getArtistAlbumStream(artist).asObservable(initialValue: []);
   }
 
-  Future<void> setSongBlocked(Song song, bool blocked) async {
-    await _musicDataModifierRepository.setSongBlocked(song, blocked);
-  }
+  Future<void> setSongBlocked(Song song, bool blocked) => _setSongBlocked(song, blocked);
 
   Future<void> toggleNextSongLink(Song song) async {
     await _musicDataModifierRepository.toggleNextSongLink(song);

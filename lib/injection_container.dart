@@ -14,6 +14,7 @@ import 'domain/repositories/platform_integration_repository.dart';
 import 'domain/repositories/settings_repository.dart';
 import 'domain/usecases/add_to_queue.dart';
 import 'domain/usecases/handle_playback_state.dart';
+import 'domain/usecases/increment_play_count.dart';
 import 'domain/usecases/inrement_like_count.dart';
 import 'domain/usecases/move_queue_item.dart';
 import 'domain/usecases/pause.dart';
@@ -29,6 +30,7 @@ import 'domain/usecases/seek_to_previous.dart';
 import 'domain/usecases/set_current_song.dart';
 import 'domain/usecases/set_loop_mode.dart';
 import 'domain/usecases/set_shuffle_mode.dart';
+import 'domain/usecases/set_song_blocked.dart';
 import 'domain/usecases/shuffle_all.dart';
 import 'domain/usecases/update_database.dart';
 import 'presentation/state/audio_store.dart';
@@ -64,6 +66,7 @@ Future<void> setupGetIt() async {
         settingsRepository: getIt(),
         musicDataModifierRepository: getIt(),
         incrementLikeCount: getIt(),
+        setSongBlocked: getIt(),
         updateDatabase: getIt(),
       );
       return musicDataStore;
@@ -115,6 +118,11 @@ Future<void> setupGetIt() async {
   );
   getIt.registerLazySingleton<IncrementLikeCount>(
     () => IncrementLikeCount(
+      getIt(),
+    ),
+  );
+  getIt.registerLazySingleton<IncrementPlayCount>(
+    () => IncrementPlayCount(
       getIt(),
     ),
   );
@@ -204,6 +212,11 @@ Future<void> setupGetIt() async {
       getIt(),
       getIt(),
       getIt(),
+      getIt(),
+    ),
+  );
+  getIt.registerLazySingleton<SetSongBlocked>(
+    () => SetSongBlocked(
       getIt(),
     ),
   );
@@ -321,6 +334,7 @@ Future<void> setupGetIt() async {
 
   getIt.registerSingleton<AudioPlayerActor>(
     AudioPlayerActor(
+      getIt(),
       getIt(),
       getIt(),
       getIt(),

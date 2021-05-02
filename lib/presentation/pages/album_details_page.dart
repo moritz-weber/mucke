@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mucke/presentation/widgets/song_info.dart';
 import 'package:provider/provider.dart';
 
 import '../../domain/entities/album.dart';
@@ -166,6 +167,35 @@ class AlbumDetailsPage extends StatelessWidget {
                   onTap: () {
                     musicDataStore.setSongBlocked(song, !song.blocked);
                     Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  title: const Text('Show song info'),
+                  leading: const Icon(Icons.info),
+                  onTap: () {
+                    Navigator.pop(context);
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return SimpleDialog(
+                            backgroundColor: DARK3,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(HORIZONTAL_PADDING),
+                                child: SongInfo(song),
+                              ),
+                              SimpleDialogOption(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text(
+                                  'Close',
+                                  textAlign: TextAlign.right,
+                                ),
+                              ),
+                            ],
+                          );
+                        });
                   },
                 ),
               ],
