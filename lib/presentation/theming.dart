@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 const Color DARK1 = Color(0xff090711);
 const Color DARK2 = Color(0xff141216);
-const Color DARK3 = Color(0xff645375); // 645375 // 241d2b
+const Color DARK3 = Color(0xff242127); // 645375 // 241d2b
 const Color LIGHT1 = Color(0xff913af1);
 const Color LIGHT2 = Color(0xffac5bfb);
 

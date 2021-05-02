@@ -28,10 +28,12 @@ class AlbumModel extends Album {
       );
 
   factory AlbumModel.fromAudiotagger({Tag tag, int albumId, String albumArtPath}) {
+    final artist = tag.albumArtist != '' ? tag.albumArtist : tag.artist;
+
     return AlbumModel(
       id: albumId,
       title: tag.album,
-      artist: tag.albumArtist,
+      artist: artist,
       albumArtPath: albumArtPath,
       year: tag.year == null ? null : _parseYear(tag.year),
     );
@@ -70,7 +72,7 @@ class AlbumModel extends Album {
     if (yearString == null || yearString == '') {
       return null;
     }
-    
+
     try {
       return int.parse(yearString);
     } on FormatException {

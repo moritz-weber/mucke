@@ -28,20 +28,22 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
 
   @override
   Stream<List<SongModel>> get songStream {
-    return select(songs).watch().map(
+    return (select(songs)..orderBy([(t) => OrderingTerm(expression: t.title)])).watch().map(
         (moorSongList) => moorSongList.map((moorSong) => SongModel.fromMoor(moorSong)).toList());
   }
 
   @override
   Stream<List<AlbumModel>> get albumStream {
-    return select(albums).watch().map((moorAlbumList) =>
-        moorAlbumList.map((moorAlbum) => AlbumModel.fromMoor(moorAlbum)).toList());
+    return (select(albums)..orderBy([(t) => OrderingTerm(expression: t.title)])).watch().map(
+        (moorAlbumList) =>
+            moorAlbumList.map((moorAlbum) => AlbumModel.fromMoor(moorAlbum)).toList());
   }
 
   @override
   Stream<List<ArtistModel>> get artistStream {
-    return select(artists).watch().map((moorArtistList) =>
-        moorArtistList.map((moorArtist) => ArtistModel.fromMoor(moorArtist)).toList());
+    return (select(artists)..orderBy([(t) => OrderingTerm(expression: t.name)])).watch().map(
+        (moorArtistList) =>
+            moorArtistList.map((moorArtist) => ArtistModel.fromMoor(moorArtist)).toList());
   }
 
   @override

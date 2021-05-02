@@ -53,7 +53,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
           albums.add(
             AlbumModel.fromAudiotagger(albumId: albumId, tag: tags, albumArtPath: albumArtPath),
           );
-          artistSet.add(tags.albumArtist);
+          artistSet.add(tags.albumArtist != '' ? tags.albumArtist : tags.artist);
         } else {
           albumId = albumIdMap[albumString];
           albumArtPath = albumArtMap[albumString];

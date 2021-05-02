@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
 import '../state/music_data_store.dart';
+import '../theming.dart';
+import '../widgets/song_info.dart';
 import '../widgets/song_list_tile.dart';
 
 class SongsPage extends StatefulWidget {
@@ -15,8 +17,7 @@ class SongsPage extends StatefulWidget {
   _SongsPageState createState() => _SongsPageState();
 }
 
-class _SongsPageState extends State<SongsPage>
-    with AutomaticKeepAliveClientMixin {
+class _SongsPageState extends State<SongsPage> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     print('SongsPage.build');
@@ -43,8 +44,7 @@ class _SongsPageState extends State<SongsPage>
                 onTapMore: () => _openBottomSheet(song),
               );
             },
-            separatorBuilder: (BuildContext context, int index) =>
-                const Divider(
+            separatorBuilder: (BuildContext context, int index) => const Divider(
               height: 4.0,
             ),
           );
@@ -66,17 +66,22 @@ class _SongsPageState extends State<SongsPage>
   bool get wantKeepAlive => true;
 
   void _openBottomSheet(Song song) {
-    final AudioStore audioStore =
-        Provider.of<AudioStore>(context, listen: false);
-    final MusicDataStore musicDataStore =
-        Provider.of<MusicDataStore>(context, listen: false);
+    final AudioStore audioStore = Provider.of<AudioStore>(context, listen: false);
+    final MusicDataStore musicDataStore = Provider.of<MusicDataStore>(context, listen: false);
 
     showModalBottomSheet(
         context: context,
+        useRootNavigator: true,
+        backgroundColor: DARK2,
         builder: (context) {
           return Container(
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
+                Container(
+                  height: 2,
+                  color: LIGHT1,
+                ),
                 ListTile(
                   title: const Text('Play next'),
                   onTap: () {
@@ -92,12 +97,38 @@ class _SongsPageState extends State<SongsPage>
                   },
                 ),
                 ListTile(
-                  title: song.blocked
-                      ? const Text('Unblock song')
-                      : const Text('Block song'),
+                  title: song.blocked ? const Text('Unblock song') : const Text('Block song'),
                   onTap: () {
                     musicDataStore.setSongBlocked(song, !song.blocked);
                     Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  title: const Text('Show song info'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return SimpleDialog(
+                            backgroundColor: DARK3,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(HORIZONTAL_PADDING),
+                                child: SongInfo(song),
+                              ),
+                              SimpleDialogOption(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text(
+                                  'Close',
+                                  textAlign: TextAlign.right,
+                                ),
+                              ),
+                            ],
+                          );
+                        });
                   },
                 ),
               ],

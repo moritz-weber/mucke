@@ -136,10 +136,17 @@ class AlbumDetailsPage extends StatelessWidget {
 
     showModalBottomSheet(
         context: context,
+        useRootNavigator: true,
+        backgroundColor: DARK2,
         builder: (context) {
           return Container(
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
+                Container(
+                  height: 2,
+                  color: LIGHT1,
+                ),
                 ListTile(
                   title: const Text('Play next'),
                   onTap: () {
