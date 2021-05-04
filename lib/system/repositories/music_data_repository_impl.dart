@@ -53,6 +53,13 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
       _musicDataSource.getArtistSongStream(artist as ArtistModel);
 
   @override
+  Stream<List<Song>> getArtistHighlightedSongStream(Artist artist) {
+    return _musicDataSource
+        .getArtistSongStream(artist as ArtistModel)
+        .map((event) => _sortHighlightedSongs(event).take(5).toList());
+  }
+
+  @override
   Stream<List<Album>> getArtistAlbumStream(Artist artist) =>
       _musicDataSource.getArtistAlbumStream(artist as ArtistModel);
 
@@ -136,5 +143,16 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   Future<void> resetSkipCount(Song song) {
     // TODO: implement resetSkipCount
     throw UnimplementedError();
+  }
+
+  List<Song> _sortHighlightedSongs(List<Song> songs) {
+    return songs
+      ..sort(
+        (a, b) {
+          final r = -a.likeCount.compareTo(b.likeCount);
+          if (r != 0) return r;
+          return -a.playCount.compareTo(b.playCount);
+        },
+      );
   }
 }

@@ -31,6 +31,7 @@ class _ArtistsPageState extends State<ArtistsPage> with AutomaticKeepAliveClient
             title: Text(artist.name),
             onTap: () {
               musicDataStore.fetchAlbumsFromArtist(artist);
+              musicDataStore.fetchHighlightedSongsFromArtist(artist);
               Navigator.push(
                 context,
                 MaterialPageRoute<Widget>(

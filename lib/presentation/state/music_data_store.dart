@@ -69,6 +69,9 @@ abstract class _MusicDataStore with Store {
   ObservableStream<List<Album>> artistAlbumStream;
 
   @observable
+  ObservableStream<List<Song>> artistHighlightedSongStream;
+
+  @observable
   bool isUpdatingDatabase = false;
 
   @computed
@@ -92,10 +95,18 @@ abstract class _MusicDataStore with Store {
         _musicDataInfoRepository.getAlbumSongStream(album).asObservable(initialValue: []);
   }
 
+  // TODO: das hier ist komplett bescheuert... brauchen einen eigenen Store für die ArtistDetailsPage
   @action
   Future<void> fetchAlbumsFromArtist(Artist artist) async {
     artistAlbumStream =
         _musicDataInfoRepository.getArtistAlbumStream(artist).asObservable(initialValue: []);
+  }
+
+  @action
+  Future<void> fetchHighlightedSongsFromArtist(Artist artist) async {
+    artistHighlightedSongStream = _musicDataInfoRepository
+        .getArtistHighlightedSongStream(artist)
+        .asObservable(initialValue: []);
   }
 
   Future<void> setSongBlocked(Song song, bool blocked) => _setSongBlocked(song, blocked);

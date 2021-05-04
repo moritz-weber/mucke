@@ -41,15 +41,11 @@ class AudioPlayerActor {
   void _handlePosition(Duration position, Song song) {
     if (song == null || position == null) return;
 
-    print('HANDLE POSITION');
-
     final int pos = position.inMilliseconds;
 
     if (pos < song.duration * 0.05) {
-      print('COUNT -> TRUE');
       _countSongPlayback = true;
     } else if (pos > song.duration * 0.95 && _countSongPlayback) {
-      print('INCREMENT PLAY COUNT: ${song.title}');
       _countSongPlayback = false;
       _incrementPlayCount(song);
     }

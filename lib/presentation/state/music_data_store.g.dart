@@ -93,6 +93,23 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
     });
   }
 
+  final _$artistHighlightedSongStreamAtom =
+      Atom(name: '_MusicDataStore.artistHighlightedSongStream');
+
+  @override
+  ObservableStream<List<Song>> get artistHighlightedSongStream {
+    _$artistHighlightedSongStreamAtom.reportRead();
+    return super.artistHighlightedSongStream;
+  }
+
+  @override
+  set artistHighlightedSongStream(ObservableStream<List<Song>> value) {
+    _$artistHighlightedSongStreamAtom
+        .reportWrite(value, super.artistHighlightedSongStream, () {
+      super.artistHighlightedSongStream = value;
+    });
+  }
+
   final _$isUpdatingDatabaseAtom =
       Atom(name: '_MusicDataStore.isUpdatingDatabase');
 
@@ -135,6 +152,15 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
         .run(() => super.fetchAlbumsFromArtist(artist));
   }
 
+  final _$fetchHighlightedSongsFromArtistAsyncAction =
+      AsyncAction('_MusicDataStore.fetchHighlightedSongsFromArtist');
+
+  @override
+  Future<void> fetchHighlightedSongsFromArtist(Artist artist) {
+    return _$fetchHighlightedSongsFromArtistAsyncAction
+        .run(() => super.fetchHighlightedSongsFromArtist(artist));
+  }
+
   @override
   String toString() {
     return '''
@@ -143,6 +169,7 @@ albumStream: ${albumStream},
 artistStream: ${artistStream},
 albumSongStream: ${albumSongStream},
 artistAlbumStream: ${artistAlbumStream},
+artistHighlightedSongStream: ${artistHighlightedSongStream},
 isUpdatingDatabase: ${isUpdatingDatabase},
 sortedArtistAlbums: ${sortedArtistAlbums}
     ''';

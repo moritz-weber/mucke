@@ -9,6 +9,7 @@ import '../state/music_data_store.dart';
 import '../theming.dart';
 import '../widgets/artist_albums.dart';
 import '../widgets/artist_header.dart';
+import '../widgets/artist_highlighted_songs.dart';
 import 'album_details_page.dart';
 
 class ArtistDetailsPage extends StatelessWidget {
@@ -40,6 +41,34 @@ class ArtistDetailsPage extends StatelessWidget {
                       onPressed: () => audioStore.shuffleArtist(artist),
                     ),
                   ),
+                  const Padding(
+                    padding: EdgeInsets.only(
+                      left: HORIZONTAL_PADDING + 2,
+                      right: HORIZONTAL_PADDING + 2,
+                      bottom: 4.0,
+                    ),
+                    child: Text(
+                      'Highlights',
+                      style: TEXT_HEADER,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: HORIZONTAL_PADDING,
+                      vertical: 4.0,
+                    ),
+                    child: Container(
+                      height: 1.0,
+                      color: Colors.white10,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            ArtistHighlightedSongs(songs: musicDataStore.artistHighlightedSongStream.value),
+            SliverList(
+              delegate: SliverChildListDelegate(
+                [
                   const Padding(
                     padding: EdgeInsets.only(
                       left: HORIZONTAL_PADDING + 2,

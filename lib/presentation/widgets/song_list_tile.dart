@@ -4,7 +4,7 @@ import '../../domain/entities/song.dart';
 import '../utils.dart' as utils;
 
 class SongListTile extends StatelessWidget {
-  const SongListTile({Key key, this.song, this.onTap, this.inAlbum, this.onTapMore})
+  const SongListTile({Key key, this.song, this.onTap, this.inAlbum = false, this.onTapMore})
       : super(key: key);
 
   final Song song;
