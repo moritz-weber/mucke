@@ -38,7 +38,7 @@ class _SongsPageState extends State<SongsPage> with AutomaticKeepAliveClientMixi
               final Song song = songs[index];
               return SongListTile(
                 song: song,
-                inAlbum: false,
+                showAlbum: true,
                 onTap: () => audioStore.playSong(index, songs),
                 onTapMore: () => SongBottomSheet()(song, context),
               );

@@ -1,32 +1,33 @@
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/song.dart';
+import '../theming.dart';
 import '../utils.dart' as utils;
 
 class SongListTile extends StatelessWidget {
-  const SongListTile({Key key, this.song, this.onTap, this.inAlbum = false, this.onTapMore})
+  const SongListTile({Key key, this.song, this.onTap, this.showAlbum = false, this.onTapMore})
       : super(key: key);
 
   final Song song;
-  final bool inAlbum;
+  final bool showAlbum;
   final Function onTap;
   final Function onTapMore;
 
   @override
   Widget build(BuildContext context) {
-    final Widget leading = inAlbum
-        ? Center(child: Text('${song.trackNumber}'))
-        : Image(
+    final Widget leading = showAlbum
+        ? Image(
             image: utils.getAlbumImage(song.albumArtPath),
             fit: BoxFit.cover,
-          );
+          )
+        : Center(child: Text('${song.trackNumber}'));
 
     final Widget subtitle =
-        inAlbum ? Text('${song.artist}') : Text('${song.artist} • ${song.album}');
+        showAlbum ? Text('${song.artist} • ${song.album}') : Text('${song.artist}');
 
     final EdgeInsets padding = (onTapMore != null)
-        ? const EdgeInsets.only(left: 8.0)
-        : const EdgeInsets.only(left: 8.0, right: 16.0);
+        ? const EdgeInsets.only(left: HORIZONTAL_PADDING)
+        : const EdgeInsets.only(left: HORIZONTAL_PADDING, right: 16.0);
 
     return ListTile(
       contentPadding: padding,

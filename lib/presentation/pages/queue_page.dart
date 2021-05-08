@@ -51,11 +51,6 @@ class QueuePage extends StatelessWidget {
                             ),
                             onDismissed: (direction) {
                               audioStore.removeQueueIndex(index);
-                              Scaffold.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('${song.title} removed'),
-                                ),
-                              );
                             },
                           );
                         },

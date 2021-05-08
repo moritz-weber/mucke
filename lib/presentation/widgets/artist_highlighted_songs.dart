@@ -17,7 +17,8 @@ class ArtistHighlightedSongs extends StatelessWidget {
         (_, int index) {
           final Song song = songs[index];
           return SongListTile(
-            song: song
+            song: song,
+            showAlbum: true,
           );
         },
         childCount: songs.length,

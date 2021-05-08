@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mucke/presentation/widgets/album_sliver_appbar.dart';
 import 'package:provider/provider.dart';
 
 import '../../domain/entities/album.dart';
@@ -9,7 +10,7 @@ import '../../domain/repositories/music_data_repository.dart';
 import '../state/album_page_store.dart';
 import '../state/audio_store.dart';
 import '../theming.dart';
-import '../utils.dart' as utils;
+
 import '../widgets/song_bottom_sheet.dart';
 import '../widgets/song_list_tile.dart';
 
@@ -23,7 +24,6 @@ class AlbumDetailsPage extends StatefulWidget {
 }
 
 class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
-
   AlbumPageStore store;
 
   @override
@@ -36,7 +36,7 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
     );
   }
 
-    @override
+  @override
   void dispose() {
     store.dispose();
     super.dispose();
@@ -52,45 +52,8 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
 
         return CustomScrollView(
           slivers: <Widget>[
-            SliverAppBar(
-              brightness: Brightness.dark,
-              pinned: true,
-              expandedHeight: 250.0,
-              backgroundColor: Theme.of(context).primaryColor,
-              iconTheme: const IconThemeData(
-                color: Colors.white,
-              ),
-              flexibleSpace: FlexibleSpaceBar(
-                centerTitle: true,
-                titlePadding: const EdgeInsets.only(
-                  bottom: 16.0,
-                  left: 16.0,
-                  right: 16.0,
-                ),
-                title: Text(
-                  widget.album.title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w300,
-                    fontSize: 16.0,
-                    color: Colors.white,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                background: Stack(
-                  children: [
-                    Positioned(
-                      left: 0,
-                      right: 0,
-                      child: Image(
-                        image: utils.getAlbumImage(widget.album.albumArtPath),
-                      ),
-                    ),
-                    Container(
-                      color: Colors.black45,
-                    ),
-                  ],
-                ),
-              ),
+            AlbumSliverAppBar(
+              album: widget.album,
             ),
             for (int d = 0; d < songsByDisc.length; d++)
               SliverList(
@@ -116,7 +79,7 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
                     for (int s = 0; s < songsByDisc[d].length; s++)
                       SongListTile(
                         song: songsByDisc[d][s],
-                        inAlbum: true,
+                        showAlbum: false,
                         onTap: () => audioStore.playSong(
                           s + _calcOffset(d, songsByDisc),
                           store.albumSongStream.value,

@@ -8,7 +8,7 @@ import '../state/audio_store.dart';
 import '../theming.dart';
 import '../widgets/album_art.dart';
 import '../widgets/album_background.dart';
-import '../widgets/next_song.dart';
+import '../widgets/currently_playing_header.dart';
 import '../widgets/playback_control.dart';
 import '../widgets/song_customization_buttons.dart';
 import '../widgets/time_progress_indicator.dart';
@@ -43,24 +43,6 @@ class CurrentlyPlayingPage extends StatelessWidget {
                 children: [
                   AlbumBackground(
                     song: song,
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Theme.of(context).scaffoldBackgroundColor,
-                        DARK3.withOpacity(0.2),
-                        DARK3.withOpacity(0.2),
-                        Theme.of(context).scaffoldBackgroundColor,
-                        Theme.of(context).scaffoldBackgroundColor,
-                      ],
-                      stops: const [
-                        0.0,
-                        0.2,
-                        0.6,
-                        0.75,
-                        1.0,
-                      ],
-                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
@@ -71,48 +53,13 @@ class CurrentlyPlayingPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.expand_more),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            ),
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () => _openQueue(context),
-                                child: Container(
-                                  color: Colors.transparent,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'Next up'.toUpperCase(),
-                                        style: TEXT_SMALL_HEADLINE,
-                                      ),
-                                      NextSong(
-                                        queue: audioStore.queueStream.value,
-                                        index: audioStore.queueIndexStream.value,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.more_vert),
-                              onPressed: () => null,
-                            )
-                          ],
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        ),
+                        CurrentlyPlayingHeader(onTap: _openQueue),
                         const Spacer(
                           flex: 10,
                         ),
                         Expanded(
                           flex: 720,
-                                                  child: Center(
+                          child: Center(
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 8.0,
@@ -138,8 +85,7 @@ class CurrentlyPlayingPage extends StatelessWidget {
                                   overflow: TextOverflow.fade,
                                   softWrap: false,
                                   maxLines: 1,
-                                  style: TEXT_BIG.copyWith(
-                                      ),
+                                  style: TEXT_BIG.copyWith(),
                                 ),
                                 Text(
                                   song.artist,
@@ -156,7 +102,7 @@ class CurrentlyPlayingPage extends StatelessWidget {
                         ),
                         const Padding(
                           padding: EdgeInsets.only(left: 6.0, right: 6.0),
-                          child:  SongCustomizationButtons(),
+                          child: SongCustomizationButtons(),
                         ),
                         const Spacer(
                           flex: 20,

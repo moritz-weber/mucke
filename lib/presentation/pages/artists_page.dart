@@ -41,7 +41,7 @@ class _ArtistsPageState extends State<ArtistsPage> with AutomaticKeepAliveClient
             },
           );
         },
-        separatorBuilder: (BuildContext context, int index) => const Divider(
+        separatorBuilder: (BuildContext context, int index) => const SizedBox(
           height: 4.0,
         ),
       );

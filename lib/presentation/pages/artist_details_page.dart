@@ -65,27 +65,14 @@ class _ArtistDetailsPageState extends State<ArtistDetailsPage> {
                       onPressed: () => audioStore.shuffleArtist(widget.artist),
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(
-                      left: HORIZONTAL_PADDING + 2,
-                      right: HORIZONTAL_PADDING + 2,
-                      bottom: 4.0,
-                    ),
-                    child: Text(
-                      'Highlights',
-                      style: TEXT_HEADER,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
+                  const ListTile(
+                    title: Text('Highlights', style: TEXT_HEADER),
+                    contentPadding: EdgeInsets.symmetric(
                       horizontal: HORIZONTAL_PADDING,
-                      vertical: 4.0,
-                    ),
-                    child: Container(
-                      height: 1.0,
-                      color: Colors.white10,
+                      vertical: 0.0,
                     ),
                   ),
+                  const Divider(),
                 ],
               ),
             ),
@@ -93,27 +80,14 @@ class _ArtistDetailsPageState extends State<ArtistDetailsPage> {
             SliverList(
               delegate: SliverChildListDelegate(
                 [
-                  const Padding(
-                    padding: EdgeInsets.only(
-                      left: HORIZONTAL_PADDING + 2,
-                      right: HORIZONTAL_PADDING + 2,
-                      bottom: 4.0,
-                    ),
-                    child: Text(
-                      'Albums',
-                      style: TEXT_HEADER,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
+                  const ListTile(
+                    title: Text('Albums', style: TEXT_HEADER),
+                    contentPadding: EdgeInsets.symmetric(
                       horizontal: HORIZONTAL_PADDING,
-                      vertical: 4.0,
-                    ),
-                    child: Container(
-                      height: 1.0,
-                      color: Colors.white10,
+                      vertical: 0.0,
                     ),
                   ),
+                  const Divider(),
                 ],
               ),
             ),

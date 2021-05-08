@@ -6,6 +6,8 @@ const Color DARK3 = Color(0xff242127); // 645375 // 241d2b
 const Color LIGHT1 = Color(0xff913af1);
 const Color LIGHT2 = Color(0xffac5bfb);
 
+const double HORIZONTAL_PADDING = 16.0;
+
 ThemeData theme() => ThemeData(
       brightness: Brightness.dark,
       primaryColor: DARK1,
@@ -59,6 +61,10 @@ ThemeData theme() => ThemeData(
         backgroundColor: DARK1,
         selectedItemColor: LIGHT1,
       ),
+      dividerTheme: const DividerThemeData(
+        indent: HORIZONTAL_PADDING,
+        endIndent: HORIZONTAL_PADDING,
+      )
     );
 
 const TextStyle TEXT_HEADER = TextStyle(
@@ -86,4 +92,3 @@ const TextStyle TEXT_SMALL_SUBTITLE = TextStyle(
   fontWeight: FontWeight.w300,
 );
 
-const double HORIZONTAL_PADDING = 16.0;
