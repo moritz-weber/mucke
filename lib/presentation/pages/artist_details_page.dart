@@ -1,32 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 import '../../domain/entities/album.dart';
 import '../../domain/entities/artist.dart';
+import '../../domain/repositories/music_data_repository.dart';
+import '../state/artist_page_store.dart';
 import '../state/audio_store.dart';
-import '../state/music_data_store.dart';
 import '../theming.dart';
 import '../widgets/artist_albums.dart';
 import '../widgets/artist_header.dart';
 import '../widgets/artist_highlighted_songs.dart';
 import 'album_details_page.dart';
 
-class ArtistDetailsPage extends StatelessWidget {
+class ArtistDetailsPage extends StatefulWidget {
   const ArtistDetailsPage({Key key, @required this.artist}) : super(key: key);
 
   final Artist artist;
 
   @override
+  _ArtistDetailsPageState createState() => _ArtistDetailsPageState();
+}
+
+class _ArtistDetailsPageState extends State<ArtistDetailsPage> {
+  ArtistPageStore store;
+
+  @override
+  void initState() {
+    super.initState();
+
+    store = ArtistPageStore(
+      musicDataInfoRepository: GetIt.I<MusicDataInfoRepository>(),
+      artist: widget.artist,
+    );
+  }
+
+  @override
+  void dispose() {
+    store.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final MusicDataStore musicDataStore = Provider.of<MusicDataStore>(context);
     final AudioStore audioStore = Provider.of<AudioStore>(context);
 
     return Observer(
       builder: (BuildContext context) => SafeArea(
         child: CustomScrollView(
           slivers: [
-            ArtistHeader(artist: artist),
+            ArtistHeader(artist: widget.artist),
             SliverList(
               delegate: SliverChildListDelegate(
                 [
@@ -38,7 +62,7 @@ class ArtistDetailsPage extends StatelessWidget {
                     ),
                     child: ElevatedButton(
                       child: const Text('SHUFFLE'),
-                      onPressed: () => audioStore.shuffleArtist(artist),
+                      onPressed: () => audioStore.shuffleArtist(widget.artist),
                     ),
                   ),
                   const Padding(
@@ -65,7 +89,7 @@ class ArtistDetailsPage extends StatelessWidget {
                 ],
               ),
             ),
-            ArtistHighlightedSongs(songs: musicDataStore.artistHighlightedSongStream.value),
+            ArtistHighlightedSongs(songs: store.artistHighlightedSongStream.value),
             SliverList(
               delegate: SliverChildListDelegate(
                 [
@@ -94,8 +118,8 @@ class ArtistDetailsPage extends StatelessWidget {
               ),
             ),
             ArtistAlbumSliverList(
-              albums: musicDataStore.sortedArtistAlbums,
-              onTap: (Album album) => _tapAlbum(album, context, musicDataStore),
+              albums: store.artistAlbumStream.value,
+              onTap: (Album album) => _tapAlbum(album, context),
               onTapPlay: (Album album) => audioStore.playAlbum(album),
             ),
           ],
@@ -104,8 +128,7 @@ class ArtistDetailsPage extends StatelessWidget {
     );
   }
 
-  void _tapAlbum(Album album, BuildContext context, MusicDataStore musicDataStore) {
-    musicDataStore.fetchSongsFromAlbum(album);
+  void _tapAlbum(Album album, BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute<Widget>(

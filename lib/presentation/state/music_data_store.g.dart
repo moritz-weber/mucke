@@ -9,14 +9,6 @@ part of 'music_data_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$MusicDataStore on _MusicDataStore, Store {
-  Computed<List<Album>> _$sortedArtistAlbumsComputed;
-
-  @override
-  List<Album> get sortedArtistAlbums => (_$sortedArtistAlbumsComputed ??=
-          Computed<List<Album>>(() => super.sortedArtistAlbums,
-              name: '_MusicDataStore.sortedArtistAlbums'))
-      .value;
-
   final _$songStreamAtom = Atom(name: '_MusicDataStore.songStream');
 
   @override
@@ -62,54 +54,6 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
     });
   }
 
-  final _$albumSongStreamAtom = Atom(name: '_MusicDataStore.albumSongStream');
-
-  @override
-  ObservableStream<List<Song>> get albumSongStream {
-    _$albumSongStreamAtom.reportRead();
-    return super.albumSongStream;
-  }
-
-  @override
-  set albumSongStream(ObservableStream<List<Song>> value) {
-    _$albumSongStreamAtom.reportWrite(value, super.albumSongStream, () {
-      super.albumSongStream = value;
-    });
-  }
-
-  final _$artistAlbumStreamAtom =
-      Atom(name: '_MusicDataStore.artistAlbumStream');
-
-  @override
-  ObservableStream<List<Album>> get artistAlbumStream {
-    _$artistAlbumStreamAtom.reportRead();
-    return super.artistAlbumStream;
-  }
-
-  @override
-  set artistAlbumStream(ObservableStream<List<Album>> value) {
-    _$artistAlbumStreamAtom.reportWrite(value, super.artistAlbumStream, () {
-      super.artistAlbumStream = value;
-    });
-  }
-
-  final _$artistHighlightedSongStreamAtom =
-      Atom(name: '_MusicDataStore.artistHighlightedSongStream');
-
-  @override
-  ObservableStream<List<Song>> get artistHighlightedSongStream {
-    _$artistHighlightedSongStreamAtom.reportRead();
-    return super.artistHighlightedSongStream;
-  }
-
-  @override
-  set artistHighlightedSongStream(ObservableStream<List<Song>> value) {
-    _$artistHighlightedSongStreamAtom
-        .reportWrite(value, super.artistHighlightedSongStream, () {
-      super.artistHighlightedSongStream = value;
-    });
-  }
-
   final _$isUpdatingDatabaseAtom =
       Atom(name: '_MusicDataStore.isUpdatingDatabase');
 
@@ -134,44 +78,13 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
     return _$updateDatabaseAsyncAction.run(() => super.updateDatabase());
   }
 
-  final _$fetchSongsFromAlbumAsyncAction =
-      AsyncAction('_MusicDataStore.fetchSongsFromAlbum');
-
-  @override
-  Future<void> fetchSongsFromAlbum(Album album) {
-    return _$fetchSongsFromAlbumAsyncAction
-        .run(() => super.fetchSongsFromAlbum(album));
-  }
-
-  final _$fetchAlbumsFromArtistAsyncAction =
-      AsyncAction('_MusicDataStore.fetchAlbumsFromArtist');
-
-  @override
-  Future<void> fetchAlbumsFromArtist(Artist artist) {
-    return _$fetchAlbumsFromArtistAsyncAction
-        .run(() => super.fetchAlbumsFromArtist(artist));
-  }
-
-  final _$fetchHighlightedSongsFromArtistAsyncAction =
-      AsyncAction('_MusicDataStore.fetchHighlightedSongsFromArtist');
-
-  @override
-  Future<void> fetchHighlightedSongsFromArtist(Artist artist) {
-    return _$fetchHighlightedSongsFromArtistAsyncAction
-        .run(() => super.fetchHighlightedSongsFromArtist(artist));
-  }
-
   @override
   String toString() {
     return '''
 songStream: ${songStream},
 albumStream: ${albumStream},
 artistStream: ${artistStream},
-albumSongStream: ${albumSongStream},
-artistAlbumStream: ${artistAlbumStream},
-artistHighlightedSongStream: ${artistHighlightedSongStream},
-isUpdatingDatabase: ${isUpdatingDatabase},
-sortedArtistAlbums: ${sortedArtistAlbums}
+isUpdatingDatabase: ${isUpdatingDatabase}
     ''';
   }
 }

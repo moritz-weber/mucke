@@ -33,7 +33,6 @@ class _AlbumsPageState extends State<AlbumsPage> with AutomaticKeepAliveClientMi
             subtitle: album.artist,
             albumArtPath: album.albumArtPath,
             onTap: () {
-              store.fetchSongsFromAlbum(album);
               Navigator.push(
                 context,
                 MaterialPageRoute<Widget>(

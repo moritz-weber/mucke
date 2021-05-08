@@ -60,8 +60,9 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   }
 
   @override
-  Stream<List<Album>> getArtistAlbumStream(Artist artist) =>
-      _musicDataSource.getArtistAlbumStream(artist as ArtistModel);
+  Stream<List<Album>> getArtistAlbumStream(Artist artist) => _musicDataSource
+      .getArtistAlbumStream(artist as ArtistModel)
+      .map((albums) => _sortArtistAlbums(albums));
 
   @override
   Future<void> updateDatabase() async {
@@ -154,5 +155,14 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
           return -a.playCount.compareTo(b.playCount);
         },
       );
+  }
+
+  List<Album> _sortArtistAlbums(List<Album> albums) {
+    return albums
+      ..sort((a, b) {
+        if (b.pubYear == null) return -1;
+        if (a.pubYear == null) return 1;
+        return -a.pubYear.compareTo(b.pubYear);
+      });
   }
 }

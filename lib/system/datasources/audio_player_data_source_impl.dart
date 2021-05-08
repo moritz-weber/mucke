@@ -181,11 +181,24 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
 
   @override
   Future<void> removeQueueIndex(int index) async {
+    _log.info('REMOVE: $index');
     _queue.removeAt(index);
     if (_isQueueIndexInLoadInterval(index)) {
-      if (index < _loadStartIndex) _loadStartIndex--;
-      if (index < _loadEndIndex) _loadEndIndex--;
-      await _audioSource.removeAt(_calcSourceIndex(index));
+      final sourceIndex = _calcSourceIndex(index);
+      final currentSourceIndex = _audioPlayer.currentIndex;
+      _log.info('INDEX IS LOADED');
+      if (index < _loadStartIndex) {
+        _log.info('$index < $_loadStartIndex --> DECREMENT LOAD START INDEX');
+        _loadStartIndex--;
+      }
+      if (index < _loadEndIndex) {
+        _log.info('$index < $_loadEndIndex --> DECREMENT LOAD END INDEX');
+        _loadEndIndex--;
+      }
+      await _audioSource.removeAt(sourceIndex);
+      if (sourceIndex >= currentSourceIndex) {
+        _updateLoadedQueue(currentSourceIndex);
+      }
     }
   }
 

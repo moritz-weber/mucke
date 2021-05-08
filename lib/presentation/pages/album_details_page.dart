@@ -1,29 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mucke/presentation/widgets/song_info.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 import '../../domain/entities/album.dart';
 import '../../domain/entities/song.dart';
+import '../../domain/repositories/music_data_repository.dart';
+import '../state/album_page_store.dart';
 import '../state/audio_store.dart';
-import '../state/music_data_store.dart';
 import '../theming.dart';
 import '../utils.dart' as utils;
+import '../widgets/song_bottom_sheet.dart';
 import '../widgets/song_list_tile.dart';
 
-class AlbumDetailsPage extends StatelessWidget {
+class AlbumDetailsPage extends StatefulWidget {
   const AlbumDetailsPage({Key key, @required this.album}) : super(key: key);
 
   final Album album;
 
   @override
+  _AlbumDetailsPageState createState() => _AlbumDetailsPageState();
+}
+
+class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
+
+  AlbumPageStore store;
+
+  @override
+  void initState() {
+    super.initState();
+
+    store = AlbumPageStore(
+      musicDataInfoRepository: GetIt.I<MusicDataInfoRepository>(),
+      album: widget.album,
+    );
+  }
+
+    @override
+  void dispose() {
+    store.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final MusicDataStore musicDataStore = Provider.of<MusicDataStore>(context);
     final AudioStore audioStore = Provider.of<AudioStore>(context);
 
     return Observer(
       builder: (BuildContext context) {
-        final songsByDisc = _songsByDisc(musicDataStore.albumSongStream.value);
+        final songsByDisc = _songsByDisc(store.albumSongStream.value);
 
         return CustomScrollView(
           slivers: <Widget>[
@@ -43,7 +68,7 @@ class AlbumDetailsPage extends StatelessWidget {
                   right: 16.0,
                 ),
                 title: Text(
-                  album.title,
+                  widget.album.title,
                   style: const TextStyle(
                     fontWeight: FontWeight.w300,
                     fontSize: 16.0,
@@ -57,7 +82,7 @@ class AlbumDetailsPage extends StatelessWidget {
                       left: 0,
                       right: 0,
                       child: Image(
-                        image: utils.getAlbumImage(album.albumArtPath),
+                        image: utils.getAlbumImage(widget.album.albumArtPath),
                       ),
                     ),
                     Container(
@@ -94,9 +119,9 @@ class AlbumDetailsPage extends StatelessWidget {
                         inAlbum: true,
                         onTap: () => audioStore.playSong(
                           s + _calcOffset(d, songsByDisc),
-                          musicDataStore.albumSongStream.value,
+                          store.albumSongStream.value,
                         ),
-                        onTapMore: () => _openBottomSheet(songsByDisc[d][s], context),
+                        onTapMore: () => SongBottomSheet()(songsByDisc[d][s], context),
                       )
                   ],
                 ),
@@ -129,78 +154,5 @@ class AlbumDetailsPage extends StatelessWidget {
       offset += discs[i].length;
     }
     return offset;
-  }
-
-  void _openBottomSheet(Song song, BuildContext context) {
-    final AudioStore audioStore = Provider.of<AudioStore>(context, listen: false);
-    final MusicDataStore musicDataStore = Provider.of<MusicDataStore>(context, listen: false);
-
-    showModalBottomSheet(
-        context: context,
-        useRootNavigator: true,
-        backgroundColor: DARK2,
-        builder: (context) {
-          return Container(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  height: 2,
-                  color: LIGHT1,
-                ),
-                ListTile(
-                  title: const Text('Play next'),
-                  onTap: () {
-                    audioStore.playNext(song);
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  title: const Text('Add to queue'),
-                  onTap: () {
-                    audioStore.addToQueue(song);
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  title: song.blocked ? const Text('Unblock song') : const Text('Block song'),
-                  onTap: () {
-                    musicDataStore.setSongBlocked(song, !song.blocked);
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  title: const Text('Show song info'),
-                  leading: const Icon(Icons.info),
-                  onTap: () {
-                    Navigator.pop(context);
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return SimpleDialog(
-                            backgroundColor: DARK3,
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.all(HORIZONTAL_PADDING),
-                                child: SongInfo(song),
-                              ),
-                              SimpleDialogOption(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Text(
-                                  'Close',
-                                  textAlign: TextAlign.right,
-                                ),
-                              ),
-                            ],
-                          );
-                        });
-                  },
-                ),
-              ],
-            ),
-          );
-        });
   }
 }
