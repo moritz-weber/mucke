@@ -39,11 +39,12 @@ class _SongsPageState extends State<SongsPage> with AutomaticKeepAliveClientMixi
               return SongListTile(
                 song: song,
                 showAlbum: true,
+                subtitle: Subtitle.artistAlbum,
                 onTap: () => audioStore.playSong(index, songs),
                 onTapMore: () => SongBottomSheet()(song, context),
               );
             },
-            separatorBuilder: (BuildContext context, int index) => const Divider(
+            separatorBuilder: (BuildContext context, int index) => const SizedBox(
               height: 4.0,
             ),
           );

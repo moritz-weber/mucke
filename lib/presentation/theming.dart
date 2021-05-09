@@ -64,6 +64,7 @@ ThemeData theme() => ThemeData(
       dividerTheme: const DividerThemeData(
         indent: HORIZONTAL_PADDING,
         endIndent: HORIZONTAL_PADDING,
+        space: 0.0,
       )
     );
 

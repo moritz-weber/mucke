@@ -57,7 +57,7 @@ class AlbumListTileExtended extends StatelessWidget {
                 ),
               ),
               IconButton(
-                icon: Icon(Icons.play_circle_fill_rounded),
+                icon: const Icon(Icons.play_circle_fill_rounded),
                 iconSize: 40.0,
                 onPressed: () => onTapPlay(),
               ),

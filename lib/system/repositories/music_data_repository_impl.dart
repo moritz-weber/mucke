@@ -56,7 +56,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   Stream<List<Song>> getArtistHighlightedSongStream(Artist artist) {
     return _musicDataSource
         .getArtistSongStream(artist as ArtistModel)
-        .map((event) => _sortHighlightedSongs(event).take(5).toList());
+        .map((event) => _sortHighlightedSongs(event));
   }
 
   @override

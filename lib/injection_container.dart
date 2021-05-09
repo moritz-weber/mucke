@@ -5,6 +5,8 @@ import 'package:just_audio/just_audio.dart';
 
 import 'domain/actors/audio_player_actor.dart';
 import 'domain/actors/platform_integration_actor.dart';
+import 'domain/entities/album.dart';
+import 'domain/entities/artist.dart';
 import 'domain/modules/queue_manager.dart';
 import 'domain/repositories/audio_player_repository.dart';
 import 'domain/repositories/music_data_modifier_repository.dart';
@@ -33,6 +35,8 @@ import 'domain/usecases/set_shuffle_mode.dart';
 import 'domain/usecases/set_song_blocked.dart';
 import 'domain/usecases/shuffle_all.dart';
 import 'domain/usecases/update_database.dart';
+import 'presentation/state/album_page_store.dart';
+import 'presentation/state/artist_page_store.dart';
 import 'presentation/state/audio_store.dart';
 import 'presentation/state/music_data_store.dart';
 import 'presentation/state/navigation_store.dart';
@@ -100,6 +104,12 @@ Future<void> setupGetIt() async {
       final navigationStore = NavigationStore();
       return navigationStore;
     },
+  );
+  getIt.registerFactoryParam<ArtistPageStore, Artist, void>(
+    (Artist artist, _) => ArtistPageStore(artist: artist, musicDataInfoRepository: getIt()),
+  );
+  getIt.registerFactoryParam<AlbumPageStore, Album, void>(
+    (Album album, _) => AlbumPageStore(album: album, musicDataInfoRepository: getIt()),
   );
 
   // use cases

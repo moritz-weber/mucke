@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../domain/entities/song.dart';
 import '../pages/currently_playing.dart';
 import '../state/audio_store.dart';
+import '../theming.dart';
 import '../utils.dart';
 import 'next_button.dart';
 import 'play_pause_button.dart';
@@ -49,10 +50,7 @@ class CurrentlyPlayingBar extends StatelessWidget {
                               ),
                               Text(
                                 song.artist,
-                                style: const TextStyle(
-                                  fontSize: 12.0,
-                                  color: Colors.white70,
-                                ),
+                                style: TEXT_SMALL_SUBTITLE.copyWith(color: Colors.white70),
                               )
                             ],
                           ),

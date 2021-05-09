@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../theming.dart';
 import '../utils.dart' as utils;
 
 class AlbumArtListTile extends StatelessWidget {
@@ -26,9 +27,14 @@ class AlbumArtListTile extends StatelessWidget {
       ),
       title: Text(
         title,
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
       ),
       subtitle: Text(
         subtitle,
+        style: TEXT_SMALL_SUBTITLE.copyWith(color: Colors.white),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
       ),
       onTap: () => onTap(),
       tileColor: highlight ? Colors.white10 : Colors.transparent,

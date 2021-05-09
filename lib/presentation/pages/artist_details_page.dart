@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 
 import '../../domain/entities/album.dart';
 import '../../domain/entities/artist.dart';
-import '../../domain/repositories/music_data_repository.dart';
 import '../state/artist_page_store.dart';
 import '../state/audio_store.dart';
 import '../theming.dart';
@@ -30,10 +29,7 @@ class _ArtistDetailsPageState extends State<ArtistDetailsPage> {
   void initState() {
     super.initState();
 
-    store = ArtistPageStore(
-      musicDataInfoRepository: GetIt.I<MusicDataInfoRepository>(),
-      artist: widget.artist,
-    );
+    store = GetIt.I<ArtistPageStore>(param1: widget.artist);
   }
 
   @override
@@ -76,7 +72,7 @@ class _ArtistDetailsPageState extends State<ArtistDetailsPage> {
                 ],
               ),
             ),
-            ArtistHighlightedSongs(songs: store.artistHighlightedSongStream.value),
+            ArtistHighlightedSongs(artistPageStore: store),
             SliverList(
               delegate: SliverChildListDelegate(
                 [

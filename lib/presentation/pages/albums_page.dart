@@ -44,7 +44,7 @@ class _AlbumsPageState extends State<AlbumsPage> with AutomaticKeepAliveClientMi
             },
           );
         },
-        separatorBuilder: (BuildContext context, int index) => const Divider(
+        separatorBuilder: (BuildContext context, int index) => const SizedBox(
           height: 4.0,
         ),
       );

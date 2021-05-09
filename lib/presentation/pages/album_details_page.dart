@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mucke/presentation/widgets/album_sliver_appbar.dart';
 import 'package:provider/provider.dart';
 
 import '../../domain/entities/album.dart';
 import '../../domain/entities/song.dart';
-import '../../domain/repositories/music_data_repository.dart';
 import '../state/album_page_store.dart';
 import '../state/audio_store.dart';
 import '../theming.dart';
-
+import '../widgets/album_sliver_appbar.dart';
 import '../widgets/song_bottom_sheet.dart';
 import '../widgets/song_list_tile.dart';
 
@@ -30,10 +28,7 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
   void initState() {
     super.initState();
 
-    store = AlbumPageStore(
-      musicDataInfoRepository: GetIt.I<MusicDataInfoRepository>(),
-      album: widget.album,
-    );
+    store = GetIt.I<AlbumPageStore>(param1: widget.album);
   }
 
   @override
