@@ -1,8 +1,9 @@
 import 'package:audio_session/audio_session.dart';
+import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_fimber_filelogger/flutter_fimber_filelogger.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
 import 'injection_container.dart';
@@ -22,10 +23,14 @@ Future<void> main() async {
   final session = await AudioSession.instance;
   await session.configure(const AudioSessionConfiguration.music());
 
-  Logger.root.onRecord.listen((record) {
-    print(
-        '${record.time} [${record.level.name}] ${record.loggerName}: ${record.message}');
-  });
+  Fimber.plantTree(
+    FileLoggerTree(
+      levels: FileLoggerLevels.ALL,
+      numberOfDays: 10,
+      logDateFormat: 'HH:mm:ss',
+    ),
+  );
+  Fimber.plantTree(DebugTree());
 
   runApp(MyApp());
 }

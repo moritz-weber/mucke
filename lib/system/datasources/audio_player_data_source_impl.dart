@@ -1,7 +1,7 @@
 import 'dart:math';
 
+import 'package:fimber/fimber.dart';
 import 'package:just_audio/just_audio.dart' as ja;
-import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../domain/entities/loop_mode.dart';
@@ -16,7 +16,7 @@ const int LOAD_MAX = 6;
 class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
   AudioPlayerDataSourceImpl(this._audioPlayer) {
     _audioPlayer.currentIndexStream.listen((index) async {
-      _log.info('currentIndexSteam.listen: $index');
+      _log.d('currentIndexSteam.listen: $index');
       if (!_lockUpdate) {
         if (!await _updateLoadedQueue(index)) {
           _updateCurrentIndex(index);
@@ -38,7 +38,7 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
   final ja.AudioPlayer _audioPlayer;
   ja.ConcatenatingAudioSource _audioSource;
 
-  static final _log = Logger('AudioPlayer');
+  static final _log = FimberLog('AudioPlayerDataSourceImpl');
   bool _lockUpdate = false;
 
   final BehaviorSubject<int> _currentIndexSubject = BehaviorSubject();
@@ -181,18 +181,18 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
 
   @override
   Future<void> removeQueueIndex(int index) async {
-    _log.info('REMOVE: $index');
+    _log.d('REMOVE: $index');
     _queue.removeAt(index);
     if (_isQueueIndexInLoadInterval(index)) {
       final sourceIndex = _calcSourceIndex(index);
       final currentSourceIndex = _audioPlayer.currentIndex;
-      _log.info('INDEX IS LOADED');
+      _log.d('INDEX IS LOADED');
       if (index < _loadStartIndex) {
-        _log.info('$index < $_loadStartIndex --> DECREMENT LOAD START INDEX');
+        _log.d('$index < $_loadStartIndex --> DECREMENT LOAD START INDEX');
         _loadStartIndex--;
       }
       if (index < _loadEndIndex) {
-        _log.info('$index < $_loadEndIndex --> DECREMENT LOAD END INDEX');
+        _log.d('$index < $_loadEndIndex --> DECREMENT LOAD END INDEX');
         _loadEndIndex--;
       }
       await _audioSource.removeAt(sourceIndex);
@@ -209,7 +209,7 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
     List<SongModel> after,
     int index,
   }) async {
-    _log.info('REPLACE QUEUE AROUND INDEX: $index');
+    _log.d('REPLACE QUEUE AROUND INDEX: $index');
     _queue = before + [_queue[index]] + after;
     final newIndex = before.length;
 
@@ -236,7 +236,7 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
     List<SongModel> before,
     List<SongModel> after,
   }) async {
-    _log.info('REPLACE QUEUE AROUND CURRENT INDEX');
+    _log.d('REPLACE QUEUE AROUND CURRENT INDEX');
     final currIndex = currentIndexStream.value;
     final newIndex = before.length;
     _queue = before + [_queue[currIndex]] + after;
@@ -294,8 +294,8 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
 
   /// extend the loaded audiosource, when seeking to previous/next
   Future<bool> _updateLoadedQueue(int newIndex) async {
-    _log.info('updateLoadedQueue: $newIndex');
-    _log.info('[$_loadStartIndex, $_loadEndIndex]');
+    _log.d('updateLoadedQueue: $newIndex');
+    _log.d('[$_loadStartIndex, $_loadEndIndex]');
 
     if (_loadStartIndex == null || _loadEndIndex == null || newIndex == null) return false;
 
@@ -303,10 +303,10 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
         (_loadStartIndex == 0 && _loadEndIndex == _queue.length)) return false;
 
     if (_loadStartIndex < _loadEndIndex) {
-      _log.info('base case');
+      _log.d('base case');
       return await _updateLoadedQueueBaseCase(newIndex);
     } else {
-      _log.info('inverted case');
+      _log.d('inverted case');
       return await _updateLoadedQueueInverted(newIndex);
     }
   }
@@ -316,13 +316,13 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
       // nearing the start of the loaded songs
       if (_loadStartIndex > 0) {
         // load the song previous to the already loaded songs
-        _log.info('loadStartIndex--');
+        _log.d('loadStartIndex--');
         _loadStartIndex--;
         await _audioSource.insert(0, ja.AudioSource.uri(Uri.file(_queue[_loadStartIndex].path)));
         return true;
       } else if (_loadEndIndex < _queue.length) {
         // load the last song, if it isn't already loaded
-        _log.info('loadStartIndex = ${_queue.length - 1}');
+        _log.d('loadStartIndex = ${_queue.length - 1}');
         _loadStartIndex = _queue.length - 1;
         await _audioSource.add(ja.AudioSource.uri(Uri.file(_queue.last.path)));
         return false;
@@ -331,14 +331,14 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
       // need to load next song
       if (_loadEndIndex < _queue.length) {
         // we ARE NOT at the end of the queue -> load next song
-        _log.info('loadEndIndex++');
+        _log.d('loadEndIndex++');
         _loadEndIndex++;
         await _audioSource.add(ja.AudioSource.uri(Uri.file(_queue[_loadEndIndex - 1].path)));
         return false;
       } else if (_loadStartIndex > 0) {
         // we ARE at the end of the queue AND the first song has not been loaded yet
         // -> load first song
-        _log.info('loadEndIndex = 1');
+        _log.d('loadEndIndex = 1');
         _loadEndIndex = 1;
         await _audioSource.insert(0, ja.AudioSource.uri(Uri.file(_queue[0].path)));
         return true;
@@ -363,7 +363,7 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
     if (leftBorder < _loadEndIndex) {
       // nearing the start of the loaded songs
       // load the song previous to the already loaded songs
-      _log.info('inv: loadStartIndex--');
+      _log.d('inv: loadStartIndex--');
       _loadStartIndex--;
       await _audioSource.insert(
           _loadEndIndex, ja.AudioSource.uri(Uri.file(_queue[_loadStartIndex].path)));
@@ -371,7 +371,7 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
     } else if (rightBorder >= _loadEndIndex) {
       // need to load next song
       // we ARE NOT at the end of the queue -> load next song
-      _log.info('inv: loadEndIndex++');
+      _log.d('inv: loadEndIndex++');
       _loadEndIndex++;
       await _audioSource.insert(
           _loadEndIndex - 1, ja.AudioSource.uri(Uri.file(_queue[_loadEndIndex - 1].path)));
@@ -388,7 +388,7 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
 
     int result;
     if (_audioSource != null && _audioSource.length == _queue.length) {
-      _log.info('EVERYTHING LOADED');
+      _log.d('EVERYTHING LOADED');
       result = apIndex;
     } else if (_loadStartIndex < _loadEndIndex) {
       // base case
@@ -403,7 +403,7 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
     }
 
     _currentIndexSubject.add(result);
-    _log.info('updateCurrentIndex: $result');
+    _log.d('updateCurrentIndex: $result');
   }
 
   int _calcSourceIndex(int queueIndex) {
