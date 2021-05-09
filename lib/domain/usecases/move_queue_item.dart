@@ -22,7 +22,7 @@ class MoveQueueItem {
     _queueManagerModule.moveQueueItem(oldIndex, newIndex);
     await _audioPlayerRepository.moveQueueItem(oldIndex, newIndex);
 
-    final songList = _audioPlayerRepository.queueStream.value;
+    final songList = _audioPlayerRepository.queueStream.valueWrapper.value;
     _platformIntegrationRepository.setQueue(songList);
   }
 }

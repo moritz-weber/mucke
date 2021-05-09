@@ -23,7 +23,7 @@ class AddToQueue {
     _queueManagerModule.addToQueue(song);
     await _audioPlayerRepository.addToQueue(song);
 
-    final songList = _audioPlayerRepository.queueStream.value;
+    final songList = _audioPlayerRepository.queueStream.valueWrapper.value;
     print(songList.length);
     _platformIntegrationRepository.setQueue(songList);
   }

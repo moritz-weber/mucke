@@ -22,7 +22,7 @@ class RemoveQueueIndex {
     _queueManagerModule.removeQueueIndex(index);
     await _audioPlayerRepository.removeQueueIndex(index);
 
-    final songList = _audioPlayerRepository.queueStream.value;
+    final songList = _audioPlayerRepository.queueStream.valueWrapper.value;
     print(songList.length);
     _platformIntegrationRepository.setQueue(songList);
   }

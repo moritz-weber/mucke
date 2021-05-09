@@ -23,7 +23,7 @@ class PlaySongs {
     if (0 <= initialIndex && initialIndex < songs.length) {
       // _audioPlayerRepository.playSong(songs[initialIndex]);
 
-      final shuffleMode = _audioPlayerRepository.shuffleModeStream.value;
+      final shuffleMode = _audioPlayerRepository.shuffleModeStream.valueWrapper.value;
 
       await _queueGenerationModule.setQueue(
         shuffleMode,

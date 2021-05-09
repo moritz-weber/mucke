@@ -85,7 +85,7 @@ class SongModel extends Song {
       return null;
     }
 
-    final String artUri = mediaItem.artUri?.replaceFirst('file://', '');
+    final String artUri = mediaItem.artUri?.path?.replaceFirst('file://', '');
 
     final dn = mediaItem.extras['discNumber'];
     int discNumber;
@@ -200,7 +200,7 @@ class SongModel extends Song {
           album: album,
           artist: artist,
           duration: Duration(milliseconds: duration),
-          artUri: 'file://$albumArtPath',
+          artUri: Uri.file('$albumArtPath'),
           extras: {
             'albumId': albumId,
             'blocked': blocked,
@@ -209,27 +209,6 @@ class SongModel extends Song {
             'previous': previous,
             'trackNumber': trackNumber,
           });
-
-  static List<int> _parseTrackNumber(String trackNumberString) {
-    int discNumber = 1;
-    int trackNumber;
-
-    if (trackNumberString == null) {
-      return [null, null];
-    }
-
-    trackNumber = int.tryParse(trackNumberString);
-    if (trackNumber == null) {
-      if (trackNumberString.contains('/')) {
-        discNumber = int.tryParse(trackNumberString.split('/')[0]);
-        trackNumber = int.tryParse(trackNumberString.split('/')[1]);
-      }
-    } else if (trackNumber > 1000) {
-      discNumber = int.tryParse(trackNumberString.substring(0, 1));
-      trackNumber = int.tryParse(trackNumberString.substring(1));
-    }
-    return [discNumber, trackNumber];
-  }
 
   static int _parseDiscNumber(String discNumberString) {
     if (discNumberString == null || discNumberString == '') {

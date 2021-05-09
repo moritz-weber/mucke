@@ -22,7 +22,7 @@ class SetShuffleMode {
     _audioPlayerRepository.setShuffleMode(shuffleMode);
 
     if (updateQueue) {
-      final currentIndex = _audioPlayerRepository.currentIndexStream.value;
+      final currentIndex = _audioPlayerRepository.currentIndexStream.valueWrapper.value;
       final originalIndex = _queueManagerModule.queue[currentIndex].originalIndex;
 
       await _queueManagerModule.reshuffleQueue(shuffleMode, currentIndex);

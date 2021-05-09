@@ -19,12 +19,12 @@ class PlayNext {
   final QueueManagerModule _queueManagerModule;
 
   Future<void> call(Song song) async {
-    final currentIndex = _audioPlayerRepository.currentIndexStream.value;
+    final currentIndex = _audioPlayerRepository.currentIndexStream.valueWrapper.value;
 
     _queueManagerModule.insertIntoQueue(song, currentIndex + 1);
     await _audioPlayerRepository.playNext(song);
 
-    final songList = _audioPlayerRepository.queueStream.value;
+    final songList = _audioPlayerRepository.queueStream.valueWrapper.value;
     print(songList.length);
     _platformIntegrationRepository.setQueue(songList);
   }
