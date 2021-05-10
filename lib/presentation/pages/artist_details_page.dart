@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:provider/provider.dart';
 
 import '../../domain/entities/album.dart';
 import '../../domain/entities/artist.dart';
@@ -40,7 +39,7 @@ class _ArtistDetailsPageState extends State<ArtistDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final AudioStore audioStore = Provider.of<AudioStore>(context);
+    final AudioStore audioStore = GetIt.I<AudioStore>();
 
     return Observer(
       builder: (BuildContext context) => SafeArea(

@@ -2,7 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:provider/provider.dart';
+import 'package:get_it/get_it.dart';
 
 import '../state/music_data_store.dart';
 import '../theming.dart';
@@ -12,7 +12,7 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final MusicDataStore store = Provider.of<MusicDataStore>(context);
+    final MusicDataStore store = GetIt.I<MusicDataStore>();
 
     return ListView(
       children: [

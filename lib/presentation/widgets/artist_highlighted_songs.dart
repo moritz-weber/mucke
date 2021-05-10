@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:provider/provider.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../domain/entities/song.dart';
 import '../state/artist_page_store.dart';
@@ -15,7 +15,7 @@ class ArtistHighlightedSongs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AudioStore audioStore = Provider.of<AudioStore>(context);
+    final AudioStore audioStore = GetIt.I<AudioStore>();
 
     return Observer(
       builder: (BuildContext context) {

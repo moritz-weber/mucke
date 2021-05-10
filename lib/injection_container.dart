@@ -63,47 +63,38 @@ Future<void> setupGetIt() async {
   print('setupGetIt');
 
   // stores
-  getIt.registerFactory<MusicDataStore>(
-    () {
-      final musicDataStore = MusicDataStore(
-        musicDataInfoRepository: getIt(),
-        settingsRepository: getIt(),
-        musicDataModifierRepository: getIt(),
-        incrementLikeCount: getIt(),
-        setSongBlocked: getIt(),
-        updateDatabase: getIt(),
-      );
-      return musicDataStore;
-    },
+  getIt.registerLazySingleton<MusicDataStore>(
+    () => MusicDataStore(
+      musicDataInfoRepository: getIt(),
+      settingsRepository: getIt(),
+      musicDataModifierRepository: getIt(),
+      incrementLikeCount: getIt(),
+      setSongBlocked: getIt(),
+      updateDatabase: getIt(),
+    ),
   );
-  getIt.registerFactory<AudioStore>(
-    () {
-      final audioStore = AudioStore(
-        audioPlayerInfoRepository: getIt(),
-        addToQueue: getIt(),
-        moveQueueItem: getIt(),
-        pause: getIt(),
-        play: getIt(),
-        playAlbum: getIt(),
-        playArtist: getIt(),
-        playNext: getIt(),
-        playSongs: getIt(),
-        removeQueueIndex: getIt(),
-        seekToIndex: getIt(),
-        seekToNext: getIt(),
-        seekToPrevious: getIt(),
-        setLoopMode: getIt(),
-        setShuffleMode: getIt(),
-        shuffleAll: getIt(),
-      );
-      return audioStore;
-    },
+  getIt.registerLazySingleton<AudioStore>(
+    () => AudioStore(
+      audioPlayerInfoRepository: getIt(),
+      addToQueue: getIt(),
+      moveQueueItem: getIt(),
+      pause: getIt(),
+      play: getIt(),
+      playAlbum: getIt(),
+      playArtist: getIt(),
+      playNext: getIt(),
+      playSongs: getIt(),
+      removeQueueIndex: getIt(),
+      seekToIndex: getIt(),
+      seekToNext: getIt(),
+      seekToPrevious: getIt(),
+      setLoopMode: getIt(),
+      setShuffleMode: getIt(),
+      shuffleAll: getIt(),
+    ),
   );
-  getIt.registerFactory<NavigationStore>(
-    () {
-      final navigationStore = NavigationStore();
-      return navigationStore;
-    },
+  getIt.registerLazySingleton<NavigationStore>(
+    () => NavigationStore(),
   );
   getIt.registerFactoryParam<ArtistPageStore, Artist, void>(
     (Artist artist, _) => ArtistPageStore(artist: artist, musicDataInfoRepository: getIt()),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
@@ -9,8 +9,8 @@ import 'song_info.dart';
 
 class SongBottomSheet {
   void call(Song song, BuildContext context) {
-    final AudioStore audioStore = Provider.of<AudioStore>(context, listen: false);
-    final MusicDataStore musicDataStore = Provider.of<MusicDataStore>(context, listen: false);
+    final AudioStore audioStore = GetIt.I<AudioStore>();
+    final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
 
     showModalBottomSheet(
         context: context,

@@ -39,7 +39,7 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final AudioStore audioStore = Provider.of<AudioStore>(context);
+    final AudioStore audioStore = GetIt.I<AudioStore>();
 
     return Observer(
       builder: (BuildContext context) {

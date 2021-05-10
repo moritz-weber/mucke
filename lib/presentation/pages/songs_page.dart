@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
-import 'package:provider/provider.dart';
 
 import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
@@ -20,8 +20,8 @@ class _SongsPageState extends State<SongsPage> with AutomaticKeepAliveClientMixi
   @override
   Widget build(BuildContext context) {
     print('SongsPage.build');
-    final MusicDataStore musicDataStore = Provider.of<MusicDataStore>(context);
-    final AudioStore audioStore = Provider.of<AudioStore>(context);
+    final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
+    final AudioStore audioStore = GetIt.I<AudioStore>();
 
     super.build(context);
     return Observer(builder: (_) {

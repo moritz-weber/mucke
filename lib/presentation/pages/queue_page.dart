@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
-import 'package:provider/provider.dart';
 import 'package:reorderables/reorderables.dart';
 
 import '../../domain/entities/song.dart';
@@ -16,7 +16,7 @@ class QueuePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('QueuePage.build');
-    final AudioStore audioStore = Provider.of<AudioStore>(context);
+    final AudioStore audioStore = GetIt.I<AudioStore>();
 
     final ObservableStream<int> queueIndexStream = audioStore.queueIndexStream;
     final initialIndex = max(((queueIndexStream?.value) ?? 0) - 2, 0);

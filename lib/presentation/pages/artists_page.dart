@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:provider/provider.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../domain/entities/artist.dart';
 import '../state/music_data_store.dart';
@@ -17,7 +17,7 @@ class _ArtistsPageState extends State<ArtistsPage> with AutomaticKeepAliveClient
   @override
   Widget build(BuildContext context) {
     print('ArtistsPage.build');
-    final MusicDataStore musicDataStore = Provider.of<MusicDataStore>(context);
+    final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
 
     super.build(context);
     return Observer(builder: (_) {

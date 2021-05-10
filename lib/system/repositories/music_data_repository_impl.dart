@@ -1,4 +1,4 @@
-import 'package:logging/logging.dart';
+import 'package:fimber/fimber.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../domain/entities/album.dart';
@@ -25,7 +25,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   final BehaviorSubject<Map<String, Song>> _songUpdateSubject = BehaviorSubject();
   final BehaviorSubject<List<Song>> _songSubject = BehaviorSubject();
 
-  static final _log = Logger('MusicDataRepository');
+  static final _log = FimberLog('MusicDataRepositoryImpl');
 
   @override
   Stream<Map<String, Song>> get songUpdateStream => _songUpdateSubject.stream;
@@ -66,7 +66,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
 
   @override
   Future<void> updateDatabase() async {
-    _log.info('updateDatabase called');
+    _log.d('updateDatabase called');
 
     final localMusic = await _localMusicFetcher.getLocalMusic();
 
@@ -74,7 +74,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
     await _updateAlbums(localMusic['ALBUMS'] as List<AlbumModel>);
     await _updateSongs(localMusic['SONGS'] as List<SongModel>);
 
-    _log.info('updateDatabase finished');
+    _log.d('updateDatabase finished');
   }
 
   @override

@@ -1,7 +1,7 @@
+import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:logging/logging.dart';
-import 'package:provider/provider.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
@@ -17,12 +17,12 @@ import 'queue_page.dart';
 class CurrentlyPlayingPage extends StatelessWidget {
   const CurrentlyPlayingPage({Key key}) : super(key: key);
 
-  static final _log = Logger('CurrentlyPlayingPage');
+  static final _log = FimberLog('CurrentlyPlayingPage');
 
   @override
   Widget build(BuildContext context) {
-    _log.info('build started');
-    final AudioStore audioStore = Provider.of<AudioStore>(context);
+    _log.d('build started');
+    final AudioStore audioStore = GetIt.I<AudioStore>();
 
     return Scaffold(
       body: SafeArea(
@@ -36,7 +36,7 @@ class CurrentlyPlayingPage extends StatelessWidget {
           },
           child: Observer(
             builder: (BuildContext context) {
-              _log.info('Observer.build');
+              _log.d('Observer.build');
               final Song song = audioStore.currentSongStream.value;
 
               return Stack(

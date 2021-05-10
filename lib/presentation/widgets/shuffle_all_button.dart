@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get_it/get_it.dart';
 
 import '../state/audio_store.dart';
 
@@ -11,7 +11,7 @@ class ShuffleAllButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AudioStore audioStore = Provider.of<AudioStore>(context);
+    final AudioStore audioStore = GetIt.I<AudioStore>();
 
     return Container(
       constraints: BoxConstraints.expand(height: 40.0 + verticalPad * 2),
