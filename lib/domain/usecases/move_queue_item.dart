@@ -13,7 +13,7 @@ class MoveQueueItem {
 
   final AudioPlayerRepository _audioPlayerRepository;
   final PlatformIntegrationRepository _platformIntegrationRepository;
-  final PlayerStateRepository _playerStateRepository;
+  final PersistentStateRepository _playerStateRepository;
 
   final QueueManagerModule _queueManagerModule;
 

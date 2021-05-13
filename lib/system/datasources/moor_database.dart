@@ -8,7 +8,7 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 import 'moor/music_data_dao.dart';
-import 'moor/player_state_dao.dart';
+import 'moor/persistent_state_dao.dart';
 import 'moor/settings_dao.dart';
 
 part 'moor_database.g.dart';
@@ -98,7 +98,7 @@ class LibraryFolders extends Table {
     Songs,
   ],
   daos: [
-    PlayerStateDao,
+    PersistentStateDao,
     SettingsDao,
     MusicDataDao,
   ],

@@ -1,3 +1,5 @@
+import 'package:mucke/system/models/queue_item_model.dart';
+
 import '../../domain/entities/loop_mode.dart';
 import '../../domain/entities/queue_item.dart';
 import '../../domain/entities/shuffle_mode.dart';
@@ -5,43 +7,39 @@ import '../../domain/entities/song.dart';
 import '../../domain/repositories/persistent_player_state_repository.dart';
 import '../datasources/player_state_data_source.dart';
 
-class PlayerStateRepositoryImpl implements PlayerStateRepository {
-  PlayerStateRepositoryImpl(this._playerStateDataSource);
+class PersistentStateRepositoryImpl implements PersistentStateRepository {
+  PersistentStateRepositoryImpl(this._persistentStateDataSource);
 
-  final PlayerStateDataSource _playerStateDataSource;
-
-  @override
-  Stream<int> get currentIndexStream => _playerStateDataSource.currentIndexStream;
+  final PersistentStateDataSource _persistentStateDataSource;
 
   @override
-  Stream<Song> get currentSongStream => _playerStateDataSource.currentSongStream;
+  Stream<int> get currentIndexStream => _persistentStateDataSource.currentIndexStream;
 
   @override
-  Stream<LoopMode> get loopModeStream => _playerStateDataSource.loopModeStream;
+  Stream<Song> get currentSongStream => _persistentStateDataSource.currentSongStream;
 
   @override
-  Stream<List<Song>> get queueStream => _playerStateDataSource.songQueueStream;
+  Stream<LoopMode> get loopModeStream => _persistentStateDataSource.loopModeStream;
 
   @override
-  Stream<ShuffleMode> get shuffleModeStream => _playerStateDataSource.shuffleModeStream;
+  Stream<List<Song>> get queueStream => _persistentStateDataSource.songQueueStream;
 
   @override
-  void setCurrentIndex(int index) {
-    // TODO: implement setCurrentIndex
-  }
+  Stream<ShuffleMode> get shuffleModeStream => _persistentStateDataSource.shuffleModeStream;
 
   @override
-  void setLoopMode(LoopMode loopMode) {
-    // TODO: implement setLoopMode
-  }
+  void setCurrentIndex(int index) => _persistentStateDataSource.setCurrentIndex(index);
+
+  @override
+  void setLoopMode(LoopMode loopMode) => _persistentStateDataSource.setLoopMode(loopMode);
 
   @override
   void setQueue(List<QueueItem> queue) {
-    // TODO: implement setQueue
+    _persistentStateDataSource.setQueue(queue.map((e) => e as QueueItemModel).toList());
   }
 
   @override
   void setShuffleMode(ShuffleMode shuffleMode) {
-    // TODO: implement setShuffleMode
+    _persistentStateDataSource.setShuffleMode(shuffleMode);
   }
 }

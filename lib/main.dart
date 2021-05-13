@@ -6,6 +6,7 @@ import 'package:flutter_fimber_filelogger/flutter_fimber_filelogger.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
+import 'domain/actors/startup_actor.dart';
 import 'injection_container.dart';
 import 'presentation/pages/currently_playing.dart';
 import 'presentation/pages/home_page.dart';
@@ -30,6 +31,8 @@ Future<void> main() async {
     ),
   );
   Fimber.plantTree(DebugTree());
+
+  GetIt.I<StartupActor>().init();
 
   runApp(MyApp());
 }

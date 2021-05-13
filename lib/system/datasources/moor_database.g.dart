@@ -2287,9 +2287,9 @@ abstract class _$MoorDatabase extends GeneratedDatabase {
       _persistentShuffleMode ??= $PersistentShuffleModeTable(this);
   $SongsTable _songs;
   $SongsTable get songs => _songs ??= $SongsTable(this);
-  PlayerStateDao _playerStateDao;
-  PlayerStateDao get playerStateDao =>
-      _playerStateDao ??= PlayerStateDao(this as MoorDatabase);
+  PersistentStateDao _persistentStateDao;
+  PersistentStateDao get persistentStateDao =>
+      _persistentStateDao ??= PersistentStateDao(this as MoorDatabase);
   SettingsDao _settingsDao;
   SettingsDao get settingsDao =>
       _settingsDao ??= SettingsDao(this as MoorDatabase);

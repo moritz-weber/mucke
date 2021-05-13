@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'player_state_dao.dart';
+part of 'persistent_state_dao.dart';
 
 // **************************************************************************
 // DaoGenerator
 // **************************************************************************
 
-mixin _$PlayerStateDaoMixin on DatabaseAccessor<MoorDatabase> {
+mixin _$PersistentStateDaoMixin on DatabaseAccessor<MoorDatabase> {
   $SongsTable get songs => attachedDatabase.songs;
   $QueueEntriesTable get queueEntries => attachedDatabase.queueEntries;
   $PersistentIndexTable get persistentIndex => attachedDatabase.persistentIndex;

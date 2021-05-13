@@ -14,12 +14,13 @@ class SetShuffleMode {
 
   final AudioPlayerRepository _audioPlayerRepository;
   final PlatformIntegrationRepository _platformIntegrationRepository;
-  final PlayerStateRepository _playerStateRepository;
+  final PersistentStateRepository _playerStateRepository;
 
   final QueueManagerModule _queueManagerModule;
 
   Future<void> call(ShuffleMode shuffleMode, {bool updateQueue = true}) async {
     _audioPlayerRepository.setShuffleMode(shuffleMode);
+    _playerStateRepository.setShuffleMode(shuffleMode);
 
     if (updateQueue) {
       final currentIndex = _audioPlayerRepository.currentIndexStream.valueWrapper.value;

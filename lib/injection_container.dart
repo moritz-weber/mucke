@@ -5,6 +5,7 @@ import 'package:just_audio/just_audio.dart';
 
 import 'domain/actors/audio_player_actor.dart';
 import 'domain/actors/platform_integration_actor.dart';
+import 'domain/actors/startup_actor.dart';
 import 'domain/entities/album.dart';
 import 'domain/entities/artist.dart';
 import 'domain/modules/queue_manager.dart';
@@ -206,6 +207,7 @@ Future<void> setupGetIt() async {
   getIt.registerLazySingleton<SetLoopMode>(
     () => SetLoopMode(
       getIt(),
+      getIt(),
     ),
   );
   getIt.registerLazySingleton<SetShuffleMode>(
@@ -266,8 +268,8 @@ Future<void> setupGetIt() async {
     ),
   );
 
-  getIt.registerLazySingleton<PlayerStateRepository>(
-    () => PlayerStateRepositoryImpl(
+  getIt.registerLazySingleton<PersistentStateRepository>(
+    () => PersistentStateRepositoryImpl(
       getIt(),
     ),
   );
@@ -288,7 +290,7 @@ Future<void> setupGetIt() async {
   // data sources
   final MoorDatabase moorDatabase = MoorDatabase();
   getIt.registerLazySingleton<MusicDataSource>(() => moorDatabase.musicDataDao);
-  getIt.registerLazySingleton<PlayerStateDataSource>(() => moorDatabase.playerStateDao);
+  getIt.registerLazySingleton<PersistentStateDataSource>(() => moorDatabase.persistentStateDao);
   getIt.registerLazySingleton<SettingsDataSource>(() => moorDatabase.settingsDao);
   getIt.registerLazySingleton<LocalMusicFetcher>(
     () => LocalMusicFetcherImpl(
@@ -335,6 +337,16 @@ Future<void> setupGetIt() async {
 
   getIt.registerSingleton<AudioPlayerActor>(
     AudioPlayerActor(
+      getIt(),
+      getIt(),
+      getIt(),
+      getIt(),
+      getIt(),
+    ),
+  );
+
+  getIt.registerSingleton<StartupActor>(
+    StartupActor(
       getIt(),
       getIt(),
       getIt(),

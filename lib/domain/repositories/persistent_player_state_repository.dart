@@ -3,7 +3,7 @@ import '../entities/queue_item.dart';
 import '../entities/shuffle_mode.dart';
 import '../entities/song.dart';
 
-abstract class PlayerStateRepository {
+abstract class PersistentStateRepository {
   Stream<List<Song>> get queueStream;
   Stream<int> get currentIndexStream;
   Stream<Song> get currentSongStream;

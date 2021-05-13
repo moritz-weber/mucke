@@ -3,7 +3,7 @@ import '../../domain/entities/shuffle_mode.dart';
 import '../models/queue_item_model.dart';
 import '../models/song_model.dart';
 
-abstract class PlayerStateDataSource {
+abstract class PersistentStateDataSource {
   Future<void> setQueue(List<QueueItemModel> queue);
   Stream<List<SongModel>> get songQueueStream;
   Stream<List<QueueItemModel>> get queueStream;
