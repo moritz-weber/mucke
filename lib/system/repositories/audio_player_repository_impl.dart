@@ -14,10 +14,7 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
     _loopModeSubject.add(LoopMode.off);
 
     _audioPlayerDataSource.currentIndexStream.listen(
-      (index) {
-        print('CURRENT INDEX: $index');
-        _updateCurrentSong(queueStream.value, index);
-      },
+      (index) => _updateCurrentSong(queueStream.value, index),
     );
     _queueSubject.listen((queue) => _updateCurrentSong(queue, currentIndexStream.value));
   }

@@ -66,7 +66,7 @@ class QueueManagerModule {
     ShuffleMode shuffleMode,
     int currentIndex,
   ) async {
-    final songs = _originalSongList.cast<Song>() + _addedSongs;
+    final songs = _originalSongList + _addedSongs;
     final currentQueueItem = _queue[currentIndex];
     int originalIndex = currentQueueItem.originalIndex;
     if (currentQueueItem.type == QueueItemType.added) {

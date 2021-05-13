@@ -110,7 +110,6 @@ Future<void> setupGetIt() async {
       getIt(),
       getIt(),
       getIt(),
-      getIt(),
     ),
   );
   getIt.registerLazySingleton<HandlePlaybackEvent>(
@@ -130,7 +129,6 @@ Future<void> setupGetIt() async {
   );
   getIt.registerLazySingleton<MoveQueueItem>(
     () => MoveQueueItem(
-      getIt(),
       getIt(),
       getIt(),
       getIt(),
@@ -165,7 +163,6 @@ Future<void> setupGetIt() async {
       getIt(),
       getIt(),
       getIt(),
-      getIt(),
     ),
   );
   getIt.registerLazySingleton<PlaySongs>(
@@ -173,12 +170,10 @@ Future<void> setupGetIt() async {
       getIt(),
       getIt(),
       getIt(),
-      getIt(),
     ),
   );
   getIt.registerLazySingleton<RemoveQueueIndex>(
     () => RemoveQueueIndex(
-      getIt(),
       getIt(),
       getIt(),
       getIt(),

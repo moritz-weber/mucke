@@ -1,11 +1,10 @@
-import 'package:mucke/system/models/queue_item_model.dart';
-
 import '../../domain/entities/loop_mode.dart';
 import '../../domain/entities/queue_item.dart';
 import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/entities/song.dart';
 import '../../domain/repositories/persistent_player_state_repository.dart';
 import '../datasources/player_state_data_source.dart';
+import '../models/queue_item_model.dart';
 
 class PersistentStateRepositoryImpl implements PersistentStateRepository {
   PersistentStateRepositoryImpl(this._persistentStateDataSource);
