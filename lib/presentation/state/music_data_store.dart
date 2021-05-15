@@ -78,6 +78,10 @@ abstract class _MusicDataStore with Store {
     await _musicDataModifierRepository.toggleNextSongLink(song);
   }
 
+  Future<void> togglePreviousSongLink(Song song) async {
+    await _musicDataModifierRepository.togglePreviousSongLink(song);
+  }
+
   Future<void> incrementLikeCount(Song song) => _incrementLikeCount(song);
 
   Future<void> resetLikeCount(Song song) => _musicDataModifierRepository.resetLikeCount(song);

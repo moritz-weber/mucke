@@ -205,6 +205,37 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
     }
   }
 
+  // EXPLORATORY CODE!!!
+  @override
+  Future<void> togglePreviousSongLink(SongModel song) async {
+    if (song.previous == null) {
+      final albumSongs = await (select(songs)
+            ..where((tbl) => tbl.albumId.equals(song.albumId))
+            ..orderBy([
+              (t) => OrderingTerm(expression: t.discNumber),
+              (t) => OrderingTerm(expression: t.trackNumber)
+            ]))
+          .get()
+          .then((moorSongList) =>
+              moorSongList.map((moorSong) => SongModel.fromMoor(moorSong)).toList());
+
+      SongModel prevSong;
+      for (final s in albumSongs) {
+        if (s.path == song.path) {
+          break;
+        }
+        prevSong = s;
+      }
+      if (prevSong != null) {
+        await (update(songs)..where((tbl) => tbl.path.equals(song.path)))
+            .write(SongsCompanion(previous: Value(prevSong.path)));
+      }
+    } else {
+      await (update(songs)..where((tbl) => tbl.path.equals(song.path)))
+          .write(const SongsCompanion(previous: Value(null)));
+    }
+  }
+
   @override
   Future<void> decrementLikeCount(SongModel song) async {
     final songEntry = await (select(songs)..where((tbl) => tbl.path.equals(song.path))).getSingle();

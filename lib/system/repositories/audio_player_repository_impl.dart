@@ -4,12 +4,13 @@ import '../../domain/entities/loop_mode.dart';
 import '../../domain/entities/playback_event.dart';
 import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/entities/song.dart';
+import '../../domain/modules/queue_manager.dart';
 import '../../domain/repositories/audio_player_repository.dart';
 import '../datasources/audio_player_data_source.dart';
 import '../models/song_model.dart';
 
 class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
-  AudioPlayerRepositoryImpl(this._audioPlayerDataSource) {
+  AudioPlayerRepositoryImpl(this._audioPlayerDataSource, this._managedQueue) {
     _shuffleModeSubject.add(ShuffleMode.none);
     _loopModeSubject.add(LoopMode.off);
 
@@ -20,6 +21,7 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   }
 
   final AudioPlayerDataSource _audioPlayerDataSource;
+  final ManagedQueue _managedQueue;
 
   // final BehaviorSubject<int> _currentIndexSubject = BehaviorSubject();
   final BehaviorSubject<Song> _currentSongSubject = BehaviorSubject();
@@ -57,7 +59,8 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   @override
   Future<void> addToQueue(Song song) async {
     _audioPlayerDataSource.addToQueue(song as SongModel);
-    _queueSubject.add(_queueSubject.value + [song]);
+    _managedQueue.addToQueue(song);
+    _queueSubject.add(_managedQueue.queue);
   }
 
   @override
@@ -66,27 +69,24 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   }
 
   @override
-  Future<void> loadQueue({List<Song> queue, int initialIndex}) async {
-    // _currentSongSubject.add(queue[initialIndex]);
-    _queueSubject.add(queue);
-    // _currentIndexSubject.add(initialIndex);
+  Future<void> loadSongs({List<Song> songs, int initialIndex}) async {
+    final shuffleMode = shuffleModeStream.value;
+    final _initialIndex = await _managedQueue.generateQueue(shuffleMode, songs, initialIndex);
+
+    _queueSubject.add(_managedQueue.queue);
 
     await _audioPlayerDataSource.loadQueue(
-      initialIndex: initialIndex,
-      queue: queue.map((e) => e as SongModel).toList(),
+      initialIndex: _initialIndex,
+      queue: _managedQueue.queue.map((e) => e as SongModel).toList(),
     );
   }
 
   @override
   Future<void> moveQueueItem(int oldIndex, int newIndex) async {
-    final _songList = _queueSubject.value.toList();
-
     _audioPlayerDataSource.moveQueueItem(oldIndex, newIndex);
 
-    final song = _songList.removeAt(oldIndex);
-    _songList.insert(newIndex, song);
-
-    _queueSubject.add(_songList);
+    _managedQueue.moveQueueItem(oldIndex, newIndex);
+    _queueSubject.add(_managedQueue.queue);
   }
 
   @override
@@ -100,41 +100,19 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   }
 
   @override
-  Future<void> playSong(Song song) async {
-    await _audioPlayerDataSource.loadQueue(
-      initialIndex: 0,
-      queue: [song as SongModel],
-    );
-    _audioPlayerDataSource.play();
-  }
-
-  @override
   Future<void> playNext(Song song) async {
-    final index = currentIndexStream.value + 1;
-    final _songList = _queueSubject.value;
-
     _audioPlayerDataSource.playNext(song as SongModel);
-    _queueSubject.add(_songList.sublist(0, index) + [song] + _songList.sublist(index));
+
+    _managedQueue.insertIntoQueue(song, currentIndexStream.value + 1);
+    _queueSubject.add(_managedQueue.queue);
   }
 
   @override
   Future<void> removeQueueIndex(int index) async {
-    final _songList = _queueSubject.value;
-
     _audioPlayerDataSource.removeQueueIndex(index);
 
-    _queueSubject.add(_songList.sublist(0, index) + _songList.sublist(index + 1));
-  }
-
-  @override
-  Future<void> replaceQueueAroundIndex({List<Song> before, List<Song> after, int index}) async {
-    _queueSubject.add(before + [_queueSubject.value[index]] + after);
-
-    await _audioPlayerDataSource.replaceQueueAroundIndex(
-      before: before.map((e) => e as SongModel).toList(),
-      after: after.map((e) => e as SongModel).toList(),
-      index: index,
-    );
+    _managedQueue.removeQueueIndex(index);
+    _queueSubject.add(_managedQueue.queue);
   }
 
   @override
@@ -159,8 +137,21 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   }
 
   @override
-  Future<void> setShuffleMode(ShuffleMode shuffleMode) async {
+  Future<void> setShuffleMode(ShuffleMode shuffleMode, {bool updateQueue}) async {
     _shuffleModeSubject.add(shuffleMode);
+
+    final currentIndex = currentIndexStream.value;
+
+    if (updateQueue) {
+      final splitIndex = await _managedQueue.reshuffleQueue(shuffleMode, currentIndex);
+      _queueSubject.add(_managedQueue.queue);
+
+      await _audioPlayerDataSource.replaceQueueAroundIndex(
+        index: currentIndex,
+        before: _managedQueue.queue.sublist(0, splitIndex).map((e) => e as SongModel).toList(),
+        after: _managedQueue.queue.sublist(splitIndex + 1).map((e) => e as SongModel).toList(),
+      );
+    }
   }
 
   @override
@@ -169,6 +160,7 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
     throw UnimplementedError();
   }
 
+  // TODO: this should be in ManagedQueue
   @override
   Future<void> updateSongs(Map<String, Song> songs) async {
     if (songs.containsKey(_currentSongSubject.value.path)) {
@@ -185,8 +177,7 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
       }
     }
 
-    if (changed)
-      _queueSubject.add(queue);
+    if (changed) _queueSubject.add(queue);
   }
 
   void _updateCurrentSong(List<Song> queue, int index) {

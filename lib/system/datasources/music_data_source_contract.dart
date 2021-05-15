@@ -21,6 +21,7 @@ abstract class MusicDataSource {
   Future<void> deleteAllSongs();
   Future<void> setSongBlocked(SongModel song, bool blocked);
   Future<void> toggleNextSongLink(SongModel song);
+  Future<void> togglePreviousSongLink(SongModel song);
   Future<void> incrementSkipCount(SongModel song);
   Future<void> resetSkipCount(SongModel song);
   Future<void> incrementLikeCount(SongModel song);

@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
 import '../state/music_data_store.dart';
+import '../theming.dart';
 import 'like_button.dart';
 
 class SongCustomizationButtons extends StatelessWidget {
@@ -23,11 +24,11 @@ class SongCustomizationButtons extends StatelessWidget {
             children: [
               IconButton(
                 icon: Icon(
-                  song.next == null ? Icons.link_off : Icons.link,
-                  color: song.next == null ? Colors.white24 : Colors.white,
+                  song.next == null && song.previous == null ? Icons.link_off : Icons.link,
+                  color: _linkColor(song),
                 ),
                 iconSize: 20.0,
-                onPressed: () => musicDataStore.toggleNextSongLink(song),
+                onPressed: () => _editLinks(song, context),
                 visualDensity: VisualDensity.compact,
               ),
               const LikeButton(
@@ -44,6 +45,54 @@ class SongCustomizationButtons extends StatelessWidget {
               ),
             ],
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          ),
+        );
+      },
+    );
+  }
+
+  Color _linkColor(Song song) {
+    if (song.next != null && song.previous != null) {
+      return LIGHT1;
+    } else if (song.next != null) {
+      return Colors.red;
+    } else if (song.previous != null) {
+      return Colors.blue;
+    }
+    return Colors.white24;
+  } 
+
+  void _editLinks(Song song, BuildContext context) {
+    final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
+
+    showModalBottomSheet(
+      context: context,
+      useRootNavigator: true,
+      backgroundColor: DARK2,
+      builder: (context) {
+        return Container(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                height: 2,
+                color: LIGHT1,
+              ),
+              SwitchListTile(
+                title: const Text('Always play previous song before'),
+                value: song.previous != null,
+                onChanged: (bool value) {
+                  musicDataStore.togglePreviousSongLink(song);
+                },
+              ),
+              SwitchListTile(
+                title: const Text('Always play next song after'),
+                value: song.next != null,
+                onChanged: (bool value) {
+                  musicDataStore.toggleNextSongLink(song);
+                },
+              ),
+            ],
           ),
         );
       },

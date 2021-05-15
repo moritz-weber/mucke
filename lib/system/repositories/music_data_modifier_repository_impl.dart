@@ -16,6 +16,10 @@ class MusicDataModifierRepositoryImpl implements MusicDataModifierRepository {
   Future<void> toggleNextSongLink(Song song) =>
       _musicDataSource.toggleNextSongLink(song as SongModel);
 
+    @override
+  Future<void> togglePreviousSongLink(Song song) =>
+      _musicDataSource.togglePreviousSongLink(song as SongModel);
+
   @override
   Future<void> decrementLikeCount(Song song) =>
       _musicDataSource.decrementLikeCount(song as SongModel);

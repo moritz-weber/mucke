@@ -29,16 +29,15 @@ abstract class AudioPlayerRepository extends AudioPlayerInfoRepository {
   Future<void> seekToIndex(int index);
   Future<void> dispose();
 
-  Future<void> playSong(Song song);
-  Future<void> loadQueue({List<Song> queue, int initialIndex});
+  /// Create and load a queue from [songs] according to current AudioPlayer settings.
+  Future<void> loadSongs({List<Song> songs, int initialIndex});
   Future<void> addToQueue(Song song);
   Future<void> playNext(Song song);
   Future<void> moveQueueItem(int oldIndex, int newIndex);
   Future<void> removeQueueIndex(int index);
-  Future<void> replaceQueueAroundIndex({List<Song> before, List<Song> after, int index});
 
-  /// Set the ShuffleMode. Does not affect playback/queue.
-  Future<void> setShuffleMode(ShuffleMode shuffleMode);
+  /// Set the ShuffleMode.
+  Future<void> setShuffleMode(ShuffleMode shuffleMode, {bool updateQueue});
   Future<void> setLoopMode(LoopMode loopMode);
 
   /// Current scope: update song information in queue, don't affect playback/queue.

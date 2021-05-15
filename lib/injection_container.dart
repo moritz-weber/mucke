@@ -109,7 +109,6 @@ Future<void> setupGetIt() async {
     () => AddToQueue(
       getIt(),
       getIt(),
-      getIt(),
     ),
   );
   getIt.registerLazySingleton<HandlePlaybackEvent>(
@@ -129,7 +128,6 @@ Future<void> setupGetIt() async {
   );
   getIt.registerLazySingleton<MoveQueueItem>(
     () => MoveQueueItem(
-      getIt(),
       getIt(),
       getIt(),
     ),
@@ -162,19 +160,16 @@ Future<void> setupGetIt() async {
     () => PlayNext(
       getIt(),
       getIt(),
-      getIt(),
     ),
   );
   getIt.registerLazySingleton<PlaySongs>(
     () => PlaySongs(
       getIt(),
       getIt(),
-      getIt(),
     ),
   );
   getIt.registerLazySingleton<RemoveQueueIndex>(
     () => RemoveQueueIndex(
-      getIt(),
       getIt(),
       getIt(),
     ),
@@ -210,7 +205,6 @@ Future<void> setupGetIt() async {
       getIt(),
       getIt(),
       getIt(),
-      getIt(),
     ),
   );
   getIt.registerLazySingleton<SetSongBlocked>(
@@ -232,8 +226,8 @@ Future<void> setupGetIt() async {
   );
 
   // modules
-  getIt.registerLazySingleton<QueueManagerModule>(
-    () => QueueManagerModule(
+  getIt.registerLazySingleton<ManagedQueue>(
+    () => ManagedQueue(
       getIt(),
     ),
   );
@@ -241,6 +235,7 @@ Future<void> setupGetIt() async {
   // repositories
   getIt.registerLazySingleton<AudioPlayerRepository>(
     () => AudioPlayerRepositoryImpl(
+      getIt(),
       getIt(),
     ),
   );
