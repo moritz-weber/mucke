@@ -1830,8 +1830,8 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
       @required this.likeCount,
       @required this.skipCount,
       @required this.playCount,
-      this.previous,
-      this.next});
+      @required this.previous,
+      @required this.next});
   factory MoorSong.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -2505,11 +2505,8 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
   @override
   GeneratedTextColumn get previous => _previous ??= _constructPrevious();
   GeneratedTextColumn _constructPrevious() {
-    return GeneratedTextColumn(
-      'previous',
-      $tableName,
-      true,
-    );
+    return GeneratedTextColumn('previous', $tableName, false,
+        defaultValue: const Constant(''));
   }
 
   final VerificationMeta _nextMeta = const VerificationMeta('next');
@@ -2517,11 +2514,8 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
   @override
   GeneratedTextColumn get next => _next ??= _constructNext();
   GeneratedTextColumn _constructNext() {
-    return GeneratedTextColumn(
-      'next',
-      $tableName,
-      true,
-    );
+    return GeneratedTextColumn('next', $tableName, false,
+        defaultValue: const Constant(''));
   }
 
   @override

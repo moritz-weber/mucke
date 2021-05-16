@@ -52,8 +52,8 @@ class Songs extends Table {
   IntColumn get skipCount => integer().withDefault(const Constant(0))();
   IntColumn get playCount => integer().withDefault(const Constant(0))();
 
-  TextColumn get previous => text().nullable()();
-  TextColumn get next => text().nullable()();
+  TextColumn get previous => text().withDefault(const Constant(''))();
+  TextColumn get next => text().withDefault(const Constant(''))();
 
   @override
   Set<Column> get primaryKey => {path};

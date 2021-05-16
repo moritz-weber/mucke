@@ -24,11 +24,11 @@ class SongCustomizationButtons extends StatelessWidget {
             children: [
               IconButton(
                 icon: Icon(
-                  song.next == null && song.previous == null ? Icons.link_off : Icons.link,
+                  song.next == '' && song.previous == '' ? Icons.link_off : Icons.link,
                   color: _linkColor(song),
                 ),
                 iconSize: 20.0,
-                onPressed: () => _editLinks(song, context),
+                onPressed: () => _editLinks(context),
                 visualDensity: VisualDensity.compact,
               ),
               const LikeButton(
@@ -52,18 +52,19 @@ class SongCustomizationButtons extends StatelessWidget {
   }
 
   Color _linkColor(Song song) {
-    if (song.next != null && song.previous != null) {
+    if (song.next != '' && song.previous != '') {
       return LIGHT1;
-    } else if (song.next != null) {
+    } else if (song.next != '') {
       return Colors.red;
-    } else if (song.previous != null) {
+    } else if (song.previous != '') {
       return Colors.blue;
     }
     return Colors.white24;
-  } 
+  }
 
-  void _editLinks(Song song, BuildContext context) {
+  void _editLinks(BuildContext context) {
     final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
+    final AudioStore audioStore = GetIt.I<AudioStore>();
 
     showModalBottomSheet(
       context: context,
@@ -71,28 +72,33 @@ class SongCustomizationButtons extends StatelessWidget {
       backgroundColor: DARK2,
       builder: (context) {
         return Container(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                height: 2,
-                color: LIGHT1,
-              ),
-              SwitchListTile(
-                title: const Text('Always play previous song before'),
-                value: song.previous != null,
-                onChanged: (bool value) {
-                  musicDataStore.togglePreviousSongLink(song);
-                },
-              ),
-              SwitchListTile(
-                title: const Text('Always play next song after'),
-                value: song.next != null,
-                onChanged: (bool value) {
-                  musicDataStore.toggleNextSongLink(song);
-                },
-              ),
-            ],
+          child: Observer(
+            builder: (BuildContext context) {
+              final song = audioStore.currentSongStream.value;
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    height: 2,
+                    color: LIGHT1,
+                  ),
+                  SwitchListTile(
+                    title: const Text('Always play previous song before'),
+                    value: song.previous != '',
+                    onChanged: (bool value) {
+                      musicDataStore.togglePreviousSongLink(song);
+                    },
+                  ),
+                  SwitchListTile(
+                    title: const Text('Always play next song after'),
+                    value: song.next != '',
+                    onChanged: (bool value) {
+                      musicDataStore.toggleNextSongLink(song);
+                    },
+                  ),
+                ],
+              );
+            },
           ),
         );
       },

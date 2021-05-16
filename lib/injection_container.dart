@@ -10,7 +10,6 @@ import 'domain/entities/album.dart';
 import 'domain/entities/artist.dart';
 import 'domain/modules/managed_queue.dart';
 import 'domain/repositories/audio_player_repository.dart';
-import 'domain/repositories/music_data_modifier_repository.dart';
 import 'domain/repositories/music_data_repository.dart';
 import 'domain/repositories/persistent_state_repository.dart';
 import 'domain/repositories/platform_integration_repository.dart';
@@ -28,6 +27,7 @@ import 'domain/usecases/play_artist.dart';
 import 'domain/usecases/play_next.dart';
 import 'domain/usecases/play_songs.dart';
 import 'domain/usecases/remove_queue_index.dart';
+import 'domain/usecases/reset_like_count.dart';
 import 'domain/usecases/seek_to_index.dart';
 import 'domain/usecases/seek_to_next.dart';
 import 'domain/usecases/seek_to_previous.dart';
@@ -36,6 +36,8 @@ import 'domain/usecases/set_loop_mode.dart';
 import 'domain/usecases/set_shuffle_mode.dart';
 import 'domain/usecases/set_song_blocked.dart';
 import 'domain/usecases/shuffle_all.dart';
+import 'domain/usecases/toggle_next_song_link.dart';
+import 'domain/usecases/toggle_previous_song_link.dart';
 import 'domain/usecases/update_database.dart';
 import 'presentation/state/album_page_store.dart';
 import 'presentation/state/artist_page_store.dart';
@@ -53,7 +55,6 @@ import 'system/datasources/platform_integration_data_source.dart';
 import 'system/datasources/platform_integration_data_source_impl.dart';
 import 'system/datasources/settings_data_source.dart';
 import 'system/repositories/audio_player_repository_impl.dart';
-import 'system/repositories/music_data_modifier_repository_impl.dart';
 import 'system/repositories/music_data_repository_impl.dart';
 import 'system/repositories/persistent_state_repository_impl.dart';
 import 'system/repositories/platform_integration_repository_impl.dart';
@@ -69,10 +70,12 @@ Future<void> setupGetIt() async {
     () => MusicDataStore(
       musicDataInfoRepository: getIt(),
       settingsRepository: getIt(),
-      musicDataModifierRepository: getIt(),
       incrementLikeCount: getIt(),
+      resetLikeCount: getIt(),
       setSongBlocked: getIt(),
       updateDatabase: getIt(),
+      toggleNextSongLink: getIt(),
+      togglePreviousSongLink: getIt(),
     ),
   );
   getIt.registerLazySingleton<AudioStore>(
@@ -180,6 +183,11 @@ Future<void> setupGetIt() async {
       getIt(),
     ),
   );
+  getIt.registerLazySingleton<ResetLikeCount>(
+    () => ResetLikeCount(
+      getIt(),
+    ),
+  );
   getIt.registerLazySingleton<SeekToIndex>(
     () => SeekToIndex(
       getIt(),
@@ -223,6 +231,16 @@ Future<void> setupGetIt() async {
       getIt(),
     ),
   );
+  getIt.registerLazySingleton<ToggleNextSongLink>(
+    () => ToggleNextSongLink(
+      getIt(),
+    ),
+  );
+  getIt.registerLazySingleton<TogglePreviousSongLink>(
+    () => TogglePreviousSongLink(
+      getIt(),
+    ),
+  );
   getIt.registerLazySingleton<UpdateDatabase>(
     () => UpdateDatabase(
       getIt(),
@@ -255,11 +273,6 @@ Future<void> setupGetIt() async {
   );
   getIt.registerLazySingleton<MusicDataInfoRepository>(
     () => getIt<MusicDataRepository>(),
-  );
-  getIt.registerLazySingleton<MusicDataModifierRepository>(
-    () => MusicDataModifierRepositoryImpl(
-      getIt(),
-    ),
   );
 
   getIt.registerLazySingleton<PersistentStateRepository>(

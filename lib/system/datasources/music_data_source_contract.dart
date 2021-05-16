@@ -8,6 +8,8 @@ abstract class MusicDataSource {
   Stream<List<SongModel>> getArtistSongStream(ArtistModel artist);
   Future<List<SongModel>> getSongs();
   Future<SongModel> getSongByPath(String path);
+  Future<SongModel> getPredecessor(SongModel song);
+  Future<SongModel> getSuccessor(SongModel song);
 
   Stream<List<AlbumModel>> get albumStream;
   Stream<List<AlbumModel>> getArtistAlbumStream(ArtistModel artist);
@@ -17,11 +19,10 @@ abstract class MusicDataSource {
   Future<List<ArtistModel>> getArtists();
 
   Future<void> insertSong(SongModel songModel);
+  Future<void> updateSong(SongModel songModel);
   Future<void> insertSongs(List<SongModel> songModels);
   Future<void> deleteAllSongs();
   Future<void> setSongBlocked(SongModel song, bool blocked);
-  Future<void> toggleNextSongLink(SongModel song);
-  Future<void> togglePreviousSongLink(SongModel song);
   Future<void> incrementSkipCount(SongModel song);
   Future<void> resetSkipCount(SongModel song);
   Future<void> incrementLikeCount(SongModel song);

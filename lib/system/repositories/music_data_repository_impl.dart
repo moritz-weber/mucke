@@ -129,9 +129,10 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   }
 
   @override
-  Future<void> resetLikeCount(Song song) {
-    // TODO: implement resetLikeCount
-    throw UnimplementedError();
+  Future<void> resetLikeCount(Song song) async {
+    final newSong = (song as SongModel).copyWith(likeCount: 0);
+    _songUpdateSubject.add({song.path: newSong});
+    _musicDataSource.resetLikeCount(song as SongModel);
   }
 
   @override
@@ -144,6 +145,32 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   Future<void> resetSkipCount(Song song) {
     // TODO: implement resetSkipCount
     throw UnimplementedError();
+  }
+
+  @override
+  Future<void> toggleNextSongLink(Song song) async {
+    SongModel newSong;
+    if (song.next == '') {
+      final successor = await _musicDataSource.getSuccessor(song as SongModel);
+      newSong = (song as SongModel).copyWith(next: successor.path);
+    } else {
+      newSong = (song as SongModel).copyWith(next: '');
+    }
+    _musicDataSource.updateSong(newSong);
+    _songUpdateSubject.add({song.path: newSong});
+  }
+
+  @override
+  Future<void> togglePreviousSongLink(Song song) async {
+    SongModel newSong;
+    if (song.previous == '') {
+      final predecessor = await _musicDataSource.getPredecessor(song as SongModel);
+      newSong = (song as SongModel).copyWith(previous: predecessor.path);
+    } else {
+      newSong = (song as SongModel).copyWith(previous: '');
+    }
+    _musicDataSource.updateSong(newSong);
+    _songUpdateSubject.add({song.path: newSong});
   }
 
   List<Song> _sortHighlightedSongs(List<Song> songs) {

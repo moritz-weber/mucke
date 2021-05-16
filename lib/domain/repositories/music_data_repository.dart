@@ -31,4 +31,7 @@ abstract class MusicDataRepository extends MusicDataInfoRepository {
 
   Future<void> incrementPlayCount(Song song);
   Future<void> resetPlayCount(Song song);
+
+  Future<void> togglePreviousSongLink(Song song);
+  Future<void> toggleNextSongLink(Song song);
 }

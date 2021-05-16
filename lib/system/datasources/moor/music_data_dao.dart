@@ -172,70 +172,6 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
         .write(SongsCompanion(blocked: Value(blocked)));
   }
 
-  // EXPLORATORY CODE!!!
-  @override
-  Future<void> toggleNextSongLink(SongModel song) async {
-    if (song.next == null) {
-      final albumSongs = await (select(songs)
-            ..where((tbl) => tbl.albumId.equals(song.albumId))
-            ..orderBy([
-              (t) => OrderingTerm(expression: t.discNumber),
-              (t) => OrderingTerm(expression: t.trackNumber)
-            ]))
-          .get()
-          .then((moorSongList) =>
-              moorSongList.map((moorSong) => SongModel.fromMoor(moorSong)).toList());
-
-      bool current = false;
-      SongModel nextSong;
-      for (final s in albumSongs) {
-        if (current) {
-          nextSong = s;
-          break;
-        }
-        if (s.path == song.path) {
-          current = true;
-        }
-      }
-      await (update(songs)..where((tbl) => tbl.path.equals(song.path)))
-          .write(SongsCompanion(next: Value(nextSong.path)));
-    } else {
-      await (update(songs)..where((tbl) => tbl.path.equals(song.path)))
-          .write(const SongsCompanion(next: Value(null)));
-    }
-  }
-
-  // EXPLORATORY CODE!!!
-  @override
-  Future<void> togglePreviousSongLink(SongModel song) async {
-    if (song.previous == null) {
-      final albumSongs = await (select(songs)
-            ..where((tbl) => tbl.albumId.equals(song.albumId))
-            ..orderBy([
-              (t) => OrderingTerm(expression: t.discNumber),
-              (t) => OrderingTerm(expression: t.trackNumber)
-            ]))
-          .get()
-          .then((moorSongList) =>
-              moorSongList.map((moorSong) => SongModel.fromMoor(moorSong)).toList());
-
-      SongModel prevSong;
-      for (final s in albumSongs) {
-        if (s.path == song.path) {
-          break;
-        }
-        prevSong = s;
-      }
-      if (prevSong != null) {
-        await (update(songs)..where((tbl) => tbl.path.equals(song.path)))
-            .write(SongsCompanion(previous: Value(prevSong.path)));
-      }
-    } else {
-      await (update(songs)..where((tbl) => tbl.path.equals(song.path)))
-          .write(const SongsCompanion(previous: Value(null)));
-    }
-  }
-
   @override
   Future<void> decrementLikeCount(SongModel song) async {
     final songEntry = await (select(songs)..where((tbl) => tbl.path.equals(song.path))).getSingle();
@@ -284,5 +220,59 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
   Future<void> resetSkipCount(SongModel song) async {
     await (update(songs)..where((tbl) => tbl.path.equals(song.path)))
         .write(const SongsCompanion(skipCount: Value(0)));
+  }
+
+  @override
+  Future<SongModel> getPredecessor(SongModel song) async {
+    final albumSongs = await (select(songs)
+          ..where((tbl) => tbl.albumId.equals(song.albumId))
+          ..orderBy([
+            (t) => OrderingTerm(expression: t.discNumber),
+            (t) => OrderingTerm(expression: t.trackNumber)
+          ]))
+        .get()
+        .then((moorSongList) =>
+            moorSongList.map((moorSong) => SongModel.fromMoor(moorSong)).toList());
+
+    SongModel prevSong;
+    for (final s in albumSongs) {
+      if (s.path == song.path) {
+        break;
+      }
+      prevSong = s;
+    }
+    return prevSong;
+  }
+
+  @override
+  Future<SongModel> getSuccessor(SongModel song) async {
+    final albumSongs = await (select(songs)
+          ..where((tbl) => tbl.albumId.equals(song.albumId))
+          ..orderBy([
+            (t) => OrderingTerm(expression: t.discNumber),
+            (t) => OrderingTerm(expression: t.trackNumber)
+          ]))
+        .get()
+        .then((moorSongList) =>
+            moorSongList.map((moorSong) => SongModel.fromMoor(moorSong)).toList());
+
+    bool current = false;
+    SongModel nextSong;
+    for (final s in albumSongs) {
+      if (current) {
+        nextSong = s;
+        break;
+      }
+      if (s.path == song.path) {
+        current = true;
+      }
+    }
+    return nextSong;
+  }
+
+  @override
+  Future<void> updateSong(SongModel songModel) async {
+    await (update(songs)..where((tbl) => tbl.path.equals(songModel.path)))
+        .write(songModel.toSongsCompanion());
   }
 }
