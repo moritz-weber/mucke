@@ -2,9 +2,10 @@ import 'package:rxdart/rxdart.dart';
 
 import '../../domain/entities/loop_mode.dart';
 import '../../domain/entities/playback_event.dart';
+import '../../domain/entities/queue_item.dart';
 import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/entities/song.dart';
-import '../../domain/modules/queue_manager.dart';
+import '../../domain/modules/managed_queue.dart';
 import '../../domain/repositories/audio_player_repository.dart';
 import '../datasources/audio_player_data_source.dart';
 import '../models/song_model.dart';
@@ -57,6 +58,9 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   Stream<Duration> get positionStream => _audioPlayerDataSource.positionStream;
 
   @override
+  ManagedQueueInfo get managedQueueInfo => _managedQueue;
+
+  @override
   Future<void> addToQueue(Song song) async {
     _audioPlayerDataSource.addToQueue(song as SongModel);
     _managedQueue.addToQueue(song);
@@ -66,6 +70,22 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   @override
   Future<void> dispose() async {
     _audioPlayerDataSource.dispose();
+  }
+
+  @override
+  Future<void> initQueue(
+    List<QueueItem> queueItems,
+    List<Song> originalSongs,
+    List<Song> addedSongs,
+    int index,
+  ) async {
+    _managedQueue.initQueue(queueItems, originalSongs, addedSongs);
+    _queueSubject.add(_managedQueue.queue);
+
+    await _audioPlayerDataSource.loadQueue(
+      initialIndex: index,
+      queue: _managedQueue.queue.map((e) => e as SongModel).toList(),
+    );
   }
 
   @override

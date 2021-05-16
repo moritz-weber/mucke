@@ -3,8 +3,10 @@ import 'package:rxdart/rxdart.dart';
 import '../entities/event.dart';
 import '../entities/loop_mode.dart';
 import '../entities/playback_event.dart';
+import '../entities/queue_item.dart';
 import '../entities/shuffle_mode.dart';
 import '../entities/song.dart';
+import '../modules/managed_queue.dart';
 
 abstract class AudioPlayerInfoRepository {
   Stream<AudioPlayerEvent> eventStream;
@@ -18,6 +20,8 @@ abstract class AudioPlayerInfoRepository {
   Stream<PlaybackEvent> get playbackEventStream;
   Stream<bool> get playingStream;
   Stream<Duration> get positionStream;
+
+  ManagedQueueInfo get managedQueueInfo;
 }
 
 abstract class AudioPlayerRepository extends AudioPlayerInfoRepository {
@@ -28,6 +32,13 @@ abstract class AudioPlayerRepository extends AudioPlayerInfoRepository {
   Future<void> seekToPrevious();
   Future<void> seekToIndex(int index);
   Future<void> dispose();
+
+  Future<void> initQueue(
+    List<QueueItem> queueItems,
+    List<Song> originalSongs,
+    List<Song> addedSongs,
+    int index,
+  );
 
   /// Create and load a queue from [songs] according to current AudioPlayer settings.
   Future<void> loadSongs({List<Song> songs, int initialIndex});

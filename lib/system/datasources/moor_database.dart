@@ -70,6 +70,24 @@ class QueueEntries extends Table {
   Set<Column> get primaryKey => {index};
 }
 
+@DataClassName('OriginalSongEntry')
+class OriginalSongEntries extends Table {
+  IntColumn get index => integer()();
+  TextColumn get path => text()();
+
+  @override
+  Set<Column> get primaryKey => {index};
+}
+
+@DataClassName('AddedSongEntry')
+class AddedSongEntries extends Table {
+  IntColumn get index => integer()();
+  TextColumn get path => text()();
+
+  @override
+  Set<Column> get primaryKey => {index};
+}
+
 class PersistentIndex extends Table {
   IntColumn get index => integer().nullable()();
 }
@@ -92,6 +110,8 @@ class LibraryFolders extends Table {
     Artists,
     LibraryFolders,
     QueueEntries,
+    OriginalSongEntries,
+    AddedSongEntries,
     PersistentIndex,
     PersistentLoopMode,
     PersistentShuffleMode,
@@ -117,15 +137,17 @@ class MoorDatabase extends _$MoorDatabase {
   int get schemaVersion => 1;
 
   @override
-  MigrationStrategy get migration => MigrationStrategy(beforeOpen: (details) async {
-        if (details.wasCreated) {
-          await into(persistentIndex).insert(const PersistentIndexCompanion(index: Value(0)));
-          await into(persistentLoopMode)
-              .insert(const PersistentLoopModeCompanion(loopMode: Value(0)));
-          await into(persistentShuffleMode)
-              .insert(const PersistentShuffleModeCompanion(shuffleMode: Value(0)));
-        }
-      });
+  MigrationStrategy get migration => MigrationStrategy(
+        beforeOpen: (details) async {
+          if (details.wasCreated) {
+            await into(persistentIndex).insert(const PersistentIndexCompanion(index: Value(0)));
+            await into(persistentLoopMode)
+                .insert(const PersistentLoopModeCompanion(loopMode: Value(0)));
+            await into(persistentShuffleMode)
+                .insert(const PersistentShuffleModeCompanion(shuffleMode: Value(0)));
+          }
+        },
+      );
 }
 
 LazyDatabase _openConnection() {

@@ -4,20 +4,21 @@ import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
 
 import 'domain/actors/audio_player_actor.dart';
+import 'domain/actors/persistence_actor.dart';
 import 'domain/actors/platform_integration_actor.dart';
-import 'domain/actors/startup_actor.dart';
 import 'domain/entities/album.dart';
 import 'domain/entities/artist.dart';
-import 'domain/modules/queue_manager.dart';
+import 'domain/modules/managed_queue.dart';
 import 'domain/repositories/audio_player_repository.dart';
 import 'domain/repositories/music_data_modifier_repository.dart';
 import 'domain/repositories/music_data_repository.dart';
-import 'domain/repositories/persistent_player_state_repository.dart';
+import 'domain/repositories/persistent_state_repository.dart';
 import 'domain/repositories/platform_integration_repository.dart';
 import 'domain/repositories/settings_repository.dart';
 import 'domain/usecases/add_to_queue.dart';
 import 'domain/usecases/handle_playback_state.dart';
 import 'domain/usecases/increment_play_count.dart';
+import 'domain/usecases/init_queue.dart';
 import 'domain/usecases/inrement_like_count.dart';
 import 'domain/usecases/move_queue_item.dart';
 import 'domain/usecases/pause.dart';
@@ -47,14 +48,14 @@ import 'system/datasources/local_music_fetcher.dart';
 import 'system/datasources/local_music_fetcher_impl.dart';
 import 'system/datasources/moor_database.dart';
 import 'system/datasources/music_data_source_contract.dart';
+import 'system/datasources/persistent_state_data_source.dart';
 import 'system/datasources/platform_integration_data_source.dart';
 import 'system/datasources/platform_integration_data_source_impl.dart';
-import 'system/datasources/player_state_data_source.dart';
 import 'system/datasources/settings_data_source.dart';
 import 'system/repositories/audio_player_repository_impl.dart';
 import 'system/repositories/music_data_modifier_repository_impl.dart';
 import 'system/repositories/music_data_repository_impl.dart';
-import 'system/repositories/persistent_player_state_repository_impl.dart';
+import 'system/repositories/persistent_state_repository_impl.dart';
 import 'system/repositories/platform_integration_repository_impl.dart';
 import 'system/repositories/settings_repository_impl.dart';
 
@@ -123,6 +124,11 @@ Future<void> setupGetIt() async {
   );
   getIt.registerLazySingleton<IncrementPlayCount>(
     () => IncrementPlayCount(
+      getIt(),
+    ),
+  );
+  getIt.registerLazySingleton<InitQueue>(
+    () => InitQueue(
       getIt(),
     ),
   );
@@ -197,12 +203,10 @@ Future<void> setupGetIt() async {
   getIt.registerLazySingleton<SetLoopMode>(
     () => SetLoopMode(
       getIt(),
-      getIt(),
     ),
   );
   getIt.registerLazySingleton<SetShuffleMode>(
     () => SetShuffleMode(
-      getIt(),
       getIt(),
       getIt(),
     ),
@@ -335,8 +339,8 @@ Future<void> setupGetIt() async {
     ),
   );
 
-  getIt.registerSingleton<StartupActor>(
-    StartupActor(
+  getIt.registerSingleton<PersistenceActor>(
+    PersistenceActor(
       getIt(),
       getIt(),
       getIt(),

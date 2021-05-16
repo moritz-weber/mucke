@@ -935,6 +935,396 @@ class $QueueEntriesTable extends QueueEntries
   }
 }
 
+class OriginalSongEntry extends DataClass
+    implements Insertable<OriginalSongEntry> {
+  final int index;
+  final String path;
+  OriginalSongEntry({@required this.index, @required this.path});
+  factory OriginalSongEntry.fromData(
+      Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    final stringType = db.typeSystem.forDartType<String>();
+    return OriginalSongEntry(
+      index: intType.mapFromDatabaseResponse(data['${effectivePrefix}index']),
+      path: stringType.mapFromDatabaseResponse(data['${effectivePrefix}path']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || index != null) {
+      map['index'] = Variable<int>(index);
+    }
+    if (!nullToAbsent || path != null) {
+      map['path'] = Variable<String>(path);
+    }
+    return map;
+  }
+
+  OriginalSongEntriesCompanion toCompanion(bool nullToAbsent) {
+    return OriginalSongEntriesCompanion(
+      index:
+          index == null && nullToAbsent ? const Value.absent() : Value(index),
+      path: path == null && nullToAbsent ? const Value.absent() : Value(path),
+    );
+  }
+
+  factory OriginalSongEntry.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return OriginalSongEntry(
+      index: serializer.fromJson<int>(json['index']),
+      path: serializer.fromJson<String>(json['path']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'index': serializer.toJson<int>(index),
+      'path': serializer.toJson<String>(path),
+    };
+  }
+
+  OriginalSongEntry copyWith({int index, String path}) => OriginalSongEntry(
+        index: index ?? this.index,
+        path: path ?? this.path,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('OriginalSongEntry(')
+          ..write('index: $index, ')
+          ..write('path: $path')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf($mrjc(index.hashCode, path.hashCode));
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is OriginalSongEntry &&
+          other.index == this.index &&
+          other.path == this.path);
+}
+
+class OriginalSongEntriesCompanion extends UpdateCompanion<OriginalSongEntry> {
+  final Value<int> index;
+  final Value<String> path;
+  const OriginalSongEntriesCompanion({
+    this.index = const Value.absent(),
+    this.path = const Value.absent(),
+  });
+  OriginalSongEntriesCompanion.insert({
+    this.index = const Value.absent(),
+    @required String path,
+  }) : path = Value(path);
+  static Insertable<OriginalSongEntry> custom({
+    Expression<int> index,
+    Expression<String> path,
+  }) {
+    return RawValuesInsertable({
+      if (index != null) 'index': index,
+      if (path != null) 'path': path,
+    });
+  }
+
+  OriginalSongEntriesCompanion copyWith(
+      {Value<int> index, Value<String> path}) {
+    return OriginalSongEntriesCompanion(
+      index: index ?? this.index,
+      path: path ?? this.path,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (index.present) {
+      map['index'] = Variable<int>(index.value);
+    }
+    if (path.present) {
+      map['path'] = Variable<String>(path.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('OriginalSongEntriesCompanion(')
+          ..write('index: $index, ')
+          ..write('path: $path')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $OriginalSongEntriesTable extends OriginalSongEntries
+    with TableInfo<$OriginalSongEntriesTable, OriginalSongEntry> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $OriginalSongEntriesTable(this._db, [this._alias]);
+  final VerificationMeta _indexMeta = const VerificationMeta('index');
+  GeneratedIntColumn _index;
+  @override
+  GeneratedIntColumn get index => _index ??= _constructIndex();
+  GeneratedIntColumn _constructIndex() {
+    return GeneratedIntColumn(
+      'index',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _pathMeta = const VerificationMeta('path');
+  GeneratedTextColumn _path;
+  @override
+  GeneratedTextColumn get path => _path ??= _constructPath();
+  GeneratedTextColumn _constructPath() {
+    return GeneratedTextColumn(
+      'path',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [index, path];
+  @override
+  $OriginalSongEntriesTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'original_song_entries';
+  @override
+  final String actualTableName = 'original_song_entries';
+  @override
+  VerificationContext validateIntegrity(Insertable<OriginalSongEntry> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('index')) {
+      context.handle(
+          _indexMeta, index.isAcceptableOrUnknown(data['index'], _indexMeta));
+    }
+    if (data.containsKey('path')) {
+      context.handle(
+          _pathMeta, path.isAcceptableOrUnknown(data['path'], _pathMeta));
+    } else if (isInserting) {
+      context.missing(_pathMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {index};
+  @override
+  OriginalSongEntry map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return OriginalSongEntry.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  $OriginalSongEntriesTable createAlias(String alias) {
+    return $OriginalSongEntriesTable(_db, alias);
+  }
+}
+
+class AddedSongEntry extends DataClass implements Insertable<AddedSongEntry> {
+  final int index;
+  final String path;
+  AddedSongEntry({@required this.index, @required this.path});
+  factory AddedSongEntry.fromData(
+      Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    final stringType = db.typeSystem.forDartType<String>();
+    return AddedSongEntry(
+      index: intType.mapFromDatabaseResponse(data['${effectivePrefix}index']),
+      path: stringType.mapFromDatabaseResponse(data['${effectivePrefix}path']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || index != null) {
+      map['index'] = Variable<int>(index);
+    }
+    if (!nullToAbsent || path != null) {
+      map['path'] = Variable<String>(path);
+    }
+    return map;
+  }
+
+  AddedSongEntriesCompanion toCompanion(bool nullToAbsent) {
+    return AddedSongEntriesCompanion(
+      index:
+          index == null && nullToAbsent ? const Value.absent() : Value(index),
+      path: path == null && nullToAbsent ? const Value.absent() : Value(path),
+    );
+  }
+
+  factory AddedSongEntry.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return AddedSongEntry(
+      index: serializer.fromJson<int>(json['index']),
+      path: serializer.fromJson<String>(json['path']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'index': serializer.toJson<int>(index),
+      'path': serializer.toJson<String>(path),
+    };
+  }
+
+  AddedSongEntry copyWith({int index, String path}) => AddedSongEntry(
+        index: index ?? this.index,
+        path: path ?? this.path,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('AddedSongEntry(')
+          ..write('index: $index, ')
+          ..write('path: $path')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf($mrjc(index.hashCode, path.hashCode));
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is AddedSongEntry &&
+          other.index == this.index &&
+          other.path == this.path);
+}
+
+class AddedSongEntriesCompanion extends UpdateCompanion<AddedSongEntry> {
+  final Value<int> index;
+  final Value<String> path;
+  const AddedSongEntriesCompanion({
+    this.index = const Value.absent(),
+    this.path = const Value.absent(),
+  });
+  AddedSongEntriesCompanion.insert({
+    this.index = const Value.absent(),
+    @required String path,
+  }) : path = Value(path);
+  static Insertable<AddedSongEntry> custom({
+    Expression<int> index,
+    Expression<String> path,
+  }) {
+    return RawValuesInsertable({
+      if (index != null) 'index': index,
+      if (path != null) 'path': path,
+    });
+  }
+
+  AddedSongEntriesCompanion copyWith({Value<int> index, Value<String> path}) {
+    return AddedSongEntriesCompanion(
+      index: index ?? this.index,
+      path: path ?? this.path,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (index.present) {
+      map['index'] = Variable<int>(index.value);
+    }
+    if (path.present) {
+      map['path'] = Variable<String>(path.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AddedSongEntriesCompanion(')
+          ..write('index: $index, ')
+          ..write('path: $path')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $AddedSongEntriesTable extends AddedSongEntries
+    with TableInfo<$AddedSongEntriesTable, AddedSongEntry> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $AddedSongEntriesTable(this._db, [this._alias]);
+  final VerificationMeta _indexMeta = const VerificationMeta('index');
+  GeneratedIntColumn _index;
+  @override
+  GeneratedIntColumn get index => _index ??= _constructIndex();
+  GeneratedIntColumn _constructIndex() {
+    return GeneratedIntColumn(
+      'index',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _pathMeta = const VerificationMeta('path');
+  GeneratedTextColumn _path;
+  @override
+  GeneratedTextColumn get path => _path ??= _constructPath();
+  GeneratedTextColumn _constructPath() {
+    return GeneratedTextColumn(
+      'path',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [index, path];
+  @override
+  $AddedSongEntriesTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'added_song_entries';
+  @override
+  final String actualTableName = 'added_song_entries';
+  @override
+  VerificationContext validateIntegrity(Insertable<AddedSongEntry> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('index')) {
+      context.handle(
+          _indexMeta, index.isAcceptableOrUnknown(data['index'], _indexMeta));
+    }
+    if (data.containsKey('path')) {
+      context.handle(
+          _pathMeta, path.isAcceptableOrUnknown(data['path'], _pathMeta));
+    } else if (isInserting) {
+      context.missing(_pathMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {index};
+  @override
+  AddedSongEntry map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return AddedSongEntry.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  $AddedSongEntriesTable createAlias(String alias) {
+    return $AddedSongEntriesTable(_db, alias);
+  }
+}
+
 class PersistentIndexData extends DataClass
     implements Insertable<PersistentIndexData> {
   final int index;
@@ -2276,6 +2666,12 @@ abstract class _$MoorDatabase extends GeneratedDatabase {
   $QueueEntriesTable _queueEntries;
   $QueueEntriesTable get queueEntries =>
       _queueEntries ??= $QueueEntriesTable(this);
+  $OriginalSongEntriesTable _originalSongEntries;
+  $OriginalSongEntriesTable get originalSongEntries =>
+      _originalSongEntries ??= $OriginalSongEntriesTable(this);
+  $AddedSongEntriesTable _addedSongEntries;
+  $AddedSongEntriesTable get addedSongEntries =>
+      _addedSongEntries ??= $AddedSongEntriesTable(this);
   $PersistentIndexTable _persistentIndex;
   $PersistentIndexTable get persistentIndex =>
       _persistentIndex ??= $PersistentIndexTable(this);
@@ -2304,6 +2700,8 @@ abstract class _$MoorDatabase extends GeneratedDatabase {
         artists,
         libraryFolders,
         queueEntries,
+        originalSongEntries,
+        addedSongEntries,
         persistentIndex,
         persistentLoopMode,
         persistentShuffleMode,

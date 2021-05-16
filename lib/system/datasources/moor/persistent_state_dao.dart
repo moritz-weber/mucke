@@ -7,44 +7,40 @@ import '../../models/queue_item_model.dart';
 import '../../models/shuffle_mode_model.dart';
 import '../../models/song_model.dart';
 import '../moor_database.dart';
-import '../player_state_data_source.dart';
+import '../persistent_state_data_source.dart';
 
 part 'persistent_state_dao.g.dart';
 
-@UseDao(tables: [Songs, QueueEntries, PersistentIndex, PersistentShuffleMode, PersistentLoopMode])
+@UseDao(tables: [
+  Songs,
+  QueueEntries,
+  OriginalSongEntries,
+  AddedSongEntries,
+  PersistentIndex,
+  PersistentShuffleMode,
+  PersistentLoopMode
+])
 class PersistentStateDao extends DatabaseAccessor<MoorDatabase>
     with _$PersistentStateDaoMixin
     implements PersistentStateDataSource {
   PersistentStateDao(MoorDatabase db) : super(db);
 
   @override
-  Stream<List<SongModel>> get songQueueStream {
+  Future<List<QueueItemModel>> get queueItems {
     final query = (select(queueEntries)..orderBy([(t) => OrderingTerm(expression: t.index)]))
         .join([innerJoin(songs, songs.path.equalsExp(queueEntries.path))]);
 
-    return query.watch().map((rows) {
-      return rows.map((row) => SongModel.fromMoor(row.readTable(songs))).toList();
-    });
+    return query.get().then((rows) => rows.map((row) {
+          return QueueItemModel(
+            SongModel.fromMoor(row.readTable(songs)),
+            originalIndex: row.readTable(queueEntries).originalIndex,
+            type: row.readTable(queueEntries).type.toQueueItemType(),
+          );
+        }).toList());
   }
 
   @override
-  Stream<List<QueueItemModel>> get queueStream {
-    final query = (select(queueEntries)..orderBy([(t) => OrderingTerm(expression: t.index)]))
-        .join([innerJoin(songs, songs.path.equalsExp(queueEntries.path))]);
-
-    return query.watch().map((rows) {
-      return rows.map((row) {
-        return QueueItemModel(
-          SongModel.fromMoor(row.readTable(songs)),
-          originalIndex: row.readTable(queueEntries).originalIndex,
-          type: row.readTable(queueEntries).type.toQueueItemType(),
-        );
-      }).toList();
-    });
-  }
-
-  @override
-  Future<void> setQueue(List<QueueItemModel> queue) async {
+  Future<void> setQueueItems(List<QueueItemModel> queue) async {
     final _queueEntries = <Insertable<MoorQueueEntry>>[];
 
     for (var i = 0; i < queue.length; i++) {
@@ -63,28 +59,74 @@ class PersistentStateDao extends DatabaseAccessor<MoorDatabase>
   }
 
   @override
-  Stream<SongModel> get currentSongStream {
-    final query = select(persistentIndex).join([
-      innerJoin(queueEntries, queueEntries.index.equalsExp(persistentIndex.index)),
-      innerJoin(songs, songs.path.equalsExp(queueEntries.path))
-    ]);
+  Future<List<SongModel>> get addedSongs {
+    final query = (select(addedSongEntries)..orderBy([(t) => OrderingTerm(expression: t.index)]))
+        .join([innerJoin(songs, songs.path.equalsExp(addedSongEntries.path))]);
 
-    return query.watchSingle().map((row) => SongModel.fromMoor(row.readTable(songs)));
+    return query.get().then((rows) => rows.map((row) {
+          return SongModel.fromMoor(row.readTable(songs));
+        }).toList());
   }
 
   @override
-  Stream<int> get currentIndexStream {
-    return select(persistentIndex).watchSingle().map((event) => event?.index);
+  Future<List<SongModel>> get originalSongs {
+    final query = (select(originalSongEntries)..orderBy([(t) => OrderingTerm(expression: t.index)]))
+        .join([innerJoin(songs, songs.path.equalsExp(originalSongEntries.path))]);
+
+    return query.get().then((rows) => rows.map((row) {
+          return SongModel.fromMoor(row.readTable(songs));
+        }).toList());
+  }
+
+  @override
+  Future<void> setAddedSongs(List<SongModel> songs) async {
+    final _songEntries = <Insertable<AddedSongEntry>>[];
+
+    for (var i = 0; i < songs.length; i++) {
+      _songEntries.add(AddedSongEntriesCompanion(
+        index: Value(i),
+        path: Value(songs[i].path),
+      ));
+    }
+
+    await delete(addedSongEntries).go();
+    await batch((batch) {
+      batch.insertAll(addedSongEntries, _songEntries);
+    });
+  }
+
+  @override
+  Future<void> setOriginalSongs(List<SongModel> songs) async {
+    final _songEntries = <Insertable<OriginalSongEntry>>[];
+
+    for (var i = 0; i < songs.length; i++) {
+      _songEntries.add(OriginalSongEntriesCompanion(
+        index: Value(i),
+        path: Value(songs[i].path),
+      ));
+    }
+
+    await delete(originalSongEntries).go();
+    await batch((batch) {
+      batch.insertAll(originalSongEntries, _songEntries);
+    });
+  }
+
+  @override
+  Future<int> get currentIndex async {
+    final res = await select(persistentIndex).get();
+    return select(persistentIndex).getSingle().then((event) => event?.index);
   }
 
   @override
   Future<void> setCurrentIndex(int index) async {
-    update(persistentIndex).write(PersistentIndexCompanion(index: Value(index)));
+    await delete(persistentIndex).go();
+    into(persistentIndex).insert(PersistentIndexCompanion(index: Value(index)));
   }
 
   @override
-  Stream<LoopMode> get loopModeStream {
-    return select(persistentLoopMode).watchSingle().map((event) => event?.loopMode?.toLoopMode());
+  Future<LoopMode> get loopMode {
+    return select(persistentLoopMode).getSingle().then((event) => event?.loopMode?.toLoopMode());
   }
 
   @override
@@ -102,9 +144,9 @@ class PersistentStateDao extends DatabaseAccessor<MoorDatabase>
   }
 
   @override
-  Stream<ShuffleMode> get shuffleModeStream {
-    return select(persistentShuffleMode)
-        .watchSingle()
-        .map((event) => event?.shuffleMode?.toShuffleMode());
+  Future<ShuffleMode> get shuffleMode {
+    return select(persistentShuffleMode).getSingle().then(
+          (event) => event?.shuffleMode?.toShuffleMode(),
+        );
   }
 }
