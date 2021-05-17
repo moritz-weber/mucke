@@ -5,7 +5,13 @@ import '../usecases/seek_to_next.dart';
 import '../usecases/seek_to_previous.dart';
 
 class PlatformIntegrationActor {
-  PlatformIntegrationActor(this._platformIntegrationInfoRepository, this._pause, this._play, this._seekToNext, this._seekToPrevious) {
+  PlatformIntegrationActor(
+    this._platformIntegrationInfoRepository,
+    this._pause,
+    this._play,
+    this._seekToNext,
+    this._seekToPrevious,
+  ) {
     _platformIntegrationInfoRepository.eventStream
         .listen((event) => _handlePlatformIntegrationEvent(event));
   }

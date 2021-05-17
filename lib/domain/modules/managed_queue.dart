@@ -37,12 +37,11 @@ class ManagedQueue implements ManagedQueueInfo {
 
   final MusicDataInfoRepository _musicDataRepository;
 
-  // die brauch ich aktuell für den originalIndex für neue Songs
-  List<Song> _originalSongs = [];
-  List<Song> _addedSongs = [];
   // this resembles the queue in AudioPlayer
   // QueueItems are needed to determine the original position of the current song
   List<QueueItem> _queue;
+  List<Song> _originalSongs = [];
+  List<Song> _addedSongs = [];
 
   void addToQueue(Song song) {
     _addedSongs.add(song);
@@ -265,7 +264,7 @@ class ManagedQueue implements ManagedQueueInfo {
     final List<Song> songs = [];
     Song currentSong = song;
 
-    while (currentSong.previous != null) {
+    while (currentSong.previous != '') {
       currentSong = await _musicDataRepository.getSongByPath(currentSong.previous);
       songs.add(currentSong);
     }
@@ -277,7 +276,7 @@ class ManagedQueue implements ManagedQueueInfo {
     final List<Song> songs = [];
     Song currentSong = song;
 
-    while (currentSong.next != null) {
+    while (currentSong.next != '') {
       currentSong = await _musicDataRepository.getSongByPath(currentSong.next);
       songs.add(currentSong);
     }

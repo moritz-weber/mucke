@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:get_it/get_it.dart';
 
-import '../state/audio_store.dart';
 import 'next_song.dart';
 
 class NextIndicator extends StatelessWidget {
@@ -12,13 +10,8 @@ class NextIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AudioStore audioStore = GetIt.I<AudioStore>();
-
     return Observer(
       builder: (BuildContext context) {
-        final queue = audioStore.queueStream.value;
-        final int index = audioStore.queueIndexStream.value;
-
         return GestureDetector(
           onTap: () => onTapAction(context),
           child: Container(
@@ -34,10 +27,7 @@ class NextIndicator extends StatelessWidget {
                       Icons.expand_less,
                       color: Colors.white70,
                     ),
-                    NextSong(
-                      queue: queue,
-                      index: index,
-                    ),
+                    const NextSong(),
                   ],
                 ),
               ),

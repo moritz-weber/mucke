@@ -24,6 +24,7 @@ class CurrentlyPlayingPage extends StatelessWidget {
     _log.d('build started');
     final AudioStore audioStore = GetIt.I<AudioStore>();
 
+    // TODO: everything wrapped in Observer and most components have Observer themselves
     return Scaffold(
       body: SafeArea(
         child: GestureDetector(

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 
-import '../state/audio_store.dart';
 import '../theming.dart';
 import 'next_song.dart';
 
@@ -12,8 +10,6 @@ class CurrentlyPlayingHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AudioStore audioStore = GetIt.I<AudioStore>();
-
     return Row(
       children: [
         IconButton(
@@ -34,10 +30,7 @@ class CurrentlyPlayingHeader extends StatelessWidget {
                     'Next up'.toUpperCase(),
                     style: TEXT_SMALL_HEADLINE,
                   ),
-                  NextSong(
-                    queue: audioStore.queueStream.value,
-                    index: audioStore.queueIndexStream.value,
-                  )
+                  const NextSong(),
                 ],
               ),
             ),

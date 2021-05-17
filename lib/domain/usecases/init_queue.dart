@@ -7,7 +7,12 @@ class InitQueue {
 
   final AudioPlayerRepository _audioPlayerRepository;
 
-  Future<void> call(List<QueueItem> queueItems, List<Song> originalSongs, List<Song> addedSongs, int index) async {
+  Future<void> call(
+    List<QueueItem> queueItems,
+    List<Song> originalSongs,
+    List<Song> addedSongs,
+    int index,
+  ) async {
     await _audioPlayerRepository.initQueue(queueItems, originalSongs, addedSongs, index);
   }
 }
