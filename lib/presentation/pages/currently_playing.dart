@@ -5,6 +5,8 @@ import 'package:get_it/get_it.dart';
 
 import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
+import '../state/music_data_store.dart';
+import '../state/navigation_store.dart';
 import '../theming.dart';
 import '../widgets/album_art.dart';
 import '../widgets/album_background.dart';
@@ -12,6 +14,8 @@ import '../widgets/currently_playing_header.dart';
 import '../widgets/playback_control.dart';
 import '../widgets/song_customization_buttons.dart';
 import '../widgets/time_progress_indicator.dart';
+import 'album_details_page.dart';
+import 'artist_details_page.dart';
 import 'queue_page.dart';
 
 class CurrentlyPlayingPage extends StatelessWidget {
@@ -54,7 +58,10 @@ class CurrentlyPlayingPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CurrentlyPlayingHeader(onTap: _openQueue),
+                        CurrentlyPlayingHeader(
+                          onTap: _openQueue,
+                          onMoreTap: _openMoreMenu,
+                        ),
                         const Spacer(
                           flex: 10,
                         ),
@@ -140,6 +147,67 @@ class CurrentlyPlayingPage extends StatelessWidget {
       MaterialPageRoute<Widget>(
         builder: (BuildContext context) => const QueuePage(),
       ),
+    );
+  }
+
+  void _openMoreMenu(BuildContext context) {
+    final AudioStore audioStore = GetIt.I<AudioStore>();
+    final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
+    final NavigationStore navStore = GetIt.I<NavigationStore>();
+
+    final song = audioStore.currentSongStream.value;
+    // EXPLORATORY
+    final albums = musicDataStore.albumStream.value;
+    final album = albums.singleWhere((a) => a.title == song.album);
+
+    final artists = musicDataStore.artistStream.value;
+    final artist = artists.singleWhere((a) => a.name == album.artist);
+
+    showModalBottomSheet(
+      context: context,
+      useRootNavigator: true,
+      backgroundColor: DARK2,
+      builder: (context) {
+        return Container(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                height: 2,
+                color: LIGHT1,
+              ),
+              ListTile(
+                title: const Text('Go to artist'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  navStore.pushOnLibrary(
+                    MaterialPageRoute<Widget>(
+                      builder: (BuildContext context) => ArtistDetailsPage(
+                        artist: artist,
+                      ),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                title: const Text('Go to album'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  navStore.pushOnLibrary(
+                    MaterialPageRoute<Widget>(
+                      builder: (BuildContext context) => AlbumDetailsPage(
+                        album: album,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

@@ -10,13 +10,11 @@ class LibraryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('LibraryPage.build');
-    final GlobalKey<NavigatorState> nav = GlobalKey();
-
     final NavigationStore navStore = GetIt.I<NavigationStore>();
 
     return WillPopScope(
       child: Navigator(
-        key: nav,
+        key: navStore.libraryNavKey,
         initialRoute: 'library',
         onGenerateRoute: (RouteSettings settings) {
           WidgetBuilder builder;
@@ -32,7 +30,7 @@ class LibraryPage extends StatelessWidget {
       ),
       onWillPop: () async {
         if (navStore.navIndex == 1) {
-          return !await nav.currentState.maybePop();
+          return !await navStore.libraryNavKey.currentState.maybePop();
         }
         return Future.value(true);
       },

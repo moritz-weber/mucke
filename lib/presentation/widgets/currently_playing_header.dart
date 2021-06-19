@@ -4,9 +4,10 @@ import '../theming.dart';
 import 'next_song.dart';
 
 class CurrentlyPlayingHeader extends StatelessWidget {
-  const CurrentlyPlayingHeader({Key key, this.onTap}) : super(key: key);
+  const CurrentlyPlayingHeader({Key key, this.onTap, this.onMoreTap}) : super(key: key);
 
   final Function onTap;
+  final Function onMoreTap;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +39,7 @@ class CurrentlyPlayingHeader extends StatelessWidget {
         ),
         IconButton(
           icon: const Icon(Icons.more_vert),
-          onPressed: () => null,
+          onPressed: () => onMoreTap(context),
         )
       ],
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
