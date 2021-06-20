@@ -12,27 +12,19 @@ class LibraryPage extends StatelessWidget {
     print('LibraryPage.build');
     final NavigationStore navStore = GetIt.I<NavigationStore>();
 
-    return WillPopScope(
-      child: Navigator(
-        key: navStore.libraryNavKey,
-        initialRoute: 'library',
-        onGenerateRoute: (RouteSettings settings) {
-          WidgetBuilder builder;
-          switch (settings.name) {
-            case 'library':
-              builder = (BuildContext context) => const LibraryTabContainer();
-              break;
-            default:
-              throw Exception('Invalid route: ${settings.name}');
-          }
-          return MaterialPageRoute(builder: builder, settings: settings);
-        },
-      ),
-      onWillPop: () async {
-        if (navStore.navIndex == 1) {
-          return !await navStore.libraryNavKey.currentState!.maybePop();
+    return Navigator(
+      key: navStore.libraryNavKey,
+      initialRoute: 'library',
+      onGenerateRoute: (RouteSettings settings) {
+        WidgetBuilder builder;
+        switch (settings.name) {
+          case 'library':
+            builder = (BuildContext context) => const LibraryTabContainer();
+            break;
+          default:
+            throw Exception('Invalid route: ${settings.name}');
         }
-        return Future.value(true);
+        return MaterialPageRoute(builder: builder, settings: settings);
       },
     );
   }

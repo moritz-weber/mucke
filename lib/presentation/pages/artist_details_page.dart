@@ -6,6 +6,7 @@ import '../../domain/entities/album.dart';
 import '../../domain/entities/artist.dart';
 import '../state/artist_page_store.dart';
 import '../state/audio_store.dart';
+import '../state/navigation_store.dart';
 import '../theming.dart';
 import '../widgets/artist_albums.dart';
 import '../widgets/artist_header.dart';
@@ -101,7 +102,9 @@ class _ArtistDetailsPageState extends State<ArtistDetailsPage> {
   }
 
   void _tapAlbum(Album album, BuildContext context) {
-    Navigator.push(
+    final NavigationStore navStore = GetIt.I<NavigationStore>();
+
+    navStore.push(
       context,
       MaterialPageRoute<Widget>(
         builder: (BuildContext context) => AlbumDetailsPage(

@@ -85,17 +85,20 @@ class _RootPageState extends State<RootPage> {
     final NavigationStore navStore = GetIt.I<NavigationStore>();
 
     print('RootPage.build');
-    return Observer(
-      builder: (BuildContext context) => Scaffold(
-        body: IndexedStack(
-          index: navStore.navIndex,
-          children: _pages,
-        ),
-        bottomNavigationBar: NavBar(
-          onTap: (int index) => navStore.setNavIndex(index),
-          currentIndex: navStore.navIndex,
+    return WillPopScope(
+      child: Observer(
+        builder: (BuildContext context) => Scaffold(
+          body: IndexedStack(
+            index: navStore.navIndex,
+            children: _pages,
+          ),
+          bottomNavigationBar: NavBar(
+            onTap: (int index) => navStore.setNavIndex(index),
+            currentIndex: navStore.navIndex,
+          ),
         ),
       ),
+      onWillPop: () => navStore.onWillPop(),
     );
   }
 }

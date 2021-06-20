@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../domain/entities/artist.dart';
 import '../state/music_data_store.dart';
+import '../state/navigation_store.dart';
 import 'artist_details_page.dart';
 
 class ArtistsPage extends StatefulWidget {
@@ -18,6 +19,7 @@ class _ArtistsPageState extends State<ArtistsPage> with AutomaticKeepAliveClient
   Widget build(BuildContext context) {
     print('ArtistsPage.build');
     final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
+    final NavigationStore navStore = GetIt.I<NavigationStore>();
 
     super.build(context);
     return Observer(builder: (_) {
@@ -30,7 +32,7 @@ class _ArtistsPageState extends State<ArtistsPage> with AutomaticKeepAliveClient
           return ListTile(
             title: Text(artist.name),
             onTap: () {
-              Navigator.push(
+              navStore.push(
                 context,
                 MaterialPageRoute<Widget>(
                   builder: (BuildContext context) => ArtistDetailsPage(

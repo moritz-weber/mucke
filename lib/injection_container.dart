@@ -78,7 +78,26 @@ Future<void> setupGetIt() async {
       togglePreviousSongLink: getIt(),
     ),
   );
-
+  getIt.registerLazySingleton<AudioStore>(
+    () => AudioStore(
+      audioPlayerInfoRepository: getIt(),
+      addToQueue: getIt(),
+      moveQueueItem: getIt(),
+      pause: getIt(),
+      play: getIt(),
+      playAlbum: getIt(),
+      playArtist: getIt(),
+      playNext: getIt(),
+      playSongs: getIt(),
+      removeQueueIndex: getIt(),
+      seekToIndex: getIt(),
+      seekToNext: getIt(),
+      seekToPrevious: getIt(),
+      setLoopMode: getIt(),
+      setShuffleMode: getIt(),
+      shuffleAll: getIt(),
+    ),
+  );
   getIt.registerLazySingleton<NavigationStore>(
     () => NavigationStore(),
   );
@@ -311,27 +330,6 @@ Future<void> setupGetIt() async {
   getIt.registerFactory<AudioPlayer>(() => AudioPlayer());
 
   getIt.registerLazySingleton<Audiotagger>(() => Audiotagger());
-
-  getIt.registerSingleton<AudioStore>(
-    AudioStore(
-      audioPlayerInfoRepository: getIt(),
-      addToQueue: getIt(),
-      moveQueueItem: getIt(),
-      pause: getIt(),
-      play: getIt(),
-      playAlbum: getIt(),
-      playArtist: getIt(),
-      playNext: getIt(),
-      playSongs: getIt(),
-      removeQueueIndex: getIt(),
-      seekToIndex: getIt(),
-      seekToNext: getIt(),
-      seekToPrevious: getIt(),
-      setLoopMode: getIt(),
-      setShuffleMode: getIt(),
-      shuffleAll: getIt(),
-    ),
-  );
 
   // actors
   getIt.registerSingleton<PlatformIntegrationActor>(

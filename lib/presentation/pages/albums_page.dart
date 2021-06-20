@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../domain/entities/album.dart';
 import '../state/music_data_store.dart';
+import '../state/navigation_store.dart';
 import '../widgets/album_art_list_tile.dart';
 import 'album_details_page.dart';
 
@@ -19,6 +20,7 @@ class _AlbumsPageState extends State<AlbumsPage> with AutomaticKeepAliveClientMi
   Widget build(BuildContext context) {
     print('AlbumsPage.build');
     final MusicDataStore store = GetIt.I<MusicDataStore>();
+    final NavigationStore navStore = GetIt.I<NavigationStore>();
 
     super.build(context);
     return Observer(builder: (_) {
@@ -33,7 +35,7 @@ class _AlbumsPageState extends State<AlbumsPage> with AutomaticKeepAliveClientMi
             subtitle: album.artist,
             albumArtPath: album.albumArtPath,
             onTap: () {
-              Navigator.push(
+              navStore.push(
                 context,
                 MaterialPageRoute<Widget>(
                   builder: (BuildContext context) => AlbumDetailsPage(
