@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../domain/entities/album.dart';
@@ -17,14 +16,14 @@ part 'music_data_store.g.dart';
 
 class MusicDataStore extends _MusicDataStore with _$MusicDataStore {
   MusicDataStore({
-    @required MusicDataInfoRepository musicDataInfoRepository,
-    @required SettingsRepository settingsRepository,
-    @required UpdateDatabase updateDatabase,
-    @required IncrementLikeCount incrementLikeCount,
-    @required ResetLikeCount resetLikeCount,
-    @required SetSongBlocked setSongBlocked,
-    @required ToggleNextSongLink toggleNextSongLink,
-    @required TogglePreviousSongLink togglePreviousSongLink,
+    required MusicDataInfoRepository musicDataInfoRepository,
+    required SettingsRepository settingsRepository,
+    required UpdateDatabase updateDatabase,
+    required IncrementLikeCount incrementLikeCount,
+    required ResetLikeCount resetLikeCount,
+    required SetSongBlocked setSongBlocked,
+    required ToggleNextSongLink toggleNextSongLink,
+    required TogglePreviousSongLink togglePreviousSongLink,
   }) : super(
           musicDataInfoRepository,
           settingsRepository,
@@ -47,11 +46,7 @@ abstract class _MusicDataStore with Store {
     this._setSongBlocked,
     this._togglePreviousSongLink,
     this._toggleNextSongLink,
-  ) {
-    songStream = _musicDataInfoRepository.songStream.asObservable(initialValue: []);
-    albumStream = _musicDataInfoRepository.albumStream.asObservable(initialValue: []);
-    artistStream = _musicDataInfoRepository.artistStream.asObservable(initialValue: []);
-  }
+  );
 
   final IncrementLikeCount _incrementLikeCount;
   final ResetLikeCount _resetLikeCount;
@@ -64,13 +59,16 @@ abstract class _MusicDataStore with Store {
   final SettingsRepository _settingsRepository;
 
   @observable
-  ObservableStream<List<Song>> songStream;
+  late ObservableStream<List<Song>> songStream =
+      _musicDataInfoRepository.songStream.asObservable(initialValue: []);
 
   @observable
-  ObservableStream<List<Album>> albumStream;
+  late ObservableStream<List<Album>> albumStream =
+      _musicDataInfoRepository.albumStream.asObservable(initialValue: []);
 
   @observable
-  ObservableStream<List<Artist>> artistStream;
+  late ObservableStream<List<Artist>> artistStream =
+      _musicDataInfoRepository.artistStream.asObservable(initialValue: []);
 
   @observable
   bool isUpdatingDatabase = false;
@@ -96,7 +94,7 @@ abstract class _MusicDataStore with Store {
 
   Future<void> resetLikeCount(Song song) => _resetLikeCount(song);
 
-  Future<void> addLibraryFolder(String path) async {
+  Future<void> addLibraryFolder(String? path) async {
     await _settingsRepository.addLibraryFolder(path);
   }
 }

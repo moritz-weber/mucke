@@ -1,3 +1,3 @@
 abstract class SettingsRepository {
-  Future<void> addLibraryFolder(String path);
+  Future<void> addLibraryFolder(String? path);
 }

@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import 'package:moor/moor.dart';
 
 import '../../domain/entities/artist.dart';
@@ -6,7 +5,7 @@ import '../datasources/moor_database.dart';
 
 class ArtistModel extends Artist {
   const ArtistModel({
-    @required String name,
+    required String name,
   }) : super(
           name: name,
         );

@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import '../../domain/entities/artist.dart';
 
 class ArtistHeader extends StatelessWidget {
-  const ArtistHeader({Key key, this.artist}) : super(key: key);
+  const ArtistHeader({
+    Key? key,
+    required this.artist,
+  }) : super(key: key);
 
   final Artist artist;
 

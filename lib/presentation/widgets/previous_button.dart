@@ -4,7 +4,7 @@ import 'package:get_it/get_it.dart';
 import '../state/audio_store.dart';
 
 class PreviousButton extends StatelessWidget {
-  const PreviousButton({Key key, this.iconSize = 24.0}) : super(key: key);
+  const PreviousButton({Key? key, this.iconSize = 24.0}) : super(key: key);
 
   final double iconSize;
 

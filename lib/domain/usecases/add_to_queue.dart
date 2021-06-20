@@ -14,7 +14,7 @@ class AddToQueue {
   Future<void> call(Song song) async {
     await _audioPlayerRepository.addToQueue(song);
 
-    final songList = _audioPlayerRepository.queueStream.valueWrapper.value;
+    final songList = _audioPlayerRepository.queueStream.valueWrapper!.value;
     _platformIntegrationRepository.setQueue(songList);
   }
 }

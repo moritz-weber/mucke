@@ -19,7 +19,7 @@ import 'artist_details_page.dart';
 import 'queue_page.dart';
 
 class CurrentlyPlayingPage extends StatelessWidget {
-  const CurrentlyPlayingPage({Key key}) : super(key: key);
+  const CurrentlyPlayingPage({Key? key}) : super(key: key);
 
   static final _log = FimberLog('CurrentlyPlayingPage');
 
@@ -33,16 +33,20 @@ class CurrentlyPlayingPage extends StatelessWidget {
       body: SafeArea(
         child: GestureDetector(
           onVerticalDragEnd: (dragEndDetails) {
-            if (dragEndDetails.primaryVelocity < 0) {
+            if (dragEndDetails.primaryVelocity! < 0) {
               _openQueue(context);
-            } else if (dragEndDetails.primaryVelocity > 0) {
+            } else if (dragEndDetails.primaryVelocity! > 0) {
               Navigator.pop(context);
             }
           },
           child: Observer(
             builder: (BuildContext context) {
               _log.d('Observer.build');
-              final Song song = audioStore.currentSongStream.value;
+              final Song? song = audioStore.currentSongStream.value;
+
+              if (song == null) {
+                return Container();
+              }
 
               return Stack(
                 children: [
@@ -156,11 +160,13 @@ class CurrentlyPlayingPage extends StatelessWidget {
     final NavigationStore navStore = GetIt.I<NavigationStore>();
 
     final song = audioStore.currentSongStream.value;
+    if (song == null)
+      return;
     // EXPLORATORY
-    final albums = musicDataStore.albumStream.value;
+    final albums = musicDataStore.albumStream.value ?? [];
     final album = albums.singleWhere((a) => a.title == song.album);
 
-    final artists = musicDataStore.artistStream.value;
+    final artists = musicDataStore.artistStream.value ?? [];
     final artist = artists.singleWhere((a) => a.name == album.artist);
 
     showModalBottomSheet(

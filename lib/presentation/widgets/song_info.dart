@@ -6,7 +6,10 @@ import '../utils.dart' as utils;
 const _LEADING_WIDTH = 108.0;
 
 class SongInfo extends StatelessWidget {
-  const SongInfo(this.song, {Key key}) : super(key: key);
+  const SongInfo(
+    this.song, {
+    Key? key,
+  }) : super(key: key);
 
   final Song song;
 
@@ -31,7 +34,7 @@ class SongInfo extends StatelessWidget {
         InfoRow(leading: 'Path:', trailing: song.path, leadingWidth: _LEADING_WIDTH),
         InfoRow(
           leading: 'Album art path:',
-          trailing: song.albumArtPath,
+          trailing: song.albumArtPath ?? 'null',
           leadingWidth: _LEADING_WIDTH,
         ),
         InfoRow(
@@ -60,7 +63,12 @@ class SongInfo extends StatelessWidget {
 }
 
 class InfoRow extends StatelessWidget {
-  const InfoRow({Key key, this.leadingWidth, this.leading, this.trailing}) : super(key: key);
+  const InfoRow({
+    Key? key,
+    required this.leadingWidth,
+    required this.leading,
+    required this.trailing,
+  }) : super(key: key);
 
   final double leadingWidth;
   final String leading;

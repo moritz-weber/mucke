@@ -4,7 +4,11 @@ import 'package:get_it/get_it.dart';
 import '../state/audio_store.dart';
 
 class ShuffleAllButton extends StatelessWidget {
-  const ShuffleAllButton({Key key, this.verticalPad, this.horizontalPad}) : super(key: key);
+  const ShuffleAllButton({
+    Key? key,
+    required this.verticalPad,
+    required this.horizontalPad,
+  }) : super(key: key);
 
   final double verticalPad;
   final double horizontalPad;

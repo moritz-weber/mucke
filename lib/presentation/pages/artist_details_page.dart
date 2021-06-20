@@ -13,7 +13,10 @@ import '../widgets/artist_highlighted_songs.dart';
 import 'album_details_page.dart';
 
 class ArtistDetailsPage extends StatefulWidget {
-  const ArtistDetailsPage({Key key, @required this.artist}) : super(key: key);
+  const ArtistDetailsPage({
+    Key? key,
+    required this.artist,
+  }) : super(key: key);
 
   final Artist artist;
 
@@ -22,7 +25,7 @@ class ArtistDetailsPage extends StatefulWidget {
 }
 
 class _ArtistDetailsPageState extends State<ArtistDetailsPage> {
-  ArtistPageStore store;
+  late ArtistPageStore store;
 
   @override
   void initState() {
@@ -87,7 +90,7 @@ class _ArtistDetailsPageState extends State<ArtistDetailsPage> {
               ),
             ),
             ArtistAlbumSliverList(
-              albums: store.artistAlbumStream.value,
+              albums: store.artistAlbumStream.value ?? [],
               onTap: (Album album) => _tapAlbum(album, context),
               onTapPlay: (Album album) => audioStore.playAlbum(album),
             ),

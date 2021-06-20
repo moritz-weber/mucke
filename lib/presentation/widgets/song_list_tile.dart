@@ -8,10 +8,10 @@ enum Subtitle { artist, artistAlbum, stats }
 
 class SongListTile extends StatelessWidget {
   const SongListTile(
-      {Key key,
-      this.song,
-      this.onTap,
-      this.onTapMore,
+      {Key? key,
+      required this.song,
+      required this.onTap,
+      required this.onTapMore,
       this.showAlbum = true,
       this.subtitle = Subtitle.artist})
       : super(key: key);

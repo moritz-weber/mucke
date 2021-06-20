@@ -22,6 +22,6 @@ abstract class _NavigationStore with Store {
   void pushOnLibrary(Route route) {
     // TODO: don't like this... 
     setNavIndex(1);
-    libraryNavKey.currentState.push(route);
+    libraryNavKey.currentState?.push(route);
   }
 }

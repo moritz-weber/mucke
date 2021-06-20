@@ -4,7 +4,10 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'next_song.dart';
 
 class NextIndicator extends StatelessWidget {
-  const NextIndicator({Key key, this.onTapAction}) : super(key: key);
+  const NextIndicator({
+    Key? key,
+    required this.onTapAction,
+  }) : super(key: key);
 
   final void Function(BuildContext) onTapAction;
 
@@ -22,12 +25,12 @@ class NextIndicator extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Icon(
+                  children: const [
+                    Icon(
                       Icons.expand_less,
                       color: Colors.white70,
                     ),
-                    const NextSong(),
+                    NextSong(),
                   ],
                 ),
               ),

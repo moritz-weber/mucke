@@ -114,8 +114,7 @@ class PersistentStateDao extends DatabaseAccessor<MoorDatabase>
 
   @override
   Future<int> get currentIndex async {
-    final res = await select(persistentIndex).get();
-    return select(persistentIndex).getSingle().then((event) => event?.index);
+    return select(persistentIndex).getSingle().then((event) => event.index ?? 0);
   }
 
   @override
@@ -126,7 +125,7 @@ class PersistentStateDao extends DatabaseAccessor<MoorDatabase>
 
   @override
   Future<LoopMode> get loopMode {
-    return select(persistentLoopMode).getSingle().then((event) => event?.loopMode?.toLoopMode());
+    return select(persistentLoopMode).getSingle().then((event) => event.loopMode.toLoopMode());
   }
 
   @override
@@ -146,7 +145,7 @@ class PersistentStateDao extends DatabaseAccessor<MoorDatabase>
   @override
   Future<ShuffleMode> get shuffleMode {
     return select(persistentShuffleMode).getSingle().then(
-          (event) => event?.shuffleMode?.toShuffleMode(),
+          (event) => event.shuffleMode.toShuffleMode(),
         );
   }
 }

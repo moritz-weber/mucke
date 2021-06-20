@@ -1,3 +1,3 @@
 abstract class Event {
-  Map<String, dynamic> payload;
+  Map<String, dynamic>? payload;
 }

@@ -11,7 +11,7 @@ import 'next_button.dart';
 import 'play_pause_button.dart';
 
 class CurrentlyPlayingBar extends StatelessWidget {
-  const CurrentlyPlayingBar({Key key}) : super(key: key);
+  const CurrentlyPlayingBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,68 +19,64 @@ class CurrentlyPlayingBar extends StatelessWidget {
 
     return Observer(
       builder: (BuildContext context) {
-        if (audioStore.currentSongStream != null) {
-          final Song song = audioStore.currentSongStream.value;
-          final Duration position = audioStore.currentPositionStream?.value ?? const Duration(seconds: 0);
-          if (song != null) {
-            return Column(
-              verticalDirection: VerticalDirection.up,
-              children: <Widget>[
-                GestureDetector(
-                  onTap: () => _onTap(context),
-                  child: Container(
-                    color: Colors.transparent,
-                    child: Row(
-                      children: <Widget>[
-                        Image(
-                          image: getAlbumImage(song.albumArtPath),
-                          height: 64.0,
+        final Song? song = audioStore.currentSongStream.value;
+        final Duration position =
+            audioStore.currentPositionStream.value ?? const Duration(seconds: 0);
+        if (song != null) {
+          return Column(
+            verticalDirection: VerticalDirection.up,
+            children: <Widget>[
+              GestureDetector(
+                onTap: () => _onTap(context),
+                child: Container(
+                  color: Colors.transparent,
+                  child: Row(
+                    children: <Widget>[
+                      Image(
+                        image: getAlbumImage(song.albumArtPath),
+                        height: 64.0,
+                      ),
+                      Container(
+                        width: 10.0,
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              song.title,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                            ),
+                            Text(
+                              song.artist,
+                              style: TEXT_SMALL_SUBTITLE.copyWith(color: Colors.white70),
+                            )
+                          ],
                         ),
-                        Container(
-                          width: 10.0,
-                        ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                song.title,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 2,
-                              ),
-                              Text(
-                                song.artist,
-                                style: TEXT_SMALL_SUBTITLE.copyWith(color: Colors.white70),
-                              )
-                            ],
-                          ),
-                        ),
-                        const PlayPauseButton(
-                          circle: false,
-                        ),
-                        const NextButton(),
-                      ],
-                    ),
-                  ),
-                ),
-                Container(
-                  child: LinearProgressIndicator(
-                    value: position.inMilliseconds / song.duration,
-                    valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
-                    backgroundColor: Colors.white10,
-                  ),
-                  height: 2,
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(color: Theme.of(context).primaryColor, blurRadius: 1),
+                      ),
+                      const PlayPauseButton(
+                        circle: false,
+                      ),
+                      const NextButton(),
                     ],
                   ),
                 ),
-              ],
-            );
-          }
-          return Container(
-            height: 0,
+              ),
+              Container(
+                child: LinearProgressIndicator(
+                  value: position.inMilliseconds / song.duration,
+                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+                  backgroundColor: Colors.white10,
+                ),
+                height: 2,
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(color: Theme.of(context).primaryColor, blurRadius: 1),
+                  ],
+                ),
+              ),
+            ],
           );
         }
         return Container();

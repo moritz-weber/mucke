@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'currently_playing_bar.dart';
 
 class NavBar extends StatefulWidget {
-  const NavBar({Key key, @required this.onTap, @required this.currentIndex})
-      : super(key: key);
+  const NavBar({
+    Key? key,
+    required this.onTap,
+    required this.currentIndex,
+  }) : super(key: key);
 
   final int currentIndex;
   final Function(int) onTap;

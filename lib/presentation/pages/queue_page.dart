@@ -11,7 +11,7 @@ import '../state/audio_store.dart';
 import '../widgets/album_art_list_tile.dart';
 
 class QueuePage extends StatelessWidget {
-  const QueuePage({Key key}) : super(key: key);
+  const QueuePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class QueuePage extends StatelessWidget {
     final AudioStore audioStore = GetIt.I<AudioStore>();
 
     final ObservableStream<int> queueIndexStream = audioStore.queueIndexStream;
-    final initialIndex = max(((queueIndexStream?.value) ?? 0) - 2, 0);
+    final initialIndex = max((queueIndexStream.value ?? 0) - 2, 0);
     final ScrollController _scrollController =
         ScrollController(initialScrollOffset: initialIndex * 72.0);
 
@@ -32,14 +32,16 @@ class QueuePage extends StatelessWidget {
 
             switch (queueStream.status) {
               case StreamStatus.active:
-                final int activeIndex = queueIndexStream.value;
+                final int activeIndex = queueIndexStream.value ?? -1;
                 return CustomScrollView(
                   controller: _scrollController,
                   slivers: [
                     ReorderableSliverList(
                       delegate: ReorderableSliverChildBuilderDelegate(
                         (context, int index) {
-                          final song = queueStream.value[index];
+                          final Song? song = queueStream.value?[index];
+                          if (song == null)
+                           return Container();
                           return Dismissible(
                             key: ValueKey(song.path),
                             child: AlbumArtListTile(
@@ -54,7 +56,7 @@ class QueuePage extends StatelessWidget {
                             },
                           );
                         },
-                        childCount: queueStream.value.length,
+                        childCount: queueStream.value?.length,
                       ),
                       onReorder: (oldIndex, newIndex) =>
                           audioStore.moveQueueItem(oldIndex, newIndex),

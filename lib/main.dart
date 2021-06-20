@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
 }
 
 class RootPage extends StatefulWidget {
-  const RootPage({Key key}) : super(key: key);
+  const RootPage({Key? key}) : super(key: key);
 
   @override
   _RootPageState createState() => _RootPageState();

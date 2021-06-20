@@ -6,17 +6,17 @@ import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
 
 class NextSong extends StatelessWidget {
-  const NextSong({Key key}) : super(key: key);
+  const NextSong({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Observer(builder: (BuildContext context) {
       final audioStore = GetIt.I<AudioStore>();
 
-      final List<Song> queue = audioStore.queueStream.value;
-      final int index = audioStore.queueIndexStream.value;
+      final List<Song>? queue = audioStore.queueStream.value;
+      final int? index = audioStore.queueIndexStream.value;
 
-      if (index < queue.length - 1) {
+      if (index != null && queue != null && index < queue.length - 1) {
         final Song song = queue[index + 1];
         return RichText(
           textAlign: TextAlign.center,

@@ -12,7 +12,7 @@ class PlaySongs {
   final PlatformIntegrationRepository _platformIntegrationRepository;
 
   /// Generate and play a queue from the [songs] according to current AudioPlayer settings.
-  Future<void> call({List<Song> songs, int initialIndex}) async {
+  Future<void> call({required List<Song> songs, required int initialIndex}) async {
     if (0 <= initialIndex && initialIndex < songs.length) {
       await _audioPlayerRepository.loadSongs(
         initialIndex: initialIndex,
@@ -22,7 +22,7 @@ class PlaySongs {
 
       _platformIntegrationRepository.setCurrentSong(songs[initialIndex]);
       _platformIntegrationRepository.setQueue(
-        _audioPlayerRepository.queueStream.valueWrapper.value,
+        _audioPlayerRepository.queueStream.valueWrapper!.value,
       );
     }
   }

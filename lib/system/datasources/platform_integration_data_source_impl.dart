@@ -44,16 +44,15 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
   Future<void> handlePlaybackEvent(PlaybackEventModel pe) async {
     if (pe.processingState == ProcessingState.ready) {
       final timeDelta = DateTime.now().difference(pe.updateTime);
-      print(timeDelta);
       if (pe.playing) {
-        playbackState.add(playbackState.value.copyWith(
+        playbackState.add(playbackState.value!.copyWith(
           controls: [MediaControl.skipToPrevious, MediaControl.pause, MediaControl.skipToNext],
           playing: true,
           processingState: AudioProcessingState.ready,
           updatePosition: pe.updatePosition + timeDelta,
         ));
       } else {
-        playbackState.add(playbackState.value.copyWith(
+        playbackState.add(playbackState.value!.copyWith(
           controls: [MediaControl.skipToPrevious, MediaControl.play, MediaControl.skipToNext],
           processingState: AudioProcessingState.ready,
           updatePosition: pe.updatePosition + timeDelta,
@@ -65,7 +64,7 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
 
   @override
   Future<void> onPlay() async {
-    playbackState.add(playbackState.value.copyWith(
+    playbackState.add(playbackState.value!.copyWith(
       controls: [MediaControl.skipToPrevious, MediaControl.pause, MediaControl.skipToNext],
       playing: true,
       processingState: AudioProcessingState.ready,
@@ -74,7 +73,7 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
 
   @override
   Future<void> onPause() async {
-    playbackState.add(playbackState.value.copyWith(
+    playbackState.add(playbackState.value!.copyWith(
       controls: [MediaControl.skipToPrevious, MediaControl.play, MediaControl.skipToNext],
       processingState: AudioProcessingState.ready,
       playing: false,

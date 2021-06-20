@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../domain/entities/album.dart';
@@ -10,8 +9,8 @@ part 'artist_page_store.g.dart';
 
 class ArtistPageStore extends _ArtistPageStore with _$ArtistPageStore {
   ArtistPageStore({
-    @required MusicDataInfoRepository musicDataInfoRepository,
-    @required Artist artist,
+    required MusicDataInfoRepository musicDataInfoRepository,
+    required Artist artist,
   }) : super(musicDataInfoRepository, artist);
 }
 
@@ -29,10 +28,10 @@ abstract class _ArtistPageStore with Store {
   final Artist _artist;
 
   @observable
-  ObservableStream<List<Album>> artistAlbumStream;
+  late ObservableStream<List<Album>> artistAlbumStream;
 
   @observable
-  ObservableStream<List<Song>> artistHighlightedSongStream;
+  late ObservableStream<List<Song>> artistHighlightedSongStream;
 
   void dispose() {}
 }

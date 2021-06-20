@@ -4,7 +4,7 @@ import '../../domain/entities/playback_state.dart' as entity;
 
 class PlaybackStateModel {
 
-  static entity.PlaybackState fromASPlaybackState(PlaybackState playbackState) {
+  static entity.PlaybackState? fromASPlaybackState(PlaybackState? playbackState) {
     if (playbackState == null) {
       return null;
     }

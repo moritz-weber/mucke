@@ -30,7 +30,7 @@ class AudioPlayerActor {
   final IncrementPlayCount _incrementPlayCount;
   final SetCurrentSong _setCurrentSong;
 
-  Song _currentSong;
+  Song? _currentSong;
   bool _countSongPlayback = false;
 
   Future<void> _handleCurrentSong(Song song) async {
@@ -38,7 +38,7 @@ class AudioPlayerActor {
     return _setCurrentSong(song);
   }
 
-  void _handlePosition(Duration position, Song song) {
+  void _handlePosition(Duration? position, Song? song) {
     if (song == null || position == null) return;
 
     final int pos = position.inMilliseconds;

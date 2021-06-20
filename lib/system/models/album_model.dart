@@ -1,17 +1,17 @@
 import 'package:audiotagger/models/tag.dart';
-import 'package:meta/meta.dart';
 import 'package:moor/moor.dart';
 
 import '../../domain/entities/album.dart';
 import '../datasources/moor_database.dart';
+import 'default_values.dart';
 
 class AlbumModel extends Album {
   const AlbumModel({
-    this.id,
-    @required String title,
-    @required String artist,
-    String albumArtPath,
-    int year,
+    required this.id,
+    required String title,
+    required String artist,
+    String? albumArtPath,
+    int? year,
   }) : super(
           title: title,
           artist: artist,
@@ -27,15 +27,19 @@ class AlbumModel extends Album {
         year: moorAlbum.year,
       );
 
-  factory AlbumModel.fromAudiotagger({Tag tag, int albumId, String albumArtPath}) {
+  factory AlbumModel.fromAudiotagger({
+    required Tag tag,
+    required int albumId,
+    String? albumArtPath,
+  }) {
     final artist = tag.albumArtist != '' ? tag.albumArtist : tag.artist;
 
     return AlbumModel(
       id: albumId,
-      title: tag.album,
-      artist: artist,
+      title: tag.album ?? DEF_ALBUM,
+      artist: artist ?? DEF_ARTIST,
       albumArtPath: albumArtPath,
-      year: tag.year == null ? null : _parseYear(tag.year),
+      year: tag.year == null ? null : _parseYear(tag.year!),
     );
   }
 
@@ -47,11 +51,11 @@ class AlbumModel extends Album {
   }
 
   AlbumModel copyWith({
-    String artist,
-    String title,
-    int id,
-    int year,
-    String albumArtPath,
+    String? artist,
+    String? title,
+    int? id,
+    int? year,
+    String? albumArtPath,
   }) =>
       AlbumModel(
           artist: artist ?? this.artist,
@@ -68,8 +72,8 @@ class AlbumModel extends Album {
         year: Value(pubYear),
       );
 
-  static int _parseYear(String yearString) {
-    if (yearString == null || yearString == '') {
+  static int? _parseYear(String yearString) {
+    if (yearString == '') {
       return null;
     }
 

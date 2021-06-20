@@ -8,7 +8,7 @@ import '../state/audio_store.dart';
 import '../utils.dart';
 
 class TimeProgressIndicator extends StatelessWidget {
-  const TimeProgressIndicator({Key key}) : super(key: key);
+  const TimeProgressIndicator({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,9 @@ class TimeProgressIndicator extends StatelessWidget {
             Container(
               width: 48,
               child: Text(
-                msToTimeString(audioStore.currentPositionStream.value),
+                msToTimeString(
+                  audioStore.currentPositionStream.value ?? const Duration(seconds: 0),
+                ),
               ),
             ),
             Expanded(
@@ -38,7 +40,8 @@ class TimeProgressIndicator extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: FractionallySizedBox(
                   widthFactor: min(
-                    audioStore.currentPositionStream.value.inMilliseconds / duration.inMilliseconds,
+                    (audioStore.currentPositionStream.value?.inMilliseconds ?? 0) /
+                        duration.inMilliseconds,
                     1.0,
                   ),
                   heightFactor: 1.0,

@@ -9,7 +9,7 @@ import '../theming.dart';
 import 'like_button.dart';
 
 class SongCustomizationButtons extends StatelessWidget {
-  const SongCustomizationButtons({Key key}) : super(key: key);
+  const SongCustomizationButtons({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,12 @@ class SongCustomizationButtons extends StatelessWidget {
 
     return Observer(
       builder: (BuildContext context) {
-        final Song song = audioStore.currentSongStream.value;
+        final Song? song = audioStore.currentSongStream.value;
+
+        if (song == null) {
+          return Container();
+        }
+
         return Container(
           child: Row(
             children: [
@@ -75,6 +80,9 @@ class SongCustomizationButtons extends StatelessWidget {
           child: Observer(
             builder: (BuildContext context) {
               final song = audioStore.currentSongStream.value;
+              if (song == null) {
+                return Container();
+              }
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [

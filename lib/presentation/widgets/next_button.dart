@@ -6,7 +6,10 @@ import '../../domain/entities/loop_mode.dart';
 import '../state/audio_store.dart';
 
 class NextButton extends StatelessWidget {
-  const NextButton({Key key, this.iconSize = 24.0}) : super(key: key);
+  const NextButton({
+    Key? key,
+    this.iconSize = 24.0,
+  }) : super(key: key);
 
   final double iconSize;
 
@@ -17,18 +20,17 @@ class NextButton extends StatelessWidget {
     return Observer(
       builder: (BuildContext context) {
         final queue = audioStore.queueStream.value;
-        final int index = audioStore.queueIndexStream.value;
-        final LoopMode loopMode = audioStore.loopModeStream.value;
+        final int? index = audioStore.queueIndexStream.value;
+        final LoopMode loopMode = audioStore.loopModeStream.value!;
 
-        if ((index != null && index < queue.length - 1) || loopMode != LoopMode.off) {
+        if ((index != null && queue != null && index < queue.length - 1) || loopMode != LoopMode.off) {
           return IconButton(
             icon: const Icon(Icons.skip_next_rounded),
             iconSize: iconSize,
             onPressed: () {
               // precacheImage(FileImage(File(queue[index+2].albumArtPath)), context);
-              return audioStore.skipToNext();
+              audioStore.skipToNext();
             },
-            
           );
         }
         return IconButton(

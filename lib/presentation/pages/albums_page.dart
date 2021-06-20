@@ -8,7 +8,7 @@ import '../widgets/album_art_list_tile.dart';
 import 'album_details_page.dart';
 
 class AlbumsPage extends StatefulWidget {
-  const AlbumsPage({Key key}) : super(key: key);
+  const AlbumsPage({Key? key}) : super(key: key);
 
   @override
   _AlbumsPageState createState() => _AlbumsPageState();
@@ -23,7 +23,7 @@ class _AlbumsPageState extends State<AlbumsPage> with AutomaticKeepAliveClientMi
     super.build(context);
     return Observer(builder: (_) {
       print('AlbumsPage.build -> Observer.builder');
-      final List<Album> albums = store.albumStream.value;
+      final List<Album> albums = store.albumStream.value ?? [];
       return ListView.separated(
         itemCount: albums.length,
         itemBuilder: (_, int index) {

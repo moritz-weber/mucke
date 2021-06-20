@@ -3,7 +3,7 @@ import 'song.dart';
 class QueueItem {
   QueueItem(
     this.song, {
-    this.originalIndex,
+    required this.originalIndex,
     this.type = QueueItemType.standard,
   });
 

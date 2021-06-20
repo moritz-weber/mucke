@@ -1,10 +1,10 @@
 class PlaybackEvent {
   PlaybackEvent({
-    this.index,
-    this.playing,
-    this.processingState,
-    this.updatePosition,
-    this.updateTime,
+    required this.index,
+    required this.playing,
+    required this.processingState,
+    required this.updatePosition,
+    required this.updateTime,
   });
 
   final int index;

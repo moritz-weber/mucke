@@ -7,7 +7,7 @@ import 'previous_button.dart';
 import 'shuffle_button.dart';
 
 class PlaybackControl extends StatelessWidget {
-  const PlaybackControl({Key key}) : super(key: key);
+  const PlaybackControl({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

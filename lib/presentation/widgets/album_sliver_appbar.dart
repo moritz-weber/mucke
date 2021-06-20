@@ -4,7 +4,10 @@ import '../../domain/entities/album.dart';
 import '../utils.dart' as utils;
 
 class AlbumSliverAppBar extends StatelessWidget {
-  const AlbumSliverAppBar({Key key, this.album}) : super(key: key);
+  const AlbumSliverAppBar({
+    Key? key,
+    required this.album,
+  }) : super(key: key);
 
   final Album album;
 

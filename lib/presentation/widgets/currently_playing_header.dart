@@ -4,7 +4,11 @@ import '../theming.dart';
 import 'next_song.dart';
 
 class CurrentlyPlayingHeader extends StatelessWidget {
-  const CurrentlyPlayingHeader({Key key, this.onTap, this.onMoreTap}) : super(key: key);
+  const CurrentlyPlayingHeader({
+    Key? key,
+    required this.onTap,
+    required this.onMoreTap,
+  }) : super(key: key);
 
   final Function onTap;
   final Function onMoreTap;

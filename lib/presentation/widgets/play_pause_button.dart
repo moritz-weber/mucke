@@ -5,7 +5,11 @@ import 'package:get_it/get_it.dart';
 import '../state/audio_store.dart';
 
 class PlayPauseButton extends StatelessWidget {
-  const PlayPauseButton({Key key, this.circle = false, this.iconSize = 24.0}) : super(key: key);
+  const PlayPauseButton({
+    Key? key,
+    this.circle = false,
+    this.iconSize = 24.0,
+  }) : super(key: key);
 
   final bool circle;
   final double iconSize;
@@ -16,7 +20,7 @@ class PlayPauseButton extends StatelessWidget {
 
     return Observer(
       builder: (BuildContext context) {
-        if (audioStore.playingStream?.value != null && audioStore.playingStream.value) {
+        if (audioStore.playingStream.value != null && (audioStore.playingStream.value ?? false)) {
           return IconButton(
             icon: circle
                 ? const Icon(Icons.pause_circle_filled_rounded)

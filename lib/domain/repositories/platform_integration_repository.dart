@@ -24,7 +24,7 @@ abstract class PlatformIntegrationRepository extends PlatformIntegrationInfoRepo
 }
 
 class PlatformIntegrationEvent extends Event {
-  PlatformIntegrationEvent({this.type});
+  PlatformIntegrationEvent({required this.type});
 
   final PlatformIntegrationEventType type;
 }

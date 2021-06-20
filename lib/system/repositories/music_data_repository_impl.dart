@@ -152,7 +152,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
     SongModel newSong;
     if (song.next == '') {
       final successor = await _musicDataSource.getSuccessor(song as SongModel);
-      newSong = (song as SongModel).copyWith(next: successor.path);
+      newSong = (song as SongModel).copyWith(next: successor?.path ?? '');
     } else {
       newSong = (song as SongModel).copyWith(next: '');
     }
@@ -165,7 +165,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
     SongModel newSong;
     if (song.previous == '') {
       final predecessor = await _musicDataSource.getPredecessor(song as SongModel);
-      newSong = (song as SongModel).copyWith(previous: predecessor.path);
+      newSong = (song as SongModel).copyWith(previous: predecessor?.path ?? '');
     } else {
       newSong = (song as SongModel).copyWith(previous: '');
     }
@@ -189,7 +189,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
       ..sort((a, b) {
         if (b.pubYear == null) return -1;
         if (a.pubYear == null) return 1;
-        return -a.pubYear.compareTo(b.pubYear);
+        return -a.pubYear!.compareTo(b.pubYear!);
       });
   }
 }

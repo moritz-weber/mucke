@@ -9,13 +9,13 @@ import '../entities/song.dart';
 import '../repositories/music_data_repository.dart';
 
 abstract class ManagedQueueInfo {
-  ValueStream<List<QueueItem>> get queueItemsStream;
+  ValueStream<List<QueueItem>/*!*/> get queueItemsStream;
   ValueStream<List<Song>> get originalSongsStream;
   ValueStream<List<Song>> get addedSongsStream;
 }
 
 class ManagedQueue implements ManagedQueueInfo {
-  ManagedQueue(this._musicDataRepository);
+  ManagedQueue(this._musicDataRepository) : _queue = [];
 
   static final _log = FimberLog('ManagedQueue');
 

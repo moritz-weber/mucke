@@ -4,7 +4,7 @@ import '../../domain/entities/song.dart';
 import '../utils.dart';
 
 class AlbumArt extends StatelessWidget {
-  const AlbumArt({Key key, this.song}) : super(key: key);
+  const AlbumArt({Key? key, required this.song}) : super(key: key);
 
   final Song song;
 

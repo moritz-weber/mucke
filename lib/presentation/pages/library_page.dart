@@ -5,7 +5,7 @@ import '../state/navigation_store.dart';
 import 'library_tab_container.dart';
 
 class LibraryPage extends StatelessWidget {
-  const LibraryPage({Key key}) : super(key: key);
+  const LibraryPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class LibraryPage extends StatelessWidget {
       ),
       onWillPop: () async {
         if (navStore.navIndex == 1) {
-          return !await navStore.libraryNavKey.currentState.maybePop();
+          return !await navStore.libraryNavKey.currentState!.maybePop();
         }
         return Future.value(true);
       },

@@ -78,41 +78,22 @@ Future<void> setupGetIt() async {
       togglePreviousSongLink: getIt(),
     ),
   );
-  getIt.registerLazySingleton<AudioStore>(
-    () => AudioStore(
-      audioPlayerInfoRepository: getIt(),
-      addToQueue: getIt(),
-      moveQueueItem: getIt(),
-      pause: getIt(),
-      play: getIt(),
-      playAlbum: getIt(),
-      playArtist: getIt(),
-      playNext: getIt(),
-      playSongs: getIt(),
-      removeQueueIndex: getIt(),
-      seekToIndex: getIt(),
-      seekToNext: getIt(),
-      seekToPrevious: getIt(),
-      setLoopMode: getIt(),
-      setShuffleMode: getIt(),
-      shuffleAll: getIt(),
-    ),
-  );
+
   getIt.registerLazySingleton<NavigationStore>(
     () => NavigationStore(),
   );
   getIt.registerFactoryParam<ArtistPageStore, Artist, void>(
-    (Artist artist, _) => ArtistPageStore(artist: artist, musicDataInfoRepository: getIt()),
+    (Artist? artist, _) => ArtistPageStore(artist: artist!, musicDataInfoRepository: getIt()),
   );
   getIt.registerFactoryParam<AlbumPageStore, Album, void>(
-    (Album album, _) => AlbumPageStore(album: album, musicDataInfoRepository: getIt()),
+    (Album? album, _) => AlbumPageStore(album: album!, musicDataInfoRepository: getIt()),
   );
 
   // use cases
   getIt.registerLazySingleton<AddToQueue>(
     () => AddToQueue(
-      getIt(),
-      getIt(),
+      getIt<AudioPlayerRepository>(),
+      getIt<PlatformIntegrationRepository>(),
     ),
   );
   getIt.registerLazySingleton<HandlePlaybackEvent>(
@@ -330,6 +311,27 @@ Future<void> setupGetIt() async {
   getIt.registerFactory<AudioPlayer>(() => AudioPlayer());
 
   getIt.registerLazySingleton<Audiotagger>(() => Audiotagger());
+
+  getIt.registerSingleton<AudioStore>(
+    AudioStore(
+      audioPlayerInfoRepository: getIt(),
+      addToQueue: getIt(),
+      moveQueueItem: getIt(),
+      pause: getIt(),
+      play: getIt(),
+      playAlbum: getIt(),
+      playArtist: getIt(),
+      playNext: getIt(),
+      playSongs: getIt(),
+      removeQueueIndex: getIt(),
+      seekToIndex: getIt(),
+      seekToNext: getIt(),
+      seekToPrevious: getIt(),
+      setLoopMode: getIt(),
+      setShuffleMode: getIt(),
+      shuffleAll: getIt(),
+    ),
+  );
 
   // actors
   getIt.registerSingleton<PlatformIntegrationActor>(

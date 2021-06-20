@@ -7,9 +7,11 @@ import '../theming.dart';
 import '../utils.dart';
 
 class AlbumBackground extends StatelessWidget {
-  const AlbumBackground({Key key, this.child, this.song}) : super(key: key);
+  const AlbumBackground({
+    Key? key,
+    required this.song,
+  }) : super(key: key);
 
-  final Widget child;
   final Song song;
 
   @override

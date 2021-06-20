@@ -6,7 +6,10 @@ import '../../domain/entities/shuffle_mode.dart';
 import '../state/audio_store.dart';
 
 class ShuffleButton extends StatelessWidget {
-  const ShuffleButton({Key key, this.iconSize = 20.0}) : super(key: key);
+  const ShuffleButton({
+    Key? key,
+    this.iconSize = 20.0,
+  }) : super(key: key);
 
   final double iconSize;
 
@@ -16,38 +19,37 @@ class ShuffleButton extends StatelessWidget {
 
     return Observer(
       builder: (BuildContext context) {
-        if (audioStore.shuffleModeStream != null) {
-          switch (audioStore.shuffleModeStream.value) {
-            case ShuffleMode.none:
-              return IconButton(
-                icon: const Icon(
-                  Icons.shuffle_rounded,
-                  color: Colors.white30,
-                ),
-                iconSize: iconSize,
-                onPressed: () => audioStore.setShuffleMode(ShuffleMode.standard),
-              );
-            case ShuffleMode.standard:
-              return IconButton(
-                icon: const Icon(
-                  Icons.shuffle_rounded,
-                  color: Colors.white,
-                ),
-                iconSize: iconSize,
-                onPressed: () => audioStore.setShuffleMode(ShuffleMode.plus),
-              );
-            case ShuffleMode.plus:
-              return IconButton(
-                icon: Icon(
-                  Icons.fingerprint_rounded,
-                  color: Theme.of(context).accentColor,
-                ),
-                iconSize: iconSize,
-                onPressed: () => audioStore.setShuffleMode(ShuffleMode.none),
-              );
-          }
+        switch (audioStore.shuffleModeStream.value) {
+          case ShuffleMode.none:
+            return IconButton(
+              icon: const Icon(
+                Icons.shuffle_rounded,
+                color: Colors.white30,
+              ),
+              iconSize: iconSize,
+              onPressed: () => audioStore.setShuffleMode(ShuffleMode.standard),
+            );
+          case ShuffleMode.standard:
+            return IconButton(
+              icon: const Icon(
+                Icons.shuffle_rounded,
+                color: Colors.white,
+              ),
+              iconSize: iconSize,
+              onPressed: () => audioStore.setShuffleMode(ShuffleMode.plus),
+            );
+          case ShuffleMode.plus:
+            return IconButton(
+              icon: Icon(
+                Icons.fingerprint_rounded,
+                color: Theme.of(context).accentColor,
+              ),
+              iconSize: iconSize,
+              onPressed: () => audioStore.setShuffleMode(ShuffleMode.none),
+            );
+          case null:
+            return Container();
         }
-        return Container();
       },
     );
   }

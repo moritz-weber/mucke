@@ -31,9 +31,6 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   final BehaviorSubject<ShuffleMode> _shuffleModeSubject = BehaviorSubject();
 
   @override
-  Stream<AudioPlayerEvent> eventStream;
-
-  @override
   ValueStream<ShuffleMode> get shuffleModeStream => _shuffleModeSubject.stream;
 
   @override
@@ -89,9 +86,9 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   }
 
   @override
-  Future<void> loadSongs({List<Song> songs, int initialIndex}) async {
+  Future<void> loadSongs({required List<Song> songs, required int initialIndex}) async {
     final shuffleMode = shuffleModeStream.value;
-    final _initialIndex = await _managedQueue.generateQueue(shuffleMode, songs, initialIndex);
+    final _initialIndex = await _managedQueue.generateQueue(shuffleMode!, songs, initialIndex);
 
     _queueSubject.add(_managedQueue.queue);
 
@@ -123,7 +120,7 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   Future<void> playNext(Song song) async {
     _audioPlayerDataSource.playNext(song as SongModel);
 
-    _managedQueue.insertIntoQueue(song, currentIndexStream.value + 1);
+    _managedQueue.insertIntoQueue(song, (currentIndexStream.value ?? 0) + 1);
     _queueSubject.add(_managedQueue.queue);
   }
 
@@ -157,10 +154,10 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   }
 
   @override
-  Future<void> setShuffleMode(ShuffleMode shuffleMode, {bool updateQueue}) async {
+  Future<void> setShuffleMode(ShuffleMode shuffleMode, {bool updateQueue = true}) async {
     _shuffleModeSubject.add(shuffleMode);
 
-    final currentIndex = currentIndexStream.value;
+    final currentIndex = currentIndexStream.value ?? 0;
 
     if (updateQueue) {
       final splitIndex = await _managedQueue.reshuffleQueue(shuffleMode, currentIndex);
@@ -183,16 +180,16 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   // TODO: this should be in ManagedQueue
   @override
   Future<void> updateSongs(Map<String, Song> songs) async {
-    if (songs.containsKey(_currentSongSubject.value.path)) {
-      _currentSongSubject.add(songs[_currentSongSubject.value.path]);
+    if (songs.containsKey(_currentSongSubject.value?.path)) {
+      _currentSongSubject.add(songs[_currentSongSubject.value!.path]!);
     }
 
-    final queue = _queueSubject.value;
+    final List<Song> queue = _queueSubject.value ?? [];
     bool changed = false;
 
     for (int i = 0; i < queue.length; i++) {
       if (songs.containsKey(queue[i].path)) {
-        queue[i] = songs[queue[i].path];
+        queue[i] = songs[queue[i].path]!;
         changed = true;
       }
     }
@@ -200,7 +197,7 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
     if (changed) _queueSubject.add(queue);
   }
 
-  void _updateCurrentSong(List<Song> queue, int index) {
+  void _updateCurrentSong(List<Song>? queue, int? index) {
     if (queue != null && index != null && index < queue.length) {
       _currentSongSubject.add(queue[index]);
     }

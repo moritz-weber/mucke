@@ -8,7 +8,7 @@ import '../state/music_data_store.dart';
 import '../theming.dart';
 
 class SettingsPage extends StatelessWidget {
-  const SettingsPage({Key key}) : super(key: key);
+  const SettingsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +32,9 @@ class SettingsPage extends StatelessWidget {
         ListTile(
           title: const Text('Update library'),
           subtitle: Observer(builder: (_) {
-            final int artistCount = store.artistStream.value.length;
-            final int albumCount = store.albumStream.value.length;
-            final int songCount = store.songStream.value.length;
+            final int artistCount = store.artistStream.value?.length ?? 0;
+            final int albumCount = store.albumStream.value?.length ?? 0;
+            final int songCount = store.songStream.value?.length ?? 0;
             return Text('$artistCount artists, $albumCount albums, $songCount songs');
           }),
           onTap: () => store.updateDatabase(),

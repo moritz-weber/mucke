@@ -5,7 +5,7 @@ import 'artists_page.dart';
 import 'songs_page.dart';
 
 class LibraryTabContainer extends StatelessWidget {
-  const LibraryTabContainer({Key key}) : super(key: key);
+  const LibraryTabContainer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

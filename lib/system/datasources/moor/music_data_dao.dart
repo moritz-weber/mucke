@@ -97,12 +97,7 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
   @override
   Future<SongModel> getSongByPath(String path) async {
     return (select(songs)..where((t) => t.path.equals(path))).getSingle().then(
-      (moorSong) {
-        if (moorSong == null) {
-          return null;
-        }
-        return SongModel.fromMoor(moorSong);
-      },
+      (moorSong) => SongModel.fromMoor(moorSong),
     );
   }
 
@@ -223,7 +218,7 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
   }
 
   @override
-  Future<SongModel> getPredecessor(SongModel song) async {
+  Future<SongModel?> getPredecessor(SongModel song) async {
     final albumSongs = await (select(songs)
           ..where((tbl) => tbl.albumId.equals(song.albumId))
           ..orderBy([
@@ -234,7 +229,7 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
         .then((moorSongList) =>
             moorSongList.map((moorSong) => SongModel.fromMoor(moorSong)).toList());
 
-    SongModel prevSong;
+    SongModel? prevSong;
     for (final s in albumSongs) {
       if (s.path == song.path) {
         break;
@@ -245,7 +240,7 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
   }
 
   @override
-  Future<SongModel> getSuccessor(SongModel song) async {
+  Future<SongModel?> getSuccessor(SongModel song) async {
     final albumSongs = await (select(songs)
           ..where((tbl) => tbl.albumId.equals(song.albumId))
           ..orderBy([
@@ -257,7 +252,7 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
             moorSongList.map((moorSong) => SongModel.fromMoor(moorSong)).toList());
 
     bool current = false;
-    SongModel nextSong;
+    SongModel? nextSong;
     for (final s in albumSongs) {
       if (current) {
         nextSong = s;

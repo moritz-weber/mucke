@@ -8,7 +8,10 @@ import '../state/music_data_store.dart';
 import '../theming.dart';
 
 class LikeButton extends StatelessWidget {
-  const LikeButton({Key key, this.iconSize = 20.0}) : super(key: key);
+  const LikeButton({
+    Key? key,
+    this.iconSize = 20.0,
+  }) : super(key: key);
 
   final double iconSize;
 
@@ -19,7 +22,19 @@ class LikeButton extends StatelessWidget {
 
     return Observer(
       builder: (BuildContext context) {
-        final Song song = audioStore.currentSongStream.value;
+        final Song? song = audioStore.currentSongStream.value;
+
+        if (song == null) {
+          return IconButton(
+            icon: Icon(
+              Icons.favorite_rounded,
+              size: iconSize,
+              color: Colors.white24,
+            ),
+            onPressed: () {},
+            visualDensity: VisualDensity.compact,
+          );
+        }
 
         if (song.likeCount == 0) {
           return IconButton(
@@ -53,9 +68,9 @@ class LikeButton extends StatelessWidget {
             ),
             onPressed: () {
               if (song.likeCount < 5) {
-                return musicDataStore.incrementLikeCount(song);
+                musicDataStore.incrementLikeCount(song);
               }
-              return musicDataStore.resetLikeCount(song);
+              musicDataStore.resetLikeCount(song);
             },
             visualDensity: VisualDensity.compact,
           );

@@ -7,7 +7,7 @@ import '../state/music_data_store.dart';
 import 'artist_details_page.dart';
 
 class ArtistsPage extends StatefulWidget {
-  const ArtistsPage({Key key}) : super(key: key);
+  const ArtistsPage({Key? key}) : super(key: key);
 
   @override
   _ArtistsPageState createState() => _ArtistsPageState();
@@ -22,7 +22,7 @@ class _ArtistsPageState extends State<ArtistsPage> with AutomaticKeepAliveClient
     super.build(context);
     return Observer(builder: (_) {
       print('ArtistsPage.build -> Observer.builder');
-      final List<Artist> artists = musicDataStore.artistStream.value;
+      final List<Artist> artists = musicDataStore.artistStream.value ?? [];
       return ListView.separated(
         itemCount: artists.length,
         itemBuilder: (_, int index) {

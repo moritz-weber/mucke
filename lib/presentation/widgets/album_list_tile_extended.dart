@@ -4,13 +4,19 @@ import '../theming.dart';
 import '../utils.dart' as utils;
 
 class AlbumListTileExtended extends StatelessWidget {
-  const AlbumListTileExtended(
-      {Key key, this.title, this.subtitle, this.albumArtPath, this.onTap, this.highlight = false, this.onTapPlay})
-      : super(key: key);
+  const AlbumListTileExtended({
+    Key? key,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+    required this.onTapPlay,
+    this.highlight = false,
+    this.albumArtPath,
+  }) : super(key: key);
 
   final String title;
   final String subtitle;
-  final String albumArtPath;
+  final String? albumArtPath;
   final Function onTap;
   final bool highlight;
   final Function onTapPlay;

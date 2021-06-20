@@ -12,7 +12,7 @@ import '../widgets/song_bottom_sheet.dart';
 import '../widgets/song_list_tile.dart';
 
 class AlbumDetailsPage extends StatefulWidget {
-  const AlbumDetailsPage({Key key, @required this.album}) : super(key: key);
+  const AlbumDetailsPage({Key? key, required this.album}) : super(key: key);
 
   final Album album;
 
@@ -21,7 +21,7 @@ class AlbumDetailsPage extends StatefulWidget {
 }
 
 class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
-  AlbumPageStore store;
+  late AlbumPageStore store;
 
   @override
   void initState() {
@@ -42,7 +42,7 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
 
     return Observer(
       builder: (BuildContext context) {
-        final songsByDisc = _songsByDisc(store.albumSongStream.value);
+        final songsByDisc = _songsByDisc(store.albumSongStream.value ?? []);
 
         return CustomScrollView(
           slivers: <Widget>[
@@ -76,7 +76,7 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
                         showAlbum: false,
                         onTap: () => audioStore.playSong(
                           s + _calcOffset(d, songsByDisc),
-                          store.albumSongStream.value,
+                          store.albumSongStream.value!,
                         ),
                         onTapMore: () => SongBottomSheet()(songsByDisc[d][s], context),
                       )

@@ -1,29 +1,29 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:audiotagger/models/audiofile.dart';
 import 'package:audiotagger/models/tag.dart';
-import 'package:meta/meta.dart';
 import 'package:moor/moor.dart';
 
 import '../../domain/entities/song.dart';
 import '../datasources/moor_database.dart';
+import 'default_values.dart';
 
 class SongModel extends Song {
   const SongModel({
-    @required String title,
-    @required String album,
-    @required this.albumId,
-    @required String artist,
-    @required String path,
-    @required int duration,
-    @required bool blocked,
-    String albumArtPath,
-    int discNumber,
-    String next,
-    String previous,
-    int trackNumber,
-    int likeCount,
-    int skipCount,
-    int playCount,
+    required String title,
+    required String album,
+    required this.albumId,
+    required String artist,
+    required String path,
+    required int duration,
+    required bool blocked,
+    String? albumArtPath,
+    required int discNumber,
+    required String next,
+    required String previous,
+    required int trackNumber,
+    required int likeCount,
+    required int skipCount,
+    required int playCount,
   }) : super(
           album: album,
           artist: artist,
@@ -60,63 +60,54 @@ class SongModel extends Song {
       );
 
   factory SongModel.fromAudiotagger({
-    String path,
-    Tag tag,
-    AudioFile audioFile,
-    String albumArtPath,
-    int albumId,
+    required String path,
+    required Tag tag,
+    required AudioFile audioFile,
+    String? albumArtPath,
+    required int albumId,
   }) {
     return SongModel(
-      title: tag.title,
-      artist: tag.artist,
-      album: tag.album,
+      // TODO: wo am besten default werte unterbringen? db oder hier?
+      title: tag.title ?? DEF_TITLE,
+      artist: tag.artist ?? DEF_ARTIST,
+      album: tag.album ?? DEF_ALBUM,
       albumId: albumId,
       path: path,
-      duration: audioFile.length * 1000,
+      duration: (audioFile.length ?? DEF_DURATION) * 1000,
       blocked: false,
-      discNumber: _parseDiscNumber(tag.discNumber),
-      trackNumber: int.parse(tag.trackNumber),
+      discNumber: _parseNumber(tag.discNumber),
+      trackNumber: _parseNumber(tag.trackNumber),
       albumArtPath: albumArtPath,
+      next: '',
+      previous: '',
+      likeCount: 0,
+      playCount: 0,
+      skipCount: 0,
     );
   }
 
   factory SongModel.fromMediaItem(MediaItem mediaItem) {
-    if (mediaItem == null) {
-      return null;
-    }
+    final String? artUri = mediaItem.artUri?.path.replaceFirst('file://', '');
 
-    final String artUri = mediaItem.artUri?.path?.replaceFirst('file://', '');
-
-    final dn = mediaItem.extras['discNumber'];
-    int discNumber;
-    final tn = mediaItem.extras['trackNumber'];
-    int trackNumber;
-
-    if (tn == null) {
-      trackNumber = null;
-    } else {
-      trackNumber = tn as int;
-    }
-
-    if (dn == null) {
-      discNumber = null;
-    } else {
-      discNumber = dn as int;
-    }
+    final int discNumber = mediaItem.extras!['discNumber'] as int;
+    final int trackNumber = mediaItem.extras!['trackNumber'] as int;
 
     return SongModel(
       album: mediaItem.album,
-      albumId: mediaItem.extras['albumId'] as int,
-      artist: mediaItem.artist,
-      duration: mediaItem.duration.inMilliseconds,
-      blocked: mediaItem.extras['blocked'] as bool,
+      albumId: mediaItem.extras!['albumId'] as int,
+      artist: mediaItem.artist!,
+      duration: mediaItem.duration!.inMilliseconds,
+      blocked: mediaItem.extras!['blocked'] as bool,
       path: mediaItem.id,
       title: mediaItem.title,
       albumArtPath: artUri,
       discNumber: discNumber,
-      next: mediaItem.extras['next'] as String,
-      previous: mediaItem.extras['previous'] as String,
+      next: mediaItem.extras!['next'] as String,
+      previous: mediaItem.extras!['previous'] as String,
       trackNumber: trackNumber,
+      likeCount: mediaItem.extras!['likeCount'] as int,
+      playCount: mediaItem.extras!['playCount'] as int,
+      skipCount: mediaItem.extras!['skipCount'] as int,
     );
   }
 
@@ -128,21 +119,21 @@ class SongModel extends Song {
   }
 
   SongModel copyWith({
-    String album,
-    int albumId,
-    String artist,
-    bool blocked,
-    int duration,
-    String path,
-    String title,
-    String albumArtPath,
-    int discNumber,
-    String next,
-    String previous,
-    int trackNumber,
-    int likeCount,
-    int skipCount,
-    int playCount,
+    String? album,
+    int? albumId,
+    String? artist,
+    bool? blocked,
+    int? duration,
+    String? path,
+    String? title,
+    String? albumArtPath,
+    int? discNumber,
+    String? next,
+    String? previous,
+    int? trackNumber,
+    int? likeCount,
+    int? skipCount,
+    int? playCount,
   }) =>
       SongModel(
         album: album ?? this.album,
@@ -180,6 +171,7 @@ class SongModel extends Song {
         playCount: Value(playCount),
       );
 
+  // FIXME: this will break
   SongsCompanion toMoorInsert() => SongsCompanion(
         albumTitle: Value(album),
         albumId: Value(albumId),
@@ -205,21 +197,24 @@ class SongModel extends Song {
             'albumId': albumId,
             'blocked': blocked,
             'discNumber': discNumber,
+            'trackNumber': trackNumber,
             'next': next,
             'previous': previous,
-            'trackNumber': trackNumber,
+            'likeCount': likeCount,
+            'playCount': playCount,
+            'skipCount': skipCount,
           });
 
-  static int _parseDiscNumber(String discNumberString) {
-    if (discNumberString == null || discNumberString == '') {
+  static int _parseNumber(String? numberString) {
+    if (numberString == null || numberString == '') {
       return 1;
     }
-    return int.parse(discNumberString);
+    return int.parse(numberString);
   }
 }
 
 // TODO: maybe move to another file
 extension SongModelExtension on MediaItem {
-  String get previous => extras['previous'] as String;
-  String get next => extras['next'] as String;
+  String get previous => extras!['previous'] as String;
+  String get next => extras!['next'] as String;
 }

@@ -8,8 +8,8 @@ abstract class MusicDataSource {
   Stream<List<SongModel>> getArtistSongStream(ArtistModel artist);
   Future<List<SongModel>> getSongs();
   Future<SongModel> getSongByPath(String path);
-  Future<SongModel> getPredecessor(SongModel song);
-  Future<SongModel> getSuccessor(SongModel song);
+  Future<SongModel?> getPredecessor(SongModel song);
+  Future<SongModel?> getSuccessor(SongModel song);
 
   Stream<List<AlbumModel>> get albumStream;
   Stream<List<AlbumModel>> getArtistAlbumStream(ArtistModel artist);

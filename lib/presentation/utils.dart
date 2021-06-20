@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-ImageProvider getAlbumImage(String albumArtPath) {
+ImageProvider getAlbumImage(String? albumArtPath) {
   // return Image.asset('assets/no_cover.png');
 
   if (albumArtPath == null || !File(albumArtPath).existsSync()) {
@@ -20,7 +20,7 @@ String msToTimeString(Duration duration) {
   }
 
   final int hours = duration.inHours;
-  final int minutes = duration.inMinutes.remainder(60) as int;
+  final int minutes = duration.inMinutes.remainder(60);
   
   final String twoDigitMinutes = twoDigits(minutes);
   final String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));

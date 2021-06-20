@@ -1,16 +1,20 @@
 import 'dart:io';
 
 import 'package:audiotagger/audiotagger.dart';
+import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../models/album_model.dart';
 import '../models/artist_model.dart';
+import '../models/default_values.dart';
 import '../models/song_model.dart';
 import 'local_music_fetcher.dart';
 import 'settings_data_source.dart';
 
 class LocalMusicFetcherImpl implements LocalMusicFetcher {
   LocalMusicFetcherImpl(this._settingsDataSource, this._audiotagger);
+
+  static final _log = FimberLog('LocalMusicFetcher');
 
   final Audiotagger _audiotagger;
   final SettingsDataSource _settingsDataSource;
@@ -33,10 +37,15 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
         final tags = await _audiotagger.readTags(path: entity.path);
         final audioFile = await _audiotagger.readAudioFile(path: entity.path);
 
+        if (tags == null || audioFile == null) {
+          _log.i('Could not read ${entity.path}');
+          continue;
+        }
+
         final albumString = '${tags.album}___${tags.albumArtist}__${tags.year}';
 
         int albumId;
-        String albumArtPath;
+        String? albumArtPath;
         if (!albumIdMap.containsKey(albumString)) {
           albumId = albumIdMap.length;
           albumIdMap[albumString] = albumId;
@@ -53,9 +62,11 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
           albums.add(
             AlbumModel.fromAudiotagger(albumId: albumId, tag: tags, albumArtPath: albumArtPath),
           );
-          artistSet.add(tags.albumArtist != '' ? tags.albumArtist : tags.artist);
+          final String albumArtist = tags.albumArtist ?? '';
+          final String artist = tags.artist ?? '';
+          artistSet.add(albumArtist != '' ? albumArtist : (artist != '' ? artist : DEF_ARTIST));
         } else {
-          albumId = albumIdMap[albumString];
+          albumId = albumIdMap[albumString]!;
           albumArtPath = albumArtMap[albumString];
         }
 

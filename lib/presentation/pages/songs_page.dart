@@ -10,7 +10,7 @@ import '../widgets/song_bottom_sheet.dart';
 import '../widgets/song_list_tile.dart';
 
 class SongsPage extends StatefulWidget {
-  const SongsPage({Key key}) : super(key: key);
+  const SongsPage({Key? key}) : super(key: key);
 
   @override
   _SongsPageState createState() => _SongsPageState();
@@ -31,7 +31,7 @@ class _SongsPageState extends State<SongsPage> with AutomaticKeepAliveClientMixi
 
       switch (songStream.status) {
         case StreamStatus.active:
-          final List<Song> songs = songStream.value;
+          final List<Song> songs = songStream.value ?? [];
           return ListView.separated(
             itemCount: songs.length,
             itemBuilder: (_, int index) {
@@ -58,7 +58,6 @@ class _SongsPageState extends State<SongsPage> with AutomaticKeepAliveClientMixi
             ],
           );
       }
-      return Container();
     });
   }
 

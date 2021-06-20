@@ -4,7 +4,7 @@ import 'song_model.dart';
 class QueueItemModel extends QueueItem {
   QueueItemModel(
     this.song, {
-    int originalIndex,
+    required int originalIndex,
     QueueItemType type = QueueItemType.standard,
   }) : super(song, originalIndex: originalIndex, type: type);
 

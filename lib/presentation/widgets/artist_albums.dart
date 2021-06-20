@@ -4,7 +4,12 @@ import '../../domain/entities/album.dart';
 import 'album_list_tile_extended.dart';
 
 class ArtistAlbumSliverList extends StatelessWidget {
-  const ArtistAlbumSliverList({Key key, this.albums, this.onTap, this.onTapPlay}) : super(key: key);
+  const ArtistAlbumSliverList({
+    Key? key,
+    required this.albums,
+    required this.onTap,
+    required this.onTapPlay,
+  }) : super(key: key);
 
   final List<Album> albums;
   final Function onTap;

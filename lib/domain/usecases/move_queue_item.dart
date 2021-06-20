@@ -13,7 +13,7 @@ class MoveQueueItem {
   Future<void> call(int oldIndex, int newIndex) async {
     await _audioPlayerRepository.moveQueueItem(oldIndex, newIndex);
 
-    final songList = _audioPlayerRepository.queueStream.valueWrapper.value;
+    final songList = _audioPlayerRepository.queueStream.valueWrapper!.value;
     _platformIntegrationRepository.setQueue(songList);
   }
 }

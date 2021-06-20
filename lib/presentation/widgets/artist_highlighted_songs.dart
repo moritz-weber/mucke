@@ -9,7 +9,10 @@ import 'song_bottom_sheet.dart';
 import 'song_list_tile.dart';
 
 class ArtistHighlightedSongs extends StatelessWidget {
-  const ArtistHighlightedSongs({Key key, this.artistPageStore}) : super(key: key);
+  const ArtistHighlightedSongs({
+    Key? key,
+    required this.artistPageStore,
+  }) : super(key: key);
 
   final ArtistPageStore artistPageStore;
 
@@ -19,7 +22,7 @@ class ArtistHighlightedSongs extends StatelessWidget {
 
     return Observer(
       builder: (BuildContext context) {
-        final songs = artistPageStore.artistHighlightedSongStream.value;
+        final songs = artistPageStore.artistHighlightedSongStream.value ?? [];
         final songsHead = songs.take(5).toList();
 
         return SliverList(

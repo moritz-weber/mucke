@@ -4,11 +4,11 @@ import '../../domain/entities/playback_event.dart';
 
 class PlaybackEventModel extends PlaybackEvent {
   PlaybackEventModel({
-    int index,
-    bool playing,
-    ProcessingState processingState,
-    Duration updatePosition,
-    DateTime updateTime,
+    required int index,
+    required bool playing,
+    required ProcessingState processingState,
+    required Duration updatePosition,
+    required DateTime updateTime,
   }) : super(
           index: index,
           playing: playing,
@@ -19,7 +19,7 @@ class PlaybackEventModel extends PlaybackEvent {
 
   factory PlaybackEventModel.fromJAPlaybackEvent(ja.PlaybackEvent playbackEvent, bool playing) =>
       PlaybackEventModel(
-        index: playbackEvent.currentIndex,
+        index: playbackEvent.currentIndex ?? -1,
         playing: playing,
         processingState: playbackEvent.processingState.toProcessingState(),
         updatePosition: playbackEvent.updatePosition,

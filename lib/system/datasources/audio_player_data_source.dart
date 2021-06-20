@@ -18,12 +18,19 @@ abstract class AudioPlayerDataSource {
   Future<void> seekToPrevious();
   Future<void> dispose();
 
-  Future<void> loadQueue({List<SongModel> queue, int initialIndex});
+  Future<void> loadQueue({
+    required List<SongModel> queue,
+    required int initialIndex,
+  });
   Future<void> addToQueue(SongModel song);
   Future<void> moveQueueItem(int oldIndex, int newIndex);
   Future<void> playNext(SongModel song);
   Future<void> removeQueueIndex(int index);
-  Future<void> replaceQueueAroundIndex({List<SongModel> before, List<SongModel> after, int index});
+  Future<void> replaceQueueAroundIndex({
+    required List<SongModel> before,
+    required List<SongModel> after,
+    required int index,
+  });
   Future<void> seekToIndex(int index);
 
   Future<void> setLoopMode(LoopMode loopMode);

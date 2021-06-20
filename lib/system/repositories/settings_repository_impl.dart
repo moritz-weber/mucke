@@ -7,7 +7,9 @@ class SettingsRepositoryImpl implements SettingsRepository {
   final SettingsDataSource _settingsDataSource;
 
   @override
-  Future<void> addLibraryFolder(String path) async {
+  Future<void> addLibraryFolder(String? path) async {
+    if (path == null) 
+      return;
     await _settingsDataSource.addLibraryFolder(path);
   }
 }

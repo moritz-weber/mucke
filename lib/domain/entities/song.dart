@@ -1,22 +1,21 @@
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
 class Song extends Equatable {
   const Song({
-    @required this.album,
-    @required this.artist,
-    @required this.blocked,
-    @required this.duration,
-    @required this.path,
-    @required this.title,
+    required this.album,
+    required this.artist,
+    required this.blocked,
+    required this.duration,
+    required this.path,
+    required this.title,
+    required this.likeCount,
+    required this.skipCount,
+    required this.playCount,
+    required this.discNumber,
+    required this.next,
+    required this.previous,
+    required this.trackNumber,
     this.albumArtPath,
-    this.discNumber,
-    this.next,
-    this.previous,
-    this.trackNumber,
-    this.likeCount,
-    this.skipCount,
-    this.playCount,
   });
 
   final String album;
@@ -34,14 +33,16 @@ class Song extends Equatable {
   final int skipCount;
   final int playCount;
 
-  final String albumArtPath;
   final int discNumber;
+  final int trackNumber;
+  
   final String next;
   final String previous;
-  final int trackNumber;
+
+  final String? albumArtPath;
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         path,
         title,
         album,
