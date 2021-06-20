@@ -194,7 +194,9 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
       }
     }
 
-    if (changed) _queueSubject.add(queue);
+    if (changed) {
+      _queueSubject.add(queue);
+    }
   }
 
   void _updateCurrentSong(List<Song>? queue, int? index) {

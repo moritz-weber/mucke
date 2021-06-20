@@ -42,7 +42,7 @@ class LibraryTabContainer extends StatelessWidget {
                       ],
                     ),
                   ),
-                  IconButton(icon: const Icon(Icons.more_vert), onPressed: () => null),
+                  IconButton(icon: const Icon(Icons.more_vert), onPressed: () {}),
                 ],
               ),
             ),

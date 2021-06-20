@@ -50,7 +50,7 @@ class Highlight extends StatelessWidget {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      Text(
+                      const Text(
                         'Architects',
                         style: TEXT_SMALL_SUBTITLE,
                         maxLines: 2,
@@ -62,7 +62,7 @@ class Highlight extends StatelessWidget {
               ),
               IconButton(
                 padding: EdgeInsets.zero,
-                icon: Icon(
+                icon: const Icon(
                   Icons.play_circle_fill_rounded,
                   size: 48.0,
                 ),

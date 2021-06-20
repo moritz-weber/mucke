@@ -268,7 +268,6 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
 
   @override
   Future<void> setLoopMode(LoopMode loopMode) async {
-    if (loopMode == null) return;
     await _audioPlayer.setLoopMode(loopMode.toJA());
   }
 
@@ -301,12 +300,16 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
   /// extend the loaded audiosource, when seeking to previous/next
   Future<bool> _updateLoadedQueue(int? newIndex) async {
     _log.d('updateLoadedQueue: $newIndex');
-    if (!isQueueLoaded || newIndex == null) return false;
+    if (!isQueueLoaded || newIndex == null) {
+      return false;
+    }
 
     _log.d('[$_loadStartIndex, $_loadEndIndex]');
 
     if (_loadStartIndex == _loadEndIndex ||
-        (_loadStartIndex == 0 && _loadEndIndex == _queue.length)) return false;
+        (_loadStartIndex == 0 && _loadEndIndex == _queue.length)) {
+      return false;
+    }
 
     if (_loadStartIndex < _loadEndIndex) {
       _log.d('base case');
@@ -387,15 +390,12 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
   }
 
   void _updateCurrentIndex(int? apIndex) {
-    if (apIndex == null) return;
-
-    if (_loadStartIndex == null || _loadEndIndex == null) {
-      _currentIndexSubject.add(apIndex); // why?
+    if (apIndex == null || !isQueueLoaded) {
       return;
     }
 
     int result;
-    if (_audioSource != null && _audioSource.length == _queue.length) {
+    if (_audioSource.length == _queue.length) {
       _log.d('EVERYTHING LOADED');
       result = apIndex;
     } else if (_loadStartIndex < _loadEndIndex) {
@@ -435,7 +435,9 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
   }
 
   bool _isQueueIndexInSaveInterval(int index) {
-    if (_audioSource.length == _queue.length) return index < _queue.length;
+    if (_audioSource.length == _queue.length) {
+      return index < _queue.length;
+    }
 
     final int leftBorder = (_loadStartIndex + LOAD_INTERVAL - 1) % _queue.length;
     final int rightBorder = (_loadEndIndex - LOAD_INTERVAL + 1) % _queue.length;

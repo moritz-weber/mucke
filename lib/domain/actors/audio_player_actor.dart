@@ -39,7 +39,9 @@ class AudioPlayerActor {
   }
 
   void _handlePosition(Duration? position, Song? song) {
-    if (song == null || position == null) return;
+    if (song == null || position == null) {
+      return;
+    }
 
     final int pos = position.inMilliseconds;
 

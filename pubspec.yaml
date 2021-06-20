@@ -1,5 +1,6 @@
 name: mucke
 description: music player
+publish_to: none
 
 version: 1.0.0+1
 

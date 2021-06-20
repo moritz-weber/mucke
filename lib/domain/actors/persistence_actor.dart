@@ -58,22 +58,16 @@ class PersistenceActor {
 
   Future<void> init() async {
     final shuffleMode = await _persistentStateRepository.shuffleMode;
-    if (shuffleMode != null) {
-      _setShuffleMode(shuffleMode, updateQueue: false);
-    }
+    _setShuffleMode(shuffleMode, updateQueue: false);
 
     final loopMode = await _persistentStateRepository.loopMode;
-    if (loopMode != null) {
-      _setLoopMode(loopMode);
-    }
+    _setLoopMode(loopMode);
 
     final queueItems = await _persistentStateRepository.queueItems;
     final originalSongs = await _persistentStateRepository.originalSongs;
     final addedSongs = await _persistentStateRepository.addedSongs;
     final index = await _persistentStateRepository.currentIndex;
 
-    if (queueItems != null && index != null) {
-      _initQueue(queueItems, originalSongs, addedSongs, index);
-    }
+    _initQueue(queueItems, originalSongs, addedSongs, index);
   }
 }

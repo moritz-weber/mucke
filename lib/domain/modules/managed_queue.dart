@@ -1,4 +1,3 @@
-import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../system/models/queue_item_model.dart';
@@ -17,7 +16,7 @@ abstract class ManagedQueueInfo {
 class ManagedQueue implements ManagedQueueInfo {
   ManagedQueue(this._musicDataRepository) : _queue = [];
 
-  static final _log = FimberLog('ManagedQueue');
+  // static final _log = FimberLog('ManagedQueue');
 
   @override
   ValueStream<List<Song>> get addedSongsStream => _addedSongsSubject.stream;

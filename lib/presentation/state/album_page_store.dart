@@ -17,17 +17,15 @@ abstract class _AlbumPageStore with Store {
   _AlbumPageStore(
     this._musicDataInfoRepository,
     this.album,
-  ) {
-    albumSongStream =
-        _musicDataInfoRepository.getAlbumSongStream(album).asObservable(initialValue: []);
-  }
+  );
 
   final Album album;
 
   final MusicDataInfoRepository _musicDataInfoRepository;
 
   @observable
-  late ObservableStream<List<Song>> albumSongStream;
+  late ObservableStream<List<Song>> albumSongStream =
+      _musicDataInfoRepository.getAlbumSongStream(album).asObservable(initialValue: []);
 
   void dispose() {}
 }

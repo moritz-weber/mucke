@@ -76,12 +76,8 @@ class SongListTile extends StatelessWidget {
         break;
     }
 
-    final EdgeInsets padding = (onTapMore != null)
-        ? const EdgeInsets.only(left: HORIZONTAL_PADDING)
-        : const EdgeInsets.only(left: HORIZONTAL_PADDING, right: 16.0);
-
     return ListTile(
-      contentPadding: padding,
+      contentPadding: const EdgeInsets.only(left: HORIZONTAL_PADDING),
       leading: SizedBox(
         height: 56,
         width: 56,
@@ -103,12 +99,11 @@ class SongListTile extends StatelessWidget {
               size: 14.0,
               color: Colors.white.withOpacity(0.4),
             ),
-          if (onTapMore != null)
-            IconButton(
-              icon: const Icon(Icons.more_vert),
-              iconSize: 20.0,
-              onPressed: () => onTapMore(),
-            ),
+          IconButton(
+            icon: const Icon(Icons.more_vert),
+            iconSize: 20.0,
+            onPressed: () => onTapMore(),
+          ),
         ],
       ),
     );

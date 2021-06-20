@@ -12,7 +12,7 @@ class Header extends StatelessWidget {
         const Text('Home', style: TEXT_HEADER),
         IconButton(
           icon: const Icon(Icons.more_vert),
-          onPressed: () => null,
+          onPressed: () {},
         ),
       ],
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

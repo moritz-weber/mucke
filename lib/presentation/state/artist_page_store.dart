@@ -15,23 +15,20 @@ class ArtistPageStore extends _ArtistPageStore with _$ArtistPageStore {
 }
 
 abstract class _ArtistPageStore with Store {
-  _ArtistPageStore(this._musicDataInfoRepository, this._artist) {
-    artistAlbumStream =
-        _musicDataInfoRepository.getArtistAlbumStream(_artist).asObservable(initialValue: []);
-    artistHighlightedSongStream = _musicDataInfoRepository
-        .getArtistHighlightedSongStream(_artist)
-        .asObservable(initialValue: []);
-  }
+  _ArtistPageStore(this._musicDataInfoRepository, this._artist);
 
   final MusicDataInfoRepository _musicDataInfoRepository;
 
   final Artist _artist;
 
   @observable
-  late ObservableStream<List<Album>> artistAlbumStream;
+  late ObservableStream<List<Album>> artistAlbumStream =
+      _musicDataInfoRepository.getArtistAlbumStream(_artist).asObservable(initialValue: []);
 
   @observable
-  late ObservableStream<List<Song>> artistHighlightedSongStream;
+  late ObservableStream<List<Song>> artistHighlightedSongStream = _musicDataInfoRepository
+      .getArtistHighlightedSongStream(_artist)
+      .asObservable(initialValue: []);
 
   void dispose() {}
 }

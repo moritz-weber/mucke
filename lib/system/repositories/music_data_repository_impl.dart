@@ -82,7 +82,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
     if (song.likeCount < 5) {
       final newSong = (song as SongModel).copyWith(likeCount: song.likeCount + 1);
       _songUpdateSubject.add({song.path: newSong});
-      _musicDataSource.incrementLikeCount(song as SongModel);
+      _musicDataSource.incrementLikeCount(song);
     }
   }
 
@@ -105,7 +105,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
     if (song.blocked != blocked) {
       final newSong = (song as SongModel).copyWith(blocked: blocked);
       _songUpdateSubject.add({song.path: newSong});
-      _musicDataSource.setSongBlocked(song as SongModel, blocked);
+      _musicDataSource.setSongBlocked(song, blocked);
     }
   }
 
@@ -119,7 +119,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   Future<void> incrementPlayCount(Song song) async {
     final newSong = (song as SongModel).copyWith(playCount: song.playCount + 1);
     _songUpdateSubject.add({song.path: newSong});
-    _musicDataSource.incrementPlayCount(song as SongModel);
+    _musicDataSource.incrementPlayCount(song);
   }
 
   @override
@@ -132,7 +132,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   Future<void> resetLikeCount(Song song) async {
     final newSong = (song as SongModel).copyWith(likeCount: 0);
     _songUpdateSubject.add({song.path: newSong});
-    _musicDataSource.resetLikeCount(song as SongModel);
+    _musicDataSource.resetLikeCount(song);
   }
 
   @override
@@ -152,7 +152,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
     SongModel newSong;
     if (song.next == '') {
       final successor = await _musicDataSource.getSuccessor(song as SongModel);
-      newSong = (song as SongModel).copyWith(next: successor?.path ?? '');
+      newSong = song.copyWith(next: successor?.path ?? '');
     } else {
       newSong = (song as SongModel).copyWith(next: '');
     }
@@ -165,7 +165,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
     SongModel newSong;
     if (song.previous == '') {
       final predecessor = await _musicDataSource.getPredecessor(song as SongModel);
-      newSong = (song as SongModel).copyWith(previous: predecessor?.path ?? '');
+      newSong = song.copyWith(previous: predecessor?.path ?? '');
     } else {
       newSong = (song as SongModel).copyWith(previous: '');
     }
@@ -178,7 +178,9 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
       ..sort(
         (a, b) {
           final r = -a.likeCount.compareTo(b.likeCount);
-          if (r != 0) return r;
+          if (r != 0) {
+            return r;
+          }
           return -a.playCount.compareTo(b.playCount);
         },
       );
@@ -187,8 +189,12 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   List<Album> _sortArtistAlbums(List<Album> albums) {
     return albums
       ..sort((a, b) {
-        if (b.pubYear == null) return -1;
-        if (a.pubYear == null) return 1;
+        if (b.pubYear == null) {
+          return -1;
+        }
+        if (a.pubYear == null) {
+          return 1;
+        }
         return -a.pubYear!.compareTo(b.pubYear!);
       });
   }
