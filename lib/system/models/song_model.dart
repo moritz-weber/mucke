@@ -171,7 +171,6 @@ class SongModel extends Song {
         playCount: Value(playCount),
       );
 
-  // FIXME: this will break
   SongsCompanion toMoorInsert() => SongsCompanion(
         albumTitle: Value(album),
         albumId: Value(albumId),
@@ -182,8 +181,13 @@ class SongModel extends Song {
         albumArtPath: Value(albumArtPath),
         discNumber: Value(discNumber),
         trackNumber: Value(trackNumber),
-        // blocked: Value(blocked),
+        blocked: Value(blocked),
         present: const Value(true),
+        next: Value(next),
+        previous: Value(previous),
+        likeCount: Value(likeCount),
+        skipCount: Value(skipCount),
+        playCount: Value(playCount),
       );
 
   MediaItem toMediaItem() => MediaItem(

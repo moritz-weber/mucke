@@ -147,6 +147,7 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
 
   @override
   Future<void> moveQueueItem(int oldIndex, int newIndex) async {
+    _log.d('moveQueueItem: $oldIndex -> $newIndex');
     final int oldCurrentIndex = currentIndexStream.value!;
     int newCurrentIndex = oldCurrentIndex;
     if (oldIndex == oldCurrentIndex) {
@@ -168,7 +169,8 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
     final before = newQueue.sublist(0, newCurrentIndex);
     final after = newQueue.sublist(min(newCurrentIndex + 1, newQueue.length));
 
-    replaceQueueAroundCurrentIndex(
+    await replaceQueueAroundIndex(
+      index: currentIndexStream.value!,
       before: before,
       after: after,
     );
@@ -187,28 +189,32 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
 
   @override
   Future<void> removeQueueIndex(int index) async {
-    _log.d('REMOVE: $index');
+    _log.d('removeQueueIndex: $index');
     _queue.removeAt(index);
-    if (_isQueueIndexInLoadInterval(index)) {
-      final sourceIndex = _calcSourceIndex(index);
-      final currentSourceIndex = _audioPlayer.currentIndex!;
-      _log.d('INDEX IS LOADED');
-      if (index < _loadStartIndex) {
-        _log.d('$index < $_loadStartIndex --> DECREMENT LOAD START INDEX');
-        _loadStartIndex--;
-      }
-      if (index < _loadEndIndex) {
-        _log.d('$index < $_loadEndIndex --> DECREMENT LOAD END INDEX');
-        _loadEndIndex--;
-      }
+    final sourceIndex = _calcSourceIndex(index);
+    final currentSourceIndex = _audioPlayer.currentIndex!;
+    final isIndexLoaded = _isQueueIndexInLoadInterval(index);
+
+    if (index < _loadStartIndex) {
+      _log.d('$index < $_loadStartIndex --> DECREMENT LOAD START INDEX');
+      _loadStartIndex--;
+    }
+    if (index < _loadEndIndex) {
+      _log.d('$index < $_loadEndIndex --> DECREMENT LOAD END INDEX');
+      _loadEndIndex--;
+    }
+    
+    if (isIndexLoaded) {
+      _log.d('index is loaded');
       await _audioSource.removeAt(sourceIndex);
       if (sourceIndex >= currentSourceIndex) {
         _updateLoadedQueue(currentSourceIndex);
       }
+    } else {
+      _updateCurrentIndex(_audioPlayer.currentIndex!);
     }
   }
 
-  // TODO: maybe remove this
   @override
   Future<void> replaceQueueAroundIndex({
     required List<SongModel> before,
@@ -220,34 +226,6 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
     final newIndex = before.length;
 
     final oldSourceIndex = _calcSourceIndex(index);
-    final queueToLoad = _getQueueToLoad(_queue, newIndex);
-    final newSourceIndex = _calcSourceIndex(newIndex);
-
-    final _before = _songModelsToAudioSource(queueToLoad.sublist(0, newSourceIndex));
-    final _after = _songModelsToAudioSource(
-      queueToLoad.sublist(min(newSourceIndex + 1, queueToLoad.length)),
-    );
-
-    _lockUpdate = true;
-    await _audioSource.removeRange(0, oldSourceIndex);
-    await _audioSource.removeRange(1, _audioSource.length);
-
-    await _audioSource.insertAll(0, _before.children);
-    await _audioSource.addAll(_after.children);
-    _lockUpdate = false;
-    _updateCurrentIndex(newSourceIndex);
-  }
-
-  Future<void> replaceQueueAroundCurrentIndex({
-    required List<SongModel> before,
-    required List<SongModel> after,
-  }) async {
-    _log.d('REPLACE QUEUE AROUND CURRENT INDEX');
-    final int currIndex = currentIndexStream.value!;
-    final int newIndex = before.length;
-    _queue = before + [_queue[currIndex]] + after;
-
-    final oldSourceIndex = _calcSourceIndex(currIndex);
     final queueToLoad = _getQueueToLoad(_queue, newIndex);
     final newSourceIndex = _calcSourceIndex(newIndex);
 

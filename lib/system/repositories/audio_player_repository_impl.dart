@@ -1,3 +1,4 @@
+import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../domain/entities/loop_mode.dart';
@@ -16,15 +17,22 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
     _loopModeSubject.add(LoopMode.off);
 
     _audioPlayerDataSource.currentIndexStream.listen(
-      (index) => _updateCurrentSong(queueStream.value, index),
+      (index) {
+        _currentIndexSubject.add(index);
+        _updateCurrentSong(queueStream.value, index);
+      },
     );
-    _queueSubject.listen((queue) => _updateCurrentSong(queue, currentIndexStream.value));
+    _queueSubject.listen((queue) {
+      _updateCurrentSong(queue, currentIndexStream.value);
+    });
   }
+
+  static final _log = FimberLog('AudioPlayerRepositoryImpl');
 
   final AudioPlayerDataSource _audioPlayerDataSource;
   final ManagedQueue _managedQueue;
 
-  // final BehaviorSubject<int> _currentIndexSubject = BehaviorSubject();
+  final BehaviorSubject<int> _currentIndexSubject = BehaviorSubject();
   final BehaviorSubject<Song> _currentSongSubject = BehaviorSubject();
   final BehaviorSubject<LoopMode> _loopModeSubject = BehaviorSubject();
   final BehaviorSubject<List<Song>> _queueSubject = BehaviorSubject();
@@ -40,7 +48,7 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   ValueStream<List<Song>> get queueStream => _queueSubject.stream;
 
   @override
-  ValueStream<int> get currentIndexStream => _audioPlayerDataSource.currentIndexStream;
+  ValueStream<int> get currentIndexStream => _currentIndexSubject.stream;
 
   @override
   Stream<Song> get currentSongStream => _currentSongSubject.stream;
@@ -100,10 +108,16 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
 
   @override
   Future<void> moveQueueItem(int oldIndex, int newIndex) async {
-    _audioPlayerDataSource.moveQueueItem(oldIndex, newIndex);
-
     _managedQueue.moveQueueItem(oldIndex, newIndex);
+    final newCurrentIndex = _calcNewCurrentIndexOnMove(
+      currentIndexStream.value!,
+      oldIndex,
+      newIndex,
+    );
+    _currentIndexSubject.add(newCurrentIndex);
     _queueSubject.add(_managedQueue.queue);
+
+    _audioPlayerDataSource.moveQueueItem(oldIndex, newIndex);
   }
 
   @override
@@ -126,10 +140,13 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
 
   @override
   Future<void> removeQueueIndex(int index) async {
-    _audioPlayerDataSource.removeQueueIndex(index);
-
     _managedQueue.removeQueueIndex(index);
+
+    final newCurrentIndex = _calcNewCurrentIndexOnRemove(currentIndexStream.value!, index);
+    _currentIndexSubject.add(newCurrentIndex);
     _queueSubject.add(_managedQueue.queue);
+
+    _audioPlayerDataSource.removeQueueIndex(index);
   }
 
   @override
@@ -201,7 +218,33 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
 
   void _updateCurrentSong(List<Song>? queue, int? index) {
     if (queue != null && index != null && index < queue.length) {
+      _log.d('Current song: ${queue[index]}');
       _currentSongSubject.add(queue[index]);
     }
+  }
+
+  /// Calculate the new current index when removing the song at [removeIndex].
+  int _calcNewCurrentIndexOnRemove(int currentIndex, int removeIndex) {
+    int result = currentIndex;
+    if (removeIndex < currentIndex) {
+      result--;
+    }
+    return result;
+  }
+
+  /// Calculate the new current index when moving a song from [oldIndex] to [newIndex].
+  int _calcNewCurrentIndexOnMove(int currentIndex, int oldIndex, int newIndex) {
+    int newCurrentIndex = currentIndex;
+    if (oldIndex == currentIndex) {
+      newCurrentIndex = newIndex;
+    } else {
+      if (oldIndex < currentIndex) {
+        newCurrentIndex--;
+      }
+      if (newIndex < currentIndex) {
+        newCurrentIndex++;
+      }
+    }
+    return newCurrentIndex;
   }
 }

@@ -69,8 +69,9 @@ class LikeButton extends StatelessWidget {
             onPressed: () {
               if (song.likeCount < 5) {
                 musicDataStore.incrementLikeCount(song);
+              } else {
+                musicDataStore.resetLikeCount(song);
               }
-              musicDataStore.resetLikeCount(song);
             },
             visualDensity: VisualDensity.compact,
           );

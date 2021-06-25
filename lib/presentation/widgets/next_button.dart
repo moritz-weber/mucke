@@ -21,7 +21,7 @@ class NextButton extends StatelessWidget {
       builder: (BuildContext context) {
         final queue = audioStore.queueStream.value;
         final int? index = audioStore.queueIndexStream.value;
-        final LoopMode loopMode = audioStore.loopModeStream.value!;
+        final LoopMode loopMode = audioStore.loopModeStream.value ?? LoopMode.off;
 
         if ((index != null && queue != null && index < queue.length - 1) || loopMode != LoopMode.off) {
           return IconButton(
