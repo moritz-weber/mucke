@@ -70,6 +70,21 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
     });
   }
 
+  final _$albumOfDayAtom = Atom(name: '_MusicDataStore.albumOfDay');
+
+  @override
+  ObservableFuture<Album?> get albumOfDay {
+    _$albumOfDayAtom.reportRead();
+    return super.albumOfDay;
+  }
+
+  @override
+  set albumOfDay(ObservableFuture<Album?> value) {
+    _$albumOfDayAtom.reportWrite(value, super.albumOfDay, () {
+      super.albumOfDay = value;
+    });
+  }
+
   final _$updateDatabaseAsyncAction =
       AsyncAction('_MusicDataStore.updateDatabase');
 
@@ -84,7 +99,8 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
 songStream: ${songStream},
 albumStream: ${albumStream},
 artistStream: ${artistStream},
-isUpdatingDatabase: ${isUpdatingDatabase}
+isUpdatingDatabase: ${isUpdatingDatabase},
+albumOfDay: ${albumOfDay}
     ''';
   }
 }

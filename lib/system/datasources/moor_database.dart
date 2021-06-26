@@ -104,6 +104,14 @@ class LibraryFolders extends Table {
   TextColumn get path => text()();
 }
 
+class MoorAlbumOfDay extends Table {
+  IntColumn get albumId => integer()();
+  IntColumn get milliSecSinceEpoch => integer()();
+
+  @override
+  Set<Column> get primaryKey => {albumId};
+}
+
 @UseMoor(
   tables: [
     Albums,
@@ -116,6 +124,7 @@ class LibraryFolders extends Table {
     PersistentLoopMode,
     PersistentShuffleMode,
     Songs,
+    MoorAlbumOfDay,
   ],
   daos: [
     PersistentStateDao,

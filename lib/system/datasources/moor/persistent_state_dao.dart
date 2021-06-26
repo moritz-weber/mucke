@@ -114,17 +114,19 @@ class PersistentStateDao extends DatabaseAccessor<MoorDatabase>
 
   @override
   Future<int> get currentIndex async {
-    return select(persistentIndex).getSingle().then((event) => event.index ?? 0);
+    return (select(persistentIndex)..limit(1)).getSingleOrNull().then((event) => event?.index ?? 0);
   }
 
   @override
   Future<void> setCurrentIndex(int index) async {
-    await delete(persistentIndex).go();
-    into(persistentIndex).insert(PersistentIndexCompanion(index: Value(index)));
+    transaction(() async {
+      await delete(persistentIndex).go();
+      into(persistentIndex).insert(PersistentIndexCompanion(index: Value(index)));
+    });
   }
 
   @override
-  Future<LoopMode> get loopMode {
+  Future<LoopMode> get loopMode async {
     return select(persistentLoopMode).getSingle().then((event) => event.loopMode.toLoopMode());
   }
 

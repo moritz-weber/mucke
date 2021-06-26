@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fimber/fimber.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -197,5 +199,25 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
         }
         return -a.pubYear!.compareTo(b.pubYear!);
       });
+  }
+
+  @override
+  Future<Album?> getAlbumOfDay() async {
+    final storedAlbum = await _musicDataSource.getAlbumOfDay();
+    if (storedAlbum == null || !_isAlbumValid(storedAlbum)) {
+      final albums = await _musicDataSource.getAlbums();
+      if (albums.isNotEmpty) {
+        final rng = Random();
+        final index = rng.nextInt(albums.length);
+        _musicDataSource.setAlbumOfDay(AlbumOfDay(albums[index], DateTime.now()));
+        return albums[index];
+      }
+    } else {
+      return storedAlbum.albumModel;
+    }
+  }
+
+  bool _isAlbumValid(AlbumOfDay albumOfDay) {
+    return albumOfDay.date.difference(DateTime.now()).inDays < 1;
   }
 }

@@ -13,6 +13,8 @@ abstract class MusicDataInfoRepository {
 
   Stream<List<Album>> get albumStream;
   Stream<List<Album>> getArtistAlbumStream(Artist artist);
+  // TODO: make this a stream? or call everytime on home screen?
+  Future<Album?> getAlbumOfDay();
 
   Stream<List<Artist>> get artistStream;
 }

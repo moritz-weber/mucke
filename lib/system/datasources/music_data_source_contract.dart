@@ -39,4 +39,8 @@ abstract class MusicDataSource {
   Future<int> insertArtist(ArtistModel artistModel);
   Future<void> insertArtists(List<ArtistModel> artistModels);
   Future<void> deleteAllArtists();
+
+  // TODO: is this the right place? maybe persistent state?
+  Future<void> setAlbumOfDay(AlbumOfDay albumOfDay);
+  Future<AlbumOfDay?> getAlbumOfDay();
 }

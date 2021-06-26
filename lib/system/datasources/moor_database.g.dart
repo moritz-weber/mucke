@@ -2555,6 +2555,202 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
   }
 }
 
+class MoorAlbumOfDayData extends DataClass
+    implements Insertable<MoorAlbumOfDayData> {
+  final int albumId;
+  final int milliSecSinceEpoch;
+  MoorAlbumOfDayData({required this.albumId, required this.milliSecSinceEpoch});
+  factory MoorAlbumOfDayData.fromData(
+      Map<String, dynamic> data, GeneratedDatabase db,
+      {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return MoorAlbumOfDayData(
+      albumId: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}album_id'])!,
+      milliSecSinceEpoch: const IntType().mapFromDatabaseResponse(
+          data['${effectivePrefix}milli_sec_since_epoch'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['album_id'] = Variable<int>(albumId);
+    map['milli_sec_since_epoch'] = Variable<int>(milliSecSinceEpoch);
+    return map;
+  }
+
+  MoorAlbumOfDayCompanion toCompanion(bool nullToAbsent) {
+    return MoorAlbumOfDayCompanion(
+      albumId: Value(albumId),
+      milliSecSinceEpoch: Value(milliSecSinceEpoch),
+    );
+  }
+
+  factory MoorAlbumOfDayData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return MoorAlbumOfDayData(
+      albumId: serializer.fromJson<int>(json['albumId']),
+      milliSecSinceEpoch: serializer.fromJson<int>(json['milliSecSinceEpoch']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'albumId': serializer.toJson<int>(albumId),
+      'milliSecSinceEpoch': serializer.toJson<int>(milliSecSinceEpoch),
+    };
+  }
+
+  MoorAlbumOfDayData copyWith({int? albumId, int? milliSecSinceEpoch}) =>
+      MoorAlbumOfDayData(
+        albumId: albumId ?? this.albumId,
+        milliSecSinceEpoch: milliSecSinceEpoch ?? this.milliSecSinceEpoch,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('MoorAlbumOfDayData(')
+          ..write('albumId: $albumId, ')
+          ..write('milliSecSinceEpoch: $milliSecSinceEpoch')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      $mrjf($mrjc(albumId.hashCode, milliSecSinceEpoch.hashCode));
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is MoorAlbumOfDayData &&
+          other.albumId == this.albumId &&
+          other.milliSecSinceEpoch == this.milliSecSinceEpoch);
+}
+
+class MoorAlbumOfDayCompanion extends UpdateCompanion<MoorAlbumOfDayData> {
+  final Value<int> albumId;
+  final Value<int> milliSecSinceEpoch;
+  const MoorAlbumOfDayCompanion({
+    this.albumId = const Value.absent(),
+    this.milliSecSinceEpoch = const Value.absent(),
+  });
+  MoorAlbumOfDayCompanion.insert({
+    this.albumId = const Value.absent(),
+    required int milliSecSinceEpoch,
+  }) : milliSecSinceEpoch = Value(milliSecSinceEpoch);
+  static Insertable<MoorAlbumOfDayData> custom({
+    Expression<int>? albumId,
+    Expression<int>? milliSecSinceEpoch,
+  }) {
+    return RawValuesInsertable({
+      if (albumId != null) 'album_id': albumId,
+      if (milliSecSinceEpoch != null)
+        'milli_sec_since_epoch': milliSecSinceEpoch,
+    });
+  }
+
+  MoorAlbumOfDayCompanion copyWith(
+      {Value<int>? albumId, Value<int>? milliSecSinceEpoch}) {
+    return MoorAlbumOfDayCompanion(
+      albumId: albumId ?? this.albumId,
+      milliSecSinceEpoch: milliSecSinceEpoch ?? this.milliSecSinceEpoch,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (albumId.present) {
+      map['album_id'] = Variable<int>(albumId.value);
+    }
+    if (milliSecSinceEpoch.present) {
+      map['milli_sec_since_epoch'] = Variable<int>(milliSecSinceEpoch.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MoorAlbumOfDayCompanion(')
+          ..write('albumId: $albumId, ')
+          ..write('milliSecSinceEpoch: $milliSecSinceEpoch')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $MoorAlbumOfDayTable extends MoorAlbumOfDay
+    with TableInfo<$MoorAlbumOfDayTable, MoorAlbumOfDayData> {
+  final GeneratedDatabase _db;
+  final String? _alias;
+  $MoorAlbumOfDayTable(this._db, [this._alias]);
+  final VerificationMeta _albumIdMeta = const VerificationMeta('albumId');
+  @override
+  late final GeneratedIntColumn albumId = _constructAlbumId();
+  GeneratedIntColumn _constructAlbumId() {
+    return GeneratedIntColumn(
+      'album_id',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _milliSecSinceEpochMeta =
+      const VerificationMeta('milliSecSinceEpoch');
+  @override
+  late final GeneratedIntColumn milliSecSinceEpoch =
+      _constructMilliSecSinceEpoch();
+  GeneratedIntColumn _constructMilliSecSinceEpoch() {
+    return GeneratedIntColumn(
+      'milli_sec_since_epoch',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [albumId, milliSecSinceEpoch];
+  @override
+  $MoorAlbumOfDayTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'moor_album_of_day';
+  @override
+  final String actualTableName = 'moor_album_of_day';
+  @override
+  VerificationContext validateIntegrity(Insertable<MoorAlbumOfDayData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('album_id')) {
+      context.handle(_albumIdMeta,
+          albumId.isAcceptableOrUnknown(data['album_id']!, _albumIdMeta));
+    }
+    if (data.containsKey('milli_sec_since_epoch')) {
+      context.handle(
+          _milliSecSinceEpochMeta,
+          milliSecSinceEpoch.isAcceptableOrUnknown(
+              data['milli_sec_since_epoch']!, _milliSecSinceEpochMeta));
+    } else if (isInserting) {
+      context.missing(_milliSecSinceEpochMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {albumId};
+  @override
+  MoorAlbumOfDayData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return MoorAlbumOfDayData.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $MoorAlbumOfDayTable createAlias(String alias) {
+    return $MoorAlbumOfDayTable(_db, alias);
+  }
+}
+
 abstract class _$MoorDatabase extends GeneratedDatabase {
   _$MoorDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   _$MoorDatabase.connect(DatabaseConnection c) : super.connect(c);
@@ -2573,6 +2769,7 @@ abstract class _$MoorDatabase extends GeneratedDatabase {
   late final $PersistentShuffleModeTable persistentShuffleMode =
       $PersistentShuffleModeTable(this);
   late final $SongsTable songs = $SongsTable(this);
+  late final $MoorAlbumOfDayTable moorAlbumOfDay = $MoorAlbumOfDayTable(this);
   late final PersistentStateDao persistentStateDao =
       PersistentStateDao(this as MoorDatabase);
   late final SettingsDao settingsDao = SettingsDao(this as MoorDatabase);
@@ -2590,6 +2787,7 @@ abstract class _$MoorDatabase extends GeneratedDatabase {
         persistentIndex,
         persistentLoopMode,
         persistentShuffleMode,
-        songs
+        songs,
+        moorAlbumOfDay
       ];
 }

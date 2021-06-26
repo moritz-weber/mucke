@@ -8,7 +8,7 @@ import '../music_data_source_contract.dart';
 
 part 'music_data_dao.g.dart';
 
-@UseDao(tables: [Albums, Artists, Songs])
+@UseDao(tables: [Albums, Artists, Songs, MoorAlbumOfDay])
 class MusicDataDao extends DatabaseAccessor<MoorDatabase>
     with _$MusicDataDaoMixin
     implements MusicDataSource {
@@ -97,8 +97,8 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
   @override
   Future<SongModel> getSongByPath(String path) async {
     return (select(songs)..where((t) => t.path.equals(path))).getSingle().then(
-      (moorSong) => SongModel.fromMoor(moorSong),
-    );
+          (moorSong) => SongModel.fromMoor(moorSong),
+        );
   }
 
   @override
@@ -269,5 +269,37 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
   Future<void> updateSong(SongModel songModel) async {
     await (update(songs)..where((tbl) => tbl.path.equals(songModel.path)))
         .write(songModel.toSongsCompanion());
+  }
+
+  @override
+  Future<AlbumOfDay?> getAlbumOfDay() async {
+    final query = select(moorAlbumOfDay)
+        .join([innerJoin(albums, albums.id.equalsExp(moorAlbumOfDay.albumId))]);
+
+    return (query..limit(1)).getSingleOrNull().then(
+          (result) {
+            if (result == null) 
+              return null;
+            return AlbumOfDay(
+            AlbumModel.fromMoor(result.readTable(albums)),
+            DateTime.fromMillisecondsSinceEpoch(
+              result.readTable(moorAlbumOfDay).milliSecSinceEpoch,
+            ),
+          );
+          },
+        );
+  }
+
+  @override
+  Future<void> setAlbumOfDay(AlbumOfDay albumOfDay) async {
+    transaction(() async {
+      await delete(moorAlbumOfDay).go();
+      into(moorAlbumOfDay).insert(
+        MoorAlbumOfDayCompanion(
+          albumId: Value(albumOfDay.albumModel.id),
+          milliSecSinceEpoch: Value(albumOfDay.date.millisecondsSinceEpoch),
+        ),
+      );
+    });
   }
 }

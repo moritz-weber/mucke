@@ -84,3 +84,10 @@ class AlbumModel extends Album {
     }
   }
 }
+
+class AlbumOfDay {
+  AlbumOfDay(this.albumModel, this.date);
+
+  final AlbumModel albumModel;
+  final DateTime date;
+}
