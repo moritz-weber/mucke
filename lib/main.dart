@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_fimber_filelogger/flutter_fimber_filelogger.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'presentation/pages/search_page.dart';
 
 import 'domain/actors/persistence_actor.dart';
 import 'injection_container.dart';
@@ -70,8 +71,8 @@ class _RootPageState extends State<RootPage> {
     const LibraryPage(
       key: PageStorageKey('LibraryPage'),
     ),
-    const SettingsPage(
-      key: PageStorageKey('SettingsPage'),
+    const SearchPage(
+      key: PageStorageKey('SearchPage'),
     ),
   ];
 

@@ -36,11 +36,11 @@ mixin _$NavigationStore on _NavigationStore, Store {
       ActionController(name: '_NavigationStore');
 
   @override
-  void setNavIndex(int i) {
+  bool setNavIndex(int i, {bool updateTypeHistory = true}) {
     final _$actionInfo = _$_NavigationStoreActionController.startAction(
         name: '_NavigationStore.setNavIndex');
     try {
-      return super.setNavIndex(i);
+      return super.setNavIndex(i, updateTypeHistory: updateTypeHistory);
     } finally {
       _$_NavigationStoreActionController.endAction(_$actionInfo);
     }

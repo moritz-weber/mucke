@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           const Padding(
             padding: EdgeInsets.only(top: 8.0, left: HORIZONTAL_PADDING),
-            child: Header(),
+            child: Header(title: 'Home'),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),

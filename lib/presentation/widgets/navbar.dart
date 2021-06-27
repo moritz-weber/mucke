@@ -42,8 +42,8 @@ class _NavBarState extends State<NavBar> {
                 label: 'Library',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.settings),
-                label: 'Settings',
+                icon: Icon(Icons.search),
+                label: 'Search',
               ),
             ],
           ),

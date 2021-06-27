@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:fimber/fimber.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:string_similarity/string_similarity.dart';
 
 import '../../domain/entities/album.dart';
 import '../../domain/entities/artist.dart';
@@ -209,7 +210,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
       if (albums.isNotEmpty) {
         final rng = Random();
         final index = rng.nextInt(albums.length);
-        _musicDataSource.setAlbumOfDay(AlbumOfDay(albums[index], DateTime.now()));
+        _musicDataSource.setAlbumOfDay(AlbumOfDay(albums[index], _day(DateTime.now())));
         return albums[index];
       }
     } else {
@@ -218,6 +219,39 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   }
 
   bool _isAlbumValid(AlbumOfDay albumOfDay) {
-    return albumOfDay.date.difference(DateTime.now()).inDays < 1;
+    return _day(DateTime.now()).difference(_day(albumOfDay.date)).inDays < 1;
+  }
+
+  DateTime _day(DateTime dateTime) {
+    return DateTime(dateTime.year, dateTime.month, dateTime.day);
+  }
+
+  @override
+  Future<List> search(String searchText) async {
+    if (searchText == '') return [];
+
+    // TODO: need to clean the string? sql injection?
+    final dbResult = await _musicDataSource.search(_fuzzy(searchText));
+    print(dbResult.length);
+
+    final List<List> ratedResults = [];
+    for (final x in dbResult) {
+      if (x is SongModel) {
+        // print('${x.title}: ${x.title.similarityTo(searchText)}');
+        ratedResults.add([x.title.similarityTo(searchText), x]);
+      }
+    }
+    ratedResults.sort((List a, List b) => -(a[0] as double).compareTo(b[0] as double));
+
+    final results = ratedResults.map((e) => e[1]);
+    return results.toList();
+  }
+
+  String _fuzzy(String text) {
+    String fuzzyText = '%$text%';
+    // for (final c in text.toLowerCase().replaceAll(' ', '').split('')) {
+    //   fuzzyText += '$c%';
+    // }
+    return fuzzyText;
   }
 }

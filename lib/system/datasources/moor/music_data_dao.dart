@@ -277,17 +277,16 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
         .join([innerJoin(albums, albums.id.equalsExp(moorAlbumOfDay.albumId))]);
 
     return (query..limit(1)).getSingleOrNull().then(
-          (result) {
-            if (result == null) 
-              return null;
-            return AlbumOfDay(
-            AlbumModel.fromMoor(result.readTable(albums)),
-            DateTime.fromMillisecondsSinceEpoch(
-              result.readTable(moorAlbumOfDay).milliSecSinceEpoch,
-            ),
-          );
-          },
+      (result) {
+        if (result == null) return null;
+        return AlbumOfDay(
+          AlbumModel.fromMoor(result.readTable(albums)),
+          DateTime.fromMillisecondsSinceEpoch(
+            result.readTable(moorAlbumOfDay).milliSecSinceEpoch,
+          ),
         );
+      },
+    );
   }
 
   @override
@@ -301,5 +300,13 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
         ),
       );
     });
+  }
+
+  @override
+  Future<List> search(String searchText) {
+    print('Search: $searchText');
+
+    return (select(songs)..where((tbl) => tbl.title.like(searchText))).get().then(
+        (moorSongList) => moorSongList.map((moorSong) => SongModel.fromMoor(moorSong)).toList());
   }
 }

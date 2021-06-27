@@ -17,6 +17,8 @@ abstract class MusicDataInfoRepository {
   Future<Album?> getAlbumOfDay();
 
   Stream<List<Artist>> get artistStream;
+
+  Future<List> search(String searchText);
 }
 
 abstract class MusicDataRepository extends MusicDataInfoRepository {

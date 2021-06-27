@@ -2,6 +2,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:audiotagger/audiotagger.dart';
 import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
+import 'presentation/state/search_page_store.dart';
 
 import 'domain/actors/audio_player_actor.dart';
 import 'domain/actors/persistence_actor.dart';
@@ -100,6 +101,11 @@ Future<void> setupGetIt() async {
   );
   getIt.registerLazySingleton<NavigationStore>(
     () => NavigationStore(),
+  );
+  getIt.registerLazySingleton<SearchPageStore>(
+    () => SearchPageStore(
+      musicDataInfoRepository: getIt(),
+    ),
   );
   getIt.registerFactoryParam<ArtistPageStore, Artist, void>(
     (Artist? artist, _) => ArtistPageStore(artist: artist!, musicDataInfoRepository: getIt()),

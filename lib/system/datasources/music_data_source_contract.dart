@@ -43,4 +43,6 @@ abstract class MusicDataSource {
   // TODO: is this the right place? maybe persistent state?
   Future<void> setAlbumOfDay(AlbumOfDay albumOfDay);
   Future<AlbumOfDay?> getAlbumOfDay();
+
+  Future<List> search(String searchText);
 }

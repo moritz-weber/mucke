@@ -21,11 +21,13 @@ abstract class _NavigationStore with Store {
   final List<_NavType> _navTypeHistory = [];
 
   @action
-  void setNavIndex(int i) {
+  bool setNavIndex(int i, {bool updateTypeHistory = true}) {
     if (i != navIndex) {
-      _navTypeHistory.add(_NavType.tab);
+      if (updateTypeHistory) _navTypeHistory.add(_NavType.tab);
       navIndexHistory.add(i);
+      return true;
     }
+    return false;
   }
 
   @action
@@ -39,9 +41,13 @@ abstract class _NavigationStore with Store {
   }
 
   void pushOnLibrary(Route route) {
-    // TODO: don't like this...
-    setNavIndex(1);
     libraryNavKey.currentState?.push(route);
+    final indexChanged = setNavIndex(1, updateTypeHistory: false);
+    if (indexChanged) {
+      _navTypeHistory.add(_NavType.both);
+    } else {
+      _navTypeHistory.add(_NavType.route);
+    }
   }
 
   Future<bool> onWillPop() async {
@@ -50,11 +56,20 @@ abstract class _NavigationStore with Store {
     }
 
     final navType = _navTypeHistory.removeLast();
+    if (navType == _NavType.both) {
+      bool result = false;
+      if (navIndex == 1) {
+        result = !await libraryNavKey.currentState!.maybePop();
+      }
+      popNavIndex();
+      return Future.value(result);
+    }
+
     if (navType == _NavType.tab) {
       popNavIndex();
       return Future.value(false);
     }
-    
+
     if (navIndex == 1) {
       final result = !await libraryNavKey.currentState!.maybePop();
       return result;
@@ -63,4 +78,4 @@ abstract class _NavigationStore with Store {
   }
 }
 
-enum _NavType { tab, route }
+enum _NavType { tab, route, both }
