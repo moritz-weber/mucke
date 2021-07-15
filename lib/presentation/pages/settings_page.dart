@@ -14,52 +14,56 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final MusicDataStore store = GetIt.I<MusicDataStore>();
 
-    return ListView(
-      children: [
-        Container(
-          height: 12.0,
+    return SafeArea(
+      child: Material(
+        child: ListView(
+          children: [
+            Container(
+              height: 12.0,
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 4.0,
+              ),
+              child: Text(
+                'Library',
+                style: TEXT_HEADER,
+              ),
+            ),
+            ListTile(
+              title: const Text('Update library'),
+              subtitle: Observer(builder: (_) {
+                final int artistCount = store.artistStream.value?.length ?? 0;
+                final int albumCount = store.albumStream.value?.length ?? 0;
+                final int songCount = store.songStream.value?.length ?? 0;
+                return Text('$artistCount artists, $albumCount albums, $songCount songs');
+              }),
+              onTap: () => store.updateDatabase(),
+              trailing: Observer(builder: (_) {
+                if (store.isUpdatingDatabase) {
+                  return const CircularProgressIndicator();
+                }
+                return Container(
+                  height: 0,
+                  width: 0,
+                );
+              }),
+            ),
+            const Divider(
+              height: 4.0,
+            ),
+            ListTile(
+              title: const Text('Select library folders'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => _openFilePicker(store),
+            ),
+            const Divider(
+              height: 4.0,
+            ),
+          ],
         ),
-        const Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: 16.0,
-            vertical: 4.0,
-          ),
-          child: Text(
-            'Library',
-            style: TEXT_HEADER,
-          ),
-        ),
-        ListTile(
-          title: const Text('Update library'),
-          subtitle: Observer(builder: (_) {
-            final int artistCount = store.artistStream.value?.length ?? 0;
-            final int albumCount = store.albumStream.value?.length ?? 0;
-            final int songCount = store.songStream.value?.length ?? 0;
-            return Text('$artistCount artists, $albumCount albums, $songCount songs');
-          }),
-          onTap: () => store.updateDatabase(),
-          trailing: Observer(builder: (_) {
-            if (store.isUpdatingDatabase) {
-              return const CircularProgressIndicator();
-            }
-            return Container(
-              height: 0,
-              width: 0,
-            );
-          }),
-        ),
-        const Divider(
-          height: 4.0,
-        ),
-        ListTile(
-          title: const Text('Select library folders'),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () => _openFilePicker(store),
-        ),
-        const Divider(
-          height: 4.0,
-        ),
-      ],
+      ),
     );
   }
 

@@ -154,7 +154,7 @@ class CurrentlyPlayingPage extends StatelessWidget {
     );
   }
 
-  void _openMoreMenu(BuildContext context) {
+  Future<void> _openMoreMenu(BuildContext context) async {
     final AudioStore audioStore = GetIt.I<AudioStore>();
     final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
     final NavigationStore navStore = GetIt.I<NavigationStore>();
@@ -163,10 +163,10 @@ class CurrentlyPlayingPage extends StatelessWidget {
     if (song == null)
       return;
     // EXPLORATORY
-    final albums = musicDataStore.albumStream.value ?? [];
+    final albums = await musicDataStore.albumStream.first;
     final album = albums.singleWhere((a) => a.title == song.album);
 
-    final artists = musicDataStore.artistStream.value ?? [];
+    final artists = await musicDataStore.artistStream.first;
     final artist = artists.singleWhere((a) => a.name == album.artist);
 
     showModalBottomSheet(

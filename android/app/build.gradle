@@ -39,12 +39,22 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "rocks.mucke"
+        // applicationId "rocks.mucke"
         minSdkVersion 19
         targetSdkVersion 29
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    flavorDimensions "app"
+    productFlavors {
+        dev {
+            applicationId = "rocks.mucke.dev"
+        }
+        prod {
+            applicationId = "rocks.mucke"
+        }
     }
 
     buildTypes {

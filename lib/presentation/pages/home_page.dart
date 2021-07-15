@@ -4,6 +4,7 @@ import '../theming.dart';
 import '../widgets/header.dart';
 import '../widgets/highlight.dart';
 import '../widgets/shuffle_all_button.dart';
+import 'settings_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -19,9 +20,18 @@ class _HomePageState extends State<HomePage> {
     return SafeArea(
       child: Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.only(top: 8.0, left: HORIZONTAL_PADDING),
-            child: Header(title: 'Home'),
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0, left: HORIZONTAL_PADDING),
+            child: Header(
+              title: 'Home',
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => const SettingsPage(),
+                  ),
+                );
+              },
+            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),

@@ -7,25 +7,51 @@
         {
             "name": "Debug",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "args": [
+                "--flavor",
+                "dev",
+            ],
         },
         {
             "name": "Test",
             "type": "dart",
             "request": "launch",
             "program": "./test/",
+            "args": [
+                "--flavor",
+                "dev",
+            ],
         },
         {
             "name": "Profile",
             "type": "dart",
             "request": "launch",
-            "flutterMode": "profile"
+            "flutterMode": "profile",
+            "args": [
+                "--flavor",
+                "dev",
+            ],
         },
         {
             "name": "Release",
             "type": "dart",
             "request": "launch",
-            "flutterMode": "release"
+            "flutterMode": "release",
+            "args": [
+                "--flavor",
+                "dev",
+            ],
+        },
+        {
+            "name": "PRODUCTION",
+            "type": "dart",
+            "request": "launch",
+            "flutterMode": "release",
+            "args": [
+                "--flavor",
+                "prod",
+            ],
         },
     ]
 }
