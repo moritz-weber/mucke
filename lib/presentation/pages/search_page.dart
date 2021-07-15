@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+
 import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
 import '../state/search_page_store.dart';
+import '../theming.dart';
 import '../widgets/song_bottom_sheet.dart';
 import '../widgets/song_list_tile.dart';
-
-import '../theming.dart';
-import '../widgets/header.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -28,25 +27,27 @@ class _SearchPageState extends State<SearchPage> {
     return SafeArea(
       child: Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.only(top: 8.0, left: HORIZONTAL_PADDING),
-            child: Header(title: 'Search'),
-          ),
           Padding(
             padding: const EdgeInsets.only(
-              left: HORIZONTAL_PADDING,
-              right: HORIZONTAL_PADDING,
-              bottom: 16.0,
+              top: 8.0,
+              left: HORIZONTAL_PADDING - 8.0,
+              right: HORIZONTAL_PADDING - 8.0,
+              bottom: 8.0,
             ),
-            child: Column(
-              children: [
-                TextField(
-                  decoration: const InputDecoration(hintText: 'Search'),
-                  onChanged: (text) {
-                    searchStore.search(text);
-                  },
-                ),
-              ],
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'Search',
+                hintStyle: TEXT_HEADER.copyWith(color: Colors.white),
+                fillColor: Colors.white10,
+                filled: true,
+                enabledBorder: const OutlineInputBorder(borderSide: BorderSide.none, gapPadding: 0.0),
+                focusedBorder: const OutlineInputBorder(borderSide: BorderSide.none, gapPadding: 0.0),
+                contentPadding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+              ),
+              
+              onChanged: (text) {
+                searchStore.search(text);
+              },
             ),
           ),
           Expanded(

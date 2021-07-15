@@ -51,6 +51,9 @@ ThemeData theme() => ThemeData(
         ),
         headline6: TextStyle(fontSize: 18.0),
       ),
+      textSelectionTheme: const TextSelectionThemeData(
+        cursorColor: LIGHT2,
+      ),
       tabBarTheme: const TabBarTheme(
         labelColor: Colors.white,
       ),
