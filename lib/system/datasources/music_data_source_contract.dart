@@ -44,5 +44,5 @@ abstract class MusicDataSource {
   Future<void> setAlbumOfDay(AlbumOfDay albumOfDay);
   Future<AlbumOfDay?> getAlbumOfDay();
 
-  Future<List> search(String searchText);
+  Future<List> search(String searchText, {int limit});
 }

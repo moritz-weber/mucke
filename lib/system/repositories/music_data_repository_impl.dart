@@ -230,21 +230,31 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   Future<List> search(String searchText) async {
     if (searchText == '') return [];
 
+    final searchTextLower = searchText.toLowerCase();
+
     // TODO: need to clean the string? sql injection?
-    final dbResult = await _musicDataSource.search(_fuzzy(searchText));
-    print(dbResult.length);
+    final dbResult = await _musicDataSource.search(_fuzzy(searchTextLower), limit: 200);
 
     final List<List> ratedResults = [];
     for (final x in dbResult) {
       if (x is SongModel) {
-        // print('${x.title}: ${x.title.similarityTo(searchText)}');
-        ratedResults.add([x.title.similarityTo(searchText), x]);
+        ratedResults.add([_similarity(x.title.toLowerCase(), searchTextLower), x]);
+      } else if (x is AlbumModel) {
+        ratedResults.add([_similarity(x.title.toLowerCase(), searchTextLower), x]);
+      } else if (x is ArtistModel) {
+        ratedResults.add([_similarity(x.name.toLowerCase(), searchTextLower), x]);
       }
     }
     ratedResults.sort((List a, List b) => -(a[0] as double).compareTo(b[0] as double));
 
     final results = ratedResults.map((e) => e[1]);
     return results.toList();
+  }
+
+  double _similarity(String value, String searchText) {
+    return value.startsWith(searchText)
+        ? value.similarityTo(searchText) + 1
+        : value.similarityTo(searchText);
   }
 
   String _fuzzy(String text) {
