@@ -15,8 +15,19 @@ class SettingsPage extends StatelessWidget {
     final MusicDataStore store = GetIt.I<MusicDataStore>();
 
     return SafeArea(
-      child: Material(
-        child: ListView(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            'Settings',
+            style: TEXT_HEADER,
+          ),
+          leading: IconButton(
+            icon: const Icon(Icons.chevron_left),
+            onPressed: () => Navigator.pop(context),
+          ),
+          leadingWidth: 28.0,
+        ),
+        body: ListView(
           children: [
             Container(
               height: 12.0,
@@ -28,7 +39,9 @@ class SettingsPage extends StatelessWidget {
               ),
               child: Text(
                 'Library',
-                style: TEXT_HEADER,
+                style: TextStyle(
+                  fontSize: 18.0,
+                ),
               ),
             ),
             ListTile(
