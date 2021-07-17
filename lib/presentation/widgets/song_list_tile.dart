@@ -7,18 +7,20 @@ import '../utils.dart' as utils;
 enum Subtitle { artist, artistAlbum, stats }
 
 class SongListTile extends StatelessWidget {
-  const SongListTile(
-      {Key? key,
-      required this.song,
-      required this.onTap,
-      required this.onTapMore,
-      this.showAlbum = true,
-      this.subtitle = Subtitle.artist})
-      : super(key: key);
+  const SongListTile({
+    Key? key,
+    required this.song,
+    required this.onTap,
+    required this.onTapMore,
+    this.highlight = false,
+    this.showAlbum = true,
+    this.subtitle = Subtitle.artist,
+  }) : super(key: key);
 
   final Song song;
   final Function onTap;
   final Function onTapMore;
+  final bool highlight;
   final bool showAlbum;
   final Subtitle subtitle;
 
@@ -90,6 +92,7 @@ class SongListTile extends StatelessWidget {
       ),
       subtitle: subtitleWidget,
       onTap: () => onTap(),
+      tileColor: highlight ? Colors.white10 : Colors.transparent,
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

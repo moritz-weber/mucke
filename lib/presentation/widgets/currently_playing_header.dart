@@ -27,8 +27,10 @@ class CurrentlyPlayingHeader extends StatelessWidget {
           child: GestureDetector(
             onTap: () => onTap(context),
             child: Container(
+              height: 56.0,
               color: Colors.transparent,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(

@@ -8,7 +8,9 @@ import 'package:reorderables/reorderables.dart';
 
 import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
-import '../widgets/album_art_list_tile.dart';
+import '../theming.dart';
+import '../widgets/song_bottom_sheet.dart';
+import '../widgets/song_list_tile.dart';
 
 class QueuePage extends StatelessWidget {
   const QueuePage({Key? key}) : super(key: key);
@@ -24,6 +26,33 @@ class QueuePage extends StatelessWidget {
         ScrollController(initialScrollOffset: initialIndex * 72.0);
 
     return Scaffold(
+      appBar: AppBar(
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 12.0),
+          child: IconButton(
+            icon: const Icon(Icons.expand_more),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ),
+        leadingWidth: 60.0,
+        title: const Text(
+          'Currently Playing',
+          style: TEXT_HEADER,
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.play_arrow_outlined),
+            onPressed: () {
+              _scrollController.animateTo(
+                max((queueIndexStream.value ?? 0) - 2, 0) * 72.0,
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeInOut,
+              );
+            },
+          )
+        ],
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: Observer(
           builder: (BuildContext context) {
@@ -33,35 +62,38 @@ class QueuePage extends StatelessWidget {
             switch (queueStream.status) {
               case StreamStatus.active:
                 final int activeIndex = queueIndexStream.value ?? -1;
-                return CustomScrollView(
-                  controller: _scrollController,
-                  slivers: [
-                    ReorderableSliverList(
-                      delegate: ReorderableSliverChildBuilderDelegate(
-                        (context, int index) {
-                          final Song? song = queueStream.value?[index];
-                          if (song == null)
-                           return Container();
-                          return Dismissible(
-                            key: ValueKey(song.path),
-                            child: AlbumArtListTile(
-                              title: song.title,
-                              subtitle: '${song.artist}',
-                              albumArtPath: song.albumArtPath,
-                              highlight: index == activeIndex,
-                              onTap: () => audioStore.seekToIndex(index),
-                            ),
-                            onDismissed: (direction) {
-                              audioStore.removeQueueIndex(index);
-                            },
-                          );
-                        },
-                        childCount: queueStream.value?.length,
-                      ),
-                      onReorder: (oldIndex, newIndex) =>
-                          audioStore.moveQueueItem(oldIndex, newIndex),
-                    )
-                  ],
+                return Scrollbar(
+                  child: CustomScrollView(
+                    controller: _scrollController,
+                    slivers: [
+                      ReorderableSliverList(
+                        delegate: ReorderableSliverChildBuilderDelegate(
+                          (context, int index) {
+                            final Song? song = queueStream.value?[index];
+                            if (song == null) return Container();
+                            return Dismissible(
+                              key: ValueKey(song.path),
+                              child: SongListTile(
+                                song: song,
+                                highlight: index == activeIndex,
+                                onTap: () async {
+                                  await audioStore.seekToIndex(index);
+                                  audioStore.play();
+                                },
+                                onTapMore: () => SongBottomSheet()(song, context),
+                              ),
+                              onDismissed: (direction) {
+                                audioStore.removeQueueIndex(index);
+                              },
+                            );
+                          },
+                          childCount: queueStream.value?.length,
+                        ),
+                        onReorder: (oldIndex, newIndex) =>
+                            audioStore.moveQueueItem(oldIndex, newIndex),
+                      )
+                    ],
+                  ),
                 );
               case StreamStatus.waiting:
               case StreamStatus.done:

@@ -26,28 +26,30 @@ class _AlbumsPageState extends State<AlbumsPage> with AutomaticKeepAliveClientMi
     return Observer(builder: (_) {
       print('AlbumsPage.build -> Observer.builder');
       final List<Album> albums = store.albumStream.value ?? [];
-      return ListView.separated(
-        itemCount: albums.length,
-        itemBuilder: (_, int index) {
-          final Album album = albums[index];
-          return AlbumArtListTile(
-            title: album.title,
-            subtitle: album.artist,
-            albumArtPath: album.albumArtPath,
-            onTap: () {
-              navStore.push(
-                context,
-                MaterialPageRoute<Widget>(
-                  builder: (BuildContext context) => AlbumDetailsPage(
-                    album: album,
+      return Scrollbar(
+        child: ListView.separated(
+          itemCount: albums.length,
+          itemBuilder: (_, int index) {
+            final Album album = albums[index];
+            return AlbumArtListTile(
+              title: album.title,
+              subtitle: album.artist,
+              albumArtPath: album.albumArtPath,
+              onTap: () {
+                navStore.push(
+                  context,
+                  MaterialPageRoute<Widget>(
+                    builder: (BuildContext context) => AlbumDetailsPage(
+                      album: album,
+                    ),
                   ),
-                ),
-              );
-            },
-          );
-        },
-        separatorBuilder: (BuildContext context, int index) => const SizedBox(
-          height: 4.0,
+                );
+              },
+            );
+          },
+          separatorBuilder: (BuildContext context, int index) => const SizedBox(
+            height: 4.0,
+          ),
         ),
       );
     });

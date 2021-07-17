@@ -32,20 +32,22 @@ class _SongsPageState extends State<SongsPage> with AutomaticKeepAliveClientMixi
       switch (songStream.status) {
         case StreamStatus.active:
           final List<Song> songs = songStream.value ?? [];
-          return ListView.separated(
-            itemCount: songs.length,
-            itemBuilder: (_, int index) {
-              final Song song = songs[index];
-              return SongListTile(
-                song: song,
-                showAlbum: true,
-                subtitle: Subtitle.artistAlbum,
-                onTap: () => audioStore.playSong(index, songs),
-                onTapMore: () => SongBottomSheet()(song, context),
-              );
-            },
-            separatorBuilder: (BuildContext context, int index) => const SizedBox(
-              height: 4.0,
+          return Scrollbar(
+            child: ListView.separated(
+              itemCount: songs.length,
+              itemBuilder: (_, int index) {
+                final Song song = songs[index];
+                return SongListTile(
+                  song: song,
+                  showAlbum: true,
+                  subtitle: Subtitle.artistAlbum,
+                  onTap: () => audioStore.playSong(index, songs),
+                  onTapMore: () => SongBottomSheet()(song, context),
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) => const SizedBox(
+                height: 4.0,
+              ),
             ),
           );
         case StreamStatus.waiting:

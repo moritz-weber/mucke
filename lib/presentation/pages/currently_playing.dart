@@ -57,7 +57,6 @@ class CurrentlyPlayingPage extends StatelessWidget {
                     padding: const EdgeInsets.only(
                       left: 12.0,
                       right: 12.0,
-                      top: 8.0,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

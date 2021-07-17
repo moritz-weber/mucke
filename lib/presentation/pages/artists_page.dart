@@ -25,26 +25,28 @@ class _ArtistsPageState extends State<ArtistsPage> with AutomaticKeepAliveClient
     return Observer(builder: (_) {
       print('ArtistsPage.build -> Observer.builder');
       final List<Artist> artists = musicDataStore.artistStream.value ?? [];
-      return ListView.separated(
-        itemCount: artists.length,
-        itemBuilder: (_, int index) {
-          final Artist artist = artists[index];
-          return ListTile(
-            title: Text(artist.name),
-            onTap: () {
-              navStore.push(
-                context,
-                MaterialPageRoute<Widget>(
-                  builder: (BuildContext context) => ArtistDetailsPage(
-                    artist: artist,
+      return Scrollbar(
+        child: ListView.separated(
+          itemCount: artists.length,
+          itemBuilder: (_, int index) {
+            final Artist artist = artists[index];
+            return ListTile(
+              title: Text(artist.name),
+              onTap: () {
+                navStore.push(
+                  context,
+                  MaterialPageRoute<Widget>(
+                    builder: (BuildContext context) => ArtistDetailsPage(
+                      artist: artist,
+                    ),
                   ),
-                ),
-              );
-            },
-          );
-        },
-        separatorBuilder: (BuildContext context, int index) => const SizedBox(
-          height: 4.0,
+                );
+              },
+            );
+          },
+          separatorBuilder: (BuildContext context, int index) => const SizedBox(
+            height: 4.0,
+          ),
         ),
       );
     });
