@@ -181,13 +181,7 @@ class SongModel extends Song {
         albumArtPath: Value(albumArtPath),
         discNumber: Value(discNumber),
         trackNumber: Value(trackNumber),
-        blocked: Value(blocked),
         present: const Value(true),
-        next: Value(next),
-        previous: Value(previous),
-        likeCount: Value(likeCount),
-        skipCount: Value(skipCount),
-        playCount: Value(playCount),
       );
 
   MediaItem toMediaItem() => MediaItem(

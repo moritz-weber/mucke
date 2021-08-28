@@ -46,14 +46,14 @@ class Songs extends Table {
   TextColumn get albumArtPath => text().nullable()();
   IntColumn get discNumber => integer()();
   IntColumn get trackNumber => integer()();
-  BoolColumn get blocked => boolean()();
-  IntColumn get likeCount => integer()();
-  IntColumn get skipCount => integer()();
-  IntColumn get playCount => integer()();
+  BoolColumn get blocked => boolean().withDefault(const Constant(false))();
+  IntColumn get likeCount => integer().withDefault(const Constant(0))();
+  IntColumn get skipCount => integer().withDefault(const Constant(0))();
+  IntColumn get playCount => integer().withDefault(const Constant(0))();
   BoolColumn get present => boolean().withDefault(const Constant(true))();
 
-  TextColumn get previous => text()();
-  TextColumn get next => text()();
+  TextColumn get previous => text().withDefault(const Constant(''))();
+  TextColumn get next => text().withDefault(const Constant(''))();
 
   @override
   Set<Column> get primaryKey => {path};

@@ -2055,13 +2055,13 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
     this.albumArtPath = const Value.absent(),
     required int discNumber,
     required int trackNumber,
-    required bool blocked,
-    required int likeCount,
-    required int skipCount,
-    required int playCount,
+    this.blocked = const Value.absent(),
+    this.likeCount = const Value.absent(),
+    this.skipCount = const Value.absent(),
+    this.playCount = const Value.absent(),
     this.present = const Value.absent(),
-    required String previous,
-    required String next,
+    this.previous = const Value.absent(),
+    this.next = const Value.absent(),
   })  : title = Value(title),
         albumTitle = Value(albumTitle),
         albumId = Value(albumId),
@@ -2069,13 +2069,7 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
         path = Value(path),
         duration = Value(duration),
         discNumber = Value(discNumber),
-        trackNumber = Value(trackNumber),
-        blocked = Value(blocked),
-        likeCount = Value(likeCount),
-        skipCount = Value(skipCount),
-        playCount = Value(playCount),
-        previous = Value(previous),
-        next = Value(next);
+        trackNumber = Value(trackNumber);
   static Insertable<MoorSong> custom({
     Expression<String>? title,
     Expression<String>? albumTitle,
@@ -2338,44 +2332,32 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
   @override
   late final GeneratedBoolColumn blocked = _constructBlocked();
   GeneratedBoolColumn _constructBlocked() {
-    return GeneratedBoolColumn(
-      'blocked',
-      $tableName,
-      false,
-    );
+    return GeneratedBoolColumn('blocked', $tableName, false,
+        defaultValue: const Constant(false));
   }
 
   final VerificationMeta _likeCountMeta = const VerificationMeta('likeCount');
   @override
   late final GeneratedIntColumn likeCount = _constructLikeCount();
   GeneratedIntColumn _constructLikeCount() {
-    return GeneratedIntColumn(
-      'like_count',
-      $tableName,
-      false,
-    );
+    return GeneratedIntColumn('like_count', $tableName, false,
+        defaultValue: const Constant(0));
   }
 
   final VerificationMeta _skipCountMeta = const VerificationMeta('skipCount');
   @override
   late final GeneratedIntColumn skipCount = _constructSkipCount();
   GeneratedIntColumn _constructSkipCount() {
-    return GeneratedIntColumn(
-      'skip_count',
-      $tableName,
-      false,
-    );
+    return GeneratedIntColumn('skip_count', $tableName, false,
+        defaultValue: const Constant(0));
   }
 
   final VerificationMeta _playCountMeta = const VerificationMeta('playCount');
   @override
   late final GeneratedIntColumn playCount = _constructPlayCount();
   GeneratedIntColumn _constructPlayCount() {
-    return GeneratedIntColumn(
-      'play_count',
-      $tableName,
-      false,
-    );
+    return GeneratedIntColumn('play_count', $tableName, false,
+        defaultValue: const Constant(0));
   }
 
   final VerificationMeta _presentMeta = const VerificationMeta('present');
@@ -2390,22 +2372,16 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
   @override
   late final GeneratedTextColumn previous = _constructPrevious();
   GeneratedTextColumn _constructPrevious() {
-    return GeneratedTextColumn(
-      'previous',
-      $tableName,
-      false,
-    );
+    return GeneratedTextColumn('previous', $tableName, false,
+        defaultValue: const Constant(''));
   }
 
   final VerificationMeta _nextMeta = const VerificationMeta('next');
   @override
   late final GeneratedTextColumn next = _constructNext();
   GeneratedTextColumn _constructNext() {
-    return GeneratedTextColumn(
-      'next',
-      $tableName,
-      false,
-    );
+    return GeneratedTextColumn('next', $tableName, false,
+        defaultValue: const Constant(''));
   }
 
   @override
@@ -2501,26 +2477,18 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
     if (data.containsKey('blocked')) {
       context.handle(_blockedMeta,
           blocked.isAcceptableOrUnknown(data['blocked']!, _blockedMeta));
-    } else if (isInserting) {
-      context.missing(_blockedMeta);
     }
     if (data.containsKey('like_count')) {
       context.handle(_likeCountMeta,
           likeCount.isAcceptableOrUnknown(data['like_count']!, _likeCountMeta));
-    } else if (isInserting) {
-      context.missing(_likeCountMeta);
     }
     if (data.containsKey('skip_count')) {
       context.handle(_skipCountMeta,
           skipCount.isAcceptableOrUnknown(data['skip_count']!, _skipCountMeta));
-    } else if (isInserting) {
-      context.missing(_skipCountMeta);
     }
     if (data.containsKey('play_count')) {
       context.handle(_playCountMeta,
           playCount.isAcceptableOrUnknown(data['play_count']!, _playCountMeta));
-    } else if (isInserting) {
-      context.missing(_playCountMeta);
     }
     if (data.containsKey('present')) {
       context.handle(_presentMeta,
@@ -2529,14 +2497,10 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
     if (data.containsKey('previous')) {
       context.handle(_previousMeta,
           previous.isAcceptableOrUnknown(data['previous']!, _previousMeta));
-    } else if (isInserting) {
-      context.missing(_previousMeta);
     }
     if (data.containsKey('next')) {
       context.handle(
           _nextMeta, next.isAcceptableOrUnknown(data['next']!, _nextMeta));
-    } else if (isInserting) {
-      context.missing(_nextMeta);
     }
     return context;
   }
