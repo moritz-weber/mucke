@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:fimber/fimber.dart';
+import 'package:mucke/domain/entities/smart_list.dart';
+import 'package:mucke/system/models/smart_list_model.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:string_similarity/string_similarity.dart';
 
@@ -66,6 +68,10 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   Stream<List<Album>> getArtistAlbumStream(Artist artist) => _musicDataSource
       .getArtistAlbumStream(artist as ArtistModel)
       .map((albums) => _sortArtistAlbums(albums));
+
+  @override
+  Stream<List<Song>> getSmartListSongStream(SmartList smartList) =>
+      _musicDataSource.getSmartListSongStream(smartList as SmartListModel);
 
   @override
   Future<void> updateDatabase() async {
@@ -206,7 +212,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   Future<Album?> getAlbumOfDay() async {
     final storedAlbum = await _musicDataSource.getAlbumOfDay();
     if (storedAlbum == null || !_isAlbumValid(storedAlbum)) {
-      final albums = await _musicDataSource.getAlbums();
+      final albums = await _musicDataSource.albumStream.first;
       if (albums.isNotEmpty) {
         final rng = Random();
         final index = rng.nextInt(albums.length);
@@ -258,7 +264,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   }
 
   String _fuzzy(String text) {
-    String fuzzyText = '%$text%';
+    final String fuzzyText = '%$text%';
     // for (final c in text.toLowerCase().replaceAll(' ', '').split('')) {
     //   fuzzyText += '$c%';
     // }

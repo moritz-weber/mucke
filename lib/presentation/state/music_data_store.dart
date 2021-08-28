@@ -4,7 +4,6 @@ import '../../domain/entities/album.dart';
 import '../../domain/entities/artist.dart';
 import '../../domain/entities/song.dart';
 import '../../domain/repositories/music_data_repository.dart';
-import '../../domain/repositories/settings_repository.dart';
 import '../../domain/usecases/inrement_like_count.dart';
 import '../../domain/usecases/reset_like_count.dart';
 import '../../domain/usecases/set_song_blocked.dart';
@@ -17,7 +16,6 @@ part 'music_data_store.g.dart';
 class MusicDataStore extends _MusicDataStore with _$MusicDataStore {
   MusicDataStore({
     required MusicDataInfoRepository musicDataInfoRepository,
-    required SettingsRepository settingsRepository,
     required UpdateDatabase updateDatabase,
     required IncrementLikeCount incrementLikeCount,
     required ResetLikeCount resetLikeCount,
@@ -26,7 +24,6 @@ class MusicDataStore extends _MusicDataStore with _$MusicDataStore {
     required TogglePreviousSongLink togglePreviousSongLink,
   }) : super(
           musicDataInfoRepository,
-          settingsRepository,
           updateDatabase,
           incrementLikeCount,
           resetLikeCount,
@@ -39,7 +36,6 @@ class MusicDataStore extends _MusicDataStore with _$MusicDataStore {
 abstract class _MusicDataStore with Store {
   _MusicDataStore(
     this._musicDataInfoRepository,
-    this._settingsRepository,
     this._updateDatabase,
     this._incrementLikeCount,
     this._resetLikeCount,
@@ -56,7 +52,6 @@ abstract class _MusicDataStore with Store {
   final UpdateDatabase _updateDatabase;
 
   final MusicDataInfoRepository _musicDataInfoRepository;
-  final SettingsRepository _settingsRepository;
 
   @observable
   late ObservableStream<List<Song>> songStream =
@@ -96,8 +91,4 @@ abstract class _MusicDataStore with Store {
   Future<void> incrementLikeCount(Song song) => _incrementLikeCount(song);
 
   Future<void> resetLikeCount(Song song) => _resetLikeCount(song);
-
-  Future<void> addLibraryFolder(String? path) async {
-    await _settingsRepository.addLibraryFolder(path);
-  }
 }

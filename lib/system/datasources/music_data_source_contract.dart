@@ -1,5 +1,6 @@
 import '../models/album_model.dart';
 import '../models/artist_model.dart';
+import '../models/smart_list_model.dart';
 import '../models/song_model.dart';
 
 abstract class MusicDataSource {
@@ -7,6 +8,7 @@ abstract class MusicDataSource {
   Stream<List<SongModel>> getAlbumSongStream(AlbumModel album);
   Stream<List<SongModel>> getArtistSongStream(ArtistModel artist);
   Future<List<SongModel>> getSongs();
+  Stream<List<SongModel>> getSmartListSongStream(SmartListModel smartList);
   Future<SongModel> getSongByPath(String path);
   Future<SongModel?> getPredecessor(SongModel song);
   Future<SongModel?> getSuccessor(SongModel song);

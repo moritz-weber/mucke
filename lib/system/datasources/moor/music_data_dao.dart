@@ -1,7 +1,9 @@
 import 'package:moor/moor.dart';
 
+import '../../../domain/entities/smart_list.dart' as sl;
 import '../../models/album_model.dart';
 import '../../models/artist_model.dart';
+import '../../models/smart_list_model.dart';
 import '../../models/song_model.dart';
 import '../moor_database.dart';
 import '../music_data_source_contract.dart';
@@ -87,6 +89,30 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
         .map(
           (moorSongList) => moorSongList.map((moorSong) => SongModel.fromMoor(moorSong)).toList(),
         );
+  }
+
+  @override
+  Stream<List<SongModel>> getSmartListSongStream(SmartListModel smartList) {
+    SimpleSelectStatement<$SongsTable, MoorSong> query = select(songs);
+
+    final filter = smartList.filter;
+    query = query..where((tbl) => tbl.likeCount.isBiggerOrEqualValue(filter.minLikeCount));
+    query = query..where((tbl) => tbl.likeCount.isSmallerOrEqualValue(filter.maxLikeCount));
+
+    if (filter.minPlayCount != null)
+    query = query..where((tbl) => tbl.playCount.isBiggerOrEqualValue(filter.minPlayCount));
+    if (filter.maxPlayCount != null)
+    query = query..where((tbl) => tbl.playCount.isSmallerOrEqualValue(filter.maxPlayCount));
+
+    if (filter.limit != null)
+    query = query..limit(filter.limit!);
+
+    final orderingTerms = _generateOrderingTerms(smartList.orderBy);
+
+    query = query..orderBy(orderingTerms);
+
+    return query.watch().map(
+        (moorSongList) => moorSongList.map((moorSong) => SongModel.fromMoor(moorSong)).toList());
   }
 
   @override
@@ -321,4 +347,50 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
     if (limit <= 0) return result;
     return result.take(limit).toList();
   }
+}
+
+List<OrderingTerm Function($SongsTable)> _generateOrderingTerms(sl.OrderBy orderBy) {
+  final orderingTerms = <OrderingTerm Function($SongsTable)>[];
+
+  int i = 0;
+  while (i < orderBy.orderCriteria.length) {
+    final OrderingMode mode = orderBy.orderDirections[i].toMoor();
+    switch (orderBy.orderCriteria[i]) {
+      case sl.OrderCriterion.artistName:
+        orderingTerms.add(
+          ($SongsTable t) => OrderingTerm(
+            expression: t.artist,
+            mode: mode,
+          ),
+        );
+        break;
+      case sl.OrderCriterion.likeCount:
+        orderingTerms.add(
+          ($SongsTable t) => OrderingTerm(
+            expression: t.likeCount,
+            mode: mode,
+          ),
+        );
+        break;
+      case sl.OrderCriterion.playCount:
+        orderingTerms.add(
+          ($SongsTable t) => OrderingTerm(
+            expression: t.playCount,
+            mode: mode,
+          ),
+        );
+        break;
+      case sl.OrderCriterion.songTitle:
+        orderingTerms.add(
+          ($SongsTable t) => OrderingTerm(
+            expression: t.title,
+            mode: mode,
+          ),
+        );
+        break;
+    }
+    i++;
+  }
+
+  return orderingTerms;
 }

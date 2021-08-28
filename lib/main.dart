@@ -5,14 +5,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_fimber_filelogger/flutter_fimber_filelogger.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'presentation/pages/search_page.dart';
 
 import 'domain/actors/persistence_actor.dart';
 import 'injection_container.dart';
 import 'presentation/pages/currently_playing.dart';
 import 'presentation/pages/home_page.dart';
 import 'presentation/pages/library_page.dart';
-import 'presentation/pages/settings_page.dart';
+import 'presentation/pages/search_page.dart';
 import 'presentation/state/navigation_store.dart';
 import 'presentation/theming.dart';
 import 'presentation/widgets/navbar.dart';

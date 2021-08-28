@@ -2,13 +2,13 @@ import 'package:audio_service/audio_service.dart';
 import 'package:audiotagger/audiotagger.dart';
 import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
-import 'presentation/state/search_page_store.dart';
 
 import 'domain/actors/audio_player_actor.dart';
 import 'domain/actors/persistence_actor.dart';
 import 'domain/actors/platform_integration_actor.dart';
 import 'domain/entities/album.dart';
 import 'domain/entities/artist.dart';
+import 'domain/entities/smart_list.dart';
 import 'domain/modules/managed_queue.dart';
 import 'domain/repositories/audio_player_repository.dart';
 import 'domain/repositories/music_data_repository.dart';
@@ -45,6 +45,10 @@ import 'presentation/state/artist_page_store.dart';
 import 'presentation/state/audio_store.dart';
 import 'presentation/state/music_data_store.dart';
 import 'presentation/state/navigation_store.dart';
+import 'presentation/state/search_page_store.dart';
+import 'presentation/state/settings_store.dart';
+import 'presentation/state/smart_list_form_store.dart';
+import 'presentation/state/smart_list_page_store.dart';
 import 'system/datasources/audio_player_data_source.dart';
 import 'system/datasources/audio_player_data_source_impl.dart';
 import 'system/datasources/local_music_fetcher.dart';
@@ -70,7 +74,6 @@ Future<void> setupGetIt() async {
   getIt.registerLazySingleton<MusicDataStore>(
     () => MusicDataStore(
       musicDataInfoRepository: getIt(),
-      settingsRepository: getIt(),
       incrementLikeCount: getIt(),
       resetLikeCount: getIt(),
       setSongBlocked: getIt(),
@@ -112,6 +115,15 @@ Future<void> setupGetIt() async {
   );
   getIt.registerFactoryParam<AlbumPageStore, Album, void>(
     (Album? album, _) => AlbumPageStore(album: album!, musicDataInfoRepository: getIt()),
+  );
+  getIt.registerFactory<SettingsStore>(
+    () => SettingsStore(settingsRepository: getIt()),
+  );
+  getIt.registerFactoryParam<SmartListFormStore, SmartList, void>(
+    (SmartList? smartList, _) => SmartListFormStore(settingsRepository: getIt(), smartList: smartList),
+  );
+  getIt.registerFactoryParam<SmartListPageStore, SmartList, void>(
+    (SmartList? smartList, _) => SmartListPageStore(smartList: smartList!, musicDataInfoRepository: getIt()),
   );
 
   // use cases

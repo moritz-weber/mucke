@@ -112,6 +112,32 @@ class MoorAlbumOfDay extends Table {
   Set<Column> get primaryKey => {albumId};
 }
 
+@DataClassName('MoorSmartList')
+class SmartLists extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get position => integer()();
+  TextColumn get name => text()();
+  TextColumn get shuffleMode => text().nullable()();
+
+  // Filter
+  BoolColumn get excludeArtists => boolean().withDefault(const Constant(false))();
+  IntColumn get minLikeCount => integer().withDefault(const Constant(0))();
+  IntColumn get maxLikeCount => integer().withDefault(const Constant(5))();
+  IntColumn get minPlayCount => integer().nullable()();
+  IntColumn get maxPlayCount => integer().nullable()();
+  IntColumn get limit => integer().nullable()();
+
+  // OrderBy
+  TextColumn get orderCriteria => text()();
+  TextColumn get orderDirections => text()();
+}
+
+@DataClassName('MoorSmartListArtist')
+class SmartListArtists extends Table {
+  IntColumn get smartListId => integer()();
+  TextColumn get artistName => text()();
+}
+
 @UseMoor(
   tables: [
     Albums,
@@ -125,6 +151,8 @@ class MoorAlbumOfDay extends Table {
     PersistentShuffleMode,
     Songs,
     MoorAlbumOfDay,
+    SmartLists,
+    SmartListArtists,
   ],
   daos: [
     PersistentStateDao,

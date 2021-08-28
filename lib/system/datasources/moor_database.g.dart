@@ -2751,6 +2751,850 @@ class $MoorAlbumOfDayTable extends MoorAlbumOfDay
   }
 }
 
+class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
+  final int id;
+  final int position;
+  final String name;
+  final String? shuffleMode;
+  final bool excludeArtists;
+  final int minLikeCount;
+  final int maxLikeCount;
+  final int? minPlayCount;
+  final int? maxPlayCount;
+  final int? limit;
+  final String orderCriteria;
+  final String orderDirections;
+  MoorSmartList(
+      {required this.id,
+      required this.position,
+      required this.name,
+      this.shuffleMode,
+      required this.excludeArtists,
+      required this.minLikeCount,
+      required this.maxLikeCount,
+      this.minPlayCount,
+      this.maxPlayCount,
+      this.limit,
+      required this.orderCriteria,
+      required this.orderDirections});
+  factory MoorSmartList.fromData(
+      Map<String, dynamic> data, GeneratedDatabase db,
+      {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return MoorSmartList(
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      position: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}position'])!,
+      name: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
+      shuffleMode: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}shuffle_mode']),
+      excludeArtists: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}exclude_artists'])!,
+      minLikeCount: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}min_like_count'])!,
+      maxLikeCount: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}max_like_count'])!,
+      minPlayCount: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}min_play_count']),
+      maxPlayCount: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}max_play_count']),
+      limit: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}limit']),
+      orderCriteria: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}order_criteria'])!,
+      orderDirections: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}order_directions'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['position'] = Variable<int>(position);
+    map['name'] = Variable<String>(name);
+    if (!nullToAbsent || shuffleMode != null) {
+      map['shuffle_mode'] = Variable<String?>(shuffleMode);
+    }
+    map['exclude_artists'] = Variable<bool>(excludeArtists);
+    map['min_like_count'] = Variable<int>(minLikeCount);
+    map['max_like_count'] = Variable<int>(maxLikeCount);
+    if (!nullToAbsent || minPlayCount != null) {
+      map['min_play_count'] = Variable<int?>(minPlayCount);
+    }
+    if (!nullToAbsent || maxPlayCount != null) {
+      map['max_play_count'] = Variable<int?>(maxPlayCount);
+    }
+    if (!nullToAbsent || limit != null) {
+      map['limit'] = Variable<int?>(limit);
+    }
+    map['order_criteria'] = Variable<String>(orderCriteria);
+    map['order_directions'] = Variable<String>(orderDirections);
+    return map;
+  }
+
+  SmartListsCompanion toCompanion(bool nullToAbsent) {
+    return SmartListsCompanion(
+      id: Value(id),
+      position: Value(position),
+      name: Value(name),
+      shuffleMode: shuffleMode == null && nullToAbsent
+          ? const Value.absent()
+          : Value(shuffleMode),
+      excludeArtists: Value(excludeArtists),
+      minLikeCount: Value(minLikeCount),
+      maxLikeCount: Value(maxLikeCount),
+      minPlayCount: minPlayCount == null && nullToAbsent
+          ? const Value.absent()
+          : Value(minPlayCount),
+      maxPlayCount: maxPlayCount == null && nullToAbsent
+          ? const Value.absent()
+          : Value(maxPlayCount),
+      limit:
+          limit == null && nullToAbsent ? const Value.absent() : Value(limit),
+      orderCriteria: Value(orderCriteria),
+      orderDirections: Value(orderDirections),
+    );
+  }
+
+  factory MoorSmartList.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return MoorSmartList(
+      id: serializer.fromJson<int>(json['id']),
+      position: serializer.fromJson<int>(json['position']),
+      name: serializer.fromJson<String>(json['name']),
+      shuffleMode: serializer.fromJson<String?>(json['shuffleMode']),
+      excludeArtists: serializer.fromJson<bool>(json['excludeArtists']),
+      minLikeCount: serializer.fromJson<int>(json['minLikeCount']),
+      maxLikeCount: serializer.fromJson<int>(json['maxLikeCount']),
+      minPlayCount: serializer.fromJson<int?>(json['minPlayCount']),
+      maxPlayCount: serializer.fromJson<int?>(json['maxPlayCount']),
+      limit: serializer.fromJson<int?>(json['limit']),
+      orderCriteria: serializer.fromJson<String>(json['orderCriteria']),
+      orderDirections: serializer.fromJson<String>(json['orderDirections']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'position': serializer.toJson<int>(position),
+      'name': serializer.toJson<String>(name),
+      'shuffleMode': serializer.toJson<String?>(shuffleMode),
+      'excludeArtists': serializer.toJson<bool>(excludeArtists),
+      'minLikeCount': serializer.toJson<int>(minLikeCount),
+      'maxLikeCount': serializer.toJson<int>(maxLikeCount),
+      'minPlayCount': serializer.toJson<int?>(minPlayCount),
+      'maxPlayCount': serializer.toJson<int?>(maxPlayCount),
+      'limit': serializer.toJson<int?>(limit),
+      'orderCriteria': serializer.toJson<String>(orderCriteria),
+      'orderDirections': serializer.toJson<String>(orderDirections),
+    };
+  }
+
+  MoorSmartList copyWith(
+          {int? id,
+          int? position,
+          String? name,
+          String? shuffleMode,
+          bool? excludeArtists,
+          int? minLikeCount,
+          int? maxLikeCount,
+          int? minPlayCount,
+          int? maxPlayCount,
+          int? limit,
+          String? orderCriteria,
+          String? orderDirections}) =>
+      MoorSmartList(
+        id: id ?? this.id,
+        position: position ?? this.position,
+        name: name ?? this.name,
+        shuffleMode: shuffleMode ?? this.shuffleMode,
+        excludeArtists: excludeArtists ?? this.excludeArtists,
+        minLikeCount: minLikeCount ?? this.minLikeCount,
+        maxLikeCount: maxLikeCount ?? this.maxLikeCount,
+        minPlayCount: minPlayCount ?? this.minPlayCount,
+        maxPlayCount: maxPlayCount ?? this.maxPlayCount,
+        limit: limit ?? this.limit,
+        orderCriteria: orderCriteria ?? this.orderCriteria,
+        orderDirections: orderDirections ?? this.orderDirections,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('MoorSmartList(')
+          ..write('id: $id, ')
+          ..write('position: $position, ')
+          ..write('name: $name, ')
+          ..write('shuffleMode: $shuffleMode, ')
+          ..write('excludeArtists: $excludeArtists, ')
+          ..write('minLikeCount: $minLikeCount, ')
+          ..write('maxLikeCount: $maxLikeCount, ')
+          ..write('minPlayCount: $minPlayCount, ')
+          ..write('maxPlayCount: $maxPlayCount, ')
+          ..write('limit: $limit, ')
+          ..write('orderCriteria: $orderCriteria, ')
+          ..write('orderDirections: $orderDirections')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf($mrjc(
+      id.hashCode,
+      $mrjc(
+          position.hashCode,
+          $mrjc(
+              name.hashCode,
+              $mrjc(
+                  shuffleMode.hashCode,
+                  $mrjc(
+                      excludeArtists.hashCode,
+                      $mrjc(
+                          minLikeCount.hashCode,
+                          $mrjc(
+                              maxLikeCount.hashCode,
+                              $mrjc(
+                                  minPlayCount.hashCode,
+                                  $mrjc(
+                                      maxPlayCount.hashCode,
+                                      $mrjc(
+                                          limit.hashCode,
+                                          $mrjc(
+                                              orderCriteria.hashCode,
+                                              orderDirections
+                                                  .hashCode))))))))))));
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is MoorSmartList &&
+          other.id == this.id &&
+          other.position == this.position &&
+          other.name == this.name &&
+          other.shuffleMode == this.shuffleMode &&
+          other.excludeArtists == this.excludeArtists &&
+          other.minLikeCount == this.minLikeCount &&
+          other.maxLikeCount == this.maxLikeCount &&
+          other.minPlayCount == this.minPlayCount &&
+          other.maxPlayCount == this.maxPlayCount &&
+          other.limit == this.limit &&
+          other.orderCriteria == this.orderCriteria &&
+          other.orderDirections == this.orderDirections);
+}
+
+class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
+  final Value<int> id;
+  final Value<int> position;
+  final Value<String> name;
+  final Value<String?> shuffleMode;
+  final Value<bool> excludeArtists;
+  final Value<int> minLikeCount;
+  final Value<int> maxLikeCount;
+  final Value<int?> minPlayCount;
+  final Value<int?> maxPlayCount;
+  final Value<int?> limit;
+  final Value<String> orderCriteria;
+  final Value<String> orderDirections;
+  const SmartListsCompanion({
+    this.id = const Value.absent(),
+    this.position = const Value.absent(),
+    this.name = const Value.absent(),
+    this.shuffleMode = const Value.absent(),
+    this.excludeArtists = const Value.absent(),
+    this.minLikeCount = const Value.absent(),
+    this.maxLikeCount = const Value.absent(),
+    this.minPlayCount = const Value.absent(),
+    this.maxPlayCount = const Value.absent(),
+    this.limit = const Value.absent(),
+    this.orderCriteria = const Value.absent(),
+    this.orderDirections = const Value.absent(),
+  });
+  SmartListsCompanion.insert({
+    this.id = const Value.absent(),
+    required int position,
+    required String name,
+    this.shuffleMode = const Value.absent(),
+    this.excludeArtists = const Value.absent(),
+    this.minLikeCount = const Value.absent(),
+    this.maxLikeCount = const Value.absent(),
+    this.minPlayCount = const Value.absent(),
+    this.maxPlayCount = const Value.absent(),
+    this.limit = const Value.absent(),
+    required String orderCriteria,
+    required String orderDirections,
+  })  : position = Value(position),
+        name = Value(name),
+        orderCriteria = Value(orderCriteria),
+        orderDirections = Value(orderDirections);
+  static Insertable<MoorSmartList> custom({
+    Expression<int>? id,
+    Expression<int>? position,
+    Expression<String>? name,
+    Expression<String?>? shuffleMode,
+    Expression<bool>? excludeArtists,
+    Expression<int>? minLikeCount,
+    Expression<int>? maxLikeCount,
+    Expression<int?>? minPlayCount,
+    Expression<int?>? maxPlayCount,
+    Expression<int?>? limit,
+    Expression<String>? orderCriteria,
+    Expression<String>? orderDirections,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (position != null) 'position': position,
+      if (name != null) 'name': name,
+      if (shuffleMode != null) 'shuffle_mode': shuffleMode,
+      if (excludeArtists != null) 'exclude_artists': excludeArtists,
+      if (minLikeCount != null) 'min_like_count': minLikeCount,
+      if (maxLikeCount != null) 'max_like_count': maxLikeCount,
+      if (minPlayCount != null) 'min_play_count': minPlayCount,
+      if (maxPlayCount != null) 'max_play_count': maxPlayCount,
+      if (limit != null) 'limit': limit,
+      if (orderCriteria != null) 'order_criteria': orderCriteria,
+      if (orderDirections != null) 'order_directions': orderDirections,
+    });
+  }
+
+  SmartListsCompanion copyWith(
+      {Value<int>? id,
+      Value<int>? position,
+      Value<String>? name,
+      Value<String?>? shuffleMode,
+      Value<bool>? excludeArtists,
+      Value<int>? minLikeCount,
+      Value<int>? maxLikeCount,
+      Value<int?>? minPlayCount,
+      Value<int?>? maxPlayCount,
+      Value<int?>? limit,
+      Value<String>? orderCriteria,
+      Value<String>? orderDirections}) {
+    return SmartListsCompanion(
+      id: id ?? this.id,
+      position: position ?? this.position,
+      name: name ?? this.name,
+      shuffleMode: shuffleMode ?? this.shuffleMode,
+      excludeArtists: excludeArtists ?? this.excludeArtists,
+      minLikeCount: minLikeCount ?? this.minLikeCount,
+      maxLikeCount: maxLikeCount ?? this.maxLikeCount,
+      minPlayCount: minPlayCount ?? this.minPlayCount,
+      maxPlayCount: maxPlayCount ?? this.maxPlayCount,
+      limit: limit ?? this.limit,
+      orderCriteria: orderCriteria ?? this.orderCriteria,
+      orderDirections: orderDirections ?? this.orderDirections,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (position.present) {
+      map['position'] = Variable<int>(position.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (shuffleMode.present) {
+      map['shuffle_mode'] = Variable<String?>(shuffleMode.value);
+    }
+    if (excludeArtists.present) {
+      map['exclude_artists'] = Variable<bool>(excludeArtists.value);
+    }
+    if (minLikeCount.present) {
+      map['min_like_count'] = Variable<int>(minLikeCount.value);
+    }
+    if (maxLikeCount.present) {
+      map['max_like_count'] = Variable<int>(maxLikeCount.value);
+    }
+    if (minPlayCount.present) {
+      map['min_play_count'] = Variable<int?>(minPlayCount.value);
+    }
+    if (maxPlayCount.present) {
+      map['max_play_count'] = Variable<int?>(maxPlayCount.value);
+    }
+    if (limit.present) {
+      map['limit'] = Variable<int?>(limit.value);
+    }
+    if (orderCriteria.present) {
+      map['order_criteria'] = Variable<String>(orderCriteria.value);
+    }
+    if (orderDirections.present) {
+      map['order_directions'] = Variable<String>(orderDirections.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SmartListsCompanion(')
+          ..write('id: $id, ')
+          ..write('position: $position, ')
+          ..write('name: $name, ')
+          ..write('shuffleMode: $shuffleMode, ')
+          ..write('excludeArtists: $excludeArtists, ')
+          ..write('minLikeCount: $minLikeCount, ')
+          ..write('maxLikeCount: $maxLikeCount, ')
+          ..write('minPlayCount: $minPlayCount, ')
+          ..write('maxPlayCount: $maxPlayCount, ')
+          ..write('limit: $limit, ')
+          ..write('orderCriteria: $orderCriteria, ')
+          ..write('orderDirections: $orderDirections')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $SmartListsTable extends SmartLists
+    with TableInfo<$SmartListsTable, MoorSmartList> {
+  final GeneratedDatabase _db;
+  final String? _alias;
+  $SmartListsTable(this._db, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedIntColumn id = _constructId();
+  GeneratedIntColumn _constructId() {
+    return GeneratedIntColumn('id', $tableName, false,
+        hasAutoIncrement: true, declaredAsPrimaryKey: true);
+  }
+
+  final VerificationMeta _positionMeta = const VerificationMeta('position');
+  @override
+  late final GeneratedIntColumn position = _constructPosition();
+  GeneratedIntColumn _constructPosition() {
+    return GeneratedIntColumn(
+      'position',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedTextColumn name = _constructName();
+  GeneratedTextColumn _constructName() {
+    return GeneratedTextColumn(
+      'name',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _shuffleModeMeta =
+      const VerificationMeta('shuffleMode');
+  @override
+  late final GeneratedTextColumn shuffleMode = _constructShuffleMode();
+  GeneratedTextColumn _constructShuffleMode() {
+    return GeneratedTextColumn(
+      'shuffle_mode',
+      $tableName,
+      true,
+    );
+  }
+
+  final VerificationMeta _excludeArtistsMeta =
+      const VerificationMeta('excludeArtists');
+  @override
+  late final GeneratedBoolColumn excludeArtists = _constructExcludeArtists();
+  GeneratedBoolColumn _constructExcludeArtists() {
+    return GeneratedBoolColumn('exclude_artists', $tableName, false,
+        defaultValue: const Constant(false));
+  }
+
+  final VerificationMeta _minLikeCountMeta =
+      const VerificationMeta('minLikeCount');
+  @override
+  late final GeneratedIntColumn minLikeCount = _constructMinLikeCount();
+  GeneratedIntColumn _constructMinLikeCount() {
+    return GeneratedIntColumn('min_like_count', $tableName, false,
+        defaultValue: const Constant(0));
+  }
+
+  final VerificationMeta _maxLikeCountMeta =
+      const VerificationMeta('maxLikeCount');
+  @override
+  late final GeneratedIntColumn maxLikeCount = _constructMaxLikeCount();
+  GeneratedIntColumn _constructMaxLikeCount() {
+    return GeneratedIntColumn('max_like_count', $tableName, false,
+        defaultValue: const Constant(5));
+  }
+
+  final VerificationMeta _minPlayCountMeta =
+      const VerificationMeta('minPlayCount');
+  @override
+  late final GeneratedIntColumn minPlayCount = _constructMinPlayCount();
+  GeneratedIntColumn _constructMinPlayCount() {
+    return GeneratedIntColumn(
+      'min_play_count',
+      $tableName,
+      true,
+    );
+  }
+
+  final VerificationMeta _maxPlayCountMeta =
+      const VerificationMeta('maxPlayCount');
+  @override
+  late final GeneratedIntColumn maxPlayCount = _constructMaxPlayCount();
+  GeneratedIntColumn _constructMaxPlayCount() {
+    return GeneratedIntColumn(
+      'max_play_count',
+      $tableName,
+      true,
+    );
+  }
+
+  final VerificationMeta _limitMeta = const VerificationMeta('limit');
+  @override
+  late final GeneratedIntColumn limit = _constructLimit();
+  GeneratedIntColumn _constructLimit() {
+    return GeneratedIntColumn(
+      'limit',
+      $tableName,
+      true,
+    );
+  }
+
+  final VerificationMeta _orderCriteriaMeta =
+      const VerificationMeta('orderCriteria');
+  @override
+  late final GeneratedTextColumn orderCriteria = _constructOrderCriteria();
+  GeneratedTextColumn _constructOrderCriteria() {
+    return GeneratedTextColumn(
+      'order_criteria',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _orderDirectionsMeta =
+      const VerificationMeta('orderDirections');
+  @override
+  late final GeneratedTextColumn orderDirections = _constructOrderDirections();
+  GeneratedTextColumn _constructOrderDirections() {
+    return GeneratedTextColumn(
+      'order_directions',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        position,
+        name,
+        shuffleMode,
+        excludeArtists,
+        minLikeCount,
+        maxLikeCount,
+        minPlayCount,
+        maxPlayCount,
+        limit,
+        orderCriteria,
+        orderDirections
+      ];
+  @override
+  $SmartListsTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'smart_lists';
+  @override
+  final String actualTableName = 'smart_lists';
+  @override
+  VerificationContext validateIntegrity(Insertable<MoorSmartList> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('position')) {
+      context.handle(_positionMeta,
+          position.isAcceptableOrUnknown(data['position']!, _positionMeta));
+    } else if (isInserting) {
+      context.missing(_positionMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('shuffle_mode')) {
+      context.handle(
+          _shuffleModeMeta,
+          shuffleMode.isAcceptableOrUnknown(
+              data['shuffle_mode']!, _shuffleModeMeta));
+    }
+    if (data.containsKey('exclude_artists')) {
+      context.handle(
+          _excludeArtistsMeta,
+          excludeArtists.isAcceptableOrUnknown(
+              data['exclude_artists']!, _excludeArtistsMeta));
+    }
+    if (data.containsKey('min_like_count')) {
+      context.handle(
+          _minLikeCountMeta,
+          minLikeCount.isAcceptableOrUnknown(
+              data['min_like_count']!, _minLikeCountMeta));
+    }
+    if (data.containsKey('max_like_count')) {
+      context.handle(
+          _maxLikeCountMeta,
+          maxLikeCount.isAcceptableOrUnknown(
+              data['max_like_count']!, _maxLikeCountMeta));
+    }
+    if (data.containsKey('min_play_count')) {
+      context.handle(
+          _minPlayCountMeta,
+          minPlayCount.isAcceptableOrUnknown(
+              data['min_play_count']!, _minPlayCountMeta));
+    }
+    if (data.containsKey('max_play_count')) {
+      context.handle(
+          _maxPlayCountMeta,
+          maxPlayCount.isAcceptableOrUnknown(
+              data['max_play_count']!, _maxPlayCountMeta));
+    }
+    if (data.containsKey('limit')) {
+      context.handle(
+          _limitMeta, limit.isAcceptableOrUnknown(data['limit']!, _limitMeta));
+    }
+    if (data.containsKey('order_criteria')) {
+      context.handle(
+          _orderCriteriaMeta,
+          orderCriteria.isAcceptableOrUnknown(
+              data['order_criteria']!, _orderCriteriaMeta));
+    } else if (isInserting) {
+      context.missing(_orderCriteriaMeta);
+    }
+    if (data.containsKey('order_directions')) {
+      context.handle(
+          _orderDirectionsMeta,
+          orderDirections.isAcceptableOrUnknown(
+              data['order_directions']!, _orderDirectionsMeta));
+    } else if (isInserting) {
+      context.missing(_orderDirectionsMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  MoorSmartList map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return MoorSmartList.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $SmartListsTable createAlias(String alias) {
+    return $SmartListsTable(_db, alias);
+  }
+}
+
+class MoorSmartListArtist extends DataClass
+    implements Insertable<MoorSmartListArtist> {
+  final int smartListId;
+  final String artistName;
+  MoorSmartListArtist({required this.smartListId, required this.artistName});
+  factory MoorSmartListArtist.fromData(
+      Map<String, dynamic> data, GeneratedDatabase db,
+      {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return MoorSmartListArtist(
+      smartListId: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}smart_list_id'])!,
+      artistName: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}artist_name'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['smart_list_id'] = Variable<int>(smartListId);
+    map['artist_name'] = Variable<String>(artistName);
+    return map;
+  }
+
+  SmartListArtistsCompanion toCompanion(bool nullToAbsent) {
+    return SmartListArtistsCompanion(
+      smartListId: Value(smartListId),
+      artistName: Value(artistName),
+    );
+  }
+
+  factory MoorSmartListArtist.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return MoorSmartListArtist(
+      smartListId: serializer.fromJson<int>(json['smartListId']),
+      artistName: serializer.fromJson<String>(json['artistName']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'smartListId': serializer.toJson<int>(smartListId),
+      'artistName': serializer.toJson<String>(artistName),
+    };
+  }
+
+  MoorSmartListArtist copyWith({int? smartListId, String? artistName}) =>
+      MoorSmartListArtist(
+        smartListId: smartListId ?? this.smartListId,
+        artistName: artistName ?? this.artistName,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('MoorSmartListArtist(')
+          ..write('smartListId: $smartListId, ')
+          ..write('artistName: $artistName')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf($mrjc(smartListId.hashCode, artistName.hashCode));
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is MoorSmartListArtist &&
+          other.smartListId == this.smartListId &&
+          other.artistName == this.artistName);
+}
+
+class SmartListArtistsCompanion extends UpdateCompanion<MoorSmartListArtist> {
+  final Value<int> smartListId;
+  final Value<String> artistName;
+  const SmartListArtistsCompanion({
+    this.smartListId = const Value.absent(),
+    this.artistName = const Value.absent(),
+  });
+  SmartListArtistsCompanion.insert({
+    required int smartListId,
+    required String artistName,
+  })  : smartListId = Value(smartListId),
+        artistName = Value(artistName);
+  static Insertable<MoorSmartListArtist> custom({
+    Expression<int>? smartListId,
+    Expression<String>? artistName,
+  }) {
+    return RawValuesInsertable({
+      if (smartListId != null) 'smart_list_id': smartListId,
+      if (artistName != null) 'artist_name': artistName,
+    });
+  }
+
+  SmartListArtistsCompanion copyWith(
+      {Value<int>? smartListId, Value<String>? artistName}) {
+    return SmartListArtistsCompanion(
+      smartListId: smartListId ?? this.smartListId,
+      artistName: artistName ?? this.artistName,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (smartListId.present) {
+      map['smart_list_id'] = Variable<int>(smartListId.value);
+    }
+    if (artistName.present) {
+      map['artist_name'] = Variable<String>(artistName.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SmartListArtistsCompanion(')
+          ..write('smartListId: $smartListId, ')
+          ..write('artistName: $artistName')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $SmartListArtistsTable extends SmartListArtists
+    with TableInfo<$SmartListArtistsTable, MoorSmartListArtist> {
+  final GeneratedDatabase _db;
+  final String? _alias;
+  $SmartListArtistsTable(this._db, [this._alias]);
+  final VerificationMeta _smartListIdMeta =
+      const VerificationMeta('smartListId');
+  @override
+  late final GeneratedIntColumn smartListId = _constructSmartListId();
+  GeneratedIntColumn _constructSmartListId() {
+    return GeneratedIntColumn(
+      'smart_list_id',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _artistNameMeta = const VerificationMeta('artistName');
+  @override
+  late final GeneratedTextColumn artistName = _constructArtistName();
+  GeneratedTextColumn _constructArtistName() {
+    return GeneratedTextColumn(
+      'artist_name',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [smartListId, artistName];
+  @override
+  $SmartListArtistsTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'smart_list_artists';
+  @override
+  final String actualTableName = 'smart_list_artists';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<MoorSmartListArtist> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('smart_list_id')) {
+      context.handle(
+          _smartListIdMeta,
+          smartListId.isAcceptableOrUnknown(
+              data['smart_list_id']!, _smartListIdMeta));
+    } else if (isInserting) {
+      context.missing(_smartListIdMeta);
+    }
+    if (data.containsKey('artist_name')) {
+      context.handle(
+          _artistNameMeta,
+          artistName.isAcceptableOrUnknown(
+              data['artist_name']!, _artistNameMeta));
+    } else if (isInserting) {
+      context.missing(_artistNameMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => <GeneratedColumn>{};
+  @override
+  MoorSmartListArtist map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return MoorSmartListArtist.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $SmartListArtistsTable createAlias(String alias) {
+    return $SmartListArtistsTable(_db, alias);
+  }
+}
+
 abstract class _$MoorDatabase extends GeneratedDatabase {
   _$MoorDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   _$MoorDatabase.connect(DatabaseConnection c) : super.connect(c);
@@ -2770,6 +3614,9 @@ abstract class _$MoorDatabase extends GeneratedDatabase {
       $PersistentShuffleModeTable(this);
   late final $SongsTable songs = $SongsTable(this);
   late final $MoorAlbumOfDayTable moorAlbumOfDay = $MoorAlbumOfDayTable(this);
+  late final $SmartListsTable smartLists = $SmartListsTable(this);
+  late final $SmartListArtistsTable smartListArtists =
+      $SmartListArtistsTable(this);
   late final PersistentStateDao persistentStateDao =
       PersistentStateDao(this as MoorDatabase);
   late final SettingsDao settingsDao = SettingsDao(this as MoorDatabase);
@@ -2788,6 +3635,8 @@ abstract class _$MoorDatabase extends GeneratedDatabase {
         persistentLoopMode,
         persistentShuffleMode,
         songs,
-        moorAlbumOfDay
+        moorAlbumOfDay,
+        smartLists,
+        smartListArtists
       ];
 }

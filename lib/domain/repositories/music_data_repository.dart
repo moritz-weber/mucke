@@ -1,3 +1,5 @@
+import 'package:mucke/domain/entities/smart_list.dart';
+
 import '../entities/album.dart';
 import '../entities/artist.dart';
 import '../entities/song.dart';
@@ -10,6 +12,7 @@ abstract class MusicDataInfoRepository {
   Stream<List<Song>> getAlbumSongStream(Album album);
   Stream<List<Song>> getArtistSongStream(Artist artist);
   Stream<List<Song>> getArtistHighlightedSongStream(Artist artist);
+  Stream<List<Song>> getSmartListSongStream(SmartList smartList);
 
   Stream<List<Album>> get albumStream;
   Stream<List<Album>> getArtistAlbumStream(Artist artist);

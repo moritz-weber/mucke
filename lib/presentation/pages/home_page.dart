@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../theming.dart';
-import '../widgets/header.dart';
 import '../widgets/highlight.dart';
 import '../widgets/shuffle_all_button.dart';
+import '../widgets/smart_lists.dart';
 import 'settings_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,12 +18,15 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     print('HomePage.build');
     return SafeArea(
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0, left: HORIZONTAL_PADDING),
-            child: Header(
-              title: 'Home',
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            'Home',
+            style: TEXT_HEADER,
+          ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.more_vert),
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -31,21 +34,31 @@ class _HomePageState extends State<HomePage> {
                   ),
                 );
               },
-            ),
+            )
+          ],
+        ),
+        body: Scrollbar(
+          child: CustomScrollView(
+            slivers: [
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
+                    child: Highlight(),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
+                    child: ShuffleAllButton(
+                      verticalPad: 20.0,
+                      horizontalPad: 0.0,
+                    ),
+                  ),
+                ]),
+              ),
+              const SmartLists(),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
-            child: Column(
-              children: const [
-                Highlight(),
-                ShuffleAllButton(
-                  verticalPad: 20.0,
-                  horizontalPad: 0.0,
-                ),
-              ],
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

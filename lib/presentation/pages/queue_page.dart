@@ -25,36 +25,36 @@ class QueuePage extends StatelessWidget {
     final ScrollController _scrollController =
         ScrollController(initialScrollOffset: initialIndex * 72.0);
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 12.0),
-          child: IconButton(
-            icon: const Icon(Icons.expand_more),
-            onPressed: () => Navigator.pop(context),
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 12.0),
+            child: IconButton(
+              icon: const Icon(Icons.expand_more),
+              onPressed: () => Navigator.pop(context),
+            ),
           ),
+          leadingWidth: 60.0,
+          title: const Text(
+            'Currently Playing',
+            style: TEXT_HEADER,
+          ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.play_arrow_outlined),
+              onPressed: () {
+                _scrollController.animateTo(
+                  max((queueIndexStream.value ?? 0) - 2, 0) * 72.0,
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.easeInOut,
+                );
+              },
+            )
+          ],
+          centerTitle: true,
         ),
-        leadingWidth: 60.0,
-        title: const Text(
-          'Currently Playing',
-          style: TEXT_HEADER,
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.play_arrow_outlined),
-            onPressed: () {
-              _scrollController.animateTo(
-                max((queueIndexStream.value ?? 0) - 2, 0) * 72.0,
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.easeInOut,
-              );
-            },
-          )
-        ],
-        centerTitle: true,
-      ),
-      body: SafeArea(
-        child: Observer(
+        body: Observer(
           builder: (BuildContext context) {
             print('QueuePage.build -> Observer.build');
             final ObservableStream<List<Song>> queueStream = audioStore.queueStream;
