@@ -21,7 +21,8 @@ abstract class _SmartListStore with Store {
   final SettingsRepository _settingsRepository;
   final SmartList? _smartList;
 
-  // evtl als computed aus _smartList -> würde save auch leichter machen?
+  final FormErrorState error = FormErrorState();
+
   @observable
   late String? name = _smartList?.name;
 
@@ -33,23 +34,21 @@ abstract class _SmartListStore with Store {
   @observable
   late bool minPlayCountEnabled = _smartList?.filter.minPlayCount != null;
   @observable
-  late String minPlayCount = _smartList?.filter.minPlayCount.toString() ?? '0';
+  late String minPlayCount = _intToString(_smartList?.filter.minPlayCount);
 
   @observable
   late bool maxPlayCountEnabled = _smartList?.filter.maxPlayCount != null;
   @observable
-  late int maxPlayCount = _smartList?.filter.maxPlayCount ?? 0;
+  late String maxPlayCount = _intToString(_smartList?.filter.maxPlayCount);
 
   @observable
   late bool limitEnabled = _smartList?.filter.limit != null;
   @observable
-  late int limit = _smartList?.filter.limit ?? 0;
+  late String limit = _intToString(_smartList?.filter.limit);
 
   @observable
   late ObservableList<OrderEntry> orderState =
       _createOrderState(_smartList?.orderBy).asObservable();
-
-  void dispose() {}
 
   @action
   void setOrderEnabled(int index, bool enabled) {
@@ -80,6 +79,51 @@ abstract class _SmartListStore with Store {
     }
   }
 
+  late List<ReactionDisposer> _disposers;
+
+  void setupValidations() {
+    _disposers = [
+      reaction((_) => name, _validateName),
+      reaction((_) => minPlayCount, (String n) => _validateMinPlayCount(minPlayCountEnabled, n)),
+      reaction((_) => maxPlayCount, (String n) => _validateMaxPlayCount(maxPlayCountEnabled, n)),
+      reaction((_) => limit, (String n) => _validateLimit(limitEnabled, n)),
+    ];
+  }
+
+  void dispose() {
+    for (final d in _disposers) {
+      d();
+    }
+  }
+
+  void validateAll() {
+    _validateName(name);
+    _validateMinPlayCount(minPlayCountEnabled, minPlayCount);
+    _validateMaxPlayCount(maxPlayCountEnabled, maxPlayCount);
+    _validateLimit(limitEnabled, limit);
+  }
+
+  void _validateName(String? name) {
+    error.name = name == null || name == '' ? 'The name must not be empty.' : null;
+  }
+
+  void _validateMinPlayCount(bool enabled, String number) {
+    error.minPlayCount = _validateNumber(enabled, number);
+  }
+
+  void _validateMaxPlayCount(bool enabled, String number) {
+    error.maxPlayCount = _validateNumber(enabled, number);
+  }
+
+  void _validateLimit(bool enabled, String number) {
+    error.limit = _validateNumber(enabled, number);
+  }
+
+  String? _validateNumber(bool enabled, String number) {
+    if (!enabled) return null;
+    return int.tryParse(number) == null ? 'Error' : null;
+  }
+
   Future<void> _createSmartList() async {
     await _settingsRepository.insertSmartList(
       SmartList(
@@ -89,10 +133,10 @@ abstract class _SmartListStore with Store {
           artists: const [],
           excludeArtists: false,
           minPlayCount: minPlayCountEnabled ? int.tryParse(minPlayCount) : null,
-          maxPlayCount: maxPlayCountEnabled ? maxPlayCount : null,
+          maxPlayCount: maxPlayCountEnabled ? int.tryParse(maxPlayCount) : null,
           minLikeCount: minLikeCount,
           maxLikeCount: maxLikeCount,
-          limit: limitEnabled ? limit : null,
+          limit: limitEnabled ? int.tryParse(limit) : null,
         ),
         orderBy: OrderBy(
           orderCriteria: orderState.where((e) => e.enabled).map((e) => e.orderCriterion).toList(),
@@ -112,10 +156,10 @@ abstract class _SmartListStore with Store {
           artists: const [],
           excludeArtists: false,
           minPlayCount: minPlayCountEnabled ? int.tryParse(minPlayCount) : null,
-          maxPlayCount: maxPlayCountEnabled ? maxPlayCount : null,
+          maxPlayCount: maxPlayCountEnabled ? int.tryParse(maxPlayCount) : null,
           minLikeCount: minLikeCount,
           maxLikeCount: maxLikeCount,
-          limit: limitEnabled ? limit : null,
+          limit: limitEnabled ? int.tryParse(limit) : null,
         ),
         orderBy: OrderBy(
           orderCriteria: orderState.where((e) => e.enabled).map((e) => e.orderCriterion).toList(),
@@ -124,6 +168,26 @@ abstract class _SmartListStore with Store {
       ),
     );
   }
+}
+
+class FormErrorState = _FormErrorState with _$FormErrorState;
+
+abstract class _FormErrorState with Store {
+  @observable
+  String? name;
+
+  @observable
+  String? minPlayCount;
+
+  @observable
+  String? maxPlayCount;
+
+  @observable
+  String? limit;
+
+  @computed
+  bool get hasErrors =>
+      name != null || minPlayCount != null || maxPlayCount != null || limit != null;
 }
 
 class OrderEntry {
@@ -165,10 +229,16 @@ List<OrderEntry> _createOrderState(OrderBy? orderBy) {
     final orderState = <OrderEntry>[];
     for (int i = 0; i < orderBy.orderCriteria.length; i++) {
       final criterion = orderBy.orderCriteria[i];
-      orderState.add(OrderEntry(true, criterion, orderBy.orderDirections[i], descriptions[criterion]!));
+      orderState
+          .add(OrderEntry(true, criterion, orderBy.orderDirections[i], descriptions[criterion]!));
       defaultState.removeWhere((entry) => entry.orderCriterion == criterion);
     }
 
     return orderState + defaultState;
   }
+}
+
+String _intToString(int? number) {
+  if (number == null) return '0';
+  return number.toString();
 }

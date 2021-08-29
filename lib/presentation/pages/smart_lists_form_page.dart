@@ -7,16 +7,34 @@ import '../../domain/entities/smart_list.dart';
 import '../state/smart_list_form_store.dart';
 import '../theming.dart';
 
-class SmartListFormPage extends StatelessWidget {
+class SmartListFormPage extends StatefulWidget {
   const SmartListFormPage({Key? key, this.smartList}) : super(key: key);
 
   final SmartList? smartList;
 
   @override
-  Widget build(BuildContext context) {
-    final SmartListFormStore store = GetIt.I<SmartListFormStore>(param1: smartList);
+  _SmartListFormPageState createState() => _SmartListFormPageState();
+}
 
-    final title = smartList == null ? 'Create smart list' : 'Edit smart list';
+class _SmartListFormPageState extends State<SmartListFormPage> {
+  late SmartListFormStore store;
+
+  @override
+  void initState() {
+    store = GetIt.I<SmartListFormStore>(param1: widget.smartList);
+    super.initState();
+    store.setupValidations();
+  }
+
+  @override
+  void dispose() {
+    store.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final title = widget.smartList == null ? 'Create smart list' : 'Edit smart list';
 
     return SafeArea(
       child: Scaffold(
@@ -33,8 +51,11 @@ class SmartListFormPage extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.check),
               onPressed: () async {
-                await store.save();
-                Navigator.pop(context);
+                store.validateAll();
+                if (!store.error.hasErrors) {
+                  await store.save();
+                  Navigator.pop(context);
+                }
               },
             ),
           ],
@@ -53,9 +74,9 @@ class SmartListFormPage extends StatelessWidget {
                         builder: (_) => TextFormField(
                           initialValue: store.name,
                           onChanged: (value) => store.name = value,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             labelText: 'Name',
-                            hintText: 'Pick a name',
+                            errorText: store.error.name,
                           ),
                         ),
                       ),
@@ -113,6 +134,10 @@ class SmartListFormPage extends StatelessWidget {
                                     store.minPlayCount = value;
                                   },
                                   textAlign: TextAlign.center,
+                                  decoration: InputDecoration(
+                                    errorText: store.error.minPlayCount,
+                                    errorStyle: const TextStyle(height: 0, fontSize: 0),
+                                  ),
                                 ),
                               ),
                             ],
@@ -141,9 +166,7 @@ class SmartListFormPage extends StatelessWidget {
                                   initialValue: store.maxPlayCount.toString(),
                                   textAlign: TextAlign.center,
                                   onChanged: (value) {
-                                    if (value == '') store.maxPlayCount = 0;
-                                    final intVal = int.tryParse(value);
-                                    if (intVal != null) store.maxPlayCount = intVal;
+                                    store.maxPlayCount = value;
                                   },
                                 ),
                               ),
@@ -173,9 +196,7 @@ class SmartListFormPage extends StatelessWidget {
                                   initialValue: store.limit.toString(),
                                   textAlign: TextAlign.center,
                                   onChanged: (value) {
-                                    if (value == '') store.limit = 0;
-                                    final intVal = int.tryParse(value);
-                                    if (intVal != null) store.limit = intVal;
+                                    store.limit = value;
                                   },
                                 ),
                               ),
@@ -197,7 +218,9 @@ class SmartListFormPage extends StatelessWidget {
                     (context, int i) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: HORIZONTAL_PADDING, vertical: 12.0),
+                          horizontal: HORIZONTAL_PADDING,
+                          vertical: 12.0,
+                        ),
                         child: Row(
                           children: [
                             Switch(

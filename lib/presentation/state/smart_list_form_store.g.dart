@@ -104,13 +104,13 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
   final _$maxPlayCountAtom = Atom(name: '_SmartListStore.maxPlayCount');
 
   @override
-  int get maxPlayCount {
+  String get maxPlayCount {
     _$maxPlayCountAtom.reportRead();
     return super.maxPlayCount;
   }
 
   @override
-  set maxPlayCount(int value) {
+  set maxPlayCount(String value) {
     _$maxPlayCountAtom.reportWrite(value, super.maxPlayCount, () {
       super.maxPlayCount = value;
     });
@@ -134,13 +134,13 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
   final _$limitAtom = Atom(name: '_SmartListStore.limit');
 
   @override
-  int get limit {
+  String get limit {
     _$limitAtom.reportRead();
     return super.limit;
   }
 
   @override
-  set limit(int value) {
+  set limit(String value) {
     _$limitAtom.reportWrite(value, super.limit, () {
       super.limit = value;
     });
@@ -210,6 +210,87 @@ maxPlayCount: ${maxPlayCount},
 limitEnabled: ${limitEnabled},
 limit: ${limit},
 orderState: ${orderState}
+    ''';
+  }
+}
+
+mixin _$FormErrorState on _FormErrorState, Store {
+  Computed<bool>? _$hasErrorsComputed;
+
+  @override
+  bool get hasErrors =>
+      (_$hasErrorsComputed ??= Computed<bool>(() => super.hasErrors,
+              name: '_FormErrorState.hasErrors'))
+          .value;
+
+  final _$nameAtom = Atom(name: '_FormErrorState.name');
+
+  @override
+  String? get name {
+    _$nameAtom.reportRead();
+    return super.name;
+  }
+
+  @override
+  set name(String? value) {
+    _$nameAtom.reportWrite(value, super.name, () {
+      super.name = value;
+    });
+  }
+
+  final _$minPlayCountAtom = Atom(name: '_FormErrorState.minPlayCount');
+
+  @override
+  String? get minPlayCount {
+    _$minPlayCountAtom.reportRead();
+    return super.minPlayCount;
+  }
+
+  @override
+  set minPlayCount(String? value) {
+    _$minPlayCountAtom.reportWrite(value, super.minPlayCount, () {
+      super.minPlayCount = value;
+    });
+  }
+
+  final _$maxPlayCountAtom = Atom(name: '_FormErrorState.maxPlayCount');
+
+  @override
+  String? get maxPlayCount {
+    _$maxPlayCountAtom.reportRead();
+    return super.maxPlayCount;
+  }
+
+  @override
+  set maxPlayCount(String? value) {
+    _$maxPlayCountAtom.reportWrite(value, super.maxPlayCount, () {
+      super.maxPlayCount = value;
+    });
+  }
+
+  final _$limitAtom = Atom(name: '_FormErrorState.limit');
+
+  @override
+  String? get limit {
+    _$limitAtom.reportRead();
+    return super.limit;
+  }
+
+  @override
+  set limit(String? value) {
+    _$limitAtom.reportWrite(value, super.limit, () {
+      super.limit = value;
+    });
+  }
+
+  @override
+  String toString() {
+    return '''
+name: ${name},
+minPlayCount: ${minPlayCount},
+maxPlayCount: ${maxPlayCount},
+limit: ${limit},
+hasErrors: ${hasErrors}
     ''';
   }
 }
