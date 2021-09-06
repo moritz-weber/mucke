@@ -26,6 +26,7 @@ import 'domain/usecases/play.dart';
 import 'domain/usecases/play_album.dart';
 import 'domain/usecases/play_artist.dart';
 import 'domain/usecases/play_next.dart';
+import 'domain/usecases/play_smart_list.dart';
 import 'domain/usecases/play_songs.dart';
 import 'domain/usecases/remove_queue_index.dart';
 import 'domain/usecases/reset_like_count.dart';
@@ -92,6 +93,7 @@ Future<void> setupGetIt() async {
       playAlbum: getIt(),
       playArtist: getIt(),
       playNext: getIt(),
+      playSmartList: getIt(),
       playSongs: getIt(),
       removeQueueIndex: getIt(),
       seekToIndex: getIt(),
@@ -120,10 +122,12 @@ Future<void> setupGetIt() async {
     () => SettingsStore(settingsRepository: getIt()),
   );
   getIt.registerFactoryParam<SmartListFormStore, SmartList, void>(
-    (SmartList? smartList, _) => SmartListFormStore(settingsRepository: getIt(), smartList: smartList),
+    (SmartList? smartList, _) =>
+        SmartListFormStore(settingsRepository: getIt(), smartList: smartList),
   );
   getIt.registerFactoryParam<SmartListPageStore, SmartList, void>(
-    (SmartList? smartList, _) => SmartListPageStore(smartList: smartList!, musicDataInfoRepository: getIt()),
+    (SmartList? smartList, _) =>
+        SmartListPageStore(smartList: smartList!, musicDataInfoRepository: getIt()),
   );
 
   // use cases
@@ -179,6 +183,12 @@ Future<void> setupGetIt() async {
   getIt.registerLazySingleton<PlayArtist>(
     () => PlayArtist(
       getIt(),
+      getIt(),
+      getIt(),
+    ),
+  );
+  getIt.registerLazySingleton<PlaySmartList>(
+    () => PlaySmartList(
       getIt(),
       getIt(),
     ),

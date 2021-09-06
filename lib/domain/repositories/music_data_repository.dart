@@ -1,7 +1,6 @@
-import 'package:mucke/domain/entities/smart_list.dart';
-
 import '../entities/album.dart';
 import '../entities/artist.dart';
+import '../entities/smart_list.dart';
 import '../entities/song.dart';
 
 abstract class MusicDataInfoRepository {

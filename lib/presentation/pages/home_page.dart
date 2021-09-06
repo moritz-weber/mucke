@@ -42,6 +42,7 @@ class _HomePageState extends State<HomePage> {
             slivers: [
               SliverList(
                 delegate: SliverChildListDelegate([
+                  const SizedBox(height: 12.0),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
                     child: Highlight(),

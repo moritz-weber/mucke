@@ -1,19 +1,19 @@
 import 'dart:math';
 
 import 'package:fimber/fimber.dart';
-import 'package:mucke/domain/entities/smart_list.dart';
-import 'package:mucke/system/models/smart_list_model.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:string_similarity/string_similarity.dart';
 
 import '../../domain/entities/album.dart';
 import '../../domain/entities/artist.dart';
+import '../../domain/entities/smart_list.dart';
 import '../../domain/entities/song.dart';
 import '../../domain/repositories/music_data_repository.dart';
 import '../datasources/local_music_fetcher.dart';
 import '../datasources/music_data_source_contract.dart';
 import '../models/album_model.dart';
 import '../models/artist_model.dart';
+import '../models/smart_list_model.dart';
 import '../models/song_model.dart';
 
 class MusicDataRepositoryImpl implements MusicDataRepository {

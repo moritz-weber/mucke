@@ -5,6 +5,7 @@ import '../../domain/entities/artist.dart';
 import '../../domain/entities/loop_mode.dart';
 import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/entities/song.dart';
+import '../../domain/entities/smart_list.dart';
 import '../../domain/repositories/audio_player_repository.dart';
 import '../../domain/usecases/add_to_queue.dart';
 import '../../domain/usecases/move_queue_item.dart';
@@ -13,6 +14,7 @@ import '../../domain/usecases/play.dart';
 import '../../domain/usecases/play_album.dart';
 import '../../domain/usecases/play_artist.dart';
 import '../../domain/usecases/play_next.dart';
+import '../../domain/usecases/play_smart_list.dart';
 import '../../domain/usecases/play_songs.dart';
 import '../../domain/usecases/remove_queue_index.dart';
 import '../../domain/usecases/seek_to_index.dart';
@@ -34,6 +36,7 @@ class AudioStore extends _AudioStore with _$AudioStore {
     required PlayArtist playArtist,
     required PlayNext playNext,
     required PlaySongs playSongs,
+    required PlaySmartList playSmartList,
     required RemoveQueueIndex removeQueueIndex,
     required SeekToIndex seekToIndex,
     required SeekToNext seekToNext,
@@ -52,6 +55,7 @@ class AudioStore extends _AudioStore with _$AudioStore {
           playAlbum,
           playArtist,
           playNext,
+          playSmartList,
           removeQueueIndex,
           seekToIndex,
           seekToNext,
@@ -73,6 +77,7 @@ abstract class _AudioStore with Store {
     this._playAlbum,
     this._playArtist,
     this._playNext,
+    this._playSmartList,
     this._removeQueueIndex,
     this._seekToIndex,
     this._seekToNext,
@@ -90,6 +95,7 @@ abstract class _AudioStore with Store {
   final Play _play;
   final PlayAlbum _playAlbum;
   final PlayArtist _playArtist;
+  final PlaySmartList _playSmartList;
   final PlayNext _playNext;
   final PlaySongs _playSongs;
   final RemoveQueueIndex _removeQueueIndex;
@@ -184,6 +190,10 @@ abstract class _AudioStore with Store {
 
   Future<void> playAlbum(Album album) async {
     _playAlbum(album);
+  }
+
+  Future<void> playSmartList(SmartList smartList) async {
+    _playSmartList(smartList);
   }
 
   Future<void> shuffleArtist(Artist artist) async {

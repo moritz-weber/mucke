@@ -161,7 +161,7 @@ class CurrentlyPlayingPage extends StatelessWidget {
     final song = audioStore.currentSongStream.value;
     if (song == null)
       return;
-    // EXPLORATORY
+    // TODO: EXPLORATORY
     final albums = await musicDataStore.albumStream.first;
     final album = albums.singleWhere((a) => a.title == song.album);
 
