@@ -9,9 +9,18 @@ class SettingsRepositoryImpl implements SettingsRepository {
   final SettingsDataSource _settingsDataSource;
 
   @override
+  Stream<List<String>> get libraryFoldersStream => _settingsDataSource.libraryFoldersStream;
+
+  @override
   Future<void> addLibraryFolder(String? path) async {
     if (path == null) return;
     await _settingsDataSource.addLibraryFolder(path);
+  }
+
+  @override
+  Future<void> removeLibraryFolder(String? path) async {
+    if (path == null) return;
+    await _settingsDataSource.removeLibraryFolder(path);
   }
 
   @override

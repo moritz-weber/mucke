@@ -1,7 +1,9 @@
 import '../entities/smart_list.dart';
 
 abstract class SettingsRepository {
+  Stream<List<String>> get libraryFoldersStream;
   Future<void> addLibraryFolder(String? path);
+  Future<void> removeLibraryFolder(String? path);
 
   Stream<List<SmartList>> get smartListsStream;
   Future<void> insertSmartList(SmartList smartList);

@@ -22,8 +22,16 @@ abstract class _SettingsStore with Store {
   late ObservableStream<List<SmartList>> smartListsStream =
       _settingsRepository.smartListsStream.asObservable(initialValue: []);
 
+  @observable
+  late ObservableStream<List<String>> libraryFoldersStream =
+      _settingsRepository.libraryFoldersStream.asObservable(initialValue: []);
+
   Future<void> addLibraryFolder(String? path) async {
     await _settingsRepository.addLibraryFolder(path);
+  }
+
+  Future<void> removeLibraryFolder(String? path) async {
+    await _settingsRepository.removeLibraryFolder(path);
   }
 
   Future<void> removeSmartList(SmartList smartList) async {

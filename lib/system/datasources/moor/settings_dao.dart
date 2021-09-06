@@ -16,13 +16,17 @@ class SettingsDao extends DatabaseAccessor<MoorDatabase>
   SettingsDao(MoorDatabase attachedDatabase) : super(attachedDatabase);
 
   @override
-  Future<void> addLibraryFolder(String path) async {
-    await into(libraryFolders).insert(LibraryFoldersCompanion(path: Value(path)));
+  Stream<List<String>> get libraryFoldersStream =>
+      select(libraryFolders).watch().map((value) => value.map((e) => e.path).toList());
+
+  @override
+  Future<void> removeLibraryFolder(String path) async {
+    await (delete(libraryFolders)..where((tbl) => tbl.path.equals(path))).go();
   }
 
   @override
-  Future<List<String>> getLibraryFolders() {
-    return select(libraryFolders).get().then((value) => value.map((e) => e.path).toList());
+  Future<void> addLibraryFolder(String path) async {
+    await into(libraryFolders).insert(LibraryFoldersCompanion(path: Value(path)));
   }
 
   @override

@@ -50,16 +50,18 @@ class _SmartListPageState extends State<SmartListPage> {
             icon: const Icon(Icons.chevron_left),
             onPressed: () => Navigator.pop(context),
           ),
-          // actions: [
-          //   IconButton(
-          //     icon: const Icon(Icons.add),
-          //     onPressed: () => Navigator.of(context).push(
-          //       MaterialPageRoute(
-          //         builder: (BuildContext context) => const SmartListFormPage(),
-          //       ),
-          //     ),
-          //   ),
-          // ],
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.edit),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (BuildContext context) => SmartListFormPage(
+                    smartList: widget.smartList,
+                  ),
+                ),
+              ),
+            ),
+          ],
           titleSpacing: 0.0,
         ),
         body: Observer(

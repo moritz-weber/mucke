@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mucke/presentation/pages/library_folders_page.dart';
 
 import '../state/music_data_store.dart';
 import '../state/settings_store.dart';
@@ -56,9 +57,13 @@ class SettingsPage extends StatelessWidget {
               height: 4.0,
             ),
             ListTile(
-              title: const Text('Select library folders'),
+              title: const Text('Manage library folders'),
               trailing: const Icon(Icons.chevron_right),
-              onTap: () => _openFilePicker(settingsStore),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (BuildContext context) => const LibraryFoldersPage(),
+                ),
+              ),
             ),
             const Divider(
               height: 4.0,
@@ -80,16 +85,6 @@ class SettingsPage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Future<void> _openFilePicker(SettingsStore store) async {
-    try {
-      store.addLibraryFolder(await FilePicker.platform.getDirectoryPath());
-    } on PlatformException catch (e) {
-      print('Unsupported operation' + e.toString());
-    } catch (ex) {
-      print(ex);
-    }
   }
 }
 

@@ -3,8 +3,9 @@ import '../../domain/entities/smart_list.dart';
 import '../models/smart_list_model.dart';
 
 abstract class SettingsDataSource {
+  Stream<List<String>> get libraryFoldersStream;
   Future<void> addLibraryFolder(String path);
-  Future<List<String>> getLibraryFolders();
+  Future<void> removeLibraryFolder(String path);
 
   Stream<List<SmartListModel>> get smartListsStream;
   Future<void> insertSmartList(

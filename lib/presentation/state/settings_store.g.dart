@@ -24,10 +24,28 @@ mixin _$SettingsStore on _SettingsStore, Store {
     });
   }
 
+  final _$libraryFoldersStreamAtom =
+      Atom(name: '_SettingsStore.libraryFoldersStream');
+
+  @override
+  ObservableStream<List<String>> get libraryFoldersStream {
+    _$libraryFoldersStreamAtom.reportRead();
+    return super.libraryFoldersStream;
+  }
+
+  @override
+  set libraryFoldersStream(ObservableStream<List<String>> value) {
+    _$libraryFoldersStreamAtom.reportWrite(value, super.libraryFoldersStream,
+        () {
+      super.libraryFoldersStream = value;
+    });
+  }
+
   @override
   String toString() {
     return '''
-smartListsStream: ${smartListsStream}
+smartListsStream: ${smartListsStream},
+libraryFoldersStream: ${libraryFoldersStream}
     ''';
   }
 }
