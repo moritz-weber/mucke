@@ -20,7 +20,6 @@ abstract class MusicDataSource {
   Stream<List<ArtistModel>> get artistStream;
   Future<List<ArtistModel>> getArtists();
 
-  Future<void> insertSong(SongModel songModel);
   Future<void> updateSong(SongModel songModel);
   Future<void> insertSongs(List<SongModel> songModels);
   Future<void> deleteAllSongs();

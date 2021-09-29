@@ -100,12 +100,20 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
     query = query..where((tbl) => tbl.likeCount.isSmallerOrEqualValue(filter.maxLikeCount));
 
     if (filter.minPlayCount != null)
-    query = query..where((tbl) => tbl.playCount.isBiggerOrEqualValue(filter.minPlayCount));
+      query = query..where((tbl) => tbl.playCount.isBiggerOrEqualValue(filter.minPlayCount));
     if (filter.maxPlayCount != null)
-    query = query..where((tbl) => tbl.playCount.isSmallerOrEqualValue(filter.maxPlayCount));
+      query = query..where((tbl) => tbl.playCount.isSmallerOrEqualValue(filter.maxPlayCount));
 
-    if (filter.limit != null)
-    query = query..limit(filter.limit!);
+    if (filter.excludeBlocked) query = query..where((tbl) => tbl.blocked.not());
+
+    if (filter.artists.isNotEmpty) {
+      if (filter.excludeArtists)
+        query = query..where((tbl) => tbl.artist.isNotIn(filter.artists.map((e) => e.name)));
+      else
+        query = query..where((tbl) => tbl.artist.isIn(filter.artists.map((e) => e.name)));
+    }
+
+    if (filter.limit != null) query = query..limit(filter.limit!);
 
     final orderingTerms = _generateOrderingTerms(smartList.orderBy);
 
@@ -113,11 +121,6 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
 
     return query.watch().map(
         (moorSongList) => moorSongList.map((moorSong) => SongModel.fromMoor(moorSong)).toList());
-  }
-
-  @override
-  Future<void> insertSong(SongModel songModel) async {
-    await into(songs).insert(songModel.toSongsCompanion());
   }
 
   @override
@@ -384,6 +387,22 @@ List<OrderingTerm Function($SongsTable)> _generateOrderingTerms(sl.OrderBy order
         orderingTerms.add(
           ($SongsTable t) => OrderingTerm(
             expression: t.title,
+            mode: mode,
+          ),
+        );
+        break;
+      case sl.OrderCriterion.timeAdded:
+        orderingTerms.add(
+          ($SongsTable t) => OrderingTerm(
+            expression: t.timeAdded,
+            mode: mode,
+          ),
+        );
+        break;
+      case sl.OrderCriterion.year:
+        orderingTerms.add(
+          ($SongsTable t) => OrderingTerm(
+            expression: t.year,
             mode: mode,
           ),
         );

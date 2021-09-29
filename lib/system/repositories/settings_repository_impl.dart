@@ -42,6 +42,10 @@ class SettingsRepositoryImpl implements SettingsRepository {
   Stream<List<SmartList>> get smartListsStream => _settingsDataSource.smartListsStream;
 
   @override
+  Stream<SmartList> getSmartListStream(int smartListId) =>
+      _settingsDataSource.getSmartListStream(smartListId);
+
+  @override
   Future<void> updateSmartList(SmartList smartList) {
     return _settingsDataSource.updateSmartList(
       SmartListModel(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mucke/presentation/pages/smart_lists_artists_page.dart';
 import 'package:reorderables/reorderables.dart';
 
 import '../../domain/entities/smart_list.dart';
@@ -206,8 +207,68 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
                       ),
                     ),
                     const SizedBox(height: 24.0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
+                      child: Observer(
+                        builder: (_) {
+                          return Row(
+                            children: [
+                              Switch(
+                                value: store.excludeBlocked,
+                                onChanged: (bool value) => store.excludeBlocked = value,
+                              ),
+                              const Text('Exclude blocked songs'),
+                              const Spacer(),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 24.0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
+                      child: Observer(
+                        builder: (_) {
+                          return Row(
+                            children: [
+                              Switch(
+                                value: store.excludeArtists,
+                                onChanged: (bool value) => store.excludeArtists = value,
+                              ),
+                              const Text('Exclude selected artists'),
+                              const Spacer(),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 24.0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
+                      child: Observer(
+                        builder: (_) => GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute<Widget>(
+                                builder: (BuildContext context) =>
+                                    SmartListArtistsPage(formStore: store),
+                              ),
+                            );
+                          },
+                          child: Row(
+                            children: [
+                              const SizedBox(width: 60.0, height: 36),
+                              Text('Select artists to ${store.excludeArtists ? "exclude" : "include"} (${store.selectedArtists.length} selected)'),
+                              const Spacer(),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 24.0),
                     const ListTile(
-                      title: Text('Order settings'),
+                      title: Text('Order settings', style: TEXT_HEADER),
                     ),
                   ],
                 ),

@@ -14,7 +14,7 @@ class PlayNext {
   Future<void> call(Song song) async {
     await _audioPlayerRepository.playNext(song);
 
-    final songList = _audioPlayerRepository.queueStream.valueWrapper!.value;
+    final songList = _audioPlayerRepository.queueStream.value;
     _platformIntegrationRepository.setQueue(songList);
   }
 }

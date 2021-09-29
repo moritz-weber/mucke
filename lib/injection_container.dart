@@ -126,8 +126,11 @@ Future<void> setupGetIt() async {
         SmartListFormStore(settingsRepository: getIt(), smartList: smartList),
   );
   getIt.registerFactoryParam<SmartListPageStore, SmartList, void>(
-    (SmartList? smartList, _) =>
-        SmartListPageStore(smartList: smartList!, musicDataInfoRepository: getIt()),
+    (SmartList? smartList, _) => SmartListPageStore(
+      smartList: smartList!,
+      musicDataInfoRepository: getIt(),
+      settingsRepository: getIt(),
+    ),
   );
 
   // use cases
@@ -348,9 +351,8 @@ Future<void> setupGetIt() async {
   // external
   final _audioHandler = await AudioService.init(
     builder: () => _platformIntegrationDataSource as AudioHandler,
-    config: AudioServiceConfig(
+    config: const AudioServiceConfig(
       androidNotificationChannelName: 'mucke',
-      androidEnableQueue: true,
     ),
   );
   getIt.registerLazySingleton<AudioHandler>(() => _audioHandler);

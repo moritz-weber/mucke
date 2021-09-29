@@ -8,6 +8,7 @@ abstract class SettingsDataSource {
   Future<void> removeLibraryFolder(String path);
 
   Stream<List<SmartListModel>> get smartListsStream;
+  Stream<SmartListModel> getSmartListStream(int smartListId);
   Future<void> insertSmartList(
     String name,
     int position,

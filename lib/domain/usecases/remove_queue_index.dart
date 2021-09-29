@@ -13,7 +13,7 @@ class RemoveQueueIndex {
   Future<void> call(int index) async {
     await _audioPlayerRepository.removeQueueIndex(index);
 
-    final songList = _audioPlayerRepository.queueStream.valueWrapper!.value;
+    final songList = _audioPlayerRepository.queueStream.value;
     _platformIntegrationRepository.setQueue(songList);
   }
 }

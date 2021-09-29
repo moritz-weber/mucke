@@ -6,6 +6,7 @@ abstract class SettingsRepository {
   Future<void> removeLibraryFolder(String? path);
 
   Stream<List<SmartList>> get smartListsStream;
+  Stream<SmartList> getSmartListStream(int smartListId);
   Future<void> insertSmartList(SmartList smartList);
   Future<void> updateSmartList(SmartList smartList);
   Future<void> removeSmartList(SmartList smartList);

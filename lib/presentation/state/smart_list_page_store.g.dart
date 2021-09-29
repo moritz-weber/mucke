@@ -9,6 +9,22 @@ part of 'smart_list_page_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$SmartListPageStore on _SmartListPageStore, Store {
+  final _$smartListStreamAtom =
+      Atom(name: '_SmartListPageStore.smartListStream');
+
+  @override
+  ObservableStream<SmartList> get smartListStream {
+    _$smartListStreamAtom.reportRead();
+    return super.smartListStream;
+  }
+
+  @override
+  set smartListStream(ObservableStream<SmartList> value) {
+    _$smartListStreamAtom.reportWrite(value, super.smartListStream, () {
+      super.smartListStream = value;
+    });
+  }
+
   final _$smartListSongStreamAtom =
       Atom(name: '_SmartListPageStore.smartListSongStream');
 
@@ -25,9 +41,24 @@ mixin _$SmartListPageStore on _SmartListPageStore, Store {
     });
   }
 
+  final _$_SmartListPageStoreActionController =
+      ActionController(name: '_SmartListPageStore');
+
+  @override
+  void _updateSmartList(SmartList? smartList) {
+    final _$actionInfo = _$_SmartListPageStoreActionController.startAction(
+        name: '_SmartListPageStore._updateSmartList');
+    try {
+      return super._updateSmartList(smartList);
+    } finally {
+      _$_SmartListPageStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
+smartListStream: ${smartListStream},
 smartListSongStream: ${smartListSongStream}
     ''';
   }

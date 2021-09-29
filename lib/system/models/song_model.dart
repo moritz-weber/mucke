@@ -24,6 +24,8 @@ class SongModel extends Song {
     required int likeCount,
     required int skipCount,
     required int playCount,
+    required DateTime timeAdded,
+    int? year,
   }) : super(
           album: album,
           artist: artist,
@@ -39,6 +41,8 @@ class SongModel extends Song {
           likeCount: likeCount,
           skipCount: skipCount,
           playCount: playCount,
+          timeAdded: timeAdded,
+          year: year,
         );
 
   factory SongModel.fromMoor(MoorSong moorSong) => SongModel(
@@ -57,6 +61,8 @@ class SongModel extends Song {
         likeCount: moorSong.likeCount,
         skipCount: moorSong.skipCount,
         playCount: moorSong.playCount,
+        timeAdded: DateTime.fromMillisecondsSinceEpoch(moorSong.timeAdded),
+        year: moorSong.year,
       );
 
   factory SongModel.fromAudiotagger({
@@ -67,7 +73,6 @@ class SongModel extends Song {
     required int albumId,
   }) {
     return SongModel(
-      // TODO: wo am besten default werte unterbringen? db oder hier?
       title: tag.title ?? DEF_TITLE,
       artist: tag.artist ?? DEF_ARTIST,
       album: tag.album ?? DEF_ALBUM,
@@ -83,6 +88,7 @@ class SongModel extends Song {
       likeCount: 0,
       playCount: 0,
       skipCount: 0,
+      timeAdded: DateTime.fromMillisecondsSinceEpoch(0),
     );
   }
 
@@ -93,7 +99,7 @@ class SongModel extends Song {
     final int trackNumber = mediaItem.extras!['trackNumber'] as int;
 
     return SongModel(
-      album: mediaItem.album,
+      album: mediaItem.album!,
       albumId: mediaItem.extras!['albumId'] as int,
       artist: mediaItem.artist!,
       duration: mediaItem.duration!.inMilliseconds,
@@ -105,9 +111,11 @@ class SongModel extends Song {
       next: mediaItem.extras!['next'] as String,
       previous: mediaItem.extras!['previous'] as String,
       trackNumber: trackNumber,
+      year: mediaItem.extras!['year'] as int,
       likeCount: mediaItem.extras!['likeCount'] as int,
       playCount: mediaItem.extras!['playCount'] as int,
       skipCount: mediaItem.extras!['skipCount'] as int,
+      timeAdded: DateTime.fromMillisecondsSinceEpoch(mediaItem.extras!['timeAdded'] as int),
     );
   }
 
@@ -134,6 +142,8 @@ class SongModel extends Song {
     int? likeCount,
     int? skipCount,
     int? playCount,
+    DateTime? timeAdded,
+    int? year,
   }) =>
       SongModel(
         album: album ?? this.album,
@@ -150,7 +160,9 @@ class SongModel extends Song {
         trackNumber: trackNumber ?? this.trackNumber,
         likeCount: likeCount ?? this.likeCount,
         skipCount: skipCount ?? this.skipCount,
-        playCount: playCount ?? this.playCount,
+        playCount: playCount ?? this.playCount, 
+        timeAdded: timeAdded ?? this.timeAdded,
+        year: year ?? this.year,
       );
 
   SongsCompanion toSongsCompanion() => SongsCompanion(
@@ -163,12 +175,14 @@ class SongModel extends Song {
         title: Value(title),
         albumArtPath: Value(albumArtPath),
         discNumber: Value(discNumber),
+        year: Value(year),
         next: Value(next),
         previous: Value(previous),
         trackNumber: Value(trackNumber),
         likeCount: Value(likeCount),
         skipCount: Value(skipCount),
         playCount: Value(playCount),
+        timeAdded: Value(timeAdded.millisecondsSinceEpoch),
       );
 
   SongsCompanion toMoorInsert() => SongsCompanion(
@@ -181,6 +195,7 @@ class SongModel extends Song {
         albumArtPath: Value(albumArtPath),
         discNumber: Value(discNumber),
         trackNumber: Value(trackNumber),
+        year: Value(year),
         present: const Value(true),
       );
 
@@ -196,11 +211,13 @@ class SongModel extends Song {
             'blocked': blocked,
             'discNumber': discNumber,
             'trackNumber': trackNumber,
+            'year': year,
             'next': next,
             'previous': previous,
             'likeCount': likeCount,
             'playCount': playCount,
             'skipCount': skipCount,
+            'timeAdded': timeAdded.millisecondsSinceEpoch,
           });
 
   static int _parseNumber(String? numberString) {

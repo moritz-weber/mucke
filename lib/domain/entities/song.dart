@@ -14,8 +14,10 @@ class Song extends Equatable {
     required this.discNumber,
     required this.next,
     required this.previous,
+    required this.timeAdded,
     required this.trackNumber,
     this.albumArtPath,
+    this.year,
   });
 
   final String album;
@@ -40,6 +42,9 @@ class Song extends Equatable {
   final String previous;
 
   final String? albumArtPath;
+  final int? year;
+
+  final DateTime timeAdded;
 
   @override
   List<Object?> get props => [
@@ -47,11 +52,13 @@ class Song extends Equatable {
         title,
         album,
         artist,
+        year,
         blocked,
         next,
         previous,
         likeCount,
         playCount,
         skipCount,
+        timeAdded,
       ];
 }

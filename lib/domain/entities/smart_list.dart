@@ -32,6 +32,9 @@ class Filter extends Equatable {
     this.maxPlayCount,
     required this.minLikeCount,
     required this.maxLikeCount,
+    this.minYear,
+    this.maxYear,
+    required this.excludeBlocked,
     this.limit,
   });
 
@@ -44,6 +47,11 @@ class Filter extends Equatable {
   final int minLikeCount;
   final int maxLikeCount;
 
+  final int? minYear;
+  final int? maxYear;
+
+  final bool excludeBlocked;
+
   final int? limit;
 
   @override
@@ -54,6 +62,8 @@ class Filter extends Equatable {
         maxPlayCount,
         minLikeCount,
         maxLikeCount,
+        minYear,
+        maxYear,
         limit,
       ];
 }
@@ -76,6 +86,8 @@ enum OrderCriterion {
   likeCount,
   playCount,
   songTitle,
+  timeAdded,
+  year,
 }
 
 extension OrderCriterionExtension on String {
@@ -89,6 +101,10 @@ extension OrderCriterionExtension on String {
         return OrderCriterion.playCount;
       case 'OrderCriterion.songTitle':
         return OrderCriterion.songTitle;
+      case 'OrderCriterion.timeAdded':  
+        return OrderCriterion.timeAdded;
+      case 'OrderCriterion.year':
+        return OrderCriterion.year;
       default:
         return null;
     }

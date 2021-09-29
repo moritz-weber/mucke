@@ -46,11 +46,14 @@ class Songs extends Table {
   TextColumn get albumArtPath => text().nullable()();
   IntColumn get discNumber => integer()();
   IntColumn get trackNumber => integer()();
+  IntColumn get year => integer().nullable()();
   BoolColumn get blocked => boolean().withDefault(const Constant(false))();
   IntColumn get likeCount => integer().withDefault(const Constant(0))();
   IntColumn get skipCount => integer().withDefault(const Constant(0))();
   IntColumn get playCount => integer().withDefault(const Constant(0))();
   BoolColumn get present => boolean().withDefault(const Constant(true))();
+  IntColumn get timeAdded =>
+      integer().withDefault(Constant(DateTime.now().millisecondsSinceEpoch))();
 
   TextColumn get previous => text().withDefault(const Constant(''))();
   TextColumn get next => text().withDefault(const Constant(''))();
@@ -121,10 +124,13 @@ class SmartLists extends Table {
 
   // Filter
   BoolColumn get excludeArtists => boolean().withDefault(const Constant(false))();
+  BoolColumn get excludeBlocked => boolean().withDefault(const Constant(false))();
   IntColumn get minLikeCount => integer().withDefault(const Constant(0))();
   IntColumn get maxLikeCount => integer().withDefault(const Constant(5))();
   IntColumn get minPlayCount => integer().nullable()();
   IntColumn get maxPlayCount => integer().nullable()();
+  IntColumn get minYear => integer().nullable()();
+  IntColumn get maxYear => integer().nullable()();
   IntColumn get limit => integer().nullable()();
 
   // OrderBy
@@ -171,20 +177,38 @@ class MoorDatabase extends _$MoorDatabase {
   MoorDatabase.connect(DatabaseConnection connection) : super.connect(connection);
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
-  MigrationStrategy get migration => MigrationStrategy(
-        beforeOpen: (details) async {
-          if (details.wasCreated) {
-            await into(persistentIndex).insert(const PersistentIndexCompanion(index: Value(0)));
-            await into(persistentLoopMode)
-                .insert(const PersistentLoopModeCompanion(loopMode: Value(0)));
-            await into(persistentShuffleMode)
-                .insert(const PersistentShuffleModeCompanion(shuffleMode: Value(0)));
-          }
-        },
-      );
+  MigrationStrategy get migration => MigrationStrategy(beforeOpen: (details) async {
+        if (details.wasCreated) {
+          await into(persistentIndex).insert(const PersistentIndexCompanion(index: Value(0)));
+          await into(persistentLoopMode)
+              .insert(const PersistentLoopModeCompanion(loopMode: Value(0)));
+          await into(persistentShuffleMode)
+              .insert(const PersistentShuffleModeCompanion(shuffleMode: Value(0)));
+        }
+      }, onUpgrade: (Migrator m, int from, int to) async {
+        print('$from -> $to');
+        if (from == 1) {
+          await m.createTable(smartLists);
+          await m.createTable(smartListArtists);
+
+          await m.addColumn(songs, songs.timeAdded);
+          await m.addColumn(songs, songs.year);
+          await m.alterTable(TableMigration(songs));
+
+          final albumMap =
+              await select(albums).get().then((value) => {for (var a in value) a.id: a.year});
+
+          await transaction(() async {
+            for (final album in albumMap.entries) {
+              await (update(songs)..where((tbl) => tbl.albumId.equals(album.key)))
+                  .write(SongsCompanion(year: Value(album.value)));
+            }
+          });
+        }
+      });
 }
 
 LazyDatabase _openConnection() {

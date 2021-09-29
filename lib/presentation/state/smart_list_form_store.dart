@@ -1,5 +1,6 @@
 import 'package:mobx/mobx.dart';
 
+import '../../domain/entities/artist.dart';
 import '../../domain/entities/smart_list.dart';
 import '../../domain/repositories/settings_repository.dart';
 
@@ -47,6 +48,15 @@ abstract class _SmartListStore with Store {
   late String limit = _intToString(_smartList?.filter.limit);
 
   @observable
+  late bool excludeBlocked = _smartList?.filter.excludeBlocked ?? false;
+
+  @observable
+  late ObservableSet<Artist> selectedArtists =
+      (_smartList?.filter.artists.toSet() ?? {}).asObservable();
+  @observable
+  late bool excludeArtists = _smartList?.filter.excludeArtists ?? false;
+
+  @observable
   late ObservableList<OrderEntry> orderState =
       _createOrderState(_smartList?.orderBy).asObservable();
 
@@ -71,6 +81,18 @@ abstract class _SmartListStore with Store {
     orderState.insert(newIndex, tmp);
   }
 
+  @action
+  void addArtist(Artist artist) {
+    selectedArtists.add(artist);
+    print(selectedArtists);
+  }
+
+  @action
+  void removeArtist(Artist artist) {
+    selectedArtists.remove(artist);
+    print(selectedArtists);
+  }
+
   Future<void> save() async {
     if (_smartList == null) {
       _createSmartList();
@@ -87,6 +109,7 @@ abstract class _SmartListStore with Store {
       reaction((_) => minPlayCount, (String n) => _validateMinPlayCount(minPlayCountEnabled, n)),
       reaction((_) => maxPlayCount, (String n) => _validateMaxPlayCount(maxPlayCountEnabled, n)),
       reaction((_) => limit, (String n) => _validateLimit(limitEnabled, n)),
+      reaction((_) => selectedArtists, (_) => print(selectedArtists)),
     ];
   }
 
@@ -130,12 +153,13 @@ abstract class _SmartListStore with Store {
         name: name ?? 'This needs a name',
         position: -1,
         filter: Filter(
-          artists: const [],
-          excludeArtists: false,
+          artists: selectedArtists.toList(),
+          excludeArtists: excludeArtists,
           minPlayCount: minPlayCountEnabled ? int.tryParse(minPlayCount) : null,
           maxPlayCount: maxPlayCountEnabled ? int.tryParse(maxPlayCount) : null,
           minLikeCount: minLikeCount,
           maxLikeCount: maxLikeCount,
+          excludeBlocked: excludeBlocked,
           limit: limitEnabled ? int.tryParse(limit) : null,
         ),
         orderBy: OrderBy(
@@ -153,12 +177,13 @@ abstract class _SmartListStore with Store {
         name: name ?? 'This needs a name',
         position: _smartList!.position,
         filter: Filter(
-          artists: const [],
-          excludeArtists: false,
+          artists: selectedArtists.toList(),
+          excludeArtists: excludeArtists,
           minPlayCount: minPlayCountEnabled ? int.tryParse(minPlayCount) : null,
           maxPlayCount: maxPlayCountEnabled ? int.tryParse(maxPlayCount) : null,
           minLikeCount: minLikeCount,
           maxLikeCount: maxLikeCount,
+          excludeBlocked: excludeBlocked,
           limit: limitEnabled ? int.tryParse(limit) : null,
         ),
         orderBy: OrderBy(

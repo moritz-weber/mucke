@@ -30,7 +30,8 @@ class SmartListModel extends SmartList {
       maxLikeCount: moorSmartList.maxLikeCount,
       minPlayCount: moorSmartList.minPlayCount,
       maxPlayCount: moorSmartList.maxPlayCount,
-      limit: moorSmartList.limit,
+      excludeBlocked: moorSmartList.excludeBlocked,
+      limit: moorSmartList.limit, 
     );
 
     final orderBy = OrderBy(
@@ -58,6 +59,7 @@ class SmartListModel extends SmartList {
         maxPlayCount: m.Value(filter.maxPlayCount),
         minLikeCount: m.Value(filter.minLikeCount),
         maxLikeCount: m.Value(filter.maxLikeCount),
+        excludeBlocked: m.Value(filter.excludeBlocked),
         limit: m.Value(filter.limit),
         orderCriteria: m.Value(orderBy.orderCriteria.join(',')),
         orderDirections: m.Value(orderBy.orderDirections.join(',')),

@@ -146,6 +146,51 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     });
   }
 
+  final _$excludeBlockedAtom = Atom(name: '_SmartListStore.excludeBlocked');
+
+  @override
+  bool get excludeBlocked {
+    _$excludeBlockedAtom.reportRead();
+    return super.excludeBlocked;
+  }
+
+  @override
+  set excludeBlocked(bool value) {
+    _$excludeBlockedAtom.reportWrite(value, super.excludeBlocked, () {
+      super.excludeBlocked = value;
+    });
+  }
+
+  final _$selectedArtistsAtom = Atom(name: '_SmartListStore.selectedArtists');
+
+  @override
+  ObservableSet<Artist> get selectedArtists {
+    _$selectedArtistsAtom.reportRead();
+    return super.selectedArtists;
+  }
+
+  @override
+  set selectedArtists(ObservableSet<Artist> value) {
+    _$selectedArtistsAtom.reportWrite(value, super.selectedArtists, () {
+      super.selectedArtists = value;
+    });
+  }
+
+  final _$excludeArtistsAtom = Atom(name: '_SmartListStore.excludeArtists');
+
+  @override
+  bool get excludeArtists {
+    _$excludeArtistsAtom.reportRead();
+    return super.excludeArtists;
+  }
+
+  @override
+  set excludeArtists(bool value) {
+    _$excludeArtistsAtom.reportWrite(value, super.excludeArtists, () {
+      super.excludeArtists = value;
+    });
+  }
+
   final _$orderStateAtom = Atom(name: '_SmartListStore.orderState');
 
   @override
@@ -198,6 +243,28 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
   }
 
   @override
+  void addArtist(Artist artist) {
+    final _$actionInfo = _$_SmartListStoreActionController.startAction(
+        name: '_SmartListStore.addArtist');
+    try {
+      return super.addArtist(artist);
+    } finally {
+      _$_SmartListStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void removeArtist(Artist artist) {
+    final _$actionInfo = _$_SmartListStoreActionController.startAction(
+        name: '_SmartListStore.removeArtist');
+    try {
+      return super.removeArtist(artist);
+    } finally {
+      _$_SmartListStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 name: ${name},
@@ -209,6 +276,9 @@ maxPlayCountEnabled: ${maxPlayCountEnabled},
 maxPlayCount: ${maxPlayCount},
 limitEnabled: ${limitEnabled},
 limit: ${limit},
+excludeBlocked: ${excludeBlocked},
+selectedArtists: ${selectedArtists},
+excludeArtists: ${excludeArtists},
 orderState: ${orderState}
     ''';
   }

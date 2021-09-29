@@ -16,7 +16,7 @@ class SetShuffleMode {
 
     if (updateQueue) {
       _platformIntegrationRepository.setQueue(
-        _audioPlayerRepository.queueStream.valueWrapper!.value,
+        _audioPlayerRepository.queueStream.value,
       );
     }
   }

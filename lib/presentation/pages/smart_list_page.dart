@@ -27,6 +27,7 @@ class _SmartListPageState extends State<SmartListPage> {
   void initState() {
     super.initState();
     store = GetIt.I<SmartListPageStore>(param1: widget.smartList);
+    store.setupReactions();
   }
 
   @override
@@ -40,34 +41,36 @@ class _SmartListPageState extends State<SmartListPage> {
     final AudioStore audioStore = GetIt.I<AudioStore>();
 
     return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            widget.smartList.name,
-            style: TEXT_HEADER,
-          ),
-          leading: IconButton(
-            icon: const Icon(Icons.chevron_left),
-            onPressed: () => Navigator.pop(context),
-          ),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.edit),
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (BuildContext context) => SmartListFormPage(
-                    smartList: widget.smartList,
+      child: Observer(
+        builder: (context) {
+          final songs = store.smartListSongStream.value ?? [];
+          final smartList = store.smartListStream.value ?? widget.smartList;
+
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(
+                smartList.name,
+                style: TEXT_HEADER,
+              ),
+              leading: IconButton(
+                icon: const Icon(Icons.chevron_left),
+                onPressed: () => Navigator.pop(context),
+              ),
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.edit),
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => SmartListFormPage(
+                        smartList: smartList,
+                      ),
+                    ),
                   ),
                 ),
-              ),
+              ],
+              titleSpacing: 0.0,
             ),
-          ],
-          titleSpacing: 0.0,
-        ),
-        body: Observer(
-          builder: (context) {
-            final songs = store.smartListSongStream.value ?? [];
-            return Scrollbar(
+            body: Scrollbar(
               child: ListView.separated(
                 itemCount: songs.length,
                 itemBuilder: (_, int index) {
@@ -84,9 +87,9 @@ class _SmartListPageState extends State<SmartListPage> {
                   height: 4.0,
                 ),
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }

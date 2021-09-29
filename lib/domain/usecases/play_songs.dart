@@ -22,7 +22,7 @@ class PlaySongs {
 
       _platformIntegrationRepository.setCurrentSong(songs[initialIndex]);
       _platformIntegrationRepository.setQueue(
-        _audioPlayerRepository.queueStream.valueWrapper!.value,
+        _audioPlayerRepository.queueStream.value,
       );
     }
   }

@@ -148,7 +148,7 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
   @override
   Future<void> moveQueueItem(int oldIndex, int newIndex) async {
     _log.d('moveQueueItem: $oldIndex -> $newIndex');
-    final int oldCurrentIndex = currentIndexStream.value!;
+    final int oldCurrentIndex = currentIndexStream.value;
     int newCurrentIndex = oldCurrentIndex;
     if (oldIndex == oldCurrentIndex) {
       newCurrentIndex = newIndex;
@@ -170,7 +170,7 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
     final after = newQueue.sublist(min(newCurrentIndex + 1, newQueue.length));
 
     await replaceQueueAroundIndex(
-      index: currentIndexStream.value!,
+      index: currentIndexStream.value,
       before: before,
       after: after,
     );
@@ -178,7 +178,7 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
 
   @override
   Future<void> playNext(SongModel song) async {
-    final index = currentIndexStream.value! + 1;
+    final index = currentIndexStream.value + 1;
     _queue.insert(index, song);
     if (index < _loadEndIndex) {
       _loadEndIndex++;

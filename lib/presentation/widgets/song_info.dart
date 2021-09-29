@@ -31,6 +31,7 @@ class SongInfo extends StatelessWidget {
         InfoRow(leading: 'Title:', trailing: song.title, leadingWidth: _LEADING_WIDTH),
         InfoRow(leading: 'Album:', trailing: song.album, leadingWidth: _LEADING_WIDTH),
         InfoRow(leading: 'Artist:', trailing: song.artist, leadingWidth: _LEADING_WIDTH),
+        InfoRow(leading: 'Year:', trailing: song.year?.toString() ?? 'null', leadingWidth: _LEADING_WIDTH),
         InfoRow(leading: 'Path:', trailing: song.path, leadingWidth: _LEADING_WIDTH),
         InfoRow(
           leading: 'Album art path:',

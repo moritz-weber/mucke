@@ -373,7 +373,9 @@ class MoorArtist extends DataClass implements Insertable<MoorArtist> {
       );
   @override
   String toString() {
-    return (StringBuffer('MoorArtist(')..write('name: $name')..write(')'))
+    return (StringBuffer('MoorArtist(')
+          ..write('name: $name')
+          ..write(')'))
         .toString();
   }
 
@@ -418,7 +420,9 @@ class ArtistsCompanion extends UpdateCompanion<MoorArtist> {
 
   @override
   String toString() {
-    return (StringBuffer('ArtistsCompanion(')..write('name: $name')..write(')'))
+    return (StringBuffer('ArtistsCompanion(')
+          ..write('name: $name')
+          ..write(')'))
         .toString();
   }
 }
@@ -519,7 +523,9 @@ class LibraryFolder extends DataClass implements Insertable<LibraryFolder> {
       );
   @override
   String toString() {
-    return (StringBuffer('LibraryFolder(')..write('path: $path')..write(')'))
+    return (StringBuffer('LibraryFolder(')
+          ..write('path: $path')
+          ..write(')'))
         .toString();
   }
 
@@ -1744,11 +1750,13 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
   final String? albumArtPath;
   final int discNumber;
   final int trackNumber;
+  final int? year;
   final bool blocked;
   final int likeCount;
   final int skipCount;
   final int playCount;
   final bool present;
+  final int timeAdded;
   final String previous;
   final String next;
   MoorSong(
@@ -1761,11 +1769,13 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
       this.albumArtPath,
       required this.discNumber,
       required this.trackNumber,
+      this.year,
       required this.blocked,
       required this.likeCount,
       required this.skipCount,
       required this.playCount,
       required this.present,
+      required this.timeAdded,
       required this.previous,
       required this.next});
   factory MoorSong.fromData(Map<String, dynamic> data, GeneratedDatabase db,
@@ -1790,6 +1800,8 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
           .mapFromDatabaseResponse(data['${effectivePrefix}disc_number'])!,
       trackNumber: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}track_number'])!,
+      year: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}year']),
       blocked: const BoolType()
           .mapFromDatabaseResponse(data['${effectivePrefix}blocked'])!,
       likeCount: const IntType()
@@ -1800,6 +1812,8 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
           .mapFromDatabaseResponse(data['${effectivePrefix}play_count'])!,
       present: const BoolType()
           .mapFromDatabaseResponse(data['${effectivePrefix}present'])!,
+      timeAdded: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}time_added'])!,
       previous: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}previous'])!,
       next: const StringType()
@@ -1820,11 +1834,15 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
     }
     map['disc_number'] = Variable<int>(discNumber);
     map['track_number'] = Variable<int>(trackNumber);
+    if (!nullToAbsent || year != null) {
+      map['year'] = Variable<int?>(year);
+    }
     map['blocked'] = Variable<bool>(blocked);
     map['like_count'] = Variable<int>(likeCount);
     map['skip_count'] = Variable<int>(skipCount);
     map['play_count'] = Variable<int>(playCount);
     map['present'] = Variable<bool>(present);
+    map['time_added'] = Variable<int>(timeAdded);
     map['previous'] = Variable<String>(previous);
     map['next'] = Variable<String>(next);
     return map;
@@ -1843,11 +1861,13 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
           : Value(albumArtPath),
       discNumber: Value(discNumber),
       trackNumber: Value(trackNumber),
+      year: year == null && nullToAbsent ? const Value.absent() : Value(year),
       blocked: Value(blocked),
       likeCount: Value(likeCount),
       skipCount: Value(skipCount),
       playCount: Value(playCount),
       present: Value(present),
+      timeAdded: Value(timeAdded),
       previous: Value(previous),
       next: Value(next),
     );
@@ -1866,11 +1886,13 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
       albumArtPath: serializer.fromJson<String?>(json['albumArtPath']),
       discNumber: serializer.fromJson<int>(json['discNumber']),
       trackNumber: serializer.fromJson<int>(json['trackNumber']),
+      year: serializer.fromJson<int?>(json['year']),
       blocked: serializer.fromJson<bool>(json['blocked']),
       likeCount: serializer.fromJson<int>(json['likeCount']),
       skipCount: serializer.fromJson<int>(json['skipCount']),
       playCount: serializer.fromJson<int>(json['playCount']),
       present: serializer.fromJson<bool>(json['present']),
+      timeAdded: serializer.fromJson<int>(json['timeAdded']),
       previous: serializer.fromJson<String>(json['previous']),
       next: serializer.fromJson<String>(json['next']),
     );
@@ -1888,11 +1910,13 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
       'albumArtPath': serializer.toJson<String?>(albumArtPath),
       'discNumber': serializer.toJson<int>(discNumber),
       'trackNumber': serializer.toJson<int>(trackNumber),
+      'year': serializer.toJson<int?>(year),
       'blocked': serializer.toJson<bool>(blocked),
       'likeCount': serializer.toJson<int>(likeCount),
       'skipCount': serializer.toJson<int>(skipCount),
       'playCount': serializer.toJson<int>(playCount),
       'present': serializer.toJson<bool>(present),
+      'timeAdded': serializer.toJson<int>(timeAdded),
       'previous': serializer.toJson<String>(previous),
       'next': serializer.toJson<String>(next),
     };
@@ -1908,11 +1932,13 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
           String? albumArtPath,
           int? discNumber,
           int? trackNumber,
+          int? year,
           bool? blocked,
           int? likeCount,
           int? skipCount,
           int? playCount,
           bool? present,
+          int? timeAdded,
           String? previous,
           String? next}) =>
       MoorSong(
@@ -1925,11 +1951,13 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
         albumArtPath: albumArtPath ?? this.albumArtPath,
         discNumber: discNumber ?? this.discNumber,
         trackNumber: trackNumber ?? this.trackNumber,
+        year: year ?? this.year,
         blocked: blocked ?? this.blocked,
         likeCount: likeCount ?? this.likeCount,
         skipCount: skipCount ?? this.skipCount,
         playCount: playCount ?? this.playCount,
         present: present ?? this.present,
+        timeAdded: timeAdded ?? this.timeAdded,
         previous: previous ?? this.previous,
         next: next ?? this.next,
       );
@@ -1945,11 +1973,13 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
           ..write('albumArtPath: $albumArtPath, ')
           ..write('discNumber: $discNumber, ')
           ..write('trackNumber: $trackNumber, ')
+          ..write('year: $year, ')
           ..write('blocked: $blocked, ')
           ..write('likeCount: $likeCount, ')
           ..write('skipCount: $skipCount, ')
           ..write('playCount: $playCount, ')
           ..write('present: $present, ')
+          ..write('timeAdded: $timeAdded, ')
           ..write('previous: $previous, ')
           ..write('next: $next')
           ..write(')'))
@@ -1976,18 +2006,24 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
                                   $mrjc(
                                       trackNumber.hashCode,
                                       $mrjc(
-                                          blocked.hashCode,
+                                          year.hashCode,
                                           $mrjc(
-                                              likeCount.hashCode,
+                                              blocked.hashCode,
                                               $mrjc(
-                                                  skipCount.hashCode,
+                                                  likeCount.hashCode,
                                                   $mrjc(
-                                                      playCount.hashCode,
+                                                      skipCount.hashCode,
                                                       $mrjc(
-                                                          present.hashCode,
+                                                          playCount.hashCode,
                                                           $mrjc(
-                                                              previous.hashCode,
-                                                              next.hashCode))))))))))))))));
+                                                              present.hashCode,
+                                                              $mrjc(
+                                                                  timeAdded
+                                                                      .hashCode,
+                                                                  $mrjc(
+                                                                      previous
+                                                                          .hashCode,
+                                                                      next.hashCode))))))))))))))))));
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2001,11 +2037,13 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
           other.albumArtPath == this.albumArtPath &&
           other.discNumber == this.discNumber &&
           other.trackNumber == this.trackNumber &&
+          other.year == this.year &&
           other.blocked == this.blocked &&
           other.likeCount == this.likeCount &&
           other.skipCount == this.skipCount &&
           other.playCount == this.playCount &&
           other.present == this.present &&
+          other.timeAdded == this.timeAdded &&
           other.previous == this.previous &&
           other.next == this.next);
 }
@@ -2020,11 +2058,13 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
   final Value<String?> albumArtPath;
   final Value<int> discNumber;
   final Value<int> trackNumber;
+  final Value<int?> year;
   final Value<bool> blocked;
   final Value<int> likeCount;
   final Value<int> skipCount;
   final Value<int> playCount;
   final Value<bool> present;
+  final Value<int> timeAdded;
   final Value<String> previous;
   final Value<String> next;
   const SongsCompanion({
@@ -2037,11 +2077,13 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
     this.albumArtPath = const Value.absent(),
     this.discNumber = const Value.absent(),
     this.trackNumber = const Value.absent(),
+    this.year = const Value.absent(),
     this.blocked = const Value.absent(),
     this.likeCount = const Value.absent(),
     this.skipCount = const Value.absent(),
     this.playCount = const Value.absent(),
     this.present = const Value.absent(),
+    this.timeAdded = const Value.absent(),
     this.previous = const Value.absent(),
     this.next = const Value.absent(),
   });
@@ -2055,11 +2097,13 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
     this.albumArtPath = const Value.absent(),
     required int discNumber,
     required int trackNumber,
+    this.year = const Value.absent(),
     this.blocked = const Value.absent(),
     this.likeCount = const Value.absent(),
     this.skipCount = const Value.absent(),
     this.playCount = const Value.absent(),
     this.present = const Value.absent(),
+    this.timeAdded = const Value.absent(),
     this.previous = const Value.absent(),
     this.next = const Value.absent(),
   })  : title = Value(title),
@@ -2080,11 +2124,13 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
     Expression<String?>? albumArtPath,
     Expression<int>? discNumber,
     Expression<int>? trackNumber,
+    Expression<int?>? year,
     Expression<bool>? blocked,
     Expression<int>? likeCount,
     Expression<int>? skipCount,
     Expression<int>? playCount,
     Expression<bool>? present,
+    Expression<int>? timeAdded,
     Expression<String>? previous,
     Expression<String>? next,
   }) {
@@ -2098,11 +2144,13 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
       if (albumArtPath != null) 'album_art_path': albumArtPath,
       if (discNumber != null) 'disc_number': discNumber,
       if (trackNumber != null) 'track_number': trackNumber,
+      if (year != null) 'year': year,
       if (blocked != null) 'blocked': blocked,
       if (likeCount != null) 'like_count': likeCount,
       if (skipCount != null) 'skip_count': skipCount,
       if (playCount != null) 'play_count': playCount,
       if (present != null) 'present': present,
+      if (timeAdded != null) 'time_added': timeAdded,
       if (previous != null) 'previous': previous,
       if (next != null) 'next': next,
     });
@@ -2118,11 +2166,13 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
       Value<String?>? albumArtPath,
       Value<int>? discNumber,
       Value<int>? trackNumber,
+      Value<int?>? year,
       Value<bool>? blocked,
       Value<int>? likeCount,
       Value<int>? skipCount,
       Value<int>? playCount,
       Value<bool>? present,
+      Value<int>? timeAdded,
       Value<String>? previous,
       Value<String>? next}) {
     return SongsCompanion(
@@ -2135,11 +2185,13 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
       albumArtPath: albumArtPath ?? this.albumArtPath,
       discNumber: discNumber ?? this.discNumber,
       trackNumber: trackNumber ?? this.trackNumber,
+      year: year ?? this.year,
       blocked: blocked ?? this.blocked,
       likeCount: likeCount ?? this.likeCount,
       skipCount: skipCount ?? this.skipCount,
       playCount: playCount ?? this.playCount,
       present: present ?? this.present,
+      timeAdded: timeAdded ?? this.timeAdded,
       previous: previous ?? this.previous,
       next: next ?? this.next,
     );
@@ -2175,6 +2227,9 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
     if (trackNumber.present) {
       map['track_number'] = Variable<int>(trackNumber.value);
     }
+    if (year.present) {
+      map['year'] = Variable<int?>(year.value);
+    }
     if (blocked.present) {
       map['blocked'] = Variable<bool>(blocked.value);
     }
@@ -2189,6 +2244,9 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
     }
     if (present.present) {
       map['present'] = Variable<bool>(present.value);
+    }
+    if (timeAdded.present) {
+      map['time_added'] = Variable<int>(timeAdded.value);
     }
     if (previous.present) {
       map['previous'] = Variable<String>(previous.value);
@@ -2211,11 +2269,13 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
           ..write('albumArtPath: $albumArtPath, ')
           ..write('discNumber: $discNumber, ')
           ..write('trackNumber: $trackNumber, ')
+          ..write('year: $year, ')
           ..write('blocked: $blocked, ')
           ..write('likeCount: $likeCount, ')
           ..write('skipCount: $skipCount, ')
           ..write('playCount: $playCount, ')
           ..write('present: $present, ')
+          ..write('timeAdded: $timeAdded, ')
           ..write('previous: $previous, ')
           ..write('next: $next')
           ..write(')'))
@@ -2328,6 +2388,17 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
     );
   }
 
+  final VerificationMeta _yearMeta = const VerificationMeta('year');
+  @override
+  late final GeneratedIntColumn year = _constructYear();
+  GeneratedIntColumn _constructYear() {
+    return GeneratedIntColumn(
+      'year',
+      $tableName,
+      true,
+    );
+  }
+
   final VerificationMeta _blockedMeta = const VerificationMeta('blocked');
   @override
   late final GeneratedBoolColumn blocked = _constructBlocked();
@@ -2368,6 +2439,14 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
         defaultValue: const Constant(true));
   }
 
+  final VerificationMeta _timeAddedMeta = const VerificationMeta('timeAdded');
+  @override
+  late final GeneratedIntColumn timeAdded = _constructTimeAdded();
+  GeneratedIntColumn _constructTimeAdded() {
+    return GeneratedIntColumn('time_added', $tableName, false,
+        defaultValue: Constant(DateTime.now().millisecondsSinceEpoch));
+  }
+
   final VerificationMeta _previousMeta = const VerificationMeta('previous');
   @override
   late final GeneratedTextColumn previous = _constructPrevious();
@@ -2395,11 +2474,13 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
         albumArtPath,
         discNumber,
         trackNumber,
+        year,
         blocked,
         likeCount,
         skipCount,
         playCount,
         present,
+        timeAdded,
         previous,
         next
       ];
@@ -2474,6 +2555,10 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
     } else if (isInserting) {
       context.missing(_trackNumberMeta);
     }
+    if (data.containsKey('year')) {
+      context.handle(
+          _yearMeta, year.isAcceptableOrUnknown(data['year']!, _yearMeta));
+    }
     if (data.containsKey('blocked')) {
       context.handle(_blockedMeta,
           blocked.isAcceptableOrUnknown(data['blocked']!, _blockedMeta));
@@ -2493,6 +2578,10 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
     if (data.containsKey('present')) {
       context.handle(_presentMeta,
           present.isAcceptableOrUnknown(data['present']!, _presentMeta));
+    }
+    if (data.containsKey('time_added')) {
+      context.handle(_timeAddedMeta,
+          timeAdded.isAcceptableOrUnknown(data['time_added']!, _timeAddedMeta));
     }
     if (data.containsKey('previous')) {
       context.handle(_previousMeta,
@@ -2721,10 +2810,13 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
   final String name;
   final String? shuffleMode;
   final bool excludeArtists;
+  final bool excludeBlocked;
   final int minLikeCount;
   final int maxLikeCount;
   final int? minPlayCount;
   final int? maxPlayCount;
+  final int? minYear;
+  final int? maxYear;
   final int? limit;
   final String orderCriteria;
   final String orderDirections;
@@ -2734,10 +2826,13 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
       required this.name,
       this.shuffleMode,
       required this.excludeArtists,
+      required this.excludeBlocked,
       required this.minLikeCount,
       required this.maxLikeCount,
       this.minPlayCount,
       this.maxPlayCount,
+      this.minYear,
+      this.maxYear,
       this.limit,
       required this.orderCriteria,
       required this.orderDirections});
@@ -2756,6 +2851,8 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
           .mapFromDatabaseResponse(data['${effectivePrefix}shuffle_mode']),
       excludeArtists: const BoolType()
           .mapFromDatabaseResponse(data['${effectivePrefix}exclude_artists'])!,
+      excludeBlocked: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}exclude_blocked'])!,
       minLikeCount: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}min_like_count'])!,
       maxLikeCount: const IntType()
@@ -2764,6 +2861,10 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
           .mapFromDatabaseResponse(data['${effectivePrefix}min_play_count']),
       maxPlayCount: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}max_play_count']),
+      minYear: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}min_year']),
+      maxYear: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}max_year']),
       limit: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}limit']),
       orderCriteria: const StringType()
@@ -2782,6 +2883,7 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
       map['shuffle_mode'] = Variable<String?>(shuffleMode);
     }
     map['exclude_artists'] = Variable<bool>(excludeArtists);
+    map['exclude_blocked'] = Variable<bool>(excludeBlocked);
     map['min_like_count'] = Variable<int>(minLikeCount);
     map['max_like_count'] = Variable<int>(maxLikeCount);
     if (!nullToAbsent || minPlayCount != null) {
@@ -2789,6 +2891,12 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
     }
     if (!nullToAbsent || maxPlayCount != null) {
       map['max_play_count'] = Variable<int?>(maxPlayCount);
+    }
+    if (!nullToAbsent || minYear != null) {
+      map['min_year'] = Variable<int?>(minYear);
+    }
+    if (!nullToAbsent || maxYear != null) {
+      map['max_year'] = Variable<int?>(maxYear);
     }
     if (!nullToAbsent || limit != null) {
       map['limit'] = Variable<int?>(limit);
@@ -2807,6 +2915,7 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
           ? const Value.absent()
           : Value(shuffleMode),
       excludeArtists: Value(excludeArtists),
+      excludeBlocked: Value(excludeBlocked),
       minLikeCount: Value(minLikeCount),
       maxLikeCount: Value(maxLikeCount),
       minPlayCount: minPlayCount == null && nullToAbsent
@@ -2815,6 +2924,12 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
       maxPlayCount: maxPlayCount == null && nullToAbsent
           ? const Value.absent()
           : Value(maxPlayCount),
+      minYear: minYear == null && nullToAbsent
+          ? const Value.absent()
+          : Value(minYear),
+      maxYear: maxYear == null && nullToAbsent
+          ? const Value.absent()
+          : Value(maxYear),
       limit:
           limit == null && nullToAbsent ? const Value.absent() : Value(limit),
       orderCriteria: Value(orderCriteria),
@@ -2831,10 +2946,13 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
       name: serializer.fromJson<String>(json['name']),
       shuffleMode: serializer.fromJson<String?>(json['shuffleMode']),
       excludeArtists: serializer.fromJson<bool>(json['excludeArtists']),
+      excludeBlocked: serializer.fromJson<bool>(json['excludeBlocked']),
       minLikeCount: serializer.fromJson<int>(json['minLikeCount']),
       maxLikeCount: serializer.fromJson<int>(json['maxLikeCount']),
       minPlayCount: serializer.fromJson<int?>(json['minPlayCount']),
       maxPlayCount: serializer.fromJson<int?>(json['maxPlayCount']),
+      minYear: serializer.fromJson<int?>(json['minYear']),
+      maxYear: serializer.fromJson<int?>(json['maxYear']),
       limit: serializer.fromJson<int?>(json['limit']),
       orderCriteria: serializer.fromJson<String>(json['orderCriteria']),
       orderDirections: serializer.fromJson<String>(json['orderDirections']),
@@ -2849,10 +2967,13 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
       'name': serializer.toJson<String>(name),
       'shuffleMode': serializer.toJson<String?>(shuffleMode),
       'excludeArtists': serializer.toJson<bool>(excludeArtists),
+      'excludeBlocked': serializer.toJson<bool>(excludeBlocked),
       'minLikeCount': serializer.toJson<int>(minLikeCount),
       'maxLikeCount': serializer.toJson<int>(maxLikeCount),
       'minPlayCount': serializer.toJson<int?>(minPlayCount),
       'maxPlayCount': serializer.toJson<int?>(maxPlayCount),
+      'minYear': serializer.toJson<int?>(minYear),
+      'maxYear': serializer.toJson<int?>(maxYear),
       'limit': serializer.toJson<int?>(limit),
       'orderCriteria': serializer.toJson<String>(orderCriteria),
       'orderDirections': serializer.toJson<String>(orderDirections),
@@ -2865,10 +2986,13 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
           String? name,
           String? shuffleMode,
           bool? excludeArtists,
+          bool? excludeBlocked,
           int? minLikeCount,
           int? maxLikeCount,
           int? minPlayCount,
           int? maxPlayCount,
+          int? minYear,
+          int? maxYear,
           int? limit,
           String? orderCriteria,
           String? orderDirections}) =>
@@ -2878,10 +3002,13 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
         name: name ?? this.name,
         shuffleMode: shuffleMode ?? this.shuffleMode,
         excludeArtists: excludeArtists ?? this.excludeArtists,
+        excludeBlocked: excludeBlocked ?? this.excludeBlocked,
         minLikeCount: minLikeCount ?? this.minLikeCount,
         maxLikeCount: maxLikeCount ?? this.maxLikeCount,
         minPlayCount: minPlayCount ?? this.minPlayCount,
         maxPlayCount: maxPlayCount ?? this.maxPlayCount,
+        minYear: minYear ?? this.minYear,
+        maxYear: maxYear ?? this.maxYear,
         limit: limit ?? this.limit,
         orderCriteria: orderCriteria ?? this.orderCriteria,
         orderDirections: orderDirections ?? this.orderDirections,
@@ -2894,10 +3021,13 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
           ..write('name: $name, ')
           ..write('shuffleMode: $shuffleMode, ')
           ..write('excludeArtists: $excludeArtists, ')
+          ..write('excludeBlocked: $excludeBlocked, ')
           ..write('minLikeCount: $minLikeCount, ')
           ..write('maxLikeCount: $maxLikeCount, ')
           ..write('minPlayCount: $minPlayCount, ')
           ..write('maxPlayCount: $maxPlayCount, ')
+          ..write('minYear: $minYear, ')
+          ..write('maxYear: $maxYear, ')
           ..write('limit: $limit, ')
           ..write('orderCriteria: $orderCriteria, ')
           ..write('orderDirections: $orderDirections')
@@ -2917,19 +3047,26 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
                   $mrjc(
                       excludeArtists.hashCode,
                       $mrjc(
-                          minLikeCount.hashCode,
+                          excludeBlocked.hashCode,
                           $mrjc(
-                              maxLikeCount.hashCode,
+                              minLikeCount.hashCode,
                               $mrjc(
-                                  minPlayCount.hashCode,
+                                  maxLikeCount.hashCode,
                                   $mrjc(
-                                      maxPlayCount.hashCode,
+                                      minPlayCount.hashCode,
                                       $mrjc(
-                                          limit.hashCode,
+                                          maxPlayCount.hashCode,
                                           $mrjc(
-                                              orderCriteria.hashCode,
-                                              orderDirections
-                                                  .hashCode))))))))))));
+                                              minYear.hashCode,
+                                              $mrjc(
+                                                  maxYear.hashCode,
+                                                  $mrjc(
+                                                      limit.hashCode,
+                                                      $mrjc(
+                                                          orderCriteria
+                                                              .hashCode,
+                                                          orderDirections
+                                                              .hashCode)))))))))))))));
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2939,10 +3076,13 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
           other.name == this.name &&
           other.shuffleMode == this.shuffleMode &&
           other.excludeArtists == this.excludeArtists &&
+          other.excludeBlocked == this.excludeBlocked &&
           other.minLikeCount == this.minLikeCount &&
           other.maxLikeCount == this.maxLikeCount &&
           other.minPlayCount == this.minPlayCount &&
           other.maxPlayCount == this.maxPlayCount &&
+          other.minYear == this.minYear &&
+          other.maxYear == this.maxYear &&
           other.limit == this.limit &&
           other.orderCriteria == this.orderCriteria &&
           other.orderDirections == this.orderDirections);
@@ -2954,10 +3094,13 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
   final Value<String> name;
   final Value<String?> shuffleMode;
   final Value<bool> excludeArtists;
+  final Value<bool> excludeBlocked;
   final Value<int> minLikeCount;
   final Value<int> maxLikeCount;
   final Value<int?> minPlayCount;
   final Value<int?> maxPlayCount;
+  final Value<int?> minYear;
+  final Value<int?> maxYear;
   final Value<int?> limit;
   final Value<String> orderCriteria;
   final Value<String> orderDirections;
@@ -2967,10 +3110,13 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
     this.name = const Value.absent(),
     this.shuffleMode = const Value.absent(),
     this.excludeArtists = const Value.absent(),
+    this.excludeBlocked = const Value.absent(),
     this.minLikeCount = const Value.absent(),
     this.maxLikeCount = const Value.absent(),
     this.minPlayCount = const Value.absent(),
     this.maxPlayCount = const Value.absent(),
+    this.minYear = const Value.absent(),
+    this.maxYear = const Value.absent(),
     this.limit = const Value.absent(),
     this.orderCriteria = const Value.absent(),
     this.orderDirections = const Value.absent(),
@@ -2981,10 +3127,13 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
     required String name,
     this.shuffleMode = const Value.absent(),
     this.excludeArtists = const Value.absent(),
+    this.excludeBlocked = const Value.absent(),
     this.minLikeCount = const Value.absent(),
     this.maxLikeCount = const Value.absent(),
     this.minPlayCount = const Value.absent(),
     this.maxPlayCount = const Value.absent(),
+    this.minYear = const Value.absent(),
+    this.maxYear = const Value.absent(),
     this.limit = const Value.absent(),
     required String orderCriteria,
     required String orderDirections,
@@ -2998,10 +3147,13 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
     Expression<String>? name,
     Expression<String?>? shuffleMode,
     Expression<bool>? excludeArtists,
+    Expression<bool>? excludeBlocked,
     Expression<int>? minLikeCount,
     Expression<int>? maxLikeCount,
     Expression<int?>? minPlayCount,
     Expression<int?>? maxPlayCount,
+    Expression<int?>? minYear,
+    Expression<int?>? maxYear,
     Expression<int?>? limit,
     Expression<String>? orderCriteria,
     Expression<String>? orderDirections,
@@ -3012,10 +3164,13 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
       if (name != null) 'name': name,
       if (shuffleMode != null) 'shuffle_mode': shuffleMode,
       if (excludeArtists != null) 'exclude_artists': excludeArtists,
+      if (excludeBlocked != null) 'exclude_blocked': excludeBlocked,
       if (minLikeCount != null) 'min_like_count': minLikeCount,
       if (maxLikeCount != null) 'max_like_count': maxLikeCount,
       if (minPlayCount != null) 'min_play_count': minPlayCount,
       if (maxPlayCount != null) 'max_play_count': maxPlayCount,
+      if (minYear != null) 'min_year': minYear,
+      if (maxYear != null) 'max_year': maxYear,
       if (limit != null) 'limit': limit,
       if (orderCriteria != null) 'order_criteria': orderCriteria,
       if (orderDirections != null) 'order_directions': orderDirections,
@@ -3028,10 +3183,13 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
       Value<String>? name,
       Value<String?>? shuffleMode,
       Value<bool>? excludeArtists,
+      Value<bool>? excludeBlocked,
       Value<int>? minLikeCount,
       Value<int>? maxLikeCount,
       Value<int?>? minPlayCount,
       Value<int?>? maxPlayCount,
+      Value<int?>? minYear,
+      Value<int?>? maxYear,
       Value<int?>? limit,
       Value<String>? orderCriteria,
       Value<String>? orderDirections}) {
@@ -3041,10 +3199,13 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
       name: name ?? this.name,
       shuffleMode: shuffleMode ?? this.shuffleMode,
       excludeArtists: excludeArtists ?? this.excludeArtists,
+      excludeBlocked: excludeBlocked ?? this.excludeBlocked,
       minLikeCount: minLikeCount ?? this.minLikeCount,
       maxLikeCount: maxLikeCount ?? this.maxLikeCount,
       minPlayCount: minPlayCount ?? this.minPlayCount,
       maxPlayCount: maxPlayCount ?? this.maxPlayCount,
+      minYear: minYear ?? this.minYear,
+      maxYear: maxYear ?? this.maxYear,
       limit: limit ?? this.limit,
       orderCriteria: orderCriteria ?? this.orderCriteria,
       orderDirections: orderDirections ?? this.orderDirections,
@@ -3069,6 +3230,9 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
     if (excludeArtists.present) {
       map['exclude_artists'] = Variable<bool>(excludeArtists.value);
     }
+    if (excludeBlocked.present) {
+      map['exclude_blocked'] = Variable<bool>(excludeBlocked.value);
+    }
     if (minLikeCount.present) {
       map['min_like_count'] = Variable<int>(minLikeCount.value);
     }
@@ -3080,6 +3244,12 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
     }
     if (maxPlayCount.present) {
       map['max_play_count'] = Variable<int?>(maxPlayCount.value);
+    }
+    if (minYear.present) {
+      map['min_year'] = Variable<int?>(minYear.value);
+    }
+    if (maxYear.present) {
+      map['max_year'] = Variable<int?>(maxYear.value);
     }
     if (limit.present) {
       map['limit'] = Variable<int?>(limit.value);
@@ -3101,10 +3271,13 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
           ..write('name: $name, ')
           ..write('shuffleMode: $shuffleMode, ')
           ..write('excludeArtists: $excludeArtists, ')
+          ..write('excludeBlocked: $excludeBlocked, ')
           ..write('minLikeCount: $minLikeCount, ')
           ..write('maxLikeCount: $maxLikeCount, ')
           ..write('minPlayCount: $minPlayCount, ')
           ..write('maxPlayCount: $maxPlayCount, ')
+          ..write('minYear: $minYear, ')
+          ..write('maxYear: $maxYear, ')
           ..write('limit: $limit, ')
           ..write('orderCriteria: $orderCriteria, ')
           ..write('orderDirections: $orderDirections')
@@ -3169,6 +3342,15 @@ class $SmartListsTable extends SmartLists
         defaultValue: const Constant(false));
   }
 
+  final VerificationMeta _excludeBlockedMeta =
+      const VerificationMeta('excludeBlocked');
+  @override
+  late final GeneratedBoolColumn excludeBlocked = _constructExcludeBlocked();
+  GeneratedBoolColumn _constructExcludeBlocked() {
+    return GeneratedBoolColumn('exclude_blocked', $tableName, false,
+        defaultValue: const Constant(false));
+  }
+
   final VerificationMeta _minLikeCountMeta =
       const VerificationMeta('minLikeCount');
   @override
@@ -3206,6 +3388,28 @@ class $SmartListsTable extends SmartLists
   GeneratedIntColumn _constructMaxPlayCount() {
     return GeneratedIntColumn(
       'max_play_count',
+      $tableName,
+      true,
+    );
+  }
+
+  final VerificationMeta _minYearMeta = const VerificationMeta('minYear');
+  @override
+  late final GeneratedIntColumn minYear = _constructMinYear();
+  GeneratedIntColumn _constructMinYear() {
+    return GeneratedIntColumn(
+      'min_year',
+      $tableName,
+      true,
+    );
+  }
+
+  final VerificationMeta _maxYearMeta = const VerificationMeta('maxYear');
+  @override
+  late final GeneratedIntColumn maxYear = _constructMaxYear();
+  GeneratedIntColumn _constructMaxYear() {
+    return GeneratedIntColumn(
+      'max_year',
       $tableName,
       true,
     );
@@ -3253,10 +3457,13 @@ class $SmartListsTable extends SmartLists
         name,
         shuffleMode,
         excludeArtists,
+        excludeBlocked,
         minLikeCount,
         maxLikeCount,
         minPlayCount,
         maxPlayCount,
+        minYear,
+        maxYear,
         limit,
         orderCriteria,
         orderDirections
@@ -3299,6 +3506,12 @@ class $SmartListsTable extends SmartLists
           excludeArtists.isAcceptableOrUnknown(
               data['exclude_artists']!, _excludeArtistsMeta));
     }
+    if (data.containsKey('exclude_blocked')) {
+      context.handle(
+          _excludeBlockedMeta,
+          excludeBlocked.isAcceptableOrUnknown(
+              data['exclude_blocked']!, _excludeBlockedMeta));
+    }
     if (data.containsKey('min_like_count')) {
       context.handle(
           _minLikeCountMeta,
@@ -3322,6 +3535,14 @@ class $SmartListsTable extends SmartLists
           _maxPlayCountMeta,
           maxPlayCount.isAcceptableOrUnknown(
               data['max_play_count']!, _maxPlayCountMeta));
+    }
+    if (data.containsKey('min_year')) {
+      context.handle(_minYearMeta,
+          minYear.isAcceptableOrUnknown(data['min_year']!, _minYearMeta));
+    }
+    if (data.containsKey('max_year')) {
+      context.handle(_maxYearMeta,
+          maxYear.isAcceptableOrUnknown(data['max_year']!, _maxYearMeta));
     }
     if (data.containsKey('limit')) {
       context.handle(

@@ -99,8 +99,42 @@ class SettingsDao extends DatabaseAccessor<MoorDatabase>
   }
 
   @override
+  Stream<SmartListModel> getSmartListStream(int smartListId) {
+    final slStream = (select(smartLists)
+          ..where((tbl) => tbl.id.equals(smartListId))
+          ..limit(1))
+        .watchSingle();
+
+    final slArtistStream =
+        (select(smartListArtists)..where((tbl) => tbl.smartListId.equals(smartListId))).join(
+      [innerJoin(artists, artists.name.equalsExp(smartListArtists.artistName))],
+    ).watch();
+
+    return Rx.combineLatest2<MoorSmartList, List<TypedResult>, SmartListModel>(
+      slStream,
+      slArtistStream,
+      (a, b) {
+        final moorArtists = b.map((e) => e.readTable(artists)).toList();
+        return SmartListModel.fromMoor(a, moorArtists);
+      },
+    );
+  }
+
+  @override
   Future<void> updateSmartList(SmartListModel smartListModel) async {
     await (update(smartLists)..where((tbl) => tbl.id.equals(smartListModel.id)))
         .write(smartListModel.toCompanion());
+
+    await (delete(smartListArtists)..where((tbl) => tbl.smartListId.equals(smartListModel.id)))
+        .go();
+
+    for (final a in smartListModel.filter.artists) {
+      await into(smartListArtists).insert(
+        SmartListArtistsCompanion(
+          smartListId: Value(smartListModel.id!),
+          artistName: Value(a.name),
+        ),
+      );
+    }
   }
 }
