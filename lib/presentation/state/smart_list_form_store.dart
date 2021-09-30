@@ -43,6 +43,16 @@ abstract class _SmartListStore with Store {
   late String maxPlayCount = _intToString(_smartList?.filter.maxPlayCount);
 
   @observable
+  late bool minYearEnabled = _smartList?.filter.minYear != null;
+  @observable
+  late String minYear = _intToString(_smartList?.filter.minYear);
+
+  @observable
+  late bool maxYearEnabled = _smartList?.filter.maxYear != null;
+  @observable
+  late String maxYear = _intToString(_smartList?.filter.maxYear);
+
+  @observable
   late bool limitEnabled = _smartList?.filter.limit != null;
   @observable
   late String limit = _intToString(_smartList?.filter.limit);
@@ -108,6 +118,8 @@ abstract class _SmartListStore with Store {
       reaction((_) => name, _validateName),
       reaction((_) => minPlayCount, (String n) => _validateMinPlayCount(minPlayCountEnabled, n)),
       reaction((_) => maxPlayCount, (String n) => _validateMaxPlayCount(maxPlayCountEnabled, n)),
+      reaction((_) => minYear, (String n) => _validateMinYear(minYearEnabled, n)),
+      reaction((_) => maxYear, (String n) => _validateMaxYear(maxYearEnabled, n)),
       reaction((_) => limit, (String n) => _validateLimit(limitEnabled, n)),
       reaction((_) => selectedArtists, (_) => print(selectedArtists)),
     ];
@@ -123,6 +135,8 @@ abstract class _SmartListStore with Store {
     _validateName(name);
     _validateMinPlayCount(minPlayCountEnabled, minPlayCount);
     _validateMaxPlayCount(maxPlayCountEnabled, maxPlayCount);
+    _validateMinYear(minYearEnabled, minYear);
+    _validateMaxYear(maxYearEnabled, maxYear);
     _validateLimit(limitEnabled, limit);
   }
 
@@ -136,6 +150,14 @@ abstract class _SmartListStore with Store {
 
   void _validateMaxPlayCount(bool enabled, String number) {
     error.maxPlayCount = _validateNumber(enabled, number);
+  }
+
+  void _validateMinYear(bool enabled, String number) {
+    error.minYear = _validateNumber(enabled, number);
+  }
+
+  void _validateMaxYear(bool enabled, String number) {
+    error.maxYear = _validateNumber(enabled, number);
   }
 
   void _validateLimit(bool enabled, String number) {
@@ -157,6 +179,8 @@ abstract class _SmartListStore with Store {
           excludeArtists: excludeArtists,
           minPlayCount: minPlayCountEnabled ? int.tryParse(minPlayCount) : null,
           maxPlayCount: maxPlayCountEnabled ? int.tryParse(maxPlayCount) : null,
+          minYear: minYearEnabled ? int.tryParse(minYear) : null,
+          maxYear: maxYearEnabled ? int.tryParse(maxYear) : null,
           minLikeCount: minLikeCount,
           maxLikeCount: maxLikeCount,
           excludeBlocked: excludeBlocked,
@@ -181,6 +205,8 @@ abstract class _SmartListStore with Store {
           excludeArtists: excludeArtists,
           minPlayCount: minPlayCountEnabled ? int.tryParse(minPlayCount) : null,
           maxPlayCount: maxPlayCountEnabled ? int.tryParse(maxPlayCount) : null,
+          minYear: minYearEnabled ? int.tryParse(minYear) : null,
+          maxYear: maxYearEnabled ? int.tryParse(maxYear) : null,
           minLikeCount: minLikeCount,
           maxLikeCount: maxLikeCount,
           excludeBlocked: excludeBlocked,
@@ -208,11 +234,17 @@ abstract class _FormErrorState with Store {
   String? maxPlayCount;
 
   @observable
+  String? minYear;
+
+  @observable
+  String? maxYear;
+
+  @observable
   String? limit;
 
   @computed
   bool get hasErrors =>
-      name != null || minPlayCount != null || maxPlayCount != null || limit != null;
+      name != null || minPlayCount != null || maxPlayCount != null || minYear != null || maxYear != null || limit != null;
 }
 
 class OrderEntry {
@@ -235,6 +267,8 @@ List<OrderEntry> _createOrderState(OrderBy? orderBy) {
     OrderCriterion.likeCount: 'Like count',
     OrderCriterion.playCount: 'Play count',
     OrderCriterion.artistName: 'Artist name',
+    OrderCriterion.year: 'Year',
+    OrderCriterion.timeAdded: 'Time added',
   };
 
   final defaultState = [
@@ -246,6 +280,10 @@ List<OrderEntry> _createOrderState(OrderBy? orderBy) {
         descriptions[OrderCriterion.playCount]!),
     OrderEntry(false, OrderCriterion.artistName, OrderDirection.ascending,
         descriptions[OrderCriterion.artistName]!),
+    OrderEntry(false, OrderCriterion.year, OrderDirection.ascending,
+        descriptions[OrderCriterion.year]!),
+    OrderEntry(false, OrderCriterion.timeAdded, OrderDirection.ascending,
+        descriptions[OrderCriterion.timeAdded]!),
   ];
 
   if (orderBy == null) {

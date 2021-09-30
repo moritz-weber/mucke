@@ -3,6 +3,7 @@ import 'package:moor/moor.dart';
 
 import '../../domain/entities/album.dart';
 import '../datasources/moor_database.dart';
+import '../utils.dart';
 import 'default_values.dart';
 
 class AlbumModel extends Album {
@@ -39,7 +40,7 @@ class AlbumModel extends Album {
       title: tag.album ?? DEF_ALBUM,
       artist: artist ?? DEF_ARTIST,
       albumArtPath: albumArtPath,
-      year: tag.year == null ? null : _parseYear(tag.year!),
+      year: tag.year == null ? null : parseYear(tag.year!),
     );
   }
 
@@ -71,18 +72,6 @@ class AlbumModel extends Album {
         albumArtPath: Value(albumArtPath),
         year: Value(pubYear),
       );
-
-  static int? _parseYear(String yearString) {
-    if (yearString == '') {
-      return null;
-    }
-
-    try {
-      return int.parse(yearString);
-    } on FormatException {
-      return int.parse(yearString.split('-')[0]);
-    }
-  }
 }
 
 class AlbumOfDay {

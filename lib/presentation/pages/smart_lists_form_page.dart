@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mucke/presentation/pages/smart_lists_artists_page.dart';
+import 'smart_lists_artists_page.dart';
 import 'package:reorderables/reorderables.dart';
 
 import '../../domain/entities/smart_list.dart';
@@ -169,6 +169,78 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
                                   onChanged: (value) {
                                     store.maxPlayCount = value;
                                   },
+                                  decoration: InputDecoration(
+                                    errorText: store.error.maxPlayCount,
+                                    errorStyle: const TextStyle(height: 0, fontSize: 0),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 24.0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
+                      child: Observer(
+                        builder: (_) {
+                          return Row(
+                            children: [
+                              Switch(
+                                value: store.minYearEnabled,
+                                onChanged: (bool value) => store.minYearEnabled = value,
+                              ),
+                              const Text('Minimum year'),
+                              const Spacer(),
+                              SizedBox(
+                                width: 36.0,
+                                child: TextFormField(
+                                  enabled: store.minYearEnabled,
+                                  keyboardType: TextInputType.number,
+                                  initialValue: store.minYear,
+                                  onChanged: (value) {
+                                    store.minYear = value;
+                                  },
+                                  textAlign: TextAlign.center,
+                                  decoration: InputDecoration(
+                                    errorText: store.error.minYear,
+                                    errorStyle: const TextStyle(height: 0, fontSize: 0),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 24.0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
+                      child: Observer(
+                        builder: (_) {
+                          return Row(
+                            children: [
+                              Switch(
+                                value: store.maxYearEnabled,
+                                onChanged: (bool value) => store.maxYearEnabled = value,
+                              ),
+                              const Text('Maximum year'),
+                              const Spacer(),
+                              SizedBox(
+                                width: 36.0,
+                                child: TextFormField(
+                                  enabled: store.maxYearEnabled,
+                                  keyboardType: TextInputType.number,
+                                  initialValue: store.maxYear.toString(),
+                                  textAlign: TextAlign.center,
+                                  onChanged: (value) {
+                                    store.maxYear = value;
+                                  },
+                                  decoration: InputDecoration(
+                                    errorText: store.error.maxYear,
+                                    errorStyle: const TextStyle(height: 0, fontSize: 0),
+                                  ),
                                 ),
                               ),
                             ],

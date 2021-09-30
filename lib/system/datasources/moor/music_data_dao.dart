@@ -104,6 +104,11 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
     if (filter.maxPlayCount != null)
       query = query..where((tbl) => tbl.playCount.isSmallerOrEqualValue(filter.maxPlayCount));
 
+    if (filter.minYear != null)
+      query = query..where((tbl) => tbl.year.isBiggerOrEqualValue(filter.minYear));
+    if (filter.maxYear != null)
+      query = query..where((tbl) => tbl.year.isSmallerOrEqualValue(filter.maxYear));
+
     if (filter.excludeBlocked) query = query..where((tbl) => tbl.blocked.not());
 
     if (filter.artists.isNotEmpty) {

@@ -116,6 +116,66 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     });
   }
 
+  final _$minYearEnabledAtom = Atom(name: '_SmartListStore.minYearEnabled');
+
+  @override
+  bool get minYearEnabled {
+    _$minYearEnabledAtom.reportRead();
+    return super.minYearEnabled;
+  }
+
+  @override
+  set minYearEnabled(bool value) {
+    _$minYearEnabledAtom.reportWrite(value, super.minYearEnabled, () {
+      super.minYearEnabled = value;
+    });
+  }
+
+  final _$minYearAtom = Atom(name: '_SmartListStore.minYear');
+
+  @override
+  String get minYear {
+    _$minYearAtom.reportRead();
+    return super.minYear;
+  }
+
+  @override
+  set minYear(String value) {
+    _$minYearAtom.reportWrite(value, super.minYear, () {
+      super.minYear = value;
+    });
+  }
+
+  final _$maxYearEnabledAtom = Atom(name: '_SmartListStore.maxYearEnabled');
+
+  @override
+  bool get maxYearEnabled {
+    _$maxYearEnabledAtom.reportRead();
+    return super.maxYearEnabled;
+  }
+
+  @override
+  set maxYearEnabled(bool value) {
+    _$maxYearEnabledAtom.reportWrite(value, super.maxYearEnabled, () {
+      super.maxYearEnabled = value;
+    });
+  }
+
+  final _$maxYearAtom = Atom(name: '_SmartListStore.maxYear');
+
+  @override
+  String get maxYear {
+    _$maxYearAtom.reportRead();
+    return super.maxYear;
+  }
+
+  @override
+  set maxYear(String value) {
+    _$maxYearAtom.reportWrite(value, super.maxYear, () {
+      super.maxYear = value;
+    });
+  }
+
   final _$limitEnabledAtom = Atom(name: '_SmartListStore.limitEnabled');
 
   @override
@@ -274,6 +334,10 @@ minPlayCountEnabled: ${minPlayCountEnabled},
 minPlayCount: ${minPlayCount},
 maxPlayCountEnabled: ${maxPlayCountEnabled},
 maxPlayCount: ${maxPlayCount},
+minYearEnabled: ${minYearEnabled},
+minYear: ${minYear},
+maxYearEnabled: ${maxYearEnabled},
+maxYear: ${maxYear},
 limitEnabled: ${limitEnabled},
 limit: ${limit},
 excludeBlocked: ${excludeBlocked},
@@ -338,6 +402,36 @@ mixin _$FormErrorState on _FormErrorState, Store {
     });
   }
 
+  final _$minYearAtom = Atom(name: '_FormErrorState.minYear');
+
+  @override
+  String? get minYear {
+    _$minYearAtom.reportRead();
+    return super.minYear;
+  }
+
+  @override
+  set minYear(String? value) {
+    _$minYearAtom.reportWrite(value, super.minYear, () {
+      super.minYear = value;
+    });
+  }
+
+  final _$maxYearAtom = Atom(name: '_FormErrorState.maxYear');
+
+  @override
+  String? get maxYear {
+    _$maxYearAtom.reportRead();
+    return super.maxYear;
+  }
+
+  @override
+  set maxYear(String? value) {
+    _$maxYearAtom.reportWrite(value, super.maxYear, () {
+      super.maxYear = value;
+    });
+  }
+
   final _$limitAtom = Atom(name: '_FormErrorState.limit');
 
   @override
@@ -359,6 +453,8 @@ mixin _$FormErrorState on _FormErrorState, Store {
 name: ${name},
 minPlayCount: ${minPlayCount},
 maxPlayCount: ${maxPlayCount},
+minYear: ${minYear},
+maxYear: ${maxYear},
 limit: ${limit},
 hasErrors: ${hasErrors}
     ''';

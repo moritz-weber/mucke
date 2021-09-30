@@ -30,6 +30,8 @@ class SmartListModel extends SmartList {
       maxLikeCount: moorSmartList.maxLikeCount,
       minPlayCount: moorSmartList.minPlayCount,
       maxPlayCount: moorSmartList.maxPlayCount,
+      minYear: moorSmartList.minYear,
+      maxYear: moorSmartList.maxYear,
       excludeBlocked: moorSmartList.excludeBlocked,
       limit: moorSmartList.limit, 
     );
@@ -59,6 +61,8 @@ class SmartListModel extends SmartList {
         maxPlayCount: m.Value(filter.maxPlayCount),
         minLikeCount: m.Value(filter.minLikeCount),
         maxLikeCount: m.Value(filter.maxLikeCount),
+        minYear: m.Value(filter.minYear),
+        maxYear: m.Value(filter.maxYear),
         excludeBlocked: m.Value(filter.excludeBlocked),
         limit: m.Value(filter.limit),
         orderCriteria: m.Value(orderBy.orderCriteria.join(',')),

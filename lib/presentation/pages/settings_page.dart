@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mucke/presentation/pages/library_folders_page.dart';
+import 'library_folders_page.dart';
 
 import '../state/music_data_store.dart';
 import '../state/settings_store.dart';

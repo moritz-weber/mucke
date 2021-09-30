@@ -1756,7 +1756,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
   final int skipCount;
   final int playCount;
   final bool present;
-  final int timeAdded;
+  final DateTime timeAdded;
   final String previous;
   final String next;
   MoorSong(
@@ -1812,7 +1812,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
           .mapFromDatabaseResponse(data['${effectivePrefix}play_count'])!,
       present: const BoolType()
           .mapFromDatabaseResponse(data['${effectivePrefix}present'])!,
-      timeAdded: const IntType()
+      timeAdded: const DateTimeType()
           .mapFromDatabaseResponse(data['${effectivePrefix}time_added'])!,
       previous: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}previous'])!,
@@ -1842,7 +1842,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
     map['skip_count'] = Variable<int>(skipCount);
     map['play_count'] = Variable<int>(playCount);
     map['present'] = Variable<bool>(present);
-    map['time_added'] = Variable<int>(timeAdded);
+    map['time_added'] = Variable<DateTime>(timeAdded);
     map['previous'] = Variable<String>(previous);
     map['next'] = Variable<String>(next);
     return map;
@@ -1892,7 +1892,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
       skipCount: serializer.fromJson<int>(json['skipCount']),
       playCount: serializer.fromJson<int>(json['playCount']),
       present: serializer.fromJson<bool>(json['present']),
-      timeAdded: serializer.fromJson<int>(json['timeAdded']),
+      timeAdded: serializer.fromJson<DateTime>(json['timeAdded']),
       previous: serializer.fromJson<String>(json['previous']),
       next: serializer.fromJson<String>(json['next']),
     );
@@ -1916,7 +1916,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
       'skipCount': serializer.toJson<int>(skipCount),
       'playCount': serializer.toJson<int>(playCount),
       'present': serializer.toJson<bool>(present),
-      'timeAdded': serializer.toJson<int>(timeAdded),
+      'timeAdded': serializer.toJson<DateTime>(timeAdded),
       'previous': serializer.toJson<String>(previous),
       'next': serializer.toJson<String>(next),
     };
@@ -1938,7 +1938,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
           int? skipCount,
           int? playCount,
           bool? present,
-          int? timeAdded,
+          DateTime? timeAdded,
           String? previous,
           String? next}) =>
       MoorSong(
@@ -2064,7 +2064,7 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
   final Value<int> skipCount;
   final Value<int> playCount;
   final Value<bool> present;
-  final Value<int> timeAdded;
+  final Value<DateTime> timeAdded;
   final Value<String> previous;
   final Value<String> next;
   const SongsCompanion({
@@ -2130,7 +2130,7 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
     Expression<int>? skipCount,
     Expression<int>? playCount,
     Expression<bool>? present,
-    Expression<int>? timeAdded,
+    Expression<DateTime>? timeAdded,
     Expression<String>? previous,
     Expression<String>? next,
   }) {
@@ -2172,7 +2172,7 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
       Value<int>? skipCount,
       Value<int>? playCount,
       Value<bool>? present,
-      Value<int>? timeAdded,
+      Value<DateTime>? timeAdded,
       Value<String>? previous,
       Value<String>? next}) {
     return SongsCompanion(
@@ -2246,7 +2246,7 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
       map['present'] = Variable<bool>(present.value);
     }
     if (timeAdded.present) {
-      map['time_added'] = Variable<int>(timeAdded.value);
+      map['time_added'] = Variable<DateTime>(timeAdded.value);
     }
     if (previous.present) {
       map['previous'] = Variable<String>(previous.value);
@@ -2441,10 +2441,10 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
 
   final VerificationMeta _timeAddedMeta = const VerificationMeta('timeAdded');
   @override
-  late final GeneratedIntColumn timeAdded = _constructTimeAdded();
-  GeneratedIntColumn _constructTimeAdded() {
-    return GeneratedIntColumn('time_added', $tableName, false,
-        defaultValue: Constant(DateTime.now().millisecondsSinceEpoch));
+  late final GeneratedDateTimeColumn timeAdded = _constructTimeAdded();
+  GeneratedDateTimeColumn _constructTimeAdded() {
+    return GeneratedDateTimeColumn('time_added', $tableName, false,
+        defaultValue: currentDateAndTime);
   }
 
   final VerificationMeta _previousMeta = const VerificationMeta('previous');

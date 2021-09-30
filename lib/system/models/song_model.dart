@@ -5,6 +5,7 @@ import 'package:moor/moor.dart';
 
 import '../../domain/entities/song.dart';
 import '../datasources/moor_database.dart';
+import '../utils.dart';
 import 'default_values.dart';
 
 class SongModel extends Song {
@@ -61,7 +62,7 @@ class SongModel extends Song {
         likeCount: moorSong.likeCount,
         skipCount: moorSong.skipCount,
         playCount: moorSong.playCount,
-        timeAdded: DateTime.fromMillisecondsSinceEpoch(moorSong.timeAdded),
+        timeAdded: moorSong.timeAdded,
         year: moorSong.year,
       );
 
@@ -88,6 +89,7 @@ class SongModel extends Song {
       likeCount: 0,
       playCount: 0,
       skipCount: 0,
+      year: parseYear(tag.year),
       timeAdded: DateTime.fromMillisecondsSinceEpoch(0),
     );
   }
@@ -182,7 +184,7 @@ class SongModel extends Song {
         likeCount: Value(likeCount),
         skipCount: Value(skipCount),
         playCount: Value(playCount),
-        timeAdded: Value(timeAdded.millisecondsSinceEpoch),
+        timeAdded: Value(timeAdded),
       );
 
   SongsCompanion toMoorInsert() => SongsCompanion(

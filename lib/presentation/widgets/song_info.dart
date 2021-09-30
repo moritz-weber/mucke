@@ -49,6 +49,7 @@ class SongInfo extends StatelessWidget {
             leadingWidth: _LEADING_WIDTH),
         InfoRow(
             leading: 'Disc number:', trailing: '${song.discNumber}', leadingWidth: _LEADING_WIDTH),
+        InfoRow(leading: 'Time added:', trailing: '${song.timeAdded}', leadingWidth: _LEADING_WIDTH),
         InfoRow(leading: 'Is blocked:', trailing: '${song.blocked}', leadingWidth: _LEADING_WIDTH),
         InfoRow(leading: 'Likes:', trailing: '${song.likeCount}', leadingWidth: _LEADING_WIDTH),
         InfoRow(
