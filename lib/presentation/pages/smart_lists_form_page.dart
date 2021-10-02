@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'smart_lists_artists_page.dart';
 import 'package:reorderables/reorderables.dart';
 
 import '../../domain/entities/smart_list.dart';
 import '../state/smart_list_form_store.dart';
 import '../theming.dart';
+import 'smart_lists_artists_page.dart';
 
 class SmartListFormPage extends StatefulWidget {
   const SmartListFormPage({Key? key, this.smartList}) : super(key: key);

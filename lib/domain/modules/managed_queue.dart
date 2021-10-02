@@ -8,7 +8,7 @@ import '../entities/song.dart';
 import '../repositories/music_data_repository.dart';
 
 abstract class ManagedQueueInfo {
-  ValueStream<List<QueueItem>/*!*/> get queueItemsStream;
+  ValueStream<List<QueueItem>> get queueItemsStream;
   ValueStream<List<Song>> get originalSongsStream;
   ValueStream<List<Song>> get addedSongsStream;
 }
@@ -137,7 +137,33 @@ class ManagedQueue implements ManagedQueueInfo {
     return await _generateQueue(shuffleMode, songs, startIndex);
   }
 
-  // ignore: missing_return
+  /// Update songs contained in queue. Return true if any song was changed.
+  bool updateSongs(Map<String, Song> songs) {
+    bool changed = false;
+
+    for (int i = 0; i < _queue.length; i++) {
+      if (songs.containsKey(_queue[i].song.path)) {
+        _queue[i] =
+            (_queue[i] as QueueItemModel).copyWith(song: songs[queue[i].path]! as SongModel);
+        changed = true;
+      }
+    }
+
+    for (int i = 0; i < _originalSongs.length; i++) {
+      if (songs.containsKey(_originalSongs[i].path)) {
+        _originalSongs[i] = songs[queue[i].path]!;
+      }
+    }
+
+    for (int i = 0; i < _addedSongs.length; i++) {
+      if (songs.containsKey(_addedSongs[i].path)) {
+        _addedSongs[i] = songs[queue[i].path]!;
+      }
+    }
+
+    return changed;
+  }
+
   Future<int> _generateQueue(
     ShuffleMode shuffleMode,
     List<Song> songs,

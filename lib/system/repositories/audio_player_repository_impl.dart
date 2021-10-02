@@ -194,25 +194,14 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
     throw UnimplementedError();
   }
 
-  // TODO: this should be in ManagedQueue
   @override
   Future<void> updateSongs(Map<String, Song> songs) async {
     if (songs.containsKey(_currentSongSubject.valueOrNull?.path)) {
       _currentSongSubject.add(songs[_currentSongSubject.value.path]!);
     }
 
-    final List<Song> queue = _queueSubject.valueOrNull ?? [];
-    bool changed = false;
-
-    for (int i = 0; i < queue.length; i++) {
-      if (songs.containsKey(queue[i].path)) {
-        queue[i] = songs[queue[i].path]!;
-        changed = true;
-      }
-    }
-
-    if (changed) {
-      _queueSubject.add(queue);
+    if (_managedQueue.updateSongs(songs)) {
+      _queueSubject.add(_managedQueue.queue);
     }
   }
 

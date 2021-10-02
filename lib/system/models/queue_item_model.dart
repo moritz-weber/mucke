@@ -7,6 +7,17 @@ class QueueItemModel extends QueueItem {
     required int originalIndex,
     QueueItemType type = QueueItemType.standard,
   }) : super(song, originalIndex: originalIndex, type: type);
+
+  QueueItemModel copyWith({
+    SongModel? song,
+    int? originalIndex,
+    QueueItemType? type,
+  }) =>
+      QueueItemModel(
+        song ?? this.song as SongModel,
+        originalIndex: originalIndex ?? this.originalIndex,
+        type: type ?? this.type,
+      );
 }
 
 extension IntToQueueItemType on int {
