@@ -227,6 +227,7 @@ Future<void> setupGetIt() async {
   getIt.registerLazySingleton<SeekToNext>(
     () => SeekToNext(
       getIt(),
+      getIt(),
     ),
   );
   getIt.registerLazySingleton<SeekToPrevious>(

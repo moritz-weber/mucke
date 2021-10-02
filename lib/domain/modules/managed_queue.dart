@@ -143,21 +143,22 @@ class ManagedQueue implements ManagedQueueInfo {
 
     for (int i = 0; i < _queue.length; i++) {
       if (songs.containsKey(_queue[i].song.path)) {
-        _queue[i] =
-            (_queue[i] as QueueItemModel).copyWith(song: songs[queue[i].path]! as SongModel);
+        _queue[i] = (_queue[i] as QueueItemModel).copyWith(
+          song: songs[_queue[i].song.path]! as SongModel,
+        );
         changed = true;
       }
     }
 
     for (int i = 0; i < _originalSongs.length; i++) {
       if (songs.containsKey(_originalSongs[i].path)) {
-        _originalSongs[i] = songs[queue[i].path]!;
+        _originalSongs[i] = songs[_originalSongs[i].path]!;
       }
     }
 
     for (int i = 0; i < _addedSongs.length; i++) {
       if (songs.containsKey(_addedSongs[i].path)) {
-        _addedSongs[i] = songs[queue[i].path]!;
+        _addedSongs[i] = songs[_addedSongs[i].path]!;
       }
     }
 

@@ -91,7 +91,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
     if (song.likeCount < 5) {
       final newSong = (song as SongModel).copyWith(likeCount: song.likeCount + 1);
       _songUpdateSubject.add({song.path: newSong});
-      _musicDataSource.incrementLikeCount(song);
+      _musicDataSource.updateSong(newSong);
     }
   }
 
@@ -114,46 +114,43 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
     if (song.blocked != blocked) {
       final newSong = (song as SongModel).copyWith(blocked: blocked);
       _songUpdateSubject.add({song.path: newSong});
-      _musicDataSource.setSongBlocked(song, blocked);
+      _musicDataSource.updateSong(newSong);
     }
-  }
-
-  @override
-  Future<void> decrementLikeCount(Song song) {
-    // TODO: implement decrementLikeCount
-    throw UnimplementedError();
   }
 
   @override
   Future<void> incrementPlayCount(Song song) async {
     final newSong = (song as SongModel).copyWith(playCount: song.playCount + 1);
     _songUpdateSubject.add({song.path: newSong});
-    _musicDataSource.incrementPlayCount(song);
+    _musicDataSource.updateSong(newSong);
   }
 
   @override
-  Future<void> incrementSkipCount(Song song) {
-    // TODO: implement incrementSkipCount
-    throw UnimplementedError();
+  Future<void> incrementSkipCount(Song song) async {
+    final newSong = (song as SongModel).copyWith(skipCount: song.skipCount + 1);
+    _songUpdateSubject.add({song.path: newSong});
+    _musicDataSource.updateSong(newSong);
   }
 
   @override
   Future<void> resetLikeCount(Song song) async {
     final newSong = (song as SongModel).copyWith(likeCount: 0);
     _songUpdateSubject.add({song.path: newSong});
-    _musicDataSource.resetLikeCount(song);
+    _musicDataSource.updateSong(newSong);
   }
 
   @override
-  Future<void> resetPlayCount(Song song) {
-    // TODO: implement resetPlayCount
-    throw UnimplementedError();
+  Future<void> resetPlayCount(Song song) async {
+    final newSong = (song as SongModel).copyWith(playCount: 0);
+    _songUpdateSubject.add({song.path: newSong});
+    _musicDataSource.updateSong(newSong);
   }
 
   @override
-  Future<void> resetSkipCount(Song song) {
-    // TODO: implement resetSkipCount
-    throw UnimplementedError();
+  Future<void> resetSkipCount(Song song) async {
+    final newSong = (song as SongModel).copyWith(skipCount: 0);
+    _songUpdateSubject.add({song.path: newSong});
+    _musicDataSource.updateSong(newSong);
   }
 
   @override

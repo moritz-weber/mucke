@@ -23,14 +23,6 @@ abstract class MusicDataSource {
   Future<void> updateSong(SongModel songModel);
   Future<void> insertSongs(List<SongModel> songModels);
   Future<void> deleteAllSongs();
-  Future<void> setSongBlocked(SongModel song, bool blocked);
-  Future<void> incrementSkipCount(SongModel song);
-  Future<void> resetSkipCount(SongModel song);
-  Future<void> incrementLikeCount(SongModel song);
-  Future<void> decrementLikeCount(SongModel song);
-  Future<void> resetLikeCount(SongModel song);
-  Future<void> incrementPlayCount(SongModel song);
-  Future<void> resetPlayCount(SongModel song);
 
   /// Insert album into the database. Return the ID of the inserted album.
   Future<int> insertAlbum(AlbumModel albumModel);
