@@ -9,14 +9,27 @@ const Color LIGHT2 = Color(0xffac5bfb);
 const double HORIZONTAL_PADDING = 16.0;
 
 ThemeData theme() => ThemeData(
-      brightness: Brightness.dark,
+      colorScheme: const ColorScheme(
+        primary: DARK2,
+        primaryVariant: DARK1,
+        secondary: LIGHT2,
+        secondaryVariant: LIGHT1,
+        surface: DARK3,
+        background: DARK2,
+        error: Colors.red,
+        onPrimary: Colors.white,
+        onSecondary: Colors.white,
+        onSurface: Colors.white,
+        onBackground: Colors.white,
+        onError: Colors.white,
+        brightness: Brightness.dark,
+      ),
       primaryColor: DARK1,
       primaryColorBrightness: Brightness.dark,
       primaryColorLight: DARK2,
-      accentColor: LIGHT1,
-      highlightColor: LIGHT2,
+      highlightColor: LIGHT1,
       scaffoldBackgroundColor: DARK2,
-      cardColor: DARK3,
+      // cardColor: DARK3,
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           primary: LIGHT1,
@@ -60,6 +73,7 @@ ThemeData theme() => ThemeData(
       iconTheme: const IconThemeData(
         color: Colors.white,
       ),
+      appBarTheme: const AppBarTheme(color: DARK1),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: DARK1,
         selectedItemColor: LIGHT1,
@@ -68,7 +82,7 @@ ThemeData theme() => ThemeData(
         indent: HORIZONTAL_PADDING,
         endIndent: HORIZONTAL_PADDING,
         space: 0.0,
-      )
+      ),
     );
 
 const TextStyle TEXT_HEADER = TextStyle(
@@ -95,4 +109,3 @@ const TextStyle TEXT_SMALL_SUBTITLE = TextStyle(
   fontSize: 12.0,
   fontWeight: FontWeight.w300,
 );
-

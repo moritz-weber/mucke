@@ -29,7 +29,7 @@ class ShuffleAllButton extends StatelessWidget {
           label: const Text('SHUFFLE ALL'),
           onPressed: () => audioStore.shuffleAll(),
           style: ElevatedButton.styleFrom(
-            primary: Theme.of(context).accentColor,
+            primary: Theme.of(context).highlightColor,
           ),
         ),
       ),

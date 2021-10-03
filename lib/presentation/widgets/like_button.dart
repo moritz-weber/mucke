@@ -52,7 +52,7 @@ class LikeButton extends StatelessWidget {
               children: [
                 Icon(
                   Icons.favorite_rounded,
-                  color: Theme.of(context).accentColor,
+                  color: Theme.of(context).highlightColor,
                   size: iconSize,
                 ),
                 Text(

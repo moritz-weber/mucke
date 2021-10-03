@@ -5,7 +5,7 @@ import 'package:get_it/get_it.dart';
 import '../state/music_data_store.dart';
 import '../theming.dart';
 import 'library_folders_page.dart';
-import 'smart_lists_page.dart';
+import 'smart_lists_settings_page.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -70,7 +70,7 @@ class SettingsPage extends StatelessWidget {
               trailing: const Icon(Icons.chevron_right),
               onTap: () => Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (BuildContext context) => const SmartListsPage(),
+                  builder: (BuildContext context) => const SmartListsSettingsPage(),
                 ),
               ),
             ),

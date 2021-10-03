@@ -7,8 +7,8 @@ import '../state/settings_store.dart';
 import '../theming.dart';
 import 'smart_lists_form_page.dart';
 
-class SmartListsPage extends StatelessWidget {
-  const SmartListsPage({Key? key}) : super(key: key);
+class SmartListsSettingsPage extends StatelessWidget {
+  const SmartListsSettingsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

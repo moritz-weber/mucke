@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../domain/entities/album.dart';
 import '../utils.dart' as utils;
@@ -14,7 +15,7 @@ class AlbumSliverAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      brightness: Brightness.dark,
+      systemOverlayStyle: SystemUiOverlayStyle.dark,
       pinned: true,
       expandedHeight: 250.0,
       backgroundColor: Theme.of(context).primaryColor,

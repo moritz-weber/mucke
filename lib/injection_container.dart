@@ -17,7 +17,6 @@ import 'domain/repositories/platform_integration_repository.dart';
 import 'domain/repositories/settings_repository.dart';
 import 'domain/usecases/add_to_queue.dart';
 import 'domain/usecases/handle_playback_state.dart';
-import 'domain/usecases/increment_play_count.dart';
 import 'domain/usecases/init_queue.dart';
 import 'domain/usecases/inrement_like_count.dart';
 import 'domain/usecases/move_queue_item.dart';
@@ -147,11 +146,6 @@ Future<void> setupGetIt() async {
   );
   getIt.registerLazySingleton<IncrementLikeCount>(
     () => IncrementLikeCount(
-      getIt(),
-    ),
-  );
-  getIt.registerLazySingleton<IncrementPlayCount>(
-    () => IncrementPlayCount(
       getIt(),
     ),
   );
@@ -375,7 +369,6 @@ Future<void> setupGetIt() async {
 
   getIt.registerSingleton<AudioPlayerActor>(
     AudioPlayerActor(
-      getIt(),
       getIt(),
       getIt(),
       getIt(),

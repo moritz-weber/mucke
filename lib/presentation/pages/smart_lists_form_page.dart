@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:reorderables/reorderables.dart';
 
 import '../../domain/entities/smart_list.dart';
+import '../state/settings_store.dart';
 import '../state/smart_list_form_store.dart';
 import '../theming.dart';
 import 'smart_lists_artists_page.dart';
@@ -36,6 +37,7 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
   @override
   Widget build(BuildContext context) {
     final title = widget.smartList == null ? 'Create smart list' : 'Edit smart list';
+    final SettingsStore settingsStore = GetIt.I<SettingsStore>();
 
     return SafeArea(
       child: Scaffold(
@@ -49,6 +51,16 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
             onPressed: () => Navigator.pop(context),
           ),
           actions: [
+            if (widget.smartList != null)
+              IconButton(
+                icon: const Icon(Icons.delete),
+                onPressed: () async {
+                  // TODO: this works, but may only pop back to the smart list page...
+                  // can I use pop 2x here?
+                  await settingsStore.removeSmartList(widget.smartList!);
+                  Navigator.pop(context);
+                },
+              ),
             IconButton(
               icon: const Icon(Icons.check),
               onPressed: () async {
@@ -331,7 +343,8 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
                           child: Row(
                             children: [
                               const SizedBox(width: 60.0, height: 36),
-                              Text('Select artists to ${store.excludeArtists ? "exclude" : "include"} (${store.selectedArtists.length} selected)'),
+                              Text(
+                                  'Select artists to ${store.excludeArtists ? "exclude" : "include"} (${store.selectedArtists.length} selected)'),
                               const Spacer(),
                             ],
                           ),

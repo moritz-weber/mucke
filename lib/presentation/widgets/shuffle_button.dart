@@ -42,7 +42,7 @@ class ShuffleButton extends StatelessWidget {
             return IconButton(
               icon: Icon(
                 Icons.fingerprint_rounded,
-                color: Theme.of(context).accentColor,
+                color: Theme.of(context).highlightColor,
               ),
               iconSize: iconSize,
               onPressed: () => audioStore.setShuffleMode(ShuffleMode.none),

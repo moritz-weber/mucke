@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../domain/entities/artist.dart';
 
@@ -14,7 +15,7 @@ class ArtistHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     const double height = 144.0;
     return SliverAppBar(
-      brightness: Brightness.dark,
+      systemOverlayStyle: SystemUiOverlayStyle.dark,
       pinned: true,
       expandedHeight: height,
       backgroundColor: Theme.of(context).primaryColor,
