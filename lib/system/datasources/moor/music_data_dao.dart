@@ -1,8 +1,10 @@
 import 'package:moor/moor.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../../domain/entities/smart_list.dart' as sl;
 import '../../models/album_model.dart';
 import '../../models/artist_model.dart';
+import '../../models/playlist_model.dart';
 import '../../models/smart_list_model.dart';
 import '../../models/song_model.dart';
 import '../moor_database.dart';
@@ -10,7 +12,7 @@ import '../music_data_source_contract.dart';
 
 part 'music_data_dao.g.dart';
 
-@UseDao(tables: [Albums, Artists, Songs, MoorAlbumOfDay])
+@UseDao(tables: [Albums, Artists, Songs, MoorAlbumOfDay, Playlists, PlaylistEntries])
 class MusicDataDao extends DatabaseAccessor<MoorDatabase>
     with _$MusicDataDaoMixin
     implements MusicDataSource {
@@ -298,6 +300,89 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
 
     if (limit <= 0) return result;
     return result.take(limit).toList();
+  }
+
+  @override
+  Future<void> appendSongToPlaylist(PlaylistModel playlist, SongModel song) async {
+    final plSongs =
+        await (select(playlistEntries)..where((tbl) => tbl.playlistId.equals(playlist.id))).get();
+
+    final songCount = plSongs.length;
+    into(playlistEntries).insert(PlaylistEntriesCompanion(
+      playlistId: Value(playlist.id),
+      songPath: Value(song.path),
+      position: Value(songCount),
+    ));
+  }
+
+  @override
+  Stream<List<SongModel>> getPlaylistSongStream(PlaylistModel playlist) {
+    // TODO: implement getPlaylistSongStream
+    throw UnimplementedError();
+  }
+
+  @override
+  Stream<PlaylistModel> getPlaylistStream(int playlistId) {
+    final plStream = (select(playlists)
+          ..where((tbl) => tbl.id.equals(playlistId))
+          ..limit(1))
+        .watchSingle();
+
+    final plSongStream = (select(playlistEntries)
+          ..where((tbl) => tbl.playlistId.equals(playlistId))
+          ..orderBy([(t) => OrderingTerm(expression: t.position)]))
+        .join(
+      [innerJoin(songs, songs.path.equalsExp(playlistEntries.songPath))],
+    ).watch();
+
+    return Rx.combineLatest2<MoorPlaylist, List<TypedResult>, PlaylistModel>(
+      plStream,
+      plSongStream,
+      (a, b) {
+        final moorSongs = b.map((e) => e.readTable(songs)).toList();
+        return PlaylistModel.fromMoor(a, moorSongs);
+      },
+    );
+  }
+
+  @override
+  Future<void> insertPlaylist(String name) async {
+    await into(playlists).insert(PlaylistsCompanion(name: Value(name)));
+  }
+
+  @override
+  Stream<List<PlaylistModel>> get playlistsStream {
+    final plStream = select(playlists).watch();
+
+    final plSongStream = (select(playlistEntries).join(
+      [innerJoin(songs, songs.path.equalsExp(playlistEntries.songPath))],
+    )).watch();
+
+    return Rx.combineLatest2<List<MoorPlaylist>, List<TypedResult>, List<PlaylistModel>>(
+      plStream,
+      plSongStream,
+      (a, b) {
+        return a.map((pl) {
+          final moorSongs =
+              (b.where((element) => element.readTable(playlistEntries).playlistId == pl.id))
+                  .map((e) => e.readTable(songs))
+                  .toList();
+          return PlaylistModel.fromMoor(pl, moorSongs);
+        }).toList();
+      },
+    );
+  }
+
+  @override
+  Future<void> removePlaylist(PlaylistModel playlist) async {
+    await (delete(playlists)..where((tbl) => tbl.id.equals(playlist.id))).go();
+    await (delete(playlistEntries)..where((tbl) => tbl.playlistId.equals(playlist.id))).go();
+  }
+
+  @override
+  Future<void> updatePlaylist(int id, String name) async {
+    await (update(playlists)..where((tbl) => tbl.id.equals(id)))
+        .write(PlaylistsCompanion(name: Value(name)));
   }
 }
 

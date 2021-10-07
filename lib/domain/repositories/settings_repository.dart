@@ -1,3 +1,4 @@
+import '../entities/shuffle_mode.dart';
 import '../entities/smart_list.dart';
 
 abstract class SettingsRepository {
@@ -7,7 +8,12 @@ abstract class SettingsRepository {
 
   Stream<List<SmartList>> get smartListsStream;
   Stream<SmartList> getSmartListStream(int smartListId);
-  Future<void> insertSmartList(SmartList smartList);
+  Future<void> insertSmartList({
+    required String name,
+    required Filter filter,
+    required OrderBy orderBy,
+    ShuffleMode? shuffleMode,
+  });
   Future<void> updateSmartList(SmartList smartList);
   Future<void> removeSmartList(SmartList smartList);
 }

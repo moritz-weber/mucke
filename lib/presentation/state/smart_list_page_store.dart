@@ -26,7 +26,7 @@ abstract class _SmartListPageStore with Store {
 
   @observable
   late ObservableStream<SmartList> smartListStream =
-      _settingsRepository.getSmartListStream(_smartList.id!).asObservable();
+      _settingsRepository.getSmartListStream(_smartList.id).asObservable();
 
   // TODO: how would I transform the stream from db to a more easily usable value here?
   // @computed
@@ -36,6 +36,7 @@ abstract class _SmartListPageStore with Store {
   late ObservableStream<List<Song>> smartListSongStream =
       _musicDataInfoRepository.getSmartListSongStream(_smartList).asObservable(initialValue: []);
 
+  // TODO: das is ja sau umständlich...
   @action
   void _updateSmartList(SmartList? smartList) {
     if (smartList != null) {

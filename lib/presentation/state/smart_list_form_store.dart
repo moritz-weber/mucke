@@ -171,9 +171,7 @@ abstract class _SmartListStore with Store {
 
   Future<void> _createSmartList() async {
     await _settingsRepository.insertSmartList(
-      SmartList(
         name: name ?? 'This needs a name',
-        position: -1,
         filter: Filter(
           artists: selectedArtists.toList(),
           excludeArtists: excludeArtists,
@@ -190,7 +188,6 @@ abstract class _SmartListStore with Store {
           orderCriteria: orderState.where((e) => e.enabled).map((e) => e.orderCriterion).toList(),
           orderDirections: orderState.where((e) => e.enabled).map((e) => e.orderDirection).toList(),
         ),
-      ),
     );
   }
 
@@ -199,7 +196,6 @@ abstract class _SmartListStore with Store {
       SmartList(
         id: _smartList!.id,
         name: name ?? 'This needs a name',
-        position: _smartList!.position,
         filter: Filter(
           artists: selectedArtists.toList(),
           excludeArtists: excludeArtists,

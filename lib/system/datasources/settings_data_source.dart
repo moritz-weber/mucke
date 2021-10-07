@@ -11,7 +11,6 @@ abstract class SettingsDataSource {
   Stream<SmartListModel> getSmartListStream(int smartListId);
   Future<void> insertSmartList(
     String name,
-    int position,
     Filter filter,
     OrderBy orderBy,
     ShuffleMode? shuffleMode,

@@ -5,17 +5,15 @@ import 'shuffle_mode.dart';
 
 class SmartList extends Equatable {
   const SmartList({
-    this.id,
+    required this.id,
     required this.name,
-    required this.position,
     required this.filter,
     required this.orderBy,
     this.shuffleMode,
   });
 
-  final int? id;
+  final int id;
   final String name;
-  final int position;
   final Filter filter;
   final OrderBy orderBy;
   final ShuffleMode? shuffleMode;

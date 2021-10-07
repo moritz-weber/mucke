@@ -2,6 +2,7 @@ import 'package:mobx/mobx.dart';
 
 import '../../domain/entities/album.dart';
 import '../../domain/entities/artist.dart';
+import '../../domain/entities/playlist.dart';
 import '../../domain/entities/song.dart';
 import '../../domain/repositories/music_data_repository.dart';
 import '../../domain/usecases/inrement_like_count.dart';
@@ -15,7 +16,7 @@ part 'music_data_store.g.dart';
 
 class MusicDataStore extends _MusicDataStore with _$MusicDataStore {
   MusicDataStore({
-    required MusicDataInfoRepository musicDataInfoRepository,
+    required MusicDataRepository musicDataRepository,
     required UpdateDatabase updateDatabase,
     required IncrementLikeCount incrementLikeCount,
     required ResetLikeCount resetLikeCount,
@@ -23,7 +24,7 @@ class MusicDataStore extends _MusicDataStore with _$MusicDataStore {
     required ToggleNextSongLink toggleNextSongLink,
     required TogglePreviousSongLink togglePreviousSongLink,
   }) : super(
-          musicDataInfoRepository,
+          musicDataRepository,
           updateDatabase,
           incrementLikeCount,
           resetLikeCount,
@@ -35,7 +36,7 @@ class MusicDataStore extends _MusicDataStore with _$MusicDataStore {
 
 abstract class _MusicDataStore with Store {
   _MusicDataStore(
-    this._musicDataInfoRepository,
+    this._musicDataRepository,
     this._updateDatabase,
     this._incrementLikeCount,
     this._resetLikeCount,
@@ -51,25 +52,29 @@ abstract class _MusicDataStore with Store {
   final ToggleNextSongLink _toggleNextSongLink;
   final UpdateDatabase _updateDatabase;
 
-  final MusicDataInfoRepository _musicDataInfoRepository;
+  // TODO: exploratory; this was an infoRepo before; all "writing" changes were supposed to go through use cases
+  final MusicDataRepository _musicDataRepository;
 
   @observable
   late ObservableStream<List<Song>> songStream =
-      _musicDataInfoRepository.songStream.asObservable(initialValue: []);
+      _musicDataRepository.songStream.asObservable(initialValue: []);
 
   @observable
   late ObservableStream<List<Album>> albumStream =
-      _musicDataInfoRepository.albumStream.asObservable(initialValue: []);
+      _musicDataRepository.albumStream.asObservable(initialValue: []);
 
   @observable
   late ObservableStream<List<Artist>> artistStream =
-      _musicDataInfoRepository.artistStream.asObservable(initialValue: []);
+      _musicDataRepository.artistStream.asObservable(initialValue: []);
+
+  @observable
+  late ObservableStream<List<Playlist>> playlistsStream = _musicDataRepository.playlistsStream.asObservable(initialValue: []);
 
   @observable
   bool isUpdatingDatabase = false;
 
   @observable
-  late ObservableFuture<Album?> albumOfDay = _musicDataInfoRepository.getAlbumOfDay().asObservable();
+  late ObservableFuture<Album?> albumOfDay = _musicDataRepository.getAlbumOfDay().asObservable();
 
   @action
   Future<void> updateDatabase() async {
@@ -91,4 +96,25 @@ abstract class _MusicDataStore with Store {
   Future<void> incrementLikeCount(Song song) => _incrementLikeCount(song);
 
   Future<void> resetLikeCount(Song song) => _resetLikeCount(song);
+
+  // TODO: exploratory from here on
+  Future<void> insertPlaylist(String name) async {
+    _musicDataRepository.insertPlaylist(name);
+  }
+
+  Future<void> removePlaylist(Playlist playlist) async {
+    _musicDataRepository.removePlaylist(playlist);
+  }
+
+  Future<void> updatePlaylist(int id, String name) async {
+    _musicDataRepository.updatePlaylist(id, name);
+  }
+
+  Future<void> addSongToPlaylist(Playlist playlist, Song song) async {
+    _musicDataRepository.appendSongToPlaylist(playlist, song);
+  }
+
+  Stream<Playlist> getPlaylistStream(int playlistId) {
+    return _musicDataRepository.getPlaylistStream(playlistId);
+  }
 }

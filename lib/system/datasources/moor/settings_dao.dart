@@ -32,7 +32,6 @@ class SettingsDao extends DatabaseAccessor<MoorDatabase>
   @override
   Future<void> insertSmartList(
     String name,
-    int position,
     sl.Filter filter,
     sl.OrderBy orderBy,
     ShuffleMode? shuffleMode,
@@ -40,15 +39,9 @@ class SettingsDao extends DatabaseAccessor<MoorDatabase>
     final orderCriteria = orderBy.orderCriteria.join(',');
     final orderDirections = orderBy.orderDirections.join(',');
 
-    int newPos = position;
-    if (newPos < 0) {
-      newPos = await select(smartLists).get().then((value) => value.length);
-    }
-
     final id = await into(smartLists).insert(
       SmartListsCompanion(
         name: Value(name),
-        position: Value(newPos),
         shuffleMode: Value(shuffleMode?.toString()),
         excludeArtists: Value(filter.excludeArtists),
         minPlayCount: Value(filter.minPlayCount),
@@ -79,8 +72,7 @@ class SettingsDao extends DatabaseAccessor<MoorDatabase>
 
   @override
   Stream<List<SmartListModel>> get smartListsStream {
-    final slStream =
-        (select(smartLists)..orderBy([(s) => OrderingTerm(expression: s.position)])).watch();
+    final slStream = select(smartLists).watch();
 
     final slArtistStream = (select(smartListArtists).join(
       [innerJoin(artists, artists.name.equalsExp(smartListArtists.artistName))],
@@ -134,7 +126,7 @@ class SettingsDao extends DatabaseAccessor<MoorDatabase>
     for (final a in smartListModel.filter.artists) {
       await into(smartListArtists).insert(
         SmartListArtistsCompanion(
-          smartListId: Value(smartListModel.id!),
+          smartListId: Value(smartListModel.id),
           artistName: Value(a.name),
         ),
       );

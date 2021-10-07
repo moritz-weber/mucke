@@ -54,6 +54,21 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
     });
   }
 
+  final _$playlistsStreamAtom = Atom(name: '_MusicDataStore.playlistsStream');
+
+  @override
+  ObservableStream<List<Playlist>> get playlistsStream {
+    _$playlistsStreamAtom.reportRead();
+    return super.playlistsStream;
+  }
+
+  @override
+  set playlistsStream(ObservableStream<List<Playlist>> value) {
+    _$playlistsStreamAtom.reportWrite(value, super.playlistsStream, () {
+      super.playlistsStream = value;
+    });
+  }
+
   final _$isUpdatingDatabaseAtom =
       Atom(name: '_MusicDataStore.isUpdatingDatabase');
 
@@ -99,6 +114,7 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
 songStream: ${songStream},
 albumStream: ${albumStream},
 artistStream: ${artistStream},
+playlistsStream: ${playlistsStream},
 isUpdatingDatabase: ${isUpdatingDatabase},
 albumOfDay: ${albumOfDay}
     ''';

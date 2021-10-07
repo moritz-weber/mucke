@@ -6,17 +6,15 @@ import '../datasources/moor_database.dart';
 import 'artist_model.dart';
 
 class SmartListModel extends SmartList {
-  const SmartListModel(
-    int id, {
+  const SmartListModel({
+    required int id,
     required String name,
-    required int position,
     required Filter filter,
     required OrderBy orderBy,
     ShuffleMode? shuffleMode,
   }) : super(
           id: id,
           name: name,
-          position: position,
           filter: filter,
           orderBy: orderBy,
           shuffleMode: shuffleMode,
@@ -42,9 +40,8 @@ class SmartListModel extends SmartList {
     );
 
     return SmartListModel(
-      moorSmartList.id,
+      id: moorSmartList.id,
       name: moorSmartList.name,
-      position: moorSmartList.position,
       filter: filter,
       orderBy: orderBy,
       shuffleMode: moorSmartList.shuffleMode?.toShuffleMode(),
@@ -52,9 +49,8 @@ class SmartListModel extends SmartList {
   }
 
   SmartListsCompanion toCompanion() => SmartListsCompanion(
-        id: m.Value(id!),
+        id: m.Value(id),
         name: m.Value(name),
-        position: m.Value(position),
         shuffleMode: m.Value(shuffleMode?.toString()),
         excludeArtists: m.Value(filter.excludeArtists),
         minPlayCount: m.Value(filter.minPlayCount),
@@ -73,7 +69,7 @@ class SmartListModel extends SmartList {
     return filter.artists
         .map(
           (e) => SmartListArtistsCompanion(
-            smartListId: m.Value(id!),
+            smartListId: m.Value(id),
             artistName: m.Value(e.name),
           ),
         )

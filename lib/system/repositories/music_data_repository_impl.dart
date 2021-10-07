@@ -6,6 +6,7 @@ import 'package:string_similarity/string_similarity.dart';
 
 import '../../domain/entities/album.dart';
 import '../../domain/entities/artist.dart';
+import '../../domain/entities/playlist.dart';
 import '../../domain/entities/smart_list.dart';
 import '../../domain/entities/song.dart';
 import '../../domain/repositories/music_data_repository.dart';
@@ -13,6 +14,7 @@ import '../datasources/local_music_fetcher.dart';
 import '../datasources/music_data_source_contract.dart';
 import '../models/album_model.dart';
 import '../models/artist_model.dart';
+import '../models/playlist_model.dart';
 import '../models/smart_list_model.dart';
 import '../models/song_model.dart';
 
@@ -266,5 +268,38 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
     //   fuzzyText += '$c%';
     // }
     return fuzzyText;
+  }
+
+  @override
+  Future<void> appendSongToPlaylist(Playlist playlist, Song song) async {
+    _musicDataSource.appendSongToPlaylist(playlist as PlaylistModel, song as SongModel);
+  }
+
+  @override
+  Stream<List<Song>> getPlaylistSongStream(Playlist playlist) {
+    return _musicDataSource.getPlaylistSongStream(playlist as PlaylistModel);
+  }
+
+  @override
+  Stream<Playlist> getPlaylistStream(int playlistId) {
+    return _musicDataSource.getPlaylistStream(playlistId);
+  }
+
+  @override
+  Future<void> insertPlaylist(String name) async {
+    _musicDataSource.insertPlaylist(name);
+  }
+
+  @override
+  Stream<List<Playlist>> get playlistsStream => _musicDataSource.playlistsStream;
+
+  @override
+  Future<void> removePlaylist(Playlist playlist) async {
+    _musicDataSource.removePlaylist(playlist as PlaylistModel);
+  }
+
+  @override
+  Future<void> updatePlaylist(int id, String name) async {
+    _musicDataSource.updatePlaylist(id, name);
   }
 }

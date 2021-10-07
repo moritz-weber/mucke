@@ -1,5 +1,6 @@
 import '../models/album_model.dart';
 import '../models/artist_model.dart';
+import '../models/playlist_model.dart';
 import '../models/smart_list_model.dart';
 import '../models/song_model.dart';
 
@@ -38,4 +39,13 @@ abstract class MusicDataSource {
   Future<AlbumOfDay?> getAlbumOfDay();
 
   Future<List> search(String searchText, {int limit});
+
+  Stream<List<PlaylistModel>> get playlistsStream;
+  Stream<List<SongModel>> getPlaylistSongStream(PlaylistModel playlist);
+  Stream<PlaylistModel> getPlaylistStream(int playlistId);
+  Future<void> insertPlaylist(String name);
+  Future<void> updatePlaylist(int id, String name);
+  Future<void> removePlaylist(PlaylistModel playlist);
+  Future<void> appendSongToPlaylist(PlaylistModel playlist, SongModel song);
+  // TODO: move and remove index
 }

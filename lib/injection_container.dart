@@ -73,7 +73,7 @@ Future<void> setupGetIt() async {
   // stores
   getIt.registerLazySingleton<MusicDataStore>(
     () => MusicDataStore(
-      musicDataInfoRepository: getIt(),
+      musicDataRepository: getIt(),
       incrementLikeCount: getIt(),
       resetLikeCount: getIt(),
       setSongBlocked: getIt(),

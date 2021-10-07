@@ -1,3 +1,4 @@
+import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/entities/smart_list.dart';
 import '../../domain/repositories/settings_repository.dart';
 import '../datasources/settings_data_source.dart';
@@ -24,14 +25,13 @@ class SettingsRepositoryImpl implements SettingsRepository {
   }
 
   @override
-  Future<void> insertSmartList(SmartList smartList) {
-    return _settingsDataSource.insertSmartList(
-      smartList.name,
-      smartList.position,
-      smartList.filter,
-      smartList.orderBy,
-      smartList.shuffleMode,
-    );
+  Future<void> insertSmartList({
+    required String name,
+    required Filter filter,
+    required OrderBy orderBy,
+    ShuffleMode? shuffleMode,
+  }) {
+    return _settingsDataSource.insertSmartList(name, filter, orderBy, shuffleMode);
   }
 
   @override
@@ -49,9 +49,8 @@ class SettingsRepositoryImpl implements SettingsRepository {
   Future<void> updateSmartList(SmartList smartList) {
     return _settingsDataSource.updateSmartList(
       SmartListModel(
-        smartList.id!,
+        id: smartList.id,
         name: smartList.name,
-        position: smartList.position,
         filter: smartList.filter,
         orderBy: smartList.orderBy,
         shuffleMode: smartList.shuffleMode,

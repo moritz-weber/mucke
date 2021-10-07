@@ -52,8 +52,7 @@ class Songs extends Table {
   IntColumn get skipCount => integer().withDefault(const Constant(0))();
   IntColumn get playCount => integer().withDefault(const Constant(0))();
   BoolColumn get present => boolean().withDefault(const Constant(true))();
-  DateTimeColumn get timeAdded =>
-      dateTime().withDefault(currentDateAndTime)();
+  DateTimeColumn get timeAdded => dateTime().withDefault(currentDateAndTime)();
 
   TextColumn get previous => text().withDefault(const Constant(''))();
   TextColumn get next => text().withDefault(const Constant(''))();
@@ -118,7 +117,6 @@ class MoorAlbumOfDay extends Table {
 @DataClassName('MoorSmartList')
 class SmartLists extends Table {
   IntColumn get id => integer().autoIncrement()();
-  IntColumn get position => integer()();
   TextColumn get name => text()();
   TextColumn get shuffleMode => text().nullable()();
 
@@ -144,6 +142,19 @@ class SmartListArtists extends Table {
   TextColumn get artistName => text()();
 }
 
+@DataClassName('MoorPlaylist')
+class Playlists extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get name => text()();
+}
+
+@DataClassName('MoorPlaylistEntry')
+class PlaylistEntries extends Table {
+  IntColumn get playlistId => integer()();
+  TextColumn get songPath => text()();
+  IntColumn get position => integer()();
+}
+
 @UseMoor(
   tables: [
     Albums,
@@ -159,6 +170,8 @@ class SmartListArtists extends Table {
     MoorAlbumOfDay,
     SmartLists,
     SmartListArtists,
+    Playlists,
+    PlaylistEntries,
   ],
   daos: [
     PersistentStateDao,
@@ -177,7 +190,7 @@ class MoorDatabase extends _$MoorDatabase {
   MoorDatabase.connect(DatabaseConnection connection) : super.connect(connection);
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(beforeOpen: (details) async {
@@ -210,13 +223,15 @@ class MoorDatabase extends _$MoorDatabase {
         }
         if (from < 3) {
           await m.alterTable(
-      TableMigration(
-        songs,
-        columnTransformer: {
-          songs.timeAdded: currentDateAndTime,
+            TableMigration(songs, columnTransformer: {
+              songs.timeAdded: currentDateAndTime,
+            }),
+          );
         }
-      ),
-    );
+        if (from < 4) {
+          await m.alterTable(TableMigration(smartLists));
+          await m.createTable(playlists);
+          await m.createTable(playlistEntries);
         }
       });
 }

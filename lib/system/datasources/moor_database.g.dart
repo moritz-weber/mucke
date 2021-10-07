@@ -2806,7 +2806,6 @@ class $MoorAlbumOfDayTable extends MoorAlbumOfDay
 
 class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
   final int id;
-  final int position;
   final String name;
   final String? shuffleMode;
   final bool excludeArtists;
@@ -2822,7 +2821,6 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
   final String orderDirections;
   MoorSmartList(
       {required this.id,
-      required this.position,
       required this.name,
       this.shuffleMode,
       required this.excludeArtists,
@@ -2843,8 +2841,6 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
     return MoorSmartList(
       id: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      position: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}position'])!,
       name: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
       shuffleMode: const StringType()
@@ -2877,7 +2873,6 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['position'] = Variable<int>(position);
     map['name'] = Variable<String>(name);
     if (!nullToAbsent || shuffleMode != null) {
       map['shuffle_mode'] = Variable<String?>(shuffleMode);
@@ -2909,7 +2904,6 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
   SmartListsCompanion toCompanion(bool nullToAbsent) {
     return SmartListsCompanion(
       id: Value(id),
-      position: Value(position),
       name: Value(name),
       shuffleMode: shuffleMode == null && nullToAbsent
           ? const Value.absent()
@@ -2942,7 +2936,6 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return MoorSmartList(
       id: serializer.fromJson<int>(json['id']),
-      position: serializer.fromJson<int>(json['position']),
       name: serializer.fromJson<String>(json['name']),
       shuffleMode: serializer.fromJson<String?>(json['shuffleMode']),
       excludeArtists: serializer.fromJson<bool>(json['excludeArtists']),
@@ -2963,7 +2956,6 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'position': serializer.toJson<int>(position),
       'name': serializer.toJson<String>(name),
       'shuffleMode': serializer.toJson<String?>(shuffleMode),
       'excludeArtists': serializer.toJson<bool>(excludeArtists),
@@ -2982,7 +2974,6 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
 
   MoorSmartList copyWith(
           {int? id,
-          int? position,
           String? name,
           String? shuffleMode,
           bool? excludeArtists,
@@ -2998,7 +2989,6 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
           String? orderDirections}) =>
       MoorSmartList(
         id: id ?? this.id,
-        position: position ?? this.position,
         name: name ?? this.name,
         shuffleMode: shuffleMode ?? this.shuffleMode,
         excludeArtists: excludeArtists ?? this.excludeArtists,
@@ -3017,7 +3007,6 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
   String toString() {
     return (StringBuffer('MoorSmartList(')
           ..write('id: $id, ')
-          ..write('position: $position, ')
           ..write('name: $name, ')
           ..write('shuffleMode: $shuffleMode, ')
           ..write('excludeArtists: $excludeArtists, ')
@@ -3039,40 +3028,36 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
   int get hashCode => $mrjf($mrjc(
       id.hashCode,
       $mrjc(
-          position.hashCode,
+          name.hashCode,
           $mrjc(
-              name.hashCode,
+              shuffleMode.hashCode,
               $mrjc(
-                  shuffleMode.hashCode,
+                  excludeArtists.hashCode,
                   $mrjc(
-                      excludeArtists.hashCode,
+                      excludeBlocked.hashCode,
                       $mrjc(
-                          excludeBlocked.hashCode,
+                          minLikeCount.hashCode,
                           $mrjc(
-                              minLikeCount.hashCode,
+                              maxLikeCount.hashCode,
                               $mrjc(
-                                  maxLikeCount.hashCode,
+                                  minPlayCount.hashCode,
                                   $mrjc(
-                                      minPlayCount.hashCode,
+                                      maxPlayCount.hashCode,
                                       $mrjc(
-                                          maxPlayCount.hashCode,
+                                          minYear.hashCode,
                                           $mrjc(
-                                              minYear.hashCode,
+                                              maxYear.hashCode,
                                               $mrjc(
-                                                  maxYear.hashCode,
+                                                  limit.hashCode,
                                                   $mrjc(
-                                                      limit.hashCode,
-                                                      $mrjc(
-                                                          orderCriteria
-                                                              .hashCode,
-                                                          orderDirections
-                                                              .hashCode)))))))))))))));
+                                                      orderCriteria.hashCode,
+                                                      orderDirections
+                                                          .hashCode))))))))))))));
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is MoorSmartList &&
           other.id == this.id &&
-          other.position == this.position &&
           other.name == this.name &&
           other.shuffleMode == this.shuffleMode &&
           other.excludeArtists == this.excludeArtists &&
@@ -3090,7 +3075,6 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
 
 class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
   final Value<int> id;
-  final Value<int> position;
   final Value<String> name;
   final Value<String?> shuffleMode;
   final Value<bool> excludeArtists;
@@ -3106,7 +3090,6 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
   final Value<String> orderDirections;
   const SmartListsCompanion({
     this.id = const Value.absent(),
-    this.position = const Value.absent(),
     this.name = const Value.absent(),
     this.shuffleMode = const Value.absent(),
     this.excludeArtists = const Value.absent(),
@@ -3123,7 +3106,6 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
   });
   SmartListsCompanion.insert({
     this.id = const Value.absent(),
-    required int position,
     required String name,
     this.shuffleMode = const Value.absent(),
     this.excludeArtists = const Value.absent(),
@@ -3137,13 +3119,11 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
     this.limit = const Value.absent(),
     required String orderCriteria,
     required String orderDirections,
-  })  : position = Value(position),
-        name = Value(name),
+  })  : name = Value(name),
         orderCriteria = Value(orderCriteria),
         orderDirections = Value(orderDirections);
   static Insertable<MoorSmartList> custom({
     Expression<int>? id,
-    Expression<int>? position,
     Expression<String>? name,
     Expression<String?>? shuffleMode,
     Expression<bool>? excludeArtists,
@@ -3160,7 +3140,6 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (position != null) 'position': position,
       if (name != null) 'name': name,
       if (shuffleMode != null) 'shuffle_mode': shuffleMode,
       if (excludeArtists != null) 'exclude_artists': excludeArtists,
@@ -3179,7 +3158,6 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
 
   SmartListsCompanion copyWith(
       {Value<int>? id,
-      Value<int>? position,
       Value<String>? name,
       Value<String?>? shuffleMode,
       Value<bool>? excludeArtists,
@@ -3195,7 +3173,6 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
       Value<String>? orderDirections}) {
     return SmartListsCompanion(
       id: id ?? this.id,
-      position: position ?? this.position,
       name: name ?? this.name,
       shuffleMode: shuffleMode ?? this.shuffleMode,
       excludeArtists: excludeArtists ?? this.excludeArtists,
@@ -3217,9 +3194,6 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
     final map = <String, Expression>{};
     if (id.present) {
       map['id'] = Variable<int>(id.value);
-    }
-    if (position.present) {
-      map['position'] = Variable<int>(position.value);
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
@@ -3267,7 +3241,6 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
   String toString() {
     return (StringBuffer('SmartListsCompanion(')
           ..write('id: $id, ')
-          ..write('position: $position, ')
           ..write('name: $name, ')
           ..write('shuffleMode: $shuffleMode, ')
           ..write('excludeArtists: $excludeArtists, ')
@@ -3297,17 +3270,6 @@ class $SmartListsTable extends SmartLists
   GeneratedIntColumn _constructId() {
     return GeneratedIntColumn('id', $tableName, false,
         hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
-  final VerificationMeta _positionMeta = const VerificationMeta('position');
-  @override
-  late final GeneratedIntColumn position = _constructPosition();
-  GeneratedIntColumn _constructPosition() {
-    return GeneratedIntColumn(
-      'position',
-      $tableName,
-      false,
-    );
   }
 
   final VerificationMeta _nameMeta = const VerificationMeta('name');
@@ -3453,7 +3415,6 @@ class $SmartListsTable extends SmartLists
   @override
   List<GeneratedColumn> get $columns => [
         id,
-        position,
         name,
         shuffleMode,
         excludeArtists,
@@ -3481,12 +3442,6 @@ class $SmartListsTable extends SmartLists
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('position')) {
-      context.handle(_positionMeta,
-          position.isAcceptableOrUnknown(data['position']!, _positionMeta));
-    } else if (isInserting) {
-      context.missing(_positionMeta);
     }
     if (data.containsKey('name')) {
       context.handle(
@@ -3780,6 +3735,424 @@ class $SmartListArtistsTable extends SmartListArtists
   }
 }
 
+class MoorPlaylist extends DataClass implements Insertable<MoorPlaylist> {
+  final int id;
+  final String name;
+  MoorPlaylist({required this.id, required this.name});
+  factory MoorPlaylist.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+      {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return MoorPlaylist(
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      name: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['name'] = Variable<String>(name);
+    return map;
+  }
+
+  PlaylistsCompanion toCompanion(bool nullToAbsent) {
+    return PlaylistsCompanion(
+      id: Value(id),
+      name: Value(name),
+    );
+  }
+
+  factory MoorPlaylist.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return MoorPlaylist(
+      id: serializer.fromJson<int>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'name': serializer.toJson<String>(name),
+    };
+  }
+
+  MoorPlaylist copyWith({int? id, String? name}) => MoorPlaylist(
+        id: id ?? this.id,
+        name: name ?? this.name,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('MoorPlaylist(')
+          ..write('id: $id, ')
+          ..write('name: $name')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf($mrjc(id.hashCode, name.hashCode));
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is MoorPlaylist && other.id == this.id && other.name == this.name);
+}
+
+class PlaylistsCompanion extends UpdateCompanion<MoorPlaylist> {
+  final Value<int> id;
+  final Value<String> name;
+  const PlaylistsCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+  });
+  PlaylistsCompanion.insert({
+    this.id = const Value.absent(),
+    required String name,
+  }) : name = Value(name);
+  static Insertable<MoorPlaylist> custom({
+    Expression<int>? id,
+    Expression<String>? name,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+    });
+  }
+
+  PlaylistsCompanion copyWith({Value<int>? id, Value<String>? name}) {
+    return PlaylistsCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PlaylistsCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $PlaylistsTable extends Playlists
+    with TableInfo<$PlaylistsTable, MoorPlaylist> {
+  final GeneratedDatabase _db;
+  final String? _alias;
+  $PlaylistsTable(this._db, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedIntColumn id = _constructId();
+  GeneratedIntColumn _constructId() {
+    return GeneratedIntColumn('id', $tableName, false,
+        hasAutoIncrement: true, declaredAsPrimaryKey: true);
+  }
+
+  final VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedTextColumn name = _constructName();
+  GeneratedTextColumn _constructName() {
+    return GeneratedTextColumn(
+      'name',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [id, name];
+  @override
+  $PlaylistsTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'playlists';
+  @override
+  final String actualTableName = 'playlists';
+  @override
+  VerificationContext validateIntegrity(Insertable<MoorPlaylist> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  MoorPlaylist map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return MoorPlaylist.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $PlaylistsTable createAlias(String alias) {
+    return $PlaylistsTable(_db, alias);
+  }
+}
+
+class MoorPlaylistEntry extends DataClass
+    implements Insertable<MoorPlaylistEntry> {
+  final int playlistId;
+  final String songPath;
+  final int position;
+  MoorPlaylistEntry(
+      {required this.playlistId,
+      required this.songPath,
+      required this.position});
+  factory MoorPlaylistEntry.fromData(
+      Map<String, dynamic> data, GeneratedDatabase db,
+      {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return MoorPlaylistEntry(
+      playlistId: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}playlist_id'])!,
+      songPath: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}song_path'])!,
+      position: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}position'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['playlist_id'] = Variable<int>(playlistId);
+    map['song_path'] = Variable<String>(songPath);
+    map['position'] = Variable<int>(position);
+    return map;
+  }
+
+  PlaylistEntriesCompanion toCompanion(bool nullToAbsent) {
+    return PlaylistEntriesCompanion(
+      playlistId: Value(playlistId),
+      songPath: Value(songPath),
+      position: Value(position),
+    );
+  }
+
+  factory MoorPlaylistEntry.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return MoorPlaylistEntry(
+      playlistId: serializer.fromJson<int>(json['playlistId']),
+      songPath: serializer.fromJson<String>(json['songPath']),
+      position: serializer.fromJson<int>(json['position']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'playlistId': serializer.toJson<int>(playlistId),
+      'songPath': serializer.toJson<String>(songPath),
+      'position': serializer.toJson<int>(position),
+    };
+  }
+
+  MoorPlaylistEntry copyWith(
+          {int? playlistId, String? songPath, int? position}) =>
+      MoorPlaylistEntry(
+        playlistId: playlistId ?? this.playlistId,
+        songPath: songPath ?? this.songPath,
+        position: position ?? this.position,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('MoorPlaylistEntry(')
+          ..write('playlistId: $playlistId, ')
+          ..write('songPath: $songPath, ')
+          ..write('position: $position')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf(
+      $mrjc(playlistId.hashCode, $mrjc(songPath.hashCode, position.hashCode)));
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is MoorPlaylistEntry &&
+          other.playlistId == this.playlistId &&
+          other.songPath == this.songPath &&
+          other.position == this.position);
+}
+
+class PlaylistEntriesCompanion extends UpdateCompanion<MoorPlaylistEntry> {
+  final Value<int> playlistId;
+  final Value<String> songPath;
+  final Value<int> position;
+  const PlaylistEntriesCompanion({
+    this.playlistId = const Value.absent(),
+    this.songPath = const Value.absent(),
+    this.position = const Value.absent(),
+  });
+  PlaylistEntriesCompanion.insert({
+    required int playlistId,
+    required String songPath,
+    required int position,
+  })  : playlistId = Value(playlistId),
+        songPath = Value(songPath),
+        position = Value(position);
+  static Insertable<MoorPlaylistEntry> custom({
+    Expression<int>? playlistId,
+    Expression<String>? songPath,
+    Expression<int>? position,
+  }) {
+    return RawValuesInsertable({
+      if (playlistId != null) 'playlist_id': playlistId,
+      if (songPath != null) 'song_path': songPath,
+      if (position != null) 'position': position,
+    });
+  }
+
+  PlaylistEntriesCompanion copyWith(
+      {Value<int>? playlistId, Value<String>? songPath, Value<int>? position}) {
+    return PlaylistEntriesCompanion(
+      playlistId: playlistId ?? this.playlistId,
+      songPath: songPath ?? this.songPath,
+      position: position ?? this.position,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (playlistId.present) {
+      map['playlist_id'] = Variable<int>(playlistId.value);
+    }
+    if (songPath.present) {
+      map['song_path'] = Variable<String>(songPath.value);
+    }
+    if (position.present) {
+      map['position'] = Variable<int>(position.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PlaylistEntriesCompanion(')
+          ..write('playlistId: $playlistId, ')
+          ..write('songPath: $songPath, ')
+          ..write('position: $position')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $PlaylistEntriesTable extends PlaylistEntries
+    with TableInfo<$PlaylistEntriesTable, MoorPlaylistEntry> {
+  final GeneratedDatabase _db;
+  final String? _alias;
+  $PlaylistEntriesTable(this._db, [this._alias]);
+  final VerificationMeta _playlistIdMeta = const VerificationMeta('playlistId');
+  @override
+  late final GeneratedIntColumn playlistId = _constructPlaylistId();
+  GeneratedIntColumn _constructPlaylistId() {
+    return GeneratedIntColumn(
+      'playlist_id',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _songPathMeta = const VerificationMeta('songPath');
+  @override
+  late final GeneratedTextColumn songPath = _constructSongPath();
+  GeneratedTextColumn _constructSongPath() {
+    return GeneratedTextColumn(
+      'song_path',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _positionMeta = const VerificationMeta('position');
+  @override
+  late final GeneratedIntColumn position = _constructPosition();
+  GeneratedIntColumn _constructPosition() {
+    return GeneratedIntColumn(
+      'position',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [playlistId, songPath, position];
+  @override
+  $PlaylistEntriesTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'playlist_entries';
+  @override
+  final String actualTableName = 'playlist_entries';
+  @override
+  VerificationContext validateIntegrity(Insertable<MoorPlaylistEntry> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('playlist_id')) {
+      context.handle(
+          _playlistIdMeta,
+          playlistId.isAcceptableOrUnknown(
+              data['playlist_id']!, _playlistIdMeta));
+    } else if (isInserting) {
+      context.missing(_playlistIdMeta);
+    }
+    if (data.containsKey('song_path')) {
+      context.handle(_songPathMeta,
+          songPath.isAcceptableOrUnknown(data['song_path']!, _songPathMeta));
+    } else if (isInserting) {
+      context.missing(_songPathMeta);
+    }
+    if (data.containsKey('position')) {
+      context.handle(_positionMeta,
+          position.isAcceptableOrUnknown(data['position']!, _positionMeta));
+    } else if (isInserting) {
+      context.missing(_positionMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => <GeneratedColumn>{};
+  @override
+  MoorPlaylistEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return MoorPlaylistEntry.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $PlaylistEntriesTable createAlias(String alias) {
+    return $PlaylistEntriesTable(_db, alias);
+  }
+}
+
 abstract class _$MoorDatabase extends GeneratedDatabase {
   _$MoorDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   _$MoorDatabase.connect(DatabaseConnection c) : super.connect(c);
@@ -3802,6 +4175,9 @@ abstract class _$MoorDatabase extends GeneratedDatabase {
   late final $SmartListsTable smartLists = $SmartListsTable(this);
   late final $SmartListArtistsTable smartListArtists =
       $SmartListArtistsTable(this);
+  late final $PlaylistsTable playlists = $PlaylistsTable(this);
+  late final $PlaylistEntriesTable playlistEntries =
+      $PlaylistEntriesTable(this);
   late final PersistentStateDao persistentStateDao =
       PersistentStateDao(this as MoorDatabase);
   late final SettingsDao settingsDao = SettingsDao(this as MoorDatabase);
@@ -3822,6 +4198,8 @@ abstract class _$MoorDatabase extends GeneratedDatabase {
         songs,
         moorAlbumOfDay,
         smartLists,
-        smartListArtists
+        smartListArtists,
+        playlists,
+        playlistEntries
       ];
 }
