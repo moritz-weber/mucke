@@ -1,38 +1,36 @@
 import '../entities/song.dart';
 import '../repositories/audio_player_repository.dart';
 import '../repositories/music_data_repository.dart';
-import '../usecases/handle_playback_state.dart';
-import '../usecases/set_current_song.dart';
+import '../repositories/platform_integration_repository.dart';
 
 class AudioPlayerActor {
   AudioPlayerActor(
     this._audioPlayerRepository,
     this._musicDataRepository,
-    this._handlePlaybackEvent,
-    this._setCurrentSong,
+    this._platformIntegrationRepository,
   ) {
     _audioPlayerRepository.currentSongStream.listen(_handleCurrentSong);
-    _audioPlayerRepository.playbackEventStream.listen(_handlePlaybackEvent);
+    _audioPlayerRepository.playbackEventStream
+        .listen(_platformIntegrationRepository.handlePlaybackEvent);
     _audioPlayerRepository.positionStream
         .listen((duration) => _handlePosition(duration, _currentSong));
+    // TODO: uncomment when implemented
+    // _audioPlayerRepository.queueStream.listen(_platformIntegrationRepository.setQueue);
 
+    // TODO: this doesn't quite fit the design: listening to audioplayer events
     _musicDataRepository.songUpdateStream.listen(_handleSongUpdate);
   }
 
-  // TODO: is this against a previous design choice? only direct "read" access to repos?
-  // Should this actor only listen to AudioPlayer events? --> move song update to new actor?
   final AudioPlayerRepository _audioPlayerRepository;
   final MusicDataRepository _musicDataRepository;
-
-  final HandlePlaybackEvent _handlePlaybackEvent;
-  final SetCurrentSong _setCurrentSong;
+  final PlatformIntegrationRepository _platformIntegrationRepository;
 
   Song? _currentSong;
   bool _countSongPlayback = false;
 
   Future<void> _handleCurrentSong(Song song) async {
     _currentSong = song;
-    return _setCurrentSong(song);
+    return _platformIntegrationRepository.setCurrentSong(song);
   }
 
   Future<void> _handlePosition(Duration? position, Song? song) async {

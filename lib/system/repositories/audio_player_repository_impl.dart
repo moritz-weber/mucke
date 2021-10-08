@@ -67,6 +67,7 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
 
   @override
   Future<void> addToQueue(Song song) async {
+    _log.d('addToQueue');
     _audioPlayerDataSource.addToQueue(song as SongModel);
     _managedQueue.addToQueue(song);
     _queueSubject.add(_managedQueue.queue);

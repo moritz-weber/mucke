@@ -7,6 +7,7 @@ class SetSongBlocked {
   final MusicDataRepository _musicDataRepository;
 
   Future<void> call(Song song, bool blocked) async {
+    // TODO: skip to next song automatically?
     await _musicDataRepository.setSongBlocked(song, blocked);
   }
 }

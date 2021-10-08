@@ -20,7 +20,7 @@ abstract class PlatformIntegrationRepository extends PlatformIntegrationInfoRepo
 
   void handlePlaybackEvent(PlaybackEvent playbackEvent);
   void setCurrentSong(Song song);
-  void setQueue(List<Song> queue);
+  // void setQueue(List<Song> queue);
 }
 
 class PlatformIntegrationEvent extends Event {

@@ -1,41 +1,35 @@
+import '../repositories/audio_player_repository.dart';
 import '../repositories/platform_integration_repository.dart';
-import '../usecases/pause.dart';
-import '../usecases/play.dart';
 import '../usecases/seek_to_next.dart';
-import '../usecases/seek_to_previous.dart';
 
 class PlatformIntegrationActor {
   PlatformIntegrationActor(
     this._platformIntegrationInfoRepository,
-    this._pause,
-    this._play,
     this._seekToNext,
-    this._seekToPrevious,
+    this._audioPlayerRepository,
   ) {
     _platformIntegrationInfoRepository.eventStream
         .listen((event) => _handlePlatformIntegrationEvent(event));
   }
 
+  final AudioPlayerRepository _audioPlayerRepository;
   final PlatformIntegrationInfoRepository _platformIntegrationInfoRepository;
 
-  final Pause _pause;
-  final Play _play;
   final SeekToNext _seekToNext;
-  final SeekToPrevious _seekToPrevious;
 
   void _handlePlatformIntegrationEvent(PlatformIntegrationEvent event) {
     switch (event.type) {
       case PlatformIntegrationEventType.play:
-        _play();
+        _audioPlayerRepository.play();
         break;
       case PlatformIntegrationEventType.pause:
-        _pause();
+        _audioPlayerRepository.pause();
         break;
       case PlatformIntegrationEventType.skipNext:
         _seekToNext();
         break;
       case PlatformIntegrationEventType.skipPrevious:
-        _seekToPrevious();
+        _audioPlayerRepository.seekToPrevious();
         break;
       default:
     }

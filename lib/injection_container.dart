@@ -15,31 +15,13 @@ import 'domain/repositories/music_data_repository.dart';
 import 'domain/repositories/persistent_state_repository.dart';
 import 'domain/repositories/platform_integration_repository.dart';
 import 'domain/repositories/settings_repository.dart';
-import 'domain/usecases/add_to_queue.dart';
-import 'domain/usecases/handle_playback_state.dart';
-import 'domain/usecases/init_queue.dart';
-import 'domain/usecases/inrement_like_count.dart';
-import 'domain/usecases/move_queue_item.dart';
-import 'domain/usecases/pause.dart';
-import 'domain/usecases/play.dart';
 import 'domain/usecases/play_album.dart';
 import 'domain/usecases/play_artist.dart';
-import 'domain/usecases/play_next.dart';
 import 'domain/usecases/play_smart_list.dart';
 import 'domain/usecases/play_songs.dart';
-import 'domain/usecases/remove_queue_index.dart';
-import 'domain/usecases/reset_like_count.dart';
-import 'domain/usecases/seek_to_index.dart';
 import 'domain/usecases/seek_to_next.dart';
-import 'domain/usecases/seek_to_previous.dart';
-import 'domain/usecases/set_current_song.dart';
-import 'domain/usecases/set_loop_mode.dart';
-import 'domain/usecases/set_shuffle_mode.dart';
 import 'domain/usecases/set_song_blocked.dart';
 import 'domain/usecases/shuffle_all.dart';
-import 'domain/usecases/toggle_next_song_link.dart';
-import 'domain/usecases/toggle_previous_song_link.dart';
-import 'domain/usecases/update_database.dart';
 import 'presentation/state/album_page_store.dart';
 import 'presentation/state/artist_page_store.dart';
 import 'presentation/state/audio_store.dart';
@@ -74,32 +56,17 @@ Future<void> setupGetIt() async {
   getIt.registerLazySingleton<MusicDataStore>(
     () => MusicDataStore(
       musicDataRepository: getIt(),
-      incrementLikeCount: getIt(),
-      resetLikeCount: getIt(),
       setSongBlocked: getIt(),
-      updateDatabase: getIt(),
-      toggleNextSongLink: getIt(),
-      togglePreviousSongLink: getIt(),
     ),
   );
   getIt.registerLazySingleton<AudioStore>(
     () => AudioStore(
-      audioPlayerInfoRepository: getIt(),
-      addToQueue: getIt(),
-      moveQueueItem: getIt(),
-      pause: getIt(),
-      play: getIt(),
+      audioPlayerRepository: getIt(),
       playAlbum: getIt(),
       playArtist: getIt(),
-      playNext: getIt(),
       playSmartList: getIt(),
       playSongs: getIt(),
-      removeQueueIndex: getIt(),
-      seekToIndex: getIt(),
       seekToNext: getIt(),
-      seekToPrevious: getIt(),
-      setLoopMode: getIt(),
-      setShuffleMode: getIt(),
       shuffleAll: getIt(),
     ),
   );
@@ -133,43 +100,6 @@ Future<void> setupGetIt() async {
   );
 
   // use cases
-  getIt.registerLazySingleton<AddToQueue>(
-    () => AddToQueue(
-      getIt<AudioPlayerRepository>(),
-      getIt<PlatformIntegrationRepository>(),
-    ),
-  );
-  getIt.registerLazySingleton<HandlePlaybackEvent>(
-    () => HandlePlaybackEvent(
-      getIt(),
-    ),
-  );
-  getIt.registerLazySingleton<IncrementLikeCount>(
-    () => IncrementLikeCount(
-      getIt(),
-    ),
-  );
-  getIt.registerLazySingleton<InitQueue>(
-    () => InitQueue(
-      getIt(),
-    ),
-  );
-  getIt.registerLazySingleton<MoveQueueItem>(
-    () => MoveQueueItem(
-      getIt(),
-      getIt(),
-    ),
-  );
-  getIt.registerLazySingleton<Pause>(
-    () => Pause(
-      getIt(),
-    ),
-  );
-  getIt.registerLazySingleton<Play>(
-    () => Play(
-      getIt(),
-    ),
-  );
   getIt.registerLazySingleton<PlayAlbum>(
     () => PlayAlbum(
       getIt(),
@@ -190,57 +120,13 @@ Future<void> setupGetIt() async {
       getIt(),
     ),
   );
-  getIt.registerLazySingleton<PlayNext>(
-    () => PlayNext(
-      getIt(),
-      getIt(),
-    ),
-  );
   getIt.registerLazySingleton<PlaySongs>(
     () => PlaySongs(
-      getIt(),
-      getIt(),
-    ),
-  );
-  getIt.registerLazySingleton<RemoveQueueIndex>(
-    () => RemoveQueueIndex(
-      getIt(),
-      getIt(),
-    ),
-  );
-  getIt.registerLazySingleton<ResetLikeCount>(
-    () => ResetLikeCount(
-      getIt(),
-    ),
-  );
-  getIt.registerLazySingleton<SeekToIndex>(
-    () => SeekToIndex(
       getIt(),
     ),
   );
   getIt.registerLazySingleton<SeekToNext>(
     () => SeekToNext(
-      getIt(),
-      getIt(),
-    ),
-  );
-  getIt.registerLazySingleton<SeekToPrevious>(
-    () => SeekToPrevious(
-      getIt(),
-    ),
-  );
-  getIt.registerLazySingleton<SetCurrentSong>(
-    () => SetCurrentSong(
-      getIt(),
-    ),
-  );
-  getIt.registerLazySingleton<SetLoopMode>(
-    () => SetLoopMode(
-      getIt(),
-    ),
-  );
-  getIt.registerLazySingleton<SetShuffleMode>(
-    () => SetShuffleMode(
       getIt(),
       getIt(),
     ),
@@ -254,21 +140,6 @@ Future<void> setupGetIt() async {
     () => ShuffleAll(
       getIt(),
       getIt(),
-      getIt(),
-    ),
-  );
-  getIt.registerLazySingleton<ToggleNextSongLink>(
-    () => ToggleNextSongLink(
-      getIt(),
-    ),
-  );
-  getIt.registerLazySingleton<TogglePreviousSongLink>(
-    () => TogglePreviousSongLink(
-      getIt(),
-    ),
-  );
-  getIt.registerLazySingleton<UpdateDatabase>(
-    () => UpdateDatabase(
       getIt(),
     ),
   );
@@ -362,8 +233,6 @@ Future<void> setupGetIt() async {
       getIt(),
       getIt(),
       getIt(),
-      getIt(),
-      getIt(),
     ),
   );
 
@@ -372,15 +241,11 @@ Future<void> setupGetIt() async {
       getIt(),
       getIt(),
       getIt(),
-      getIt(),
     ),
   );
 
   getIt.registerSingleton<PersistenceActor>(
     PersistenceActor(
-      getIt(),
-      getIt(),
-      getIt(),
       getIt(),
       getIt(),
     ),
