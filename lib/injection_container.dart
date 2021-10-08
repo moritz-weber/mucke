@@ -118,6 +118,7 @@ Future<void> setupGetIt() async {
     () => PlaySmartList(
       getIt(),
       getIt(),
+      getIt(),
     ),
   );
   getIt.registerLazySingleton<PlaySongs>(

@@ -27,7 +27,6 @@ abstract class _MusicDataStore with Store {
 
   final SetSongBlocked _setSongBlocked;
 
-  // TODO: exploratory; this was an infoRepo before; all "writing" changes were supposed to go through use cases
   final MusicDataRepository _musicDataRepository;
 
   @observable

@@ -12,6 +12,11 @@ class PlaybackEvent {
   final ProcessingState processingState;
   final Duration updatePosition;
   final DateTime updateTime;
+
+  @override
+  String toString() {
+    return '$index, $playing, $processingState';
+  }
 }
 
 enum ProcessingState {

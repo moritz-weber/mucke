@@ -19,11 +19,15 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
     _audioPlayerDataSource.currentIndexStream.listen(
       (index) {
         _currentIndexSubject.add(index);
-        _updateCurrentSong(queueStream.value, index);
+        if (!blockIndexUpdate) {
+          _updateCurrentSong(queueStream.value, index);
+        }
       },
     );
     _queueSubject.listen((queue) {
-      if (currentIndexStream.hasValue) _updateCurrentSong(queue, currentIndexStream.value);
+      if (currentIndexStream.hasValue) {
+        _updateCurrentSong(queue, currentIndexStream.value);
+      }
     });
   }
 
@@ -37,6 +41,9 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   final BehaviorSubject<LoopMode> _loopModeSubject = BehaviorSubject();
   final BehaviorSubject<List<Song>> _queueSubject = BehaviorSubject();
   final BehaviorSubject<ShuffleMode> _shuffleModeSubject = BehaviorSubject();
+
+  // temporarily block song updating via index updates to avoid double updates on shufflemode change
+  bool blockIndexUpdate = false;
 
   @override
   ValueStream<ShuffleMode> get shuffleModeStream => _shuffleModeSubject.stream;
@@ -179,20 +186,23 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
 
     if (updateQueue) {
       final splitIndex = await _managedQueue.reshuffleQueue(shuffleMode, currentIndex);
-      _queueSubject.add(_managedQueue.queue);
+      blockIndexUpdate = true;
 
-      await _audioPlayerDataSource.replaceQueueAroundIndex(
+      _audioPlayerDataSource
+          .replaceQueueAroundIndex(
         index: currentIndex,
         before: _managedQueue.queue.sublist(0, splitIndex).map((e) => e as SongModel).toList(),
         after: _managedQueue.queue.sublist(splitIndex + 1).map((e) => e as SongModel).toList(),
-      );
+      )
+          .then((_) {
+        _queueSubject.add(_managedQueue.queue);
+      });
     }
   }
 
   @override
-  Future<void> stop() {
-    // TODO: implement stop
-    throw UnimplementedError();
+  Future<void> stop() async {
+    _audioPlayerDataSource.stop();
   }
 
   @override
@@ -211,6 +221,8 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
       _log.d('Current song: ${queue[index]}');
       _currentSongSubject.add(queue[index]);
     }
+    // idea: unblock index update, once the current song has been updated (via queue update)
+    blockIndexUpdate = false;
   }
 
   /// Calculate the new current index when removing the song at [removeIndex].

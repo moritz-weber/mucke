@@ -16,7 +16,7 @@ const int LOAD_MAX = 6;
 class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
   AudioPlayerDataSourceImpl(this._audioPlayer) {
     _audioPlayer.currentIndexStream.listen((index) async {
-      _log.d('currentIndexSteam.listen: $index');
+      _log.d('currentIndexStream.listen: $index');
       if (!_lockUpdate) {
         if (!await _updateLoadedQueue(index)) {
           _updateCurrentIndex(index);
@@ -27,6 +27,13 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
     _audioPlayer.playingStream.listen((event) => _playingSubject.add(event));
 
     _audioPlayer.positionStream.listen((event) => _positionSubject.add(event));
+
+    _audioPlayer.playbackEventStream.listen((event) {
+      if (event.processingState == ja.ProcessingState.completed && _audioPlayer.playing) {
+        // AudioPlayer crashes if paused directly on completed
+        Future.delayed(const Duration(milliseconds: 100)).then((_) => pause());
+      }
+    });
 
     _playbackEventModelStream = Rx.combineLatest2<ja.PlaybackEvent, bool, PlaybackEventModel>(
       _audioPlayer.playbackEventStream,
