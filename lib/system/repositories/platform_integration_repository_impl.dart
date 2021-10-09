@@ -23,21 +23,6 @@ class PlatformIntegrationRepositoryImpl implements PlatformIntegrationRepository
   }
 
   @override
-  void pause() {
-    _platformIntegrationDataSource.onPause();
-  }
-
-  @override
-  void play() {
-    _platformIntegrationDataSource.onPlay();
-  }
-
-  @override
-  void onStop() {
-    // TODO: implement onStop
-  }
-
-  @override
   void setCurrentSong(Song song) {
     _log.d('setCurrentSong');
     _platformIntegrationDataSource.setCurrentSong(song as SongModel);

@@ -16,7 +16,6 @@ abstract class MusicDataInfoRepository {
 
   Stream<List<Playlist>> get playlistsStream;
   Stream<Playlist> getPlaylistStream(int playlistId);
-  Stream<List<Song>> getPlaylistSongStream(Playlist playlist);
 
   Stream<List<Album>> get albumStream;
   Stream<List<Album>> getArtistAlbumStream(Artist artist);
@@ -40,7 +39,6 @@ abstract class MusicDataRepository extends MusicDataInfoRepository {
   Future<void> resetLikeCount(Song song);
 
   Future<void> incrementPlayCount(Song song);
-  Future<void> resetPlayCount(Song song);
 
   Future<void> togglePreviousSongLink(Song song);
   Future<void> toggleNextSongLink(Song song);

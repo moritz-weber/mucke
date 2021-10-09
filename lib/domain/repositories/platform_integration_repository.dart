@@ -14,10 +14,6 @@ abstract class PlatformIntegrationInfoRepository {
 }
 
 abstract class PlatformIntegrationRepository extends PlatformIntegrationInfoRepository {
-  void play();
-  void pause();
-  void onStop();
-
   void handlePlaybackEvent(PlaybackEvent playbackEvent);
   void setCurrentSong(Song song);
   // void setQueue(List<Song> queue);

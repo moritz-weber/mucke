@@ -6,7 +6,5 @@ abstract class PlatformIntegrationDataSource {
   Stream<PlatformIntegrationEvent> get eventStream;
 
   Future<void> handlePlaybackEvent(PlaybackEventModel playbackEventModel);
-  Future<void> onPause();
-  Future<void> onPlay();
   Future<void> setCurrentSong(SongModel songModel);
 }

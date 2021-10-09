@@ -58,7 +58,7 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   ValueStream<int> get currentIndexStream => _currentIndexSubject.stream;
 
   @override
-  Stream<Song> get currentSongStream => _currentSongSubject.stream;
+  Stream<Song> get currentSongStream => _currentSongSubject.stream.distinct();
 
   @override
   Stream<PlaybackEvent> get playbackEventStream => _audioPlayerDataSource.playbackEventStream;

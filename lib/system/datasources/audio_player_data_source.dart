@@ -6,7 +6,6 @@ import '../models/song_model.dart';
 
 abstract class AudioPlayerDataSource {
   ValueStream<int> get currentIndexStream;
-  // ValueStream<SongModel> get currentSongStream;
   Stream<PlaybackEventModel> get playbackEventStream;
   ValueStream<bool> get playingStream;
   ValueStream<Duration> get positionStream;
@@ -16,7 +15,7 @@ abstract class AudioPlayerDataSource {
   Future<void> stop();
   Future<bool> seekToNext();
   Future<void> seekToPrevious();
-  Future<void> dispose();
+  Future<void> dispose();  // TODO: unused
 
   Future<void> loadQueue({
     required List<SongModel> queue,

@@ -19,18 +19,6 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
   MusicDataDao(MoorDatabase db) : super(db);
 
   @override
-  Future<List<AlbumModel>> getAlbums() async {
-    return select(albums).get().then((moorAlbumList) =>
-        moorAlbumList.map((moorAlbum) => AlbumModel.fromMoor(moorAlbum)).toList());
-  }
-
-  // TODO: insert can throw exception -> implications?
-  @override
-  Future<int> insertAlbum(AlbumModel albumModel) async {
-    return await into(albums).insert(albumModel.toAlbumsCompanion());
-  }
-
-  @override
   Stream<List<SongModel>> get songStream {
     return (select(songs)..orderBy([(t) => OrderingTerm(expression: t.title)])).watch().map(
         (moorSongList) => moorSongList.map((moorSong) => SongModel.fromMoor(moorSong)).toList());
@@ -48,12 +36,6 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
     return (select(artists)..orderBy([(t) => OrderingTerm(expression: t.name)])).watch().map(
         (moorArtistList) =>
             moorArtistList.map((moorArtist) => ArtistModel.fromMoor(moorArtist)).toList());
-  }
-
-  @override
-  Future<List<SongModel>> getSongs() {
-    return select(songs).get().then(
-        (moorSongList) => moorSongList.map((moorSong) => SongModel.fromMoor(moorSong)).toList());
   }
 
   @override
@@ -143,24 +125,8 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
   }
 
   @override
-  Future<int> insertArtist(ArtistModel artistModel) async {
-    return into(artists).insert(artistModel.toArtistsCompanion());
-  }
-
-  @override
   Future<void> deleteAllAlbums() async {
     delete(albums).go();
-  }
-
-  @override
-  Future<void> deleteAllSongs() async {
-    delete(songs).go();
-  }
-
-  @override
-  Future<List<ArtistModel>> getArtists() {
-    return select(artists).get().then((moorArtistList) =>
-        moorArtistList.map((moorArtist) => ArtistModel.fromMoor(moorArtist)).toList());
   }
 
   @override
@@ -313,12 +279,6 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
       songPath: Value(song.path),
       position: Value(songCount),
     ));
-  }
-
-  @override
-  Stream<List<SongModel>> getPlaylistSongStream(PlaylistModel playlist) {
-    // TODO: implement getPlaylistSongStream
-    throw UnimplementedError();
   }
 
   @override

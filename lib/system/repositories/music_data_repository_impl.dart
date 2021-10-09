@@ -142,13 +142,6 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   }
 
   @override
-  Future<void> resetPlayCount(Song song) async {
-    final newSong = (song as SongModel).copyWith(playCount: 0);
-    _songUpdateSubject.add({song.path: newSong});
-    _musicDataSource.updateSong(newSong);
-  }
-
-  @override
   Future<void> resetSkipCount(Song song) async {
     final newSong = (song as SongModel).copyWith(skipCount: 0);
     _songUpdateSubject.add({song.path: newSong});
@@ -273,11 +266,6 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   @override
   Future<void> appendSongToPlaylist(Playlist playlist, Song song) async {
     _musicDataSource.appendSongToPlaylist(playlist as PlaylistModel, song as SongModel);
-  }
-
-  @override
-  Stream<List<Song>> getPlaylistSongStream(Playlist playlist) {
-    return _musicDataSource.getPlaylistSongStream(playlist as PlaylistModel);
   }
 
   @override

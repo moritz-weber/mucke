@@ -28,7 +28,7 @@ abstract class AudioPlayerRepository extends AudioPlayerInfoRepository {
   Future<bool> seekToNext();
   Future<void> seekToPrevious();
   Future<void> seekToIndex(int index);
-  Future<void> dispose();
+  // Future<void> dispose();  // TODO: unused
 
   Future<void> initQueue(
     List<QueueItem> queueItems,
