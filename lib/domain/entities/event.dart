@@ -1,3 +1,5 @@
-abstract class Event {
-  Map<String, dynamic>? payload;
+class Event {
+  Event(this.payload);
+
+  final Map<String, dynamic>? payload;
 }

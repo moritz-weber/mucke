@@ -433,4 +433,12 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
       return leftBorder <= index || index < rightBorder;
     }
   }
+
+  @override
+  Future<void> seekToPosition(double position) async {
+    final duration = _audioPlayer.duration;
+    if (duration != null) {
+      _audioPlayer.seek(duration * position);
+    }
+  }
 }

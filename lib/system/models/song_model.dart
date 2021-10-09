@@ -15,7 +15,7 @@ class SongModel extends Song {
     required this.albumId,
     required String artist,
     required String path,
-    required int duration,
+    required Duration duration,
     required bool blocked,
     String? albumArtPath,
     required int discNumber,
@@ -51,7 +51,7 @@ class SongModel extends Song {
         albumId: moorSong.albumId,
         artist: moorSong.artist,
         blocked: moorSong.blocked,
-        duration: moorSong.duration,
+        duration: Duration(milliseconds: moorSong.duration),
         path: moorSong.path,
         title: moorSong.title,
         albumArtPath: moorSong.albumArtPath,
@@ -79,7 +79,7 @@ class SongModel extends Song {
       album: tag.album ?? DEF_ALBUM,
       albumId: albumId,
       path: path,
-      duration: (audioFile.length ?? DEF_DURATION) * 1000,
+      duration: Duration(milliseconds: (audioFile.length ?? DEF_DURATION) * 1000),
       blocked: false,
       discNumber: _parseNumber(tag.discNumber),
       trackNumber: _parseNumber(tag.trackNumber),
@@ -94,6 +94,7 @@ class SongModel extends Song {
     );
   }
 
+  // TODO: unused
   factory SongModel.fromMediaItem(MediaItem mediaItem) {
     final String? artUri = mediaItem.artUri?.path.replaceFirst('file://', '');
 
@@ -104,7 +105,7 @@ class SongModel extends Song {
       album: mediaItem.album!,
       albumId: mediaItem.extras!['albumId'] as int,
       artist: mediaItem.artist!,
-      duration: mediaItem.duration!.inMilliseconds,
+      duration: mediaItem.duration!,
       blocked: mediaItem.extras!['blocked'] as bool,
       path: mediaItem.id,
       title: mediaItem.title,
@@ -133,7 +134,7 @@ class SongModel extends Song {
     int? albumId,
     String? artist,
     bool? blocked,
-    int? duration,
+    Duration? duration,
     String? path,
     String? title,
     String? albumArtPath,
@@ -172,7 +173,7 @@ class SongModel extends Song {
         albumId: Value(albumId),
         artist: Value(artist),
         blocked: Value(blocked),
-        duration: Value(duration),
+        duration: Value(duration.inMilliseconds),
         path: Value(path),
         title: Value(title),
         albumArtPath: Value(albumArtPath),
@@ -193,7 +194,7 @@ class SongModel extends Song {
         artist: Value(artist),
         title: Value(title),
         path: Value(path),
-        duration: Value(duration),
+        duration: Value(duration.inMilliseconds),
         albumArtPath: Value(albumArtPath),
         discNumber: Value(discNumber),
         trackNumber: Value(trackNumber),
@@ -206,7 +207,7 @@ class SongModel extends Song {
           title: title,
           album: album,
           artist: artist,
-          duration: Duration(milliseconds: duration),
+          duration: duration,
           artUri: Uri.file('$albumArtPath'),
           extras: {
             'albumId': albumId,

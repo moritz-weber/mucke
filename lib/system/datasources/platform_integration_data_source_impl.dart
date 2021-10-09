@@ -42,6 +42,15 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
     _eventSubject.add(PlatformIntegrationEvent(type: PlatformIntegrationEventType.skipPrevious));
   }
 
+  @override
+  Future<void> seek(Duration position) async {
+    _log.d('skipToPrevious');
+    _eventSubject.add(PlatformIntegrationEvent(
+      type: PlatformIntegrationEventType.seek,
+      payload: {'position': position},
+    ));
+  }
+
   // PlatformIntegrationDataSource interface
 
   @override
@@ -54,6 +63,9 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
       if (pe.playing) {
         playbackState.add(playbackState.value.copyWith(
           controls: [MediaControl.skipToPrevious, MediaControl.pause, MediaControl.skipToNext],
+          systemActions: const {
+            MediaAction.seek,
+          },
           playing: true,
           processingState: AudioProcessingState.ready,
           updatePosition: pe.updatePosition + timeDelta,
@@ -61,6 +73,9 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
       } else {
         playbackState.add(playbackState.value.copyWith(
           controls: [MediaControl.skipToPrevious, MediaControl.play, MediaControl.skipToNext],
+          systemActions: const {
+            MediaAction.seek,
+          },
           processingState: AudioProcessingState.ready,
           updatePosition: pe.updatePosition + timeDelta,
           playing: false,

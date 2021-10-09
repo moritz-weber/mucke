@@ -28,6 +28,8 @@ abstract class AudioPlayerRepository extends AudioPlayerInfoRepository {
   Future<bool> seekToNext();
   Future<void> seekToPrevious();
   Future<void> seekToIndex(int index);
+  /// Seek to a relative position of the current track.
+  Future<void> seekToPosition(double position);
   // Future<void> dispose();  // TODO: unused
 
   Future<void> initQueue(

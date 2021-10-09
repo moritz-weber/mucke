@@ -40,7 +40,7 @@ class SongInfo extends StatelessWidget {
         ),
         InfoRow(
           leading: 'Duration:',
-          trailing: utils.msToTimeString(Duration(milliseconds: song.duration)),
+          trailing: utils.msToTimeString(song.duration),
           leadingWidth: _LEADING_WIDTH,
         ),
         InfoRow(

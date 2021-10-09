@@ -15,6 +15,7 @@ abstract class AudioPlayerDataSource {
   Future<void> stop();
   Future<bool> seekToNext();
   Future<void> seekToPrevious();
+  Future<void> seekToPosition(double position);
   Future<void> dispose();  // TODO: unused
 
   Future<void> loadQueue({

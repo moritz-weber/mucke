@@ -31,7 +31,17 @@ class PlatformIntegrationActor {
       case PlatformIntegrationEventType.skipPrevious:
         _audioPlayerRepository.seekToPrevious();
         break;
-      default:
+      case PlatformIntegrationEventType.stop:
+        break;
+      case PlatformIntegrationEventType.seek:
+        _seekToPosition(event.payload!['position'] as Duration);
+        break;
     }
+  }
+
+  Future<void> _seekToPosition(Duration position) async {
+    final duration =
+        await _audioPlayerRepository.currentSongStream.first.then((value) => value.duration);
+    _audioPlayerRepository.seekToPosition(position.inMilliseconds / duration.inMilliseconds);
   }
 }

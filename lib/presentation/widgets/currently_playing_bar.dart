@@ -65,7 +65,7 @@ class CurrentlyPlayingBar extends StatelessWidget {
               ),
               Container(
                 child: LinearProgressIndicator(
-                  value: position.inMilliseconds / song.duration,
+                  value: position.inMilliseconds / song.duration.inMilliseconds,
                   valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
                   backgroundColor: Colors.white10,
                 ),

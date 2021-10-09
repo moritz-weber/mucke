@@ -38,11 +38,9 @@ class AudioPlayerActor {
       return;
     }
 
-    final int pos = position.inMilliseconds;
-
-    if (pos < song.duration * 0.05) {
+    if (position < song.duration * 0.05) {
       _countSongPlayback = true;
-    } else if (pos > song.duration * 0.95 && _countSongPlayback) {
+    } else if (position > song.duration * 0.95 && _countSongPlayback) {
       _countSongPlayback = false;
       await _musicDataRepository.incrementPlayCount(song);
       _musicDataRepository.resetSkipCount(song);

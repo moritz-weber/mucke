@@ -26,8 +26,7 @@ class Song extends Equatable {
   /// Is this song blocked in shuffle mode?
   final bool blocked;
 
-  /// Duration in milliseconds.
-  final int duration;
+  final Duration duration;
   final String path;
   final String title;
 

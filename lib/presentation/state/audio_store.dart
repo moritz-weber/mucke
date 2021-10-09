@@ -98,6 +98,9 @@ abstract class _AudioStore with Store {
 
   Future<void> seekToIndex(int index) async => _audioPlayerRepository.seekToIndex(index);
 
+  Future<void> seekToPosition(double position) async =>
+      _audioPlayerRepository.seekToPosition(position);
+
   Future<void> setShuffleMode(ShuffleMode shuffleMode) async =>
       _audioPlayerRepository.setShuffleMode(shuffleMode);
 

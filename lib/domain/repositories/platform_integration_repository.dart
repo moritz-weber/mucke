@@ -20,7 +20,7 @@ abstract class PlatformIntegrationRepository extends PlatformIntegrationInfoRepo
 }
 
 class PlatformIntegrationEvent extends Event {
-  PlatformIntegrationEvent({required this.type});
+  PlatformIntegrationEvent({required this.type, Map<String, dynamic>? payload}) : super(payload);
 
   final PlatformIntegrationEventType type;
 }
@@ -31,4 +31,5 @@ enum PlatformIntegrationEventType {
   stop,
   skipNext,
   skipPrevious,
+  seek,
 }

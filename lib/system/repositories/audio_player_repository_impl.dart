@@ -249,4 +249,8 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
     }
     return newCurrentIndex;
   }
+
+  @override
+  Future<void> seekToPosition(double position) async =>
+      _audioPlayerDataSource.seekToPosition(position);
 }

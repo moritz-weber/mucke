@@ -7,8 +7,16 @@ import 'package:get_it/get_it.dart';
 import '../state/audio_store.dart';
 import '../utils.dart';
 
-class TimeProgressIndicator extends StatelessWidget {
+class TimeProgressIndicator extends StatefulWidget {
   const TimeProgressIndicator({Key? key}) : super(key: key);
+
+  @override
+  State<TimeProgressIndicator> createState() => _TimeProgressIndicatorState();
+}
+
+class _TimeProgressIndicatorState extends State<TimeProgressIndicator> {
+  bool useLocalPosition = false;
+  double localPosition = 0.0;
 
   @override
   Widget build(BuildContext context) {
@@ -16,13 +24,16 @@ class TimeProgressIndicator extends StatelessWidget {
 
     return Observer(
       builder: (BuildContext context) {
-        final duration =
-            Duration(milliseconds: audioStore.currentSongStream.value?.duration ?? 1000);
+        final duration = audioStore.currentSongStream.value?.duration ?? const Duration(minutes: 1);
+        final sliderWidth = useLocalPosition
+            ? localPosition
+            : _position(audioStore.currentPositionStream.value?.inMilliseconds ?? 0,
+                duration.inMilliseconds);
 
         return Row(
           children: [
             Container(
-              width: 48,
+              width: 44,
               child: Text(
                 msToTimeString(
                   audioStore.currentPositionStream.value ?? const Duration(seconds: 0),
@@ -30,33 +41,31 @@ class TimeProgressIndicator extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: Container(
-                width: double.infinity,
-                height: 3.0,
-                decoration: const BoxDecoration(
-                  color: Colors.white10,
-                  borderRadius: BorderRadius.all(Radius.circular(2)),
-                ),
-                alignment: Alignment.centerLeft,
-                child: FractionallySizedBox(
-                  widthFactor: min(
-                    (audioStore.currentPositionStream.value?.inMilliseconds ?? 0) /
-                        duration.inMilliseconds,
-                    1.0,
-                  ),
-                  heightFactor: 1.0,
-                  child: Container(
-                    height: double.infinity,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(2)),
-                    ),
-                  ),
-                ),
+              child: Slider(
+                value: sliderWidth,
+                activeColor: Colors.white,
+                inactiveColor: Colors.white10,
+                onChanged: (value) {
+                  setState(() {
+                    localPosition = value;
+                  });
+                },
+                onChangeStart: (value) {
+                  setState(() {
+                    localPosition = value;
+                    useLocalPosition = true;
+                  });
+                },
+                onChangeEnd: (value) {
+                  setState(() {
+                    useLocalPosition = false;
+                  });
+                  audioStore.seekToPosition(value);
+                },
               ),
             ),
             Container(
-              width: 48,
+              width: 44,
               alignment: Alignment.centerRight,
               child: Text(msToTimeString(duration)),
             ),
@@ -65,5 +74,10 @@ class TimeProgressIndicator extends StatelessWidget {
         );
       },
     );
+  }
+
+  double _position(int position, int duration) {
+    final res = position / duration;
+    return min(1.0, max(0.0, res));
   }
 }
