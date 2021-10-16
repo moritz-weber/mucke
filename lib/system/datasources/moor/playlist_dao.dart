@@ -95,6 +95,51 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
   }
 
   @override
+  Future<void> moveEntry(int playlistId, int oldIndex, int newIndex) async {
+    if (oldIndex != newIndex) {
+      transaction(() async {
+        await (update(playlistEntries)
+              ..where((tbl) => tbl.position.equals(oldIndex) & tbl.playlistId.equals(playlistId)))
+            .write(const PlaylistEntriesCompanion(position: Value(-1)));
+        if (oldIndex < newIndex) {
+          for (int i = oldIndex + 1; i <= newIndex; i++) {
+            await (update(playlistEntries)
+                  ..where((tbl) => tbl.position.equals(i) & tbl.playlistId.equals(playlistId)))
+                .write(PlaylistEntriesCompanion(position: Value(i - 1)));
+          }
+        } else {
+          for (int i = oldIndex - 1; i >= newIndex; i--) {
+            await (update(playlistEntries)
+                  ..where((tbl) => tbl.position.equals(i) & tbl.playlistId.equals(playlistId)))
+                .write(PlaylistEntriesCompanion(position: Value(i + 1)));
+          }
+        }
+        await (update(playlistEntries)
+              ..where((tbl) => tbl.position.equals(-1) & tbl.playlistId.equals(playlistId)))
+            .write(PlaylistEntriesCompanion(position: Value(newIndex)));
+      });
+    }
+  }
+
+  @override
+  Future<void> removeIndex(int playlistId, int index) async {
+    final entries =
+        await (select(playlistEntries)..where((tbl) => tbl.playlistId.equals(playlistId))).get();
+    final count = entries.length;
+
+    transaction(() async {
+      await (delete(playlistEntries)
+            ..where((tbl) => tbl.position.equals(index) & tbl.playlistId.equals(playlistId)))
+          .go();
+      for (int i = index + 1; i < count; i++) {
+        await (update(playlistEntries)
+              ..where((tbl) => tbl.position.equals(i) & tbl.playlistId.equals(playlistId)))
+            .write(PlaylistEntriesCompanion(position: Value(i - 1)));
+      }
+    });
+  }
+
+  @override
   Future<void> insertSmartList(
     String name,
     sl.Filter filter,

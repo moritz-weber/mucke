@@ -300,6 +300,16 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   }
 
   @override
+  Future<void> movePlaylistEntry(int playlistId, int oldIndex, int newIndex) async {
+    _playlistDataSource.moveEntry(playlistId, oldIndex, newIndex);
+  }
+
+  @override
+  Future<void> removePlaylistEntry(int playlistId, int index) async {
+    _playlistDataSource.removeIndex(playlistId, index);
+  }
+
+  @override
   Future<void> insertSmartList({
     required String name,
     required Filter filter,

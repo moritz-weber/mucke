@@ -40,6 +40,7 @@ import 'system/datasources/music_data_source_contract.dart';
 import 'system/datasources/persistent_state_data_source.dart';
 import 'system/datasources/platform_integration_data_source.dart';
 import 'system/datasources/platform_integration_data_source_impl.dart';
+import 'system/datasources/playlist_data_source.dart';
 import 'system/datasources/settings_data_source.dart';
 import 'system/repositories/audio_player_repository_impl.dart';
 import 'system/repositories/music_data_repository_impl.dart';
@@ -200,6 +201,7 @@ Future<void> setupGetIt() async {
   getIt.registerLazySingleton<MusicDataSource>(() => moorDatabase.musicDataDao);
   getIt.registerLazySingleton<PersistentStateDataSource>(() => moorDatabase.persistentStateDao);
   getIt.registerLazySingleton<SettingsDataSource>(() => moorDatabase.settingsDao);
+  getIt.registerLazySingleton<PlaylistDataSource>(() => moorDatabase.playlistDao);
   getIt.registerLazySingleton<LocalMusicFetcher>(
     () => LocalMusicFetcherImpl(
       getIt(),

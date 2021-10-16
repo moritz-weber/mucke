@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:reorderables/reorderables.dart';
 
 import '../../domain/entities/playlist.dart';
 import '../../domain/entities/song.dart';
@@ -36,26 +37,39 @@ class PlaylistPage extends StatelessWidget {
                   onPressed: () => Navigator.pop(context),
                 ),
                 actions: [
-                  IconButton(icon: const Icon(Icons.edit), onPressed: () => _editPlaylist(context, uPlaylist)),
+                  IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () => _editPlaylist(context, uPlaylist)),
                 ],
                 titleSpacing: 0.0,
               ),
               body: Scrollbar(
-                child: ListView.separated(
-                  itemCount: uPlaylist.songs.length,
-                  itemBuilder: (_, int index) {
-                    final Song song = uPlaylist.songs[index];
-                    return SongListTile(
-                      song: song,
-                      showAlbum: true,
-                      subtitle: Subtitle.artistAlbum,
-                      onTap: () => audioStore.playSong(index, uPlaylist.songs),
-                      onTapMore: () => SongBottomSheet()(song, context),
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) => const SizedBox(
-                    height: 4.0,
-                  ),
+                child: CustomScrollView(
+                  slivers: [
+                    ReorderableSliverList(
+                      delegate: ReorderableSliverChildBuilderDelegate(
+                        (context, int index) {
+                          final Song song = uPlaylist.songs[index];
+                          return Dismissible(
+                            key: ValueKey(song.path),
+                            child: SongListTile(
+                              song: song,
+                              showAlbum: true,
+                              subtitle: Subtitle.artistAlbum,
+                              onTap: () => audioStore.playSong(index, uPlaylist.songs),
+                              onTapMore: () => SongBottomSheet()(song, context),
+                            ),
+                            onDismissed: (direction) {
+                              musicDataStore.removePlaylistEntry(uPlaylist.id, index);
+                            },
+                          );
+                        },
+                        childCount: uPlaylist.songs.length,
+                      ),
+                      onReorder: (oldIndex, newIndex) =>
+                          musicDataStore.movePlaylistEntry(uPlaylist.id, oldIndex, newIndex),
+                    )
+                  ],
                 ),
               ),
             );
@@ -90,7 +104,7 @@ class _PlaylistFormState extends State<_PlaylistForm> {
   late TextEditingController _controller;
 
   @override
-  void initState() { 
+  void initState() {
     super.initState();
     _controller = TextEditingController(text: widget.playlist.name);
   }
