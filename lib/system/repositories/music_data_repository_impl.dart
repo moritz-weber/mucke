@@ -256,11 +256,15 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   }
 
   String _fuzzy(String text) {
-    final String fuzzyText = '%$text%';
-    // for (final c in text.toLowerCase().replaceAll(' ', '').split('')) {
-    //   fuzzyText += '$c%';
-    // }
-    return fuzzyText;
+    final String fuzzyText = text
+        .replaceAll(RegExp(r'[aáàäâã]'), '[aáàäâã]')
+        .replaceAll(RegExp(r'[eéèëê]'), '[eéèëê]')
+        .replaceAll(RegExp(r'[iíìî]'), '[iíìî]')
+        .replaceAll(RegExp(r'[oóòöôõ]'), '[oóòöôõ]')
+        .replaceAll(RegExp(r'[uúùüû]'), '[uúùüû]')
+        .replaceAll('.', '\\.')
+        .replaceAll('?', '\\?');
+    return '.*$fuzzyText.*';
   }
 
   @override

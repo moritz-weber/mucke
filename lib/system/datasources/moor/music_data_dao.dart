@@ -252,15 +252,24 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
   Future<List> search(String searchText, {int limit = 0}) async {
     List<dynamic> result = [];
 
-    result += await (select(artists)..where((tbl) => tbl.name.like(searchText))).get().then(
+    result += await (select(artists)
+          ..where((tbl) => tbl.name.regexp(searchText, dotAll: true, caseSensitive: false)))
+        .get()
+        .then(
           (moorList) => moorList.map((moorArtist) => ArtistModel.fromMoor(moorArtist)).toList(),
         );
 
-    result += await (select(albums)..where((tbl) => tbl.title.like(searchText))).get().then(
+    result += await (select(albums)
+          ..where((tbl) => tbl.title.regexp(searchText, dotAll: true, caseSensitive: false)))
+        .get()
+        .then(
           (moorList) => moorList.map((moorAlbum) => AlbumModel.fromMoor(moorAlbum)).toList(),
         );
 
-    result += await (select(songs)..where((tbl) => tbl.title.like(searchText))).get().then(
+    result += await (select(songs)
+          ..where((tbl) => tbl.title.regexp(searchText, dotAll: true, caseSensitive: false)))
+        .get()
+        .then(
           (moorList) => moorList.map((moorSong) => SongModel.fromMoor(moorSong)).toList(),
         );
 
