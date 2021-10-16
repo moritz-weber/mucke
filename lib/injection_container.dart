@@ -85,17 +85,19 @@ Future<void> setupGetIt() async {
     (Album? album, _) => AlbumPageStore(album: album!, musicDataInfoRepository: getIt()),
   );
   getIt.registerFactory<SettingsStore>(
-    () => SettingsStore(settingsRepository: getIt()),
+    () => SettingsStore(
+      settingsRepository: getIt(),
+      musicDataRepository: getIt(),
+    ),
   );
   getIt.registerFactoryParam<SmartListFormStore, SmartList, void>(
     (SmartList? smartList, _) =>
-        SmartListFormStore(settingsRepository: getIt(), smartList: smartList),
+        SmartListFormStore(musicDataRepository: getIt(), smartList: smartList),
   );
   getIt.registerFactoryParam<SmartListPageStore, SmartList, void>(
     (SmartList? smartList, _) => SmartListPageStore(
       smartList: smartList!,
       musicDataInfoRepository: getIt(),
-      settingsRepository: getIt(),
     ),
   );
 
@@ -165,6 +167,7 @@ Future<void> setupGetIt() async {
 
   getIt.registerLazySingleton<MusicDataRepository>(
     () => MusicDataRepositoryImpl(
+      getIt(),
       getIt(),
       getIt(),
     ),

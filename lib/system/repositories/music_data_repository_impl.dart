@@ -7,11 +7,13 @@ import 'package:string_similarity/string_similarity.dart';
 import '../../domain/entities/album.dart';
 import '../../domain/entities/artist.dart';
 import '../../domain/entities/playlist.dart';
+import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/entities/smart_list.dart';
 import '../../domain/entities/song.dart';
 import '../../domain/repositories/music_data_repository.dart';
 import '../datasources/local_music_fetcher.dart';
 import '../datasources/music_data_source_contract.dart';
+import '../datasources/playlist_data_source.dart';
 import '../models/album_model.dart';
 import '../models/artist_model.dart';
 import '../models/playlist_model.dart';
@@ -22,12 +24,14 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   MusicDataRepositoryImpl(
     this._localMusicFetcher,
     this._musicDataSource,
+    this._playlistDataSource,
   ) {
     _musicDataSource.songStream.listen((event) => _songSubject.add(event));
   }
 
   final LocalMusicFetcher _localMusicFetcher;
   final MusicDataSource _musicDataSource;
+  final PlaylistDataSource _playlistDataSource;
 
   final BehaviorSubject<Map<String, Song>> _songUpdateSubject = BehaviorSubject();
   final BehaviorSubject<List<Song>> _songSubject = BehaviorSubject();
@@ -73,7 +77,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
 
   @override
   Stream<List<Song>> getSmartListSongStream(SmartList smartList) =>
-      _musicDataSource.getSmartListSongStream(smartList as SmartListModel);
+      _playlistDataSource.getSmartListSongStream(smartList as SmartListModel);
 
   @override
   Future<void> updateDatabase() async {
@@ -269,29 +273,63 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
 
   @override
   Future<void> appendSongToPlaylist(Playlist playlist, Song song) async {
-    _musicDataSource.appendSongToPlaylist(playlist as PlaylistModel, song as SongModel);
+    _playlistDataSource.appendSongToPlaylist(playlist as PlaylistModel, song as SongModel);
   }
 
   @override
   Stream<Playlist> getPlaylistStream(int playlistId) {
-    return _musicDataSource.getPlaylistStream(playlistId);
+    return _playlistDataSource.getPlaylistStream(playlistId);
   }
 
   @override
   Future<void> insertPlaylist(String name) async {
-    _musicDataSource.insertPlaylist(name);
+    _playlistDataSource.insertPlaylist(name);
   }
 
   @override
-  Stream<List<Playlist>> get playlistsStream => _musicDataSource.playlistsStream;
+  Stream<List<Playlist>> get playlistsStream => _playlistDataSource.playlistsStream;
 
   @override
   Future<void> removePlaylist(Playlist playlist) async {
-    _musicDataSource.removePlaylist(playlist as PlaylistModel);
+    _playlistDataSource.removePlaylist(playlist as PlaylistModel);
   }
 
   @override
   Future<void> updatePlaylist(int id, String name) async {
-    _musicDataSource.updatePlaylist(id, name);
+    _playlistDataSource.updatePlaylist(id, name);
+  }
+
+  @override
+  Future<void> insertSmartList({
+    required String name,
+    required Filter filter,
+    required OrderBy orderBy,
+    ShuffleMode? shuffleMode,
+  }) {
+    return _playlistDataSource.insertSmartList(name, filter, orderBy, shuffleMode);
+  }
+
+  @override
+  Future<void> removeSmartList(SmartList smartList) =>
+      _playlistDataSource.removeSmartList(smartList as SmartListModel);
+
+  @override
+  Stream<List<SmartList>> get smartListsStream => _playlistDataSource.smartListsStream;
+
+  @override
+  Stream<SmartList> getSmartListStream(int smartListId) =>
+      _playlistDataSource.getSmartListStream(smartListId);
+
+  @override
+  Future<void> updateSmartList(SmartList smartList) {
+    return _playlistDataSource.updateSmartList(
+      SmartListModel(
+        id: smartList.id,
+        name: smartList.name,
+        filter: smartList.filter,
+        orderBy: smartList.orderBy,
+        shuffleMode: smartList.shuffleMode,
+      ),
+    );
   }
 }

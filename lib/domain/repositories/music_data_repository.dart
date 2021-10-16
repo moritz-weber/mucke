@@ -1,6 +1,7 @@
 import '../entities/album.dart';
 import '../entities/artist.dart';
 import '../entities/playlist.dart';
+import '../entities/shuffle_mode.dart';
 import '../entities/smart_list.dart';
 import '../entities/song.dart';
 
@@ -16,6 +17,9 @@ abstract class MusicDataInfoRepository {
 
   Stream<List<Playlist>> get playlistsStream;
   Stream<Playlist> getPlaylistStream(int playlistId);
+
+  Stream<List<SmartList>> get smartListsStream;
+  Stream<SmartList> getSmartListStream(int smartListId);
 
   Stream<List<Album>> get albumStream;
   Stream<List<Album>> getArtistAlbumStream(Artist artist);
@@ -47,4 +51,13 @@ abstract class MusicDataRepository extends MusicDataInfoRepository {
   Future<void> updatePlaylist(int id, String name);
   Future<void> removePlaylist(Playlist playlist);
   Future<void> appendSongToPlaylist(Playlist playlist, Song song);
+
+  Future<void> insertSmartList({
+    required String name,
+    required Filter filter,
+    required OrderBy orderBy,
+    ShuffleMode? shuffleMode,
+  });
+  Future<void> updateSmartList(SmartList smartList);
+  Future<void> removeSmartList(SmartList smartList);
 }

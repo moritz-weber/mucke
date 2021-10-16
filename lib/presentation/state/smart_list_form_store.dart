@@ -2,24 +2,24 @@ import 'package:mobx/mobx.dart';
 
 import '../../domain/entities/artist.dart';
 import '../../domain/entities/smart_list.dart';
-import '../../domain/repositories/settings_repository.dart';
+import '../../domain/repositories/music_data_repository.dart';
 
 part 'smart_list_form_store.g.dart';
 
 class SmartListFormStore extends _SmartListStore with _$SmartListFormStore {
   SmartListFormStore({
-    required SettingsRepository settingsRepository,
+    required MusicDataRepository musicDataRepository,
     SmartList? smartList,
-  }) : super(settingsRepository, smartList);
+  }) : super(musicDataRepository, smartList);
 }
 
 abstract class _SmartListStore with Store {
   _SmartListStore(
-    this._settingsRepository,
+    this._musicDataRepository,
     this._smartList,
   );
 
-  final SettingsRepository _settingsRepository;
+  final MusicDataRepository _musicDataRepository;
   final SmartList? _smartList;
 
   final FormErrorState error = FormErrorState();
@@ -170,29 +170,29 @@ abstract class _SmartListStore with Store {
   }
 
   Future<void> _createSmartList() async {
-    await _settingsRepository.insertSmartList(
-        name: name ?? 'This needs a name',
-        filter: Filter(
-          artists: selectedArtists.toList(),
-          excludeArtists: excludeArtists,
-          minPlayCount: minPlayCountEnabled ? int.tryParse(minPlayCount) : null,
-          maxPlayCount: maxPlayCountEnabled ? int.tryParse(maxPlayCount) : null,
-          minYear: minYearEnabled ? int.tryParse(minYear) : null,
-          maxYear: maxYearEnabled ? int.tryParse(maxYear) : null,
-          minLikeCount: minLikeCount,
-          maxLikeCount: maxLikeCount,
-          excludeBlocked: excludeBlocked,
-          limit: limitEnabled ? int.tryParse(limit) : null,
-        ),
-        orderBy: OrderBy(
-          orderCriteria: orderState.where((e) => e.enabled).map((e) => e.orderCriterion).toList(),
-          orderDirections: orderState.where((e) => e.enabled).map((e) => e.orderDirection).toList(),
-        ),
+    await _musicDataRepository.insertSmartList(
+      name: name ?? 'This needs a name',
+      filter: Filter(
+        artists: selectedArtists.toList(),
+        excludeArtists: excludeArtists,
+        minPlayCount: minPlayCountEnabled ? int.tryParse(minPlayCount) : null,
+        maxPlayCount: maxPlayCountEnabled ? int.tryParse(maxPlayCount) : null,
+        minYear: minYearEnabled ? int.tryParse(minYear) : null,
+        maxYear: maxYearEnabled ? int.tryParse(maxYear) : null,
+        minLikeCount: minLikeCount,
+        maxLikeCount: maxLikeCount,
+        excludeBlocked: excludeBlocked,
+        limit: limitEnabled ? int.tryParse(limit) : null,
+      ),
+      orderBy: OrderBy(
+        orderCriteria: orderState.where((e) => e.enabled).map((e) => e.orderCriterion).toList(),
+        orderDirections: orderState.where((e) => e.enabled).map((e) => e.orderDirection).toList(),
+      ),
     );
   }
 
   Future<void> _updateSmartList() async {
-    await _settingsRepository.updateSmartList(
+    await _musicDataRepository.updateSmartList(
       SmartList(
         id: _smartList!.id,
         name: name ?? 'This needs a name',
@@ -240,7 +240,12 @@ abstract class _FormErrorState with Store {
 
   @computed
   bool get hasErrors =>
-      name != null || minPlayCount != null || maxPlayCount != null || minYear != null || maxYear != null || limit != null;
+      name != null ||
+      minPlayCount != null ||
+      maxPlayCount != null ||
+      minYear != null ||
+      maxYear != null ||
+      limit != null;
 }
 
 class OrderEntry {
@@ -276,8 +281,8 @@ List<OrderEntry> _createOrderState(OrderBy? orderBy) {
         descriptions[OrderCriterion.playCount]!),
     OrderEntry(false, OrderCriterion.artistName, OrderDirection.ascending,
         descriptions[OrderCriterion.artistName]!),
-    OrderEntry(false, OrderCriterion.year, OrderDirection.ascending,
-        descriptions[OrderCriterion.year]!),
+    OrderEntry(
+        false, OrderCriterion.year, OrderDirection.ascending, descriptions[OrderCriterion.year]!),
     OrderEntry(false, OrderCriterion.timeAdded, OrderDirection.ascending,
         descriptions[OrderCriterion.timeAdded]!),
   ];

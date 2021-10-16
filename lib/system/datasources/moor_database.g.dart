@@ -4182,6 +4182,7 @@ abstract class _$MoorDatabase extends GeneratedDatabase {
       PersistentStateDao(this as MoorDatabase);
   late final SettingsDao settingsDao = SettingsDao(this as MoorDatabase);
   late final MusicDataDao musicDataDao = MusicDataDao(this as MoorDatabase);
+  late final PlaylistDao playlistDao = PlaylistDao(this as MoorDatabase);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
