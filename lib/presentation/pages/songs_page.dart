@@ -6,6 +6,7 @@ import 'package:mobx/mobx.dart';
 import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
 import '../state/music_data_store.dart';
+import '../state/settings_store.dart';
 import '../widgets/song_bottom_sheet.dart';
 import '../widgets/song_list_tile.dart';
 
@@ -22,12 +23,15 @@ class _SongsPageState extends State<SongsPage> with AutomaticKeepAliveClientMixi
     print('SongsPage.build');
     final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
     final AudioStore audioStore = GetIt.I<AudioStore>();
+    final SettingsStore settingsStore = GetIt.I<SettingsStore>();
 
     super.build(context);
     return Observer(builder: (_) {
       print('SongsPage.build -> Observer.builder');
 
       final songStream = musicDataStore.songStream;
+      final isBlockSkippedSongsEnabled = settingsStore.isBlockSkippedSongsEnabled.first;
+      final blockSkippedSongsThreshold = settingsStore.blockSkippedSongsThreshold.first;
 
       switch (songStream.status) {
         case StreamStatus.active:
@@ -43,6 +47,8 @@ class _SongsPageState extends State<SongsPage> with AutomaticKeepAliveClientMixi
                   subtitle: Subtitle.artistAlbum,
                   onTap: () => audioStore.playSong(index, songs),
                   onTapMore: () => SongBottomSheet()(song, context),
+                  isBlockSkippedSongsEnabled: isBlockSkippedSongsEnabled.value,
+                  blockSkippedSongsThreshold: blockSkippedSongsThreshold.value,
                 );
               },
               separatorBuilder: (BuildContext context, int index) => const SizedBox(

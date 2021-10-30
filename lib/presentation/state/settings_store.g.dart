@@ -41,11 +41,47 @@ mixin _$SettingsStore on _SettingsStore, Store {
     });
   }
 
+  final _$isBlockSkippedSongsEnabledAtom =
+      Atom(name: '_SettingsStore.isBlockSkippedSongsEnabled');
+
+  @override
+  ObservableStream<bool> get isBlockSkippedSongsEnabled {
+    _$isBlockSkippedSongsEnabledAtom.reportRead();
+    return super.isBlockSkippedSongsEnabled;
+  }
+
+  @override
+  set isBlockSkippedSongsEnabled(ObservableStream<bool> value) {
+    _$isBlockSkippedSongsEnabledAtom
+        .reportWrite(value, super.isBlockSkippedSongsEnabled, () {
+      super.isBlockSkippedSongsEnabled = value;
+    });
+  }
+
+  final _$blockSkippedSongsThresholdAtom =
+      Atom(name: '_SettingsStore.blockSkippedSongsThreshold');
+
+  @override
+  ObservableStream<int> get blockSkippedSongsThreshold {
+    _$blockSkippedSongsThresholdAtom.reportRead();
+    return super.blockSkippedSongsThreshold;
+  }
+
+  @override
+  set blockSkippedSongsThreshold(ObservableStream<int> value) {
+    _$blockSkippedSongsThresholdAtom
+        .reportWrite(value, super.blockSkippedSongsThreshold, () {
+      super.blockSkippedSongsThreshold = value;
+    });
+  }
+
   @override
   String toString() {
     return '''
 smartListsStream: ${smartListsStream},
-libraryFoldersStream: ${libraryFoldersStream}
+libraryFoldersStream: ${libraryFoldersStream},
+isBlockSkippedSongsEnabled: ${isBlockSkippedSongsEnabled},
+blockSkippedSongsThreshold: ${blockSkippedSongsThreshold}
     ''';
   }
 }

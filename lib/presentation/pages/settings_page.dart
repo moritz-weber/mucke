@@ -1,14 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mobx/mobx.dart';
 
 import '../state/music_data_store.dart';
+import '../state/settings_page_store.dart';
 import '../theming.dart';
 import 'library_folders_page.dart';
-import 'smart_lists_settings_page.dart';
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
+
+  @override
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
+  late SettingsPageStore settingsPageStore;
+  late TextEditingController _controller;
+  late ReactionDisposer _dispose;
+
+  @override
+  void initState() {
+    super.initState();
+    settingsPageStore = GetIt.I<SettingsPageStore>();
+    settingsPageStore.init();
+    settingsPageStore.setupValidations();
+
+    _controller = TextEditingController();
+    _controller.addListener(() {
+      if (_controller.text != settingsPageStore.blockSkippedSongsThreshold) {
+        print('ctrl listener: ${_controller.text}');
+        settingsPageStore.blockSkippedSongsThreshold = _controller.text;
+      }
+    });
+    _dispose = autorun((_) {
+      if (_controller.text != settingsPageStore.blockSkippedSongsThreshold) {
+        print('autorun: ${settingsPageStore.blockSkippedSongsThreshold}');
+        _controller.text = settingsPageStore.blockSkippedSongsThreshold;
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    settingsPageStore.dispose();
+    _dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,17 +104,65 @@ class SettingsPage extends StatelessWidget {
               height: 4.0,
             ),
             const SettingsSection(text: 'Home page'),
-            ListTile(
-              title: const Text('Customize smart lists'),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (BuildContext context) => const SmartListsSettingsPage(),
-                ),
-              ),
+            const ListTile(
+              title: Text('Soon (tm)'),
             ),
             const Divider(
               height: 4.0,
+            ),
+            const SettingsSection(text: 'Customize playback'),
+            Observer(
+              builder: (_) {
+                final bool enabled = settingsPageStore.isBlockSkippedSongsEnabled;
+
+                return Column(
+                  children: [
+                    Padding(
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING, vertical: 4.0),
+                      child: Row(
+                        children: [
+                          const Text('Mark skipped songs as blocked'),
+                          const Spacer(),
+                          Switch(
+                            value: settingsPageStore.isBlockSkippedSongsEnabled,
+                            onChanged: (bool value) {
+                              print('set: $value');
+                              settingsPageStore.isBlockSkippedSongsEnabled = value;
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING, vertical: 4.0),
+                      child: Row(
+                        children: [
+                          const Text('Minimum skip count to block songs'),
+                          const Spacer(),
+                          SizedBox(
+                            width: 56.0,
+                            child: TextFormField(
+                              controller: _controller,
+                              enabled: enabled,
+                              keyboardType: TextInputType.number,
+                              textAlign: TextAlign.center,
+                              onChanged: (value) {
+                                print(value);
+                              },
+                              decoration: InputDecoration(
+                                errorText: settingsPageStore.error.skipCountThreshold,
+                                errorStyle: const TextStyle(height: 0, fontSize: 0),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
           ],
         ),

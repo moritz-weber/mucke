@@ -176,13 +176,81 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
                                 child: TextFormField(
                                   enabled: store.maxPlayCountEnabled,
                                   keyboardType: TextInputType.number,
-                                  initialValue: store.maxPlayCount.toString(),
+                                  initialValue: store.maxPlayCount,
                                   textAlign: TextAlign.center,
                                   onChanged: (value) {
                                     store.maxPlayCount = value;
                                   },
                                   decoration: InputDecoration(
                                     errorText: store.error.maxPlayCount,
+                                    errorStyle: const TextStyle(height: 0, fontSize: 0),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 24.0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
+                      child: Observer(
+                        builder: (_) {
+                          return Row(
+                            children: [
+                              Switch(
+                                value: store.minSkipCountEnabled,
+                                onChanged: (bool value) => store.minSkipCountEnabled = value,
+                              ),
+                              const Text('Minimum skip count'),
+                              const Spacer(),
+                              SizedBox(
+                                width: 36.0,
+                                child: TextFormField(
+                                  enabled: store.minSkipCountEnabled,
+                                  keyboardType: TextInputType.number,
+                                  initialValue: store.minSkipCount,
+                                  onChanged: (value) {
+                                    store.minSkipCount = value;
+                                  },
+                                  textAlign: TextAlign.center,
+                                  decoration: InputDecoration(
+                                    errorText: store.error.minSkipCount,
+                                    errorStyle: const TextStyle(height: 0, fontSize: 0),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 24.0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
+                      child: Observer(
+                        builder: (_) {
+                          return Row(
+                            children: [
+                              Switch(
+                                value: store.maxSkipCountEnabled,
+                                onChanged: (bool value) => store.maxSkipCountEnabled = value,
+                              ),
+                              const Text('Maximum skip count'),
+                              const Spacer(),
+                              SizedBox(
+                                width: 36.0,
+                                child: TextFormField(
+                                  enabled: store.maxSkipCountEnabled,
+                                  keyboardType: TextInputType.number,
+                                  initialValue: store.maxSkipCount,
+                                  textAlign: TextAlign.center,
+                                  onChanged: (value) {
+                                    store.maxSkipCount = value;
+                                  },
+                                  decoration: InputDecoration(
+                                    errorText: store.error.maxSkipCount,
                                     errorStyle: const TextStyle(height: 0, fontSize: 0),
                                   ),
                                 ),
@@ -244,7 +312,7 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
                                 child: TextFormField(
                                   enabled: store.maxYearEnabled,
                                   keyboardType: TextInputType.number,
-                                  initialValue: store.maxYear.toString(),
+                                  initialValue: store.maxYear,
                                   textAlign: TextAlign.center,
                                   onChanged: (value) {
                                     store.maxYear = value;
@@ -278,7 +346,7 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
                                 child: TextFormField(
                                   enabled: store.limitEnabled,
                                   keyboardType: TextInputType.number,
-                                  initialValue: store.limit.toString(),
+                                  initialValue: store.limit,
                                   textAlign: TextAlign.center,
                                   onChanged: (value) {
                                     store.limit = value;

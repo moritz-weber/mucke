@@ -107,6 +107,11 @@ class LibraryFolders extends Table {
   TextColumn get path => text()();
 }
 
+class BlockSkippedSongs extends Table {
+  BoolColumn get enabled => boolean().withDefault(const Constant(false))();
+  IntColumn get threshold => integer().withDefault(const Constant(3))();
+}
+
 class MoorAlbumOfDay extends Table {
   IntColumn get albumId => integer()();
   IntColumn get milliSecSinceEpoch => integer()();
@@ -128,6 +133,8 @@ class SmartLists extends Table {
   IntColumn get maxLikeCount => integer().withDefault(const Constant(5))();
   IntColumn get minPlayCount => integer().nullable()();
   IntColumn get maxPlayCount => integer().nullable()();
+  IntColumn get minSkipCount => integer().nullable()();
+  IntColumn get maxSkipCount => integer().nullable()();
   IntColumn get minYear => integer().nullable()();
   IntColumn get maxYear => integer().nullable()();
   IntColumn get limit => integer().nullable()();
@@ -173,6 +180,7 @@ class PlaylistEntries extends Table {
     SmartListArtists,
     Playlists,
     PlaylistEntries,
+    BlockSkippedSongs,
   ],
   daos: [
     PersistentStateDao,
@@ -192,7 +200,7 @@ class MoorDatabase extends _$MoorDatabase {
   MoorDatabase.connect(DatabaseConnection connection) : super.connect(connection);
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(beforeOpen: (details) async {
@@ -234,6 +242,12 @@ class MoorDatabase extends _$MoorDatabase {
           await m.alterTable(TableMigration(smartLists));
           await m.createTable(playlists);
           await m.createTable(playlistEntries);
+        }
+        if (from < 5) {
+          await m.addColumn(smartLists, smartLists.minSkipCount);
+          await m.addColumn(smartLists, smartLists.maxSkipCount);
+          await m.createTable(blockSkippedSongs);
+          await into(blockSkippedSongs).insert(const BlockSkippedSongsCompanion());
         }
       });
 }

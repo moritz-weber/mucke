@@ -3,6 +3,7 @@ import 'package:mobx/mobx.dart';
 import '../../domain/entities/artist.dart';
 import '../../domain/entities/smart_list.dart';
 import '../../domain/repositories/music_data_repository.dart';
+import '../utils.dart';
 
 part 'smart_list_form_store.g.dart';
 
@@ -41,6 +42,16 @@ abstract class _SmartListStore with Store {
   late bool maxPlayCountEnabled = _smartList?.filter.maxPlayCount != null;
   @observable
   late String maxPlayCount = _intToString(_smartList?.filter.maxPlayCount);
+
+  @observable
+  late bool minSkipCountEnabled = _smartList?.filter.minSkipCount != null;
+  @observable
+  late String minSkipCount = _intToString(_smartList?.filter.minSkipCount);
+
+  @observable
+  late bool maxSkipCountEnabled = _smartList?.filter.maxSkipCount != null;
+  @observable
+  late String maxSkipCount = _intToString(_smartList?.filter.maxSkipCount);
 
   @observable
   late bool minYearEnabled = _smartList?.filter.minYear != null;
@@ -118,6 +129,8 @@ abstract class _SmartListStore with Store {
       reaction((_) => name, _validateName),
       reaction((_) => minPlayCount, (String n) => _validateMinPlayCount(minPlayCountEnabled, n)),
       reaction((_) => maxPlayCount, (String n) => _validateMaxPlayCount(maxPlayCountEnabled, n)),
+      reaction((_) => minSkipCount, (String n) => _validateMinSkipCount(minSkipCountEnabled, n)),
+      reaction((_) => maxSkipCount, (String n) => _validateMaxSkipCount(maxSkipCountEnabled, n)),
       reaction((_) => minYear, (String n) => _validateMinYear(minYearEnabled, n)),
       reaction((_) => maxYear, (String n) => _validateMaxYear(maxYearEnabled, n)),
       reaction((_) => limit, (String n) => _validateLimit(limitEnabled, n)),
@@ -135,6 +148,8 @@ abstract class _SmartListStore with Store {
     _validateName(name);
     _validateMinPlayCount(minPlayCountEnabled, minPlayCount);
     _validateMaxPlayCount(maxPlayCountEnabled, maxPlayCount);
+    _validateMinSkipCount(minSkipCountEnabled, minSkipCount);
+    _validateMaxSkipCount(maxSkipCountEnabled, maxSkipCount);
     _validateMinYear(minYearEnabled, minYear);
     _validateMaxYear(maxYearEnabled, maxYear);
     _validateLimit(limitEnabled, limit);
@@ -145,29 +160,34 @@ abstract class _SmartListStore with Store {
   }
 
   void _validateMinPlayCount(bool enabled, String number) {
-    error.minPlayCount = _validateNumber(enabled, number);
+    error.minPlayCount = validateNumber(enabled, number);
   }
 
   void _validateMaxPlayCount(bool enabled, String number) {
-    error.maxPlayCount = _validateNumber(enabled, number);
+    error.maxPlayCount = validateNumber(enabled, number);
+  }
+
+  void _validateMinSkipCount(bool enabled, String number) {
+    error.minSkipCount = validateNumber(enabled, number);
+  }
+
+  void _validateMaxSkipCount(bool enabled, String number) {
+    error.maxSkipCount = validateNumber(enabled, number);
   }
 
   void _validateMinYear(bool enabled, String number) {
-    error.minYear = _validateNumber(enabled, number);
+    error.minYear = validateNumber(enabled, number);
   }
 
   void _validateMaxYear(bool enabled, String number) {
-    error.maxYear = _validateNumber(enabled, number);
+    error.maxYear = validateNumber(enabled, number);
   }
 
   void _validateLimit(bool enabled, String number) {
-    error.limit = _validateNumber(enabled, number);
+    error.limit = validateNumber(enabled, number);
   }
 
-  String? _validateNumber(bool enabled, String number) {
-    if (!enabled) return null;
-    return int.tryParse(number) == null ? 'Error' : null;
-  }
+  
 
   Future<void> _createSmartList() async {
     await _musicDataRepository.insertSmartList(
@@ -177,6 +197,8 @@ abstract class _SmartListStore with Store {
         excludeArtists: excludeArtists,
         minPlayCount: minPlayCountEnabled ? int.tryParse(minPlayCount) : null,
         maxPlayCount: maxPlayCountEnabled ? int.tryParse(maxPlayCount) : null,
+        minSkipCount: minSkipCountEnabled ? int.tryParse(minSkipCount) : null,
+        maxSkipCount: maxSkipCountEnabled ? int.tryParse(maxSkipCount) : null,
         minYear: minYearEnabled ? int.tryParse(minYear) : null,
         maxYear: maxYearEnabled ? int.tryParse(maxYear) : null,
         minLikeCount: minLikeCount,
@@ -201,6 +223,8 @@ abstract class _SmartListStore with Store {
           excludeArtists: excludeArtists,
           minPlayCount: minPlayCountEnabled ? int.tryParse(minPlayCount) : null,
           maxPlayCount: maxPlayCountEnabled ? int.tryParse(maxPlayCount) : null,
+          minSkipCount: minSkipCountEnabled ? int.tryParse(minSkipCount) : null,
+          maxSkipCount: maxSkipCountEnabled ? int.tryParse(maxSkipCount) : null,
           minYear: minYearEnabled ? int.tryParse(minYear) : null,
           maxYear: maxYearEnabled ? int.tryParse(maxYear) : null,
           minLikeCount: minLikeCount,
@@ -228,6 +252,12 @@ abstract class _FormErrorState with Store {
 
   @observable
   String? maxPlayCount;
+
+  @observable
+  String? minSkipCount;
+
+  @observable
+  String? maxSkipCount;
 
   @observable
   String? minYear;
@@ -267,6 +297,7 @@ List<OrderEntry> _createOrderState(OrderBy? orderBy) {
     OrderCriterion.songTitle: 'Song title',
     OrderCriterion.likeCount: 'Like count',
     OrderCriterion.playCount: 'Play count',
+    OrderCriterion.skipCount: 'Skip count',
     OrderCriterion.artistName: 'Artist name',
     OrderCriterion.year: 'Year',
     OrderCriterion.timeAdded: 'Time added',
@@ -279,6 +310,8 @@ List<OrderEntry> _createOrderState(OrderBy? orderBy) {
         descriptions[OrderCriterion.likeCount]!),
     OrderEntry(false, OrderCriterion.playCount, OrderDirection.ascending,
         descriptions[OrderCriterion.playCount]!),
+    OrderEntry(false, OrderCriterion.skipCount, OrderDirection.ascending,
+        descriptions[OrderCriterion.skipCount]!),
     OrderEntry(false, OrderCriterion.artistName, OrderDirection.ascending,
         descriptions[OrderCriterion.artistName]!),
     OrderEntry(

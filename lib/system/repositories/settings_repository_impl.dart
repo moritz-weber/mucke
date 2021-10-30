@@ -20,4 +20,20 @@ class SettingsRepositoryImpl implements SettingsRepository {
     if (path == null) return;
     await _settingsDataSource.removeLibraryFolder(path);
   }
+
+  @override
+  Stream<int> get blockSkippedSongsThreshold => _settingsDataSource.blockSkippedSongsThreshold;
+
+  @override
+  Stream<bool> get isBlockSkippedSongsEnabled => _settingsDataSource.isBlockSkippedSongsEnabled;
+
+  @override
+  Future<void> setBlockSkippedSongsThreshold(int threshold) async {
+    _settingsDataSource.setBlockSkippedSongsThreshold(threshold);
+  }
+
+  @override
+  Future<void> setBlockSkippedSongs(bool enabled) async {
+    _settingsDataSource.setBlockSkippedSongs(enabled);
+  }
 }

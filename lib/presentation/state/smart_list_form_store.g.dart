@@ -116,6 +116,68 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     });
   }
 
+  final _$minSkipCountEnabledAtom =
+      Atom(name: '_SmartListStore.minSkipCountEnabled');
+
+  @override
+  bool get minSkipCountEnabled {
+    _$minSkipCountEnabledAtom.reportRead();
+    return super.minSkipCountEnabled;
+  }
+
+  @override
+  set minSkipCountEnabled(bool value) {
+    _$minSkipCountEnabledAtom.reportWrite(value, super.minSkipCountEnabled, () {
+      super.minSkipCountEnabled = value;
+    });
+  }
+
+  final _$minSkipCountAtom = Atom(name: '_SmartListStore.minSkipCount');
+
+  @override
+  String get minSkipCount {
+    _$minSkipCountAtom.reportRead();
+    return super.minSkipCount;
+  }
+
+  @override
+  set minSkipCount(String value) {
+    _$minSkipCountAtom.reportWrite(value, super.minSkipCount, () {
+      super.minSkipCount = value;
+    });
+  }
+
+  final _$maxSkipCountEnabledAtom =
+      Atom(name: '_SmartListStore.maxSkipCountEnabled');
+
+  @override
+  bool get maxSkipCountEnabled {
+    _$maxSkipCountEnabledAtom.reportRead();
+    return super.maxSkipCountEnabled;
+  }
+
+  @override
+  set maxSkipCountEnabled(bool value) {
+    _$maxSkipCountEnabledAtom.reportWrite(value, super.maxSkipCountEnabled, () {
+      super.maxSkipCountEnabled = value;
+    });
+  }
+
+  final _$maxSkipCountAtom = Atom(name: '_SmartListStore.maxSkipCount');
+
+  @override
+  String get maxSkipCount {
+    _$maxSkipCountAtom.reportRead();
+    return super.maxSkipCount;
+  }
+
+  @override
+  set maxSkipCount(String value) {
+    _$maxSkipCountAtom.reportWrite(value, super.maxSkipCount, () {
+      super.maxSkipCount = value;
+    });
+  }
+
   final _$minYearEnabledAtom = Atom(name: '_SmartListStore.minYearEnabled');
 
   @override
@@ -334,6 +396,10 @@ minPlayCountEnabled: ${minPlayCountEnabled},
 minPlayCount: ${minPlayCount},
 maxPlayCountEnabled: ${maxPlayCountEnabled},
 maxPlayCount: ${maxPlayCount},
+minSkipCountEnabled: ${minSkipCountEnabled},
+minSkipCount: ${minSkipCount},
+maxSkipCountEnabled: ${maxSkipCountEnabled},
+maxSkipCount: ${maxSkipCount},
 minYearEnabled: ${minYearEnabled},
 minYear: ${minYear},
 maxYearEnabled: ${maxYearEnabled},
@@ -402,6 +468,36 @@ mixin _$FormErrorState on _FormErrorState, Store {
     });
   }
 
+  final _$minSkipCountAtom = Atom(name: '_FormErrorState.minSkipCount');
+
+  @override
+  String? get minSkipCount {
+    _$minSkipCountAtom.reportRead();
+    return super.minSkipCount;
+  }
+
+  @override
+  set minSkipCount(String? value) {
+    _$minSkipCountAtom.reportWrite(value, super.minSkipCount, () {
+      super.minSkipCount = value;
+    });
+  }
+
+  final _$maxSkipCountAtom = Atom(name: '_FormErrorState.maxSkipCount');
+
+  @override
+  String? get maxSkipCount {
+    _$maxSkipCountAtom.reportRead();
+    return super.maxSkipCount;
+  }
+
+  @override
+  set maxSkipCount(String? value) {
+    _$maxSkipCountAtom.reportWrite(value, super.maxSkipCount, () {
+      super.maxSkipCount = value;
+    });
+  }
+
   final _$minYearAtom = Atom(name: '_FormErrorState.minYear');
 
   @override
@@ -453,6 +549,8 @@ mixin _$FormErrorState on _FormErrorState, Store {
 name: ${name},
 minPlayCount: ${minPlayCount},
 maxPlayCount: ${maxPlayCount},
+minSkipCount: ${minSkipCount},
+maxSkipCount: ${maxSkipCount},
 minYear: ${minYear},
 maxYear: ${maxYear},
 limit: ${limit},

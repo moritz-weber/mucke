@@ -21,7 +21,7 @@ String msToTimeString(Duration duration) {
 
   final int hours = duration.inHours;
   final int minutes = duration.inMinutes.remainder(60);
-  
+
   final String twoDigitMinutes = twoDigits(minutes);
   final String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
 
@@ -29,4 +29,9 @@ String msToTimeString(Duration duration) {
     return '$hours:$twoDigitMinutes:$twoDigitSeconds';
   }
   return '$minutes:$twoDigitSeconds';
+}
+
+String? validateNumber(bool enabled, String number) {
+  if (!enabled) return null;
+  return int.tryParse(number) == null ? 'Error' : null;
 }

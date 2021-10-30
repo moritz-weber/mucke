@@ -12,8 +12,8 @@ import '../state/music_data_store.dart';
 import '../state/settings_store.dart';
 import '../theming.dart';
 import 'playlist_page.dart';
+import 'smart_list_form_page.dart';
 import 'smart_list_page.dart';
-import 'smart_lists_form_page.dart';
 
 class PlaylistsPage extends StatefulWidget {
   const PlaylistsPage({Key? key}) : super(key: key);

@@ -35,6 +35,8 @@ ThemeData theme() => ThemeData(
           primary: LIGHT1,
         ),
       ),
+      progressIndicatorTheme: const ProgressIndicatorThemeData(color: LIGHT2),
+      sliderTheme: const SliderThemeData(activeTrackColor: LIGHT2, thumbColor: LIGHT2, inactiveTrackColor: Colors.white24),
       // https://api.flutter.dev/flutter/material/TextTheme-class.html
       textTheme: const TextTheme(
         headline1: TextStyle(

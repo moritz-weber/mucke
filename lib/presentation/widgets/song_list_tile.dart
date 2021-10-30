@@ -15,6 +15,8 @@ class SongListTile extends StatelessWidget {
     this.highlight = false,
     this.showAlbum = true,
     this.subtitle = Subtitle.artist,
+    this.isBlockSkippedSongsEnabled,
+    this.blockSkippedSongsThreshold,
   }) : super(key: key);
 
   final Song song;
@@ -23,9 +25,14 @@ class SongListTile extends StatelessWidget {
   final bool highlight;
   final bool showAlbum;
   final Subtitle subtitle;
+  final bool? isBlockSkippedSongsEnabled;
+  final int? blockSkippedSongsThreshold;
 
   @override
   Widget build(BuildContext context) {
+    final isBlockEnabled = isBlockSkippedSongsEnabled ?? false;
+    final blockThreshold = blockSkippedSongsThreshold ?? 1000;
+
     final Widget leading = showAlbum
         ? Image(
             image: utils.getAlbumImage(song.albumArtPath),
@@ -97,10 +104,16 @@ class SongListTile extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (song.blocked)
-            Icon(
+            const Icon(
               Icons.remove_circle_outline,
               size: 14.0,
-              color: Colors.white.withOpacity(0.4),
+              color: Colors.white38,
+            ),
+          if (!song.blocked && isBlockEnabled && blockThreshold <= song.skipCount)
+            Icon(
+              Icons.skip_next_rounded,
+              size: 18.0,
+              color: Colors.red.shade900,
             ),
           IconButton(
             icon: const Icon(Icons.more_vert),

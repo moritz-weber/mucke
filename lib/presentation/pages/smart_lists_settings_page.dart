@@ -5,8 +5,9 @@ import 'package:get_it/get_it.dart';
 import '../../domain/entities/smart_list.dart';
 import '../state/settings_store.dart';
 import '../theming.dart';
-import 'smart_lists_form_page.dart';
+import 'smart_list_form_page.dart';
 
+// TODO: currently unused
 class SmartListsSettingsPage extends StatelessWidget {
   const SmartListsSettingsPage({Key? key}) : super(key: key);
 

@@ -2814,6 +2814,8 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
   final int maxLikeCount;
   final int? minPlayCount;
   final int? maxPlayCount;
+  final int? minSkipCount;
+  final int? maxSkipCount;
   final int? minYear;
   final int? maxYear;
   final int? limit;
@@ -2829,6 +2831,8 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
       required this.maxLikeCount,
       this.minPlayCount,
       this.maxPlayCount,
+      this.minSkipCount,
+      this.maxSkipCount,
       this.minYear,
       this.maxYear,
       this.limit,
@@ -2857,6 +2861,10 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
           .mapFromDatabaseResponse(data['${effectivePrefix}min_play_count']),
       maxPlayCount: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}max_play_count']),
+      minSkipCount: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}min_skip_count']),
+      maxSkipCount: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}max_skip_count']),
       minYear: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}min_year']),
       maxYear: const IntType()
@@ -2886,6 +2894,12 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
     }
     if (!nullToAbsent || maxPlayCount != null) {
       map['max_play_count'] = Variable<int?>(maxPlayCount);
+    }
+    if (!nullToAbsent || minSkipCount != null) {
+      map['min_skip_count'] = Variable<int?>(minSkipCount);
+    }
+    if (!nullToAbsent || maxSkipCount != null) {
+      map['max_skip_count'] = Variable<int?>(maxSkipCount);
     }
     if (!nullToAbsent || minYear != null) {
       map['min_year'] = Variable<int?>(minYear);
@@ -2918,6 +2932,12 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
       maxPlayCount: maxPlayCount == null && nullToAbsent
           ? const Value.absent()
           : Value(maxPlayCount),
+      minSkipCount: minSkipCount == null && nullToAbsent
+          ? const Value.absent()
+          : Value(minSkipCount),
+      maxSkipCount: maxSkipCount == null && nullToAbsent
+          ? const Value.absent()
+          : Value(maxSkipCount),
       minYear: minYear == null && nullToAbsent
           ? const Value.absent()
           : Value(minYear),
@@ -2944,6 +2964,8 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
       maxLikeCount: serializer.fromJson<int>(json['maxLikeCount']),
       minPlayCount: serializer.fromJson<int?>(json['minPlayCount']),
       maxPlayCount: serializer.fromJson<int?>(json['maxPlayCount']),
+      minSkipCount: serializer.fromJson<int?>(json['minSkipCount']),
+      maxSkipCount: serializer.fromJson<int?>(json['maxSkipCount']),
       minYear: serializer.fromJson<int?>(json['minYear']),
       maxYear: serializer.fromJson<int?>(json['maxYear']),
       limit: serializer.fromJson<int?>(json['limit']),
@@ -2964,6 +2986,8 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
       'maxLikeCount': serializer.toJson<int>(maxLikeCount),
       'minPlayCount': serializer.toJson<int?>(minPlayCount),
       'maxPlayCount': serializer.toJson<int?>(maxPlayCount),
+      'minSkipCount': serializer.toJson<int?>(minSkipCount),
+      'maxSkipCount': serializer.toJson<int?>(maxSkipCount),
       'minYear': serializer.toJson<int?>(minYear),
       'maxYear': serializer.toJson<int?>(maxYear),
       'limit': serializer.toJson<int?>(limit),
@@ -2982,6 +3006,8 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
           int? maxLikeCount,
           int? minPlayCount,
           int? maxPlayCount,
+          int? minSkipCount,
+          int? maxSkipCount,
           int? minYear,
           int? maxYear,
           int? limit,
@@ -2997,6 +3023,8 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
         maxLikeCount: maxLikeCount ?? this.maxLikeCount,
         minPlayCount: minPlayCount ?? this.minPlayCount,
         maxPlayCount: maxPlayCount ?? this.maxPlayCount,
+        minSkipCount: minSkipCount ?? this.minSkipCount,
+        maxSkipCount: maxSkipCount ?? this.maxSkipCount,
         minYear: minYear ?? this.minYear,
         maxYear: maxYear ?? this.maxYear,
         limit: limit ?? this.limit,
@@ -3015,6 +3043,8 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
           ..write('maxLikeCount: $maxLikeCount, ')
           ..write('minPlayCount: $minPlayCount, ')
           ..write('maxPlayCount: $maxPlayCount, ')
+          ..write('minSkipCount: $minSkipCount, ')
+          ..write('maxSkipCount: $maxSkipCount, ')
           ..write('minYear: $minYear, ')
           ..write('maxYear: $maxYear, ')
           ..write('limit: $limit, ')
@@ -3044,15 +3074,20 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
                                   $mrjc(
                                       maxPlayCount.hashCode,
                                       $mrjc(
-                                          minYear.hashCode,
+                                          minSkipCount.hashCode,
                                           $mrjc(
-                                              maxYear.hashCode,
+                                              maxSkipCount.hashCode,
                                               $mrjc(
-                                                  limit.hashCode,
+                                                  minYear.hashCode,
                                                   $mrjc(
-                                                      orderCriteria.hashCode,
-                                                      orderDirections
-                                                          .hashCode))))))))))))));
+                                                      maxYear.hashCode,
+                                                      $mrjc(
+                                                          limit.hashCode,
+                                                          $mrjc(
+                                                              orderCriteria
+                                                                  .hashCode,
+                                                              orderDirections
+                                                                  .hashCode))))))))))))))));
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3066,6 +3101,8 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
           other.maxLikeCount == this.maxLikeCount &&
           other.minPlayCount == this.minPlayCount &&
           other.maxPlayCount == this.maxPlayCount &&
+          other.minSkipCount == this.minSkipCount &&
+          other.maxSkipCount == this.maxSkipCount &&
           other.minYear == this.minYear &&
           other.maxYear == this.maxYear &&
           other.limit == this.limit &&
@@ -3083,6 +3120,8 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
   final Value<int> maxLikeCount;
   final Value<int?> minPlayCount;
   final Value<int?> maxPlayCount;
+  final Value<int?> minSkipCount;
+  final Value<int?> maxSkipCount;
   final Value<int?> minYear;
   final Value<int?> maxYear;
   final Value<int?> limit;
@@ -3098,6 +3137,8 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
     this.maxLikeCount = const Value.absent(),
     this.minPlayCount = const Value.absent(),
     this.maxPlayCount = const Value.absent(),
+    this.minSkipCount = const Value.absent(),
+    this.maxSkipCount = const Value.absent(),
     this.minYear = const Value.absent(),
     this.maxYear = const Value.absent(),
     this.limit = const Value.absent(),
@@ -3114,6 +3155,8 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
     this.maxLikeCount = const Value.absent(),
     this.minPlayCount = const Value.absent(),
     this.maxPlayCount = const Value.absent(),
+    this.minSkipCount = const Value.absent(),
+    this.maxSkipCount = const Value.absent(),
     this.minYear = const Value.absent(),
     this.maxYear = const Value.absent(),
     this.limit = const Value.absent(),
@@ -3132,6 +3175,8 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
     Expression<int>? maxLikeCount,
     Expression<int?>? minPlayCount,
     Expression<int?>? maxPlayCount,
+    Expression<int?>? minSkipCount,
+    Expression<int?>? maxSkipCount,
     Expression<int?>? minYear,
     Expression<int?>? maxYear,
     Expression<int?>? limit,
@@ -3148,6 +3193,8 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
       if (maxLikeCount != null) 'max_like_count': maxLikeCount,
       if (minPlayCount != null) 'min_play_count': minPlayCount,
       if (maxPlayCount != null) 'max_play_count': maxPlayCount,
+      if (minSkipCount != null) 'min_skip_count': minSkipCount,
+      if (maxSkipCount != null) 'max_skip_count': maxSkipCount,
       if (minYear != null) 'min_year': minYear,
       if (maxYear != null) 'max_year': maxYear,
       if (limit != null) 'limit': limit,
@@ -3166,6 +3213,8 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
       Value<int>? maxLikeCount,
       Value<int?>? minPlayCount,
       Value<int?>? maxPlayCount,
+      Value<int?>? minSkipCount,
+      Value<int?>? maxSkipCount,
       Value<int?>? minYear,
       Value<int?>? maxYear,
       Value<int?>? limit,
@@ -3181,6 +3230,8 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
       maxLikeCount: maxLikeCount ?? this.maxLikeCount,
       minPlayCount: minPlayCount ?? this.minPlayCount,
       maxPlayCount: maxPlayCount ?? this.maxPlayCount,
+      minSkipCount: minSkipCount ?? this.minSkipCount,
+      maxSkipCount: maxSkipCount ?? this.maxSkipCount,
       minYear: minYear ?? this.minYear,
       maxYear: maxYear ?? this.maxYear,
       limit: limit ?? this.limit,
@@ -3219,6 +3270,12 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
     if (maxPlayCount.present) {
       map['max_play_count'] = Variable<int?>(maxPlayCount.value);
     }
+    if (minSkipCount.present) {
+      map['min_skip_count'] = Variable<int?>(minSkipCount.value);
+    }
+    if (maxSkipCount.present) {
+      map['max_skip_count'] = Variable<int?>(maxSkipCount.value);
+    }
     if (minYear.present) {
       map['min_year'] = Variable<int?>(minYear.value);
     }
@@ -3249,6 +3306,8 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
           ..write('maxLikeCount: $maxLikeCount, ')
           ..write('minPlayCount: $minPlayCount, ')
           ..write('maxPlayCount: $maxPlayCount, ')
+          ..write('minSkipCount: $minSkipCount, ')
+          ..write('maxSkipCount: $maxSkipCount, ')
           ..write('minYear: $minYear, ')
           ..write('maxYear: $maxYear, ')
           ..write('limit: $limit, ')
@@ -3355,6 +3414,30 @@ class $SmartListsTable extends SmartLists
     );
   }
 
+  final VerificationMeta _minSkipCountMeta =
+      const VerificationMeta('minSkipCount');
+  @override
+  late final GeneratedIntColumn minSkipCount = _constructMinSkipCount();
+  GeneratedIntColumn _constructMinSkipCount() {
+    return GeneratedIntColumn(
+      'min_skip_count',
+      $tableName,
+      true,
+    );
+  }
+
+  final VerificationMeta _maxSkipCountMeta =
+      const VerificationMeta('maxSkipCount');
+  @override
+  late final GeneratedIntColumn maxSkipCount = _constructMaxSkipCount();
+  GeneratedIntColumn _constructMaxSkipCount() {
+    return GeneratedIntColumn(
+      'max_skip_count',
+      $tableName,
+      true,
+    );
+  }
+
   final VerificationMeta _minYearMeta = const VerificationMeta('minYear');
   @override
   late final GeneratedIntColumn minYear = _constructMinYear();
@@ -3423,6 +3506,8 @@ class $SmartListsTable extends SmartLists
         maxLikeCount,
         minPlayCount,
         maxPlayCount,
+        minSkipCount,
+        maxSkipCount,
         minYear,
         maxYear,
         limit,
@@ -3490,6 +3575,18 @@ class $SmartListsTable extends SmartLists
           _maxPlayCountMeta,
           maxPlayCount.isAcceptableOrUnknown(
               data['max_play_count']!, _maxPlayCountMeta));
+    }
+    if (data.containsKey('min_skip_count')) {
+      context.handle(
+          _minSkipCountMeta,
+          minSkipCount.isAcceptableOrUnknown(
+              data['min_skip_count']!, _minSkipCountMeta));
+    }
+    if (data.containsKey('max_skip_count')) {
+      context.handle(
+          _maxSkipCountMeta,
+          maxSkipCount.isAcceptableOrUnknown(
+              data['max_skip_count']!, _maxSkipCountMeta));
     }
     if (data.containsKey('min_year')) {
       context.handle(_minYearMeta,
@@ -4153,6 +4250,188 @@ class $PlaylistEntriesTable extends PlaylistEntries
   }
 }
 
+class BlockSkippedSong extends DataClass
+    implements Insertable<BlockSkippedSong> {
+  final bool enabled;
+  final int threshold;
+  BlockSkippedSong({required this.enabled, required this.threshold});
+  factory BlockSkippedSong.fromData(
+      Map<String, dynamic> data, GeneratedDatabase db,
+      {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return BlockSkippedSong(
+      enabled: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}enabled'])!,
+      threshold: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}threshold'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['enabled'] = Variable<bool>(enabled);
+    map['threshold'] = Variable<int>(threshold);
+    return map;
+  }
+
+  BlockSkippedSongsCompanion toCompanion(bool nullToAbsent) {
+    return BlockSkippedSongsCompanion(
+      enabled: Value(enabled),
+      threshold: Value(threshold),
+    );
+  }
+
+  factory BlockSkippedSong.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return BlockSkippedSong(
+      enabled: serializer.fromJson<bool>(json['enabled']),
+      threshold: serializer.fromJson<int>(json['threshold']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'enabled': serializer.toJson<bool>(enabled),
+      'threshold': serializer.toJson<int>(threshold),
+    };
+  }
+
+  BlockSkippedSong copyWith({bool? enabled, int? threshold}) =>
+      BlockSkippedSong(
+        enabled: enabled ?? this.enabled,
+        threshold: threshold ?? this.threshold,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('BlockSkippedSong(')
+          ..write('enabled: $enabled, ')
+          ..write('threshold: $threshold')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf($mrjc(enabled.hashCode, threshold.hashCode));
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is BlockSkippedSong &&
+          other.enabled == this.enabled &&
+          other.threshold == this.threshold);
+}
+
+class BlockSkippedSongsCompanion extends UpdateCompanion<BlockSkippedSong> {
+  final Value<bool> enabled;
+  final Value<int> threshold;
+  const BlockSkippedSongsCompanion({
+    this.enabled = const Value.absent(),
+    this.threshold = const Value.absent(),
+  });
+  BlockSkippedSongsCompanion.insert({
+    this.enabled = const Value.absent(),
+    this.threshold = const Value.absent(),
+  });
+  static Insertable<BlockSkippedSong> custom({
+    Expression<bool>? enabled,
+    Expression<int>? threshold,
+  }) {
+    return RawValuesInsertable({
+      if (enabled != null) 'enabled': enabled,
+      if (threshold != null) 'threshold': threshold,
+    });
+  }
+
+  BlockSkippedSongsCompanion copyWith(
+      {Value<bool>? enabled, Value<int>? threshold}) {
+    return BlockSkippedSongsCompanion(
+      enabled: enabled ?? this.enabled,
+      threshold: threshold ?? this.threshold,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (enabled.present) {
+      map['enabled'] = Variable<bool>(enabled.value);
+    }
+    if (threshold.present) {
+      map['threshold'] = Variable<int>(threshold.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('BlockSkippedSongsCompanion(')
+          ..write('enabled: $enabled, ')
+          ..write('threshold: $threshold')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $BlockSkippedSongsTable extends BlockSkippedSongs
+    with TableInfo<$BlockSkippedSongsTable, BlockSkippedSong> {
+  final GeneratedDatabase _db;
+  final String? _alias;
+  $BlockSkippedSongsTable(this._db, [this._alias]);
+  final VerificationMeta _enabledMeta = const VerificationMeta('enabled');
+  @override
+  late final GeneratedBoolColumn enabled = _constructEnabled();
+  GeneratedBoolColumn _constructEnabled() {
+    return GeneratedBoolColumn('enabled', $tableName, false,
+        defaultValue: const Constant(false));
+  }
+
+  final VerificationMeta _thresholdMeta = const VerificationMeta('threshold');
+  @override
+  late final GeneratedIntColumn threshold = _constructThreshold();
+  GeneratedIntColumn _constructThreshold() {
+    return GeneratedIntColumn('threshold', $tableName, false,
+        defaultValue: const Constant(3));
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [enabled, threshold];
+  @override
+  $BlockSkippedSongsTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'block_skipped_songs';
+  @override
+  final String actualTableName = 'block_skipped_songs';
+  @override
+  VerificationContext validateIntegrity(Insertable<BlockSkippedSong> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('enabled')) {
+      context.handle(_enabledMeta,
+          enabled.isAcceptableOrUnknown(data['enabled']!, _enabledMeta));
+    }
+    if (data.containsKey('threshold')) {
+      context.handle(_thresholdMeta,
+          threshold.isAcceptableOrUnknown(data['threshold']!, _thresholdMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => <GeneratedColumn>{};
+  @override
+  BlockSkippedSong map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return BlockSkippedSong.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $BlockSkippedSongsTable createAlias(String alias) {
+    return $BlockSkippedSongsTable(_db, alias);
+  }
+}
+
 abstract class _$MoorDatabase extends GeneratedDatabase {
   _$MoorDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   _$MoorDatabase.connect(DatabaseConnection c) : super.connect(c);
@@ -4178,6 +4457,8 @@ abstract class _$MoorDatabase extends GeneratedDatabase {
   late final $PlaylistsTable playlists = $PlaylistsTable(this);
   late final $PlaylistEntriesTable playlistEntries =
       $PlaylistEntriesTable(this);
+  late final $BlockSkippedSongsTable blockSkippedSongs =
+      $BlockSkippedSongsTable(this);
   late final PersistentStateDao persistentStateDao =
       PersistentStateDao(this as MoorDatabase);
   late final SettingsDao settingsDao = SettingsDao(this as MoorDatabase);
@@ -4201,6 +4482,7 @@ abstract class _$MoorDatabase extends GeneratedDatabase {
         smartLists,
         smartListArtists,
         playlists,
-        playlistEntries
+        playlistEntries,
+        blockSkippedSongs
       ];
 }

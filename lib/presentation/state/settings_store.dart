@@ -30,6 +30,12 @@ abstract class _SettingsStore with Store {
   late ObservableStream<List<String>> libraryFoldersStream =
       _settingsRepository.libraryFoldersStream.asObservable(initialValue: []);
 
+  @observable
+  late ObservableStream<bool> isBlockSkippedSongsEnabled = _settingsRepository.isBlockSkippedSongsEnabled.asObservable();
+
+  @observable
+  late ObservableStream<int> blockSkippedSongsThreshold = _settingsRepository.blockSkippedSongsThreshold.asObservable();
+
   Future<void> addLibraryFolder(String? path) async {
     await _settingsRepository.addLibraryFolder(path);
   }

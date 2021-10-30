@@ -9,7 +9,7 @@ import '../state/smart_list_page_store.dart';
 import '../theming.dart';
 import '../widgets/song_bottom_sheet.dart';
 import '../widgets/song_list_tile.dart';
-import 'smart_lists_form_page.dart';
+import 'smart_list_form_page.dart';
 
 class SmartListPage extends StatefulWidget {
   const SmartListPage({Key? key, required this.smartList}) : super(key: key);
