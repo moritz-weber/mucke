@@ -4,6 +4,7 @@ import 'package:fimber/fimber.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:string_similarity/string_similarity.dart';
 
+import '../../constants.dart';
 import '../../domain/entities/album.dart';
 import '../../domain/entities/artist.dart';
 import '../../domain/entities/playlist.dart';
@@ -93,12 +94,14 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   }
 
   @override
-  Future<void> incrementLikeCount(Song song) async {
-    if (song.likeCount < 5) {
+  Future<Song> incrementLikeCount(Song song) async {
+    if (song.likeCount < MAX_LIKE_COUNT) {
       final newSong = (song as SongModel).copyWith(likeCount: song.likeCount + 1);
       _songUpdateSubject.add({song.path: newSong});
-      _musicDataSource.updateSong(newSong);
+      await _musicDataSource.updateSong(newSong);
+      return newSong;
     }
+    return song;
   }
 
   Future<void> _updateArtists(List<ArtistModel> artists) async {
@@ -116,44 +119,50 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   }
 
   @override
-  Future<void> setSongBlocked(Song song, bool blocked) async {
+  Future<Song> setSongBlocked(Song song, bool blocked) async {
     if (song.blocked != blocked) {
       final newSong = (song as SongModel).copyWith(blocked: blocked);
       _songUpdateSubject.add({song.path: newSong});
-      _musicDataSource.updateSong(newSong);
+      await _musicDataSource.updateSong(newSong);
+      return newSong;
     }
+    return song;
   }
 
   @override
-  Future<void> incrementPlayCount(Song song) async {
+  Future<Song> incrementPlayCount(Song song) async {
     final newSong = (song as SongModel).copyWith(playCount: song.playCount + 1);
     _songUpdateSubject.add({song.path: newSong});
-    _musicDataSource.updateSong(newSong);
+    await _musicDataSource.updateSong(newSong);
+    return newSong;
   }
 
   @override
-  Future<void> incrementSkipCount(Song song) async {
+  Future<Song> incrementSkipCount(Song song) async {
     final newSong = (song as SongModel).copyWith(skipCount: song.skipCount + 1);
     _songUpdateSubject.add({song.path: newSong});
-    _musicDataSource.updateSong(newSong);
+    await _musicDataSource.updateSong(newSong);
+    return newSong;
   }
 
   @override
-  Future<void> resetLikeCount(Song song) async {
+  Future<Song> resetLikeCount(Song song) async {
     final newSong = (song as SongModel).copyWith(likeCount: 0);
     _songUpdateSubject.add({song.path: newSong});
-    _musicDataSource.updateSong(newSong);
+    await _musicDataSource.updateSong(newSong);
+    return newSong;
   }
 
   @override
-  Future<void> resetSkipCount(Song song) async {
+  Future<Song> resetSkipCount(Song song) async {
     final newSong = (song as SongModel).copyWith(skipCount: 0);
     _songUpdateSubject.add({song.path: newSong});
-    _musicDataSource.updateSong(newSong);
+    await _musicDataSource.updateSong(newSong);
+    return newSong;
   }
 
   @override
-  Future<void> toggleNextSongLink(Song song) async {
+  Future<Song> toggleNextSongLink(Song song) async {
     SongModel newSong;
     if (song.next == '') {
       final successor = await _musicDataSource.getSuccessor(song as SongModel);
@@ -161,12 +170,13 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
     } else {
       newSong = (song as SongModel).copyWith(next: '');
     }
-    _musicDataSource.updateSong(newSong);
     _songUpdateSubject.add({song.path: newSong});
+    await _musicDataSource.updateSong(newSong);
+    return newSong;
   }
 
   @override
-  Future<void> togglePreviousSongLink(Song song) async {
+  Future<Song> togglePreviousSongLink(Song song) async {
     SongModel newSong;
     if (song.previous == '') {
       final predecessor = await _musicDataSource.getPredecessor(song as SongModel);
@@ -174,8 +184,9 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
     } else {
       newSong = (song as SongModel).copyWith(previous: '');
     }
-    _musicDataSource.updateSong(newSong);
     _songUpdateSubject.add({song.path: newSong});
+    await _musicDataSource.updateSong(newSong);
+    return newSong;
   }
 
   List<Song> _sortHighlightedSongs(List<Song> songs) {

@@ -10,6 +10,9 @@ import '../modules/managed_queue.dart';
 abstract class AudioPlayerInfoRepository {
   ValueStream<ShuffleMode> get shuffleModeStream;
   ValueStream<LoopMode> get loopModeStream;
+  ValueStream<bool> get excludeBlockedStream;
+  ValueStream<bool> get excludeSkippedStream;
+  ValueStream<bool> get respectSongLinksStream;
   ValueStream<List<Song>> get queueStream;
 
   ValueStream<int> get currentIndexStream;
@@ -52,6 +55,9 @@ abstract class AudioPlayerRepository extends AudioPlayerInfoRepository {
   /// Set the ShuffleMode.
   Future<void> setShuffleMode(ShuffleMode shuffleMode, {bool updateQueue});
   Future<void> setLoopMode(LoopMode loopMode);
+  Future<void> setExcludeBlocked(bool enabled);
+  Future<void> setExcludeSkipped(bool enabled);
+  Future<void> setRespectSongLinks(bool enabled);
 
   /// Current scope: update song information in queue, don't affect playback/queue.
   Future<void> updateSongs(Map<String, Song> songs);

@@ -7,6 +7,7 @@ import 'package:moor/moor.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
+import '../../constants.dart';
 import 'moor/music_data_dao.dart';
 import 'moor/persistent_state_dao.dart';
 import 'moor/playlist_dao.dart';
@@ -91,25 +92,17 @@ class AddedSongEntries extends Table {
   Set<Column> get primaryKey => {index};
 }
 
-class PersistentIndex extends Table {
-  IntColumn get index => integer().nullable()();
-}
+@DataClassName('KeyValueEntry')
+class KeyValueEntries extends Table {
+  TextColumn get key => text()();
+  TextColumn get value => text()();
 
-class PersistentShuffleMode extends Table {
-  IntColumn get shuffleMode => integer().withDefault(const Constant(0))();
-}
-
-class PersistentLoopMode extends Table {
-  IntColumn get loopMode => integer().withDefault(const Constant(0))();
+  @override
+  Set<Column> get primaryKey => {key};
 }
 
 class LibraryFolders extends Table {
   TextColumn get path => text()();
-}
-
-class BlockSkippedSongs extends Table {
-  BoolColumn get enabled => boolean().withDefault(const Constant(false))();
-  IntColumn get threshold => integer().withDefault(const Constant(3))();
 }
 
 class MoorAlbumOfDay extends Table {
@@ -171,16 +164,13 @@ class PlaylistEntries extends Table {
     QueueEntries,
     OriginalSongEntries,
     AddedSongEntries,
-    PersistentIndex,
-    PersistentLoopMode,
-    PersistentShuffleMode,
     Songs,
     MoorAlbumOfDay,
     SmartLists,
     SmartListArtists,
     Playlists,
     PlaylistEntries,
-    BlockSkippedSongs,
+    KeyValueEntries,
   ],
   daos: [
     PersistentStateDao,
@@ -200,16 +190,36 @@ class MoorDatabase extends _$MoorDatabase {
   MoorDatabase.connect(DatabaseConnection connection) : super.connect(connection);
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(beforeOpen: (details) async {
         if (details.wasCreated) {
-          await into(persistentIndex).insert(const PersistentIndexCompanion(index: Value(0)));
-          await into(persistentLoopMode)
-              .insert(const PersistentLoopModeCompanion(loopMode: Value(0)));
-          await into(persistentShuffleMode)
-              .insert(const PersistentShuffleModeCompanion(shuffleMode: Value(0)));
+          await into(keyValueEntries).insert(
+            const KeyValueEntriesCompanion(key: Value(PERSISTENT_INDEX), value: Value('0')),
+          );
+          await into(keyValueEntries).insert(
+            const KeyValueEntriesCompanion(key: Value(PERSISTENT_LOOPMODE), value: Value('0')),
+          );
+          await into(keyValueEntries).insert(
+            const KeyValueEntriesCompanion(key: Value(PERSISTENT_SHUFFLEMODE), value: Value('0')),
+          );
+          await into(keyValueEntries).insert(
+            const KeyValueEntriesCompanion(key: Value(PERSISTENT_EXCLUDE_BLOCKED), value: Value('true')),
+          );
+          await into(keyValueEntries).insert(
+            const KeyValueEntriesCompanion(key: Value(PERSISTENT_EXCLUDE_SKIPPED), value: Value('true')),
+          );
+          await into(keyValueEntries).insert(
+            const KeyValueEntriesCompanion(key: Value(PERSISTENT_RESPECT_SONG_LINKS), value: Value('true')),
+          );
+          
+          await into(keyValueEntries).insert(
+            const KeyValueEntriesCompanion(key: Value(SETTING_EXCLUDE_SKIPPED_SONGS), value: Value('true')),
+          );
+          await into(keyValueEntries).insert(
+            const KeyValueEntriesCompanion(key: Value(SETTING_SKIP_THRESHOLD), value: Value('3')),
+          );
         }
       }, onUpgrade: (Migrator m, int from, int to) async {
         print('$from -> $to');
@@ -246,8 +256,14 @@ class MoorDatabase extends _$MoorDatabase {
         if (from < 5) {
           await m.addColumn(smartLists, smartLists.minSkipCount);
           await m.addColumn(smartLists, smartLists.maxSkipCount);
-          await m.createTable(blockSkippedSongs);
-          await into(blockSkippedSongs).insert(const BlockSkippedSongsCompanion());
+        }
+        if (from < 6) {
+          await (update(songs)..where((tbl) => tbl.likeCount.equals(3)))
+              .write(const SongsCompanion(likeCount: Value(2)));
+          await (update(songs)..where((tbl) => tbl.likeCount.equals(4)))
+              .write(const SongsCompanion(likeCount: Value(3)));
+          await (update(songs)..where((tbl) => tbl.likeCount.equals(5)))
+              .write(const SongsCompanion(likeCount: Value(3)));
         }
       });
 }

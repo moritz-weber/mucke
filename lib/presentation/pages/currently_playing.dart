@@ -2,6 +2,7 @@ import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mucke/presentation/widgets/song_info.dart';
 
 import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
@@ -159,8 +160,7 @@ class CurrentlyPlayingPage extends StatelessWidget {
     final NavigationStore navStore = GetIt.I<NavigationStore>();
 
     final song = audioStore.currentSongStream.value;
-    if (song == null)
-      return;
+    if (song == null) return;
     // TODO: EXPLORATORY
     final albums = await musicDataStore.albumStream.first;
     final album = albums.singleWhere((a) => a.title == song.album);
@@ -181,8 +181,78 @@ class CurrentlyPlayingPage extends StatelessWidget {
                 height: 2,
                 color: LIGHT1,
               ),
+              const SizedBox(height: 8.0),
+              Observer(
+                builder: (context) => SwitchListTile(
+                  value: audioStore.excludeBlockedStream.value ?? true,
+                  title: const Text('Exclude blocked songs'),
+                  secondary: const Icon(Icons.remove_circle_outline_rounded),
+                  onChanged: (value) {
+                    audioStore.setExcludeBlocked(value);
+                  },
+                ),
+              ),
+              Observer(
+                builder: (context) => SwitchListTile(
+                  value: audioStore.excludeSkippedStream.value ?? true,
+                  title: const Text('Exclude skipped songs'),
+                  secondary: const Icon(Icons.skip_next_rounded),
+                  onChanged: (value) {
+                    audioStore.setExcludeSkipped(value);
+                  },
+                ),
+              ),
+              Observer(
+                builder: (context) => SwitchListTile(
+                  value: audioStore.respectSongLinksStream.value ?? true,
+                  title: const Text('Respect song links'),
+                  secondary: const Icon(Icons.link_rounded),
+                  onChanged: (value) {
+                    audioStore.setRespectSongLinks(value);
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  height: 1,
+                  color: Colors.white10,
+                ),
+              ),
+              ListTile(
+                title: const Text('Show song info'),
+                leading: const Icon(Icons.info),
+                onTap: () {
+                  Navigator.pop(context);
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return SimpleDialog(
+                        backgroundColor: DARK3,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(HORIZONTAL_PADDING),
+                            child: SongInfo(song),
+                          ),
+                          SimpleDialogOption(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text(
+                              'Close',
+                              textAlign: TextAlign.right,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+              ),
               ListTile(
                 title: const Text('Go to artist'),
+                leading: const Icon(Icons.person_rounded),
+                trailing: const Icon(Icons.chevron_right_rounded),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.pop(context);
@@ -197,6 +267,8 @@ class CurrentlyPlayingPage extends StatelessWidget {
               ),
               ListTile(
                 title: const Text('Go to album'),
+                leading: const Icon(Icons.album_rounded),
+                trailing: const Icon(Icons.chevron_right_rounded),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.pop(context);
@@ -209,6 +281,7 @@ class CurrentlyPlayingPage extends StatelessWidget {
                   );
                 },
               ),
+              const SizedBox(height: 8.0),
             ],
           ),
         );

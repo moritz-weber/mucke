@@ -1,11 +1,12 @@
 import 'package:moor/moor.dart';
 
+import '../../../constants.dart';
 import '../moor_database.dart';
 import '../settings_data_source.dart';
 
 part 'settings_dao.g.dart';
 
-@UseDao(tables: [LibraryFolders, BlockSkippedSongs])
+@UseDao(tables: [LibraryFolders, KeyValueEntries])
 class SettingsDao extends DatabaseAccessor<MoorDatabase>
     with _$SettingsDaoMixin
     implements SettingsDataSource {
@@ -26,20 +27,28 @@ class SettingsDao extends DatabaseAccessor<MoorDatabase>
   }
 
   @override
-  Stream<bool> get isBlockSkippedSongsEnabled =>
-      (select(blockSkippedSongs)..limit(1)).watchSingle().map((tbl) => tbl.enabled);
+  Stream<bool> get isBlockSkippedSongsEnabled {
+    return (select(keyValueEntries)..where((tbl) => tbl.key.equals(SETTING_EXCLUDE_SKIPPED_SONGS)))
+        .watchSingle()
+        .map((entry) => entry.value == 'true');
+  }
 
   @override
-  Stream<int> get blockSkippedSongsThreshold =>
-      (select(blockSkippedSongs)..limit(1)).watchSingle().map((tbl) => tbl.threshold);
+  Stream<int> get blockSkippedSongsThreshold {
+    return (select(keyValueEntries)..where((tbl) => tbl.key.equals(SETTING_SKIP_THRESHOLD)))
+        .watchSingle()
+        .map((entry) => int.parse(entry.value));
+  }
 
   @override
   Future<void> setBlockSkippedSongsThreshold(int threshold) async {
-    await update(blockSkippedSongs).write(BlockSkippedSongsCompanion(threshold: Value(threshold)));
+    (update(keyValueEntries)..where((tbl) => tbl.key.equals(SETTING_SKIP_THRESHOLD)))
+        .write(KeyValueEntriesCompanion(value: Value(threshold.toString())));
   }
 
   @override
   Future<void> setBlockSkippedSongs(bool enabled) async {
-    await update(blockSkippedSongs).write(BlockSkippedSongsCompanion(enabled: Value(enabled)));
+    (update(keyValueEntries)..where((tbl) => tbl.key.equals(SETTING_EXCLUDE_SKIPPED_SONGS)))
+        .write(KeyValueEntriesCompanion(value: Value(enabled.toString())));
   }
 }

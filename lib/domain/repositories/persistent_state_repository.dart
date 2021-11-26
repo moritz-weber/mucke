@@ -11,6 +11,9 @@ abstract class PersistentStateRepository {
 
   Future<LoopMode> get loopMode;
   Future<ShuffleMode> get shuffleMode;
+  Future<bool> get excludeBlocked;
+  Future<bool> get excludeSkipped;
+  Future<bool> get respectSongLinks;
 
   void setShuffleMode(ShuffleMode shuffleMode);
   void setLoopMode(LoopMode loopMode);
@@ -18,4 +21,7 @@ abstract class PersistentStateRepository {
   void setOriginalSongs(List<Song> songs);
   void setAddedSongs(List<Song> songs);
   void setCurrentIndex(int index);
+  void setExcludeBlocked(bool active);
+  void setExcludeSkipped(bool active);
+  void setRespectSongLinks(bool active);
 }

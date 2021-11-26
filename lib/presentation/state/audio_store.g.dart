@@ -116,6 +116,57 @@ mixin _$AudioStore on _AudioStore, Store {
     });
   }
 
+  final _$excludeBlockedStreamAtom =
+      Atom(name: '_AudioStore.excludeBlockedStream');
+
+  @override
+  ObservableStream<bool> get excludeBlockedStream {
+    _$excludeBlockedStreamAtom.reportRead();
+    return super.excludeBlockedStream;
+  }
+
+  @override
+  set excludeBlockedStream(ObservableStream<bool> value) {
+    _$excludeBlockedStreamAtom.reportWrite(value, super.excludeBlockedStream,
+        () {
+      super.excludeBlockedStream = value;
+    });
+  }
+
+  final _$excludeSkippedStreamAtom =
+      Atom(name: '_AudioStore.excludeSkippedStream');
+
+  @override
+  ObservableStream<bool> get excludeSkippedStream {
+    _$excludeSkippedStreamAtom.reportRead();
+    return super.excludeSkippedStream;
+  }
+
+  @override
+  set excludeSkippedStream(ObservableStream<bool> value) {
+    _$excludeSkippedStreamAtom.reportWrite(value, super.excludeSkippedStream,
+        () {
+      super.excludeSkippedStream = value;
+    });
+  }
+
+  final _$respectSongLinksStreamAtom =
+      Atom(name: '_AudioStore.respectSongLinksStream');
+
+  @override
+  ObservableStream<bool> get respectSongLinksStream {
+    _$respectSongLinksStreamAtom.reportRead();
+    return super.respectSongLinksStream;
+  }
+
+  @override
+  set respectSongLinksStream(ObservableStream<bool> value) {
+    _$respectSongLinksStreamAtom
+        .reportWrite(value, super.respectSongLinksStream, () {
+      super.respectSongLinksStream = value;
+    });
+  }
+
   @override
   String toString() {
     return '''
@@ -125,7 +176,10 @@ currentPositionStream: ${currentPositionStream},
 queueStream: ${queueStream},
 queueIndexStream: ${queueIndexStream},
 shuffleModeStream: ${shuffleModeStream},
-loopModeStream: ${loopModeStream}
+loopModeStream: ${loopModeStream},
+excludeBlockedStream: ${excludeBlockedStream},
+excludeSkippedStream: ${excludeSkippedStream},
+respectSongLinksStream: ${respectSongLinksStream}
     ''';
   }
 }

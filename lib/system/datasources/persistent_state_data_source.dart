@@ -21,4 +21,13 @@ abstract class PersistentStateDataSource {
 
   Future<void> setLoopMode(LoopMode loopMode);
   Future<LoopMode> get loopMode;
+
+  Future<void> setExcludeBlocked(bool active);
+  Future<bool> get excludeBlocked;
+
+  Future<void> setExcludeSkipped(bool active);
+  Future<bool> get excludeSkipped;
+
+  Future<void> setRespectSongLinks(bool active);
+  Future<bool> get respectSongLinks;
 }

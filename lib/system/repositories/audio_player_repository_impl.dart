@@ -6,15 +6,20 @@ import '../../domain/entities/playback_event.dart';
 import '../../domain/entities/queue_item.dart';
 import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/entities/song.dart';
+import '../../domain/modules/dynamic_queue.dart';
 import '../../domain/modules/managed_queue.dart';
 import '../../domain/repositories/audio_player_repository.dart';
 import '../datasources/audio_player_data_source.dart';
 import '../models/song_model.dart';
 
 class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
-  AudioPlayerRepositoryImpl(this._audioPlayerDataSource, this._managedQueue) {
+  AudioPlayerRepositoryImpl(this._audioPlayerDataSource, this._dynamicQueue) {
     _shuffleModeSubject.add(ShuffleMode.none);
     _loopModeSubject.add(LoopMode.off);
+
+    _excludeBlockedSubject.add(true);
+    _excludeSkippedSubject.add(true);
+    _respectSongLinksSubject.add(true);
 
     _audioPlayerDataSource.currentIndexStream.listen(
       (index) {
@@ -34,13 +39,16 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   static final _log = FimberLog('AudioPlayerRepositoryImpl');
 
   final AudioPlayerDataSource _audioPlayerDataSource;
-  final ManagedQueue _managedQueue;
+  final DynamicQueue _dynamicQueue;
 
   final BehaviorSubject<int> _currentIndexSubject = BehaviorSubject();
   final BehaviorSubject<Song> _currentSongSubject = BehaviorSubject();
   final BehaviorSubject<LoopMode> _loopModeSubject = BehaviorSubject();
   final BehaviorSubject<List<Song>> _queueSubject = BehaviorSubject();
   final BehaviorSubject<ShuffleMode> _shuffleModeSubject = BehaviorSubject();
+  final BehaviorSubject<bool> _excludeBlockedSubject = BehaviorSubject();
+  final BehaviorSubject<bool> _excludeSkippedSubject = BehaviorSubject();
+  final BehaviorSubject<bool> _respectSongLinksSubject = BehaviorSubject();
 
   // temporarily block song updating via index updates to avoid double updates on shufflemode change
   bool blockIndexUpdate = false;
@@ -50,6 +58,15 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
 
   @override
   ValueStream<LoopMode> get loopModeStream => _loopModeSubject.stream;
+
+  @override
+  ValueStream<bool> get excludeBlockedStream => _excludeBlockedSubject.stream;
+
+  @override
+  ValueStream<bool> get excludeSkippedStream => _excludeSkippedSubject.stream;
+
+  @override
+  ValueStream<bool> get respectSongLinksStream => _respectSongLinksSubject.stream;
 
   @override
   ValueStream<List<Song>> get queueStream => _queueSubject.stream;
@@ -70,14 +87,14 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   Stream<Duration> get positionStream => _audioPlayerDataSource.positionStream;
 
   @override
-  ManagedQueueInfo get managedQueueInfo => _managedQueue;
+  ManagedQueueInfo get managedQueueInfo => _dynamicQueue;
 
   @override
   Future<void> addToQueue(Song song) async {
     _log.d('addToQueue');
     _audioPlayerDataSource.addToQueue(song as SongModel);
-    _managedQueue.addToQueue(song);
-    _queueSubject.add(_managedQueue.queue);
+    _dynamicQueue.addToQueue(song);
+    _queueSubject.add(_dynamicQueue.queue);
   }
 
   @override
@@ -92,38 +109,46 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
     List<Song> addedSongs,
     int index,
   ) async {
-    _managedQueue.initQueue(queueItems, originalSongs, addedSongs);
-    _queueSubject.add(_managedQueue.queue);
+    _dynamicQueue.init(
+      queueItems,
+      originalSongs,
+      addedSongs,
+      shuffleModeStream.value,
+      [],
+      [],
+      _respectSongLinksSubject.value,
+    );
+    _queueSubject.add(_dynamicQueue.queue);
 
     await _audioPlayerDataSource.loadQueue(
       initialIndex: index,
-      queue: _managedQueue.queue.map((e) => e as SongModel).toList(),
+      queue: _dynamicQueue.queue.map((e) => e as SongModel).toList(),
     );
   }
 
   @override
   Future<void> loadSongs({required List<Song> songs, required int initialIndex}) async {
     final shuffleMode = shuffleModeStream.value;
-    final _initialIndex = await _managedQueue.generateQueue(shuffleMode, songs, initialIndex);
+    final _initialIndex = await _dynamicQueue.generateQueue(shuffleMode, songs, initialIndex);
 
-    _queueSubject.add(_managedQueue.queue);
+    _queueSubject.add(_dynamicQueue.queue);
 
     await _audioPlayerDataSource.loadQueue(
       initialIndex: _initialIndex,
-      queue: _managedQueue.queue.map((e) => e as SongModel).toList(),
+      queue: _dynamicQueue.queue.map((e) => e as SongModel).toList(),
     );
   }
 
   @override
   Future<void> moveQueueItem(int oldIndex, int newIndex) async {
-    _managedQueue.moveQueueItem(oldIndex, newIndex);
+    _dynamicQueue.moveQueueItem(oldIndex, newIndex);
     final newCurrentIndex = _calcNewCurrentIndexOnMove(
       currentIndexStream.value,
       oldIndex,
       newIndex,
     );
     _currentIndexSubject.add(newCurrentIndex);
-    _queueSubject.add(_managedQueue.queue);
+    _queueSubject.add(_dynamicQueue.queue);
 
     _audioPlayerDataSource.moveQueueItem(oldIndex, newIndex);
   }
@@ -142,17 +167,17 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   Future<void> playNext(Song song) async {
     _audioPlayerDataSource.playNext(song as SongModel);
 
-    _managedQueue.insertIntoQueue(song, (currentIndexStream.valueOrNull ?? 0) + 1);
-    _queueSubject.add(_managedQueue.queue);
+    _dynamicQueue.insertIntoQueue(song, (currentIndexStream.valueOrNull ?? 0) + 1);
+    _queueSubject.add(_dynamicQueue.queue);
   }
 
   @override
   Future<void> removeQueueIndex(int index) async {
-    _managedQueue.removeQueueIndex(index);
+    _dynamicQueue.removeQueueIndex(index);
 
     final newCurrentIndex = _calcNewCurrentIndexOnRemove(currentIndexStream.value, index);
     _currentIndexSubject.add(newCurrentIndex);
-    _queueSubject.add(_managedQueue.queue);
+    _queueSubject.add(_dynamicQueue.queue);
 
     _audioPlayerDataSource.removeQueueIndex(index);
   }
@@ -185,17 +210,17 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
     final currentIndex = currentIndexStream.valueOrNull ?? 0;
 
     if (updateQueue) {
-      final splitIndex = await _managedQueue.reshuffleQueue(shuffleMode, currentIndex);
+      final splitIndex = await _dynamicQueue.reshuffleQueue(shuffleMode, currentIndex);
       blockIndexUpdate = true;
 
       _audioPlayerDataSource
           .replaceQueueAroundIndex(
         index: currentIndex,
-        before: _managedQueue.queue.sublist(0, splitIndex).map((e) => e as SongModel).toList(),
-        after: _managedQueue.queue.sublist(splitIndex + 1).map((e) => e as SongModel).toList(),
+        before: _dynamicQueue.queue.sublist(0, splitIndex).map((e) => e as SongModel).toList(),
+        after: _dynamicQueue.queue.sublist(splitIndex + 1).map((e) => e as SongModel).toList(),
       )
           .then((_) {
-        _queueSubject.add(_managedQueue.queue);
+        _queueSubject.add(_dynamicQueue.queue);
       });
     }
   }
@@ -211,8 +236,8 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
       _currentSongSubject.add(songs[_currentSongSubject.value.path]!);
     }
 
-    if (_managedQueue.updateSongs(songs)) {
-      _queueSubject.add(_managedQueue.queue);
+    if (_dynamicQueue.updateSongs(songs)) {
+      _queueSubject.add(_dynamicQueue.queue);
     }
   }
 
@@ -253,4 +278,28 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   @override
   Future<void> seekToPosition(double position) async =>
       _audioPlayerDataSource.seekToPosition(position);
+
+  @override
+  Future<void> setExcludeBlocked(bool enabled) async {
+    if (_excludeBlockedSubject.value != enabled) {
+      _dynamicQueue.setExcludeBlocked(enabled);
+      _excludeBlockedSubject.add(enabled);
+    }
+  }
+
+  @override
+  Future<void> setExcludeSkipped(bool enabled) async {
+    if (_excludeSkippedSubject.value != enabled) {
+      _dynamicQueue.setExcludeSkipped(enabled);
+      _excludeSkippedSubject.add(enabled);
+    }
+  }
+
+  @override
+  Future<void> setRespectSongLinks(bool enabled) async {
+    if (_respectSongLinksSubject.value != enabled) {
+      _dynamicQueue.setRespectSongLinks(enabled);
+      _respectSongLinksSubject.add(enabled);
+    }
+  }
 }

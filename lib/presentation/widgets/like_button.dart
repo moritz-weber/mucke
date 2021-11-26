@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import '../../constants.dart';
 
 import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
@@ -67,7 +68,7 @@ class LikeButton extends StatelessWidget {
               alignment: AlignmentDirectional.center,
             ),
             onPressed: () {
-              if (song.likeCount < 5) {
+              if (song.likeCount < MAX_LIKE_COUNT) {
                 musicDataStore.incrementLikeCount(song);
               } else {
                 musicDataStore.resetLikeCount(song);

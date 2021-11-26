@@ -13,9 +13,5 @@ mixin _$PersistentStateDaoMixin on DatabaseAccessor<MoorDatabase> {
       attachedDatabase.originalSongEntries;
   $AddedSongEntriesTable get addedSongEntries =>
       attachedDatabase.addedSongEntries;
-  $PersistentIndexTable get persistentIndex => attachedDatabase.persistentIndex;
-  $PersistentShuffleModeTable get persistentShuffleMode =>
-      attachedDatabase.persistentShuffleMode;
-  $PersistentLoopModeTable get persistentLoopMode =>
-      attachedDatabase.persistentLoopMode;
+  $KeyValueEntriesTable get keyValueEntries => attachedDatabase.keyValueEntries;
 }

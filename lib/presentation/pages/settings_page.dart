@@ -122,7 +122,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING, vertical: 4.0),
                       child: Row(
                         children: [
-                          const Text('Mark skipped songs as blocked'),
+                          const Text('Enable excluding skipped songs from queue'),
                           const Spacer(),
                           Switch(
                             value: settingsPageStore.isBlockSkippedSongsEnabled,
@@ -139,7 +139,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING, vertical: 4.0),
                       child: Row(
                         children: [
-                          const Text('Minimum skip count to block songs'),
+                          const Text('Minimum skip count to exclude songs'),
                           const Spacer(),
                           SizedBox(
                             width: 56.0,

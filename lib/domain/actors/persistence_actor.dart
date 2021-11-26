@@ -39,6 +39,21 @@ class PersistenceActor {
       _log.d('setShuffleMode: $shuffleMode');
       _persistentStateRepository.setShuffleMode(shuffleMode);
     });
+
+    _audioPlayerRepository.excludeBlockedStream.skip(1).listen((active) {
+      _log.d('setExcludeBlocked: $active');
+      _persistentStateRepository.setExcludeBlocked(active);
+    });
+    
+    _audioPlayerRepository.excludeSkippedStream.skip(1).listen((active) {
+      _log.d('setExcludeSkipped: $active');
+      _persistentStateRepository.setExcludeSkipped(active);
+    });
+
+    _audioPlayerRepository.respectSongLinksStream.skip(1).listen((active) {
+      _log.d('setRespectSongLinks: $active');
+      _persistentStateRepository.setRespectSongLinks(active);
+    });
   }
 
   static final _log = FimberLog('PersistenceActor');
@@ -46,18 +61,29 @@ class PersistenceActor {
   final AudioPlayerRepository _audioPlayerRepository;
   final PersistentStateRepository _persistentStateRepository;
 
+  // TODO: gefällt mir nicht (weil AudioPlayer bspw. auch Infos aus Settings braucht)
+  // -> hier müsste noch der skipThreshold dazu
   Future<void> init() async {
-    final shuffleMode = await _persistentStateRepository.shuffleMode;
-    _audioPlayerRepository.setShuffleMode(shuffleMode, updateQueue: false);
-
-    final loopMode = await _persistentStateRepository.loopMode;
-    _audioPlayerRepository.setLoopMode(loopMode);
-
     final queueItems = await _persistentStateRepository.queueItems;
     final originalSongs = await _persistentStateRepository.originalSongs;
     final addedSongs = await _persistentStateRepository.addedSongs;
     final index = await _persistentStateRepository.currentIndex;
 
     _audioPlayerRepository.initQueue(queueItems, originalSongs, addedSongs, index);
+
+    final shuffleMode = await _persistentStateRepository.shuffleMode;
+    _audioPlayerRepository.setShuffleMode(shuffleMode, updateQueue: false);
+
+    final loopMode = await _persistentStateRepository.loopMode;
+    _audioPlayerRepository.setLoopMode(loopMode);
+
+    final excludeBlocked = await _persistentStateRepository.excludeBlocked;
+    _audioPlayerRepository.setExcludeBlocked(excludeBlocked);
+
+    final excludeSkipped = await _persistentStateRepository.excludeSkipped;
+    _audioPlayerRepository.setExcludeSkipped(excludeSkipped);
+
+    final respectSongLinks = await _persistentStateRepository.respectSongLinks;
+    _audioPlayerRepository.setRespectSongLinks(respectSongLinks);
   }
 }

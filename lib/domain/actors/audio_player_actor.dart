@@ -14,8 +14,6 @@ class AudioPlayerActor {
         .listen(_platformIntegrationRepository.handlePlaybackEvent);
     _audioPlayerRepository.positionStream
         .listen((duration) => _handlePosition(duration, _currentSong));
-    // TODO: uncomment when implemented
-    // _audioPlayerRepository.queueStream.listen(_platformIntegrationRepository.setQueue);
 
     // TODO: this doesn't quite fit the design: listening to audioplayer events
     _musicDataRepository.songUpdateStream.listen(_handleSongUpdate);
@@ -42,8 +40,9 @@ class AudioPlayerActor {
       _countSongPlayback = true;
     } else if (position > song.duration * 0.95 && _countSongPlayback) {
       _countSongPlayback = false;
-      await _musicDataRepository.incrementPlayCount(song);
-      _musicDataRepository.resetSkipCount(song);
+      final updatedSong = await _musicDataRepository.incrementPlayCount(song);
+      if (updatedSong.skipCount > 0)
+        _musicDataRepository.resetSkipCount(updatedSong);
     }
   }
 

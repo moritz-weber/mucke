@@ -8,6 +8,5 @@ part of 'settings_dao.dart';
 
 mixin _$SettingsDaoMixin on DatabaseAccessor<MoorDatabase> {
   $LibraryFoldersTable get libraryFolders => attachedDatabase.libraryFolders;
-  $BlockSkippedSongsTable get blockSkippedSongs =>
-      attachedDatabase.blockSkippedSongs;
+  $KeyValueEntriesTable get keyValueEntries => attachedDatabase.keyValueEntries;
 }

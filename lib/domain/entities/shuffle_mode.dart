@@ -14,8 +14,7 @@ extension ShuffleModeExtension on String {
       case 'ShuffleMode.plus':
         return ShuffleMode.plus;
       default:
-        // TODO: does this make sense? maybe throw an error?
-        return ShuffleMode.none;
+        throw TypeError();
     }
   }
 }

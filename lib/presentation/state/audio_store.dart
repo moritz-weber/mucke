@@ -84,6 +84,18 @@ abstract class _AudioStore with Store {
   late ObservableStream<LoopMode> loopModeStream =
       _audioPlayerRepository.loopModeStream.asObservable();
 
+  @observable
+  late ObservableStream<bool> excludeBlockedStream =
+      _audioPlayerRepository.excludeBlockedStream.asObservable();
+
+  @observable
+  late ObservableStream<bool> excludeSkippedStream =
+      _audioPlayerRepository.excludeSkippedStream.asObservable();
+
+  @observable
+  late ObservableStream<bool> respectSongLinksStream =
+      _audioPlayerRepository.respectSongLinksStream.asObservable();
+
   Future<void> playSong(int index, List<Song> songList) async {
     _playSongs(songs: songList, initialIndex: index);
   }
@@ -105,6 +117,15 @@ abstract class _AudioStore with Store {
       _audioPlayerRepository.setShuffleMode(shuffleMode);
 
   Future<void> setLoopMode(LoopMode loopMode) async => _audioPlayerRepository.setLoopMode(loopMode);
+
+  Future<void> setExcludeBlocked(bool enabled) async =>
+      _audioPlayerRepository.setExcludeBlocked(enabled);
+
+  Future<void> setExcludeSkipped(bool enabled) async =>
+      _audioPlayerRepository.setExcludeSkipped(enabled);
+
+  Future<void> setRespectSongLinks(bool enabled) async =>
+      _audioPlayerRepository.setRespectSongLinks(enabled);
 
   Future<void> shuffleAll() async => _shuffleAll();
 

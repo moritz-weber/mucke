@@ -1,5 +1,6 @@
 import 'package:moor/moor.dart';
 
+import '../../../constants.dart';
 import '../../../domain/entities/loop_mode.dart';
 import '../../../domain/entities/shuffle_mode.dart';
 import '../../models/loop_mode_model.dart';
@@ -16,9 +17,7 @@ part 'persistent_state_dao.g.dart';
   QueueEntries,
   OriginalSongEntries,
   AddedSongEntries,
-  PersistentIndex,
-  PersistentShuffleMode,
-  PersistentLoopMode
+  KeyValueEntries,
 ])
 class PersistentStateDao extends DatabaseAccessor<MoorDatabase>
     with _$PersistentStateDaoMixin
@@ -114,40 +113,79 @@ class PersistentStateDao extends DatabaseAccessor<MoorDatabase>
 
   @override
   Future<int> get currentIndex async {
-    return (select(persistentIndex)..limit(1)).getSingleOrNull().then((event) => event?.index ?? 0);
+    return (select(keyValueEntries)..where((tbl) => tbl.key.equals(PERSISTENT_INDEX)))
+        .getSingle()
+        .then((event) => int.parse(event.value));
   }
 
   @override
   Future<void> setCurrentIndex(int index) async {
-    transaction(() async {
-      await delete(persistentIndex).go();
-      into(persistentIndex).insert(PersistentIndexCompanion(index: Value(index)));
-    });
+    (update(keyValueEntries)..where((tbl) => tbl.key.equals(PERSISTENT_INDEX)))
+        .write(KeyValueEntriesCompanion(value: Value(index.toString())));
   }
 
   @override
   Future<LoopMode> get loopMode async {
-    return select(persistentLoopMode).getSingle().then((event) => event.loopMode.toLoopMode());
+    return (select(keyValueEntries)..where((tbl) => tbl.key.equals(PERSISTENT_LOOPMODE)))
+        .getSingle()
+        .then((event) => int.parse(event.value).toLoopMode());
   }
 
   @override
   Future<void> setLoopMode(LoopMode loopMode) async {
-    update(persistentLoopMode).write(
-      PersistentLoopModeCompanion(loopMode: Value(loopMode.toInt())),
-    );
+    (update(keyValueEntries)..where((tbl) => tbl.key.equals(PERSISTENT_LOOPMODE)))
+        .write(KeyValueEntriesCompanion(value: Value(loopMode.toInt().toString())));
   }
 
   @override
   Future<void> setShuffleMode(ShuffleMode shuffleMode) async {
-    update(persistentShuffleMode).write(
-      PersistentShuffleModeCompanion(shuffleMode: Value(shuffleMode.toInt())),
-    );
+    (update(keyValueEntries)..where((tbl) => tbl.key.equals(PERSISTENT_SHUFFLEMODE)))
+        .write(KeyValueEntriesCompanion(value: Value(shuffleMode.toInt().toString())));
   }
 
   @override
   Future<ShuffleMode> get shuffleMode {
-    return select(persistentShuffleMode).getSingle().then(
-          (event) => event.shuffleMode.toShuffleMode(),
-        );
+    return (select(keyValueEntries)..where((tbl) => tbl.key.equals(PERSISTENT_SHUFFLEMODE)))
+        .getSingle()
+        .then((event) => int.parse(event.value).toShuffleMode());
+  }
+
+  @override
+  Future<bool> get excludeBlocked {
+    return (select(keyValueEntries)..where((tbl) => tbl.key.equals(PERSISTENT_EXCLUDE_BLOCKED)))
+        .getSingle()
+        .then((event) => event.value == 'true');
+  }
+
+  @override
+  Future<bool> get excludeSkipped {
+    return (select(keyValueEntries)..where((tbl) => tbl.key.equals(PERSISTENT_EXCLUDE_SKIPPED)))
+        .getSingle()
+        .then((event) => event.value == 'true');
+  }
+
+  @override
+  Future<bool> get respectSongLinks {
+    return (select(keyValueEntries)..where((tbl) => tbl.key.equals(PERSISTENT_RESPECT_SONG_LINKS)))
+        .getSingle()
+        .then((event) => event.value == 'true');
+  }
+
+  @override
+  Future<void> setExcludeBlocked(bool active) async {
+    (update(keyValueEntries)..where((tbl) => tbl.key.equals(PERSISTENT_EXCLUDE_BLOCKED)))
+        .write(KeyValueEntriesCompanion(value: Value(active.toString())));
+  }
+
+  @override
+  Future<void> setExcludeSkipped(bool active) async {
+    (update(keyValueEntries)..where((tbl) => tbl.key.equals(PERSISTENT_EXCLUDE_SKIPPED)))
+        .write(KeyValueEntriesCompanion(value: Value(active.toString())));
+  }
+
+  @override
+  Future<void> setRespectSongLinks(bool active) async {
+    (update(keyValueEntries)..where((tbl) => tbl.key.equals(PERSISTENT_RESPECT_SONG_LINKS)))
+        .write(KeyValueEntriesCompanion(value: Value(active.toString())));
   }
 }

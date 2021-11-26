@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mobx/mobx.dart';
 
 import '../../domain/entities/album.dart';
 import '../../domain/entities/artist.dart';
@@ -23,13 +24,37 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  late final NavigationStore _navStore;
+  late final ReactionDisposer _disposer;
+  late final FocusNode _searchFocus;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchFocus = FocusNode();
+    _navStore = GetIt.I<NavigationStore>();
+    _disposer = reaction(
+      (_) => _navStore.navIndex,
+      (int index) {
+        if (index != 2) {
+          if (_searchFocus.hasFocus) _searchFocus.unfocus();
+        }
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _disposer();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     print('SearchPage.build');
 
     final searchStore = GetIt.I<SearchPageStore>();
     final audioStore = GetIt.I<AudioStore>();
-    final navStore = GetIt.I<NavigationStore>();
 
     return SafeArea(
       child: Column(
@@ -56,6 +81,7 @@ class _SearchPageState extends State<SearchPage> {
               onChanged: (text) {
                 searchStore.search(text);
               },
+              focusNode: _searchFocus,
             ),
           ),
           Expanded(
@@ -79,7 +105,7 @@ class _SearchPageState extends State<SearchPage> {
                       subtitle: album.artist,
                       albumArtPath: album.albumArtPath,
                       onTap: () {
-                        navStore.pushOnLibrary(
+                        _navStore.pushOnLibrary(
                           MaterialPageRoute<Widget>(
                             builder: (BuildContext context) => AlbumDetailsPage(
                               album: album,
@@ -93,7 +119,7 @@ class _SearchPageState extends State<SearchPage> {
                     return ListTile(
                       title: Text(artist.name),
                       onTap: () {
-                        navStore.pushOnLibrary(
+                        _navStore.pushOnLibrary(
                           MaterialPageRoute<Widget>(
                             builder: (BuildContext context) => ArtistDetailsPage(
                               artist: artist,

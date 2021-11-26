@@ -1,4 +1,5 @@
 import 'package:mobx/mobx.dart';
+import '../../constants.dart';
 
 import '../../domain/entities/artist.dart';
 import '../../domain/entities/smart_list.dart';
@@ -31,7 +32,7 @@ abstract class _SmartListStore with Store {
   @observable
   late int minLikeCount = _smartList?.filter.minLikeCount ?? 0;
   @observable
-  late int maxLikeCount = _smartList?.filter.maxLikeCount ?? 5;
+  late int maxLikeCount = _smartList?.filter.maxLikeCount ?? MAX_LIKE_COUNT;
 
   @observable
   late bool minPlayCountEnabled = _smartList?.filter.minPlayCount != null;

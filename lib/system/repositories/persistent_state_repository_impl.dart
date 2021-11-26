@@ -55,4 +55,28 @@ class PersistentStateRepositoryImpl implements PersistentStateRepository {
   void setOriginalSongs(List<Song> songs) {
     _persistentStateDataSource.setOriginalSongs(songs.map((e) => e as SongModel).toList());
   }
+
+  @override
+  Future<bool> get excludeBlocked => _persistentStateDataSource.excludeBlocked;
+
+  @override
+  Future<bool> get excludeSkipped => _persistentStateDataSource.excludeSkipped;
+
+  @override
+  Future<bool> get respectSongLinks => _persistentStateDataSource.respectSongLinks;
+
+  @override
+  void setExcludeBlocked(bool active) {
+    _persistentStateDataSource.setExcludeBlocked(active);
+  }
+
+  @override
+  void setExcludeSkipped(bool active) {
+    _persistentStateDataSource.setExcludeSkipped(active);
+  }
+
+  @override
+  void setRespectSongLinks(bool active) {
+    _persistentStateDataSource.setRespectSongLinks(active);
+  }
 }

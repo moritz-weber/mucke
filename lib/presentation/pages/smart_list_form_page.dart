@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mucke/constants.dart';
 import 'package:reorderables/reorderables.dart';
 
 import '../../domain/entities/smart_list.dart';
@@ -108,8 +109,8 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
                               RangeSlider(
                                 values: _currentRangeValues,
                                 min: 0,
-                                max: 5,
-                                divisions: 5,
+                                max: MAX_LIKE_COUNT.toDouble(),
+                                divisions: MAX_LIKE_COUNT,
                                 labels: RangeLabels(
                                   _currentRangeValues.start.round().toString(),
                                   _currentRangeValues.end.round().toString(),

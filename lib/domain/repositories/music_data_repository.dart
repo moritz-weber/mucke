@@ -34,18 +34,18 @@ abstract class MusicDataInfoRepository {
 abstract class MusicDataRepository extends MusicDataInfoRepository {
   Future<void> updateDatabase();
 
-  Future<void> setSongBlocked(Song song, bool blocked);
+  Future<Song> setSongBlocked(Song song, bool blocked);
 
-  Future<void> incrementSkipCount(Song song);
-  Future<void> resetSkipCount(Song song);
+  Future<Song> incrementSkipCount(Song song);
+  Future<Song> resetSkipCount(Song song);
 
-  Future<void> incrementLikeCount(Song song);
-  Future<void> resetLikeCount(Song song);
+  Future<Song> incrementLikeCount(Song song);
+  Future<Song> resetLikeCount(Song song);
 
-  Future<void> incrementPlayCount(Song song);
+  Future<Song> incrementPlayCount(Song song);
 
-  Future<void> togglePreviousSongLink(Song song);
-  Future<void> toggleNextSongLink(Song song);
+  Future<Song> togglePreviousSongLink(Song song);
+  Future<Song> toggleNextSongLink(Song song);
 
   Future<void> insertPlaylist(String name);
   Future<void> updatePlaylist(int id, String name);

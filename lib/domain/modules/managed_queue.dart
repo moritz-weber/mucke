@@ -252,7 +252,6 @@ class ManagedQueue implements ManagedQueueInfo {
     return newStartIndex;
   }
 
-  // TODO: naming things is hard
   Future<List<QueueItem>> _getQueueItemWithLinks(
     Song song,
     int index,
