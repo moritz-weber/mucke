@@ -5,44 +5,45 @@ class QueueItemModel extends QueueItem {
   QueueItemModel(
     SongModel song, {
     required int originalIndex,
-    QueueItemType type = QueueItemType.standard,
-  }) : super(song, originalIndex: originalIndex, type: type);
+    QueueItemSource source = QueueItemSource.original,
+    bool isAvailable = true,
+  }) : super(song, originalIndex: originalIndex, source: source, isAvailable: isAvailable);
 
   QueueItemModel copyWith({
     SongModel? song,
     int? originalIndex,
-    QueueItemType? type,
+    QueueItemSource? type,
   }) =>
       QueueItemModel(
         song ?? this.song as SongModel,
         originalIndex: originalIndex ?? this.originalIndex,
-        type: type ?? this.type,
+        source: type ?? this.source,
       );
 }
 
 extension IntToQueueItemType on int {
-  QueueItemType toQueueItemType() {
+  QueueItemSource toQueueItemType() {
     switch (this) {
       case 1:
-        return QueueItemType.predecessor;
+        return QueueItemSource.predecessor;
       case 2:
-        return QueueItemType.successor;
+        return QueueItemSource.successor;
       case 3:
-        return QueueItemType.added;
+        return QueueItemSource.added;
       default:
-        return QueueItemType.standard;
+        return QueueItemSource.original;
     }
   }
 }
 
-extension QueueItemTypeToInt on QueueItemType {
+extension QueueItemTypeToInt on QueueItemSource {
   int toInt() {
     switch (this) {
-      case QueueItemType.predecessor:
+      case QueueItemSource.predecessor:
         return 1;
-      case QueueItemType.successor:
+      case QueueItemSource.successor:
         return 2;
-      case QueueItemType.added:
+      case QueueItemSource.added:
         return 3;
       default:
         return 0;

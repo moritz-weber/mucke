@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:flutter_fimber/flutter_fimber.dart';
+
 import '../../constants.dart';
 import '../entities/queue_item.dart';
 import '../repositories/music_data_repository.dart';
@@ -11,12 +13,24 @@ class WeightedRandomQueueGenerator extends QueueGenerator {
     bool respectSongLinks,
     MusicDataInfoRepository musicDataRepository,
   ) : super(musicDataRepository, respectSongLinks) {
+    _log.i('Start bucket list with ${queueItems.length} items');
     _buckets = List.generate(MAX_LIKE_COUNT + 1, (index) => []);
 
     for (final qi in queueItems) {
-      _buckets[qi.song.likeCount].add(qi);
+      if (!qi.song.blocked && qi.song.skipCount < 3) {
+        _buckets[qi.song.likeCount].add(qi);
+      }
     }
+
+    _buckets[0][0].originalIndex = 123456;
+
+    // 0.7ms dauert das mit 3000 Liedern...
+    // TODO: dieses ganze remove und so, kann man also sparen und einfach die Buckets jedes Mal erzeugen
+    // auch mit filtern gar kein Problem
+    _log.i('Finished bucket list');
   }
+
+  static final _log = FimberLog('QueueGenerator');
 
   late final List<List<QueueItem>> _buckets;
   final Random _rnd = Random();

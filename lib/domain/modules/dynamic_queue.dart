@@ -110,7 +110,7 @@ class DynamicQueue implements ManagedQueueInfo {
     final queueItem = QueueItemModel(
       song as SongModel,
       originalIndex: _addedSongs.length - 1,
-      type: QueueItemType.added,
+      source: QueueItemSource.added,
     );
     _queue.add(queueItem);
     _queueItemsSubject.add(_queue);
@@ -148,7 +148,7 @@ class DynamicQueue implements ManagedQueueInfo {
     final queueItem = QueueItemModel(
       song as SongModel,
       originalIndex: _addedSongs.length - 1,
-      type: QueueItemType.added,
+      source: QueueItemSource.added,
     );
     _queue.insert(index, queueItem);
     _queueItemsSubject.add(_queue);
@@ -164,21 +164,21 @@ class DynamicQueue implements ManagedQueueInfo {
     final queueItem = _queue[index];
 
     // if a song is removed from the queue, it should not pop up again when reshuffling
-    if (queueItem.type == QueueItemType.added) {
+    if (queueItem.source == QueueItemSource.added) {
       _addedSongs.removeAt(queueItem.originalIndex);
       _addedSongsSubject.add(_addedSongs);
-    } else if (queueItem.type == QueueItemType.standard) {
+    } else if (queueItem.source == QueueItemSource.original) {
       _originalSongs.removeAt(queueItem.originalIndex);
       _originalSongsSubject.add(_originalSongs);
     }
 
     for (int i = 0; i < queueItemList.length; i++) {
-      if (queueItemList[i].type == queueItem.type &&
+      if (queueItemList[i].source == queueItem.source &&
           queueItemList[i].originalIndex > queueItem.originalIndex) {
         queueItemList[i] = QueueItemModel(
           queueItemList[i].song as SongModel,
           originalIndex: queueItemList[i].originalIndex - 1,
-          type: queueItemList[i].type,
+          source: queueItemList[i].source,
         );
       }
     }
@@ -198,7 +198,7 @@ class DynamicQueue implements ManagedQueueInfo {
     final songs = _originalSongs.cast<Song>() + _addedSongs;
     final currentQueueItem = _queue[currentIndex];
     int originalIndex = currentQueueItem.originalIndex;
-    if (currentQueueItem.type == QueueItemType.added) {
+    if (currentQueueItem.source == QueueItemSource.added) {
       originalIndex += _originalSongs.length;
     }
 

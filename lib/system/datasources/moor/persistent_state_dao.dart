@@ -33,7 +33,7 @@ class PersistentStateDao extends DatabaseAccessor<MoorDatabase>
           return QueueItemModel(
             SongModel.fromMoor(row.readTable(songs)),
             originalIndex: row.readTable(queueEntries).originalIndex,
-            type: row.readTable(queueEntries).type.toQueueItemType(),
+            source: row.readTable(queueEntries).type.toQueueItemType(),
           );
         }).toList());
   }
@@ -47,7 +47,7 @@ class PersistentStateDao extends DatabaseAccessor<MoorDatabase>
         index: Value(i),
         path: Value(queue[i].song.path),
         originalIndex: Value(queue[i].originalIndex),
-        type: Value(queue[i].type.toInt()),
+        type: Value(queue[i].source.toInt()),
       ));
     }
 

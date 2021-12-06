@@ -4,12 +4,14 @@ class QueueItem {
   QueueItem(
     this.song, {
     required this.originalIndex,
-    this.type = QueueItemType.standard,
+    this.source = QueueItemSource.original,
+    required this.isAvailable,
   });
 
-  final Song song;
-  final int originalIndex;
-  final QueueItemType type;
+  Song song;
+  int originalIndex;
+  QueueItemSource source;
+  bool isAvailable;
 
   @override
   String toString() {
@@ -17,4 +19,4 @@ class QueueItem {
   }
 }
 
-enum QueueItemType { standard, predecessor, successor, added }
+enum QueueItemSource { original, predecessor, successor, added }

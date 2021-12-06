@@ -1,4 +1,6 @@
 import 'package:flutter_fimber/flutter_fimber.dart';
+import 'package:get_it/get_it.dart';
+import 'package:mucke/domain/modules/dynamic_queue_2.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../domain/entities/loop_mode.dart';
@@ -128,14 +130,16 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
 
   @override
   Future<void> loadSongs({required List<Song> songs, required int initialIndex}) async {
-    final shuffleMode = shuffleModeStream.value;
-    final _initialIndex = await _dynamicQueue.generateQueue(shuffleMode, songs, initialIndex);
+    final dynamicQueue2 = GetIt.I<DynamicQueue2>();
 
-    _queueSubject.add(_dynamicQueue.queue);
+    final shuffleMode = shuffleModeStream.value;
+    final _initialIndex = await dynamicQueue2.generateQueue(songs, initialIndex);
+
+    _queueSubject.add(dynamicQueue2.queue);
 
     await _audioPlayerDataSource.loadQueue(
       initialIndex: _initialIndex,
-      queue: _dynamicQueue.queue.map((e) => e as SongModel).toList(),
+      queue: dynamicQueue2.queue.map((e) => e as SongModel).toList(),
     );
   }
 
@@ -206,21 +210,22 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   @override
   Future<void> setShuffleMode(ShuffleMode shuffleMode, {bool updateQueue = true}) async {
     _shuffleModeSubject.add(shuffleMode);
+    final dynamicQueue2 = GetIt.I<DynamicQueue2>();
 
     final currentIndex = currentIndexStream.valueOrNull ?? 0;
 
     if (updateQueue) {
-      final splitIndex = await _dynamicQueue.reshuffleQueue(shuffleMode, currentIndex);
+      final splitIndex = await dynamicQueue2.reshuffleQueue();
       blockIndexUpdate = true;
 
       _audioPlayerDataSource
           .replaceQueueAroundIndex(
         index: currentIndex,
-        before: _dynamicQueue.queue.sublist(0, splitIndex).map((e) => e as SongModel).toList(),
-        after: _dynamicQueue.queue.sublist(splitIndex + 1).map((e) => e as SongModel).toList(),
+        before: dynamicQueue2.queue.sublist(0, splitIndex).map((e) => e as SongModel).toList(),
+        after: dynamicQueue2.queue.sublist(splitIndex + 1).map((e) => e as SongModel).toList(),
       )
           .then((_) {
-        _queueSubject.add(_dynamicQueue.queue);
+        _queueSubject.add(dynamicQueue2.queue);
       });
     }
   }
@@ -232,12 +237,13 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
 
   @override
   Future<void> updateSongs(Map<String, Song> songs) async {
+    final dynamicQueue2 = GetIt.I<DynamicQueue2>();
     if (songs.containsKey(_currentSongSubject.valueOrNull?.path)) {
       _currentSongSubject.add(songs[_currentSongSubject.value.path]!);
     }
 
-    if (_dynamicQueue.updateSongs(songs)) {
-      _queueSubject.add(_dynamicQueue.queue);
+    if (dynamicQueue2.updateSongs(songs)) {
+      _queueSubject.add(dynamicQueue2.queue);
     }
   }
 

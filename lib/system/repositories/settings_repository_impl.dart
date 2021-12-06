@@ -1,10 +1,23 @@
+import 'package:rxdart/rxdart.dart';
+
 import '../../domain/repositories/settings_repository.dart';
 import '../datasources/settings_data_source.dart';
 
 class SettingsRepositoryImpl implements SettingsRepository {
-  SettingsRepositoryImpl(this._settingsDataSource);
+  SettingsRepositoryImpl(this._settingsDataSource) {
+    _settingsDataSource.blockSkippedSongsThreshold.listen((event) { 
+      _blockSkippedSongsThreshold.add(event);
+    });
+
+    _settingsDataSource.isBlockSkippedSongsEnabled.listen((event) { 
+      _isBlockSkippedSongsEnabled.add(event);
+    });
+  }
 
   final SettingsDataSource _settingsDataSource;
+
+  final BehaviorSubject<int> _blockSkippedSongsThreshold = BehaviorSubject();
+  final BehaviorSubject<bool> _isBlockSkippedSongsEnabled = BehaviorSubject();
 
   @override
   Stream<List<String>> get libraryFoldersStream => _settingsDataSource.libraryFoldersStream;
@@ -22,10 +35,10 @@ class SettingsRepositoryImpl implements SettingsRepository {
   }
 
   @override
-  Stream<int> get blockSkippedSongsThreshold => _settingsDataSource.blockSkippedSongsThreshold;
+  ValueStream<int> get blockSkippedSongsThreshold => _blockSkippedSongsThreshold.stream;
 
   @override
-  Stream<bool> get isBlockSkippedSongsEnabled => _settingsDataSource.isBlockSkippedSongsEnabled;
+  ValueStream<bool> get isBlockSkippedSongsEnabled => _isBlockSkippedSongsEnabled.stream;
 
   @override
   Future<void> setBlockSkippedSongsThreshold(int threshold) async {

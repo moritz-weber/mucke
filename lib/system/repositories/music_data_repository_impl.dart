@@ -189,6 +189,32 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
     return newSong;
   }
 
+  @override
+  Future<List<Song>> getPredecessors(Song song) async {
+    final List<Song> songs = [];
+    Song currentSong = song;
+
+    while (currentSong.previous != '') {
+      currentSong = await getSongByPath(currentSong.previous);
+      songs.add(currentSong);
+    }
+
+    return songs.reversed.toList();
+  }
+
+  @override
+  Future<List<Song>> getSuccessors(Song song) async {
+    final List<Song> songs = [];
+    Song currentSong = song;
+
+    while (currentSong.next != '') {
+      currentSong = await getSongByPath(currentSong.next);
+      songs.add(currentSong);
+    }
+
+    return songs.toList();
+  }
+
   List<Song> _sortHighlightedSongs(List<Song> songs) {
     return songs
       ..sort(

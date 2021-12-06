@@ -10,6 +10,7 @@ import 'domain/entities/album.dart';
 import 'domain/entities/artist.dart';
 import 'domain/entities/smart_list.dart';
 import 'domain/modules/dynamic_queue.dart';
+import 'domain/modules/dynamic_queue_2.dart';
 import 'domain/modules/managed_queue.dart';
 import 'domain/repositories/audio_player_repository.dart';
 import 'domain/repositories/music_data_repository.dart';
@@ -158,6 +159,14 @@ Future<void> setupGetIt() async {
   // modules
   getIt.registerLazySingleton<ManagedQueue>(
     () => ManagedQueue(
+      getIt(),
+    ),
+  );
+  getIt.registerLazySingleton<DynamicQueue2>(
+    () => DynamicQueue2(
+      getIt(),
+      getIt(),
+      getIt(),
       getIt(),
     ),
   );
