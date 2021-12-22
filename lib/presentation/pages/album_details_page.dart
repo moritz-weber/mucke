@@ -77,6 +77,7 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
                         onTap: () => audioStore.playSong(
                           s + _calcOffset(d, songsByDisc),
                           store.albumSongStream.value!,
+                          widget.album,
                         ),
                         onTapMore: () => SongBottomSheet()(songsByDisc[d][s], context),
                       )

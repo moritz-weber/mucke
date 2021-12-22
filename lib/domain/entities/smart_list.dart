@@ -1,9 +1,10 @@
 import 'package:equatable/equatable.dart';
 
 import 'artist.dart';
+import 'playable.dart';
 import 'shuffle_mode.dart';
 
-class SmartList extends Equatable {
+class SmartList extends Equatable implements Playable {
   const SmartList({
     required this.id,
     required this.name,
@@ -20,6 +21,9 @@ class SmartList extends Equatable {
 
   @override
   List<Object?> get props => [name, filter, orderBy, shuffleMode];
+
+  @override
+  PlayableType get type => PlayableType.smartlist;
 }
 
 class Filter extends Equatable {

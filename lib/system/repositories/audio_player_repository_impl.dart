@@ -1,6 +1,6 @@
 import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mucke/domain/modules/dynamic_queue_2.dart';
+import 'package:mucke/domain/entities/playable.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../domain/entities/loop_mode.dart';
@@ -8,8 +8,7 @@ import '../../domain/entities/playback_event.dart';
 import '../../domain/entities/queue_item.dart';
 import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/entities/song.dart';
-import '../../domain/modules/dynamic_queue.dart';
-import '../../domain/modules/managed_queue.dart';
+import '../../domain/modules/dynamic_queue_3.dart';
 import '../../domain/repositories/audio_player_repository.dart';
 import '../datasources/audio_player_data_source.dart';
 import '../models/song_model.dart';
@@ -41,7 +40,7 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   static final _log = FimberLog('AudioPlayerRepositoryImpl');
 
   final AudioPlayerDataSource _audioPlayerDataSource;
-  final DynamicQueue _dynamicQueue;
+  final DynamicQueue2 _dynamicQueue;
 
   final BehaviorSubject<int> _currentIndexSubject = BehaviorSubject();
   final BehaviorSubject<Song> _currentSongSubject = BehaviorSubject();
@@ -62,15 +61,6 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   ValueStream<LoopMode> get loopModeStream => _loopModeSubject.stream;
 
   @override
-  ValueStream<bool> get excludeBlockedStream => _excludeBlockedSubject.stream;
-
-  @override
-  ValueStream<bool> get excludeSkippedStream => _excludeSkippedSubject.stream;
-
-  @override
-  ValueStream<bool> get respectSongLinksStream => _respectSongLinksSubject.stream;
-
-  @override
   ValueStream<List<Song>> get queueStream => _queueSubject.stream;
 
   @override
@@ -88,8 +78,8 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   @override
   Stream<Duration> get positionStream => _audioPlayerDataSource.positionStream;
 
-  @override
-  ManagedQueueInfo get managedQueueInfo => _dynamicQueue;
+  // @override
+  // ManagedQueueInfo get managedQueueInfo => _dynamicQueue;
 
   @override
   Future<void> addToQueue(Song song) async {
@@ -111,29 +101,29 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
     List<Song> addedSongs,
     int index,
   ) async {
-    _dynamicQueue.init(
-      queueItems,
-      originalSongs,
-      addedSongs,
-      shuffleModeStream.value,
-      [],
-      [],
-      _respectSongLinksSubject.value,
-    );
-    _queueSubject.add(_dynamicQueue.queue);
+    // _dynamicQueue.init(
+    //   queueItems,
+    //   originalSongs,
+    //   addedSongs,
+    //   shuffleModeStream.value,
+    //   [],
+    //   [],
+    //   _respectSongLinksSubject.value,
+    // );
+    // _queueSubject.add(_dynamicQueue.queue);
 
-    await _audioPlayerDataSource.loadQueue(
-      initialIndex: index,
-      queue: _dynamicQueue.queue.map((e) => e as SongModel).toList(),
-    );
+    // await _audioPlayerDataSource.loadQueue(
+    //   initialIndex: index,
+    //   queue: _dynamicQueue.queue.map((e) => e as SongModel).toList(),
+    // );
   }
 
   @override
-  Future<void> loadSongs({required List<Song> songs, required int initialIndex}) async {
+  Future<void> loadSongs({required List<Song> songs, required int initialIndex, required Playable playable}) async {
     final dynamicQueue2 = GetIt.I<DynamicQueue2>();
 
     final shuffleMode = shuffleModeStream.value;
-    final _initialIndex = await dynamicQueue2.generateQueue(songs, initialIndex);
+    final _initialIndex = await dynamicQueue2.generateQueue(songs, playable, initialIndex, shuffleMode);
 
     _queueSubject.add(dynamicQueue2.queue);
 
@@ -215,7 +205,7 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
     final currentIndex = currentIndexStream.valueOrNull ?? 0;
 
     if (updateQueue) {
-      final splitIndex = await dynamicQueue2.reshuffleQueue();
+      final splitIndex = await dynamicQueue2.reshuffleQueue(shuffleMode, currentIndex);
       blockIndexUpdate = true;
 
       _audioPlayerDataSource
@@ -284,28 +274,4 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   @override
   Future<void> seekToPosition(double position) async =>
       _audioPlayerDataSource.seekToPosition(position);
-
-  @override
-  Future<void> setExcludeBlocked(bool enabled) async {
-    if (_excludeBlockedSubject.value != enabled) {
-      _dynamicQueue.setExcludeBlocked(enabled);
-      _excludeBlockedSubject.add(enabled);
-    }
-  }
-
-  @override
-  Future<void> setExcludeSkipped(bool enabled) async {
-    if (_excludeSkippedSubject.value != enabled) {
-      _dynamicQueue.setExcludeSkipped(enabled);
-      _excludeSkippedSubject.add(enabled);
-    }
-  }
-
-  @override
-  Future<void> setRespectSongLinks(bool enabled) async {
-    if (_respectSongLinksSubject.value != enabled) {
-      _dynamicQueue.setRespectSongLinks(enabled);
-      _respectSongLinksSubject.add(enabled);
-    }
-  }
 }

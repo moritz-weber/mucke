@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
+import 'package:mucke/domain/entities/playable.dart';
 
 import '../../domain/entities/album.dart';
 import '../../domain/entities/artist.dart';
@@ -95,7 +96,7 @@ class _SearchPageState extends State<SearchPage> {
                     final song = results[index] as Song;
                     return SongListTile(
                       song: song,
-                      onTap: () => audioStore.playSong(0, [song]),
+                      onTap: () => audioStore.playSong(0, [song], SearchQuery('query')),  // TODO: include correct query
                       onTapMore: () => SongBottomSheet()(song, context),
                     );
                   } else if (results[index] is Album) {

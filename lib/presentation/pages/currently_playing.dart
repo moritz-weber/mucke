@@ -182,43 +182,6 @@ class CurrentlyPlayingPage extends StatelessWidget {
                 color: LIGHT1,
               ),
               const SizedBox(height: 8.0),
-              Observer(
-                builder: (context) => SwitchListTile(
-                  value: audioStore.excludeBlockedStream.value ?? true,
-                  title: const Text('Exclude blocked songs'),
-                  secondary: const Icon(Icons.remove_circle_outline_rounded),
-                  onChanged: (value) {
-                    audioStore.setExcludeBlocked(value);
-                  },
-                ),
-              ),
-              Observer(
-                builder: (context) => SwitchListTile(
-                  value: audioStore.excludeSkippedStream.value ?? true,
-                  title: const Text('Exclude skipped songs'),
-                  secondary: const Icon(Icons.skip_next_rounded),
-                  onChanged: (value) {
-                    audioStore.setExcludeSkipped(value);
-                  },
-                ),
-              ),
-              Observer(
-                builder: (context) => SwitchListTile(
-                  value: audioStore.respectSongLinksStream.value ?? true,
-                  title: const Text('Respect song links'),
-                  secondary: const Icon(Icons.link_rounded),
-                  onChanged: (value) {
-                    audioStore.setRespectSongLinks(value);
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: 1,
-                  color: Colors.white10,
-                ),
-              ),
               ListTile(
                 title: const Text('Show song info'),
                 leading: const Icon(Icons.info),

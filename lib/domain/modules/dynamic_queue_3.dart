@@ -3,52 +3,57 @@ import 'dart:math';
 import '../../constants.dart';
 import '../../system/models/queue_item_model.dart';
 import '../../system/models/song_model.dart';
+import '../entities/playable.dart';
 import '../entities/queue_item.dart';
 import '../entities/shuffle_mode.dart';
 import '../entities/song.dart';
-import '../repositories/audio_player_repository.dart';
 import '../repositories/music_data_repository.dart';
-import '../repositories/persistent_state_repository.dart';
-import '../repositories/settings_repository.dart';
 
-const int QUEUE_AHEAD = 20;
+const int QUEUE_AHEAD = 50;
 
 // Notizen zu filter / reshuffle
-// für reshuffle ist nur nötig: 
+// für reshuffle ist nur nötig:
 // * originale Reihenfolge (bleibt in _availableSongs erhalten)
 // * position des aktuellen Songs in der originalen Reihenfolge
-//
-// für filter:
-// bestehende Queue soll entsprechend aktualisiert werden (rausfiltern bzw. hinzufügen)
-// für non-shuffle: die rausgefilterten müssten eigentlich von Anfang an mit in die Queue
-// ... nur dann eben deaktiviert bzw. über den queue getter gefiltert
-// ... der Generator braucht also alle _availableSongs und ignoriert die Filterung mehr oder weniger
-// bleibt die Frage: was passiert bei refilter, wenn aktueller Song rausfliegen müsste?
+
+// X queue kennt Typ+ID der Wiedergabe, bspw: Album, All, Artist, Search, Playlist, Smartlist
+// X queue kennt Wiedergabemodus: Shuffle,...
+// X Filter (block) sind fix: 3 Modi für unterschiedliche Situationen
+//   - dadurch auch keine Änderungen, die sich auf queue auswirken könnten
+//   - dafür sind Typ und Modus nötig
+//   - Einstellung von Smartlist könnte das überschreiben
+// X Queue wird nicht aktualisiert, wenn sich SmartList ändert -> könnte in Zukunft manuell geschehen
+// X Skip-Block gibt's nicht
+// - respectSongLinks richtig handlen
+// - Reaktionen auf Song-Änderungen: erstmal nur, wenn geblockt wird -> entfernen
+// - Bonus-Reaktion: wenn Song aus/zu Playlist entfernt/hinzugefügt wird
+// ** WELCHE SONG-LISTE WIRD ÜBERGEBEN? **
+//   X muss die queue selber filtern? eigentlich schon, aber wird auch einfacher, weil sich das nicht ändert
+//   X müsste halt auf ShuffleMode-Änderungen reagieren
 
 class DynamicQueue2 {
   DynamicQueue2(
     this._musicDataRepository,
-    this._audioPlayerRepository,
-    this._settingsRepository,
-    this._persistentStateRepository,
   ) {
     _availableSongs = [];
     _queue = [];
-
-    _audioPlayerRepository.excludeBlockedStream.listen((_) => _handlePlaybackSettingsChanged);
   }
 
   final MusicDataRepository _musicDataRepository;
-  final AudioPlayerRepository _audioPlayerRepository;
-  final SettingsRepository _settingsRepository;
-  final PersistentStateRepository _persistentStateRepository;
 
-  // List<Song> get queue => _queue.map((e) => e.song).toList();
-  List<Song> get queue => _filterAvailableSongs(_queue).map((e) => e.song).toList();
+  List<Song> get queue => _queue.map((e) => e.song).toList();
+  // WHY IS/WAS THIS REQUIRED? FILTERED SONGS SHOULDN'T BE IN _queue
+  // List<Song> get queue => _filterAvailableSongs(_queue).map((e) => e.song).toList();
   late List<QueueItem> _queue;
   late List<QueueItem> _availableSongs;
 
-  Future<int> generateQueue(List<Song> songs, int startIndex) async {
+  Playable? _playable;
+  ShuffleMode _shuffleMode = ShuffleMode.none;
+
+  Future<int> generateQueue(List<Song> songs, Playable playable, int startIndex, ShuffleMode shuffleMode) async {
+    _shuffleMode = shuffleMode;
+    _playable = playable;
+    
     _availableSongs = List.generate(
       songs.length,
       (i) => QueueItemModel(songs[i] as SongModel, originalIndex: i),
@@ -59,7 +64,7 @@ class DynamicQueue2 {
     final filteredAvailableSongs = _filterAvailableSongs(_availableSongs);
     final newStartIndex = filteredAvailableSongs.indexOf(initialQueueItem);
 
-    switch (_audioPlayerRepository.shuffleModeStream.value) {
+    switch (_shuffleMode) {
       case ShuffleMode.none:
         return _generateNormalQueue(filteredAvailableSongs, newStartIndex);
       case ShuffleMode.standard:
@@ -113,15 +118,16 @@ class DynamicQueue2 {
     _queue.removeAt(index);
   }
 
-  Future<int> reshuffleQueue() async {
-    final currentQueueItem = _queue[_audioPlayerRepository.currentIndexStream.value];
+  Future<int> reshuffleQueue(ShuffleMode shuffleMode, int currentIndex) async {
+    _shuffleMode = shuffleMode;
+    final currentQueueItem = _queue[currentIndex];
 
-    // TODO: need  to make songs available
+    // TODO: need  to make songs available // WHAT?
     final filteredAvailableSongs = _filterAvailableSongs(_availableSongs);
     // TODO: what if the item is not in the filtered list?
     final newStartIndex = filteredAvailableSongs.indexOf(currentQueueItem);
 
-    switch (_audioPlayerRepository.shuffleModeStream.value) {
+    switch (_shuffleMode) {
       case ShuffleMode.none:
         return _generateNormalQueue(filteredAvailableSongs, newStartIndex);
       case ShuffleMode.standard:
@@ -168,22 +174,27 @@ class DynamicQueue2 {
   }
 
   List<QueueItem> _filterAvailableSongs(List<QueueItem> availableSongs) {
-    final excludeBlocked = _audioPlayerRepository.excludeBlockedStream.value;
-    final skipThreshold = _settingsRepository.blockSkippedSongsThreshold.value;
-    final excludeSkipped = _audioPlayerRepository.excludeSkippedStream.value &&
-        _settingsRepository.isBlockSkippedSongsEnabled.value;
-
     final List<QueueItem> result = [];
 
-    for (int i = 0; i < availableSongs.length; i++) {
-      final qi = availableSongs[i];
-      if (!(excludeBlocked && qi.song.blocked) &&
-          !(excludeSkipped && qi.song.skipCount >= skipThreshold)) {
-        result.add(qi);
+    int blockLevel = 2;  // exclude songs with highest block level
+    if (_shuffleMode != ShuffleMode.none) {
+      if (_playable?.type == PlayableType.all) {
+        blockLevel = 0;  // shuffling all songs -> strictest setting
+      } else {
+        blockLevel = 1;
       }
     }
 
-    return result;
+    for (int i = 0; i < availableSongs.length; i++) {
+      final qi = availableSongs[i];
+      if (!(qi.song.blockLevel > blockLevel)) {
+        result.add(qi);
+      } else {
+        print('blocked: ${qi.song.title}');
+      }
+    }
+
+    return availableSongs;
   }
 
   Future<int> _generateNormalQueue(List<QueueItem> queueItems, int startIndex) async {
@@ -197,37 +208,37 @@ class DynamicQueue2 {
 
   Future<int> _generateShuffleQueue(List<QueueItem> queueItems, int startIndex) async {
     final Random _rnd = Random();
-    final respectSongLinks = _audioPlayerRepository.respectSongLinksStream.value;
     // keeping this list makes iterating the available songs easier
     final locallyAvailableSongs = List<QueueItem>.from(queueItems);
 
     final List<QueueItem> queue = [];
-    if (respectSongLinks) {
-      final linkedItems = await getQueueItemWithLinks(queueItems[startIndex]);
-      // TODO: need to add those to the _availableSongs?
-      queue.addAll(linkedItems);
-    } else {
-      queue.add(queueItems[startIndex]);
-    }
+    // if (respectSongLinks) {
+    final linkedItems = await getQueueItemWithLinks(queueItems[startIndex]);
+    // TODO: need to add those to the _availableSongs?
+    queue.addAll(linkedItems);
+    // } else {
+    //   queue.add(queueItems[startIndex]);
+    // }
     // don't want to select these songs twice
     queue.forEach(locallyAvailableSongs.remove);
 
     while (queue.length < QUEUE_AHEAD && locallyAvailableSongs.isNotEmpty) {
       final index = _rnd.nextInt(locallyAvailableSongs.length);
 
-      if (respectSongLinks) {
-        final linkedSong = await getQueueItemWithLinks(locallyAvailableSongs[index]);
-        queue.addAll(linkedSong);
-        if (linkedSong.length > 1) {
-          linkedSong.forEach((q) => locallyAvailableSongs.removeWhere((e) => e.song == q.song));
-        } else {
-          locallyAvailableSongs.removeAt(index);
-        }
+      // if (respectSongLinks) {
+      final linkedSong = await getQueueItemWithLinks(locallyAvailableSongs[index]);
+      queue.addAll(linkedSong);
+      if (linkedSong.length > 1) {
+        linkedSong.forEach((q) => locallyAvailableSongs.removeWhere((e) => e.song == q.song));
       } else {
-        queue.add(locallyAvailableSongs.removeAt(index));
+        locallyAvailableSongs.removeAt(index);
       }
+      // } else {
+      //   queue.add(locallyAvailableSongs.removeAt(index));
+      // }
     }
 
+    // these qi are the same objects as in _availableSongs -> marks them to not be queued (again)
     queue.forEach((qi) {
       qi.isAvailable = false;
     });
@@ -237,7 +248,6 @@ class DynamicQueue2 {
 
   Future<int> _generateShufflePlusQueue(List<QueueItem> queueItems, int startIndex) async {
     final Random _rnd = Random();
-    final respectSongLinks = _audioPlayerRepository.respectSongLinksStream.value;
     final List<List<QueueItem>> buckets = List.generate(MAX_LIKE_COUNT + 1, (index) => []);
 
     for (final qi in queueItems) {
@@ -245,12 +255,12 @@ class DynamicQueue2 {
     }
 
     final List<QueueItem> queue = [];
-    if (respectSongLinks) {
-      final linkedItems = await getQueueItemWithLinks(queueItems[startIndex]);
-      queue.addAll(linkedItems);
-    } else {
-      queue.add(queueItems[startIndex]);
-    }
+    // if (respectSongLinks) {
+    final linkedItems = await getQueueItemWithLinks(queueItems[startIndex]);
+    queue.addAll(linkedItems);
+    // } else {
+    //   queue.add(queueItems[startIndex]);
+    // }
     // don't want to select these songs twice
     for (final qi in queue) {
       buckets[qi.song.likeCount].remove(qi);
@@ -262,19 +272,19 @@ class DynamicQueue2 {
 
       final index = _rnd.nextInt(bucket.length);
 
-      if (respectSongLinks) {
-        final linkedSong = await getQueueItemWithLinks(bucket[index]);
-        queue.addAll(linkedSong);
-        if (linkedSong.length > 1) {
-          for (final q in linkedSong) {
-            buckets[q.song.likeCount].removeWhere((e) => e.song == q.song);
-          }
-        } else {
-          bucket.removeAt(index);
+      // if (respectSongLinks) {
+      final linkedSong = await getQueueItemWithLinks(bucket[index]);
+      queue.addAll(linkedSong);
+      if (linkedSong.length > 1) {
+        for (final q in linkedSong) {
+          buckets[q.song.likeCount].removeWhere((e) => e.song == q.song);
         }
       } else {
-        queue.add(bucket.removeAt(index));
+        bucket.removeAt(index);
       }
+      // } else {
+      //   queue.add(bucket.removeAt(index));
+      // }
     }
 
     queue.forEach((qi) {
@@ -304,9 +314,5 @@ class DynamicQueue2 {
       }
     }
     throw Error();
-  }
-
-  void _handlePlaybackSettingsChanged() {
-
   }
 }

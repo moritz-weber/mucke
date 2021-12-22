@@ -9,9 +9,7 @@ import 'domain/actors/platform_integration_actor.dart';
 import 'domain/entities/album.dart';
 import 'domain/entities/artist.dart';
 import 'domain/entities/smart_list.dart';
-import 'domain/modules/dynamic_queue.dart';
-import 'domain/modules/dynamic_queue_2.dart';
-import 'domain/modules/managed_queue.dart';
+import 'domain/modules/dynamic_queue_3.dart';
 import 'domain/repositories/audio_player_repository.dart';
 import 'domain/repositories/music_data_repository.dart';
 import 'domain/repositories/persistent_state_repository.dart';
@@ -30,7 +28,6 @@ import 'presentation/state/audio_store.dart';
 import 'presentation/state/music_data_store.dart';
 import 'presentation/state/navigation_store.dart';
 import 'presentation/state/search_page_store.dart';
-import 'presentation/state/settings_page_store.dart';
 import 'presentation/state/settings_store.dart';
 import 'presentation/state/smart_list_form_store.dart';
 import 'presentation/state/smart_list_page_store.dart';
@@ -94,11 +91,6 @@ Future<void> setupGetIt() async {
   getIt.registerFactoryParam<AlbumPageStore, Album, void>(
     (Album? album, _) => AlbumPageStore(album: album!, musicDataInfoRepository: getIt()),
   );
-  getIt.registerFactory<SettingsPageStore>(
-    () => SettingsPageStore(
-      settingsRepository: getIt(),
-    ),
-  );
   getIt.registerFactoryParam<SmartListFormStore, SmartList, void>(
     (SmartList? smartList, _) =>
         SmartListFormStore(musicDataRepository: getIt(), smartList: smartList),
@@ -157,22 +149,8 @@ Future<void> setupGetIt() async {
   );
 
   // modules
-  getIt.registerLazySingleton<ManagedQueue>(
-    () => ManagedQueue(
-      getIt(),
-    ),
-  );
   getIt.registerLazySingleton<DynamicQueue2>(
     () => DynamicQueue2(
-      getIt(),
-      getIt(),
-      getIt(),
-      getIt(),
-    ),
-  );
-  // modules
-  getIt.registerLazySingleton<DynamicQueue>(
-    () => DynamicQueue(
       getIt(),
     ),
   );

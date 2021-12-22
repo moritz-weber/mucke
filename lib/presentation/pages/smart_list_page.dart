@@ -79,7 +79,7 @@ class _SmartListPageState extends State<SmartListPage> {
                     song: song,
                     showAlbum: true,
                     subtitle: Subtitle.artistAlbum,
-                    onTap: () => audioStore.playSong(index, songs),
+                    onTap: () => audioStore.playSong(index, songs, smartList),
                     onTapMore: () => SongBottomSheet()(song, context),
                   );
                 },

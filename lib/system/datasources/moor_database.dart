@@ -49,7 +49,7 @@ class Songs extends Table {
   IntColumn get discNumber => integer()();
   IntColumn get trackNumber => integer()();
   IntColumn get year => integer().nullable()();
-  BoolColumn get blocked => boolean().withDefault(const Constant(false))();
+  IntColumn get blockLevel => integer().withDefault(const Constant(0))();
   IntColumn get likeCount => integer().withDefault(const Constant(0))();
   IntColumn get skipCount => integer().withDefault(const Constant(0))();
   IntColumn get playCount => integer().withDefault(const Constant(0))();
@@ -203,22 +203,6 @@ class MoorDatabase extends _$MoorDatabase {
           );
           await into(keyValueEntries).insert(
             const KeyValueEntriesCompanion(key: Value(PERSISTENT_SHUFFLEMODE), value: Value('0')),
-          );
-          await into(keyValueEntries).insert(
-            const KeyValueEntriesCompanion(key: Value(PERSISTENT_EXCLUDE_BLOCKED), value: Value('true')),
-          );
-          await into(keyValueEntries).insert(
-            const KeyValueEntriesCompanion(key: Value(PERSISTENT_EXCLUDE_SKIPPED), value: Value('true')),
-          );
-          await into(keyValueEntries).insert(
-            const KeyValueEntriesCompanion(key: Value(PERSISTENT_RESPECT_SONG_LINKS), value: Value('true')),
-          );
-          
-          await into(keyValueEntries).insert(
-            const KeyValueEntriesCompanion(key: Value(SETTING_EXCLUDE_SKIPPED_SONGS), value: Value('true')),
-          );
-          await into(keyValueEntries).insert(
-            const KeyValueEntriesCompanion(key: Value(SETTING_SKIP_THRESHOLD), value: Value('3')),
           );
         }
       }, onUpgrade: (Migrator m, int from, int to) async {

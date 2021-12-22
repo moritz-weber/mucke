@@ -1293,7 +1293,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
   final int discNumber;
   final int trackNumber;
   final int? year;
-  final bool blocked;
+  final int blockLevel;
   final int likeCount;
   final int skipCount;
   final int playCount;
@@ -1312,7 +1312,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
       required this.discNumber,
       required this.trackNumber,
       this.year,
-      required this.blocked,
+      required this.blockLevel,
       required this.likeCount,
       required this.skipCount,
       required this.playCount,
@@ -1344,8 +1344,8 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
           .mapFromDatabaseResponse(data['${effectivePrefix}track_number'])!,
       year: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}year']),
-      blocked: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}blocked'])!,
+      blockLevel: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}block_level'])!,
       likeCount: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}like_count'])!,
       skipCount: const IntType()
@@ -1379,7 +1379,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
     if (!nullToAbsent || year != null) {
       map['year'] = Variable<int?>(year);
     }
-    map['blocked'] = Variable<bool>(blocked);
+    map['block_level'] = Variable<int>(blockLevel);
     map['like_count'] = Variable<int>(likeCount);
     map['skip_count'] = Variable<int>(skipCount);
     map['play_count'] = Variable<int>(playCount);
@@ -1404,7 +1404,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
       discNumber: Value(discNumber),
       trackNumber: Value(trackNumber),
       year: year == null && nullToAbsent ? const Value.absent() : Value(year),
-      blocked: Value(blocked),
+      blockLevel: Value(blockLevel),
       likeCount: Value(likeCount),
       skipCount: Value(skipCount),
       playCount: Value(playCount),
@@ -1429,7 +1429,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
       discNumber: serializer.fromJson<int>(json['discNumber']),
       trackNumber: serializer.fromJson<int>(json['trackNumber']),
       year: serializer.fromJson<int?>(json['year']),
-      blocked: serializer.fromJson<bool>(json['blocked']),
+      blockLevel: serializer.fromJson<int>(json['blockLevel']),
       likeCount: serializer.fromJson<int>(json['likeCount']),
       skipCount: serializer.fromJson<int>(json['skipCount']),
       playCount: serializer.fromJson<int>(json['playCount']),
@@ -1453,7 +1453,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
       'discNumber': serializer.toJson<int>(discNumber),
       'trackNumber': serializer.toJson<int>(trackNumber),
       'year': serializer.toJson<int?>(year),
-      'blocked': serializer.toJson<bool>(blocked),
+      'blockLevel': serializer.toJson<int>(blockLevel),
       'likeCount': serializer.toJson<int>(likeCount),
       'skipCount': serializer.toJson<int>(skipCount),
       'playCount': serializer.toJson<int>(playCount),
@@ -1475,7 +1475,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
           int? discNumber,
           int? trackNumber,
           int? year,
-          bool? blocked,
+          int? blockLevel,
           int? likeCount,
           int? skipCount,
           int? playCount,
@@ -1494,7 +1494,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
         discNumber: discNumber ?? this.discNumber,
         trackNumber: trackNumber ?? this.trackNumber,
         year: year ?? this.year,
-        blocked: blocked ?? this.blocked,
+        blockLevel: blockLevel ?? this.blockLevel,
         likeCount: likeCount ?? this.likeCount,
         skipCount: skipCount ?? this.skipCount,
         playCount: playCount ?? this.playCount,
@@ -1516,7 +1516,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
           ..write('discNumber: $discNumber, ')
           ..write('trackNumber: $trackNumber, ')
           ..write('year: $year, ')
-          ..write('blocked: $blocked, ')
+          ..write('blockLevel: $blockLevel, ')
           ..write('likeCount: $likeCount, ')
           ..write('skipCount: $skipCount, ')
           ..write('playCount: $playCount, ')
@@ -1550,7 +1550,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
                                       $mrjc(
                                           year.hashCode,
                                           $mrjc(
-                                              blocked.hashCode,
+                                              blockLevel.hashCode,
                                               $mrjc(
                                                   likeCount.hashCode,
                                                   $mrjc(
@@ -1580,7 +1580,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
           other.discNumber == this.discNumber &&
           other.trackNumber == this.trackNumber &&
           other.year == this.year &&
-          other.blocked == this.blocked &&
+          other.blockLevel == this.blockLevel &&
           other.likeCount == this.likeCount &&
           other.skipCount == this.skipCount &&
           other.playCount == this.playCount &&
@@ -1601,7 +1601,7 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
   final Value<int> discNumber;
   final Value<int> trackNumber;
   final Value<int?> year;
-  final Value<bool> blocked;
+  final Value<int> blockLevel;
   final Value<int> likeCount;
   final Value<int> skipCount;
   final Value<int> playCount;
@@ -1620,7 +1620,7 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
     this.discNumber = const Value.absent(),
     this.trackNumber = const Value.absent(),
     this.year = const Value.absent(),
-    this.blocked = const Value.absent(),
+    this.blockLevel = const Value.absent(),
     this.likeCount = const Value.absent(),
     this.skipCount = const Value.absent(),
     this.playCount = const Value.absent(),
@@ -1640,7 +1640,7 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
     required int discNumber,
     required int trackNumber,
     this.year = const Value.absent(),
-    this.blocked = const Value.absent(),
+    this.blockLevel = const Value.absent(),
     this.likeCount = const Value.absent(),
     this.skipCount = const Value.absent(),
     this.playCount = const Value.absent(),
@@ -1667,7 +1667,7 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
     Expression<int>? discNumber,
     Expression<int>? trackNumber,
     Expression<int?>? year,
-    Expression<bool>? blocked,
+    Expression<int>? blockLevel,
     Expression<int>? likeCount,
     Expression<int>? skipCount,
     Expression<int>? playCount,
@@ -1687,7 +1687,7 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
       if (discNumber != null) 'disc_number': discNumber,
       if (trackNumber != null) 'track_number': trackNumber,
       if (year != null) 'year': year,
-      if (blocked != null) 'blocked': blocked,
+      if (blockLevel != null) 'block_level': blockLevel,
       if (likeCount != null) 'like_count': likeCount,
       if (skipCount != null) 'skip_count': skipCount,
       if (playCount != null) 'play_count': playCount,
@@ -1709,7 +1709,7 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
       Value<int>? discNumber,
       Value<int>? trackNumber,
       Value<int?>? year,
-      Value<bool>? blocked,
+      Value<int>? blockLevel,
       Value<int>? likeCount,
       Value<int>? skipCount,
       Value<int>? playCount,
@@ -1728,7 +1728,7 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
       discNumber: discNumber ?? this.discNumber,
       trackNumber: trackNumber ?? this.trackNumber,
       year: year ?? this.year,
-      blocked: blocked ?? this.blocked,
+      blockLevel: blockLevel ?? this.blockLevel,
       likeCount: likeCount ?? this.likeCount,
       skipCount: skipCount ?? this.skipCount,
       playCount: playCount ?? this.playCount,
@@ -1772,8 +1772,8 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
     if (year.present) {
       map['year'] = Variable<int?>(year.value);
     }
-    if (blocked.present) {
-      map['blocked'] = Variable<bool>(blocked.value);
+    if (blockLevel.present) {
+      map['block_level'] = Variable<int>(blockLevel.value);
     }
     if (likeCount.present) {
       map['like_count'] = Variable<int>(likeCount.value);
@@ -1812,7 +1812,7 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
           ..write('discNumber: $discNumber, ')
           ..write('trackNumber: $trackNumber, ')
           ..write('year: $year, ')
-          ..write('blocked: $blocked, ')
+          ..write('blockLevel: $blockLevel, ')
           ..write('likeCount: $likeCount, ')
           ..write('skipCount: $skipCount, ')
           ..write('playCount: $playCount, ')
@@ -1941,12 +1941,12 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
     );
   }
 
-  final VerificationMeta _blockedMeta = const VerificationMeta('blocked');
+  final VerificationMeta _blockLevelMeta = const VerificationMeta('blockLevel');
   @override
-  late final GeneratedBoolColumn blocked = _constructBlocked();
-  GeneratedBoolColumn _constructBlocked() {
-    return GeneratedBoolColumn('blocked', $tableName, false,
-        defaultValue: const Constant(false));
+  late final GeneratedIntColumn blockLevel = _constructBlockLevel();
+  GeneratedIntColumn _constructBlockLevel() {
+    return GeneratedIntColumn('block_level', $tableName, false,
+        defaultValue: const Constant(0));
   }
 
   final VerificationMeta _likeCountMeta = const VerificationMeta('likeCount');
@@ -2017,7 +2017,7 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
         discNumber,
         trackNumber,
         year,
-        blocked,
+        blockLevel,
         likeCount,
         skipCount,
         playCount,
@@ -2101,9 +2101,11 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
       context.handle(
           _yearMeta, year.isAcceptableOrUnknown(data['year']!, _yearMeta));
     }
-    if (data.containsKey('blocked')) {
-      context.handle(_blockedMeta,
-          blocked.isAcceptableOrUnknown(data['blocked']!, _blockedMeta));
+    if (data.containsKey('block_level')) {
+      context.handle(
+          _blockLevelMeta,
+          blockLevel.isAcceptableOrUnknown(
+              data['block_level']!, _blockLevelMeta));
     }
     if (data.containsKey('like_count')) {
       context.handle(_likeCountMeta,

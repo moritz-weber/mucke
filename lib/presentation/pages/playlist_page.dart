@@ -24,7 +24,7 @@ class PlaylistPage extends StatelessWidget {
       child: StreamBuilder<Playlist>(
           stream: musicDataStore.getPlaylistStream(playlist.id),
           builder: (context, snapshot) {
-            final Playlist uPlaylist = snapshot.data ?? playlist;
+            final Playlist uPlaylist = snapshot.data ?? playlist;  // *u* for updating
 
             return Scaffold(
               appBar: AppBar(
@@ -56,7 +56,7 @@ class PlaylistPage extends StatelessWidget {
                               song: song,
                               showAlbum: true,
                               subtitle: Subtitle.artistAlbum,
-                              onTap: () => audioStore.playSong(index, uPlaylist.songs),
+                              onTap: () => audioStore.playSong(index, uPlaylist.songs, uPlaylist),
                               onTapMore: () => SongBottomSheet()(song, context),
                             ),
                             onDismissed: (direction) {

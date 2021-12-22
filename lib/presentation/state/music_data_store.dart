@@ -58,7 +58,7 @@ abstract class _MusicDataStore with Store {
     isUpdatingDatabase = false;
   }
 
-  Future<void> setSongBlocked(Song song, bool blocked) => _setSongBlocked(song, blocked);
+  Future<void> setSongBlocked(Song song, int blockLevel) => _setSongBlocked(song, blockLevel);
 
   Future<void> toggleNextSongLink(Song song) async =>
       await _musicDataRepository.toggleNextSongLink(song);

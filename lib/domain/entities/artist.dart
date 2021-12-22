@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
+import 'package:mucke/domain/entities/playable.dart';
 
-class Artist extends Equatable {
+class Artist extends Equatable implements Playable {
   const Artist({
     required this.name,
   });
@@ -9,4 +10,7 @@ class Artist extends Equatable {
 
   @override
   List<Object> get props => [name];
+
+  @override
+  PlayableType get type => PlayableType.artist;
 }

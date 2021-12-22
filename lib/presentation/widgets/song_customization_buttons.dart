@@ -41,11 +41,11 @@ class SongCustomizationButtons extends StatelessWidget {
               ),
               IconButton(
                 icon: Icon(
-                  Icons.remove_circle_outline_rounded,
+                  _blockIcon(song.blockLevel),
                   size: 20.0,
-                  color: song.blocked ? Colors.white : Colors.white24,
+                  color: song.blockLevel == 0 ? Colors.white24 : Colors.white,
                 ),
-                onPressed: () => musicDataStore.setSongBlocked(song, !song.blocked),
+                onPressed: () => _editBlockLevel(context),
                 visualDensity: VisualDensity.compact,
               ),
             ],
@@ -102,6 +102,110 @@ class SongCustomizationButtons extends StatelessWidget {
                     value: song.next != '',
                     onChanged: (bool value) {
                       musicDataStore.toggleNextSongLink(song);
+                    },
+                  ),
+                ],
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  IconData _blockIcon(int blockLevel) {
+    switch (blockLevel) {
+      case 1:
+        return Icons.sentiment_neutral_rounded;
+      case 2:
+        return Icons.sentiment_dissatisfied_rounded;
+      case 3:
+        return Icons.sentiment_very_dissatisfied_rounded;
+      default:
+        return Icons.sentiment_satisfied_rounded;
+    }
+  }
+
+  void _editBlockLevel(BuildContext context) {
+    final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
+    final AudioStore audioStore = GetIt.I<AudioStore>();
+
+    const TextStyle _active = TextStyle(color: Colors.white);
+    const TextStyle _inactive = TextStyle(color: Colors.white54);
+
+    showModalBottomSheet(
+      context: context,
+      useRootNavigator: true,
+      backgroundColor: DARK2,
+      builder: (context) {
+        return Container(
+          child: Observer(
+            builder: (BuildContext context) {
+              final song = audioStore.currentSongStream.value;
+              if (song == null) {
+                return Container();
+              }
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    height: 2,
+                    color: LIGHT1,
+                  ),
+                  ListTile(
+                    title: Text(
+                      "Don't exclude this song.",
+                      style: song.blockLevel == 0 ? _active : _inactive,
+                    ),
+                    leading: Icon(
+                      Icons.sentiment_satisfied_rounded,
+                      color: song.blockLevel == 0 ? LIGHT1 : Colors.white54,
+                    ),
+                    enabled: song.blockLevel != 0,
+                    onTap: () {
+                      musicDataStore.setSongBlocked(song, 0);
+                    },
+                  ),
+                  ListTile(
+                    title: Text(
+                      'Exclude when shuffling all songs.',
+                      style: song.blockLevel == 1 ? _active : _inactive,
+                    ),
+                    leading: Icon(
+                      Icons.sentiment_neutral_rounded,
+                      color: song.blockLevel == 1 ? LIGHT1 : Colors.white54,
+                    ),
+                    enabled: song.blockLevel != 1,
+                    onTap: () {
+                      musicDataStore.setSongBlocked(song, 1);
+                    },
+                  ),
+                  ListTile(
+                    title: Text(
+                      'Exclude when shuffling.',
+                      style: song.blockLevel == 2 ? _active : _inactive,
+                    ),
+                    leading: Icon(
+                      Icons.sentiment_dissatisfied_rounded,
+                      color: song.blockLevel == 2 ? LIGHT1 : Colors.white54,
+                    ),
+                    enabled: song.blockLevel != 2,
+                    onTap: () {
+                      musicDataStore.setSongBlocked(song, 2);
+                    },
+                  ),
+                  ListTile(
+                    title: Text(
+                      'Always exclude this song.',
+                      style: song.blockLevel == 3 ? _active : _inactive,
+                    ),
+                    leading: Icon(
+                      Icons.sentiment_very_dissatisfied_rounded,
+                      color: song.blockLevel == 3 ? LIGHT1 : Colors.white54,
+                    ),
+                    enabled: song.blockLevel != 3,
+                    onTap: () {
+                      musicDataStore.setSongBlocked(song, 3);
                     },
                   ),
                 ],

@@ -6,8 +6,8 @@ class SetSongBlocked {
 
   final MusicDataRepository _musicDataRepository;
 
-  Future<void> call(Song song, bool blocked) async {
+  Future<void> call(Song song, int blockLevel) async {
     // TODO: skip to next song automatically?
-    await _musicDataRepository.setSongBlocked(song, blocked);
+    await _musicDataRepository.setSongBlockLevel(song, blockLevel);
   }
 }

@@ -119,9 +119,9 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   }
 
   @override
-  Future<Song> setSongBlocked(Song song, bool blocked) async {
-    if (song.blocked != blocked) {
-      final newSong = (song as SongModel).copyWith(blocked: blocked);
+  Future<Song> setSongBlockLevel(Song song, int blockLevel) async {
+    if (song.blockLevel != blockLevel) {
+      final newSong = (song as SongModel).copyWith(blockLevel: blockLevel);
       _songUpdateSubject.add({song.path: newSong});
       await _musicDataSource.updateSong(newSong);
       return newSong;

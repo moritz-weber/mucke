@@ -36,7 +36,7 @@ abstract class MusicDataInfoRepository {
 abstract class MusicDataRepository extends MusicDataInfoRepository {
   Future<void> updateDatabase();
 
-  Future<Song> setSongBlocked(Song song, bool blocked);
+  Future<Song> setSongBlockLevel(Song song, int blockLevel);
 
   Future<Song> incrementSkipCount(Song song);
   Future<Song> resetSkipCount(Song song);

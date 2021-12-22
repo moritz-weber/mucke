@@ -98,16 +98,17 @@ class SongBottomSheet {
                   );
                 },
               ),
-              ListTile(
-                title: song.blocked ? const Text('Unblock song') : const Text('Block song'),
-                leading: song.blocked
-                    ? const Icon(Icons.check_circle_outline_rounded)
-                    : const Icon(Icons.remove_circle_outline_rounded),
-                onTap: () {
-                  musicDataStore.setSongBlocked(song, !song.blocked);
-                  Navigator.pop(context);
-                },
-              ),
+              // TODO: adapt to multiple block levels
+              // ListTile(
+              //   title: song.blocked ? const Text('Unblock song') : const Text('Block song'),
+              //   leading: song.blocked
+              //       ? const Icon(Icons.check_circle_outline_rounded)
+              //       : const Icon(Icons.remove_circle_outline_rounded),
+              //   onTap: () {
+              //     musicDataStore.setSongBlocked(song, !song.blocked);
+              //     Navigator.pop(context);
+              //   },
+              // ),
               ListTile(
                 title: const Text('Show song info'),
                 leading: const Icon(Icons.info),

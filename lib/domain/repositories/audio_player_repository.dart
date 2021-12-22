@@ -1,3 +1,4 @@
+import 'package:mucke/domain/entities/playable.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../entities/loop_mode.dart';
@@ -5,14 +6,10 @@ import '../entities/playback_event.dart';
 import '../entities/queue_item.dart';
 import '../entities/shuffle_mode.dart';
 import '../entities/song.dart';
-import '../modules/managed_queue.dart';
 
 abstract class AudioPlayerInfoRepository {
   ValueStream<ShuffleMode> get shuffleModeStream;
   ValueStream<LoopMode> get loopModeStream;
-  ValueStream<bool> get excludeBlockedStream;
-  ValueStream<bool> get excludeSkippedStream;
-  ValueStream<bool> get respectSongLinksStream;
   ValueStream<List<Song>> get queueStream;
 
   ValueStream<int> get currentIndexStream;
@@ -20,8 +17,6 @@ abstract class AudioPlayerInfoRepository {
   Stream<PlaybackEvent> get playbackEventStream;
   Stream<bool> get playingStream;
   Stream<Duration> get positionStream;
-
-  ManagedQueueInfo get managedQueueInfo;
 }
 
 abstract class AudioPlayerRepository extends AudioPlayerInfoRepository {
@@ -46,6 +41,7 @@ abstract class AudioPlayerRepository extends AudioPlayerInfoRepository {
   Future<void> loadSongs({
     required List<Song> songs,
     required int initialIndex,
+    required Playable playable,
   });
   Future<void> addToQueue(Song song);
   Future<void> playNext(Song song);
@@ -55,9 +51,6 @@ abstract class AudioPlayerRepository extends AudioPlayerInfoRepository {
   /// Set the ShuffleMode.
   Future<void> setShuffleMode(ShuffleMode shuffleMode, {bool updateQueue});
   Future<void> setLoopMode(LoopMode loopMode);
-  Future<void> setExcludeBlocked(bool enabled);
-  Future<void> setExcludeSkipped(bool enabled);
-  Future<void> setRespectSongLinks(bool enabled);
 
   /// Current scope: update song information in queue, don't affect playback/queue.
   Future<void> updateSongs(Map<String, Song> songs);

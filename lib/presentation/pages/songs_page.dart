@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 
+import '../../domain/entities/playable.dart';
 import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
 import '../state/music_data_store.dart';
@@ -45,7 +46,7 @@ class _SongsPageState extends State<SongsPage> with AutomaticKeepAliveClientMixi
                   song: song,
                   showAlbum: true,
                   subtitle: Subtitle.artistAlbum,
-                  onTap: () => audioStore.playSong(index, songs),
+                  onTap: () => audioStore.playSong(index, songs, AllSongs()),
                   onTapMore: () => SongBottomSheet()(song, context),
                   isBlockSkippedSongsEnabled: isBlockSkippedSongsEnabled.value,
                   blockSkippedSongsThreshold: blockSkippedSongsThreshold.value,

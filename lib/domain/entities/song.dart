@@ -4,7 +4,7 @@ class Song extends Equatable {
   const Song({
     required this.album,
     required this.artist,
-    required this.blocked,
+    required this.blockLevel,
     required this.duration,
     required this.path,
     required this.title,
@@ -23,8 +23,8 @@ class Song extends Equatable {
   final String album;
   final String artist;
 
-  /// Is this song blocked in shuffle mode?
-  final bool blocked;
+  /// 0: not blocked, 3: always blocked
+  final int blockLevel;
 
   final Duration duration;
   final String path;
@@ -52,7 +52,7 @@ class Song extends Equatable {
         album,
         artist,
         year,
-        blocked,
+        blockLevel,
         next,
         previous,
         likeCount,

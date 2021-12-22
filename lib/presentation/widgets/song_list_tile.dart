@@ -103,17 +103,23 @@ class SongListTile extends StatelessWidget {
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (song.blocked)
+          if (song.blockLevel == 1)
             const Icon(
-              Icons.remove_circle_outline,
+              Icons.sentiment_neutral_rounded,
               size: 14.0,
               color: Colors.white38,
             ),
-          if (!song.blocked && isBlockEnabled && blockThreshold <= song.skipCount)
-            Icon(
-              Icons.skip_next_rounded,
-              size: 18.0,
-              color: Colors.red.shade900,
+          if (song.blockLevel == 2)
+            const Icon(
+              Icons.sentiment_dissatisfied_rounded,
+              size: 14.0,
+              color: Colors.white38,
+            ),
+          if (song.blockLevel == 3)
+            const Icon(
+              Icons.sentiment_very_dissatisfied_rounded,
+              size: 14.0,
+              color: Colors.white38,
             ),
           IconButton(
             icon: const Icon(Icons.more_vert),

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import '../entities/playable.dart';
 import '../entities/shuffle_mode.dart';
 import '../entities/song.dart';
 import '../repositories/audio_player_repository.dart';
@@ -26,6 +27,6 @@ class ShuffleAll {
     final index = rng.nextInt(songs.length);
 
     await _audioPlayerRepository.setShuffleMode(SHUFFLE_MODE, updateQueue: false);
-    _playSongs(songs: songs, initialIndex: index);
+    _playSongs(songs: songs, initialIndex: index, playable: AllSongs());
   }
 }

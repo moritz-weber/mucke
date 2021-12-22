@@ -33,7 +33,7 @@ class ArtistHighlightedSongs extends StatelessWidget {
                 song: song,
                 showAlbum: true,
                 subtitle: Subtitle.stats,
-                onTap: () => audioStore.playSong(index, songs),
+                onTap: () => audioStore.playSong(index, songs, artistPageStore.artist),
                 onTapMore: () => SongBottomSheet()(song, context),
               );
             },

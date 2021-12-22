@@ -3,6 +3,7 @@ import 'package:mobx/mobx.dart';
 import '../../domain/entities/album.dart';
 import '../../domain/entities/artist.dart';
 import '../../domain/entities/loop_mode.dart';
+import '../../domain/entities/playable.dart';
 import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/entities/smart_list.dart';
 import '../../domain/entities/song.dart';
@@ -84,20 +85,9 @@ abstract class _AudioStore with Store {
   late ObservableStream<LoopMode> loopModeStream =
       _audioPlayerRepository.loopModeStream.asObservable();
 
-  @observable
-  late ObservableStream<bool> excludeBlockedStream =
-      _audioPlayerRepository.excludeBlockedStream.asObservable();
 
-  @observable
-  late ObservableStream<bool> excludeSkippedStream =
-      _audioPlayerRepository.excludeSkippedStream.asObservable();
-
-  @observable
-  late ObservableStream<bool> respectSongLinksStream =
-      _audioPlayerRepository.respectSongLinksStream.asObservable();
-
-  Future<void> playSong(int index, List<Song> songList) async {
-    _playSongs(songs: songList, initialIndex: index);
+  Future<void> playSong(int index, List<Song> songList, Playable playable) async {
+    _playSongs(songs: songList, initialIndex: index, playable: playable);
   }
 
   Future<void> play() async => _audioPlayerRepository.play();
@@ -117,15 +107,6 @@ abstract class _AudioStore with Store {
       _audioPlayerRepository.setShuffleMode(shuffleMode);
 
   Future<void> setLoopMode(LoopMode loopMode) async => _audioPlayerRepository.setLoopMode(loopMode);
-
-  Future<void> setExcludeBlocked(bool enabled) async =>
-      _audioPlayerRepository.setExcludeBlocked(enabled);
-
-  Future<void> setExcludeSkipped(bool enabled) async =>
-      _audioPlayerRepository.setExcludeSkipped(enabled);
-
-  Future<void> setRespectSongLinks(bool enabled) async =>
-      _audioPlayerRepository.setRespectSongLinks(enabled);
 
   Future<void> shuffleAll() async => _shuffleAll();
 

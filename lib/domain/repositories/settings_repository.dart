@@ -10,7 +10,4 @@ abstract class SettingsInfoRepository {
 abstract class SettingsRepository extends SettingsInfoRepository {
   Future<void> addLibraryFolder(String? path);
   Future<void> removeLibraryFolder(String? path);
-
-  Future<void> setBlockSkippedSongs(bool enabled);
-  Future<void> setBlockSkippedSongsThreshold(int threshold);
 }

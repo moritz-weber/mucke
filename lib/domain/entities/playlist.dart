@@ -1,8 +1,9 @@
 import 'package:equatable/equatable.dart';
 
+import 'playable.dart';
 import 'song.dart';
 
-class Playlist extends Equatable {
+class Playlist extends Equatable implements Playable {
   const Playlist({
     required this.id,
     required this.name,
@@ -15,4 +16,7 @@ class Playlist extends Equatable {
 
   @override
   List<Object?> get props => [id, name];
+
+  @override
+  PlayableType get type => PlayableType.playlist;
 }

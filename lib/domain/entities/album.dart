@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 
-class Album extends Equatable {
+import 'playable.dart';
+
+class Album extends Equatable implements Playable{
   const Album({
     required this.title,
     required this.artist,
@@ -15,4 +17,7 @@ class Album extends Equatable {
 
   @override
   List<Object?> get props => [title, artist, albumArtPath, pubYear];
+
+  @override
+  PlayableType get type => PlayableType.album;
 }
