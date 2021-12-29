@@ -9,7 +9,7 @@ import 'domain/actors/platform_integration_actor.dart';
 import 'domain/entities/album.dart';
 import 'domain/entities/artist.dart';
 import 'domain/entities/smart_list.dart';
-import 'domain/modules/dynamic_queue_3.dart';
+import 'domain/modules/dynamic_queue.dart';
 import 'domain/repositories/audio_player_repository.dart';
 import 'domain/repositories/music_data_repository.dart';
 import 'domain/repositories/persistent_state_repository.dart';
@@ -149,8 +149,8 @@ Future<void> setupGetIt() async {
   );
 
   // modules
-  getIt.registerLazySingleton<DynamicQueue2>(
-    () => DynamicQueue2(
+  getIt.registerLazySingleton<DynamicQueue>(
+    () => DynamicQueue(
       getIt(),
     ),
   );

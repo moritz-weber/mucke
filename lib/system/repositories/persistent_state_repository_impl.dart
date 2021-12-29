@@ -1,11 +1,10 @@
 import '../../domain/entities/loop_mode.dart';
+import '../../domain/entities/playable.dart';
 import '../../domain/entities/queue_item.dart';
 import '../../domain/entities/shuffle_mode.dart';
-import '../../domain/entities/song.dart';
 import '../../domain/repositories/persistent_state_repository.dart';
 import '../datasources/persistent_state_data_source.dart';
 import '../models/queue_item_model.dart';
-import '../models/song_model.dart';
 
 class PersistentStateRepositoryImpl implements PersistentStateRepository {
   PersistentStateRepositoryImpl(this._persistentStateDataSource);
@@ -41,42 +40,18 @@ class PersistentStateRepositoryImpl implements PersistentStateRepository {
   }
 
   @override
-  Future<List<Song>> get addedSongs => _persistentStateDataSource.addedSongs;
+  Future<List<QueueItem>> get availableSongs => _persistentStateDataSource.availableSongs;
 
   @override
-  Future<List<Song>> get originalSongs => _persistentStateDataSource.originalSongs;
+  Future<Playable> get playable => _persistentStateDataSource.playable;
 
   @override
-  void setAddedSongs(List<Song> songs) {
-    _persistentStateDataSource.setAddedSongs(songs.map((e) => e as SongModel).toList());
+  void setAvailableSongs(List<QueueItem> songs) {
+    _persistentStateDataSource.setAvailableSongs(songs.map((e) => e as QueueItemModel).toList());
   }
 
   @override
-  void setOriginalSongs(List<Song> songs) {
-    _persistentStateDataSource.setOriginalSongs(songs.map((e) => e as SongModel).toList());
-  }
-
-  @override
-  Future<bool> get excludeBlocked => _persistentStateDataSource.excludeBlocked;
-
-  @override
-  Future<bool> get excludeSkipped => _persistentStateDataSource.excludeSkipped;
-
-  @override
-  Future<bool> get respectSongLinks => _persistentStateDataSource.respectSongLinks;
-
-  @override
-  void setExcludeBlocked(bool active) {
-    _persistentStateDataSource.setExcludeBlocked(active);
-  }
-
-  @override
-  void setExcludeSkipped(bool active) {
-    _persistentStateDataSource.setExcludeSkipped(active);
-  }
-
-  @override
-  void setRespectSongLinks(bool active) {
-    _persistentStateDataSource.setRespectSongLinks(active);
+  void setPlayable(Playable playable) {
+    _persistentStateDataSource.setPlayable(playable);
   }
 }

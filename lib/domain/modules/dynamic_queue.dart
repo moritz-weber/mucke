@@ -1,63 +1,75 @@
 import 'dart:math';
 
+import 'package:rxdart/rxdart.dart';
+
 import '../../constants.dart';
 import '../../system/models/queue_item_model.dart';
 import '../../system/models/song_model.dart';
+import '../../system/utils.dart';
 import '../entities/playable.dart';
 import '../entities/queue_item.dart';
 import '../entities/shuffle_mode.dart';
 import '../entities/song.dart';
 import '../repositories/music_data_repository.dart';
+import 'managed_queue_info.dart';
 
-const int QUEUE_AHEAD = 50;
+const int INITIAL_QUEUE_LENGTH = 50;
+const int QUEUE_AHEAD = 10;
 
-// Notizen zu filter / reshuffle
-// für reshuffle ist nur nötig:
-// * originale Reihenfolge (bleibt in _availableSongs erhalten)
-// * position des aktuellen Songs in der originalen Reihenfolge
-
-// X queue kennt Typ+ID der Wiedergabe, bspw: Album, All, Artist, Search, Playlist, Smartlist
-// X queue kennt Wiedergabemodus: Shuffle,...
-// X Filter (block) sind fix: 3 Modi für unterschiedliche Situationen
-//   - dadurch auch keine Änderungen, die sich auf queue auswirken könnten
-//   - dafür sind Typ und Modus nötig
-//   - Einstellung von Smartlist könnte das überschreiben
-// X Queue wird nicht aktualisiert, wenn sich SmartList ändert -> könnte in Zukunft manuell geschehen
-// X Skip-Block gibt's nicht
-// - respectSongLinks richtig handlen
-// - Reaktionen auf Song-Änderungen: erstmal nur, wenn geblockt wird -> entfernen
-// - Bonus-Reaktion: wenn Song aus/zu Playlist entfernt/hinzugefügt wird
-// ** WELCHE SONG-LISTE WIRD ÜBERGEBEN? **
-//   X muss die queue selber filtern? eigentlich schon, aber wird auch einfacher, weil sich das nicht ändert
-//   X müsste halt auf ShuffleMode-Änderungen reagieren
-
-class DynamicQueue2 {
-  DynamicQueue2(
+class DynamicQueue implements ManagedQueueInfo {
+  DynamicQueue(
     this._musicDataRepository,
-  ) {
-    _availableSongs = [];
-    _queue = [];
-  }
+  );
 
   final MusicDataRepository _musicDataRepository;
 
   List<Song> get queue => _queue.map((e) => e.song).toList();
-  // WHY IS/WAS THIS REQUIRED? FILTERED SONGS SHOULDN'T BE IN _queue
-  // List<Song> get queue => _filterAvailableSongs(_queue).map((e) => e.song).toList();
-  late List<QueueItem> _queue;
-  late List<QueueItem> _availableSongs;
+
+  /// The queue generated so far from the _availableSongs.
+  List<QueueItem> _queue = [];
+  final BehaviorSubject<List<QueueItem>> _queueSubject = BehaviorSubject.seeded([]);
+
+  /// The list of songs available for queue generation with some extra information.
+  List<QueueItem> _availableSongs = [];
+  final BehaviorSubject<List<QueueItem>> _availableSongsSubject = BehaviorSubject.seeded([]);
 
   Playable? _playable;
   ShuffleMode _shuffleMode = ShuffleMode.none;
 
-  Future<int> generateQueue(List<Song> songs, Playable playable, int startIndex, ShuffleMode shuffleMode) async {
+  @override
+  ValueStream<List<QueueItem>> get availableSongsStream => _availableSongsSubject.stream;
+
+  @override
+  ValueStream<List<QueueItem>> get queueItemsStream => _queueSubject.stream;
+
+  void init(
+    List<QueueItem> queue,
+    List<QueueItem> availableSongs,
+    Playable playable,
+    ShuffleMode shuffleMode,
+  ) {
     _shuffleMode = shuffleMode;
     _playable = playable;
-    
+
+    // no push on subject here to not trigger persistence
+    _queue = queue.cast();
+    _availableSongs = availableSongs;
+  }
+
+  Future<int> generateQueue(
+    List<Song> songs,
+    Playable playable,
+    int startIndex,
+    ShuffleMode shuffleMode,
+  ) async {
+    _shuffleMode = shuffleMode;
+    _playable = playable;
+
     _availableSongs = List.generate(
       songs.length,
       (i) => QueueItemModel(songs[i] as SongModel, originalIndex: i),
     );
+    _availableSongsSubject.add(_availableSongs);
 
     final initialQueueItem = _availableSongs[startIndex];
 
@@ -70,7 +82,7 @@ class DynamicQueue2 {
       case ShuffleMode.standard:
         return await _generateShuffleQueue(filteredAvailableSongs, newStartIndex);
       case ShuffleMode.plus:
-        return await _generateShufflePlusQueue(filteredAvailableSongs, newStartIndex);
+        return await _generateShuffleQueue(filteredAvailableSongs, newStartIndex, weighted: true);
     }
   }
 
@@ -83,7 +95,9 @@ class DynamicQueue2 {
     );
 
     _availableSongs.add(queueItem);
+    _availableSongsSubject.add(_availableSongs);
     _queue.add(queueItem);
+    _queueSubject.add(_queue);
   }
 
   void insertIntoQueue(Song song, int index) {
@@ -95,34 +109,45 @@ class DynamicQueue2 {
     );
 
     _availableSongs.add(queueItem);
+    _availableSongsSubject.add(_availableSongs);
     _queue.insert(index, queueItem);
+    _queueSubject.add(_queue);
   }
 
   void moveQueueItem(int oldIndex, int newIndex) {
     _queue.insert(newIndex, _queue.removeAt(oldIndex));
+    _queueSubject.add(_queue);
   }
 
-  void removeQueueIndex(int index) {
+  void removeQueueIndex(int index, bool permanent) {
     final queueItem = _queue[index];
 
-    // if a song is removed from the queue, it should not pop up again when reshuffling
-    _availableSongs.remove(queueItem);
+    if (permanent) {
+      // if a song is removed from the queue, it should not pop up again when reshuffling
+      _availableSongs.remove(queueItem);
 
-    // this needs to update originalIndex
-    for (int i = 0; i < _availableSongs.length; i++) {
-      if (_availableSongs[i].originalIndex > queueItem.originalIndex) {
-        _availableSongs[i].originalIndex -= 1;
+      // this needs to update originalIndex
+      for (int i = 0; i < _availableSongs.length; i++) {
+        if (_availableSongs[i].originalIndex > queueItem.originalIndex) {
+          _availableSongs[i].originalIndex -= 1;
+        }
       }
+
+      _availableSongsSubject.add(_availableSongs);
     }
 
     _queue.removeAt(index);
+    _queueSubject.add(_queue);
   }
 
   Future<int> reshuffleQueue(ShuffleMode shuffleMode, int currentIndex) async {
     _shuffleMode = shuffleMode;
     final currentQueueItem = _queue[currentIndex];
 
-    // TODO: need  to make songs available // WHAT?
+    // make songs available again for new shuffle
+    for (final qi in _availableSongs) {
+      qi.isAvailable = true;
+    }
     final filteredAvailableSongs = _filterAvailableSongs(_availableSongs);
     // TODO: what if the item is not in the filtered list?
     final newStartIndex = filteredAvailableSongs.indexOf(currentQueueItem);
@@ -133,17 +158,64 @@ class DynamicQueue2 {
       case ShuffleMode.standard:
         return await _generateShuffleQueue(filteredAvailableSongs, newStartIndex);
       case ShuffleMode.plus:
-        return await _generateShufflePlusQueue(filteredAvailableSongs, newStartIndex);
+        return await _generateShuffleQueue(filteredAvailableSongs, newStartIndex, weighted: true);
     }
   }
 
-  Future<List<Song>> drawFromAvailableSongs(int numberOfSongs) async {
+  Future<List<Song>> updateCurrentIndex(int currentIndex) async {
+    final int songsAhead = _queue.length - currentIndex - 1;
+    int songsToQueue = QUEUE_AHEAD - songsAhead;
+
+    if (songsToQueue > 0) {
+      final filteredAvailableSongs = _filterAvailableSongs(_availableSongs);
+      songsToQueue = min(songsToQueue, filteredAvailableSongs.length);
+      if (filteredAvailableSongs.isNotEmpty) {
+        List<QueueItem> newSongs = [];
+        switch (_shuffleMode) {
+          case ShuffleMode.none:
+            newSongs = filteredAvailableSongs.sublist(0, songsToQueue);
+            break;
+          case ShuffleMode.standard:
+            newSongs = await _shuffleQueue(filteredAvailableSongs, songsToQueue);
+            break;
+          case ShuffleMode.plus:
+            newSongs = await _shufflePlusQueue(filteredAvailableSongs, songsToQueue);
+        }
+
+        newSongs.forEach((qi) {
+          qi.isAvailable = false;
+        });
+        _queue.addAll(newSongs);
+        _queueSubject.add(_queue);
+        return newSongs.map((e) => e.song).toList();
+      }
+    }
     return [];
   }
 
   /// Update songs contained in queue. Return true if any song was changed.
   bool updateSongs(Map<String, Song> songs) {
-    return false;
+    bool changed = false;
+
+    for (int i = 0; i < _availableSongs.length; i++) {
+      if (songs.containsKey(_availableSongs[i].song.path)) {
+        final oldQueueItem = _availableSongs[i] as QueueItemModel;
+        final newQueueItem = (_availableSongs[i] as QueueItemModel).copyWith(
+          song: songs[_availableSongs[i].song.path]! as SongModel,
+        );
+        _availableSongs[i] = newQueueItem;
+
+        final index = _queue.indexOf(oldQueueItem);
+        if (index > -1) {
+          _queue[index] = newQueueItem;
+          changed = true;
+        }
+      }
+    }
+
+    // TODO: update streams here? -> don't think so because only properties of songs change
+
+    return changed;
   }
 
   Future<List<QueueItem>> getQueueItemWithLinks(QueueItem queueItem) async {
@@ -176,66 +248,49 @@ class DynamicQueue2 {
   List<QueueItem> _filterAvailableSongs(List<QueueItem> availableSongs) {
     final List<QueueItem> result = [];
 
-    int blockLevel = 2;  // exclude songs with highest block level
-    if (_shuffleMode != ShuffleMode.none) {
-      if (_playable?.type == PlayableType.all) {
-        blockLevel = 0;  // shuffling all songs -> strictest setting
-      } else {
-        blockLevel = 1;
-      }
-    }
+    final blockLevel = calcBlockLevel(_shuffleMode, _playable!.type);
 
     for (int i = 0; i < availableSongs.length; i++) {
       final qi = availableSongs[i];
-      if (!(qi.song.blockLevel > blockLevel)) {
+      if (!(qi.song.blockLevel > blockLevel) && qi.isAvailable) {
         result.add(qi);
-      } else {
-        print('blocked: ${qi.song.title}');
       }
     }
 
-    return availableSongs;
+    return result;
   }
 
   Future<int> _generateNormalQueue(List<QueueItem> queueItems, int startIndex) async {
-    final max = min(startIndex + QUEUE_AHEAD, queueItems.length);
+    final queueLength = min(max(startIndex + QUEUE_AHEAD, INITIAL_QUEUE_LENGTH), queueItems.length);
 
-    for (int i = 0; i < max; i++) queueItems[i].isAvailable = false;
+    for (int i = 0; i < queueLength; i++) queueItems[i].isAvailable = false;
 
-    _queue = queueItems.sublist(0, max);
+    _queue = queueItems.sublist(0, queueLength).cast();
+    _queueSubject.add(_queue);
     return startIndex;
   }
 
-  Future<int> _generateShuffleQueue(List<QueueItem> queueItems, int startIndex) async {
-    final Random _rnd = Random();
+  Future<int> _generateShuffleQueue(
+    List<QueueItem> queueItems,
+    int startIndex, {
+    bool weighted = false,
+  }) async {
     // keeping this list makes iterating the available songs easier
     final locallyAvailableSongs = List<QueueItem>.from(queueItems);
 
     final List<QueueItem> queue = [];
-    // if (respectSongLinks) {
     final linkedItems = await getQueueItemWithLinks(queueItems[startIndex]);
     // TODO: need to add those to the _availableSongs?
     queue.addAll(linkedItems);
-    // } else {
-    //   queue.add(queueItems[startIndex]);
-    // }
     // don't want to select these songs twice
     queue.forEach(locallyAvailableSongs.remove);
 
-    while (queue.length < QUEUE_AHEAD && locallyAvailableSongs.isNotEmpty) {
-      final index = _rnd.nextInt(locallyAvailableSongs.length);
+    final songsToQueue = INITIAL_QUEUE_LENGTH - queue.length;
 
-      // if (respectSongLinks) {
-      final linkedSong = await getQueueItemWithLinks(locallyAvailableSongs[index]);
-      queue.addAll(linkedSong);
-      if (linkedSong.length > 1) {
-        linkedSong.forEach((q) => locallyAvailableSongs.removeWhere((e) => e.song == q.song));
-      } else {
-        locallyAvailableSongs.removeAt(index);
-      }
-      // } else {
-      //   queue.add(locallyAvailableSongs.removeAt(index));
-      // }
+    if (weighted) {
+      queue.addAll(await _shufflePlusQueue(locallyAvailableSongs, songsToQueue));
+    } else {
+      queue.addAll(await _shuffleQueue(locallyAvailableSongs, songsToQueue));
     }
 
     // these qi are the same objects as in _availableSongs -> marks them to not be queued (again)
@@ -243,36 +298,45 @@ class DynamicQueue2 {
       qi.isAvailable = false;
     });
     _queue = queue.cast();
+    _queueSubject.add(_queue);
     return 0;
   }
 
-  Future<int> _generateShufflePlusQueue(List<QueueItem> queueItems, int startIndex) async {
-    final Random _rnd = Random();
+  Future<List<QueueItem>> _shuffleQueue(List<QueueItem> queueItems, int length) async {
+    final Random rnd = Random();
+    final locallyAvailableSongs = List<QueueItem>.from(queueItems);
+    final queue = <QueueItem>[];
+
+    while (queue.length < length && locallyAvailableSongs.isNotEmpty) {
+      final index = rnd.nextInt(locallyAvailableSongs.length);
+
+      final linkedSong = await getQueueItemWithLinks(locallyAvailableSongs[index]);
+      queue.addAll(linkedSong);
+      if (linkedSong.length > 1) {
+        linkedSong.forEach((q) => locallyAvailableSongs.removeWhere((e) => e.song == q.song));
+      } else {
+        locallyAvailableSongs.removeAt(index);
+      }
+    }
+
+    return queue;
+  }
+
+  Future<List<QueueItem>> _shufflePlusQueue(List<QueueItem> queueItems, int length) async {
+    final Random rnd = Random();
+    final List<QueueItem> queue = [];
     final List<List<QueueItem>> buckets = List.generate(MAX_LIKE_COUNT + 1, (index) => []);
 
     for (final qi in queueItems) {
       buckets[qi.song.likeCount].add(qi);
     }
 
-    final List<QueueItem> queue = [];
-    // if (respectSongLinks) {
-    final linkedItems = await getQueueItemWithLinks(queueItems[startIndex]);
-    queue.addAll(linkedItems);
-    // } else {
-    //   queue.add(queueItems[startIndex]);
-    // }
-    // don't want to select these songs twice
-    for (final qi in queue) {
-      buckets[qi.song.likeCount].remove(qi);
-    }
-
-    while (queue.length < QUEUE_AHEAD && buckets.expand((e) => e).isNotEmpty) {
+    while (queue.length < length && buckets.expand((e) => e).isNotEmpty) {
       final bucketIndex = _getBucketIndex(buckets);
       final bucket = buckets[bucketIndex];
 
-      final index = _rnd.nextInt(bucket.length);
+      final index = rnd.nextInt(bucket.length);
 
-      // if (respectSongLinks) {
       final linkedSong = await getQueueItemWithLinks(bucket[index]);
       queue.addAll(linkedSong);
       if (linkedSong.length > 1) {
@@ -282,16 +346,9 @@ class DynamicQueue2 {
       } else {
         bucket.removeAt(index);
       }
-      // } else {
-      //   queue.add(bucket.removeAt(index));
-      // }
     }
 
-    queue.forEach((qi) {
-      qi.isAvailable = false;
-    });
-    _queue = queue.cast();
-    return 0;
+    return queue;
   }
 
   int _getBucketIndex(List<List> buckets) {

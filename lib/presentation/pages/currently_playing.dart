@@ -2,7 +2,6 @@ import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mucke/presentation/widgets/song_info.dart';
 
 import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
@@ -14,6 +13,7 @@ import '../widgets/album_background.dart';
 import '../widgets/currently_playing_header.dart';
 import '../widgets/playback_control.dart';
 import '../widgets/song_customization_buttons.dart';
+import '../widgets/song_info.dart';
 import '../widgets/time_progress_indicator.dart';
 import 'album_details_page.dart';
 import 'artist_details_page.dart';
@@ -97,7 +97,7 @@ class CurrentlyPlayingPage extends StatelessWidget {
                                   overflow: TextOverflow.fade,
                                   softWrap: false,
                                   maxLines: 1,
-                                  style: TEXT_BIG.copyWith(),
+                                  style: TEXT_BIG,
                                 ),
                                 Text(
                                   song.artist,

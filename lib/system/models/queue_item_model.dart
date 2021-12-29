@@ -12,12 +12,14 @@ class QueueItemModel extends QueueItem {
   QueueItemModel copyWith({
     SongModel? song,
     int? originalIndex,
-    QueueItemSource? type,
+    QueueItemSource? source,
+    bool? isAvailable,
   }) =>
       QueueItemModel(
         song ?? this.song as SongModel,
         originalIndex: originalIndex ?? this.originalIndex,
-        source: type ?? this.source,
+        source: source ?? this.source,
+        isAvailable: isAvailable ?? this.isAvailable
       );
 }
 

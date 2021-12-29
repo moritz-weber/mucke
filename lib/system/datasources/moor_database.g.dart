@@ -634,11 +634,13 @@ class MoorQueueEntry extends DataClass implements Insertable<MoorQueueEntry> {
   final String path;
   final int originalIndex;
   final int type;
+  final bool isAvailable;
   MoorQueueEntry(
       {required this.index,
       required this.path,
       required this.originalIndex,
-      required this.type});
+      required this.type,
+      required this.isAvailable});
   factory MoorQueueEntry.fromData(
       Map<String, dynamic> data, GeneratedDatabase db,
       {String? prefix}) {
@@ -652,6 +654,8 @@ class MoorQueueEntry extends DataClass implements Insertable<MoorQueueEntry> {
           .mapFromDatabaseResponse(data['${effectivePrefix}original_index'])!,
       type: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}type'])!,
+      isAvailable: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}is_available'])!,
     );
   }
   @override
@@ -661,6 +665,7 @@ class MoorQueueEntry extends DataClass implements Insertable<MoorQueueEntry> {
     map['path'] = Variable<String>(path);
     map['original_index'] = Variable<int>(originalIndex);
     map['type'] = Variable<int>(type);
+    map['is_available'] = Variable<bool>(isAvailable);
     return map;
   }
 
@@ -670,6 +675,7 @@ class MoorQueueEntry extends DataClass implements Insertable<MoorQueueEntry> {
       path: Value(path),
       originalIndex: Value(originalIndex),
       type: Value(type),
+      isAvailable: Value(isAvailable),
     );
   }
 
@@ -681,6 +687,7 @@ class MoorQueueEntry extends DataClass implements Insertable<MoorQueueEntry> {
       path: serializer.fromJson<String>(json['path']),
       originalIndex: serializer.fromJson<int>(json['originalIndex']),
       type: serializer.fromJson<int>(json['type']),
+      isAvailable: serializer.fromJson<bool>(json['isAvailable']),
     );
   }
   @override
@@ -691,16 +698,22 @@ class MoorQueueEntry extends DataClass implements Insertable<MoorQueueEntry> {
       'path': serializer.toJson<String>(path),
       'originalIndex': serializer.toJson<int>(originalIndex),
       'type': serializer.toJson<int>(type),
+      'isAvailable': serializer.toJson<bool>(isAvailable),
     };
   }
 
   MoorQueueEntry copyWith(
-          {int? index, String? path, int? originalIndex, int? type}) =>
+          {int? index,
+          String? path,
+          int? originalIndex,
+          int? type,
+          bool? isAvailable}) =>
       MoorQueueEntry(
         index: index ?? this.index,
         path: path ?? this.path,
         originalIndex: originalIndex ?? this.originalIndex,
         type: type ?? this.type,
+        isAvailable: isAvailable ?? this.isAvailable,
       );
   @override
   String toString() {
@@ -708,14 +721,19 @@ class MoorQueueEntry extends DataClass implements Insertable<MoorQueueEntry> {
           ..write('index: $index, ')
           ..write('path: $path, ')
           ..write('originalIndex: $originalIndex, ')
-          ..write('type: $type')
+          ..write('type: $type, ')
+          ..write('isAvailable: $isAvailable')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(index.hashCode,
-      $mrjc(path.hashCode, $mrjc(originalIndex.hashCode, type.hashCode))));
+  int get hashCode => $mrjf($mrjc(
+      index.hashCode,
+      $mrjc(
+          path.hashCode,
+          $mrjc(originalIndex.hashCode,
+              $mrjc(type.hashCode, isAvailable.hashCode)))));
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -723,7 +741,8 @@ class MoorQueueEntry extends DataClass implements Insertable<MoorQueueEntry> {
           other.index == this.index &&
           other.path == this.path &&
           other.originalIndex == this.originalIndex &&
-          other.type == this.type);
+          other.type == this.type &&
+          other.isAvailable == this.isAvailable);
 }
 
 class QueueEntriesCompanion extends UpdateCompanion<MoorQueueEntry> {
@@ -731,31 +750,37 @@ class QueueEntriesCompanion extends UpdateCompanion<MoorQueueEntry> {
   final Value<String> path;
   final Value<int> originalIndex;
   final Value<int> type;
+  final Value<bool> isAvailable;
   const QueueEntriesCompanion({
     this.index = const Value.absent(),
     this.path = const Value.absent(),
     this.originalIndex = const Value.absent(),
     this.type = const Value.absent(),
+    this.isAvailable = const Value.absent(),
   });
   QueueEntriesCompanion.insert({
     this.index = const Value.absent(),
     required String path,
     required int originalIndex,
     required int type,
+    required bool isAvailable,
   })  : path = Value(path),
         originalIndex = Value(originalIndex),
-        type = Value(type);
+        type = Value(type),
+        isAvailable = Value(isAvailable);
   static Insertable<MoorQueueEntry> custom({
     Expression<int>? index,
     Expression<String>? path,
     Expression<int>? originalIndex,
     Expression<int>? type,
+    Expression<bool>? isAvailable,
   }) {
     return RawValuesInsertable({
       if (index != null) 'index': index,
       if (path != null) 'path': path,
       if (originalIndex != null) 'original_index': originalIndex,
       if (type != null) 'type': type,
+      if (isAvailable != null) 'is_available': isAvailable,
     });
   }
 
@@ -763,12 +788,14 @@ class QueueEntriesCompanion extends UpdateCompanion<MoorQueueEntry> {
       {Value<int>? index,
       Value<String>? path,
       Value<int>? originalIndex,
-      Value<int>? type}) {
+      Value<int>? type,
+      Value<bool>? isAvailable}) {
     return QueueEntriesCompanion(
       index: index ?? this.index,
       path: path ?? this.path,
       originalIndex: originalIndex ?? this.originalIndex,
       type: type ?? this.type,
+      isAvailable: isAvailable ?? this.isAvailable,
     );
   }
 
@@ -787,6 +814,9 @@ class QueueEntriesCompanion extends UpdateCompanion<MoorQueueEntry> {
     if (type.present) {
       map['type'] = Variable<int>(type.value);
     }
+    if (isAvailable.present) {
+      map['is_available'] = Variable<bool>(isAvailable.value);
+    }
     return map;
   }
 
@@ -796,7 +826,8 @@ class QueueEntriesCompanion extends UpdateCompanion<MoorQueueEntry> {
           ..write('index: $index, ')
           ..write('path: $path, ')
           ..write('originalIndex: $originalIndex, ')
-          ..write('type: $type')
+          ..write('type: $type, ')
+          ..write('isAvailable: $isAvailable')
           ..write(')'))
         .toString();
   }
@@ -852,8 +883,21 @@ class $QueueEntriesTable extends QueueEntries
     );
   }
 
+  final VerificationMeta _isAvailableMeta =
+      const VerificationMeta('isAvailable');
   @override
-  List<GeneratedColumn> get $columns => [index, path, originalIndex, type];
+  late final GeneratedBoolColumn isAvailable = _constructIsAvailable();
+  GeneratedBoolColumn _constructIsAvailable() {
+    return GeneratedBoolColumn(
+      'is_available',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns =>
+      [index, path, originalIndex, type, isAvailable];
   @override
   $QueueEntriesTable get asDslTable => this;
   @override
@@ -889,6 +933,14 @@ class $QueueEntriesTable extends QueueEntries
     } else if (isInserting) {
       context.missing(_typeMeta);
     }
+    if (data.containsKey('is_available')) {
+      context.handle(
+          _isAvailableMeta,
+          isAvailable.isAcceptableOrUnknown(
+              data['is_available']!, _isAvailableMeta));
+    } else if (isInserting) {
+      context.missing(_isAvailableMeta);
+    }
     return context;
   }
 
@@ -906,20 +958,34 @@ class $QueueEntriesTable extends QueueEntries
   }
 }
 
-class OriginalSongEntry extends DataClass
-    implements Insertable<OriginalSongEntry> {
+class AvailableSongEntry extends DataClass
+    implements Insertable<AvailableSongEntry> {
   final int index;
   final String path;
-  OriginalSongEntry({required this.index, required this.path});
-  factory OriginalSongEntry.fromData(
+  final int originalIndex;
+  final int type;
+  final bool isAvailable;
+  AvailableSongEntry(
+      {required this.index,
+      required this.path,
+      required this.originalIndex,
+      required this.type,
+      required this.isAvailable});
+  factory AvailableSongEntry.fromData(
       Map<String, dynamic> data, GeneratedDatabase db,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
-    return OriginalSongEntry(
+    return AvailableSongEntry(
       index: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}index'])!,
       path: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}path'])!,
+      originalIndex: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}original_index'])!,
+      type: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}type'])!,
+      isAvailable: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}is_available'])!,
     );
   }
   @override
@@ -927,22 +993,31 @@ class OriginalSongEntry extends DataClass
     final map = <String, Expression>{};
     map['index'] = Variable<int>(index);
     map['path'] = Variable<String>(path);
+    map['original_index'] = Variable<int>(originalIndex);
+    map['type'] = Variable<int>(type);
+    map['is_available'] = Variable<bool>(isAvailable);
     return map;
   }
 
-  OriginalSongEntriesCompanion toCompanion(bool nullToAbsent) {
-    return OriginalSongEntriesCompanion(
+  AvailableSongEntriesCompanion toCompanion(bool nullToAbsent) {
+    return AvailableSongEntriesCompanion(
       index: Value(index),
       path: Value(path),
+      originalIndex: Value(originalIndex),
+      type: Value(type),
+      isAvailable: Value(isAvailable),
     );
   }
 
-  factory OriginalSongEntry.fromJson(Map<String, dynamic> json,
+  factory AvailableSongEntry.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
-    return OriginalSongEntry(
+    return AvailableSongEntry(
       index: serializer.fromJson<int>(json['index']),
       path: serializer.fromJson<String>(json['path']),
+      originalIndex: serializer.fromJson<int>(json['originalIndex']),
+      type: serializer.fromJson<int>(json['type']),
+      isAvailable: serializer.fromJson<bool>(json['isAvailable']),
     );
   }
   @override
@@ -951,58 +1026,107 @@ class OriginalSongEntry extends DataClass
     return <String, dynamic>{
       'index': serializer.toJson<int>(index),
       'path': serializer.toJson<String>(path),
+      'originalIndex': serializer.toJson<int>(originalIndex),
+      'type': serializer.toJson<int>(type),
+      'isAvailable': serializer.toJson<bool>(isAvailable),
     };
   }
 
-  OriginalSongEntry copyWith({int? index, String? path}) => OriginalSongEntry(
+  AvailableSongEntry copyWith(
+          {int? index,
+          String? path,
+          int? originalIndex,
+          int? type,
+          bool? isAvailable}) =>
+      AvailableSongEntry(
         index: index ?? this.index,
         path: path ?? this.path,
+        originalIndex: originalIndex ?? this.originalIndex,
+        type: type ?? this.type,
+        isAvailable: isAvailable ?? this.isAvailable,
       );
   @override
   String toString() {
-    return (StringBuffer('OriginalSongEntry(')
+    return (StringBuffer('AvailableSongEntry(')
           ..write('index: $index, ')
-          ..write('path: $path')
+          ..write('path: $path, ')
+          ..write('originalIndex: $originalIndex, ')
+          ..write('type: $type, ')
+          ..write('isAvailable: $isAvailable')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(index.hashCode, path.hashCode));
+  int get hashCode => $mrjf($mrjc(
+      index.hashCode,
+      $mrjc(
+          path.hashCode,
+          $mrjc(originalIndex.hashCode,
+              $mrjc(type.hashCode, isAvailable.hashCode)))));
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is OriginalSongEntry &&
+      (other is AvailableSongEntry &&
           other.index == this.index &&
-          other.path == this.path);
+          other.path == this.path &&
+          other.originalIndex == this.originalIndex &&
+          other.type == this.type &&
+          other.isAvailable == this.isAvailable);
 }
 
-class OriginalSongEntriesCompanion extends UpdateCompanion<OriginalSongEntry> {
+class AvailableSongEntriesCompanion
+    extends UpdateCompanion<AvailableSongEntry> {
   final Value<int> index;
   final Value<String> path;
-  const OriginalSongEntriesCompanion({
+  final Value<int> originalIndex;
+  final Value<int> type;
+  final Value<bool> isAvailable;
+  const AvailableSongEntriesCompanion({
     this.index = const Value.absent(),
     this.path = const Value.absent(),
+    this.originalIndex = const Value.absent(),
+    this.type = const Value.absent(),
+    this.isAvailable = const Value.absent(),
   });
-  OriginalSongEntriesCompanion.insert({
+  AvailableSongEntriesCompanion.insert({
     this.index = const Value.absent(),
     required String path,
-  }) : path = Value(path);
-  static Insertable<OriginalSongEntry> custom({
+    required int originalIndex,
+    required int type,
+    required bool isAvailable,
+  })  : path = Value(path),
+        originalIndex = Value(originalIndex),
+        type = Value(type),
+        isAvailable = Value(isAvailable);
+  static Insertable<AvailableSongEntry> custom({
     Expression<int>? index,
     Expression<String>? path,
+    Expression<int>? originalIndex,
+    Expression<int>? type,
+    Expression<bool>? isAvailable,
   }) {
     return RawValuesInsertable({
       if (index != null) 'index': index,
       if (path != null) 'path': path,
+      if (originalIndex != null) 'original_index': originalIndex,
+      if (type != null) 'type': type,
+      if (isAvailable != null) 'is_available': isAvailable,
     });
   }
 
-  OriginalSongEntriesCompanion copyWith(
-      {Value<int>? index, Value<String>? path}) {
-    return OriginalSongEntriesCompanion(
+  AvailableSongEntriesCompanion copyWith(
+      {Value<int>? index,
+      Value<String>? path,
+      Value<int>? originalIndex,
+      Value<int>? type,
+      Value<bool>? isAvailable}) {
+    return AvailableSongEntriesCompanion(
       index: index ?? this.index,
       path: path ?? this.path,
+      originalIndex: originalIndex ?? this.originalIndex,
+      type: type ?? this.type,
+      isAvailable: isAvailable ?? this.isAvailable,
     );
   }
 
@@ -1015,24 +1139,36 @@ class OriginalSongEntriesCompanion extends UpdateCompanion<OriginalSongEntry> {
     if (path.present) {
       map['path'] = Variable<String>(path.value);
     }
+    if (originalIndex.present) {
+      map['original_index'] = Variable<int>(originalIndex.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<int>(type.value);
+    }
+    if (isAvailable.present) {
+      map['is_available'] = Variable<bool>(isAvailable.value);
+    }
     return map;
   }
 
   @override
   String toString() {
-    return (StringBuffer('OriginalSongEntriesCompanion(')
+    return (StringBuffer('AvailableSongEntriesCompanion(')
           ..write('index: $index, ')
-          ..write('path: $path')
+          ..write('path: $path, ')
+          ..write('originalIndex: $originalIndex, ')
+          ..write('type: $type, ')
+          ..write('isAvailable: $isAvailable')
           ..write(')'))
         .toString();
   }
 }
 
-class $OriginalSongEntriesTable extends OriginalSongEntries
-    with TableInfo<$OriginalSongEntriesTable, OriginalSongEntry> {
+class $AvailableSongEntriesTable extends AvailableSongEntries
+    with TableInfo<$AvailableSongEntriesTable, AvailableSongEntry> {
   final GeneratedDatabase _db;
   final String? _alias;
-  $OriginalSongEntriesTable(this._db, [this._alias]);
+  $AvailableSongEntriesTable(this._db, [this._alias]);
   final VerificationMeta _indexMeta = const VerificationMeta('index');
   @override
   late final GeneratedIntColumn index = _constructIndex();
@@ -1055,203 +1191,52 @@ class $OriginalSongEntriesTable extends OriginalSongEntries
     );
   }
 
+  final VerificationMeta _originalIndexMeta =
+      const VerificationMeta('originalIndex');
   @override
-  List<GeneratedColumn> get $columns => [index, path];
-  @override
-  $OriginalSongEntriesTable get asDslTable => this;
-  @override
-  String get $tableName => _alias ?? 'original_song_entries';
-  @override
-  final String actualTableName = 'original_song_entries';
-  @override
-  VerificationContext validateIntegrity(Insertable<OriginalSongEntry> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('index')) {
-      context.handle(
-          _indexMeta, index.isAcceptableOrUnknown(data['index']!, _indexMeta));
-    }
-    if (data.containsKey('path')) {
-      context.handle(
-          _pathMeta, path.isAcceptableOrUnknown(data['path']!, _pathMeta));
-    } else if (isInserting) {
-      context.missing(_pathMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {index};
-  @override
-  OriginalSongEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return OriginalSongEntry.fromData(data, _db,
-        prefix: tablePrefix != null ? '$tablePrefix.' : null);
-  }
-
-  @override
-  $OriginalSongEntriesTable createAlias(String alias) {
-    return $OriginalSongEntriesTable(_db, alias);
-  }
-}
-
-class AddedSongEntry extends DataClass implements Insertable<AddedSongEntry> {
-  final int index;
-  final String path;
-  AddedSongEntry({required this.index, required this.path});
-  factory AddedSongEntry.fromData(
-      Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
-    return AddedSongEntry(
-      index: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}index'])!,
-      path: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}path'])!,
-    );
-  }
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['index'] = Variable<int>(index);
-    map['path'] = Variable<String>(path);
-    return map;
-  }
-
-  AddedSongEntriesCompanion toCompanion(bool nullToAbsent) {
-    return AddedSongEntriesCompanion(
-      index: Value(index),
-      path: Value(path),
-    );
-  }
-
-  factory AddedSongEntry.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
-    return AddedSongEntry(
-      index: serializer.fromJson<int>(json['index']),
-      path: serializer.fromJson<String>(json['path']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'index': serializer.toJson<int>(index),
-      'path': serializer.toJson<String>(path),
-    };
-  }
-
-  AddedSongEntry copyWith({int? index, String? path}) => AddedSongEntry(
-        index: index ?? this.index,
-        path: path ?? this.path,
-      );
-  @override
-  String toString() {
-    return (StringBuffer('AddedSongEntry(')
-          ..write('index: $index, ')
-          ..write('path: $path')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => $mrjf($mrjc(index.hashCode, path.hashCode));
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is AddedSongEntry &&
-          other.index == this.index &&
-          other.path == this.path);
-}
-
-class AddedSongEntriesCompanion extends UpdateCompanion<AddedSongEntry> {
-  final Value<int> index;
-  final Value<String> path;
-  const AddedSongEntriesCompanion({
-    this.index = const Value.absent(),
-    this.path = const Value.absent(),
-  });
-  AddedSongEntriesCompanion.insert({
-    this.index = const Value.absent(),
-    required String path,
-  }) : path = Value(path);
-  static Insertable<AddedSongEntry> custom({
-    Expression<int>? index,
-    Expression<String>? path,
-  }) {
-    return RawValuesInsertable({
-      if (index != null) 'index': index,
-      if (path != null) 'path': path,
-    });
-  }
-
-  AddedSongEntriesCompanion copyWith({Value<int>? index, Value<String>? path}) {
-    return AddedSongEntriesCompanion(
-      index: index ?? this.index,
-      path: path ?? this.path,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (index.present) {
-      map['index'] = Variable<int>(index.value);
-    }
-    if (path.present) {
-      map['path'] = Variable<String>(path.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('AddedSongEntriesCompanion(')
-          ..write('index: $index, ')
-          ..write('path: $path')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $AddedSongEntriesTable extends AddedSongEntries
-    with TableInfo<$AddedSongEntriesTable, AddedSongEntry> {
-  final GeneratedDatabase _db;
-  final String? _alias;
-  $AddedSongEntriesTable(this._db, [this._alias]);
-  final VerificationMeta _indexMeta = const VerificationMeta('index');
-  @override
-  late final GeneratedIntColumn index = _constructIndex();
-  GeneratedIntColumn _constructIndex() {
+  late final GeneratedIntColumn originalIndex = _constructOriginalIndex();
+  GeneratedIntColumn _constructOriginalIndex() {
     return GeneratedIntColumn(
-      'index',
+      'original_index',
       $tableName,
       false,
     );
   }
 
-  final VerificationMeta _pathMeta = const VerificationMeta('path');
+  final VerificationMeta _typeMeta = const VerificationMeta('type');
   @override
-  late final GeneratedTextColumn path = _constructPath();
-  GeneratedTextColumn _constructPath() {
-    return GeneratedTextColumn(
-      'path',
+  late final GeneratedIntColumn type = _constructType();
+  GeneratedIntColumn _constructType() {
+    return GeneratedIntColumn(
+      'type',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _isAvailableMeta =
+      const VerificationMeta('isAvailable');
+  @override
+  late final GeneratedBoolColumn isAvailable = _constructIsAvailable();
+  GeneratedBoolColumn _constructIsAvailable() {
+    return GeneratedBoolColumn(
+      'is_available',
       $tableName,
       false,
     );
   }
 
   @override
-  List<GeneratedColumn> get $columns => [index, path];
+  List<GeneratedColumn> get $columns =>
+      [index, path, originalIndex, type, isAvailable];
   @override
-  $AddedSongEntriesTable get asDslTable => this;
+  $AvailableSongEntriesTable get asDslTable => this;
   @override
-  String get $tableName => _alias ?? 'added_song_entries';
+  String get $tableName => _alias ?? 'available_song_entries';
   @override
-  final String actualTableName = 'added_song_entries';
+  final String actualTableName = 'available_song_entries';
   @override
-  VerificationContext validateIntegrity(Insertable<AddedSongEntry> instance,
+  VerificationContext validateIntegrity(Insertable<AvailableSongEntry> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -1265,20 +1250,42 @@ class $AddedSongEntriesTable extends AddedSongEntries
     } else if (isInserting) {
       context.missing(_pathMeta);
     }
+    if (data.containsKey('original_index')) {
+      context.handle(
+          _originalIndexMeta,
+          originalIndex.isAcceptableOrUnknown(
+              data['original_index']!, _originalIndexMeta));
+    } else if (isInserting) {
+      context.missing(_originalIndexMeta);
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
+    if (data.containsKey('is_available')) {
+      context.handle(
+          _isAvailableMeta,
+          isAvailable.isAcceptableOrUnknown(
+              data['is_available']!, _isAvailableMeta));
+    } else if (isInserting) {
+      context.missing(_isAvailableMeta);
+    }
     return context;
   }
 
   @override
   Set<GeneratedColumn> get $primaryKey => {index};
   @override
-  AddedSongEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return AddedSongEntry.fromData(data, _db,
+  AvailableSongEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return AvailableSongEntry.fromData(data, _db,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
-  $AddedSongEntriesTable createAlias(String alias) {
-    return $AddedSongEntriesTable(_db, alias);
+  $AvailableSongEntriesTable createAlias(String alias) {
+    return $AvailableSongEntriesTable(_db, alias);
   }
 }
 
@@ -3992,10 +3999,8 @@ abstract class _$MoorDatabase extends GeneratedDatabase {
   late final $ArtistsTable artists = $ArtistsTable(this);
   late final $LibraryFoldersTable libraryFolders = $LibraryFoldersTable(this);
   late final $QueueEntriesTable queueEntries = $QueueEntriesTable(this);
-  late final $OriginalSongEntriesTable originalSongEntries =
-      $OriginalSongEntriesTable(this);
-  late final $AddedSongEntriesTable addedSongEntries =
-      $AddedSongEntriesTable(this);
+  late final $AvailableSongEntriesTable availableSongEntries =
+      $AvailableSongEntriesTable(this);
   late final $SongsTable songs = $SongsTable(this);
   late final $MoorAlbumOfDayTable moorAlbumOfDay = $MoorAlbumOfDayTable(this);
   late final $SmartListsTable smartLists = $SmartListsTable(this);
@@ -4019,8 +4024,7 @@ abstract class _$MoorDatabase extends GeneratedDatabase {
         artists,
         libraryFolders,
         queueEntries,
-        originalSongEntries,
-        addedSongEntries,
+        availableSongEntries,
         songs,
         moorAlbumOfDay,
         smartLists,

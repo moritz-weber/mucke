@@ -1,22 +1,26 @@
-import 'package:mucke/domain/entities/playable.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../entities/loop_mode.dart';
+import '../entities/playable.dart';
 import '../entities/playback_event.dart';
 import '../entities/queue_item.dart';
 import '../entities/shuffle_mode.dart';
 import '../entities/song.dart';
+import '../modules/managed_queue_info.dart';
 
 abstract class AudioPlayerInfoRepository {
   ValueStream<ShuffleMode> get shuffleModeStream;
   ValueStream<LoopMode> get loopModeStream;
   ValueStream<List<Song>> get queueStream;
+  ValueStream<Playable> get playableStream;
 
   ValueStream<int> get currentIndexStream;
   Stream<Song> get currentSongStream;
   Stream<PlaybackEvent> get playbackEventStream;
   Stream<bool> get playingStream;
   Stream<Duration> get positionStream;
+
+  ManagedQueueInfo get managedQueueInfo;
 }
 
 abstract class AudioPlayerRepository extends AudioPlayerInfoRepository {
@@ -32,8 +36,8 @@ abstract class AudioPlayerRepository extends AudioPlayerInfoRepository {
 
   Future<void> initQueue(
     List<QueueItem> queueItems,
-    List<Song> originalSongs,
-    List<Song> addedSongs,
+    List<QueueItem> availableSongs,
+    Playable playable,
     int index,
   );
 

@@ -1,11 +1,18 @@
+import 'dart:convert';
+
 import 'package:moor/moor.dart';
 
 import '../../../constants.dart';
 import '../../../domain/entities/loop_mode.dart';
+import '../../../domain/entities/playable.dart';
 import '../../../domain/entities/shuffle_mode.dart';
+import '../../models/album_model.dart';
+import '../../models/artist_model.dart';
 import '../../models/loop_mode_model.dart';
+import '../../models/playlist_model.dart';
 import '../../models/queue_item_model.dart';
 import '../../models/shuffle_mode_model.dart';
+import '../../models/smart_list_model.dart';
 import '../../models/song_model.dart';
 import '../moor_database.dart';
 import '../persistent_state_data_source.dart';
@@ -13,10 +20,15 @@ import '../persistent_state_data_source.dart';
 part 'persistent_state_dao.g.dart';
 
 @UseDao(tables: [
+  Albums,
+  Artists,
   Songs,
+  Playlists,
+  PlaylistEntries,
+  SmartLists,
+  SmartListArtists,
   QueueEntries,
-  OriginalSongEntries,
-  AddedSongEntries,
+  AvailableSongEntries,
   KeyValueEntries,
 ])
 class PersistentStateDao extends DatabaseAccessor<MoorDatabase>
@@ -48,6 +60,7 @@ class PersistentStateDao extends DatabaseAccessor<MoorDatabase>
         path: Value(queue[i].song.path),
         originalIndex: Value(queue[i].originalIndex),
         type: Value(queue[i].source.toInt()),
+        isAvailable: Value(queue[i].isAvailable),
       ));
     }
 
@@ -58,56 +71,37 @@ class PersistentStateDao extends DatabaseAccessor<MoorDatabase>
   }
 
   @override
-  Future<List<SongModel>> get addedSongs {
-    final query = (select(addedSongEntries)..orderBy([(t) => OrderingTerm(expression: t.index)]))
-        .join([innerJoin(songs, songs.path.equalsExp(addedSongEntries.path))]);
+  Future<List<QueueItemModel>> get availableSongs {
+    final query = (select(availableSongEntries)
+          ..orderBy([(t) => OrderingTerm(expression: t.index)]))
+        .join([innerJoin(songs, songs.path.equalsExp(availableSongEntries.path))]);
 
     return query.get().then((rows) => rows.map((row) {
-          return SongModel.fromMoor(row.readTable(songs));
+          return QueueItemModel(
+            SongModel.fromMoor(row.readTable(songs)),
+            originalIndex: row.readTable(availableSongEntries).originalIndex,
+            source: row.readTable(availableSongEntries).type.toQueueItemType(),
+          );
         }).toList());
   }
 
   @override
-  Future<List<SongModel>> get originalSongs {
-    final query = (select(originalSongEntries)..orderBy([(t) => OrderingTerm(expression: t.index)]))
-        .join([innerJoin(songs, songs.path.equalsExp(originalSongEntries.path))]);
-
-    return query.get().then((rows) => rows.map((row) {
-          return SongModel.fromMoor(row.readTable(songs));
-        }).toList());
-  }
-
-  @override
-  Future<void> setAddedSongs(List<SongModel> songs) async {
-    final _songEntries = <Insertable<AddedSongEntry>>[];
+  Future<void> setAvailableSongs(List<QueueItemModel> songs) async {
+    final _songEntries = <Insertable<AvailableSongEntry>>[];
 
     for (var i = 0; i < songs.length; i++) {
-      _songEntries.add(AddedSongEntriesCompanion(
+      _songEntries.add(AvailableSongEntriesCompanion(
         index: Value(i),
-        path: Value(songs[i].path),
+        path: Value(songs[i].song.path),
+        originalIndex: Value(songs[i].originalIndex),
+        type: Value(songs[i].source.toInt()),
+        isAvailable: Value(songs[i].isAvailable),
       ));
     }
 
-    await delete(addedSongEntries).go();
+    await delete(availableSongEntries).go();
     await batch((batch) {
-      batch.insertAll(addedSongEntries, _songEntries);
-    });
-  }
-
-  @override
-  Future<void> setOriginalSongs(List<SongModel> songs) async {
-    final _songEntries = <Insertable<OriginalSongEntry>>[];
-
-    for (var i = 0; i < songs.length; i++) {
-      _songEntries.add(OriginalSongEntriesCompanion(
-        index: Value(i),
-        path: Value(songs[i].path),
-      ));
-    }
-
-    await delete(originalSongEntries).go();
-    await batch((batch) {
-      batch.insertAll(originalSongEntries, _songEntries);
+      batch.insertAll(availableSongEntries, _songEntries);
     });
   }
 
@@ -151,41 +145,79 @@ class PersistentStateDao extends DatabaseAccessor<MoorDatabase>
   }
 
   @override
-  Future<bool> get excludeBlocked {
-    return (select(keyValueEntries)..where((tbl) => tbl.key.equals(PERSISTENT_EXCLUDE_BLOCKED)))
-        .getSingle()
-        .then((event) => event.value == 'true');
+  Future<Playable> get playable async {
+    final entry = await (select(keyValueEntries)
+          ..where((tbl) => tbl.key.equals(PERSISTENT_PLAYABLE)))
+        .getSingle();
+    final data = jsonDecode(entry.value);
+    final playableType = (data['type'] as String).toPlayableType();
+
+    switch (playableType) {
+      case PlayableType.all:
+        return AllSongs();
+      case PlayableType.album:
+        return (select(albums)..where((tbl) => tbl.id.equals(int.parse(data['id'] as String))))
+            .getSingle()
+            .then((value) => AlbumModel.fromMoor(value));
+      case PlayableType.artist:
+        return (select(artists)..where((tbl) => tbl.name.equals(data['id'] as String)))
+            .getSingle()
+            .then((value) => ArtistModel.fromMoor(value));
+      case PlayableType.playlist:
+        final plId = int.parse(data['id'] as String);
+        // TODO: need proper getter for this
+        final moorPl = await (select(playlists)..where((tbl) => tbl.id.equals(plId))).getSingle();
+        final moorSongs =
+            await (select(playlistEntries)..where((tbl) => tbl.playlistId.equals(plId)))
+                .join(
+                  [innerJoin(songs, songs.path.equalsExp(playlistEntries.songPath))],
+                )
+                .map((p0) => p0.readTable(songs))
+                .get();
+        return PlaylistModel.fromMoor(moorPl, moorSongs);
+      case PlayableType.smartlist:
+        final slId = int.parse(data['id'] as String);
+        final sl = await (select(smartLists)..where((tbl) => tbl.id.equals(slId))).getSingle();
+
+        final slArtists =
+            await ((select(smartListArtists)..where((tbl) => tbl.smartListId.equals(slId))).join(
+          [innerJoin(artists, artists.name.equalsExp(smartListArtists.artistName))],
+        )).map((p0) => p0.readTable(artists)).get();
+
+        return SmartListModel.fromMoor(sl, slArtists);
+      case PlayableType.search:
+        return SearchQuery(data['id'] as String);
+    }
   }
 
   @override
-  Future<bool> get excludeSkipped {
-    return (select(keyValueEntries)..where((tbl) => tbl.key.equals(PERSISTENT_EXCLUDE_SKIPPED)))
-        .getSingle()
-        .then((event) => event.value == 'true');
-  }
+  Future<void> setPlayable(Playable playable) async {
+    String id = '';
+    switch (playable.type) {
+      case PlayableType.all:
+        break;
+      case PlayableType.album:
+        id = (playable as AlbumModel).id.toString();
+        break;
+      case PlayableType.artist:
+        id = (playable as ArtistModel).name;
+        break;
+      case PlayableType.playlist:
+        id = (playable as PlaylistModel).id.toString();
+        break;
+      case PlayableType.smartlist:
+        id = (playable as SmartListModel).id.toString();
+        break;
+      case PlayableType.search:
+        id = (playable as SearchQuery).query;
+        break;
+    }
+    final data = {
+      'id': id,
+      'type': playable.type.toString(),
+    };
 
-  @override
-  Future<bool> get respectSongLinks {
-    return (select(keyValueEntries)..where((tbl) => tbl.key.equals(PERSISTENT_RESPECT_SONG_LINKS)))
-        .getSingle()
-        .then((event) => event.value == 'true');
-  }
-
-  @override
-  Future<void> setExcludeBlocked(bool active) async {
-    (update(keyValueEntries)..where((tbl) => tbl.key.equals(PERSISTENT_EXCLUDE_BLOCKED)))
-        .write(KeyValueEntriesCompanion(value: Value(active.toString())));
-  }
-
-  @override
-  Future<void> setExcludeSkipped(bool active) async {
-    (update(keyValueEntries)..where((tbl) => tbl.key.equals(PERSISTENT_EXCLUDE_SKIPPED)))
-        .write(KeyValueEntriesCompanion(value: Value(active.toString())));
-  }
-
-  @override
-  Future<void> setRespectSongLinks(bool active) async {
-    (update(keyValueEntries)..where((tbl) => tbl.key.equals(PERSISTENT_RESPECT_SONG_LINKS)))
-        .write(KeyValueEntriesCompanion(value: Value(active.toString())));
+    (update(keyValueEntries)..where((tbl) => tbl.key.equals(PERSISTENT_PLAYABLE)))
+        .write(KeyValueEntriesCompanion(value: Value(jsonEncode(data))));
   }
 }

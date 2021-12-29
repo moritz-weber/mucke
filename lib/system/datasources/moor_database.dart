@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 
 import 'package:moor/ffi.dart';
 import 'package:moor/isolate.dart';
 import 'package:moor/moor.dart';
+import 'package:mucke/domain/entities/playable.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
@@ -69,24 +71,19 @@ class QueueEntries extends Table {
   TextColumn get path => text()();
   IntColumn get originalIndex => integer()();
   IntColumn get type => integer()();
+  BoolColumn get isAvailable => boolean()();
 
   @override
   Set<Column> get primaryKey => {index};
 }
 
-@DataClassName('OriginalSongEntry')
-class OriginalSongEntries extends Table {
+@DataClassName('AvailableSongEntry')
+class AvailableSongEntries extends Table {
   IntColumn get index => integer()();
   TextColumn get path => text()();
-
-  @override
-  Set<Column> get primaryKey => {index};
-}
-
-@DataClassName('AddedSongEntry')
-class AddedSongEntries extends Table {
-  IntColumn get index => integer()();
-  TextColumn get path => text()();
+  IntColumn get originalIndex => integer()();
+  IntColumn get type => integer()();
+  BoolColumn get isAvailable => boolean()();
 
   @override
   Set<Column> get primaryKey => {index};
@@ -162,8 +159,7 @@ class PlaylistEntries extends Table {
     Artists,
     LibraryFolders,
     QueueEntries,
-    OriginalSongEntries,
-    AddedSongEntries,
+    AvailableSongEntries,
     Songs,
     MoorAlbumOfDay,
     SmartLists,
@@ -203,6 +199,16 @@ class MoorDatabase extends _$MoorDatabase {
           );
           await into(keyValueEntries).insert(
             const KeyValueEntriesCompanion(key: Value(PERSISTENT_SHUFFLEMODE), value: Value('0')),
+          );
+          final Map initialPlayable = {
+            'id': '',
+            'type': PlayableType.all.toString(),
+          };
+          await into(keyValueEntries).insert(
+            KeyValueEntriesCompanion(
+              key: const Value(PERSISTENT_PLAYABLE),
+              value: Value(jsonEncode(initialPlayable)),
+            ),
           );
         }
       }, onUpgrade: (Migrator m, int from, int to) async {
