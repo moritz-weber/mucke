@@ -6,6 +6,8 @@ import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
 import '../state/music_data_store.dart';
 import '../theming.dart';
+import '../utils.dart';
+import 'custom_modal_bottom_sheet.dart';
 import 'like_button.dart';
 
 class SongCustomizationButtons extends StatelessWidget {
@@ -13,7 +15,6 @@ class SongCustomizationButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
     final AudioStore audioStore = GetIt.I<AudioStore>();
 
     return Observer(
@@ -41,7 +42,7 @@ class SongCustomizationButtons extends StatelessWidget {
               ),
               IconButton(
                 icon: Icon(
-                  _blockIcon(song.blockLevel),
+                  blockLevelIcon(song.blockLevel),
                   size: 20.0,
                   color: song.blockLevel == 0 ? Colors.white24 : Colors.white,
                 ),
@@ -71,59 +72,33 @@ class SongCustomizationButtons extends StatelessWidget {
     final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
     final AudioStore audioStore = GetIt.I<AudioStore>();
 
-    showModalBottomSheet(
-      context: context,
-      useRootNavigator: true,
-      backgroundColor: DARK2,
-      builder: (context) {
-        return Container(
-          child: Observer(
-            builder: (BuildContext context) {
-              final song = audioStore.currentSongStream.value;
-              if (song == null) {
-                return Container();
-              }
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    height: 2,
-                    color: LIGHT1,
-                  ),
-                  SwitchListTile(
-                    title: const Text('Always play previous song before'),
-                    value: song.previous != '',
-                    onChanged: (bool value) {
-                      musicDataStore.togglePreviousSongLink(song);
-                    },
-                  ),
-                  SwitchListTile(
-                    title: const Text('Always play next song after'),
-                    value: song.next != '',
-                    onChanged: (bool value) {
-                      musicDataStore.toggleNextSongLink(song);
-                    },
-                  ),
-                ],
-              );
+    CustomModalBottomSheet()(
+      context,
+      [
+        Observer(builder: (context) {
+          final song = audioStore.currentSongStream.value;
+          if (song == null) return Container();
+          return SwitchListTile(
+            title: const Text('Always play previous song before'),
+            value: song.previous != '',
+            onChanged: (bool value) {
+              musicDataStore.togglePreviousSongLink(song);
             },
-          ),
-        );
-      },
+          );
+        }),
+        Observer(builder: (context) {
+          final song = audioStore.currentSongStream.value;
+          if (song == null) return Container();
+          return SwitchListTile(
+            title: const Text('Always play next song after'),
+            value: song.next != '',
+            onChanged: (bool value) {
+              musicDataStore.toggleNextSongLink(song);
+            },
+          );
+        }),
+      ],
     );
-  }
-
-  IconData _blockIcon(int blockLevel) {
-    switch (blockLevel) {
-      case 1:
-        return Icons.sentiment_neutral_rounded;
-      case 2:
-        return Icons.sentiment_dissatisfied_rounded;
-      case 3:
-        return Icons.sentiment_very_dissatisfied_rounded;
-      default:
-        return Icons.sentiment_satisfied_rounded;
-    }
   }
 
   void _editBlockLevel(BuildContext context) {
@@ -133,87 +108,39 @@ class SongCustomizationButtons extends StatelessWidget {
     const TextStyle _active = TextStyle(color: Colors.white);
     const TextStyle _inactive = TextStyle(color: Colors.white54);
 
-    showModalBottomSheet(
-      context: context,
-      useRootNavigator: true,
-      backgroundColor: DARK2,
-      builder: (context) {
-        return Container(
-          child: Observer(
-            builder: (BuildContext context) {
-              final song = audioStore.currentSongStream.value;
-              if (song == null) {
-                return Container();
-              }
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    height: 2,
-                    color: LIGHT1,
-                  ),
-                  ListTile(
-                    title: Text(
-                      "Don't exclude this song.",
-                      style: song.blockLevel == 0 ? _active : _inactive,
-                    ),
-                    leading: Icon(
-                      Icons.sentiment_satisfied_rounded,
-                      color: song.blockLevel == 0 ? LIGHT1 : Colors.white54,
-                    ),
-                    enabled: song.blockLevel != 0,
-                    onTap: () {
-                      musicDataStore.setSongBlocked(song, 0);
-                    },
-                  ),
-                  ListTile(
-                    title: Text(
-                      'Exclude when shuffling all songs.',
-                      style: song.blockLevel == 1 ? _active : _inactive,
-                    ),
-                    leading: Icon(
-                      Icons.sentiment_neutral_rounded,
-                      color: song.blockLevel == 1 ? LIGHT1 : Colors.white54,
-                    ),
-                    enabled: song.blockLevel != 1,
-                    onTap: () {
-                      musicDataStore.setSongBlocked(song, 1);
-                    },
-                  ),
-                  ListTile(
-                    title: Text(
-                      'Exclude when shuffling.',
-                      style: song.blockLevel == 2 ? _active : _inactive,
-                    ),
-                    leading: Icon(
-                      Icons.sentiment_dissatisfied_rounded,
-                      color: song.blockLevel == 2 ? LIGHT1 : Colors.white54,
-                    ),
-                    enabled: song.blockLevel != 2,
-                    onTap: () {
-                      musicDataStore.setSongBlocked(song, 2);
-                    },
-                  ),
-                  ListTile(
-                    title: Text(
-                      'Always exclude this song.',
-                      style: song.blockLevel == 3 ? _active : _inactive,
-                    ),
-                    leading: Icon(
-                      Icons.sentiment_very_dissatisfied_rounded,
-                      color: song.blockLevel == 3 ? LIGHT1 : Colors.white54,
-                    ),
-                    enabled: song.blockLevel != 3,
-                    onTap: () {
-                      musicDataStore.setSongBlocked(song, 3);
-                    },
-                  ),
-                ],
-              );
-            },
-          ),
-        );
-      },
+    const descriptions = <String>[
+      "Don't exclude this song.",
+      'Exclude when shuffling all songs.',
+      'Exclude when shuffling.',
+      'Always exclude this song.'
+    ];
+
+    CustomModalBottomSheet()(
+      context,
+      List.generate(
+        descriptions.length,
+        (index) => Observer(
+          builder: (BuildContext context) {
+            final song = audioStore.currentSongStream.value;
+            if (song == null) return Container();
+            return ListTile(
+              title: Text(
+                descriptions[index],
+                style: song.blockLevel == index ? _active : _inactive,
+              ),
+              leading: Icon(
+                blockLevelIcon(index),
+                size: 24.0,
+                color: song.blockLevel == index ? LIGHT1 : Colors.white54,
+              ),
+              enabled: song.blockLevel != index,
+              onTap: () {
+                musicDataStore.setSongBlocked(song, index);
+              },
+            );
+          },
+        ),
+      ),
     );
   }
 }

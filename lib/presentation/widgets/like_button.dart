@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import '../../constants.dart';
 
+import '../../constants.dart';
 import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
 import '../state/music_data_store.dart';
-import '../theming.dart';
+import '../utils.dart';
 
 class LikeButton extends StatelessWidget {
   const LikeButton({
@@ -28,7 +28,7 @@ class LikeButton extends StatelessWidget {
         if (song == null) {
           return IconButton(
             icon: Icon(
-              Icons.favorite_rounded,
+              likeCountIcon(0),
               size: iconSize,
               color: Colors.white24,
             ),
@@ -37,46 +37,28 @@ class LikeButton extends StatelessWidget {
           );
         }
 
-        if (song.likeCount == 0) {
-          return IconButton(
-            icon: Icon(
-              Icons.favorite_rounded,
-              size: iconSize,
-              color: Colors.white24,
-            ),
-            onPressed: () => musicDataStore.incrementLikeCount(song),
-            visualDensity: VisualDensity.compact,
-          );
-        } else {
-          return IconButton(
-            icon: Stack(
-              children: [
-                Icon(
-                  Icons.favorite_rounded,
-                  color: Theme.of(context).highlightColor,
-                  size: iconSize,
-                ),
-                Text(
-                  song.likeCount.toString(),
-                  style: const TextStyle(
-                    color: DARK1,
-                    fontSize: 10.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-              alignment: AlignmentDirectional.center,
-            ),
-            onPressed: () {
-              if (song.likeCount < MAX_LIKE_COUNT) {
-                musicDataStore.incrementLikeCount(song);
-              } else {
-                musicDataStore.resetLikeCount(song);
-              }
-            },
-            visualDensity: VisualDensity.compact,
-          );
-        }
+        final likeCountColors = [
+          Colors.white24,
+          Colors.white54,
+          Colors.white70,
+          Theme.of(context).highlightColor,
+        ];
+
+        return IconButton(
+          icon: Icon(
+            likeCountIcon(song.likeCount),
+            size: iconSize,
+            color: likeCountColors[song.likeCount],
+          ),
+          onPressed: () {
+            if (song.likeCount < MAX_LIKE_COUNT) {
+              musicDataStore.incrementLikeCount(song);
+            } else {
+              musicDataStore.resetLikeCount(song);
+            }
+          },
+          visualDensity: VisualDensity.compact,
+        );
       },
     );
   }

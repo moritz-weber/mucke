@@ -70,7 +70,7 @@ abstract class _SmartListStore with Store {
   late String limit = _intToString(_smartList?.filter.limit);
 
   @observable
-  late bool excludeBlocked = _smartList?.filter.excludeBlocked ?? false;
+  late int blockLevel = _smartList?.filter.blockLevel ?? 0;
 
   @observable
   late ObservableSet<Artist> selectedArtists =
@@ -204,7 +204,7 @@ abstract class _SmartListStore with Store {
         maxYear: maxYearEnabled ? int.tryParse(maxYear) : null,
         minLikeCount: minLikeCount,
         maxLikeCount: maxLikeCount,
-        excludeBlocked: excludeBlocked,
+        blockLevel: blockLevel,
         limit: limitEnabled ? int.tryParse(limit) : null,
       ),
       orderBy: OrderBy(
@@ -230,7 +230,7 @@ abstract class _SmartListStore with Store {
           maxYear: maxYearEnabled ? int.tryParse(maxYear) : null,
           minLikeCount: minLikeCount,
           maxLikeCount: maxLikeCount,
-          excludeBlocked: excludeBlocked,
+          blockLevel: blockLevel,
           limit: limitEnabled ? int.tryParse(limit) : null,
         ),
         orderBy: OrderBy(

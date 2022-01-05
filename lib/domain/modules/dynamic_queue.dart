@@ -73,6 +73,10 @@ class DynamicQueue implements ManagedQueueInfo {
 
     final initialQueueItem = _availableSongs[startIndex];
 
+    // FIXME: broken when first song is filtered out
+    // when starting a shuffle playback, there needs to be an option to select a new startindex
+    // in this case the startindex was selected randomly
+    // otherwise the startindex item should be included as it was selected manually
     final filteredAvailableSongs = _filterAvailableSongs(_availableSongs);
     final newStartIndex = filteredAvailableSongs.indexOf(initialQueueItem);
 

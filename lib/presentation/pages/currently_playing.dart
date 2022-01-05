@@ -11,6 +11,7 @@ import '../theming.dart';
 import '../widgets/album_art.dart';
 import '../widgets/album_background.dart';
 import '../widgets/currently_playing_header.dart';
+import '../widgets/custom_modal_bottom_sheet.dart';
 import '../widgets/playback_control.dart';
 import '../widgets/song_customization_buttons.dart';
 import '../widgets/song_info.dart';
@@ -44,10 +45,7 @@ class CurrentlyPlayingPage extends StatelessWidget {
             builder: (BuildContext context) {
               _log.d('Observer.build');
               final Song? song = audioStore.currentSongStream.value;
-
-              if (song == null) {
-                return Container();
-              }
+              if (song == null) return Container();
 
               return Stack(
                 children: [
@@ -87,26 +85,24 @@ class CurrentlyPlayingPage extends StatelessWidget {
                           flex: 50,
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(left: 12.0, right: 12.0),
-                          child: Center(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  song.title,
-                                  overflow: TextOverflow.fade,
-                                  softWrap: false,
-                                  maxLines: 1,
-                                  style: TEXT_BIG,
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                song.title,
+                                overflow: TextOverflow.fade,
+                                softWrap: false,
+                                maxLines: 1,
+                                style: TEXT_BIG,
+                              ),
+                              Text(
+                                '${song.artist} • ${song.album}',
+                                style: TEXT_SUBTITLE.copyWith(
+                                  color: Colors.grey[100],
                                 ),
-                                Text(
-                                  song.artist,
-                                  style: TEXT_SUBTITLE.copyWith(
-                                    color: Colors.grey[100],
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                         const Spacer(
@@ -168,87 +164,72 @@ class CurrentlyPlayingPage extends StatelessWidget {
     final artists = await musicDataStore.artistStream.first;
     final artist = artists.singleWhere((a) => a.name == album.artist);
 
-    showModalBottomSheet(
-      context: context,
-      useRootNavigator: true,
-      backgroundColor: DARK2,
-      builder: (context) {
-        return Container(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                height: 2,
-                color: LIGHT1,
-              ),
-              const SizedBox(height: 8.0),
-              ListTile(
-                title: const Text('Show song info'),
-                leading: const Icon(Icons.info),
-                onTap: () {
-                  Navigator.pop(context);
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return SimpleDialog(
-                        backgroundColor: DARK3,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.all(HORIZONTAL_PADDING),
-                            child: SongInfo(song),
-                          ),
-                          SimpleDialogOption(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text(
-                              'Close',
-                              textAlign: TextAlign.right,
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-              ),
-              ListTile(
-                title: const Text('Go to artist'),
-                leading: const Icon(Icons.person_rounded),
-                trailing: const Icon(Icons.chevron_right_rounded),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                  navStore.pushOnLibrary(
-                    MaterialPageRoute<Widget>(
-                      builder: (BuildContext context) => ArtistDetailsPage(
-                        artist: artist,
+    CustomModalBottomSheet()(
+      context,
+      [
+        ListTile(
+          title: const Text('Show song info'),
+          leading: const Icon(Icons.info),
+          onTap: () {
+            Navigator.pop(context);
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return SimpleDialog(
+                  backgroundColor: DARK3,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(HORIZONTAL_PADDING),
+                      child: SongInfo(song),
+                    ),
+                    SimpleDialogOption(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text(
+                        'Close',
+                        textAlign: TextAlign.right,
                       ),
                     ),
-                  );
-                },
+                  ],
+                );
+              },
+            );
+          },
+        ),
+        ListTile(
+          title: const Text('Go to artist'),
+          leading: const Icon(Icons.person_rounded),
+          trailing: const Icon(Icons.chevron_right_rounded),
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.pop(context);
+            navStore.pushOnLibrary(
+              MaterialPageRoute<Widget>(
+                builder: (BuildContext context) => ArtistDetailsPage(
+                  artist: artist,
+                ),
               ),
-              ListTile(
-                title: const Text('Go to album'),
-                leading: const Icon(Icons.album_rounded),
-                trailing: const Icon(Icons.chevron_right_rounded),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                  navStore.pushOnLibrary(
-                    MaterialPageRoute<Widget>(
-                      builder: (BuildContext context) => AlbumDetailsPage(
-                        album: album,
-                      ),
-                    ),
-                  );
-                },
+            );
+          },
+        ),
+        ListTile(
+          title: const Text('Go to album'),
+          leading: const Icon(Icons.album_rounded),
+          trailing: const Icon(Icons.chevron_right_rounded),
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.pop(context);
+            navStore.pushOnLibrary(
+              MaterialPageRoute<Widget>(
+                builder: (BuildContext context) => AlbumDetailsPage(
+                  album: album,
+                ),
               ),
-              const SizedBox(height: 8.0),
-            ],
-          ),
-        );
-      },
+            );
+          },
+        ),
+      ],
     );
   }
 }

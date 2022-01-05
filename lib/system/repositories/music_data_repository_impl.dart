@@ -86,9 +86,17 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
 
     final localMusic = await _localMusicFetcher.getLocalMusic();
 
-    await _updateArtists(localMusic['ARTISTS'] as List<ArtistModel>);
-    await _updateAlbums(localMusic['ALBUMS'] as List<AlbumModel>);
-    await _updateSongs(localMusic['SONGS'] as List<SongModel>);
+    final artists = localMusic['ARTISTS'] as List<ArtistModel>;
+    final albums = localMusic['ALBUMS'] as List<AlbumModel>;
+    final songs = localMusic['SONGS'] as List<SongModel>;
+
+    _log.d('Artists found: ${artists.length}');
+    _log.d('Albums found: ${albums.length}');
+    _log.d('Songs found: ${songs.length}');
+
+    await _updateArtists(artists);
+    await _updateAlbums(albums);
+    await _updateSongs(songs);
 
     _log.d('updateDatabase finished');
   }
@@ -219,11 +227,11 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
     return songs
       ..sort(
         (a, b) {
-          final r = -a.likeCount.compareTo(b.likeCount);
-          if (r != 0) {
-            return r;
-          }
-          return -a.playCount.compareTo(b.playCount);
+          int r = -a.likeCount.compareTo(b.likeCount);
+          if (r == 0) r = -a.playCount.compareTo(b.playCount);
+          if (r == 0) r = a.skipCount.compareTo(b.skipCount);
+          if (r == 0) r = a.title.compareTo(b.title);
+          return r;
         },
       );
   }
@@ -231,12 +239,9 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   List<Album> _sortArtistAlbums(List<Album> albums) {
     return albums
       ..sort((a, b) {
-        if (b.pubYear == null) {
-          return -1;
-        }
-        if (a.pubYear == null) {
-          return 1;
-        }
+        if (b.pubYear == null) return -1;
+        if (a.pubYear == null) return 1;
+
         return -a.pubYear!.compareTo(b.pubYear!);
       });
   }

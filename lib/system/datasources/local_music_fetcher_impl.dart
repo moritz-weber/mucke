@@ -42,7 +42,11 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     final Set<String> artistSet = {};
 
     final Directory dir = await getApplicationSupportDirectory();
+    int count = 1;
     for (final file in files.toSet()) {
+      if (count % 10 == 0) _log.d('Files scanned: $count');
+      count++;
+      
       final tags = await _audiotagger.readTags(path: file.path);
       final audioFile = await _audiotagger.readAudioFile(path: file.path);
 

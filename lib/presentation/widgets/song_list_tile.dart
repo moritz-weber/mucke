@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../domain/entities/song.dart';
 import '../theming.dart';
 import '../utils.dart' as utils;
+import '../utils.dart';
 
 enum Subtitle { artist, artistAlbum, stats }
 
@@ -15,8 +16,6 @@ class SongListTile extends StatelessWidget {
     this.highlight = false,
     this.showAlbum = true,
     this.subtitle = Subtitle.artist,
-    this.isBlockSkippedSongsEnabled,
-    this.blockSkippedSongsThreshold,
   }) : super(key: key);
 
   final Song song;
@@ -25,14 +24,9 @@ class SongListTile extends StatelessWidget {
   final bool highlight;
   final bool showAlbum;
   final Subtitle subtitle;
-  final bool? isBlockSkippedSongsEnabled;
-  final int? blockSkippedSongsThreshold;
 
   @override
   Widget build(BuildContext context) {
-    final isBlockEnabled = isBlockSkippedSongsEnabled ?? false;
-    final blockThreshold = blockSkippedSongsThreshold ?? 1000;
-
     final Widget leading = showAlbum
         ? Image(
             image: utils.getAlbumImage(song.albumArtPath),
@@ -103,24 +97,24 @@ class SongListTile extends StatelessWidget {
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (song.blockLevel == 1)
-            const Icon(
-              Icons.sentiment_neutral_rounded,
-              size: 14.0,
-              color: Colors.white38,
+          if (song.blockLevel > 0)
+            Padding(
+              padding: const EdgeInsets.only(right: 4.0),
+              child: Icon(
+                blockLevelIcon(song.blockLevel),
+                size: 16.0,
+                color: Colors.white38,
+              ),
             ),
-          if (song.blockLevel == 2)
-            const Icon(
-              Icons.sentiment_dissatisfied_rounded,
-              size: 14.0,
-              color: Colors.white38,
-            ),
-          if (song.blockLevel == 3)
-            const Icon(
-              Icons.sentiment_very_dissatisfied_rounded,
-              size: 14.0,
-              color: Colors.white38,
-            ),
+          Icon(
+            likeCountIcon(song.likeCount),
+            size: 16.0,
+            color: song.likeCount == 3
+                ? LIGHT2
+                : Colors.white.withOpacity(
+                    0.2 + 0.18 * song.likeCount,
+                  ),
+          ),
           IconButton(
             icon: const Icon(Icons.more_vert),
             iconSize: 20.0,

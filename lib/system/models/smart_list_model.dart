@@ -32,7 +32,7 @@ class SmartListModel extends SmartList {
       maxSkipCount: moorSmartList.maxSkipCount,
       minYear: moorSmartList.minYear,
       maxYear: moorSmartList.maxYear,
-      excludeBlocked: moorSmartList.excludeBlocked,
+      blockLevel: moorSmartList.blockLevel,
       limit: moorSmartList.limit, 
     );
 
@@ -63,7 +63,7 @@ class SmartListModel extends SmartList {
         maxSkipCount: m.Value(filter.maxSkipCount),
         minYear: m.Value(filter.minYear),
         maxYear: m.Value(filter.maxYear),
-        excludeBlocked: m.Value(filter.excludeBlocked),
+        blockLevel: m.Value(filter.blockLevel),
         limit: m.Value(filter.limit),
         orderCriteria: m.Value(orderBy.orderCriteria.join(',')),
         orderDirections: m.Value(orderBy.orderDirections.join(',')),

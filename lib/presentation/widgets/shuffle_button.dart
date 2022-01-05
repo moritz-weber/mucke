@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../domain/entities/shuffle_mode.dart';
+import '../mucke_icons.dart';
 import '../state/audio_store.dart';
 
 class ShuffleButton extends StatelessWidget {
@@ -41,7 +42,8 @@ class ShuffleButton extends StatelessWidget {
           case ShuffleMode.plus:
             return IconButton(
               icon: Icon(
-                Icons.fingerprint_rounded,
+                MuckeIcons.shuffle_heart,
+                size: iconSize,
                 color: Theme.of(context).highlightColor,
               ),
               iconSize: iconSize,

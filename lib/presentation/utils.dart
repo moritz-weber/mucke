@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+import 'mucke_icons.dart';
+
 ImageProvider getAlbumImage(String? albumArtPath) {
   // return Image.asset('assets/no_cover.png');
 
@@ -34,4 +36,28 @@ String msToTimeString(Duration duration) {
 String? validateNumber(bool enabled, String number) {
   if (!enabled) return null;
   return int.tryParse(number) == null ? 'Error' : null;
+}
+
+IconData blockLevelIcon(int blockLevel) {
+  switch (blockLevel) {
+    case 1:
+      return MuckeIcons.exclude_shuffle_all;
+    case 2:
+      return MuckeIcons.exclude_shuffle;
+    case 3:
+      return MuckeIcons.exclude_always;
+    default:
+      return MuckeIcons.exclude_never;
+  }
+}
+
+const _LIKE_COUNT_ICONS = [
+  Icons.favorite_border_rounded,
+  MuckeIcons.favorite_1_3,
+  MuckeIcons.favorite_2_3,
+  Icons.favorite_rounded
+];
+
+IconData likeCountIcon(int likeCount) {
+  return _LIKE_COUNT_ICONS[likeCount];
 }

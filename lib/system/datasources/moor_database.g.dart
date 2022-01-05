@@ -2360,7 +2360,7 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
   final String name;
   final String? shuffleMode;
   final bool excludeArtists;
-  final bool excludeBlocked;
+  final int blockLevel;
   final int minLikeCount;
   final int maxLikeCount;
   final int? minPlayCount;
@@ -2377,7 +2377,7 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
       required this.name,
       this.shuffleMode,
       required this.excludeArtists,
-      required this.excludeBlocked,
+      required this.blockLevel,
       required this.minLikeCount,
       required this.maxLikeCount,
       this.minPlayCount,
@@ -2402,8 +2402,8 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
           .mapFromDatabaseResponse(data['${effectivePrefix}shuffle_mode']),
       excludeArtists: const BoolType()
           .mapFromDatabaseResponse(data['${effectivePrefix}exclude_artists'])!,
-      excludeBlocked: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}exclude_blocked'])!,
+      blockLevel: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}block_level'])!,
       minLikeCount: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}min_like_count'])!,
       maxLikeCount: const IntType()
@@ -2437,7 +2437,7 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
       map['shuffle_mode'] = Variable<String?>(shuffleMode);
     }
     map['exclude_artists'] = Variable<bool>(excludeArtists);
-    map['exclude_blocked'] = Variable<bool>(excludeBlocked);
+    map['block_level'] = Variable<int>(blockLevel);
     map['min_like_count'] = Variable<int>(minLikeCount);
     map['max_like_count'] = Variable<int>(maxLikeCount);
     if (!nullToAbsent || minPlayCount != null) {
@@ -2474,7 +2474,7 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
           ? const Value.absent()
           : Value(shuffleMode),
       excludeArtists: Value(excludeArtists),
-      excludeBlocked: Value(excludeBlocked),
+      blockLevel: Value(blockLevel),
       minLikeCount: Value(minLikeCount),
       maxLikeCount: Value(maxLikeCount),
       minPlayCount: minPlayCount == null && nullToAbsent
@@ -2510,7 +2510,7 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
       name: serializer.fromJson<String>(json['name']),
       shuffleMode: serializer.fromJson<String?>(json['shuffleMode']),
       excludeArtists: serializer.fromJson<bool>(json['excludeArtists']),
-      excludeBlocked: serializer.fromJson<bool>(json['excludeBlocked']),
+      blockLevel: serializer.fromJson<int>(json['blockLevel']),
       minLikeCount: serializer.fromJson<int>(json['minLikeCount']),
       maxLikeCount: serializer.fromJson<int>(json['maxLikeCount']),
       minPlayCount: serializer.fromJson<int?>(json['minPlayCount']),
@@ -2532,7 +2532,7 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
       'name': serializer.toJson<String>(name),
       'shuffleMode': serializer.toJson<String?>(shuffleMode),
       'excludeArtists': serializer.toJson<bool>(excludeArtists),
-      'excludeBlocked': serializer.toJson<bool>(excludeBlocked),
+      'blockLevel': serializer.toJson<int>(blockLevel),
       'minLikeCount': serializer.toJson<int>(minLikeCount),
       'maxLikeCount': serializer.toJson<int>(maxLikeCount),
       'minPlayCount': serializer.toJson<int?>(minPlayCount),
@@ -2552,7 +2552,7 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
           String? name,
           String? shuffleMode,
           bool? excludeArtists,
-          bool? excludeBlocked,
+          int? blockLevel,
           int? minLikeCount,
           int? maxLikeCount,
           int? minPlayCount,
@@ -2569,7 +2569,7 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
         name: name ?? this.name,
         shuffleMode: shuffleMode ?? this.shuffleMode,
         excludeArtists: excludeArtists ?? this.excludeArtists,
-        excludeBlocked: excludeBlocked ?? this.excludeBlocked,
+        blockLevel: blockLevel ?? this.blockLevel,
         minLikeCount: minLikeCount ?? this.minLikeCount,
         maxLikeCount: maxLikeCount ?? this.maxLikeCount,
         minPlayCount: minPlayCount ?? this.minPlayCount,
@@ -2589,7 +2589,7 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
           ..write('name: $name, ')
           ..write('shuffleMode: $shuffleMode, ')
           ..write('excludeArtists: $excludeArtists, ')
-          ..write('excludeBlocked: $excludeBlocked, ')
+          ..write('blockLevel: $blockLevel, ')
           ..write('minLikeCount: $minLikeCount, ')
           ..write('maxLikeCount: $maxLikeCount, ')
           ..write('minPlayCount: $minPlayCount, ')
@@ -2615,7 +2615,7 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
               $mrjc(
                   excludeArtists.hashCode,
                   $mrjc(
-                      excludeBlocked.hashCode,
+                      blockLevel.hashCode,
                       $mrjc(
                           minLikeCount.hashCode,
                           $mrjc(
@@ -2647,7 +2647,7 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
           other.name == this.name &&
           other.shuffleMode == this.shuffleMode &&
           other.excludeArtists == this.excludeArtists &&
-          other.excludeBlocked == this.excludeBlocked &&
+          other.blockLevel == this.blockLevel &&
           other.minLikeCount == this.minLikeCount &&
           other.maxLikeCount == this.maxLikeCount &&
           other.minPlayCount == this.minPlayCount &&
@@ -2666,7 +2666,7 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
   final Value<String> name;
   final Value<String?> shuffleMode;
   final Value<bool> excludeArtists;
-  final Value<bool> excludeBlocked;
+  final Value<int> blockLevel;
   final Value<int> minLikeCount;
   final Value<int> maxLikeCount;
   final Value<int?> minPlayCount;
@@ -2683,7 +2683,7 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
     this.name = const Value.absent(),
     this.shuffleMode = const Value.absent(),
     this.excludeArtists = const Value.absent(),
-    this.excludeBlocked = const Value.absent(),
+    this.blockLevel = const Value.absent(),
     this.minLikeCount = const Value.absent(),
     this.maxLikeCount = const Value.absent(),
     this.minPlayCount = const Value.absent(),
@@ -2701,7 +2701,7 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
     required String name,
     this.shuffleMode = const Value.absent(),
     this.excludeArtists = const Value.absent(),
-    this.excludeBlocked = const Value.absent(),
+    this.blockLevel = const Value.absent(),
     this.minLikeCount = const Value.absent(),
     this.maxLikeCount = const Value.absent(),
     this.minPlayCount = const Value.absent(),
@@ -2721,7 +2721,7 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
     Expression<String>? name,
     Expression<String?>? shuffleMode,
     Expression<bool>? excludeArtists,
-    Expression<bool>? excludeBlocked,
+    Expression<int>? blockLevel,
     Expression<int>? minLikeCount,
     Expression<int>? maxLikeCount,
     Expression<int?>? minPlayCount,
@@ -2739,7 +2739,7 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
       if (name != null) 'name': name,
       if (shuffleMode != null) 'shuffle_mode': shuffleMode,
       if (excludeArtists != null) 'exclude_artists': excludeArtists,
-      if (excludeBlocked != null) 'exclude_blocked': excludeBlocked,
+      if (blockLevel != null) 'block_level': blockLevel,
       if (minLikeCount != null) 'min_like_count': minLikeCount,
       if (maxLikeCount != null) 'max_like_count': maxLikeCount,
       if (minPlayCount != null) 'min_play_count': minPlayCount,
@@ -2759,7 +2759,7 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
       Value<String>? name,
       Value<String?>? shuffleMode,
       Value<bool>? excludeArtists,
-      Value<bool>? excludeBlocked,
+      Value<int>? blockLevel,
       Value<int>? minLikeCount,
       Value<int>? maxLikeCount,
       Value<int?>? minPlayCount,
@@ -2776,7 +2776,7 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
       name: name ?? this.name,
       shuffleMode: shuffleMode ?? this.shuffleMode,
       excludeArtists: excludeArtists ?? this.excludeArtists,
-      excludeBlocked: excludeBlocked ?? this.excludeBlocked,
+      blockLevel: blockLevel ?? this.blockLevel,
       minLikeCount: minLikeCount ?? this.minLikeCount,
       maxLikeCount: maxLikeCount ?? this.maxLikeCount,
       minPlayCount: minPlayCount ?? this.minPlayCount,
@@ -2806,8 +2806,8 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
     if (excludeArtists.present) {
       map['exclude_artists'] = Variable<bool>(excludeArtists.value);
     }
-    if (excludeBlocked.present) {
-      map['exclude_blocked'] = Variable<bool>(excludeBlocked.value);
+    if (blockLevel.present) {
+      map['block_level'] = Variable<int>(blockLevel.value);
     }
     if (minLikeCount.present) {
       map['min_like_count'] = Variable<int>(minLikeCount.value);
@@ -2852,7 +2852,7 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
           ..write('name: $name, ')
           ..write('shuffleMode: $shuffleMode, ')
           ..write('excludeArtists: $excludeArtists, ')
-          ..write('excludeBlocked: $excludeBlocked, ')
+          ..write('blockLevel: $blockLevel, ')
           ..write('minLikeCount: $minLikeCount, ')
           ..write('maxLikeCount: $maxLikeCount, ')
           ..write('minPlayCount: $minPlayCount, ')
@@ -2914,13 +2914,12 @@ class $SmartListsTable extends SmartLists
         defaultValue: const Constant(false));
   }
 
-  final VerificationMeta _excludeBlockedMeta =
-      const VerificationMeta('excludeBlocked');
+  final VerificationMeta _blockLevelMeta = const VerificationMeta('blockLevel');
   @override
-  late final GeneratedBoolColumn excludeBlocked = _constructExcludeBlocked();
-  GeneratedBoolColumn _constructExcludeBlocked() {
-    return GeneratedBoolColumn('exclude_blocked', $tableName, false,
-        defaultValue: const Constant(false));
+  late final GeneratedIntColumn blockLevel = _constructBlockLevel();
+  GeneratedIntColumn _constructBlockLevel() {
+    return GeneratedIntColumn('block_level', $tableName, false,
+        defaultValue: const Constant(0));
   }
 
   final VerificationMeta _minLikeCountMeta =
@@ -3052,7 +3051,7 @@ class $SmartListsTable extends SmartLists
         name,
         shuffleMode,
         excludeArtists,
-        excludeBlocked,
+        blockLevel,
         minLikeCount,
         maxLikeCount,
         minPlayCount,
@@ -3097,11 +3096,11 @@ class $SmartListsTable extends SmartLists
           excludeArtists.isAcceptableOrUnknown(
               data['exclude_artists']!, _excludeArtistsMeta));
     }
-    if (data.containsKey('exclude_blocked')) {
+    if (data.containsKey('block_level')) {
       context.handle(
-          _excludeBlockedMeta,
-          excludeBlocked.isAcceptableOrUnknown(
-              data['exclude_blocked']!, _excludeBlockedMeta));
+          _blockLevelMeta,
+          blockLevel.isAcceptableOrUnknown(
+              data['block_level']!, _blockLevelMeta));
     }
     if (data.containsKey('min_like_count')) {
       context.handle(

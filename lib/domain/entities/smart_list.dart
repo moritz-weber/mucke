@@ -38,7 +38,7 @@ class Filter extends Equatable {
     this.maxSkipCount,
     this.minYear,
     this.maxYear,
-    required this.excludeBlocked,
+    required this.blockLevel,
     this.limit,
   });
 
@@ -57,7 +57,7 @@ class Filter extends Equatable {
   final int? minYear;
   final int? maxYear;
 
-  final bool excludeBlocked;
+  final int blockLevel;
 
   final int? limit;
 

@@ -7,9 +7,9 @@ import '../../domain/entities/song.dart';
 import '../state/album_page_store.dart';
 import '../state/audio_store.dart';
 import '../theming.dart';
+import '../utils.dart';
 import '../widgets/album_sliver_appbar.dart';
 import '../widgets/song_bottom_sheet.dart';
-import '../widgets/song_list_tile.dart';
 
 class AlbumDetailsPage extends StatefulWidget {
   const AlbumDetailsPage({Key? key, required this.album}) : super(key: key);
@@ -48,6 +48,14 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
           slivers: <Widget>[
             AlbumSliverAppBar(
               album: widget.album,
+              songs: store.albumSongStream.value ?? [],
+            ),
+            SliverList(
+              delegate: SliverChildListDelegate([
+                // const SizedBox(
+                //   height: 24.0,
+                // ),
+              ]),
             ),
             for (int d = 0; d < songsByDisc.length; d++)
               SliverList(
@@ -57,8 +65,8 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
                     if (songsByDisc.length > 1)
                       ListTile(
                         title: Text('Disc ${d + 1}', style: TEXT_HEADER),
-                        leading: const SizedBox(width: 56, child: Icon(Icons.album)),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        leading: const SizedBox(width: 40, child: Icon(Icons.album)),
+                        contentPadding: const EdgeInsets.only(left: HORIZONTAL_PADDING),
                       ),
                     if (songsByDisc.length > 1)
                       Padding(
@@ -71,16 +79,58 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
                         ),
                       ),
                     for (int s = 0; s < songsByDisc[d].length; s++)
-                      SongListTile(
-                        song: songsByDisc[d][s],
-                        showAlbum: false,
+                      ListTile(
+                        contentPadding: const EdgeInsets.only(left: HORIZONTAL_PADDING),
+                        leading: SizedBox(
+                          height: 56,
+                          width: 40,
+                          child: Center(child: Text('${songsByDisc[d][s].trackNumber}')),
+                        ),
+                        title: Text(
+                          songsByDisc[d][s].title,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        subtitle: Text(
+                          '${msToTimeString(songsByDisc[d][s].duration)} • ${songsByDisc[d][s].artist}',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
                         onTap: () => audioStore.playSong(
                           s + _calcOffset(d, songsByDisc),
                           store.albumSongStream.value!,
                           widget.album,
                         ),
-                        onTapMore: () => SongBottomSheet()(songsByDisc[d][s], context),
-                      )
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (songsByDisc[d][s].blockLevel > 0)
+                              Padding(
+                                padding: const EdgeInsets.only(right: 4.0),
+                                child: Icon(
+                                  blockLevelIcon(songsByDisc[d][s].blockLevel),
+                                  size: 16.0,
+                                  color: Colors.white38,
+                                ),
+                              ),
+                            Icon(
+                              likeCountIcon(songsByDisc[d][s].likeCount),
+                              size: 16.0,
+                              color: songsByDisc[d][s].likeCount == 3
+                                  ? LIGHT2
+                                  : Colors.white.withOpacity(
+                                      0.2 + 0.18 * songsByDisc[d][s].likeCount,
+                                    ),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.more_vert),
+                              iconSize: 20.0,
+                              onPressed: () => SongBottomSheet()(songsByDisc[d][s], context),
+                            ),
+                          ],
+                        ),
+                      ),
                   ],
                 ),
               )

@@ -40,6 +40,13 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
     final title = widget.smartList == null ? 'Create smart list' : 'Edit smart list';
     final SettingsStore settingsStore = GetIt.I<SettingsStore>();
 
+    const blockLevelTexts = <String>[
+      'Exclude all songs marked for exclusion.',
+      'Exclude songs marked for exclusion in shuffle mode.',
+      'Exclude only songs marked as always exclude.',
+      "Don't exclude any songs.",
+    ];
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -364,15 +371,22 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
                       padding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
                       child: Observer(
                         builder: (_) {
-                          return Row(
-                            children: [
-                              Switch(
-                                value: store.excludeBlocked,
-                                onChanged: (bool value) => store.excludeBlocked = value,
-                              ),
-                              const Text('Exclude blocked songs'),
-                              const Spacer(),
-                            ],
+                          return DropdownButton<int>(
+                            value: store.blockLevel,
+                            hint: const Text('Select which songs to exclude.'),
+                            isExpanded: true,
+                            onChanged: (int? newValue) {
+                              if (newValue != null) store.blockLevel = newValue;
+                            },
+                            items: <int>[0, 1, 2, 3].map<DropdownMenuItem<int>>((int value) {
+                              return DropdownMenuItem<int>(
+                                value: value,
+                                child: Text(
+                                  blockLevelTexts[value],
+                                  style: const TextStyle(fontSize: 14.0),
+                                ),
+                              );
+                            }).toList(),
                           );
                         },
                       ),

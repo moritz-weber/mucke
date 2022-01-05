@@ -5,11 +5,11 @@ import 'dart:isolate';
 import 'package:moor/ffi.dart';
 import 'package:moor/isolate.dart';
 import 'package:moor/moor.dart';
-import 'package:mucke/domain/entities/playable.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 import '../../constants.dart';
+import '../../domain/entities/playable.dart';
 import 'moor/music_data_dao.dart';
 import 'moor/persistent_state_dao.dart';
 import 'moor/playlist_dao.dart';
@@ -118,7 +118,7 @@ class SmartLists extends Table {
 
   // Filter
   BoolColumn get excludeArtists => boolean().withDefault(const Constant(false))();
-  BoolColumn get excludeBlocked => boolean().withDefault(const Constant(false))();
+  IntColumn get blockLevel => integer().withDefault(const Constant(0))();
   IntColumn get minLikeCount => integer().withDefault(const Constant(0))();
   IntColumn get maxLikeCount => integer().withDefault(const Constant(5))();
   IntColumn get minPlayCount => integer().nullable()();
@@ -186,7 +186,7 @@ class MoorDatabase extends _$MoorDatabase {
   MoorDatabase.connect(DatabaseConnection connection) : super.connect(connection);
 
   @override
-  int get schemaVersion => 6;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(beforeOpen: (details) async {
@@ -213,47 +213,9 @@ class MoorDatabase extends _$MoorDatabase {
         }
       }, onUpgrade: (Migrator m, int from, int to) async {
         print('$from -> $to');
-        if (from == 1) {
-          await m.createTable(smartLists);
-          await m.createTable(smartListArtists);
-
-          await m.addColumn(songs, songs.timeAdded);
-          await m.addColumn(songs, songs.year);
-          await m.alterTable(TableMigration(songs));
-
-          final albumMap =
-              await select(albums).get().then((value) => {for (var a in value) a.id: a.year});
-
-          await transaction(() async {
-            for (final album in albumMap.entries) {
-              await (update(songs)..where((tbl) => tbl.albumId.equals(album.key)))
-                  .write(SongsCompanion(year: Value(album.value)));
-            }
-          });
-        }
-        if (from < 3) {
-          await m.alterTable(
-            TableMigration(songs, columnTransformer: {
-              songs.timeAdded: currentDateAndTime,
-            }),
-          );
-        }
-        if (from < 4) {
+        if (from < 2) {
+          await m.addColumn(smartLists, smartLists.blockLevel);
           await m.alterTable(TableMigration(smartLists));
-          await m.createTable(playlists);
-          await m.createTable(playlistEntries);
-        }
-        if (from < 5) {
-          await m.addColumn(smartLists, smartLists.minSkipCount);
-          await m.addColumn(smartLists, smartLists.maxSkipCount);
-        }
-        if (from < 6) {
-          await (update(songs)..where((tbl) => tbl.likeCount.equals(3)))
-              .write(const SongsCompanion(likeCount: Value(2)));
-          await (update(songs)..where((tbl) => tbl.likeCount.equals(4)))
-              .write(const SongsCompanion(likeCount: Value(3)));
-          await (update(songs)..where((tbl) => tbl.likeCount.equals(5)))
-              .write(const SongsCompanion(likeCount: Value(3)));
         }
       });
 }

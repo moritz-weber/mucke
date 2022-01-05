@@ -268,18 +268,18 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     });
   }
 
-  final _$excludeBlockedAtom = Atom(name: '_SmartListStore.excludeBlocked');
+  final _$blockLevelAtom = Atom(name: '_SmartListStore.blockLevel');
 
   @override
-  bool get excludeBlocked {
-    _$excludeBlockedAtom.reportRead();
-    return super.excludeBlocked;
+  int get blockLevel {
+    _$blockLevelAtom.reportRead();
+    return super.blockLevel;
   }
 
   @override
-  set excludeBlocked(bool value) {
-    _$excludeBlockedAtom.reportWrite(value, super.excludeBlocked, () {
-      super.excludeBlocked = value;
+  set blockLevel(int value) {
+    _$blockLevelAtom.reportWrite(value, super.blockLevel, () {
+      super.blockLevel = value;
     });
   }
 
@@ -406,7 +406,7 @@ maxYearEnabled: ${maxYearEnabled},
 maxYear: ${maxYear},
 limitEnabled: ${limitEnabled},
 limit: ${limit},
-excludeBlocked: ${excludeBlocked},
+blockLevel: ${blockLevel},
 selectedArtists: ${selectedArtists},
 excludeArtists: ${excludeArtists},
 orderState: ${orderState}

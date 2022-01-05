@@ -162,7 +162,7 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
         maxLikeCount: Value(filter.maxLikeCount),
         minYear: Value(filter.minYear),
         maxYear: Value(filter.maxYear),
-        excludeBlocked: Value(filter.excludeBlocked),
+        blockLevel: Value(filter.blockLevel),
         limit: Value(filter.limit),
         orderCriteria: Value(orderCriteria),
         orderDirections: Value(orderDirections),
@@ -269,7 +269,7 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
       query = query..where((tbl) => tbl.year.isSmallerOrEqualValue(filter.maxYear));
 
     // TODO: adapt for different block levels
-    if (filter.excludeBlocked) query = query..where((tbl) => tbl.blockLevel.isSmallerThanValue(1));
+    query = query..where((tbl) => tbl.blockLevel.isSmallerOrEqualValue(filter.blockLevel));
 
     if (filter.artists.isNotEmpty) {
       if (filter.excludeArtists)

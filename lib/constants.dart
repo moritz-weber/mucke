@@ -1,5 +1,3 @@
-import 'package:mucke/domain/entities/playable.dart';
-
 const int MAX_LIKE_COUNT = 3;
 
 const String PERSISTENT_INDEX = 'PERSISTENT_INDEX';
