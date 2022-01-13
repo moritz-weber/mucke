@@ -19,8 +19,7 @@ class MoorAlbum extends DataClass implements Insertable<MoorAlbum> {
       required this.artist,
       this.albumArtPath,
       this.year});
-  factory MoorAlbum.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
+  factory MoorAlbum.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return MoorAlbum(
       id: const IntType()
@@ -64,7 +63,7 @@ class MoorAlbum extends DataClass implements Insertable<MoorAlbum> {
 
   factory MoorAlbum.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return MoorAlbum(
       id: serializer.fromJson<int>(json['id']),
       title: serializer.fromJson<String>(json['title']),
@@ -75,7 +74,7 @@ class MoorAlbum extends DataClass implements Insertable<MoorAlbum> {
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'title': serializer.toJson<String>(title),
@@ -111,12 +110,7 @@ class MoorAlbum extends DataClass implements Insertable<MoorAlbum> {
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(
-      id.hashCode,
-      $mrjc(
-          title.hashCode,
-          $mrjc(
-              artist.hashCode, $mrjc(albumArtPath.hashCode, year.hashCode)))));
+  int get hashCode => Object.hash(id, title, artist, albumArtPath, year);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -220,68 +214,36 @@ class $AlbumsTable extends Albums with TableInfo<$AlbumsTable, MoorAlbum> {
   $AlbumsTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedIntColumn id = _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn(
-      'id',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: false);
   final VerificationMeta _titleMeta = const VerificationMeta('title');
   @override
-  late final GeneratedTextColumn title = _constructTitle();
-  GeneratedTextColumn _constructTitle() {
-    return GeneratedTextColumn(
-      'title',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<String?> title = GeneratedColumn<String?>(
+      'title', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _artistMeta = const VerificationMeta('artist');
   @override
-  late final GeneratedTextColumn artist = _constructArtist();
-  GeneratedTextColumn _constructArtist() {
-    return GeneratedTextColumn(
-      'artist',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<String?> artist = GeneratedColumn<String?>(
+      'artist', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _albumArtPathMeta =
       const VerificationMeta('albumArtPath');
   @override
-  late final GeneratedTextColumn albumArtPath = _constructAlbumArtPath();
-  GeneratedTextColumn _constructAlbumArtPath() {
-    return GeneratedTextColumn(
-      'album_art_path',
-      $tableName,
-      true,
-    );
-  }
-
+  late final GeneratedColumn<String?> albumArtPath = GeneratedColumn<String?>(
+      'album_art_path', aliasedName, true,
+      type: const StringType(), requiredDuringInsert: false);
   final VerificationMeta _yearMeta = const VerificationMeta('year');
   @override
-  late final GeneratedIntColumn year = _constructYear();
-  GeneratedIntColumn _constructYear() {
-    return GeneratedIntColumn(
-      'year',
-      $tableName,
-      true,
-    );
-  }
-
+  late final GeneratedColumn<int?> year = GeneratedColumn<int?>(
+      'year', aliasedName, true,
+      type: const IntType(), requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [id, title, artist, albumArtPath, year];
   @override
-  $AlbumsTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'albums';
   @override
-  String get $tableName => _alias ?? 'albums';
-  @override
-  final String actualTableName = 'albums';
+  String get actualTableName => 'albums';
   @override
   VerificationContext validateIntegrity(Insertable<MoorAlbum> instance,
       {bool isInserting = false}) {
@@ -319,7 +281,7 @@ class $AlbumsTable extends Albums with TableInfo<$AlbumsTable, MoorAlbum> {
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   MoorAlbum map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return MoorAlbum.fromData(data, _db,
+    return MoorAlbum.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -332,8 +294,7 @@ class $AlbumsTable extends Albums with TableInfo<$AlbumsTable, MoorAlbum> {
 class MoorArtist extends DataClass implements Insertable<MoorArtist> {
   final String name;
   MoorArtist({required this.name});
-  factory MoorArtist.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
+  factory MoorArtist.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return MoorArtist(
       name: const StringType()
@@ -355,14 +316,14 @@ class MoorArtist extends DataClass implements Insertable<MoorArtist> {
 
   factory MoorArtist.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return MoorArtist(
       name: serializer.fromJson<String>(json['name']),
     );
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'name': serializer.toJson<String>(name),
     };
@@ -380,7 +341,7 @@ class MoorArtist extends DataClass implements Insertable<MoorArtist> {
   }
 
   @override
-  int get hashCode => $mrjf(name.hashCode);
+  int get hashCode => name.hashCode;
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -433,23 +394,15 @@ class $ArtistsTable extends Artists with TableInfo<$ArtistsTable, MoorArtist> {
   $ArtistsTable(this._db, [this._alias]);
   final VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
-  late final GeneratedTextColumn name = _constructName();
-  GeneratedTextColumn _constructName() {
-    return GeneratedTextColumn(
-      'name',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
+      'name', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [name];
   @override
-  $ArtistsTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'artists';
   @override
-  String get $tableName => _alias ?? 'artists';
-  @override
-  final String actualTableName = 'artists';
+  String get actualTableName => 'artists';
   @override
   VerificationContext validateIntegrity(Insertable<MoorArtist> instance,
       {bool isInserting = false}) {
@@ -468,7 +421,7 @@ class $ArtistsTable extends Artists with TableInfo<$ArtistsTable, MoorArtist> {
   Set<GeneratedColumn> get $primaryKey => {name};
   @override
   MoorArtist map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return MoorArtist.fromData(data, _db,
+    return MoorArtist.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -481,9 +434,7 @@ class $ArtistsTable extends Artists with TableInfo<$ArtistsTable, MoorArtist> {
 class LibraryFolder extends DataClass implements Insertable<LibraryFolder> {
   final String path;
   LibraryFolder({required this.path});
-  factory LibraryFolder.fromData(
-      Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
+  factory LibraryFolder.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return LibraryFolder(
       path: const StringType()
@@ -505,14 +456,14 @@ class LibraryFolder extends DataClass implements Insertable<LibraryFolder> {
 
   factory LibraryFolder.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return LibraryFolder(
       path: serializer.fromJson<String>(json['path']),
     );
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'path': serializer.toJson<String>(path),
     };
@@ -530,7 +481,7 @@ class LibraryFolder extends DataClass implements Insertable<LibraryFolder> {
   }
 
   @override
-  int get hashCode => $mrjf(path.hashCode);
+  int get hashCode => path.hashCode;
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -584,23 +535,15 @@ class $LibraryFoldersTable extends LibraryFolders
   $LibraryFoldersTable(this._db, [this._alias]);
   final VerificationMeta _pathMeta = const VerificationMeta('path');
   @override
-  late final GeneratedTextColumn path = _constructPath();
-  GeneratedTextColumn _constructPath() {
-    return GeneratedTextColumn(
-      'path',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<String?> path = GeneratedColumn<String?>(
+      'path', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [path];
   @override
-  $LibraryFoldersTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'library_folders';
   @override
-  String get $tableName => _alias ?? 'library_folders';
-  @override
-  final String actualTableName = 'library_folders';
+  String get actualTableName => 'library_folders';
   @override
   VerificationContext validateIntegrity(Insertable<LibraryFolder> instance,
       {bool isInserting = false}) {
@@ -619,7 +562,7 @@ class $LibraryFoldersTable extends LibraryFolders
   Set<GeneratedColumn> get $primaryKey => <GeneratedColumn>{};
   @override
   LibraryFolder map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return LibraryFolder.fromData(data, _db,
+    return LibraryFolder.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -641,9 +584,7 @@ class MoorQueueEntry extends DataClass implements Insertable<MoorQueueEntry> {
       required this.originalIndex,
       required this.type,
       required this.isAvailable});
-  factory MoorQueueEntry.fromData(
-      Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
+  factory MoorQueueEntry.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return MoorQueueEntry(
       index: const IntType()
@@ -681,7 +622,7 @@ class MoorQueueEntry extends DataClass implements Insertable<MoorQueueEntry> {
 
   factory MoorQueueEntry.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return MoorQueueEntry(
       index: serializer.fromJson<int>(json['index']),
       path: serializer.fromJson<String>(json['path']),
@@ -692,7 +633,7 @@ class MoorQueueEntry extends DataClass implements Insertable<MoorQueueEntry> {
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'index': serializer.toJson<int>(index),
       'path': serializer.toJson<String>(path),
@@ -728,12 +669,8 @@ class MoorQueueEntry extends DataClass implements Insertable<MoorQueueEntry> {
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(
-      index.hashCode,
-      $mrjc(
-          path.hashCode,
-          $mrjc(originalIndex.hashCode,
-              $mrjc(type.hashCode, isAvailable.hashCode)))));
+  int get hashCode =>
+      Object.hash(index, path, originalIndex, type, isAvailable);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -840,70 +777,40 @@ class $QueueEntriesTable extends QueueEntries
   $QueueEntriesTable(this._db, [this._alias]);
   final VerificationMeta _indexMeta = const VerificationMeta('index');
   @override
-  late final GeneratedIntColumn index = _constructIndex();
-  GeneratedIntColumn _constructIndex() {
-    return GeneratedIntColumn(
-      'index',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<int?> index = GeneratedColumn<int?>(
+      'index', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: false);
   final VerificationMeta _pathMeta = const VerificationMeta('path');
   @override
-  late final GeneratedTextColumn path = _constructPath();
-  GeneratedTextColumn _constructPath() {
-    return GeneratedTextColumn(
-      'path',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<String?> path = GeneratedColumn<String?>(
+      'path', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _originalIndexMeta =
       const VerificationMeta('originalIndex');
   @override
-  late final GeneratedIntColumn originalIndex = _constructOriginalIndex();
-  GeneratedIntColumn _constructOriginalIndex() {
-    return GeneratedIntColumn(
-      'original_index',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<int?> originalIndex = GeneratedColumn<int?>(
+      'original_index', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _typeMeta = const VerificationMeta('type');
   @override
-  late final GeneratedIntColumn type = _constructType();
-  GeneratedIntColumn _constructType() {
-    return GeneratedIntColumn(
-      'type',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<int?> type = GeneratedColumn<int?>(
+      'type', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _isAvailableMeta =
       const VerificationMeta('isAvailable');
   @override
-  late final GeneratedBoolColumn isAvailable = _constructIsAvailable();
-  GeneratedBoolColumn _constructIsAvailable() {
-    return GeneratedBoolColumn(
-      'is_available',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<bool?> isAvailable = GeneratedColumn<bool?>(
+      'is_available', aliasedName, false,
+      type: const BoolType(),
+      requiredDuringInsert: true,
+      defaultConstraints: 'CHECK (is_available IN (0, 1))');
   @override
   List<GeneratedColumn> get $columns =>
       [index, path, originalIndex, type, isAvailable];
   @override
-  $QueueEntriesTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'queue_entries';
   @override
-  String get $tableName => _alias ?? 'queue_entries';
-  @override
-  final String actualTableName = 'queue_entries';
+  String get actualTableName => 'queue_entries';
   @override
   VerificationContext validateIntegrity(Insertable<MoorQueueEntry> instance,
       {bool isInserting = false}) {
@@ -948,7 +855,7 @@ class $QueueEntriesTable extends QueueEntries
   Set<GeneratedColumn> get $primaryKey => {index};
   @override
   MoorQueueEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return MoorQueueEntry.fromData(data, _db,
+    return MoorQueueEntry.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -971,8 +878,7 @@ class AvailableSongEntry extends DataClass
       required this.originalIndex,
       required this.type,
       required this.isAvailable});
-  factory AvailableSongEntry.fromData(
-      Map<String, dynamic> data, GeneratedDatabase db,
+  factory AvailableSongEntry.fromData(Map<String, dynamic> data,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return AvailableSongEntry(
@@ -1011,7 +917,7 @@ class AvailableSongEntry extends DataClass
 
   factory AvailableSongEntry.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return AvailableSongEntry(
       index: serializer.fromJson<int>(json['index']),
       path: serializer.fromJson<String>(json['path']),
@@ -1022,7 +928,7 @@ class AvailableSongEntry extends DataClass
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'index': serializer.toJson<int>(index),
       'path': serializer.toJson<String>(path),
@@ -1058,12 +964,8 @@ class AvailableSongEntry extends DataClass
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(
-      index.hashCode,
-      $mrjc(
-          path.hashCode,
-          $mrjc(originalIndex.hashCode,
-              $mrjc(type.hashCode, isAvailable.hashCode)))));
+  int get hashCode =>
+      Object.hash(index, path, originalIndex, type, isAvailable);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1171,70 +1073,40 @@ class $AvailableSongEntriesTable extends AvailableSongEntries
   $AvailableSongEntriesTable(this._db, [this._alias]);
   final VerificationMeta _indexMeta = const VerificationMeta('index');
   @override
-  late final GeneratedIntColumn index = _constructIndex();
-  GeneratedIntColumn _constructIndex() {
-    return GeneratedIntColumn(
-      'index',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<int?> index = GeneratedColumn<int?>(
+      'index', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: false);
   final VerificationMeta _pathMeta = const VerificationMeta('path');
   @override
-  late final GeneratedTextColumn path = _constructPath();
-  GeneratedTextColumn _constructPath() {
-    return GeneratedTextColumn(
-      'path',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<String?> path = GeneratedColumn<String?>(
+      'path', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _originalIndexMeta =
       const VerificationMeta('originalIndex');
   @override
-  late final GeneratedIntColumn originalIndex = _constructOriginalIndex();
-  GeneratedIntColumn _constructOriginalIndex() {
-    return GeneratedIntColumn(
-      'original_index',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<int?> originalIndex = GeneratedColumn<int?>(
+      'original_index', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _typeMeta = const VerificationMeta('type');
   @override
-  late final GeneratedIntColumn type = _constructType();
-  GeneratedIntColumn _constructType() {
-    return GeneratedIntColumn(
-      'type',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<int?> type = GeneratedColumn<int?>(
+      'type', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _isAvailableMeta =
       const VerificationMeta('isAvailable');
   @override
-  late final GeneratedBoolColumn isAvailable = _constructIsAvailable();
-  GeneratedBoolColumn _constructIsAvailable() {
-    return GeneratedBoolColumn(
-      'is_available',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<bool?> isAvailable = GeneratedColumn<bool?>(
+      'is_available', aliasedName, false,
+      type: const BoolType(),
+      requiredDuringInsert: true,
+      defaultConstraints: 'CHECK (is_available IN (0, 1))');
   @override
   List<GeneratedColumn> get $columns =>
       [index, path, originalIndex, type, isAvailable];
   @override
-  $AvailableSongEntriesTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'available_song_entries';
   @override
-  String get $tableName => _alias ?? 'available_song_entries';
-  @override
-  final String actualTableName = 'available_song_entries';
+  String get actualTableName => 'available_song_entries';
   @override
   VerificationContext validateIntegrity(Insertable<AvailableSongEntry> instance,
       {bool isInserting = false}) {
@@ -1279,7 +1151,7 @@ class $AvailableSongEntriesTable extends AvailableSongEntries
   Set<GeneratedColumn> get $primaryKey => {index};
   @override
   AvailableSongEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return AvailableSongEntry.fromData(data, _db,
+    return AvailableSongEntry.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -1327,8 +1199,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
       required this.timeAdded,
       required this.previous,
       required this.next});
-  factory MoorSong.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
+  factory MoorSong.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return MoorSong(
       title: const StringType()
@@ -1424,7 +1295,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
 
   factory MoorSong.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return MoorSong(
       title: serializer.fromJson<String>(json['title']),
       albumTitle: serializer.fromJson<String>(json['albumTitle']),
@@ -1448,7 +1319,7 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'title': serializer.toJson<String>(title),
       'albumTitle': serializer.toJson<String>(albumTitle),
@@ -1536,43 +1407,25 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(
-      title.hashCode,
-      $mrjc(
-          albumTitle.hashCode,
-          $mrjc(
-              albumId.hashCode,
-              $mrjc(
-                  artist.hashCode,
-                  $mrjc(
-                      path.hashCode,
-                      $mrjc(
-                          duration.hashCode,
-                          $mrjc(
-                              albumArtPath.hashCode,
-                              $mrjc(
-                                  discNumber.hashCode,
-                                  $mrjc(
-                                      trackNumber.hashCode,
-                                      $mrjc(
-                                          year.hashCode,
-                                          $mrjc(
-                                              blockLevel.hashCode,
-                                              $mrjc(
-                                                  likeCount.hashCode,
-                                                  $mrjc(
-                                                      skipCount.hashCode,
-                                                      $mrjc(
-                                                          playCount.hashCode,
-                                                          $mrjc(
-                                                              present.hashCode,
-                                                              $mrjc(
-                                                                  timeAdded
-                                                                      .hashCode,
-                                                                  $mrjc(
-                                                                      previous
-                                                                          .hashCode,
-                                                                      next.hashCode))))))))))))))))));
+  int get hashCode => Object.hash(
+      title,
+      albumTitle,
+      albumId,
+      artist,
+      path,
+      duration,
+      albumArtPath,
+      discNumber,
+      trackNumber,
+      year,
+      blockLevel,
+      likeCount,
+      skipCount,
+      playCount,
+      present,
+      timeAdded,
+      previous,
+      next);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1838,180 +1691,113 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
   $SongsTable(this._db, [this._alias]);
   final VerificationMeta _titleMeta = const VerificationMeta('title');
   @override
-  late final GeneratedTextColumn title = _constructTitle();
-  GeneratedTextColumn _constructTitle() {
-    return GeneratedTextColumn(
-      'title',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<String?> title = GeneratedColumn<String?>(
+      'title', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _albumTitleMeta = const VerificationMeta('albumTitle');
   @override
-  late final GeneratedTextColumn albumTitle = _constructAlbumTitle();
-  GeneratedTextColumn _constructAlbumTitle() {
-    return GeneratedTextColumn(
-      'album_title',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<String?> albumTitle = GeneratedColumn<String?>(
+      'album_title', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _albumIdMeta = const VerificationMeta('albumId');
   @override
-  late final GeneratedIntColumn albumId = _constructAlbumId();
-  GeneratedIntColumn _constructAlbumId() {
-    return GeneratedIntColumn(
-      'album_id',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<int?> albumId = GeneratedColumn<int?>(
+      'album_id', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _artistMeta = const VerificationMeta('artist');
   @override
-  late final GeneratedTextColumn artist = _constructArtist();
-  GeneratedTextColumn _constructArtist() {
-    return GeneratedTextColumn(
-      'artist',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<String?> artist = GeneratedColumn<String?>(
+      'artist', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _pathMeta = const VerificationMeta('path');
   @override
-  late final GeneratedTextColumn path = _constructPath();
-  GeneratedTextColumn _constructPath() {
-    return GeneratedTextColumn(
-      'path',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<String?> path = GeneratedColumn<String?>(
+      'path', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _durationMeta = const VerificationMeta('duration');
   @override
-  late final GeneratedIntColumn duration = _constructDuration();
-  GeneratedIntColumn _constructDuration() {
-    return GeneratedIntColumn(
-      'duration',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<int?> duration = GeneratedColumn<int?>(
+      'duration', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _albumArtPathMeta =
       const VerificationMeta('albumArtPath');
   @override
-  late final GeneratedTextColumn albumArtPath = _constructAlbumArtPath();
-  GeneratedTextColumn _constructAlbumArtPath() {
-    return GeneratedTextColumn(
-      'album_art_path',
-      $tableName,
-      true,
-    );
-  }
-
+  late final GeneratedColumn<String?> albumArtPath = GeneratedColumn<String?>(
+      'album_art_path', aliasedName, true,
+      type: const StringType(), requiredDuringInsert: false);
   final VerificationMeta _discNumberMeta = const VerificationMeta('discNumber');
   @override
-  late final GeneratedIntColumn discNumber = _constructDiscNumber();
-  GeneratedIntColumn _constructDiscNumber() {
-    return GeneratedIntColumn(
-      'disc_number',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<int?> discNumber = GeneratedColumn<int?>(
+      'disc_number', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _trackNumberMeta =
       const VerificationMeta('trackNumber');
   @override
-  late final GeneratedIntColumn trackNumber = _constructTrackNumber();
-  GeneratedIntColumn _constructTrackNumber() {
-    return GeneratedIntColumn(
-      'track_number',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<int?> trackNumber = GeneratedColumn<int?>(
+      'track_number', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _yearMeta = const VerificationMeta('year');
   @override
-  late final GeneratedIntColumn year = _constructYear();
-  GeneratedIntColumn _constructYear() {
-    return GeneratedIntColumn(
-      'year',
-      $tableName,
-      true,
-    );
-  }
-
+  late final GeneratedColumn<int?> year = GeneratedColumn<int?>(
+      'year', aliasedName, true,
+      type: const IntType(), requiredDuringInsert: false);
   final VerificationMeta _blockLevelMeta = const VerificationMeta('blockLevel');
   @override
-  late final GeneratedIntColumn blockLevel = _constructBlockLevel();
-  GeneratedIntColumn _constructBlockLevel() {
-    return GeneratedIntColumn('block_level', $tableName, false,
-        defaultValue: const Constant(0));
-  }
-
+  late final GeneratedColumn<int?> blockLevel = GeneratedColumn<int?>(
+      'block_level', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
   final VerificationMeta _likeCountMeta = const VerificationMeta('likeCount');
   @override
-  late final GeneratedIntColumn likeCount = _constructLikeCount();
-  GeneratedIntColumn _constructLikeCount() {
-    return GeneratedIntColumn('like_count', $tableName, false,
-        defaultValue: const Constant(0));
-  }
-
+  late final GeneratedColumn<int?> likeCount = GeneratedColumn<int?>(
+      'like_count', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
   final VerificationMeta _skipCountMeta = const VerificationMeta('skipCount');
   @override
-  late final GeneratedIntColumn skipCount = _constructSkipCount();
-  GeneratedIntColumn _constructSkipCount() {
-    return GeneratedIntColumn('skip_count', $tableName, false,
-        defaultValue: const Constant(0));
-  }
-
+  late final GeneratedColumn<int?> skipCount = GeneratedColumn<int?>(
+      'skip_count', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
   final VerificationMeta _playCountMeta = const VerificationMeta('playCount');
   @override
-  late final GeneratedIntColumn playCount = _constructPlayCount();
-  GeneratedIntColumn _constructPlayCount() {
-    return GeneratedIntColumn('play_count', $tableName, false,
-        defaultValue: const Constant(0));
-  }
-
+  late final GeneratedColumn<int?> playCount = GeneratedColumn<int?>(
+      'play_count', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
   final VerificationMeta _presentMeta = const VerificationMeta('present');
   @override
-  late final GeneratedBoolColumn present = _constructPresent();
-  GeneratedBoolColumn _constructPresent() {
-    return GeneratedBoolColumn('present', $tableName, false,
-        defaultValue: const Constant(true));
-  }
-
+  late final GeneratedColumn<bool?> present = GeneratedColumn<bool?>(
+      'present', aliasedName, false,
+      type: const BoolType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (present IN (0, 1))',
+      defaultValue: const Constant(true));
   final VerificationMeta _timeAddedMeta = const VerificationMeta('timeAdded');
   @override
-  late final GeneratedDateTimeColumn timeAdded = _constructTimeAdded();
-  GeneratedDateTimeColumn _constructTimeAdded() {
-    return GeneratedDateTimeColumn('time_added', $tableName, false,
-        defaultValue: currentDateAndTime);
-  }
-
+  late final GeneratedColumn<DateTime?> timeAdded = GeneratedColumn<DateTime?>(
+      'time_added', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
   final VerificationMeta _previousMeta = const VerificationMeta('previous');
   @override
-  late final GeneratedTextColumn previous = _constructPrevious();
-  GeneratedTextColumn _constructPrevious() {
-    return GeneratedTextColumn('previous', $tableName, false,
-        defaultValue: const Constant(''));
-  }
-
+  late final GeneratedColumn<String?> previous = GeneratedColumn<String?>(
+      'previous', aliasedName, false,
+      type: const StringType(),
+      requiredDuringInsert: false,
+      defaultValue: const Constant(''));
   final VerificationMeta _nextMeta = const VerificationMeta('next');
   @override
-  late final GeneratedTextColumn next = _constructNext();
-  GeneratedTextColumn _constructNext() {
-    return GeneratedTextColumn('next', $tableName, false,
-        defaultValue: const Constant(''));
-  }
-
+  late final GeneratedColumn<String?> next = GeneratedColumn<String?>(
+      'next', aliasedName, false,
+      type: const StringType(),
+      requiredDuringInsert: false,
+      defaultValue: const Constant(''));
   @override
   List<GeneratedColumn> get $columns => [
         title,
@@ -2034,11 +1820,9 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
         next
       ];
   @override
-  $SongsTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'songs';
   @override
-  String get $tableName => _alias ?? 'songs';
-  @override
-  final String actualTableName = 'songs';
+  String get actualTableName => 'songs';
   @override
   VerificationContext validateIntegrity(Insertable<MoorSong> instance,
       {bool isInserting = false}) {
@@ -2149,7 +1933,7 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
   Set<GeneratedColumn> get $primaryKey => {path};
   @override
   MoorSong map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return MoorSong.fromData(data, _db,
+    return MoorSong.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -2164,8 +1948,7 @@ class MoorAlbumOfDayData extends DataClass
   final int albumId;
   final int milliSecSinceEpoch;
   MoorAlbumOfDayData({required this.albumId, required this.milliSecSinceEpoch});
-  factory MoorAlbumOfDayData.fromData(
-      Map<String, dynamic> data, GeneratedDatabase db,
+  factory MoorAlbumOfDayData.fromData(Map<String, dynamic> data,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return MoorAlbumOfDayData(
@@ -2192,7 +1975,7 @@ class MoorAlbumOfDayData extends DataClass
 
   factory MoorAlbumOfDayData.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return MoorAlbumOfDayData(
       albumId: serializer.fromJson<int>(json['albumId']),
       milliSecSinceEpoch: serializer.fromJson<int>(json['milliSecSinceEpoch']),
@@ -2200,7 +1983,7 @@ class MoorAlbumOfDayData extends DataClass
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'albumId': serializer.toJson<int>(albumId),
       'milliSecSinceEpoch': serializer.toJson<int>(milliSecSinceEpoch),
@@ -2222,8 +2005,7 @@ class MoorAlbumOfDayData extends DataClass
   }
 
   @override
-  int get hashCode =>
-      $mrjf($mrjc(albumId.hashCode, milliSecSinceEpoch.hashCode));
+  int get hashCode => Object.hash(albumId, milliSecSinceEpoch);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2291,36 +2073,21 @@ class $MoorAlbumOfDayTable extends MoorAlbumOfDay
   $MoorAlbumOfDayTable(this._db, [this._alias]);
   final VerificationMeta _albumIdMeta = const VerificationMeta('albumId');
   @override
-  late final GeneratedIntColumn albumId = _constructAlbumId();
-  GeneratedIntColumn _constructAlbumId() {
-    return GeneratedIntColumn(
-      'album_id',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<int?> albumId = GeneratedColumn<int?>(
+      'album_id', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: false);
   final VerificationMeta _milliSecSinceEpochMeta =
       const VerificationMeta('milliSecSinceEpoch');
   @override
-  late final GeneratedIntColumn milliSecSinceEpoch =
-      _constructMilliSecSinceEpoch();
-  GeneratedIntColumn _constructMilliSecSinceEpoch() {
-    return GeneratedIntColumn(
-      'milli_sec_since_epoch',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<int?> milliSecSinceEpoch = GeneratedColumn<int?>(
+      'milli_sec_since_epoch', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [albumId, milliSecSinceEpoch];
   @override
-  $MoorAlbumOfDayTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'moor_album_of_day';
   @override
-  String get $tableName => _alias ?? 'moor_album_of_day';
-  @override
-  final String actualTableName = 'moor_album_of_day';
+  String get actualTableName => 'moor_album_of_day';
   @override
   VerificationContext validateIntegrity(Insertable<MoorAlbumOfDayData> instance,
       {bool isInserting = false}) {
@@ -2345,7 +2112,7 @@ class $MoorAlbumOfDayTable extends MoorAlbumOfDay
   Set<GeneratedColumn> get $primaryKey => {albumId};
   @override
   MoorAlbumOfDayData map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return MoorAlbumOfDayData.fromData(data, _db,
+    return MoorAlbumOfDayData.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -2389,9 +2156,7 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
       this.limit,
       required this.orderCriteria,
       required this.orderDirections});
-  factory MoorSmartList.fromData(
-      Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
+  factory MoorSmartList.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return MoorSmartList(
       id: const IntType()
@@ -2504,7 +2269,7 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
 
   factory MoorSmartList.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return MoorSmartList(
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
@@ -2526,7 +2291,7 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
@@ -2606,39 +2371,23 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(
-      id.hashCode,
-      $mrjc(
-          name.hashCode,
-          $mrjc(
-              shuffleMode.hashCode,
-              $mrjc(
-                  excludeArtists.hashCode,
-                  $mrjc(
-                      blockLevel.hashCode,
-                      $mrjc(
-                          minLikeCount.hashCode,
-                          $mrjc(
-                              maxLikeCount.hashCode,
-                              $mrjc(
-                                  minPlayCount.hashCode,
-                                  $mrjc(
-                                      maxPlayCount.hashCode,
-                                      $mrjc(
-                                          minSkipCount.hashCode,
-                                          $mrjc(
-                                              maxSkipCount.hashCode,
-                                              $mrjc(
-                                                  minYear.hashCode,
-                                                  $mrjc(
-                                                      maxYear.hashCode,
-                                                      $mrjc(
-                                                          limit.hashCode,
-                                                          $mrjc(
-                                                              orderCriteria
-                                                                  .hashCode,
-                                                              orderDirections
-                                                                  .hashCode))))))))))))))));
+  int get hashCode => Object.hash(
+      id,
+      name,
+      shuffleMode,
+      excludeArtists,
+      blockLevel,
+      minLikeCount,
+      maxLikeCount,
+      minPlayCount,
+      maxPlayCount,
+      minSkipCount,
+      maxSkipCount,
+      minYear,
+      maxYear,
+      limit,
+      orderCriteria,
+      orderDirections);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2876,175 +2625,105 @@ class $SmartListsTable extends SmartLists
   $SmartListsTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedIntColumn id = _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
-  late final GeneratedTextColumn name = _constructName();
-  GeneratedTextColumn _constructName() {
-    return GeneratedTextColumn(
-      'name',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
+      'name', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _shuffleModeMeta =
       const VerificationMeta('shuffleMode');
   @override
-  late final GeneratedTextColumn shuffleMode = _constructShuffleMode();
-  GeneratedTextColumn _constructShuffleMode() {
-    return GeneratedTextColumn(
-      'shuffle_mode',
-      $tableName,
-      true,
-    );
-  }
-
+  late final GeneratedColumn<String?> shuffleMode = GeneratedColumn<String?>(
+      'shuffle_mode', aliasedName, true,
+      type: const StringType(), requiredDuringInsert: false);
   final VerificationMeta _excludeArtistsMeta =
       const VerificationMeta('excludeArtists');
   @override
-  late final GeneratedBoolColumn excludeArtists = _constructExcludeArtists();
-  GeneratedBoolColumn _constructExcludeArtists() {
-    return GeneratedBoolColumn('exclude_artists', $tableName, false,
-        defaultValue: const Constant(false));
-  }
-
+  late final GeneratedColumn<bool?> excludeArtists = GeneratedColumn<bool?>(
+      'exclude_artists', aliasedName, false,
+      type: const BoolType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (exclude_artists IN (0, 1))',
+      defaultValue: const Constant(false));
   final VerificationMeta _blockLevelMeta = const VerificationMeta('blockLevel');
   @override
-  late final GeneratedIntColumn blockLevel = _constructBlockLevel();
-  GeneratedIntColumn _constructBlockLevel() {
-    return GeneratedIntColumn('block_level', $tableName, false,
-        defaultValue: const Constant(0));
-  }
-
+  late final GeneratedColumn<int?> blockLevel = GeneratedColumn<int?>(
+      'block_level', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
   final VerificationMeta _minLikeCountMeta =
       const VerificationMeta('minLikeCount');
   @override
-  late final GeneratedIntColumn minLikeCount = _constructMinLikeCount();
-  GeneratedIntColumn _constructMinLikeCount() {
-    return GeneratedIntColumn('min_like_count', $tableName, false,
-        defaultValue: const Constant(0));
-  }
-
+  late final GeneratedColumn<int?> minLikeCount = GeneratedColumn<int?>(
+      'min_like_count', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
   final VerificationMeta _maxLikeCountMeta =
       const VerificationMeta('maxLikeCount');
   @override
-  late final GeneratedIntColumn maxLikeCount = _constructMaxLikeCount();
-  GeneratedIntColumn _constructMaxLikeCount() {
-    return GeneratedIntColumn('max_like_count', $tableName, false,
-        defaultValue: const Constant(5));
-  }
-
+  late final GeneratedColumn<int?> maxLikeCount = GeneratedColumn<int?>(
+      'max_like_count', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultValue: const Constant(5));
   final VerificationMeta _minPlayCountMeta =
       const VerificationMeta('minPlayCount');
   @override
-  late final GeneratedIntColumn minPlayCount = _constructMinPlayCount();
-  GeneratedIntColumn _constructMinPlayCount() {
-    return GeneratedIntColumn(
-      'min_play_count',
-      $tableName,
-      true,
-    );
-  }
-
+  late final GeneratedColumn<int?> minPlayCount = GeneratedColumn<int?>(
+      'min_play_count', aliasedName, true,
+      type: const IntType(), requiredDuringInsert: false);
   final VerificationMeta _maxPlayCountMeta =
       const VerificationMeta('maxPlayCount');
   @override
-  late final GeneratedIntColumn maxPlayCount = _constructMaxPlayCount();
-  GeneratedIntColumn _constructMaxPlayCount() {
-    return GeneratedIntColumn(
-      'max_play_count',
-      $tableName,
-      true,
-    );
-  }
-
+  late final GeneratedColumn<int?> maxPlayCount = GeneratedColumn<int?>(
+      'max_play_count', aliasedName, true,
+      type: const IntType(), requiredDuringInsert: false);
   final VerificationMeta _minSkipCountMeta =
       const VerificationMeta('minSkipCount');
   @override
-  late final GeneratedIntColumn minSkipCount = _constructMinSkipCount();
-  GeneratedIntColumn _constructMinSkipCount() {
-    return GeneratedIntColumn(
-      'min_skip_count',
-      $tableName,
-      true,
-    );
-  }
-
+  late final GeneratedColumn<int?> minSkipCount = GeneratedColumn<int?>(
+      'min_skip_count', aliasedName, true,
+      type: const IntType(), requiredDuringInsert: false);
   final VerificationMeta _maxSkipCountMeta =
       const VerificationMeta('maxSkipCount');
   @override
-  late final GeneratedIntColumn maxSkipCount = _constructMaxSkipCount();
-  GeneratedIntColumn _constructMaxSkipCount() {
-    return GeneratedIntColumn(
-      'max_skip_count',
-      $tableName,
-      true,
-    );
-  }
-
+  late final GeneratedColumn<int?> maxSkipCount = GeneratedColumn<int?>(
+      'max_skip_count', aliasedName, true,
+      type: const IntType(), requiredDuringInsert: false);
   final VerificationMeta _minYearMeta = const VerificationMeta('minYear');
   @override
-  late final GeneratedIntColumn minYear = _constructMinYear();
-  GeneratedIntColumn _constructMinYear() {
-    return GeneratedIntColumn(
-      'min_year',
-      $tableName,
-      true,
-    );
-  }
-
+  late final GeneratedColumn<int?> minYear = GeneratedColumn<int?>(
+      'min_year', aliasedName, true,
+      type: const IntType(), requiredDuringInsert: false);
   final VerificationMeta _maxYearMeta = const VerificationMeta('maxYear');
   @override
-  late final GeneratedIntColumn maxYear = _constructMaxYear();
-  GeneratedIntColumn _constructMaxYear() {
-    return GeneratedIntColumn(
-      'max_year',
-      $tableName,
-      true,
-    );
-  }
-
+  late final GeneratedColumn<int?> maxYear = GeneratedColumn<int?>(
+      'max_year', aliasedName, true,
+      type: const IntType(), requiredDuringInsert: false);
   final VerificationMeta _limitMeta = const VerificationMeta('limit');
   @override
-  late final GeneratedIntColumn limit = _constructLimit();
-  GeneratedIntColumn _constructLimit() {
-    return GeneratedIntColumn(
-      'limit',
-      $tableName,
-      true,
-    );
-  }
-
+  late final GeneratedColumn<int?> limit = GeneratedColumn<int?>(
+      'limit', aliasedName, true,
+      type: const IntType(), requiredDuringInsert: false);
   final VerificationMeta _orderCriteriaMeta =
       const VerificationMeta('orderCriteria');
   @override
-  late final GeneratedTextColumn orderCriteria = _constructOrderCriteria();
-  GeneratedTextColumn _constructOrderCriteria() {
-    return GeneratedTextColumn(
-      'order_criteria',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<String?> orderCriteria = GeneratedColumn<String?>(
+      'order_criteria', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _orderDirectionsMeta =
       const VerificationMeta('orderDirections');
   @override
-  late final GeneratedTextColumn orderDirections = _constructOrderDirections();
-  GeneratedTextColumn _constructOrderDirections() {
-    return GeneratedTextColumn(
-      'order_directions',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<String?> orderDirections =
+      GeneratedColumn<String?>('order_directions', aliasedName, false,
+          type: const StringType(), requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -3065,11 +2744,9 @@ class $SmartListsTable extends SmartLists
         orderDirections
       ];
   @override
-  $SmartListsTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'smart_lists';
   @override
-  String get $tableName => _alias ?? 'smart_lists';
-  @override
-  final String actualTableName = 'smart_lists';
+  String get actualTableName => 'smart_lists';
   @override
   VerificationContext validateIntegrity(Insertable<MoorSmartList> instance,
       {bool isInserting = false}) {
@@ -3173,7 +2850,7 @@ class $SmartListsTable extends SmartLists
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   MoorSmartList map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return MoorSmartList.fromData(data, _db,
+    return MoorSmartList.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -3188,8 +2865,7 @@ class MoorSmartListArtist extends DataClass
   final int smartListId;
   final String artistName;
   MoorSmartListArtist({required this.smartListId, required this.artistName});
-  factory MoorSmartListArtist.fromData(
-      Map<String, dynamic> data, GeneratedDatabase db,
+  factory MoorSmartListArtist.fromData(Map<String, dynamic> data,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return MoorSmartListArtist(
@@ -3216,7 +2892,7 @@ class MoorSmartListArtist extends DataClass
 
   factory MoorSmartListArtist.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return MoorSmartListArtist(
       smartListId: serializer.fromJson<int>(json['smartListId']),
       artistName: serializer.fromJson<String>(json['artistName']),
@@ -3224,7 +2900,7 @@ class MoorSmartListArtist extends DataClass
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'smartListId': serializer.toJson<int>(smartListId),
       'artistName': serializer.toJson<String>(artistName),
@@ -3246,7 +2922,7 @@ class MoorSmartListArtist extends DataClass
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(smartListId.hashCode, artistName.hashCode));
+  int get hashCode => Object.hash(smartListId, artistName);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3315,34 +2991,20 @@ class $SmartListArtistsTable extends SmartListArtists
   final VerificationMeta _smartListIdMeta =
       const VerificationMeta('smartListId');
   @override
-  late final GeneratedIntColumn smartListId = _constructSmartListId();
-  GeneratedIntColumn _constructSmartListId() {
-    return GeneratedIntColumn(
-      'smart_list_id',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<int?> smartListId = GeneratedColumn<int?>(
+      'smart_list_id', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _artistNameMeta = const VerificationMeta('artistName');
   @override
-  late final GeneratedTextColumn artistName = _constructArtistName();
-  GeneratedTextColumn _constructArtistName() {
-    return GeneratedTextColumn(
-      'artist_name',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<String?> artistName = GeneratedColumn<String?>(
+      'artist_name', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [smartListId, artistName];
   @override
-  $SmartListArtistsTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'smart_list_artists';
   @override
-  String get $tableName => _alias ?? 'smart_list_artists';
-  @override
-  final String actualTableName = 'smart_list_artists';
+  String get actualTableName => 'smart_list_artists';
   @override
   VerificationContext validateIntegrity(
       Insertable<MoorSmartListArtist> instance,
@@ -3372,7 +3034,7 @@ class $SmartListArtistsTable extends SmartListArtists
   Set<GeneratedColumn> get $primaryKey => <GeneratedColumn>{};
   @override
   MoorSmartListArtist map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return MoorSmartListArtist.fromData(data, _db,
+    return MoorSmartListArtist.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -3386,8 +3048,7 @@ class MoorPlaylist extends DataClass implements Insertable<MoorPlaylist> {
   final int id;
   final String name;
   MoorPlaylist({required this.id, required this.name});
-  factory MoorPlaylist.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
+  factory MoorPlaylist.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return MoorPlaylist(
       id: const IntType()
@@ -3413,7 +3074,7 @@ class MoorPlaylist extends DataClass implements Insertable<MoorPlaylist> {
 
   factory MoorPlaylist.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return MoorPlaylist(
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
@@ -3421,7 +3082,7 @@ class MoorPlaylist extends DataClass implements Insertable<MoorPlaylist> {
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
@@ -3442,7 +3103,7 @@ class MoorPlaylist extends DataClass implements Insertable<MoorPlaylist> {
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(id.hashCode, name.hashCode));
+  int get hashCode => Object.hash(id, name);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3506,31 +3167,22 @@ class $PlaylistsTable extends Playlists
   $PlaylistsTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedIntColumn id = _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
-  late final GeneratedTextColumn name = _constructName();
-  GeneratedTextColumn _constructName() {
-    return GeneratedTextColumn(
-      'name',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
+      'name', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [id, name];
   @override
-  $PlaylistsTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'playlists';
   @override
-  String get $tableName => _alias ?? 'playlists';
-  @override
-  final String actualTableName = 'playlists';
+  String get actualTableName => 'playlists';
   @override
   VerificationContext validateIntegrity(Insertable<MoorPlaylist> instance,
       {bool isInserting = false}) {
@@ -3552,7 +3204,7 @@ class $PlaylistsTable extends Playlists
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   MoorPlaylist map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return MoorPlaylist.fromData(data, _db,
+    return MoorPlaylist.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -3571,8 +3223,7 @@ class MoorPlaylistEntry extends DataClass
       {required this.playlistId,
       required this.songPath,
       required this.position});
-  factory MoorPlaylistEntry.fromData(
-      Map<String, dynamic> data, GeneratedDatabase db,
+  factory MoorPlaylistEntry.fromData(Map<String, dynamic> data,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return MoorPlaylistEntry(
@@ -3603,7 +3254,7 @@ class MoorPlaylistEntry extends DataClass
 
   factory MoorPlaylistEntry.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return MoorPlaylistEntry(
       playlistId: serializer.fromJson<int>(json['playlistId']),
       songPath: serializer.fromJson<String>(json['songPath']),
@@ -3612,7 +3263,7 @@ class MoorPlaylistEntry extends DataClass
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'playlistId': serializer.toJson<int>(playlistId),
       'songPath': serializer.toJson<String>(songPath),
@@ -3638,8 +3289,7 @@ class MoorPlaylistEntry extends DataClass
   }
 
   @override
-  int get hashCode => $mrjf(
-      $mrjc(playlistId.hashCode, $mrjc(songPath.hashCode, position.hashCode)));
+  int get hashCode => Object.hash(playlistId, songPath, position);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3719,45 +3369,25 @@ class $PlaylistEntriesTable extends PlaylistEntries
   $PlaylistEntriesTable(this._db, [this._alias]);
   final VerificationMeta _playlistIdMeta = const VerificationMeta('playlistId');
   @override
-  late final GeneratedIntColumn playlistId = _constructPlaylistId();
-  GeneratedIntColumn _constructPlaylistId() {
-    return GeneratedIntColumn(
-      'playlist_id',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<int?> playlistId = GeneratedColumn<int?>(
+      'playlist_id', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _songPathMeta = const VerificationMeta('songPath');
   @override
-  late final GeneratedTextColumn songPath = _constructSongPath();
-  GeneratedTextColumn _constructSongPath() {
-    return GeneratedTextColumn(
-      'song_path',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<String?> songPath = GeneratedColumn<String?>(
+      'song_path', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _positionMeta = const VerificationMeta('position');
   @override
-  late final GeneratedIntColumn position = _constructPosition();
-  GeneratedIntColumn _constructPosition() {
-    return GeneratedIntColumn(
-      'position',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<int?> position = GeneratedColumn<int?>(
+      'position', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [playlistId, songPath, position];
   @override
-  $PlaylistEntriesTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'playlist_entries';
   @override
-  String get $tableName => _alias ?? 'playlist_entries';
-  @override
-  final String actualTableName = 'playlist_entries';
+  String get actualTableName => 'playlist_entries';
   @override
   VerificationContext validateIntegrity(Insertable<MoorPlaylistEntry> instance,
       {bool isInserting = false}) {
@@ -3790,7 +3420,7 @@ class $PlaylistEntriesTable extends PlaylistEntries
   Set<GeneratedColumn> get $primaryKey => <GeneratedColumn>{};
   @override
   MoorPlaylistEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return MoorPlaylistEntry.fromData(data, _db,
+    return MoorPlaylistEntry.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -3804,9 +3434,7 @@ class KeyValueEntry extends DataClass implements Insertable<KeyValueEntry> {
   final String key;
   final String value;
   KeyValueEntry({required this.key, required this.value});
-  factory KeyValueEntry.fromData(
-      Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
+  factory KeyValueEntry.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return KeyValueEntry(
       key: const StringType()
@@ -3832,7 +3460,7 @@ class KeyValueEntry extends DataClass implements Insertable<KeyValueEntry> {
 
   factory KeyValueEntry.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return KeyValueEntry(
       key: serializer.fromJson<String>(json['key']),
       value: serializer.fromJson<String>(json['value']),
@@ -3840,7 +3468,7 @@ class KeyValueEntry extends DataClass implements Insertable<KeyValueEntry> {
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'key': serializer.toJson<String>(key),
       'value': serializer.toJson<String>(value),
@@ -3861,7 +3489,7 @@ class KeyValueEntry extends DataClass implements Insertable<KeyValueEntry> {
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(key.hashCode, value.hashCode));
+  int get hashCode => Object.hash(key, value);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3929,34 +3557,20 @@ class $KeyValueEntriesTable extends KeyValueEntries
   $KeyValueEntriesTable(this._db, [this._alias]);
   final VerificationMeta _keyMeta = const VerificationMeta('key');
   @override
-  late final GeneratedTextColumn key = _constructKey();
-  GeneratedTextColumn _constructKey() {
-    return GeneratedTextColumn(
-      'key',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<String?> key = GeneratedColumn<String?>(
+      'key', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _valueMeta = const VerificationMeta('value');
   @override
-  late final GeneratedTextColumn value = _constructValue();
-  GeneratedTextColumn _constructValue() {
-    return GeneratedTextColumn(
-      'value',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<String?> value = GeneratedColumn<String?>(
+      'value', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [key, value];
   @override
-  $KeyValueEntriesTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'key_value_entries';
   @override
-  String get $tableName => _alias ?? 'key_value_entries';
-  @override
-  final String actualTableName = 'key_value_entries';
+  String get actualTableName => 'key_value_entries';
   @override
   VerificationContext validateIntegrity(Insertable<KeyValueEntry> instance,
       {bool isInserting = false}) {
@@ -3981,7 +3595,7 @@ class $KeyValueEntriesTable extends KeyValueEntries
   Set<GeneratedColumn> get $primaryKey => {key};
   @override
   KeyValueEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return KeyValueEntry.fromData(data, _db,
+    return KeyValueEntry.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 

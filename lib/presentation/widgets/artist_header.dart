@@ -24,12 +24,12 @@ class ArtistHeader extends StatelessWidget {
         icon: const Icon(Icons.chevron_left),
         onPressed: () => Navigator.pop(context),
       ),
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.more_vert),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ],
+      // actions: [
+      //   IconButton(
+      //     icon: const Icon(Icons.more_vert),
+      //     onPressed: () => Navigator.pop(context),
+      //   ),
+      // ],
       titleSpacing: 48.0,
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,

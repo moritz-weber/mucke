@@ -1,4 +1,4 @@
-import 'package:moor/moor.dart' as m;
+import 'package:drift/drift.dart' as m;
 
 import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/entities/smart_list.dart';

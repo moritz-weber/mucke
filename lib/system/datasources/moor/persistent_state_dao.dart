@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:moor/moor.dart';
+import 'package:drift/drift.dart';
 
 import '../../../constants.dart';
 import '../../../domain/entities/loop_mode.dart';
@@ -19,7 +19,7 @@ import '../persistent_state_data_source.dart';
 
 part 'persistent_state_dao.g.dart';
 
-@UseDao(tables: [
+@DriftAccessor(tables: [
   Albums,
   Artists,
   Songs,

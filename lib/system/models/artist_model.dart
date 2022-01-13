@@ -1,4 +1,4 @@
-import 'package:moor/moor.dart';
+import 'package:drift/drift.dart';
 
 import '../../domain/entities/artist.dart';
 import '../datasources/moor_database.dart';

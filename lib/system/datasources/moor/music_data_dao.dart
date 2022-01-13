@@ -1,4 +1,4 @@
-import 'package:moor/moor.dart';
+import 'package:drift/drift.dart';
 
 import '../../models/album_model.dart';
 import '../../models/artist_model.dart';
@@ -8,7 +8,7 @@ import '../music_data_source_contract.dart';
 
 part 'music_data_dao.g.dart';
 
-@UseDao(tables: [Albums, Artists, Songs, MoorAlbumOfDay, Playlists, PlaylistEntries])
+@DriftAccessor(tables: [Albums, Artists, Songs, MoorAlbumOfDay, Playlists, PlaylistEntries])
 class MusicDataDao extends DatabaseAccessor<MoorDatabase>
     with _$MusicDataDaoMixin
     implements MusicDataSource {
@@ -200,7 +200,7 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
   Future<void> setAlbumOfDay(AlbumOfDay albumOfDay) async {
     transaction(() async {
       await delete(moorAlbumOfDay).go();
-      into(moorAlbumOfDay).insert(
+      await into(moorAlbumOfDay).insert(
         MoorAlbumOfDayCompanion(
           albumId: Value(albumOfDay.albumModel.id),
           milliSecSinceEpoch: Value(albumOfDay.date.millisecondsSinceEpoch),

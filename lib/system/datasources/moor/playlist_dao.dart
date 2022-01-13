@@ -1,4 +1,4 @@
-import 'package:moor/moor.dart';
+import 'package:drift/drift.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../domain/entities/shuffle_mode.dart';
@@ -11,7 +11,7 @@ import '../playlist_data_source.dart';
 
 part 'playlist_dao.g.dart';
 
-@UseDao(tables: [Albums, Artists, Songs, Playlists, PlaylistEntries, SmartLists, SmartListArtists])
+@DriftAccessor(tables: [Albums, Artists, Songs, Playlists, PlaylistEntries, SmartLists, SmartListArtists])
 class PlaylistDao extends DatabaseAccessor<MoorDatabase>
     with _$PlaylistDaoMixin
     implements PlaylistDataSource {

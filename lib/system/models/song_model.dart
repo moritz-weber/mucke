@@ -1,7 +1,7 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:audiotagger/models/audiofile.dart';
 import 'package:audiotagger/models/tag.dart';
-import 'package:moor/moor.dart';
+import 'package:drift/drift.dart';
 
 import '../../domain/entities/song.dart';
 import '../datasources/moor_database.dart';

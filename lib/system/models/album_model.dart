@@ -1,5 +1,5 @@
 import 'package:audiotagger/models/tag.dart';
-import 'package:moor/moor.dart';
+import 'package:drift/drift.dart';
 
 import '../../domain/entities/album.dart';
 import '../datasources/moor_database.dart';

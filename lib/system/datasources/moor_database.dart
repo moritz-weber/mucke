@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 
-import 'package:moor/ffi.dart';
-import 'package:moor/isolate.dart';
-import 'package:moor/moor.dart';
+import 'package:drift/drift.dart';
+import 'package:drift/isolate.dart';
+import 'package:drift/native.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
@@ -153,7 +153,7 @@ class PlaylistEntries extends Table {
   IntColumn get position => integer()();
 }
 
-@UseMoor(
+@DriftDatabase(
   tables: [
     Albums,
     Artists,
@@ -227,11 +227,11 @@ LazyDatabase _openConnection() {
     // for your app.
     final Directory dbFolder = await getApplicationDocumentsDirectory();
     final File file = File(p.join(dbFolder.path, 'db.sqlite'));
-    return VmDatabase(file);
+    return NativeDatabase(file);
   });
 }
 
-Future<MoorIsolate> createMoorIsolate() async {
+Future<DriftIsolate> createMoorIsolate() async {
   // this method is called from the main isolate. Since we can't use
   // getApplicationDocumentsDirectory on a background isolate, we calculate
   // the database path in the foreground isolate and then inform the
@@ -246,17 +246,17 @@ Future<MoorIsolate> createMoorIsolate() async {
   );
 
   // _startBackground will send the MoorIsolate to this ReceivePort
-  return await receivePort.first as MoorIsolate;
+  return await receivePort.first as DriftIsolate;
 }
 
 void _startBackground(_IsolateStartRequest request) {
   // this is the entry point from the background isolate! Let's create
   // the database from the path we received
-  final executor = VmDatabase(File(request.targetPath));
+  final executor = NativeDatabase(File(request.targetPath));
   // we're using MoorIsolate.inCurrent here as this method already runs on a
   // background isolate. If we used MoorIsolate.spawn, a third isolate would be
   // started which is not what we want!
-  final moorIsolate = MoorIsolate.inCurrent(
+  final moorIsolate = DriftIsolate.inCurrent(
     () => DatabaseConnection.fromExecutor(executor),
   );
   // inform the starting isolate about this, so that it can call .connect()

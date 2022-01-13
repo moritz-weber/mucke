@@ -158,10 +158,13 @@ class CurrentlyPlayingPage extends StatelessWidget {
     final song = audioStore.currentSongStream.value;
     if (song == null) return;
     // TODO: EXPLORATORY
+    // TODO: why are these 2 streams behaving differently?
     final albums = await musicDataStore.albumStream.first;
-    final album = albums.singleWhere((a) => a.title == song.album);
+    final artists = musicDataStore.artistStream.value;
 
-    final artists = await musicDataStore.artistStream.first;
+    if (artists == null) return;
+
+    final album = albums.singleWhere((a) => a.title == song.album);
     final artist = artists.singleWhere((a) => a.name == album.artist);
 
     CustomModalBottomSheet()(

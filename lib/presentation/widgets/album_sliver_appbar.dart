@@ -45,12 +45,12 @@ class _AlbumSliverAppBarState extends State<AlbumSliverAppBar> {
         icon: const Icon(Icons.chevron_left),
         onPressed: () => Navigator.pop(context),
       ),
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.more_vert),
-          onPressed: () {},
-        )
-      ],
+      // actions: [
+      //   IconButton(
+      //     icon: const Icon(Icons.more_vert),
+      //     onPressed: () {},
+      //   )
+      // ],
     );
   }
 }

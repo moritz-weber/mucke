@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
           ),
           actions: [
             IconButton(
-              icon: const Icon(Icons.more_vert),
+              icon: const Icon(Icons.settings_rounded),
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(

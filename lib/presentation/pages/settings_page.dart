@@ -60,13 +60,13 @@ class SettingsPage extends StatelessWidget {
                 ),
               ),
             ),
-            const Divider(
-              height: 4.0,
-            ),
-            const SettingsSection(text: 'Home page'),
-            const ListTile(
-              title: Text('Soon (tm)'),
-            ),
+            // const Divider(
+            //   height: 4.0,
+            // ),
+            // const SettingsSection(text: 'Home page'),
+            // const ListTile(
+            //   title: Text('Soon (tm)'),
+            // ),
           ],
         ),
       ),
