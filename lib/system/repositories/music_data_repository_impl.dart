@@ -44,7 +44,9 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
 
   @override
   Future<Song> getSongByPath(String path) async {
-    return await _musicDataSource.getSongByPath(path);
+    // this method is only called from upper layers
+    // they should have no reason to access paths that are not in the database
+    return (await _musicDataSource.getSongByPath(path))!;
   }
 
   @override

@@ -1,5 +1,5 @@
-import 'package:mucke/domain/entities/playable.dart';
-import 'package:mucke/domain/entities/shuffle_mode.dart';
+import '../domain/entities/playable.dart';
+import '../domain/entities/shuffle_mode.dart';
 
 int? parseYear(String? yearString) {
   if (yearString == null || yearString == '') {

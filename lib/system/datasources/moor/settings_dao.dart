@@ -1,6 +1,5 @@
 import 'package:drift/drift.dart';
 
-import '../../../constants.dart';
 import '../moor_database.dart';
 import '../settings_data_source.dart';
 

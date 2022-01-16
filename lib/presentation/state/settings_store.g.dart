@@ -41,11 +41,29 @@ mixin _$SettingsStore on _SettingsStore, Store {
     });
   }
 
+  final _$manageExternalStorageGrantedAtom =
+      Atom(name: '_SettingsStore.manageExternalStorageGranted');
+
+  @override
+  ObservableStream<bool> get manageExternalStorageGranted {
+    _$manageExternalStorageGrantedAtom.reportRead();
+    return super.manageExternalStorageGranted;
+  }
+
+  @override
+  set manageExternalStorageGranted(ObservableStream<bool> value) {
+    _$manageExternalStorageGrantedAtom
+        .reportWrite(value, super.manageExternalStorageGranted, () {
+      super.manageExternalStorageGranted = value;
+    });
+  }
+
   @override
   String toString() {
     return '''
 smartListsStream: ${smartListsStream},
-libraryFoldersStream: ${libraryFoldersStream}
+libraryFoldersStream: ${libraryFoldersStream},
+manageExternalStorageGranted: ${manageExternalStorageGranted}
     ''';
   }
 }

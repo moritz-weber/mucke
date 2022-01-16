@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mucke/constants.dart';
 import 'package:reorderables/reorderables.dart';
 
+import '../../constants.dart';
 import '../../domain/entities/smart_list.dart';
 import '../state/settings_store.dart';
 import '../state/smart_list_form_store.dart';

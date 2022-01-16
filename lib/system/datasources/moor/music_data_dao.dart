@@ -74,9 +74,9 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
   
 
   @override
-  Future<SongModel> getSongByPath(String path) async {
-    return (select(songs)..where((t) => t.path.equals(path))).getSingle().then(
-          (moorSong) => SongModel.fromMoor(moorSong),
+  Future<SongModel?> getSongByPath(String path) async {
+    return (select(songs)..where((t) => t.path.equals(path))).getSingleOrNull().then(
+          (moorSong) => moorSong == null ? null : SongModel.fromMoor(moorSong),
         );
   }
 

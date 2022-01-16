@@ -26,6 +26,7 @@ class SongModel extends Song {
     required int skipCount,
     required int playCount,
     required DateTime timeAdded,
+    required this.lastModified,
     int? year,
   }) : super(
           album: album,
@@ -63,6 +64,7 @@ class SongModel extends Song {
         skipCount: moorSong.skipCount,
         playCount: moorSong.playCount,
         timeAdded: moorSong.timeAdded,
+        lastModified: moorSong.lastModified,
         year: moorSong.year,
       );
 
@@ -72,6 +74,7 @@ class SongModel extends Song {
     required AudioFile audioFile,
     String? albumArtPath,
     required int albumId,
+    required DateTime lastModified,
   }) {
     return SongModel(
       title: tag.title ?? DEF_TITLE,
@@ -91,38 +94,12 @@ class SongModel extends Song {
       skipCount: 0,
       year: parseYear(tag.year),
       timeAdded: DateTime.fromMillisecondsSinceEpoch(0),
-    );
-  }
-
-  // TODO: unused
-  factory SongModel.fromMediaItem(MediaItem mediaItem) {
-    final String? artUri = mediaItem.artUri?.path.replaceFirst('file://', '');
-
-    final int discNumber = mediaItem.extras!['discNumber'] as int;
-    final int trackNumber = mediaItem.extras!['trackNumber'] as int;
-
-    return SongModel(
-      album: mediaItem.album!,
-      albumId: mediaItem.extras!['albumId'] as int,
-      artist: mediaItem.artist!,
-      duration: mediaItem.duration!,
-      blockLevel: mediaItem.extras!['blockLevel'] as int,
-      path: mediaItem.id,
-      title: mediaItem.title,
-      albumArtPath: artUri,
-      discNumber: discNumber,
-      next: mediaItem.extras!['next'] as String,
-      previous: mediaItem.extras!['previous'] as String,
-      trackNumber: trackNumber,
-      year: mediaItem.extras!['year'] as int,
-      likeCount: mediaItem.extras!['likeCount'] as int,
-      playCount: mediaItem.extras!['playCount'] as int,
-      skipCount: mediaItem.extras!['skipCount'] as int,
-      timeAdded: DateTime.fromMillisecondsSinceEpoch(mediaItem.extras!['timeAdded'] as int),
+      lastModified: lastModified,
     );
   }
 
   final int albumId;
+  final DateTime lastModified;
 
   @override
   String toString() {
@@ -146,6 +123,7 @@ class SongModel extends Song {
     int? skipCount,
     int? playCount,
     DateTime? timeAdded,
+    DateTime? lastModified,
     int? year,
   }) =>
       SongModel(
@@ -165,6 +143,7 @@ class SongModel extends Song {
         skipCount: skipCount ?? this.skipCount,
         playCount: playCount ?? this.playCount, 
         timeAdded: timeAdded ?? this.timeAdded,
+        lastModified: lastModified ?? this.lastModified,
         year: year ?? this.year,
       );
 
@@ -186,6 +165,7 @@ class SongModel extends Song {
         skipCount: Value(skipCount),
         playCount: Value(playCount),
         timeAdded: Value(timeAdded),
+        lastModified: Value(lastModified),
       );
 
   SongsCompanion toMoorInsert() => SongsCompanion(
@@ -200,6 +180,7 @@ class SongModel extends Song {
         trackNumber: Value(trackNumber),
         year: Value(year),
         present: const Value(true),
+        lastModified: Value(lastModified),
       );
 
   MediaItem toMediaItem() => MediaItem(

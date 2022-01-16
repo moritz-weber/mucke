@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:mucke/domain/entities/playable.dart';
+
+import 'playable.dart';
 
 class Artist extends Equatable implements Playable {
   const Artist({

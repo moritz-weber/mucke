@@ -1,9 +1,7 @@
 import 'dart:io';
 
 import 'package:audiotagger/audiotagger.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
-import 'package:id3tag/id3tag.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../models/album_model.dart';
@@ -11,18 +9,23 @@ import '../models/artist_model.dart';
 import '../models/default_values.dart';
 import '../models/song_model.dart';
 import 'local_music_fetcher.dart';
+import 'music_data_source_contract.dart';
 import 'settings_data_source.dart';
 
 class LocalMusicFetcherImpl implements LocalMusicFetcher {
-  LocalMusicFetcherImpl(this._settingsDataSource, this._audiotagger);
+  LocalMusicFetcherImpl(this._settingsDataSource, this._audiotagger, this._musicDataSource);
 
   static final _log = FimberLog('LocalMusicFetcher');
 
   final Audiotagger _audiotagger;
   final SettingsDataSource _settingsDataSource;
+  final MusicDataSource _musicDataSource;
 
   @override
   Future<Map<String, List>> getLocalMusic() async {
+    // FIXME: it seems that songs currently loaded in queue are not updated
+    // example: when Brainwashed/Four Walls was loaded, the tags where not updated as opposed to the rest of the album
+
     final musicDirectories = await _settingsDataSource.libraryFoldersStream.first;
     final libDirs = musicDirectories.map((e) => Directory(e));
 
@@ -43,46 +46,59 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     final List<ArtistModel> artists = [];
     final Set<String> artistSet = {};
 
+    final albumsInDb = (await _musicDataSource.albumStream.first)..sort((a, b) => a.id.compareTo(b.id));
+    int newAlbumId = albumsInDb.isNotEmpty ? albumsInDb.last.id + 1 : 0;
+    _log.d('New albums start with id: $newAlbumId');
+
     final Directory dir = await getApplicationSupportDirectory();
     int count = 1;
-    Duration readTags = Duration.zero;
-    Duration handleAlbum = Duration.zero;
-
-    // final files600 = files.toSet().take(600).toList();
-    // final titles = [];
-    // final now1 = DateTime.now();
-    // await Future.wait([
-    //   compute(_readTags, {'audiotagger': Audiotagger(), 'files': files600.sublist(0, 200)})
-    //       .then((value) => titles.addAll(value)),
-    //   // compute(_readTags, {'audiotagger': Audiotagger(), 'files': files600.sublist(200, 400)})
-    //   //     .then((value) => titles.addAll(value)),
-    //   // compute(_readTags, {'audiotagger': Audiotagger(), 'files': files600.sublist(400)})
-    //   //     .then((value) => titles.addAll(value)),
-    // ]);
-    // readTags += DateTime.now().difference(now1);
-    // _log.d('${titles.length}');
+    final now1 = DateTime.now();
 
     for (final file in files.toSet()) {
       if (count % 10 == 0) _log.d('Files scanned: $count');
       count++;
 
-      final now1 = DateTime.now();
+      final fileStats = file.statSync();
+      // changed includes the creation time
+      // => also update, when the file was created later (and wasn't really changed)
+      // this is used as a workaround because android
+      // doesn't seem to return the correct modification time
+      final lastModified = _dateMax(fileStats.modified, fileStats.changed);
+      final song = await _musicDataSource.getSongByPath(file.path);
+
+      int? albumId;
+      String albumString;
+      if (song != null) {
+        if (!lastModified.isAfter(song.lastModified)) {
+          // use existing songmodel
+          songs.add(song);
+
+          final album = albumsInDb.singleWhere((a) => a.id == song.albumId);
+          albumString = '${album.title}___${album.artist}__${album.pubYear}';
+          if (!albumIdMap.containsKey(albumString)) {
+            albums.add(album);
+            albumIdMap[albumString] = album.id;
+            artistSet.add(album.artist);
+          }
+          continue;
+        } else {
+          // read new info but keep albumId
+          albumId = song.albumId;
+        }
+      }
+      // completely new song -> new album ids should start after existing ones
       final tags = await _audiotagger.readTags(path: file.path);
       final audioFile = await _audiotagger.readAudioFile(path: file.path);
-      readTags += DateTime.now().difference(now1);
 
       if (tags == null || audioFile == null) {
-        _log.i('Could not read ${file.path}');
+        _log.w('Could not read ${file.path}');
         continue;
       }
+      albumString = '${tags.album}___${tags.albumArtist}__${tags.year}';
 
-      final albumString = '${tags.album}___${tags.albumArtist}__${tags.year}';
-
-      int albumId;
       String? albumArtPath;
       if (!albumIdMap.containsKey(albumString)) {
-        final now2 = DateTime.now();
-        albumId = albumIdMap.length;
+        albumId ??= newAlbumId++;
         albumIdMap[albumString] = albumId;
 
         final albumArt = await _audiotagger.readArtwork(path: file.path);
@@ -100,7 +116,6 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
         final String albumArtist = tags.albumArtist ?? '';
         final String artist = tags.artist ?? '';
         artistSet.add(albumArtist != '' ? albumArtist : (artist != '' ? artist : DEF_ARTIST));
-        handleAlbum += DateTime.now().difference(now2);
       } else {
         albumId = albumIdMap[albumString]!;
         albumArtPath = albumArtMap[albumString];
@@ -113,6 +128,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
           audioFile: audioFile,
           albumId: albumId,
           albumArtPath: albumArtPath,
+          lastModified: lastModified,
         ),
       );
     }
@@ -121,8 +137,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
       artists.add(ArtistModel(name: artist));
     }
 
-    _log.d(readTags.toString());
-    _log.d(handleAlbum.toString());
+    _log.d(DateTime.now().difference(now1).toString());
 
     return {
       'SONGS': songs,
@@ -151,4 +166,9 @@ Future<List<String>> _readTags(Map<String, dynamic> args) async {
     }
   }
   return result;
+}
+
+DateTime _dateMax(DateTime a, DateTime b) {
+  if (a.isAfter(b)) return a;
+  return b;
 }

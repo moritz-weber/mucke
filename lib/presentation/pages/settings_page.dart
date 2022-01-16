@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
 import '../state/music_data_store.dart';
+import '../state/settings_store.dart';
 import '../theming.dart';
 import 'library_folders_page.dart';
 
@@ -12,6 +13,7 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
+    final SettingsStore settingsStore = GetIt.I<SettingsStore>();
 
     return SafeArea(
       child: Scaffold(
@@ -60,9 +62,24 @@ class SettingsPage extends StatelessWidget {
                 ),
               ),
             ),
-            // const Divider(
-            //   height: 4.0,
-            // ),
+            const Divider(
+              height: 4.0,
+            ),
+            Observer(
+              builder: (context) => SwitchListTile(
+                value: settingsStore.manageExternalStorageGranted.value ?? false,
+                onChanged: settingsStore.setManageExternalStorageGranted,
+                title: const Text('Grant permission to manage all files'),
+                subtitle: const Text(
+                  'This permission can improve library updates in some cases. Revoking the permission will result in a restart of mucke.',
+                  style: TEXT_SMALL_SUBTITLE,
+                ),
+                isThreeLine: true,
+              ),
+            ),
+            const Divider(
+              height: 4.0,
+            ),
             // const SettingsSection(text: 'Home page'),
             // const ListTile(
             //   title: Text('Soon (tm)'),

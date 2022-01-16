@@ -30,6 +30,12 @@ abstract class _SettingsStore with Store {
   late ObservableStream<List<String>> libraryFoldersStream =
       _settingsRepository.libraryFoldersStream.asObservable(initialValue: []);
 
+  @observable
+  late ObservableStream<bool> manageExternalStorageGranted =
+      _settingsRepository.manageExternalStorageGranted.asObservable(
+    initialValue: _settingsRepository.manageExternalStorageGranted.valueOrNull ?? false,
+  );
+
   Future<void> addLibraryFolder(String? path) async {
     await _settingsRepository.addLibraryFolder(path);
   }
@@ -40,6 +46,10 @@ abstract class _SettingsStore with Store {
 
   Future<void> removeSmartList(SmartList smartList) async {
     await _musicDataRepository.removeSmartList(smartList);
+  }
+
+  Future<void> setManageExternalStorageGranted(bool granted) async {
+    await _settingsRepository.setManageExternalStorageGranted(granted);
   }
 
   void dispose() {}

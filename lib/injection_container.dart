@@ -86,12 +86,12 @@ Future<void> setupGetIt() async {
     ),
   );
   getIt.registerFactoryParam<ArtistPageStore, Artist, void>(
-    (Artist? artist, _) => ArtistPageStore(artist: artist!, musicDataInfoRepository: getIt()),
+    (Artist artist, _) => ArtistPageStore(artist: artist, musicDataInfoRepository: getIt()),
   );
   getIt.registerFactoryParam<AlbumPageStore, Album, void>(
-    (Album? album, _) => AlbumPageStore(album: album!, musicDataInfoRepository: getIt()),
+    (Album album, _) => AlbumPageStore(album: album, musicDataInfoRepository: getIt()),
   );
-  getIt.registerFactoryParam<SmartListFormStore, SmartList, void>(
+  getIt.registerFactoryParam<SmartListFormStore, SmartList?, void>(
     (SmartList? smartList, _) =>
         SmartListFormStore(musicDataRepository: getIt(), smartList: smartList),
   );
@@ -204,6 +204,7 @@ Future<void> setupGetIt() async {
   getIt.registerLazySingleton<PlaylistDataSource>(() => moorDatabase.playlistDao);
   getIt.registerLazySingleton<LocalMusicFetcher>(
     () => LocalMusicFetcherImpl(
+      getIt(),
       getIt(),
       getIt(),
     ),
