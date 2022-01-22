@@ -31,14 +31,17 @@ class SongCustomizationButtons extends StatelessWidget {
               IconButton(
                 icon: Icon(
                   song.next == '' && song.previous == '' ? Icons.link_off : Icons.link,
-                  color: _linkColor(song),
+                  color: linkColor(song),
                 ),
                 iconSize: 20.0,
                 onPressed: () => _editLinks(context),
                 visualDensity: VisualDensity.compact,
               ),
-              const LikeButton(
-                iconSize: 20.0,
+              Observer(
+                builder: (context) => LikeButton(
+                  iconSize: 20.0,
+                  song: song,
+                ),
               ),
               IconButton(
                 icon: Icon(
@@ -57,17 +60,6 @@ class SongCustomizationButtons extends StatelessWidget {
     );
   }
 
-  Color _linkColor(Song song) {
-    if (song.next != '' && song.previous != '') {
-      return LIGHT1;
-    } else if (song.next != '') {
-      return Colors.red;
-    } else if (song.previous != '') {
-      return Colors.blue;
-    }
-    return Colors.white24;
-  }
-
   void _editLinks(BuildContext context) {
     final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
     final AudioStore audioStore = GetIt.I<AudioStore>();
@@ -80,7 +72,7 @@ class SongCustomizationButtons extends StatelessWidget {
           if (song == null) return Container();
           return SwitchListTile(
             title: const Text('Always play previous song before'),
-            value: song.previous != '',
+            value: song.previous,
             onChanged: (bool value) {
               musicDataStore.togglePreviousSongLink(song);
             },
@@ -91,7 +83,7 @@ class SongCustomizationButtons extends StatelessWidget {
           if (song == null) return Container();
           return SwitchListTile(
             title: const Text('Always play next song after'),
-            value: song.next != '',
+            value: song.next,
             onChanged: (bool value) {
               musicDataStore.toggleNextSongLink(song);
             },

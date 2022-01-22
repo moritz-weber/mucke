@@ -92,6 +92,11 @@ const TextStyle TEXT_HEADER = TextStyle(
   fontWeight: FontWeight.bold,
 );
 
+const TextStyle TEXT_HEADER_S = TextStyle(
+  fontSize: 18.0,
+  fontWeight: FontWeight.bold,
+);
+
 const TextStyle TEXT_BIG = TextStyle(
   fontSize: 22.0,
   fontWeight: FontWeight.bold,

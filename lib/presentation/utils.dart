@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+import '../domain/entities/song.dart';
 import 'mucke_icons.dart';
+import 'theming.dart';
 
 ImageProvider getAlbumImage(String? albumArtPath) {
   // return Image.asset('assets/no_cover.png');
@@ -51,6 +53,10 @@ IconData blockLevelIcon(int blockLevel) {
   }
 }
 
+Color blockLevelColor(int blockLevel) {
+  return blockLevel == 0 ? Colors.white24 : Colors.white;
+}
+
 const _LIKE_COUNT_ICONS = [
   Icons.favorite_border_rounded,
   MuckeIcons.favorite_1_3,
@@ -60,4 +66,19 @@ const _LIKE_COUNT_ICONS = [
 
 IconData likeCountIcon(int likeCount) {
   return _LIKE_COUNT_ICONS[likeCount];
+}
+
+Color likeCountColor(int likeCount) {
+  return likeCount == 3 ? LIGHT2 : Colors.white.withOpacity(0.24 + 0.18 * likeCount);
+}
+
+Color linkColor(Song song) {
+  if (song.next && song.previous) {
+    return LIGHT2;
+  } else if (song.next) {
+    return Colors.red;
+  } else if (song.previous) {
+    return Colors.blue;
+  }
+  return Colors.white24;
 }

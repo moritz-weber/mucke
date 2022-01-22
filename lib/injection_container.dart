@@ -9,6 +9,7 @@ import 'domain/actors/platform_integration_actor.dart';
 import 'domain/entities/album.dart';
 import 'domain/entities/artist.dart';
 import 'domain/entities/smart_list.dart';
+import 'domain/entities/song.dart';
 import 'domain/modules/dynamic_queue.dart';
 import 'domain/repositories/audio_player_repository.dart';
 import 'domain/repositories/music_data_repository.dart';
@@ -31,6 +32,7 @@ import 'presentation/state/search_page_store.dart';
 import 'presentation/state/settings_store.dart';
 import 'presentation/state/smart_list_form_store.dart';
 import 'presentation/state/smart_list_page_store.dart';
+import 'presentation/state/song_store.dart';
 import 'system/datasources/audio_player_data_source.dart';
 import 'system/datasources/audio_player_data_source_impl.dart';
 import 'system/datasources/local_music_fetcher.dart';
@@ -84,6 +86,9 @@ Future<void> setupGetIt() async {
       settingsRepository: getIt(),
       musicDataRepository: getIt(),
     ),
+  );
+  getIt.registerFactoryParam<SongStore, Song, void>(
+    (Song song, _) => SongStore(song: song, musicDataInfoRepository: getIt()),
   );
   getIt.registerFactoryParam<ArtistPageStore, Artist, void>(
     (Artist artist, _) => ArtistPageStore(artist: artist, musicDataInfoRepository: getIt()),

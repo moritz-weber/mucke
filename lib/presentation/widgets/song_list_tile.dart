@@ -109,11 +109,7 @@ class SongListTile extends StatelessWidget {
           Icon(
             likeCountIcon(song.likeCount),
             size: 16.0,
-            color: song.likeCount == 3
-                ? LIGHT2
-                : Colors.white.withOpacity(
-                    0.2 + 0.18 * song.likeCount,
-                  ),
+            color: utils.likeCountColor(song.likeCount),
           ),
           IconButton(
             icon: const Icon(Icons.more_vert),

@@ -1,6 +1,6 @@
 import 'package:mobx/mobx.dart';
-import '../../constants.dart';
 
+import '../../constants.dart';
 import '../../domain/entities/artist.dart';
 import '../../domain/entities/smart_list.dart';
 import '../../domain/repositories/music_data_repository.dart';
@@ -187,8 +187,6 @@ abstract class _SmartListStore with Store {
   void _validateLimit(bool enabled, String number) {
     error.limit = validateNumber(enabled, number);
   }
-
-  
 
   Future<void> _createSmartList() async {
     await _musicDataRepository.insertSmartList(

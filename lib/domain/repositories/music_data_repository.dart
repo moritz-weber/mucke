@@ -9,7 +9,8 @@ abstract class MusicDataInfoRepository {
   Stream<Map<String, Song>> get songUpdateStream;
 
   Future<Song> getSongByPath(String path);
-  Stream<List<Song>> get songStream;
+  Stream<Song> getSongStream(String path);
+  Stream<List<Song>> get songsStream;
   Stream<List<Song>> getAlbumSongStream(Album album);
   Stream<List<Song>> getArtistSongStream(Artist artist);
   Stream<List<Song>> getArtistHighlightedSongStream(Artist artist);

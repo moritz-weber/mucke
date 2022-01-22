@@ -50,7 +50,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   }
 
   @override
-  Stream<List<Song>> get songStream => _songSubject.stream;
+  Stream<List<Song>> get songsStream => _songSubject.stream;
 
   @override
   Stream<List<Album>> get albumStream => _musicDataSource.albumStream;
@@ -174,11 +174,11 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   @override
   Future<Song> toggleNextSongLink(Song song) async {
     SongModel newSong;
-    if (song.next == '') {
+    if (!song.next) {
       final successor = await _musicDataSource.getSuccessor(song as SongModel);
-      newSong = song.copyWith(next: successor?.path ?? '');
+      newSong = song.copyWith(next: successor != null);
     } else {
-      newSong = (song as SongModel).copyWith(next: '');
+      newSong = (song as SongModel).copyWith(next: false);
     }
     _songUpdateSubject.add({song.path: newSong});
     await _musicDataSource.updateSong(newSong);
@@ -188,11 +188,11 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   @override
   Future<Song> togglePreviousSongLink(Song song) async {
     SongModel newSong;
-    if (song.previous == '') {
+    if (!song.previous) {
       final predecessor = await _musicDataSource.getPredecessor(song as SongModel);
-      newSong = song.copyWith(previous: predecessor?.path ?? '');
+      newSong = song.copyWith(previous: predecessor != null);
     } else {
-      newSong = (song as SongModel).copyWith(previous: '');
+      newSong = (song as SongModel).copyWith(previous: false);
     }
     _songUpdateSubject.add({song.path: newSong});
     await _musicDataSource.updateSong(newSong);
@@ -202,10 +202,11 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   @override
   Future<List<Song>> getPredecessors(Song song) async {
     final List<Song> songs = [];
-    Song currentSong = song;
+    Song? currentSong = song;
 
-    while (currentSong.previous != '') {
-      currentSong = await getSongByPath(currentSong.previous);
+    while (currentSong!.previous) {
+      currentSong = await _musicDataSource.getPredecessor(currentSong as SongModel);
+      if (currentSong == null) break;
       songs.add(currentSong);
     }
 
@@ -215,10 +216,11 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   @override
   Future<List<Song>> getSuccessors(Song song) async {
     final List<Song> songs = [];
-    Song currentSong = song;
+    Song? currentSong = song;
 
-    while (currentSong.next != '') {
-      currentSong = await getSongByPath(currentSong.next);
+    while (currentSong!.next) {
+      currentSong = await _musicDataSource.getSuccessor(currentSong as SongModel);
+      if (currentSong == null) break;
       songs.add(currentSong);
     }
 
@@ -385,5 +387,10 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
         shuffleMode: smartList.shuffleMode,
       ),
     );
+  }
+
+  @override
+  Stream<Song> getSongStream(String path) {
+    return _musicDataSource.getSongStream(path);
   }
 }

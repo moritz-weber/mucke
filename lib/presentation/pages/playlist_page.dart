@@ -57,7 +57,15 @@ class PlaylistPage extends StatelessWidget {
                               showAlbum: true,
                               subtitle: Subtitle.artistAlbum,
                               onTap: () => audioStore.playSong(index, uPlaylist.songs, uPlaylist),
-                              onTapMore: () => SongBottomSheet()(song, context),
+                              onTapMore: () => showModalBottomSheet(
+                                  context: context,
+                                  useRootNavigator: true,
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.transparent,
+                                  builder: (context) => SongBottomSheet(
+                                    song: song,
+                                  ),
+                                ),
                             ),
                             onDismissed: (direction) {
                               musicDataStore.removePlaylistEntry(uPlaylist.id, index);

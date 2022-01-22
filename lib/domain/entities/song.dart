@@ -37,8 +37,8 @@ class Song extends Equatable {
   final int discNumber;
   final int trackNumber;
   
-  final String next;
-  final String previous;
+  final bool next;
+  final bool previous;
 
   final String? albumArtPath;
   final int? year;

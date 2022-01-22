@@ -18,6 +18,8 @@ class SongsPage extends StatefulWidget {
 }
 
 class _SongsPageState extends State<SongsPage> with AutomaticKeepAliveClientMixin {
+  final ScrollController _scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     print('SongsPage.build');
@@ -34,7 +36,9 @@ class _SongsPageState extends State<SongsPage> with AutomaticKeepAliveClientMixi
         case StreamStatus.active:
           final List<Song> songs = songStream.value ?? [];
           return Scrollbar(
+            controller: _scrollController,
             child: ListView.separated(
+              controller: _scrollController,
               itemCount: songs.length,
               itemBuilder: (_, int index) {
                 final Song song = songs[index];
@@ -43,7 +47,15 @@ class _SongsPageState extends State<SongsPage> with AutomaticKeepAliveClientMixi
                   showAlbum: true,
                   subtitle: Subtitle.artistAlbum,
                   onTap: () => audioStore.playSong(index, songs, AllSongs()),
-                  onTapMore: () => SongBottomSheet()(song, context),
+                  onTapMore: () => showModalBottomSheet(
+                  context: context,
+                  useRootNavigator: true,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (context) => SongBottomSheet(
+                    song: song,
+                  ),
+                ),
                 );
               },
               separatorBuilder: (BuildContext context, int index) => const SizedBox(

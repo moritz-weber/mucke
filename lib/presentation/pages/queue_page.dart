@@ -80,7 +80,15 @@ class QueuePage extends StatelessWidget {
                                   await audioStore.seekToIndex(index);
                                   audioStore.play();
                                 },
-                                onTapMore: () => SongBottomSheet()(song, context),
+                                onTapMore: () => showModalBottomSheet(
+                                  context: context,
+                                  useRootNavigator: true,
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.transparent,
+                                  builder: (context) => SongBottomSheet(
+                                    song: song,
+                                  ),
+                                ),
                               ),
                               onDismissed: (direction) {
                                 audioStore.removeQueueIndex(index);

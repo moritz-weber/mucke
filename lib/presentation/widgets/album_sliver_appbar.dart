@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import '../../domain/entities/album.dart';
 import '../../domain/entities/song.dart';
 import '../utils.dart' as utils;
-import '../utils.dart';
 
 class AlbumSliverAppBar extends StatefulWidget {
   const AlbumSliverAppBar({
@@ -149,7 +148,7 @@ class Header extends StatelessWidget {
                 fontSize: Tween<double>(begin: 16, end: 24).evaluate(animation),
                 color: Colors.white,
                 fontWeight: FontWeight.lerp(
-                  FontWeight.w300,
+                  FontWeight.w400,
                   FontWeight.w600,
                   Tween<double>(begin: 0, end: 1).evaluate(animation),
                 ),
@@ -170,7 +169,7 @@ class Header extends StatelessWidget {
               ),
             ),
             Text(
-              '${album.pubYear.toString()} • ${songs.length} Songs • ${msToTimeString(totalDuration)}',
+              '${album.pubYear.toString()} • ${songs.length} Songs • ${utils.msToTimeString(totalDuration)}',
               style: TextStyle(
                 fontSize: Tween<double>(begin: 0, end: 13).evaluate(animation),
                 color:

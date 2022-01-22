@@ -1162,8 +1162,8 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
   final bool present;
   final DateTime timeAdded;
   final DateTime lastModified;
-  final String previous;
-  final String next;
+  final bool previous;
+  final bool next;
   MoorSong(
       {required this.title,
       required this.albumTitle,
@@ -1221,9 +1221,9 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
           .mapFromDatabaseResponse(data['${effectivePrefix}time_added'])!,
       lastModified: const DateTimeType()
           .mapFromDatabaseResponse(data['${effectivePrefix}last_modified'])!,
-      previous: const StringType()
+      previous: const BoolType()
           .mapFromDatabaseResponse(data['${effectivePrefix}previous'])!,
-      next: const StringType()
+      next: const BoolType()
           .mapFromDatabaseResponse(data['${effectivePrefix}next'])!,
     );
   }
@@ -1251,8 +1251,8 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
     map['present'] = Variable<bool>(present);
     map['time_added'] = Variable<DateTime>(timeAdded);
     map['last_modified'] = Variable<DateTime>(lastModified);
-    map['previous'] = Variable<String>(previous);
-    map['next'] = Variable<String>(next);
+    map['previous'] = Variable<bool>(previous);
+    map['next'] = Variable<bool>(next);
     return map;
   }
 
@@ -1303,8 +1303,8 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
       present: serializer.fromJson<bool>(json['present']),
       timeAdded: serializer.fromJson<DateTime>(json['timeAdded']),
       lastModified: serializer.fromJson<DateTime>(json['lastModified']),
-      previous: serializer.fromJson<String>(json['previous']),
-      next: serializer.fromJson<String>(json['next']),
+      previous: serializer.fromJson<bool>(json['previous']),
+      next: serializer.fromJson<bool>(json['next']),
     );
   }
   @override
@@ -1328,8 +1328,8 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
       'present': serializer.toJson<bool>(present),
       'timeAdded': serializer.toJson<DateTime>(timeAdded),
       'lastModified': serializer.toJson<DateTime>(lastModified),
-      'previous': serializer.toJson<String>(previous),
-      'next': serializer.toJson<String>(next),
+      'previous': serializer.toJson<bool>(previous),
+      'next': serializer.toJson<bool>(next),
     };
   }
 
@@ -1351,8 +1351,8 @@ class MoorSong extends DataClass implements Insertable<MoorSong> {
           bool? present,
           DateTime? timeAdded,
           DateTime? lastModified,
-          String? previous,
-          String? next}) =>
+          bool? previous,
+          bool? next}) =>
       MoorSong(
         title: title ?? this.title,
         albumTitle: albumTitle ?? this.albumTitle,
@@ -1464,8 +1464,8 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
   final Value<bool> present;
   final Value<DateTime> timeAdded;
   final Value<DateTime> lastModified;
-  final Value<String> previous;
-  final Value<String> next;
+  final Value<bool> previous;
+  final Value<bool> next;
   const SongsCompanion({
     this.title = const Value.absent(),
     this.albumTitle = const Value.absent(),
@@ -1534,8 +1534,8 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
     Expression<bool>? present,
     Expression<DateTime>? timeAdded,
     Expression<DateTime>? lastModified,
-    Expression<String>? previous,
-    Expression<String>? next,
+    Expression<bool>? previous,
+    Expression<bool>? next,
   }) {
     return RawValuesInsertable({
       if (title != null) 'title': title,
@@ -1578,8 +1578,8 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
       Value<bool>? present,
       Value<DateTime>? timeAdded,
       Value<DateTime>? lastModified,
-      Value<String>? previous,
-      Value<String>? next}) {
+      Value<bool>? previous,
+      Value<bool>? next}) {
     return SongsCompanion(
       title: title ?? this.title,
       albumTitle: albumTitle ?? this.albumTitle,
@@ -1658,10 +1658,10 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
       map['last_modified'] = Variable<DateTime>(lastModified.value);
     }
     if (previous.present) {
-      map['previous'] = Variable<String>(previous.value);
+      map['previous'] = Variable<bool>(previous.value);
     }
     if (next.present) {
-      map['next'] = Variable<String>(next.value);
+      map['next'] = Variable<bool>(next.value);
     }
     return map;
   }
@@ -1782,17 +1782,19 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
       GeneratedColumn<DateTime?>('last_modified', aliasedName, false,
           typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _previousMeta = const VerificationMeta('previous');
-  late final GeneratedColumn<String?> previous = GeneratedColumn<String?>(
+  late final GeneratedColumn<bool?> previous = GeneratedColumn<bool?>(
       'previous', aliasedName, false,
-      typeName: 'TEXT',
+      typeName: 'INTEGER',
       requiredDuringInsert: false,
-      defaultValue: const Constant(''));
+      defaultConstraints: 'CHECK (previous IN (0, 1))',
+      defaultValue: const Constant(false));
   final VerificationMeta _nextMeta = const VerificationMeta('next');
-  late final GeneratedColumn<String?> next = GeneratedColumn<String?>(
+  late final GeneratedColumn<bool?> next = GeneratedColumn<bool?>(
       'next', aliasedName, false,
-      typeName: 'TEXT',
+      typeName: 'INTEGER',
       requiredDuringInsert: false,
-      defaultValue: const Constant(''));
+      defaultConstraints: 'CHECK (next IN (0, 1))',
+      defaultValue: const Constant(false));
   @override
   List<GeneratedColumn> get $columns => [
         title,

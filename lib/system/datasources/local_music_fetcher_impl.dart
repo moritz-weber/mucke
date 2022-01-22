@@ -46,7 +46,8 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     final List<ArtistModel> artists = [];
     final Set<String> artistSet = {};
 
-    final albumsInDb = (await _musicDataSource.albumStream.first)..sort((a, b) => a.id.compareTo(b.id));
+    final albumsInDb = (await _musicDataSource.albumStream.first)
+      ..sort((a, b) => a.id.compareTo(b.id));
     int newAlbumId = albumsInDb.isNotEmpty ? albumsInDb.last.id + 1 : 0;
     _log.d('New albums start with id: $newAlbumId');
 
@@ -78,6 +79,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
           if (!albumIdMap.containsKey(albumString)) {
             albums.add(album);
             albumIdMap[albumString] = album.id;
+            if (album.albumArtPath != null) albumArtMap[albumString] = album.albumArtPath!;
             artistSet.add(album.artist);
           }
           continue;
@@ -117,7 +119,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
         final String artist = tags.artist ?? '';
         artistSet.add(albumArtist != '' ? albumArtist : (artist != '' ? artist : DEF_ARTIST));
       } else {
-        albumId = albumIdMap[albumString]!;
+        albumId ??= albumIdMap[albumString]!;
         albumArtPath = albumArtMap[albumString];
       }
 

@@ -59,8 +59,8 @@ class Songs extends Table {
   DateTimeColumn get timeAdded => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get lastModified => dateTime()();
 
-  TextColumn get previous => text().withDefault(const Constant(''))();
-  TextColumn get next => text().withDefault(const Constant(''))();
+  BoolColumn get previous => boolean().withDefault(const Constant(false))();
+  BoolColumn get next => boolean().withDefault(const Constant(false))();
 
   @override
   Set<Column> get primaryKey => {path};
@@ -187,7 +187,7 @@ class MoorDatabase extends _$MoorDatabase {
   MoorDatabase.connect(DatabaseConnection connection) : super.connect(connection);
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(beforeOpen: (details) async {
@@ -223,6 +223,14 @@ class MoorDatabase extends _$MoorDatabase {
           await m.alterTable(
             TableMigration(songs, columnTransformer: {
               songs.lastModified: Constant(DateTime.fromMillisecondsSinceEpoch(0)),
+            }),
+          );
+        }
+        if (from < 4) {
+          await m.alterTable(
+            TableMigration(songs, columnTransformer: {
+              songs.previous: const Constant(false),
+              songs.next: const Constant(false),
             }),
           );
         }

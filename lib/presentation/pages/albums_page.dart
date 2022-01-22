@@ -16,6 +16,8 @@ class AlbumsPage extends StatefulWidget {
 }
 
 class _AlbumsPageState extends State<AlbumsPage> with AutomaticKeepAliveClientMixin {
+  final ScrollController _scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     print('AlbumsPage.build');
@@ -27,7 +29,9 @@ class _AlbumsPageState extends State<AlbumsPage> with AutomaticKeepAliveClientMi
       print('AlbumsPage.build -> Observer.builder');
       final List<Album> albums = store.albumStream.value ?? [];
       return Scrollbar(
+        controller: _scrollController,
         child: ListView.separated(
+          controller: _scrollController,
           itemCount: albums.length,
           itemBuilder: (_, int index) {
             final Album album = albums[index];

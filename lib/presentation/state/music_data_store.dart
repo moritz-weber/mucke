@@ -31,7 +31,7 @@ abstract class _MusicDataStore with Store {
 
   @observable
   late ObservableStream<List<Song>> songStream =
-      _musicDataRepository.songStream.asObservable(initialValue: []);
+      _musicDataRepository.songsStream.asObservable(initialValue: []);
 
   @observable
   late ObservableStream<List<Album>> albumStream =
@@ -60,11 +60,10 @@ abstract class _MusicDataStore with Store {
 
   Future<void> setSongBlocked(Song song, int blockLevel) => _setSongBlocked(song, blockLevel);
 
-  Future<void> toggleNextSongLink(Song song) async =>
-      await _musicDataRepository.toggleNextSongLink(song);
+  Future<void> toggleNextSongLink(Song song) => _musicDataRepository.toggleNextSongLink(song);
 
-  Future<void> togglePreviousSongLink(Song song) async =>
-      await _musicDataRepository.togglePreviousSongLink(song);
+  Future<void> togglePreviousSongLink(Song song) =>
+      _musicDataRepository.togglePreviousSongLink(song);
 
   Future<void> incrementLikeCount(Song song) => _musicDataRepository.incrementLikeCount(song);
 

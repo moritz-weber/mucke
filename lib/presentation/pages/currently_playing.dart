@@ -5,19 +5,14 @@ import 'package:get_it/get_it.dart';
 
 import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
-import '../state/music_data_store.dart';
-import '../state/navigation_store.dart';
 import '../theming.dart';
 import '../widgets/album_art.dart';
 import '../widgets/album_background.dart';
 import '../widgets/currently_playing_header.dart';
-import '../widgets/custom_modal_bottom_sheet.dart';
 import '../widgets/playback_control.dart';
+import '../widgets/song_bottom_sheet.dart';
 import '../widgets/song_customization_buttons.dart';
-import '../widgets/song_info.dart';
 import '../widgets/time_progress_indicator.dart';
-import 'album_details_page.dart';
-import 'artist_details_page.dart';
 import 'queue_page.dart';
 
 class CurrentlyPlayingPage extends StatelessWidget {
@@ -152,87 +147,20 @@ class CurrentlyPlayingPage extends StatelessWidget {
 
   Future<void> _openMoreMenu(BuildContext context) async {
     final AudioStore audioStore = GetIt.I<AudioStore>();
-    final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
-    final NavigationStore navStore = GetIt.I<NavigationStore>();
 
     final song = audioStore.currentSongStream.value;
     if (song == null) return;
-    // TODO: EXPLORATORY
-    // TODO: why are these 2 streams behaving differently?
-    final albums = await musicDataStore.albumStream.first;
-    final artists = musicDataStore.artistStream.value;
 
-    if (artists == null) return;
-
-    final album = albums.singleWhere((a) => a.title == song.album);
-    final artist = artists.singleWhere((a) => a.name == album.artist);
-
-    CustomModalBottomSheet()(
-      context,
-      [
-        ListTile(
-          title: const Text('Show song info'),
-          leading: const Icon(Icons.info),
-          onTap: () {
-            Navigator.pop(context);
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return SimpleDialog(
-                  backgroundColor: DARK3,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(HORIZONTAL_PADDING),
-                      child: SongInfo(song),
-                    ),
-                    SimpleDialogOption(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text(
-                        'Close',
-                        textAlign: TextAlign.right,
-                      ),
-                    ),
-                  ],
-                );
-              },
-            );
-          },
-        ),
-        ListTile(
-          title: const Text('Go to artist'),
-          leading: const Icon(Icons.person_rounded),
-          trailing: const Icon(Icons.chevron_right_rounded),
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.pop(context);
-            navStore.pushOnLibrary(
-              MaterialPageRoute<Widget>(
-                builder: (BuildContext context) => ArtistDetailsPage(
-                  artist: artist,
-                ),
-              ),
-            );
-          },
-        ),
-        ListTile(
-          title: const Text('Go to album'),
-          leading: const Icon(Icons.album_rounded),
-          trailing: const Icon(Icons.chevron_right_rounded),
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.pop(context);
-            navStore.pushOnLibrary(
-              MaterialPageRoute<Widget>(
-                builder: (BuildContext context) => AlbumDetailsPage(
-                  album: album,
-                ),
-              ),
-            );
-          },
-        ),
-      ],
+    showModalBottomSheet(
+      context: context,
+      useRootNavigator: true,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => SongBottomSheet(
+        song: song,
+        enableQueueActions: false,
+        enableSongCustomization: false,
+      ),
     );
   }
 }

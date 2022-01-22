@@ -98,7 +98,15 @@ class _SearchPageState extends State<SearchPage> {
                       song: song,
                       onTap: () => audioStore.playSong(
                           0, [song], SearchQuery('query')), // TODO: include correct query
-                      onTapMore: () => SongBottomSheet()(song, context),
+                      onTapMore: () => showModalBottomSheet(
+                        context: context,
+                        useRootNavigator: true,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) => SongBottomSheet(
+                          song: song,
+                        ),
+                      ),
                     );
                   } else if (results[index] is Album) {
                     final album = results[index] as Album;

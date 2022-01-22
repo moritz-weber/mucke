@@ -34,7 +34,16 @@ class ArtistHighlightedSongs extends StatelessWidget {
                 showAlbum: true,
                 subtitle: Subtitle.stats,
                 onTap: () => audioStore.playSong(index, songs, artistPageStore.artist),
-                onTapMore: () => SongBottomSheet()(song, context),
+                onTapMore: () => showModalBottomSheet(
+                  context: context,
+                  useRootNavigator: true,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (context) => SongBottomSheet(
+                    song: song,
+                    enableGoToArtist: false,
+                  ),
+                ),
               );
             },
             childCount: songsHead.length,

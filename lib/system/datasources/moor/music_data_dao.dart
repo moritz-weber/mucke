@@ -71,8 +71,6 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
         );
   }
 
-  
-
   @override
   Future<SongModel?> getSongByPath(String path) async {
     return (select(songs)..where((t) => t.path.equals(path))).getSingleOrNull().then(
@@ -174,8 +172,10 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
 
   @override
   Future<void> updateSong(SongModel songModel) async {
+    final companion = songModel.toSongsCompanion();
+    
     await (update(songs)..where((tbl) => tbl.path.equals(songModel.path)))
-        .write(songModel.toSongsCompanion());
+        .write(companion);
   }
 
   @override
@@ -236,5 +236,12 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
 
     if (limit <= 0) return result;
     return result.take(limit).toList();
+  }
+
+  @override
+  Stream<SongModel> getSongStream(String path) {
+    return (select(songs)..where((t) => t.path.equals(path))).watchSingle().map(
+          (moorSong) => SongModel.fromMoor(moorSong),
+        );
   }
 }

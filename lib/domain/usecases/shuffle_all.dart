@@ -22,7 +22,7 @@ class ShuffleAll {
   final MusicDataRepository _musicDataRepository;
 
   Future<void> call() async {
-    final List<Song> songs = await _musicDataRepository.songStream.first;
+    final List<Song> songs = await _musicDataRepository.songsStream.first;
     final rng = Random();
     final index = rng.nextInt(songs.length);
 

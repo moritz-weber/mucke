@@ -23,6 +23,8 @@ class PlaylistsPage extends StatefulWidget {
 }
 
 class _PlaylistsPageState extends State<PlaylistsPage> with AutomaticKeepAliveClientMixin {
+  final ScrollController _scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     print('PlaylistsPage.build');
@@ -37,42 +39,46 @@ class _PlaylistsPageState extends State<PlaylistsPage> with AutomaticKeepAliveCl
       final smartLists = settingsStore.smartListsStream.value ?? [];
       final playlists = musicDataStore.playlistsStream.value ?? [];
       return Scaffold(
-        body: ListView.separated(
-          itemCount: smartLists.length + playlists.length,
-          itemBuilder: (_, int index) {
-            if (index < smartLists.length) {
-              final SmartList smartList = smartLists[index];
-              return ListTile(
-                title: Text(smartList.name),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => SmartListPage(smartList: smartList),
+        body: Scrollbar(
+          controller: _scrollController,
+          child: ListView.separated(
+            controller: _scrollController,
+            itemCount: smartLists.length + playlists.length,
+            itemBuilder: (_, int index) {
+              if (index < smartLists.length) {
+                final SmartList smartList = smartLists[index];
+                return ListTile(
+                  title: Text(smartList.name),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => SmartListPage(smartList: smartList),
+                    ),
                   ),
-                ),
-                trailing: IconButton(
-                  icon: const Icon(Icons.play_circle_fill_rounded, size: 32.0),
-                  onPressed: () => audioStore.playSmartList(smartList),
-                ),
-              );
-            } else {
-              final i = index - smartLists.length;
-              final Playlist playlist = playlists[i];
-              return ListTile(
-                title: Text(playlist.name),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => PlaylistPage(playlist: playlist),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.play_circle_fill_rounded, size: 32.0),
+                    onPressed: () => audioStore.playSmartList(smartList),
                   ),
-                ),
-                trailing: IconButton(
-                  icon: const Icon(Icons.play_circle_fill_rounded, size: 32.0),
-                  onPressed: () => {},
-                ),
-              );
-            }
-          },
-          separatorBuilder: (BuildContext context, int index) => const SizedBox(
-            height: 4.0,
+                );
+              } else {
+                final i = index - smartLists.length;
+                final Playlist playlist = playlists[i];
+                return ListTile(
+                  title: Text(playlist.name),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => PlaylistPage(playlist: playlist),
+                    ),
+                  ),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.play_circle_fill_rounded, size: 32.0),
+                    onPressed: () => {},
+                  ),
+                );
+              }
+            },
+            separatorBuilder: (BuildContext context, int index) => const SizedBox(
+              height: 4.0,
+            ),
           ),
         ),
         floatingActionButton: SpeedDial(
