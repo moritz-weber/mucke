@@ -24,7 +24,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
   @override
   Future<Map<String, List>> getLocalMusic() async {
     // FIXME: it seems that songs currently loaded in queue are not updated
-    // example: when Brainwashed/Four Walls was loaded, the tags where not updated as opposed to the rest of the album
+    // example: when Brainwashed/Four Walls was loaded, the tags were not updated as opposed to the rest of the album
 
     final musicDirectories = await _settingsDataSource.libraryFoldersStream.first;
     final libDirs = musicDirectories.map((e) => Directory(e));
@@ -52,13 +52,8 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     _log.d('New albums start with id: $newAlbumId');
 
     final Directory dir = await getApplicationSupportDirectory();
-    int count = 1;
-    final now1 = DateTime.now();
 
     for (final file in files.toSet()) {
-      if (count % 10 == 0) _log.d('Files scanned: $count');
-      count++;
-
       final fileStats = file.statSync();
       // changed includes the creation time
       // => also update, when the file was created later (and wasn't really changed)
@@ -71,8 +66,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
       String albumString;
       if (song != null) {
         if (!lastModified.isAfter(song.lastModified)) {
-          // use existing songmodel
-          songs.add(song);
+          // file hasn't changed -> use existing songmodel
 
           final album = albumsInDb.singleWhere((a) => a.id == song.albumId);
           albumString = '${album.title}___${album.artist}__${album.pubYear}';
@@ -82,6 +76,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
             if (album.albumArtPath != null) albumArtMap[albumString] = album.albumArtPath!;
             artistSet.add(album.artist);
           }
+          songs.add(song);
           continue;
         } else {
           // read new info but keep albumId
@@ -96,11 +91,17 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
         _log.w('Could not read ${file.path}');
         continue;
       }
+      // this is new information
+      // is the album ID still correct or do we find another album with the same properties?
       albumString = '${tags.album}___${tags.albumArtist}__${tags.year}';
 
       String? albumArtPath;
       if (!albumIdMap.containsKey(albumString)) {
-        albumId ??= newAlbumId++;
+        // we haven't seen an album with these properties in the files yet, but there might be an entry in the database
+        // in this case, we should use the corresponding ID
+        albumId ??= await _musicDataSource.getAlbumId(
+                tags.album, tags.albumArtist, int.tryParse(tags.year ?? '')) ??
+            newAlbumId++;
         albumIdMap[albumString] = albumId;
 
         final albumArt = await _audiotagger.readArtwork(path: file.path);
@@ -119,7 +120,9 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
         final String artist = tags.artist ?? '';
         artistSet.add(albumArtist != '' ? albumArtist : (artist != '' ? artist : DEF_ARTIST));
       } else {
-        albumId ??= albumIdMap[albumString]!;
+        // an album with the same properties is already stored in the list
+        // use it's ID regardless of the old one stored in the songModel
+        albumId = albumIdMap[albumString]!;
         albumArtPath = albumArtMap[albumString];
       }
 
@@ -139,35 +142,12 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
       artists.add(ArtistModel(name: artist));
     }
 
-    _log.d(DateTime.now().difference(now1).toString());
-
     return {
       'SONGS': songs,
       'ALBUMS': albums,
       'ARTISTS': artists,
     };
   }
-}
-
-Future<List<String>> _readTags(Map<String, dynamic> args) async {
-  final files = args['files'] as List<File>;
-  final audiotagger = Audiotagger();
-  final result = <String>[];
-
-  for (final file in files) {
-    print(file.path);
-    final tags = await audiotagger.readTagsAsMap(path: file.path);
-    // final audioFile = await audiotagger.readAudioFile(path: file.path);
-    // if (audioFile != null) print(audioFile.bitRate.toString());
-    if (tags != null) {
-      if (tags['title'] != null) {
-        result.add(tags['title'] as String);
-      } else {
-        print('NO TITLE!');
-      }
-    }
-  }
-  return result;
 }
 
 DateTime _dateMax(DateTime a, DateTime b) {

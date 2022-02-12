@@ -26,12 +26,15 @@ abstract class MusicDataInfoRepository {
 
   Stream<List<Album>> get albumStream;
   Stream<List<Album>> getArtistAlbumStream(Artist artist);
+  Future<int?> getAlbumId(String title, String artist, int? year);
   // TODO: make this a stream? or call everytime on home screen?
   Future<Album?> getAlbumOfDay();
 
   Stream<List<Artist>> get artistStream;
 
-  Future<List> search(String searchText);
+  Future<List<Artist>> searchArtists(String searchText, {int? limit});
+  Future<List<Album>> searchAlbums(String searchText, {int? limit});
+  Future<List<Song>> searchSongs(String searchText, {int? limit});
 }
 
 abstract class MusicDataRepository extends MusicDataInfoRepository {

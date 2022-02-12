@@ -25,6 +25,7 @@ class SongBottomSheet extends StatefulWidget {
     this.enableGoToArtist = true,
     this.enableSongCustomization = true,
     this.enableQueueActions = true,
+    this.numNavPop = 1,
   }) : super(key: key);
 
   final Song song;
@@ -32,6 +33,7 @@ class SongBottomSheet extends StatefulWidget {
   final bool enableGoToArtist;
   final bool enableSongCustomization;
   final bool enableQueueActions;
+  final int numNavPop;
 
   @override
   _SongBottomSheetState createState() => _SongBottomSheetState();
@@ -202,7 +204,8 @@ class _SongBottomSheetState extends State<SongBottomSheet> {
           onTap: widget.enableGoToAlbum
               ? () {
                   if (album != null) {
-                    Navigator.pop(context);
+                    for (final _ in List.generate(widget.numNavPop, (index) => null))
+                      Navigator.pop(context);
                     navStore.pushOnLibrary(
                       MaterialPageRoute<Widget>(
                         builder: (BuildContext context) => AlbumDetailsPage(
@@ -222,7 +225,8 @@ class _SongBottomSheetState extends State<SongBottomSheet> {
           onTap: widget.enableGoToArtist
               ? () {
                   if (artist != null) {
-                    Navigator.pop(context);
+                    for (final _ in List.generate(widget.numNavPop, (index) => null))
+                      Navigator.pop(context);
                     navStore.pushOnLibrary(
                       MaterialPageRoute<Widget>(
                         builder: (BuildContext context) => ArtistDetailsPage(

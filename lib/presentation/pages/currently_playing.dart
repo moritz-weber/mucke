@@ -160,6 +160,7 @@ class CurrentlyPlayingPage extends StatelessWidget {
         song: song,
         enableQueueActions: false,
         enableSongCustomization: false,
+        numNavPop: 2,
       ),
     );
   }

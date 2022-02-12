@@ -173,9 +173,8 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
   @override
   Future<void> updateSong(SongModel songModel) async {
     final companion = songModel.toSongsCompanion();
-    
-    await (update(songs)..where((tbl) => tbl.path.equals(songModel.path)))
-        .write(companion);
+
+    await (update(songs)..where((tbl) => tbl.path.equals(songModel.path))).write(companion);
   }
 
   @override
@@ -210,32 +209,51 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
   }
 
   @override
-  Future<List> search(String searchText, {int limit = 0}) async {
-    List<dynamic> result = [];
-
-    result += await (select(artists)
-          ..where((tbl) => tbl.name.regexp(searchText, dotAll: true, caseSensitive: false)))
-        .get()
-        .then(
-          (moorList) => moorList.map((moorArtist) => ArtistModel.fromMoor(moorArtist)).toList(),
-        );
-
-    result += await (select(albums)
+  Future<List<AlbumModel>> searchAlbums(String searchText, {int? limit}) async {
+    final List<AlbumModel> result = await (select(albums)
           ..where((tbl) => tbl.title.regexp(searchText, dotAll: true, caseSensitive: false)))
         .get()
         .then(
           (moorList) => moorList.map((moorAlbum) => AlbumModel.fromMoor(moorAlbum)).toList(),
         );
 
-    result += await (select(songs)
+    if (limit != null) {
+      if (limit < 0) return [];
+      return result.take(limit).toList();
+    }
+    return result;
+  }
+
+  @override
+  Future<List<ArtistModel>> searchArtists(String searchText, {int? limit}) async {
+    final List<ArtistModel> result = await (select(artists)
+          ..where((tbl) => tbl.name.regexp(searchText, dotAll: true, caseSensitive: false)))
+        .get()
+        .then(
+          (moorList) => moorList.map((moorArtist) => ArtistModel.fromMoor(moorArtist)).toList(),
+        );
+
+    if (limit != null) {
+      if (limit < 0) return [];
+      return result.take(limit).toList();
+    }
+    return result;
+  }
+
+  @override
+  Future<List<SongModel>> searchSongs(String searchText, {int? limit}) async {
+    final List<SongModel> result = await (select(songs)
           ..where((tbl) => tbl.title.regexp(searchText, dotAll: true, caseSensitive: false)))
         .get()
         .then(
           (moorList) => moorList.map((moorSong) => SongModel.fromMoor(moorSong)).toList(),
         );
 
-    if (limit <= 0) return result;
-    return result.take(limit).toList();
+    if (limit != null) {
+      if (limit < 0) return [];
+      return result.take(limit).toList();
+    }
+    return result;
   }
 
   @override
@@ -243,5 +261,15 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
     return (select(songs)..where((t) => t.path.equals(path))).watchSingle().map(
           (moorSong) => SongModel.fromMoor(moorSong),
         );
+  }
+
+  @override
+  Future<int?> getAlbumId(String? title, String? artist, int? year) {
+    return (select(albums)
+          ..where(
+            (t) => t.artist.equals(artist) & t.title.equals(title) & t.year.equals(year),
+          ))
+        .getSingleOrNull()
+        .then((v) => v?.id);
   }
 }

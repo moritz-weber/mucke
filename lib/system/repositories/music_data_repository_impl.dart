@@ -275,28 +275,51 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   }
 
   @override
-  Future<List> search(String searchText) async {
+  Future<List<Album>> searchAlbums(String searchText, {int? limit}) async {
     if (searchText == '') return [];
 
     final searchTextLower = searchText.toLowerCase();
 
     // TODO: need to clean the string? sql injection?
-    final dbResult = await _musicDataSource.search(_fuzzy(searchTextLower), limit: 200);
+    final dbResult = await _musicDataSource.searchAlbums(_fuzzy(searchTextLower));
 
-    final List<List> ratedResults = [];
-    for (final x in dbResult) {
-      if (x is SongModel) {
-        ratedResults.add([_similarity(x.title.toLowerCase(), searchTextLower), x]);
-      } else if (x is AlbumModel) {
-        ratedResults.add([_similarity(x.title.toLowerCase(), searchTextLower), x]);
-      } else if (x is ArtistModel) {
-        ratedResults.add([_similarity(x.name.toLowerCase(), searchTextLower), x]);
-      }
-    }
-    ratedResults.sort((List a, List b) => -(a[0] as double).compareTo(b[0] as double));
+    dbResult.sort((a, b) => -_similarity(a.title.toLowerCase(), searchTextLower)
+        .compareTo(_similarity(b.title.toLowerCase(), searchTextLower)));
 
-    final results = ratedResults.map((e) => e[1]);
-    return results.toList();
+    if (limit != null) return dbResult.take(limit).toList();
+    return dbResult;
+  }
+
+  @override
+  Future<List<Artist>> searchArtists(String searchText, {int? limit}) async {
+    if (searchText == '') return [];
+
+    final searchTextLower = searchText.toLowerCase();
+
+    // TODO: need to clean the string? sql injection?
+    final dbResult = await _musicDataSource.searchArtists(_fuzzy(searchTextLower));
+
+    dbResult.sort((a, b) => -_similarity(a.name.toLowerCase(), searchTextLower)
+        .compareTo(_similarity(b.name.toLowerCase(), searchTextLower)));
+
+    if (limit != null) return dbResult.take(limit).toList();
+    return dbResult;
+  }
+
+  @override
+  Future<List<Song>> searchSongs(String searchText, {int? limit}) async {
+    if (searchText == '') return [];
+
+    final searchTextLower = searchText.toLowerCase();
+
+    // TODO: need to clean the string? sql injection?
+    final dbResult = await _musicDataSource.searchSongs(_fuzzy(searchTextLower));
+
+    dbResult.sort((a, b) => -_similarity(a.title.toLowerCase(), searchTextLower)
+        .compareTo(_similarity(b.title.toLowerCase(), searchTextLower)));
+
+    if (limit != null) return dbResult.take(limit).toList();
+    return dbResult;
   }
 
   double _similarity(String value, String searchText) {
@@ -392,5 +415,10 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   @override
   Stream<Song> getSongStream(String path) {
     return _musicDataSource.getSongStream(path);
+  }
+
+  @override
+  Future<int?> getAlbumId(String title, String artist, int? year) async {
+    return _musicDataSource.getAlbumId(title, artist, year);
   }
 }

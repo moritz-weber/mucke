@@ -87,6 +87,8 @@ class QueuePage extends StatelessWidget {
                                   backgroundColor: Colors.transparent,
                                   builder: (context) => SongBottomSheet(
                                     song: song,
+                                    enableQueueActions: false,
+                                    numNavPop: 3,
                                   ),
                                 ),
                               ),

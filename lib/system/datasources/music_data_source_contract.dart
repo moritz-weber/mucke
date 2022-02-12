@@ -29,5 +29,9 @@ abstract class MusicDataSource {
   Future<void> setAlbumOfDay(AlbumOfDay albumOfDay);
   Future<AlbumOfDay?> getAlbumOfDay();
 
-  Future<List> search(String searchText, {int limit});
+  Future<List<ArtistModel>> searchArtists(String searchText, {int? limit});
+  Future<List<AlbumModel>> searchAlbums(String searchText, {int? limit});
+  Future<List<SongModel>> searchSongs(String searchText, {int? limit});
+
+  Future<int?> getAlbumId(String? title, String? artist, int? year);
 }
