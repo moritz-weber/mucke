@@ -30,18 +30,16 @@ class SongCustomizationButtons extends StatelessWidget {
             children: [
               IconButton(
                 icon: Icon(
-                  song.next == '' && song.previous == '' ? Icons.link_off : Icons.link,
+                  song.next || song.previous ? Icons.link : Icons.link_off,
                   color: linkColor(song),
                 ),
                 iconSize: 20.0,
                 onPressed: () => _editLinks(context),
                 visualDensity: VisualDensity.compact,
               ),
-              Observer(
-                builder: (context) => LikeButton(
-                  iconSize: 20.0,
-                  song: song,
-                ),
+              LikeButton(
+                iconSize: 20.0,
+                song: song,
               ),
               IconButton(
                 icon: Icon(

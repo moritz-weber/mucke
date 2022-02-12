@@ -148,6 +148,8 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
       oldIndex,
       newIndex,
     );
+    // _audioPlayerDataSource will actually result in the correct update as well
+    // doing this manually here minimizes the time of inconsistent state though
     _currentIndexSubject.add(newCurrentIndex);
     _queueSubject.add(_dynamicQueue.queue);
 
@@ -279,12 +281,13 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   int _calcNewCurrentIndexOnMove(int currentIndex, int oldIndex, int newIndex) {
     int newCurrentIndex = currentIndex;
     if (oldIndex == currentIndex) {
+      // moving the currently playing song
       newCurrentIndex = newIndex;
     } else {
       if (oldIndex < currentIndex) {
         newCurrentIndex--;
       }
-      if (newIndex < currentIndex) {
+      if (newIndex <= currentIndex) {
         newCurrentIndex++;
       }
     }
