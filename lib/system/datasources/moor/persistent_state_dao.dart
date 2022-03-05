@@ -81,6 +81,7 @@ class PersistentStateDao extends DatabaseAccessor<MoorDatabase>
             SongModel.fromMoor(row.readTable(songs)),
             originalIndex: row.readTable(availableSongEntries).originalIndex,
             source: row.readTable(availableSongEntries).type.toQueueItemType(),
+            isAvailable: row.readTable(availableSongEntries).isAvailable,
           );
         }).toList());
   }

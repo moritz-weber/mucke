@@ -51,6 +51,27 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
     ));
   }
 
+  @override
+  Future<void> click([MediaButton button = MediaButton.media]) async {
+    switch (button) {
+      case MediaButton.media:
+      // this paused the playback when connecting a bluetooth speaker via NFC
+      // find another solution if this turns out to break other things
+        // if (playbackState.value.playing == true) {
+        //   await pause();
+        // } else {
+        //   await play();
+        // }
+        // break;
+      case MediaButton.next:
+        await skipToNext();
+        break;
+      case MediaButton.previous:
+        await skipToPrevious();
+        break;
+    }
+  }
+
   // PlatformIntegrationDataSource interface
 
   @override

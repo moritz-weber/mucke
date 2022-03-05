@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../constants.dart';
@@ -21,24 +20,20 @@ class LikeButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
 
-    return Observer(
-      builder: (BuildContext context) {
-        return IconButton(
-          icon: Icon(
-            likeCountIcon(song.likeCount),
-            size: iconSize,
-            color: likeCountColor(song.likeCount),
-          ),
-          onPressed: () {
-            if (song.likeCount < MAX_LIKE_COUNT) {
-              musicDataStore.incrementLikeCount(song);
-            } else {
-              musicDataStore.resetLikeCount(song);
-            }
-          },
-          visualDensity: VisualDensity.compact,
-        );
+    return IconButton(
+      icon: Icon(
+        likeCountIcon(song.likeCount),
+        size: iconSize,
+        color: likeCountColor(song.likeCount),
+      ),
+      onPressed: () {
+        if (song.likeCount < MAX_LIKE_COUNT) {
+          musicDataStore.incrementLikeCount(song);
+        } else {
+          musicDataStore.resetLikeCount(song);
+        }
       },
+      visualDensity: VisualDensity.compact,
     );
   }
 }
