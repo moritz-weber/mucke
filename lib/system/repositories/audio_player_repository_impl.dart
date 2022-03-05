@@ -125,8 +125,11 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   }
 
   @override
-  Future<void> loadSongs(
-      {required List<Song> songs, required int initialIndex, required Playable playable}) async {
+  Future<void> loadSongs({
+    required List<Song> songs,
+    required int initialIndex,
+    required Playable playable,
+  }) async {
     _playableSubject.add(playable);
     final shuffleMode = shuffleModeStream.value;
     final _initialIndex =

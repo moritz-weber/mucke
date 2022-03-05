@@ -105,6 +105,9 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
 
   @override
   Future<void> play() async {
+    if (_audioPlayer.playerState.processingState == ja.ProcessingState.completed) {
+      await seekToPosition(0.0);
+    }
     _audioPlayer.play();
   }
 
@@ -438,7 +441,7 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
   Future<void> seekToPosition(double position) async {
     final duration = _audioPlayer.duration;
     if (duration != null) {
-      _audioPlayer.seek(duration * position);
+      await _audioPlayer.seek(duration * position);
     }
   }
 }

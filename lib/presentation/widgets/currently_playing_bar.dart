@@ -29,15 +29,21 @@ class CurrentlyPlayingBar extends StatelessWidget {
               GestureDetector(
                 onTap: () => _onTap(context),
                 child: Container(
-                  color: Colors.transparent,
+                  color: Colors.white.withOpacity(0.02),
                   child: Row(
                     children: <Widget>[
-                      Image(
-                        image: getAlbumImage(song.albumArtPath),
-                        height: 64.0,
-                      ),
-                      Container(
-                        width: 10.0,
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0, bottom: 8.0, top: 8.0, right: 12.0),
+                        child: Container(
+                          clipBehavior: Clip.antiAlias,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(1.5),
+                          ),
+                          child: Image(
+                            image: getAlbumImage(song.albumArtPath),
+                            height: 56.0,
+                          ),
+                        ),
                       ),
                       Expanded(
                         child: Column(

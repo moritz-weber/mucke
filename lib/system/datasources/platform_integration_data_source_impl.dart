@@ -32,7 +32,7 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
 
   @override
   Future<void> skipToNext() async {
-    _log.d('slipToNext');
+    _log.d('skipToNext');
     _eventSubject.add(PlatformIntegrationEvent(type: PlatformIntegrationEventType.skipNext));
   }
 
@@ -81,6 +81,19 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
           playing: false,
         ));
       }
+    } else if (pe.processingState == ProcessingState.completed) {
+      final timeDelta = DateTime.now().difference(pe.updateTime);
+      playbackState.add(playbackState.value.copyWith(
+        controls: [MediaControl.skipToPrevious, MediaControl.play, MediaControl.skipToNext],
+        systemActions: const {
+          MediaAction.seek,
+        },
+        processingState: AudioProcessingState.ready,
+        updatePosition: pe.updatePosition + timeDelta,
+        playing: false,
+      ));
+    } else {
+      _log.d(pe.processingState.toString());
     }
   }
 

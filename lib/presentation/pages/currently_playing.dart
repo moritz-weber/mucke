@@ -81,23 +81,28 @@ class CurrentlyPlayingPage extends StatelessWidget {
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                song.title,
-                                overflow: TextOverflow.fade,
-                                softWrap: false,
-                                maxLines: 1,
-                                style: TEXT_BIG,
-                              ),
-                              Text(
-                                '${song.artist} • ${song.album}',
-                                style: TEXT_SUBTITLE.copyWith(
-                                  color: Colors.grey[100],
+                          child: SizedBox(
+                            width: double.infinity,
+                            height: 72.0,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  song.title,
+                                  overflow: TextOverflow.fade,
+                                  softWrap: false,
+                                  maxLines: 1,
+                                  style: TEXT_BIG,
                                 ),
-                              ),
-                            ],
+                                Text(
+                                  '${song.artist} • ${song.album}',
+                                  style: TEXT_SUBTITLE.copyWith(
+                                    color: Colors.grey[100],
+                                  ),
+                                  maxLines: 2,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         const Spacer(
