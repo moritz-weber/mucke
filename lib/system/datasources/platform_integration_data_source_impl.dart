@@ -1,4 +1,5 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:audio_session/audio_session.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -53,16 +54,23 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
 
   @override
   Future<void> click([MediaButton button = MediaButton.media]) async {
+    final session = await AudioSession.instance;
+
     switch (button) {
       case MediaButton.media:
-      // this paused the playback when connecting a bluetooth speaker via NFC
-      // find another solution if this turns out to break other things
-        // if (playbackState.value.playing == true) {
-        //   await pause();
-        // } else {
-        //   await play();
-        // }
-        // break;
+        // when connecting to certain bluetooth devices via NFC, this button gets "clicked"
+        // in order to keep the music playing when connecting, we ignore this
+        // if there is no device connected that could trigger this button press
+        // listening to device changes would be nicer, but we get them only after this click
+        final devices = _filterAudioDevices(await session.getDevices(includeInputs: false));
+        if (devices.isNotEmpty) {
+          if (playbackState.value.playing == true) {
+            await pause();
+          } else {
+            await play();
+          }
+        }
+        break;
       case MediaButton.next:
         await skipToNext();
         break;
@@ -122,4 +130,20 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
   Future<void> setCurrentSong(SongModel songModel) async {
     mediaItem.add(songModel.toMediaItem());
   }
+}
+
+Set<AudioDevice> _filterAudioDevices(Set<AudioDevice> devices) {
+  // remove builtin outputs from list
+  final result = <AudioDevice>{};
+
+  for (final d in devices) {
+    if (d.type != AudioDeviceType.builtInEarpiece &&
+        d.type != AudioDeviceType.builtInSpeaker &&
+        d.type != AudioDeviceType.builtInSpeakerSafe &&
+        d.type != AudioDeviceType.telephony) {
+      result.add(d);
+    }
+  }
+
+  return result;
 }
