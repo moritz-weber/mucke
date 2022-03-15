@@ -85,6 +85,11 @@ abstract class _AudioStore with Store {
   late ObservableStream<LoopMode> loopModeStream =
       _audioPlayerRepository.loopModeStream.asObservable();
 
+  @computed
+  bool get hasNext => (queueIndexStream.value != null &&
+          queueStream.value != null &&
+          queueIndexStream.value! < queueStream.value!.length - 1) ||
+      (loopModeStream.value ?? LoopMode.off) != LoopMode.off;
 
   Future<void> playSong(int index, List<Song> songList, Playable playable) async {
     _playSongs(songs: songList, initialIndex: index, playable: playable);

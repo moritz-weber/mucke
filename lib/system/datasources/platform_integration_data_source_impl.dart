@@ -54,20 +54,22 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
 
   @override
   Future<void> click([MediaButton button = MediaButton.media]) async {
+    _log.i(button.toString());
     final session = await AudioSession.instance;
 
     switch (button) {
       case MediaButton.media:
-        // when connecting to certain bluetooth devices via NFC, this button gets "clicked"
-        // in order to keep the music playing when connecting, we ignore this
-        // if there is no device connected that could trigger this button press
-        // listening to device changes would be nicer, but we get them only after this click
-        final devices = _filterAudioDevices(await session.getDevices(includeInputs: false));
-        if (devices.isNotEmpty) {
-          if (playbackState.value.playing == true) {
+        if (!playbackState.value.playing) {
+          await play();
+        } else {
+          // When connecting to certain Bluetooth devices via NFC, this button gets "clicked".
+          // In order to keep the music playing when connecting, we ignore this
+          // if there is no device connected that could trigger this button press.
+          // Listening to device changes would be nicer, but we get them only after this click (up to 1s delay).
+          final devices = _filterAudioDevices(await session.getDevices(includeInputs: false));
+
+          if (devices.isNotEmpty) {
             await pause();
-          } else {
-            await play();
           }
         }
         break;

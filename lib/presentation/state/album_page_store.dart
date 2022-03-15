@@ -27,5 +27,37 @@ abstract class _AlbumPageStore with Store {
   late ObservableStream<List<Song>> albumSongStream =
       _musicDataInfoRepository.getAlbumSongStream(album).asObservable(initialValue: []);
 
+  @observable
+  bool isMultiSelectEnabled = false;
+
+  @observable
+  ObservableList<bool> isSelected = ObservableList();
+
+  @computed
+  bool get isAllSelected => isSelected.every((e) => e);
+
+  @action
+  void toggleMultiSelect() {
+    if (!isMultiSelectEnabled) {
+      isSelected = List.generate(albumSongStream.value?.length ?? 0, (index) => false).asObservable();
+    }
+    isMultiSelectEnabled = !isMultiSelectEnabled;
+  }
+
+  @action
+  void setSelected(bool selected, int index) {
+    isSelected[index] = selected;
+  }
+
+  @action
+  void selectAll() {
+    isSelected = List.generate(albumSongStream.value?.length ?? 0, (index) => true).asObservable();
+  }
+
+  @action
+  void deselectAll() {
+    isSelected = List.generate(albumSongStream.value?.length ?? 0, (index) => false).asObservable();
+  }
+
   void dispose() {}
 }

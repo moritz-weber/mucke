@@ -12,7 +12,7 @@ part 'music_data_store.g.dart';
 class MusicDataStore extends _MusicDataStore with _$MusicDataStore {
   MusicDataStore({
     required MusicDataRepository musicDataRepository,
-    required SetSongBlocked setSongBlocked,
+    required SetSongsBlocked setSongBlocked,
   }) : super(
           musicDataRepository,
           setSongBlocked,
@@ -22,10 +22,10 @@ class MusicDataStore extends _MusicDataStore with _$MusicDataStore {
 abstract class _MusicDataStore with Store {
   _MusicDataStore(
     this._musicDataRepository,
-    this._setSongBlocked,
+    this._setSongsBlocked,
   );
 
-  final SetSongBlocked _setSongBlocked;
+  final SetSongsBlocked _setSongsBlocked;
 
   final MusicDataRepository _musicDataRepository;
 
@@ -58,7 +58,9 @@ abstract class _MusicDataStore with Store {
     isUpdatingDatabase = false;
   }
 
-  Future<void> setSongBlocked(Song song, int blockLevel) => _setSongBlocked(song, blockLevel);
+  Future<void> setSongsBlocked(List<Song> songs, int blockLevel) async {
+    await _setSongsBlocked(songs, blockLevel);
+  }
 
   Future<void> toggleNextSongLink(Song song) => _musicDataRepository.toggleNextSongLink(song);
 

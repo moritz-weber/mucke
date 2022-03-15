@@ -15,6 +15,7 @@ import '../state/song_store.dart';
 import '../theming.dart';
 import '../utils.dart' as utils;
 import 'custom_modal_bottom_sheet.dart';
+import 'exclude_level_options.dart';
 import 'like_button.dart';
 
 class SongBottomSheet extends StatefulWidget {
@@ -106,50 +107,7 @@ class _SongBottomSheetState extends State<SongBottomSheet> {
             ],
           ),
         ),
-        Container(
-          color: Colors.white10,
-          child: Padding(
-            padding: const EdgeInsets.only(
-              left: HORIZONTAL_PADDING - 12,
-              right: HORIZONTAL_PADDING - 12,
-              top: 4.0,
-              bottom: 4.0,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    if (song.blockLevel != 0) musicDataStore.setSongBlocked(song, 0);
-                  },
-                  icon: Icon(utils.blockLevelIcon(0)),
-                  color: song.blockLevel == 0 ? LIGHT2 : Colors.white38,
-                ),
-                IconButton(
-                  onPressed: () {
-                    if (song.blockLevel != 1) musicDataStore.setSongBlocked(song, 1);
-                  },
-                  icon: Icon(utils.blockLevelIcon(1)),
-                  color: song.blockLevel == 1 ? LIGHT2 : Colors.white38,
-                ),
-                IconButton(
-                  onPressed: () {
-                    if (song.blockLevel != 2) musicDataStore.setSongBlocked(song, 2);
-                  },
-                  icon: Icon(utils.blockLevelIcon(2)),
-                  color: song.blockLevel == 2 ? LIGHT2 : Colors.white38,
-                ),
-                IconButton(
-                  onPressed: () {
-                    if (song.blockLevel != 3) musicDataStore.setSongBlocked(song, 3);
-                  },
-                  icon: Icon(utils.blockLevelIcon(3)),
-                  color: song.blockLevel == 3 ? LIGHT2 : Colors.white38,
-                ),
-              ],
-            ),
-          ),
-        ),
+        ExcludeLevelOptions(songs: [song], musicDataStore: musicDataStore),
       ];
 
       final List<Widget> widgets = [

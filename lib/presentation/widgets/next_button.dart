@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../domain/entities/loop_mode.dart';
 import '../state/audio_store.dart';
 
 class NextButton extends StatelessWidget {
@@ -19,11 +18,9 @@ class NextButton extends StatelessWidget {
 
     return Observer(
       builder: (BuildContext context) {
-        final queue = audioStore.queueStream.value;
-        final int? index = audioStore.queueIndexStream.value;
-        final LoopMode loopMode = audioStore.loopModeStream.value ?? LoopMode.off;
+        final hasNext = audioStore.hasNext;
 
-        if ((index != null && queue != null && index < queue.length - 1) || loopMode != LoopMode.off) {
+        if (hasNext) {
           return IconButton(
             icon: const Icon(Icons.skip_next_rounded),
             iconSize: iconSize,

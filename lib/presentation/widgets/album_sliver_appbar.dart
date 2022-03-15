@@ -1,20 +1,24 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../../domain/entities/album.dart';
 import '../../domain/entities/song.dart';
+import '../state/album_page_store.dart';
 import '../utils.dart' as utils;
 
 class AlbumSliverAppBar extends StatefulWidget {
   const AlbumSliverAppBar({
     Key? key,
     required this.album,
-    required this.songs,
+    required this.store,
+    required this.onTapMultiSelectMenu,
   }) : super(key: key);
 
   final Album album;
-  final List<Song> songs;
+  final AlbumPageStore store;
+  final Function onTapMultiSelectMenu;
 
   @override
   State<AlbumSliverAppBar> createState() => _AlbumSliverAppBarState();
@@ -26,6 +30,8 @@ class _AlbumSliverAppBarState extends State<AlbumSliverAppBar> {
 
   @override
   Widget build(BuildContext context) {
+    final songs = widget.store.albumSongStream.value ?? [];
+
     return SliverAppBar(
       pinned: true,
       expandedHeight: maxHeight - MediaQuery.of(context).padding.top,
@@ -36,7 +42,7 @@ class _AlbumSliverAppBarState extends State<AlbumSliverAppBar> {
       ),
       flexibleSpace: Header(
         album: widget.album,
-        songs: widget.songs,
+        songs: songs,
         minHeight: minHeight,
         maxHeight: maxHeight,
       ),
@@ -44,12 +50,54 @@ class _AlbumSliverAppBarState extends State<AlbumSliverAppBar> {
         icon: const Icon(Icons.chevron_left),
         onPressed: () => Navigator.pop(context),
       ),
-      // actions: [
-      //   IconButton(
-      //     icon: const Icon(Icons.more_vert),
-      //     onPressed: () {},
-      //   )
-      // ],
+      actions: [
+        Observer(
+          builder: (context) {
+            final isMultiSelectEnabled = widget.store.isMultiSelectEnabled;
+
+            if (isMultiSelectEnabled)
+              return IconButton(
+                key: GlobalKey(),
+                icon: const Icon(Icons.more_vert_rounded),
+                onPressed: () => widget.onTapMultiSelectMenu(),
+              );
+
+            return Container();
+          },
+        ),
+        Observer(
+          builder: (context) {
+            final isMultiSelectEnabled = widget.store.isMultiSelectEnabled;
+            final isAllSelected = widget.store.isAllSelected;
+
+            if (isMultiSelectEnabled)
+              return IconButton(
+                key: GlobalKey(),
+                icon: isAllSelected
+                    ? const Icon(Icons.deselect_rounded)
+                    : const Icon(Icons.select_all_rounded),
+                onPressed: () {
+                  if (isAllSelected)
+                    widget.store.deselectAll();
+                  else
+                    widget.store.selectAll();
+                },
+              );
+
+            return Container();
+          },
+        ),
+        Observer(builder: (context) {
+          final isMultiSelectEnabled = widget.store.isMultiSelectEnabled;
+          return IconButton(
+            key: const ValueKey('ALBUM_MULTISELECT'), // TODO: this allows to keep animations while rebuilding the icon
+            icon: isMultiSelectEnabled
+                ? const Icon(Icons.close_rounded)
+                : const Icon(Icons.checklist_rtl_rounded),
+            onPressed: () => widget.store.toggleMultiSelect(),
+          );
+        })
+      ],
     );
   }
 }
@@ -152,7 +200,6 @@ class Header extends StatelessWidget {
                   FontWeight.w600,
                   Tween<double>(begin: 0, end: 1).evaluate(animation),
                 ),
-                
               ),
             ),
             Container(

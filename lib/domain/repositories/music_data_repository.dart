@@ -40,7 +40,7 @@ abstract class MusicDataInfoRepository {
 abstract class MusicDataRepository extends MusicDataInfoRepository {
   Future<void> updateDatabase();
 
-  Future<Song> setSongBlockLevel(Song song, int blockLevel);
+  Future<void> setSongsBlockLevel(List<Song> songs, int blockLevel);
 
   Future<Song> incrementSkipCount(Song song);
   Future<Song> resetSkipCount(Song song);

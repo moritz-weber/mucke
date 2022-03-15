@@ -140,8 +140,8 @@ Future<void> setupGetIt() async {
       getIt(),
     ),
   );
-  getIt.registerLazySingleton<SetSongBlocked>(
-    () => SetSongBlocked(
+  getIt.registerLazySingleton<SetSongsBlocked>(
+    () => SetSongsBlocked(
       getIt(),
     ),
   );

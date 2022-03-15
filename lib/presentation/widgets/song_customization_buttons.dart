@@ -125,7 +125,7 @@ class SongCustomizationButtons extends StatelessWidget {
               ),
               enabled: song.blockLevel != index,
               onTap: () {
-                musicDataStore.setSongBlocked(song, index);
+                musicDataStore.setSongsBlocked([song], index);
               },
             );
           },

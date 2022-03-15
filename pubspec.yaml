@@ -12,6 +12,7 @@ dependencies:
   audio_service: ^0.18.0
   audio_session: ^0.1.5
   audiotagger: ^2.2.1
+  collection: ^1.15.0
   drift: ^1.0.0
   equatable: ^2.0.3
   file_picker: ^4.3.0

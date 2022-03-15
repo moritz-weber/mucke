@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
 
 import '../../models/album_model.dart';
@@ -42,7 +43,7 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
             (t) => OrderingTerm(expression: t.discNumber),
             (t) => OrderingTerm(expression: t.trackNumber)
           ]))
-        .watch()
+        .watch().distinct(const ListEquality().equals)
         .map((moorSongList) =>
             moorSongList.map((moorSong) => SongModel.fromMoor(moorSong)).toList());
   }
@@ -54,7 +55,7 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
           ..orderBy([
             (t) => OrderingTerm(expression: t.title),
           ]))
-        .watch()
+        .watch().distinct(const ListEquality().equals)
         .map((moorAlbumList) {
       return moorAlbumList.map((moorAlbum) => AlbumModel.fromMoor(moorAlbum)).toList();
     });
@@ -65,7 +66,7 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
     return (select(albums)..where((tbl) => tbl.artist.equals(artist.name)))
         .join([innerJoin(songs, songs.albumId.equalsExp(albums.id))])
         .map((row) => row.readTable(songs))
-        .watch()
+        .watch().distinct(const ListEquality().equals)
         .map(
           (moorSongList) => moorSongList.map((moorSong) => SongModel.fromMoor(moorSong)).toList(),
         );
@@ -171,10 +172,14 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
   }
 
   @override
-  Future<void> updateSong(SongModel songModel) async {
-    final companion = songModel.toSongsCompanion();
+  Future<void> updateSongs(List<SongModel> songModels) async {
+    // final companion = songModel.toSongsCompanion();
 
-    await (update(songs)..where((tbl) => tbl.path.equals(songModel.path))).write(companion);
+    await batch((batch) {
+      batch.replaceAll(songs, songModels.map((e) => e.toSongsCompanion()).toList());
+    });
+
+    // await (update(songs)..where((tbl) => tbl.path.equals(songModel.path))).write(companion);
   }
 
   @override
@@ -258,7 +263,7 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
 
   @override
   Stream<SongModel> getSongStream(String path) {
-    return (select(songs)..where((t) => t.path.equals(path))).watchSingle().map(
+    return (select(songs)..where((t) => t.path.equals(path))).watchSingle().distinct().map(
           (moorSong) => SongModel.fromMoor(moorSong),
         );
   }
