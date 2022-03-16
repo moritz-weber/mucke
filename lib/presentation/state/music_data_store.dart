@@ -67,11 +67,9 @@ abstract class _MusicDataStore with Store {
   Future<void> togglePreviousSongLink(Song song) =>
       _musicDataRepository.togglePreviousSongLink(song);
 
-  Future<void> incrementLikeCount(Song song) => _musicDataRepository.incrementLikeCount(song);
+  Future<void> setLikeCount(List<Song> songs, int count) =>
+      _musicDataRepository.setLikeCount(songs, count);
 
-  Future<void> resetLikeCount(Song song) => _musicDataRepository.resetLikeCount(song);
-
-  // TODO: exploratory from here on
   Future<void> insertPlaylist(String name) async {
     _musicDataRepository.insertPlaylist(name);
   }

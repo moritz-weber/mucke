@@ -117,7 +117,7 @@ abstract class _AudioStore with Store {
 
   Future<void> addToQueue(Song song) async => _audioPlayerRepository.addToQueue(song);
 
-  Future<void> playNext(Song song) async => _audioPlayerRepository.playNext(song);
+  Future<void> playNext(List<Song> songs) async => _audioPlayerRepository.playNext(songs);
 
   Future<void> moveQueueItem(int oldIndex, int newIndex) async =>
       _audioPlayerRepository.moveQueueItem(oldIndex, newIndex);

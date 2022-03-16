@@ -187,14 +187,14 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
   }
 
   @override
-  Future<void> playNext(SongModel song) async {
+  Future<void> playNext(List<SongModel> songs) async {
     final index = currentIndexStream.value + 1;
-    _queue.insert(index, song);
+    _queue.insertAll(index, songs);
     if (index < _loadEndIndex) {
-      _loadEndIndex++;
+      _loadEndIndex = _loadEndIndex + songs.length;
     }
-    await _audioSource.insert(
-        _audioPlayer.currentIndex! + 1, ja.AudioSource.uri(Uri.file(song.path)));
+    await _audioSource.insertAll(_audioPlayer.currentIndex! + 1,
+        songs.map((e) => ja.AudioSource.uri(Uri.file(e.path))).toList());
   }
 
   @override
@@ -213,7 +213,7 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
       _log.d('$index < $_loadEndIndex --> DECREMENT LOAD END INDEX');
       _loadEndIndex--;
     }
-    
+
     if (isIndexLoaded) {
       _log.d('index is loaded');
       await _audioSource.removeAt(sourceIndex);

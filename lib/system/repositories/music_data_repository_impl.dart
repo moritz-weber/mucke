@@ -131,7 +131,8 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   @override
   Future<void> setSongsBlockLevel(List<Song> songs, int blockLevel) async {
     final changedSongs = songs.where((e) => e.blockLevel != blockLevel);
-    final newSongs = changedSongs.map((e) => (e as SongModel).copyWith(blockLevel: blockLevel)).toList();
+    final newSongs =
+        changedSongs.map((e) => (e as SongModel).copyWith(blockLevel: blockLevel)).toList();
     _songUpdateSubject.add({for (var s in newSongs) s.path: s});
     await _musicDataSource.updateSongs(newSongs);
   }
@@ -153,11 +154,15 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   }
 
   @override
-  Future<Song> resetLikeCount(Song song) async {
-    final newSong = (song as SongModel).copyWith(likeCount: 0);
-    _songUpdateSubject.add({song.path: newSong});
-    await _musicDataSource.updateSongs([newSong]);
-    return newSong;
+  Future<void> setLikeCount(List<Song> songs, int count) async {
+    if (0 <= count && count <= MAX_LIKE_COUNT) {
+      final changedSongs = songs.where((e) => e.likeCount != count);
+      final newSongs =
+          changedSongs.map((e) => (e as SongModel).copyWith(likeCount: count)).toList();
+
+      _songUpdateSubject.add({for (var s in newSongs) s.path: s});
+      await _musicDataSource.updateSongs(newSongs);
+    }
   }
 
   @override

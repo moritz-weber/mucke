@@ -62,32 +62,37 @@ class SongCustomizationButtons extends StatelessWidget {
     final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
     final AudioStore audioStore = GetIt.I<AudioStore>();
 
-    CustomModalBottomSheet()(
-      context,
-      [
-        Observer(builder: (context) {
-          final song = audioStore.currentSongStream.value;
-          if (song == null) return Container();
-          return SwitchListTile(
-            title: const Text('Always play previous song before'),
-            value: song.previous,
-            onChanged: (bool value) {
-              musicDataStore.togglePreviousSongLink(song);
-            },
-          );
-        }),
-        Observer(builder: (context) {
-          final song = audioStore.currentSongStream.value;
-          if (song == null) return Container();
-          return SwitchListTile(
-            title: const Text('Always play next song after'),
-            value: song.next,
-            onChanged: (bool value) {
-              musicDataStore.toggleNextSongLink(song);
-            },
-          );
-        }),
-      ],
+    showModalBottomSheet(
+      context: context,
+      useRootNavigator: true,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => MyBottomSheet(
+        widgets: [
+          Observer(builder: (context) {
+            final song = audioStore.currentSongStream.value;
+            if (song == null) return Container();
+            return SwitchListTile(
+              title: const Text('Always play previous song before'),
+              value: song.previous,
+              onChanged: (bool value) {
+                musicDataStore.togglePreviousSongLink(song);
+              },
+            );
+          }),
+          Observer(builder: (context) {
+            final song = audioStore.currentSongStream.value;
+            if (song == null) return Container();
+            return SwitchListTile(
+              title: const Text('Always play next song after'),
+              value: song.next,
+              onChanged: (bool value) {
+                musicDataStore.toggleNextSongLink(song);
+              },
+            );
+          }),
+        ],
+      ),
     );
   }
 
@@ -105,30 +110,35 @@ class SongCustomizationButtons extends StatelessWidget {
       'Always exclude this song.'
     ];
 
-    CustomModalBottomSheet()(
-      context,
-      List.generate(
-        descriptions.length,
-        (index) => Observer(
-          builder: (BuildContext context) {
-            final song = audioStore.currentSongStream.value;
-            if (song == null) return Container();
-            return ListTile(
-              title: Text(
-                descriptions[index],
-                style: song.blockLevel == index ? _active : _inactive,
-              ),
-              leading: Icon(
-                blockLevelIcon(index),
-                size: 24.0,
-                color: song.blockLevel == index ? LIGHT1 : Colors.white54,
-              ),
-              enabled: song.blockLevel != index,
-              onTap: () {
-                musicDataStore.setSongsBlocked([song], index);
-              },
-            );
-          },
+    showModalBottomSheet(
+      context: context,
+      useRootNavigator: true,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => MyBottomSheet(
+        widgets: List<Widget>.generate(
+          descriptions.length,
+          (index) => Observer(
+            builder: (BuildContext context) {
+              final song = audioStore.currentSongStream.value;
+              if (song == null) return Container();
+              return ListTile(
+                title: Text(
+                  descriptions[index],
+                  style: song.blockLevel == index ? _active : _inactive,
+                ),
+                leading: Icon(
+                  blockLevelIcon(index),
+                  size: 24.0,
+                  color: song.blockLevel == index ? LIGHT1 : Colors.white54,
+                ),
+                enabled: song.blockLevel != index,
+                onTap: () {
+                  musicDataStore.setSongsBlocked([song], index);
+                },
+              );
+            },
+          ),
         ),
       ),
     );

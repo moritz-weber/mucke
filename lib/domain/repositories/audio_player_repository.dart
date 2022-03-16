@@ -48,7 +48,7 @@ abstract class AudioPlayerRepository extends AudioPlayerInfoRepository {
     required Playable playable,
   });
   Future<void> addToQueue(Song song);
-  Future<void> playNext(Song song);
+  Future<void> playNext(List<Song> songs);
   Future<void> moveQueueItem(int oldIndex, int newIndex);
   Future<void> removeQueueIndex(int index);
 

@@ -170,10 +170,10 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   }
 
   @override
-  Future<void> playNext(Song song) async {
-    _audioPlayerDataSource.playNext(song as SongModel);
+  Future<void> playNext(List<Song> songs) async {
+    _audioPlayerDataSource.playNext(songs.map((e) => e as SongModel).toList());
 
-    _dynamicQueue.insertIntoQueue(song, (currentIndexStream.valueOrNull ?? 0) + 1);
+    _dynamicQueue.insertIntoQueue(songs, (currentIndexStream.valueOrNull ?? 0) + 1);
     _queueSubject.add(_dynamicQueue.queue);
   }
 

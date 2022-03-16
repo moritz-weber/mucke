@@ -28,9 +28,9 @@ class LikeButton extends StatelessWidget {
       ),
       onPressed: () {
         if (song.likeCount < MAX_LIKE_COUNT) {
-          musicDataStore.incrementLikeCount(song);
+          musicDataStore.setLikeCount([song], song.likeCount + 1);
         } else {
-          musicDataStore.resetLikeCount(song);
+          musicDataStore.setLikeCount([song], 0);
         }
       },
       visualDensity: VisualDensity.compact,

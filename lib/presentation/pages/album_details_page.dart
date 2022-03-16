@@ -11,6 +11,7 @@ import '../theming.dart';
 import '../widgets/album_sliver_appbar.dart';
 import '../widgets/custom_modal_bottom_sheet.dart';
 import '../widgets/exclude_level_options.dart';
+import '../widgets/like_count_options.dart';
 import '../widgets/song_bottom_sheet.dart';
 import '../widgets/song_list_tile_numbered.dart';
 
@@ -143,6 +144,7 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
   }
 
   Future<void> _openMultiselectMenu(BuildContext context) async {
+    final audioStore = GetIt.I<AudioStore>();
     final musicDataStore = GetIt.I<MusicDataStore>();
 
     showModalBottomSheet(
@@ -163,7 +165,32 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
             ListTile(
               title: Text('${songs.length} songs selected'),
             ),
-            ExcludeLevelOptions(songs: songs, musicDataStore: musicDataStore)
+            LikeCountOptions(songs: songs, musicDataStore: musicDataStore),
+            Container(
+              height: 1,
+              color: Colors.transparent,
+            ),
+            ExcludeLevelOptions(songs: songs, musicDataStore: musicDataStore),
+            ListTile(
+              title: const Text('Play next'),
+              leading: const Icon(Icons.play_arrow_rounded),
+              onTap: () {
+                audioStore.playNext(songs);
+                Navigator.of(context, rootNavigator: true).pop();
+              },
+            ),
+            const ListTile(
+              enabled: false,
+              title: Text('Append to manual queue'),
+            ),
+            const ListTile(
+              enabled: false,
+              title: Text('Add to queue'),
+            ),
+            const ListTile(
+              enabled: false,
+              title: Text('Add to playlist'),
+            ),
           ],
         );
       }),

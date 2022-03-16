@@ -173,13 +173,9 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
 
   @override
   Future<void> updateSongs(List<SongModel> songModels) async {
-    // final companion = songModel.toSongsCompanion();
-
     await batch((batch) {
       batch.replaceAll(songs, songModels.map((e) => e.toSongsCompanion()).toList());
     });
-
-    // await (update(songs)..where((tbl) => tbl.path.equals(songModel.path))).write(companion);
   }
 
   @override

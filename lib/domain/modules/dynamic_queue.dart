@@ -104,17 +104,22 @@ class DynamicQueue implements ManagedQueueInfo {
     _queueSubject.add(_queue);
   }
 
-  void insertIntoQueue(Song song, int index) {
-    final queueItem = QueueItemModel(
-      song as SongModel,
-      originalIndex: _availableSongs.length, // interference with predecessors/successors?
-      source: QueueItemSource.added,
-      isAvailable: false,
-    );
+  void insertIntoQueue(List<Song> songs, int index) {
+    final queueItems = <QueueItem>[];
+    int i = 0;
+    for (final song in songs) {
+      queueItems.add(QueueItemModel(
+        song as SongModel,
+        originalIndex: _availableSongs.length + i, // interference with predecessors/successors?
+        source: QueueItemSource.added,
+        isAvailable: false,
+      ));
+      i++;
+    }
 
-    _availableSongs.add(queueItem);
+    _availableSongs.addAll(queueItems);
     _availableSongsSubject.add(_availableSongs);
-    _queue.insert(index, queueItem);
+    _queue.insertAll(index, queueItems);
     _queueSubject.add(_queue);
   }
 

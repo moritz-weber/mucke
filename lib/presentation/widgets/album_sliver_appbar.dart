@@ -169,9 +169,10 @@ class Header extends StatelessWidget {
     final totalDuration =
         songs.fold(const Duration(milliseconds: 0), (Duration d, s) => d + s.duration);
 
+    // TODO: padding right for enabled multi select
     return Align(
       alignment: AlignmentTween(
-        begin: Alignment.center,
+        begin: Alignment.centerLeft,
         end: Alignment.topLeft,
       ).evaluate(animation),
       child: Container(

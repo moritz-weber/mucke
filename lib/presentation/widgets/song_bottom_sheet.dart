@@ -247,7 +247,7 @@ class _SongBottomSheetState extends State<SongBottomSheet> {
             title: const Text('Play next'),
             leading: const Icon(Icons.play_arrow_rounded),
             onTap: () {
-              audioStore.playNext(song);
+              audioStore.playNext([song]);
               Navigator.of(context, rootNavigator: true).pop();
             },
           ),
