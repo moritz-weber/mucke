@@ -22,7 +22,8 @@ abstract class AudioPlayerDataSource {
     required List<SongModel> queue,
     required int initialIndex,
   });
-  Future<void> addToQueue(SongModel song);
+  Future<void> addToQueue(List<SongModel> songs);
+  Future<void> insertIntoQueue(List<SongModel> songs, int index);
   Future<void> moveQueueItem(int oldIndex, int newIndex);
   Future<void> playNext(List<SongModel> songs);
   Future<void> removeQueueIndex(int index);

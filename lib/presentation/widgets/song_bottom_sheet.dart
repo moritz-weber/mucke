@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'bottom_sheet/add_to_playlist.dart';
 
 import '../../domain/entities/album.dart';
 import '../../domain/entities/artist.dart';
@@ -254,72 +255,21 @@ class _SongBottomSheetState extends State<SongBottomSheet> {
           ListTile(
             title: const Text('Append to manually queued songs'),
             leading: const Icon(Icons.play_arrow_rounded),
-            onTap: () {},
-            enabled: false,
+            onTap: () {
+              audioStore.appendToNext([song]);
+              Navigator.of(context, rootNavigator: true).pop();
+            },
           ),
           ListTile(
             title: const Text('Add to queue'),
             leading: const Icon(Icons.queue_rounded),
             onTap: () {
-              audioStore.addToQueue(song);
+              audioStore.addToQueue([song]);
               Navigator.of(context, rootNavigator: true).pop();
             },
           ),
         ],
-        ListTile(
-          title: const Text('Add to playlist'),
-          leading: const Icon(Icons.playlist_add_rounded),
-          onTap: () {
-            Navigator.of(context, rootNavigator: true).pop();
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return Observer(
-                  builder: (context) {
-                    final playlists = musicDataStore.playlistsStream.value ?? [];
-                    return SimpleDialog(
-                      backgroundColor: DARK3,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(HORIZONTAL_PADDING),
-                          child: Container(
-                            height: 300.0,
-                            width: 300.0,
-                            child: ListView.separated(
-                              itemCount: playlists.length,
-                              itemBuilder: (_, int index) {
-                                final Playlist playlist = playlists[index];
-                                return ListTile(
-                                  title: Text(playlist.name),
-                                  onTap: () {
-                                    musicDataStore.addSongToPlaylist(playlist, song);
-                                    Navigator.pop(context);
-                                  },
-                                );
-                              },
-                              separatorBuilder: (BuildContext context, int index) => const SizedBox(
-                                height: 4.0,
-                              ),
-                            ),
-                          ),
-                        ),
-                        SimpleDialogOption(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text(
-                            'Cancel',
-                            textAlign: TextAlign.right,
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-            );
-          },
-        ),
+        AddToPlaylistTile(songs: [song], musicDataStore: musicDataStore),
       ];
 
       return MyBottomSheet(widgets: widgets);

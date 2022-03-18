@@ -25,11 +25,9 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
         if (!_blockIndexUpdate) {
           _updateCurrentSong(queueStream.value, index);
         }
-        _dynamicQueue.updateCurrentIndex(index).then((value) {
-          if (value.isNotEmpty) {
-            for (final s in value) {
-              _audioPlayerDataSource.addToQueue(s as SongModel);
-            }
+        _dynamicQueue.updateCurrentIndex(index).then((songs) {
+          if (songs.isNotEmpty) {
+            _audioPlayerDataSource.addToQueue(songs.map((e) => e as SongModel).toList());
             _queueSubject.add(_dynamicQueue.queue);
           }
         });
@@ -88,10 +86,9 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   ManagedQueueInfo get managedQueueInfo => _dynamicQueue;
 
   @override
-  Future<void> addToQueue(Song song) async {
-    _log.d('addToQueue');
-    _audioPlayerDataSource.addToQueue(song as SongModel);
-    _dynamicQueue.addToQueue(song);
+  Future<void> addToQueue(List<Song> songs) async {
+    _audioPlayerDataSource.addToQueue(songs.map((e) => e as SongModel).toList());
+    _dynamicQueue.addToQueue(songs);
     _queueSubject.add(_dynamicQueue.queue);
   }
 
@@ -174,6 +171,16 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
     _audioPlayerDataSource.playNext(songs.map((e) => e as SongModel).toList());
 
     _dynamicQueue.insertIntoQueue(songs, (currentIndexStream.valueOrNull ?? 0) + 1);
+    _queueSubject.add(_dynamicQueue.queue);
+  }
+
+  @override
+  Future<void> addToNext(List<Song> songs) async {
+    final index = _dynamicQueue.getNextNormalIndex(currentIndexStream.value + 1);
+
+    _audioPlayerDataSource.insertIntoQueue(songs.map((e) => e as SongModel).toList(), index);
+
+    _dynamicQueue.insertIntoQueue(songs, index);
     _queueSubject.add(_dynamicQueue.queue);
   }
 

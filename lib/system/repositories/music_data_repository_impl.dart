@@ -343,8 +343,9 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   }
 
   @override
-  Future<void> appendSongToPlaylist(Playlist playlist, Song song) async {
-    _playlistDataSource.appendSongToPlaylist(playlist as PlaylistModel, song as SongModel);
+  Future<void> addSongsToPlaylist(Playlist playlist, List<Song> songs) async {
+    _playlistDataSource.addSongsToPlaylist(
+        playlist as PlaylistModel, songs.map((e) => e as SongModel).toList());
   }
 
   @override

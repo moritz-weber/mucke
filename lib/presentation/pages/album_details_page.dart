@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import '../widgets/bottom_sheet/add_to_playlist.dart';
 
 import '../../domain/entities/album.dart';
 import '../../domain/entities/song.dart';
@@ -179,18 +180,23 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
                 Navigator.of(context, rootNavigator: true).pop();
               },
             ),
-            const ListTile(
-              enabled: false,
-              title: Text('Append to manual queue'),
+            ListTile(
+              title: const Text('Append to manually queued songs'),
+              leading: const Icon(Icons.play_arrow_rounded),
+              onTap: () {
+                audioStore.appendToNext(songs);
+                Navigator.of(context, rootNavigator: true).pop();
+              },
             ),
-            const ListTile(
-              enabled: false,
-              title: Text('Add to queue'),
+            ListTile(
+              title: const Text('Add to queue'),
+              leading: const Icon(Icons.queue_rounded),
+              onTap: () {
+                audioStore.addToQueue(songs);
+                Navigator.of(context, rootNavigator: true).pop();
+              },
             ),
-            const ListTile(
-              enabled: false,
-              title: Text('Add to playlist'),
-            ),
+            AddToPlaylistTile(songs: songs, musicDataStore: musicDataStore),
           ],
         );
       }),

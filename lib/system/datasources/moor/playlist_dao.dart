@@ -11,23 +11,35 @@ import '../playlist_data_source.dart';
 
 part 'playlist_dao.g.dart';
 
-@DriftAccessor(tables: [Albums, Artists, Songs, Playlists, PlaylistEntries, SmartLists, SmartListArtists])
+@DriftAccessor(
+    tables: [Albums, Artists, Songs, Playlists, PlaylistEntries, SmartLists, SmartListArtists])
 class PlaylistDao extends DatabaseAccessor<MoorDatabase>
     with _$PlaylistDaoMixin
     implements PlaylistDataSource {
   PlaylistDao(MoorDatabase db) : super(db);
 
   @override
-  Future<void> appendSongToPlaylist(PlaylistModel playlist, SongModel song) async {
+  Future<void> addSongsToPlaylist(PlaylistModel playlist, List<SongModel> songs) async {
     final plSongs =
         await (select(playlistEntries)..where((tbl) => tbl.playlistId.equals(playlist.id))).get();
 
     final songCount = plSongs.length;
-    into(playlistEntries).insert(PlaylistEntriesCompanion(
-      playlistId: Value(playlist.id),
-      songPath: Value(song.path),
-      position: Value(songCount),
-    ));
+
+    int i = 0;
+    final entries = <PlaylistEntriesCompanion>[];
+
+    for (final s in songs) {
+      entries.add(PlaylistEntriesCompanion(
+        playlistId: Value(playlist.id),
+        songPath: Value(s.path),
+        position: Value(songCount + i),
+      ));
+      i++;
+    }
+
+    await batch((batch) {
+      batch.insertAll(playlistEntries, entries);
+    });
   }
 
   @override

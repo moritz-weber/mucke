@@ -90,17 +90,22 @@ class DynamicQueue implements ManagedQueueInfo {
     }
   }
 
-  void addToQueue(Song song) {
-    final queueItem = QueueItemModel(
-      song as SongModel,
-      originalIndex: _availableSongs.length, // interference with predecessors/successors?
-      source: QueueItemSource.added,
-      isAvailable: false,
-    );
+  void addToQueue(List<Song> songs) {
+    final queueItems = <QueueItem>[];
+    int i = 0;
+    for (final song in songs) {
+      queueItems.add(QueueItemModel(
+        song as SongModel,
+        originalIndex: _availableSongs.length + i, // interference with predecessors/successors?
+        source: QueueItemSource.added,
+        isAvailable: false,
+      ));
+      i++;
+    }
 
-    _availableSongs.add(queueItem);
+    _availableSongs.addAll(queueItems);
     _availableSongsSubject.add(_availableSongs);
-    _queue.add(queueItem);
+    _queue.addAll(queueItems);
     _queueSubject.add(_queue);
   }
 
@@ -252,6 +257,16 @@ class DynamicQueue implements ManagedQueueInfo {
     }
 
     return queueItems;
+  }
+
+  int getNextNormalIndex(int index) {
+    int i = index;
+
+    while (_queue[i].source == QueueItemSource.added) {
+      i++;
+    }
+
+    return i;
   }
 
   List<QueueItem> _filterAvailableSongs(List<QueueItem> availableSongs) {

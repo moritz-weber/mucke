@@ -48,7 +48,9 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
 
   late ja.ConcatenatingAudioSource _audioSource;
   late List<SongModel> _queue;
+  // inclusive
   late int _loadStartIndex;
+  // exclusive
   late int _loadEndIndex;
   bool isQueueLoaded = false;
 
@@ -142,16 +144,17 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
   }
 
   @override
-  Future<void> addToQueue(SongModel song) async {
-    _queue.add(song);
+  Future<void> addToQueue(List<SongModel> songs) async {
+    _queue.addAll(songs);
 
     if (_loadStartIndex < _loadEndIndex) {
-      if (_loadEndIndex == _queue.length) {
+      if (_loadEndIndex == _queue.length - 1) {
+        // queue is loaded until the end -> load this song too and adapt the index
         _loadEndIndex++;
-        await _audioSource.add(ja.AudioSource.uri(Uri.file(song.path)));
+        await _audioSource.addAll(songs.map((e) => ja.AudioSource.uri(Uri.file(e.path))).toList());
       }
     } else {
-      await _audioSource.add(ja.AudioSource.uri(Uri.file(song.path)));
+      await _audioSource.addAll(songs.map((e) => ja.AudioSource.uri(Uri.file(e.path))).toList());
     }
   }
 
@@ -198,6 +201,27 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
   }
 
   @override
+  Future<void> insertIntoQueue(List<SongModel> songs, int index) async {
+    _queue.insertAll(index, songs);
+
+    final sourceIndex = _calcSourceIndex(index);
+    final isIndexLoaded = _isQueueIndexInLoadInterval(index);
+    if (index < _loadStartIndex) {
+      _loadStartIndex = _loadStartIndex + songs.length;
+    }
+    if (index < _loadEndIndex) {
+      _loadEndIndex = _loadEndIndex + songs.length;
+    }
+
+    if (isIndexLoaded) {
+      await _audioSource.insertAll(sourceIndex,
+          songs.map((e) => ja.AudioSource.uri(Uri.file(e.path))).toList());
+    } else {
+      _updateCurrentIndex(_audioPlayer.currentIndex);
+    }
+  }
+
+  @override
   Future<void> removeQueueIndex(int index) async {
     _log.d('removeQueueIndex: $index');
     _queue.removeAt(index);
@@ -221,7 +245,7 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
         _updateLoadedQueue(currentSourceIndex);
       }
     } else {
-      _updateCurrentIndex(_audioPlayer.currentIndex!);
+      _updateCurrentIndex(_audioPlayer.currentIndex);
     }
   }
 
@@ -269,7 +293,8 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
   List<SongModel> _getQueueToLoad(List<SongModel> queue, int initialIndex) {
     if (queue.length > LOAD_MAX) {
       _loadStartIndex = (initialIndex - LOAD_INTERVAL) % queue.length;
-      _loadEndIndex = (initialIndex + LOAD_INTERVAL + 1) % queue.length;
+      _loadEndIndex = initialIndex + LOAD_INTERVAL + 1;
+      if (_loadEndIndex > queue.length) _loadEndIndex %= queue.length;
 
       List<SongModel> smallQueue;
       if (_loadStartIndex < _loadEndIndex) {
@@ -308,6 +333,8 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
     }
   }
 
+  /// update loaded queue in case the loaded queue is one continous part of the queue
+  /// return true if queue was changed
   Future<bool> _updateLoadedQueueBaseCase(int newIndex) async {
     if (newIndex < LOAD_INTERVAL) {
       // nearing the start of the loaded songs
@@ -344,6 +371,8 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
     return false;
   }
 
+  /// update loaded queue in case the loaded queue is split in two parts
+  /// return true if queue was changed
   Future<bool> _updateLoadedQueueInverted(int newIndex) async {
     final rightOfLoadEnd = newIndex >= _loadEndIndex;
 

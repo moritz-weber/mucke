@@ -55,7 +55,7 @@ abstract class MusicDataRepository extends MusicDataInfoRepository {
   Future<void> insertPlaylist(String name);
   Future<void> updatePlaylist(int id, String name);
   Future<void> removePlaylist(Playlist playlist);
-  Future<void> appendSongToPlaylist(Playlist playlist, Song song);
+  Future<void> addSongsToPlaylist(Playlist playlist, List<Song> songs);
   Future<void> removePlaylistEntry(int playlistId, int index);
   Future<void> movePlaylistEntry(int playlistId, int oldIndex, int newIndex);
 

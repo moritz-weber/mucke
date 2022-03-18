@@ -82,8 +82,8 @@ abstract class _MusicDataStore with Store {
     _musicDataRepository.updatePlaylist(id, name);
   }
 
-  Future<void> addSongToPlaylist(Playlist playlist, Song song) async {
-    _musicDataRepository.appendSongToPlaylist(playlist, song);
+  Future<void> addSongsToPlaylist(Playlist playlist, List<Song> songs) async {
+    _musicDataRepository.addSongsToPlaylist(playlist, songs);
   }
 
   Future<void> removePlaylistEntry(int playlistId, int index) async {

@@ -10,7 +10,7 @@ abstract class PlaylistDataSource {
   Future<void> insertPlaylist(String name);
   Future<void> updatePlaylist(int id, String name);
   Future<void> removePlaylist(PlaylistModel playlist);
-  Future<void> appendSongToPlaylist(PlaylistModel playlist, SongModel song);
+  Future<void> addSongsToPlaylist(PlaylistModel playlist, List<SongModel> songs);
   Future<void> removeIndex(int playlistId, int index);
   Future<void> moveEntry(int playlistId, int oldIndex, int newIndex);
 
