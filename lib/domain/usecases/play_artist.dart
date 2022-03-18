@@ -24,6 +24,6 @@ class PlayArtist {
     final index = rng.nextInt(songs.length);
 
     await _audioPlayerRepository.setShuffleMode(ShuffleMode.plus, updateQueue: false);
-    _playSongs(songs: songs, initialIndex: index, playable: artist);
+    _playSongs(songs: songs, initialIndex: index, playable: artist, keepInitialIndex: false);
   }
 }

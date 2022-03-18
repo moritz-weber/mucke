@@ -27,6 +27,11 @@ class ShuffleAll {
     final index = rng.nextInt(songs.length);
 
     await _audioPlayerRepository.setShuffleMode(SHUFFLE_MODE, updateQueue: false);
-    _playSongs(songs: songs, initialIndex: index, playable: AllSongs());
+    _playSongs(
+      songs: songs,
+      initialIndex: index,
+      playable: AllSongs(),
+      keepInitialIndex: false,
+    );
   }
 }

@@ -92,7 +92,7 @@ abstract class _AudioStore with Store {
       (loopModeStream.value ?? LoopMode.off) != LoopMode.off;
 
   Future<void> playSong(int index, List<Song> songList, Playable playable) async {
-    _playSongs(songs: songList, initialIndex: index, playable: playable);
+    _playSongs(songs: songList, initialIndex: index, playable: playable, keepInitialIndex: true);
   }
 
   Future<void> play() async => _audioPlayerRepository.play();

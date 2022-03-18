@@ -10,12 +10,18 @@ class PlaySongs {
   final AudioPlayerRepository _audioPlayerRepository;
 
   /// Generate and play a queue from the [songs] according to current AudioPlayer settings.
-  Future<void> call({required List<Song> songs, required int initialIndex, required Playable playable}) async {
+  Future<void> call({
+    required List<Song> songs,
+    required int initialIndex,
+    required Playable playable,
+    required bool keepInitialIndex,
+  }) async {
     if (0 <= initialIndex && initialIndex < songs.length) {
       await _audioPlayerRepository.loadSongs(
         initialIndex: initialIndex,
         songs: songs,
         playable: playable,
+        keepInitialIndex: keepInitialIndex,
       );
       _audioPlayerRepository.play();
     }

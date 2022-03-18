@@ -46,6 +46,7 @@ abstract class AudioPlayerRepository extends AudioPlayerInfoRepository {
     required List<Song> songs,
     required int initialIndex,
     required Playable playable,
+    bool keepInitialIndex,
   });
   Future<void> addToQueue(List<Song> songs);
   Future<void> playNext(List<Song> songs);

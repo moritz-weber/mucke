@@ -60,8 +60,9 @@ class DynamicQueue implements ManagedQueueInfo {
     List<Song> songs,
     Playable playable,
     int startIndex,
-    ShuffleMode shuffleMode,
-  ) async {
+    ShuffleMode shuffleMode, {
+    bool keepIndex = false,
+  }) async {
     _shuffleMode = shuffleMode;
     _playable = playable;
 
@@ -73,12 +74,35 @@ class DynamicQueue implements ManagedQueueInfo {
 
     final initialQueueItem = _availableSongs[startIndex];
 
-    // FIXME: broken when first song is filtered out
-    // when starting a shuffle playback, there needs to be an option to select a new startindex
-    // in this case the startindex was selected randomly
-    // otherwise the startindex item should be included as it was selected manually
-    final filteredAvailableSongs = _filterAvailableSongs(_availableSongs);
-    final newStartIndex = filteredAvailableSongs.indexOf(initialQueueItem);
+    List<QueueItem> filteredAvailableSongs = _filterAvailableSongs(
+      _availableSongs,
+      index: startIndex,
+      keepIndex: keepIndex,
+    );
+    if (filteredAvailableSongs.isEmpty) filteredAvailableSongs = _availableSongs;
+
+    int newStartIndex = filteredAvailableSongs.indexOf(initialQueueItem);
+
+    // if the starting song is filtered out, select another one
+    if (newStartIndex < 0) {
+      if (shuffleMode == ShuffleMode.none) {
+        // select new starting song near the original one
+        int i = 1;
+        while (true) {
+          if (startIndex + i < _availableSongs.length) {
+            newStartIndex = filteredAvailableSongs.indexOf(_availableSongs[startIndex + i]);
+            if (newStartIndex >= 0) break;
+          }
+          if (startIndex - i >= 0) {
+            newStartIndex = filteredAvailableSongs.indexOf(_availableSongs[startIndex - i]);
+            if (newStartIndex >= 0) break;
+          }
+          i++;
+        }
+      } else {
+        newStartIndex = Random().nextInt(filteredAvailableSongs.length);
+      }
+    }
 
     switch (_shuffleMode) {
       case ShuffleMode.none:
@@ -162,7 +186,10 @@ class DynamicQueue implements ManagedQueueInfo {
     for (final qi in _availableSongs) {
       qi.isAvailable = true;
     }
-    final filteredAvailableSongs = _filterAvailableSongs(_availableSongs);
+
+    final index = _availableSongs.indexOf(currentQueueItem);
+
+    final filteredAvailableSongs = _filterAvailableSongs(_availableSongs, keepIndex: true, index: index);
     // TODO: what if the item is not in the filtered list?
     final newStartIndex = filteredAvailableSongs.indexOf(currentQueueItem);
 
@@ -269,14 +296,19 @@ class DynamicQueue implements ManagedQueueInfo {
     return i;
   }
 
-  List<QueueItem> _filterAvailableSongs(List<QueueItem> availableSongs) {
+  List<QueueItem> _filterAvailableSongs(
+    List<QueueItem> availableSongs, {
+    bool keepIndex = false,
+    int? index,
+  }) {
     final List<QueueItem> result = [];
 
     final blockLevel = calcBlockLevel(_shuffleMode, _playable!.type);
+    final kIndex = keepIndex ? index! : -1;
 
     for (int i = 0; i < availableSongs.length; i++) {
       final qi = availableSongs[i];
-      if (!(qi.song.blockLevel > blockLevel) && qi.isAvailable) {
+      if (i == kIndex || (!(qi.song.blockLevel > blockLevel) && qi.isAvailable)) {
         result.add(qi);
       }
     }

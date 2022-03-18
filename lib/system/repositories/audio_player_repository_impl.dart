@@ -126,11 +126,17 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
     required List<Song> songs,
     required int initialIndex,
     required Playable playable,
+    bool keepInitialIndex = false,
   }) async {
     _playableSubject.add(playable);
     final shuffleMode = shuffleModeStream.value;
-    final _initialIndex =
-        await _dynamicQueue.generateQueue(songs, playable, initialIndex, shuffleMode);
+    final _initialIndex = await _dynamicQueue.generateQueue(
+      songs,
+      playable,
+      initialIndex,
+      shuffleMode,
+      keepIndex: keepInitialIndex,
+    );
 
     _queueSubject.add(_dynamicQueue.queue);
 

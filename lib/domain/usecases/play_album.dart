@@ -20,6 +20,6 @@ class PlayAlbum {
     final songs = await _musicDataRepository.getAlbumSongStream(album).first;
 
     await _audioPlayerRepository.setShuffleMode(ShuffleMode.none, updateQueue: false);
-    _playSongs(songs: songs, initialIndex: 0, playable: album);
+    _playSongs(songs: songs, initialIndex: 0, playable: album, keepInitialIndex: false);
   }
 }
