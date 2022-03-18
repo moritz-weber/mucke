@@ -189,7 +189,8 @@ class DynamicQueue implements ManagedQueueInfo {
 
     final index = _availableSongs.indexOf(currentQueueItem);
 
-    final filteredAvailableSongs = _filterAvailableSongs(_availableSongs, keepIndex: true, index: index);
+    final filteredAvailableSongs =
+        _filterAvailableSongs(_availableSongs, keepIndex: true, index: index);
     // TODO: what if the item is not in the filtered list?
     final newStartIndex = filteredAvailableSongs.indexOf(currentQueueItem);
 
@@ -259,27 +260,33 @@ class DynamicQueue implements ManagedQueueInfo {
     return changed;
   }
 
-  Future<List<QueueItem>> getQueueItemWithLinks(QueueItem queueItem) async {
+  Future<List<QueueItem>> getQueueItemWithLinks(QueueItem queueItem, List<QueueItem> pool) async {
     final List<QueueItem> queueItems = [];
 
     final predecessors = await _musicDataRepository.getPredecessors(queueItem.song);
     final successors = await _musicDataRepository.getSuccessors(queueItem.song);
 
     for (final p in predecessors) {
-      queueItems.add(QueueItemModel(
-        p as SongModel,
-        originalIndex: queueItem.originalIndex,
-        source: QueueItemSource.predecessor,
+      queueItems.add(pool.firstWhere(
+        (element) => element.song == p,
+        orElse: () => QueueItemModel(
+          p as SongModel,
+          originalIndex: queueItem.originalIndex,
+          source: QueueItemSource.predecessor,
+        ),
       ));
     }
 
     queueItems.add(queueItem);
 
     for (final s in successors) {
-      queueItems.add(QueueItemModel(
-        s as SongModel,
-        originalIndex: queueItem.originalIndex,
-        source: QueueItemSource.successor,
+      queueItems.add(pool.firstWhere(
+        (element) => element.song == s,
+        orElse: () => QueueItemModel(
+          s as SongModel,
+          originalIndex: queueItem.originalIndex,
+          source: QueueItemSource.successor,
+        ),
       ));
     }
 
@@ -335,11 +342,10 @@ class DynamicQueue implements ManagedQueueInfo {
     final locallyAvailableSongs = List<QueueItem>.from(queueItems);
 
     final List<QueueItem> queue = [];
-    final linkedItems = await getQueueItemWithLinks(queueItems[startIndex]);
-    // TODO: need to add those to the _availableSongs?
+    final linkedItems = await getQueueItemWithLinks(queueItems[startIndex], queueItems);
     queue.addAll(linkedItems);
     // don't want to select these songs twice
-    queue.forEach(locallyAvailableSongs.remove);
+    linkedItems.forEach(locallyAvailableSongs.remove);
 
     final songsToQueue = INITIAL_QUEUE_LENGTH - queue.length;
 
@@ -366,7 +372,7 @@ class DynamicQueue implements ManagedQueueInfo {
     while (queue.length < length && locallyAvailableSongs.isNotEmpty) {
       final index = rnd.nextInt(locallyAvailableSongs.length);
 
-      final linkedSong = await getQueueItemWithLinks(locallyAvailableSongs[index]);
+      final linkedSong = await getQueueItemWithLinks(locallyAvailableSongs[index], queueItems);
       queue.addAll(linkedSong);
       if (linkedSong.length > 1) {
         linkedSong.forEach((q) => locallyAvailableSongs.removeWhere((e) => e.song == q.song));
@@ -393,7 +399,7 @@ class DynamicQueue implements ManagedQueueInfo {
 
       final index = rnd.nextInt(bucket.length);
 
-      final linkedSong = await getQueueItemWithLinks(bucket[index]);
+      final linkedSong = await getQueueItemWithLinks(bucket[index], queueItems);
       queue.addAll(linkedSong);
       if (linkedSong.length > 1) {
         for (final q in linkedSong) {
