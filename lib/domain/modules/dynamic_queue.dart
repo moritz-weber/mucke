@@ -310,12 +310,12 @@ class DynamicQueue implements ManagedQueueInfo {
   }) {
     final List<QueueItem> result = [];
 
-    final blockLevel = calcBlockLevel(_shuffleMode, _playable!.type);
+    final blockLevel = calcBlockLevel(_shuffleMode, _playable!);
     final kIndex = keepIndex ? index! : -1;
 
     for (int i = 0; i < availableSongs.length; i++) {
       final qi = availableSongs[i];
-      if (i == kIndex || (!(qi.song.blockLevel > blockLevel) && qi.isAvailable)) {
+      if (i == kIndex || (qi.song.blockLevel <= blockLevel && qi.isAvailable)) {
         result.add(qi);
       }
     }

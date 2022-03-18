@@ -261,7 +261,7 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
     }
 
     if (_dynamicQueue.updateSongs(songs)) {
-      final blockLevel = calcBlockLevel(shuffleModeStream.value, playableStream.value.type);
+      final blockLevel = calcBlockLevel(shuffleModeStream.value, playableStream.value);
       final queue = _dynamicQueue.queue;
 
       for (int i = 0; i < queue.length; i++) {
