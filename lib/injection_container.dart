@@ -18,6 +18,7 @@ import 'domain/repositories/platform_integration_repository.dart';
 import 'domain/repositories/settings_repository.dart';
 import 'domain/usecases/play_album.dart';
 import 'domain/usecases/play_artist.dart';
+import 'domain/usecases/play_playlist.dart';
 import 'domain/usecases/play_smart_list.dart';
 import 'domain/usecases/play_songs.dart';
 import 'domain/usecases/seek_to_next.dart';
@@ -68,6 +69,7 @@ Future<void> setupGetIt() async {
       playAlbum: getIt(),
       playArtist: getIt(),
       playSmartList: getIt(),
+      playPlayist: getIt(),
       playSongs: getIt(),
       seekToNext: getIt(),
       shuffleAll: getIt(),
@@ -125,6 +127,12 @@ Future<void> setupGetIt() async {
   getIt.registerLazySingleton<PlaySmartList>(
     () => PlaySmartList(
       getIt(),
+      getIt(),
+      getIt(),
+    ),
+  );
+  getIt.registerLazySingleton<PlayPlaylist>(
+    () => PlayPlaylist(
       getIt(),
       getIt(),
     ),

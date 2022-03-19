@@ -4,12 +4,14 @@ import '../../domain/entities/album.dart';
 import '../../domain/entities/artist.dart';
 import '../../domain/entities/loop_mode.dart';
 import '../../domain/entities/playable.dart';
+import '../../domain/entities/playlist.dart';
 import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/entities/smart_list.dart';
 import '../../domain/entities/song.dart';
 import '../../domain/repositories/audio_player_repository.dart';
 import '../../domain/usecases/play_album.dart';
 import '../../domain/usecases/play_artist.dart';
+import '../../domain/usecases/play_playlist.dart';
 import '../../domain/usecases/play_smart_list.dart';
 import '../../domain/usecases/play_songs.dart';
 import '../../domain/usecases/seek_to_next.dart';
@@ -23,6 +25,7 @@ class AudioStore extends _AudioStore with _$AudioStore {
     required PlayArtist playArtist,
     required PlaySongs playSongs,
     required PlaySmartList playSmartList,
+    required PlayPlaylist playPlayist,
     required SeekToNext seekToNext,
     required ShuffleAll shuffleAll,
     required AudioPlayerRepository audioPlayerRepository,
@@ -32,6 +35,7 @@ class AudioStore extends _AudioStore with _$AudioStore {
           playAlbum,
           playArtist,
           playSmartList,
+          playPlayist,
           seekToNext,
           shuffleAll,
         );
@@ -44,6 +48,7 @@ abstract class _AudioStore with Store {
     this._playAlbum,
     this._playArtist,
     this._playSmartList,
+    this._playPlaylist,
     this._seekToNext,
     this._shuffleAll,
   );
@@ -53,6 +58,7 @@ abstract class _AudioStore with Store {
   final PlayAlbum _playAlbum;
   final PlayArtist _playArtist;
   final PlaySmartList _playSmartList;
+  final PlayPlaylist _playPlaylist;
   final PlaySongs _playSongs;
   final SeekToNext _seekToNext;
   final ShuffleAll _shuffleAll;
@@ -86,7 +92,8 @@ abstract class _AudioStore with Store {
       _audioPlayerRepository.loopModeStream.asObservable();
 
   @computed
-  bool get hasNext => (queueIndexStream.value != null &&
+  bool get hasNext =>
+      (queueIndexStream.value != null &&
           queueStream.value != null &&
           queueIndexStream.value! < queueStream.value!.length - 1) ||
       (loopModeStream.value ?? LoopMode.off) != LoopMode.off;
@@ -129,6 +136,8 @@ abstract class _AudioStore with Store {
   Future<void> playAlbum(Album album) async => _playAlbum(album);
 
   Future<void> playSmartList(SmartList smartList) async => _playSmartList(smartList);
+
+  Future<void> playPlaylist(Playlist playlist) async => _playPlaylist(playlist);
 
   Future<void> shuffleArtist(Artist artist) async => _playArtist(artist);
 }

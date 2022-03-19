@@ -2,6 +2,8 @@ import 'package:mobx/mobx.dart';
 
 import '../../domain/entities/album.dart';
 import '../../domain/entities/artist.dart';
+import '../../domain/entities/playlist.dart';
+import '../../domain/entities/smart_list.dart';
 import '../../domain/entities/song.dart';
 import '../../domain/repositories/music_data_repository.dart';
 
@@ -29,15 +31,10 @@ abstract class _SearchPageStore with Store {
   ObservableList<Album> searchResultsAlbums = <Album>[].asObservable();
   @observable
   ObservableList<Song> searchResultsSongs = <Song>[].asObservable();
-
   @observable
-  bool viewArtists = true;
-
+  ObservableList<SmartList> searchResultsSmartLists = <SmartList>[].asObservable();
   @observable
-  bool viewAlbums = true;
-
-  @observable
-  bool viewSongs = true;
+  ObservableList<Playlist> searchResultsPlaylists = <Playlist>[].asObservable();
 
   @action
   Future<void> search(String searchText) async {
@@ -54,6 +51,10 @@ abstract class _SearchPageStore with Store {
         (await _musicDataInfoRepository.searchAlbums(searchText, limit: limit)).asObservable();
     searchResultsSongs =
         (await _musicDataInfoRepository.searchSongs(searchText, limit: limit)).asObservable();
+    searchResultsSmartLists =
+        (await _musicDataInfoRepository.searchSmartLists(searchText, limit: limit)).asObservable();
+    searchResultsPlaylists =
+        (await _musicDataInfoRepository.searchPlaylists(searchText, limit: limit)).asObservable();
   }
 
   @action
@@ -62,21 +63,8 @@ abstract class _SearchPageStore with Store {
     searchResultsArtists = <Artist>[].asObservable();
     searchResultsAlbums = <Album>[].asObservable();
     searchResultsSongs = <Song>[].asObservable();
-  }
-
-  @action
-  void toggleViewArtists() {
-    viewArtists = !viewArtists;
-  }
-
-  @action
-  void toggleViewAlbums() {
-    viewAlbums = !viewAlbums;
-  }
-
-  @action
-  void toggleViewSongs() {
-    viewSongs = !viewSongs;
+    searchResultsSmartLists = <SmartList>[].asObservable();
+    searchResultsPlaylists = <Playlist>[].asObservable();
   }
 
   void dispose() {}

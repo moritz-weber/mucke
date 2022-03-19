@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'bottom_sheet/add_to_playlist.dart';
 
 import '../../domain/entities/album.dart';
 import '../../domain/entities/artist.dart';
-import '../../domain/entities/playlist.dart';
 import '../../domain/entities/song.dart';
 import '../pages/album_details_page.dart';
 import '../pages/artist_details_page.dart';
@@ -15,6 +13,7 @@ import '../state/navigation_store.dart';
 import '../state/song_store.dart';
 import '../theming.dart';
 import '../utils.dart' as utils;
+import 'bottom_sheet/add_to_playlist.dart';
 import 'custom_modal_bottom_sheet.dart';
 import 'exclude_level_options.dart';
 import 'like_button.dart';

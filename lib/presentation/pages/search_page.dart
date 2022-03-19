@@ -13,6 +13,8 @@ import '../widgets/song_bottom_sheet.dart';
 import '../widgets/song_list_tile.dart';
 import 'album_details_page.dart';
 import 'artist_details_page.dart';
+import 'playlist_page.dart';
+import 'smart_list_page.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -62,57 +64,151 @@ class _SearchPageState extends State<SearchPage> {
     return SafeArea(
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(
-              top: 8.0,
-              left: HORIZONTAL_PADDING - 8.0,
-              right: HORIZONTAL_PADDING - 8.0,
-              bottom: 8.0,
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  DARK1,
+                  // Colors.transparent,
+                  Theme.of(context).scaffoldBackgroundColor,
+                ],
+              ),
             ),
-            child: StatefulBuilder(builder: (context, setState) {
-              return TextField(
-                controller: _textController,
-                decoration: InputDecoration(
-                  hintText: 'Search',
-                  hintStyle: TEXT_HEADER.copyWith(color: Colors.white),
-                  fillColor: Colors.white10,
-                  filled: true,
-                  enabledBorder:
-                      const OutlineInputBorder(borderSide: BorderSide.none, gapPadding: 0.0),
-                  focusedBorder:
-                      const OutlineInputBorder(borderSide: BorderSide.none, gapPadding: 0.0),
-                  contentPadding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-                  suffixIcon: searchText.isNotEmpty
-                      ? IconButton(
-                          icon: const Icon(Icons.clear_rounded),
-                          color: Colors.white,
-                          onPressed: () {
-                            setState(() {
-                              searchText = '';
-                              _textController.text = '';
-                            });
-                            searchStore.reset();
-                          },
-                        )
-                      : const SizedBox.shrink(),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 8.0,
+                    left: HORIZONTAL_PADDING - 8.0,
+                    right: HORIZONTAL_PADDING - 8.0,
+                    bottom: 8.0,
+                  ),
+                  child: StatefulBuilder(builder: (context, setState) {
+                    return TextField(
+                      controller: _textController,
+                      decoration: InputDecoration(
+                        hintText: 'Search',
+                        hintStyle: TEXT_HEADER.copyWith(color: Colors.white),
+                        fillColor: Colors.white10,
+                        filled: true,
+                        enabledBorder:
+                            const OutlineInputBorder(borderSide: BorderSide.none, gapPadding: 0.0),
+                        focusedBorder:
+                            const OutlineInputBorder(borderSide: BorderSide.none, gapPadding: 0.0),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+                        suffixIcon: searchText.isNotEmpty
+                            ? IconButton(
+                                icon: const Icon(Icons.clear_rounded),
+                                color: Colors.white,
+                                onPressed: () {
+                                  setState(() {
+                                    searchText = '';
+                                    _textController.text = '';
+                                  });
+                                  searchStore.reset();
+                                },
+                              )
+                            : const SizedBox.shrink(),
+                      ),
+                      onChanged: (text) {
+                        setState(() => searchText = text);
+                        searchStore.search(text);
+                      },
+                      focusNode: _searchFocus,
+                    );
+                  }),
                 ),
-                onChanged: (text) {
-                  setState(() => searchText = text);
-                  searchStore.search(text);
-                },
-                focusNode: _searchFocus,
-              );
-            }),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: HORIZONTAL_PADDING - 8.0,
+                    right: HORIZONTAL_PADDING - 8.0,
+                    bottom: 16.0,
+                  ),
+                  child: Observer(builder: (context) {
+                    final artists = searchStore.searchResultsArtists;
+                    final albums = searchStore.searchResultsAlbums;
+                    final songs = searchStore.searchResultsSongs;
+                    final smartlists = searchStore.searchResultsSmartLists;
+                    final playlists = searchStore.searchResultsPlaylists;
+
+                    final artistHeight =
+                        artists.length * 56.0 + artists.isNotEmpty.toDouble() * (16.0 + 56.0);
+                    final albumsHeight =
+                        albums.length * 72.0 + albums.isNotEmpty.toDouble() * (16.0 + 56.0);
+                    final songsHeight =
+                        songs.length * 56.0 + songs.isNotEmpty.toDouble() * (16.0 + 56.0);
+                    final smartListsHeight =
+                        smartlists.length * 56.0 + smartlists.isNotEmpty.toDouble() * (16.0 + 56.0);
+
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          onPressed: artists.isEmpty
+                              ? null
+                              : () => _scrollController.animateTo(
+                                    0,
+                                    duration: const Duration(milliseconds: 250),
+                                    curve: Curves.easeInOut,
+                                  ),
+                          icon: const Icon(Icons.person_rounded),
+                        ),
+                        IconButton(
+                          onPressed: albums.isEmpty
+                              ? null
+                              : () => _scrollController.animateTo(
+                                    artistHeight,
+                                    duration: const Duration(milliseconds: 250),
+                                    curve: Curves.easeInOut,
+                                  ),
+                          icon: const Icon(Icons.album_rounded),
+                        ),
+                        IconButton(
+                          onPressed: songs.isEmpty
+                              ? null
+                              : () => _scrollController.animateTo(
+                                    artistHeight + albumsHeight,
+                                    duration: const Duration(milliseconds: 250),
+                                    curve: Curves.easeInOut,
+                                  ),
+                          icon: const Icon(Icons.audiotrack_rounded),
+                        ),
+                        IconButton(
+                          onPressed: smartlists.isEmpty
+                              ? null
+                              : () => _scrollController.animateTo(
+                                    artistHeight + albumsHeight + songsHeight,
+                                    duration: const Duration(milliseconds: 250),
+                                    curve: Curves.easeInOut,
+                                  ),
+                          icon: const Icon(Icons.auto_awesome_rounded),
+                        ),
+                        IconButton(
+                          onPressed: playlists.isEmpty
+                              ? null
+                              : () => _scrollController.animateTo(
+                                    artistHeight + albumsHeight + songsHeight + smartListsHeight,
+                                    duration: const Duration(milliseconds: 250),
+                                    curve: Curves.easeInOut,
+                                  ),
+                          icon: const Icon(Icons.queue_music_rounded),
+                        ),
+                      ],
+                    );
+                  }),
+                ),
+              ],
+            ),
           ),
           Expanded(
             child: Observer(builder: (context) {
               final artists = searchStore.searchResultsArtists;
               final albums = searchStore.searchResultsAlbums;
               final songs = searchStore.searchResultsSongs;
-
-              final viewArtists = searchStore.viewArtists;
-              final viewAlbums = searchStore.viewAlbums;
-              final viewSongs = searchStore.viewSongs;
+              final smartlists = searchStore.searchResultsSmartLists;
+              final playlists = searchStore.searchResultsPlaylists;
 
               return Scrollbar(
                 controller: _scrollController,
@@ -120,205 +216,192 @@ class _SearchPageState extends State<SearchPage> {
                   controller: _scrollController,
                   slivers: [
                     if (artists.isNotEmpty) ...[
-                      SliverAppBar(
-                        title: GestureDetector(
-                          onTap: () => _scrollController.animateTo(
-                            0,
-                            duration: const Duration(milliseconds: 250),
-                            curve: Curves.easeInOut,
-                          ),
-                          child: Container(
-                            width: double.infinity,
-                            color: Colors.transparent,
-                            child: const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 10.0),
-                              child: Text('Artists', style: TEXT_HEADER),
-                            ),
-                          ),
-                        ),
-                        actions: [
-                          IconButton(
-                            onPressed: () => searchStore.toggleViewArtists(),
-                            icon: Icon(viewArtists
-                                ? Icons.expand_less_rounded
-                                : Icons.expand_more_rounded),
-                          ),
-                        ],
-                        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                        elevation: 0.0,
-                        pinned: true,
-                      ),
                       SliverList(
                         delegate: SliverChildListDelegate(
                           [
-                            AnimatedSwitcher(
-                              duration: const Duration(milliseconds: 200),
-                              transitionBuilder: (child, animation) => SizeTransition(
-                                sizeFactor: animation,
-                                child: child,
+                            ListTile(
+                              title: Text(
+                                'Artists',
+                                style: TEXT_HEADER.underlined(
+                                  textColor: Colors.white,
+                                  underlineColor: LIGHT1,
+                                  thickness: 4,
+                                  distance: 8,
+                                ),
                               ),
-                              child: viewArtists
-                                  ? Column(
-                                      children: [
-                                        for (final artist in artists)
-                                          ListTile(
-                                            title: Text(artist.name),
-                                            leading: const SizedBox(
-                                              child: Icon(Icons.person_rounded),
-                                              width: 56.0,
-                                              height: 56.0,
-                                            ),
-                                            onTap: () {
-                                              _navStore.pushOnLibrary(
-                                                MaterialPageRoute<Widget>(
-                                                  builder: (BuildContext context) =>
-                                                      ArtistDetailsPage(
-                                                    artist: artist,
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          )
-                                      ],
-                                    )
-                                  : const SizedBox.shrink(),
                             ),
+                            for (final artist in artists)
+                              ListTile(
+                                title: Text(artist.name),
+                                leading: const SizedBox(
+                                  child: Icon(Icons.person_rounded),
+                                  width: 56.0,
+                                  height: 56.0,
+                                ),
+                                onTap: () {
+                                  _navStore.pushOnLibrary(
+                                    MaterialPageRoute<Widget>(
+                                      builder: (BuildContext context) => ArtistDetailsPage(
+                                        artist: artist,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            const SizedBox(height: 16.0),
                           ],
                         ),
                       ),
                     ],
                     if (albums.isNotEmpty) ...[
-                      SliverAppBar(
-                        title: GestureDetector(
-                          onTap: () {
-                            _scrollController.animateTo(
-                              artists.length * 56.0 * viewArtists.toDouble(),
-                              duration: const Duration(milliseconds: 250),
-                              curve: Curves.easeInOut,
-                            );
-                          },
-                          child: Container(
-                            width: double.infinity,
-                            color: Colors.transparent,
-                            child: const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 10.0),
-                              child: Text('Albums', style: TEXT_HEADER),
-                            ),
-                          ),
-                        ),
-                        actions: [
-                          IconButton(
-                            onPressed: () => searchStore.toggleViewAlbums(),
-                            icon: Icon(
-                              viewAlbums ? Icons.expand_less_rounded : Icons.expand_more_rounded,
-                            ),
-                          ),
-                        ],
-                        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                        elevation: 0.0,
-                        pinned: true,
-                      ),
                       SliverList(
                         delegate: SliverChildListDelegate(
                           [
-                            AnimatedSwitcher(
-                              duration: const Duration(milliseconds: 200),
-                              transitionBuilder: (child, animation) => SizeTransition(
-                                sizeFactor: animation,
-                                child: child,
+                            ListTile(
+                              title: Text(
+                                'Albums',
+                                style: TEXT_HEADER.underlined(
+                                  textColor: Colors.white,
+                                  underlineColor: LIGHT1,
+                                  thickness: 4,
+                                  distance: 8,
+                                ),
                               ),
-                              child: viewAlbums
-                                  ? Column(children: [
-                                      for (final album in albums)
-                                        AlbumArtListTile(
-                                          title: album.title,
-                                          subtitle: album.artist,
-                                          albumArtPath: album.albumArtPath,
-                                          onTap: () {
-                                            _navStore.pushOnLibrary(
-                                              MaterialPageRoute<Widget>(
-                                                builder: (BuildContext context) => AlbumDetailsPage(
-                                                  album: album,
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                    ])
-                                  : const SizedBox.shrink(),
                             ),
+                            for (final album in albums)
+                              AlbumArtListTile(
+                                title: album.title,
+                                subtitle: album.artist,
+                                albumArtPath: album.albumArtPath,
+                                onTap: () {
+                                  _navStore.pushOnLibrary(
+                                    MaterialPageRoute<Widget>(
+                                      builder: (BuildContext context) => AlbumDetailsPage(
+                                        album: album,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            const SizedBox(height: 16.0),
                           ],
                         ),
                       ),
                     ],
                     if (songs.isNotEmpty) ...[
-                      SliverAppBar(
-                        title: GestureDetector(
-                          onTap: () {
-                            _scrollController.animateTo(
-                              artists.length * 56.0 * viewArtists.toDouble() +
-                                  albums.length * 72.0 * viewAlbums.toDouble(),
-                              duration: const Duration(milliseconds: 250),
-                              curve: Curves.easeInOut,
-                            );
-                          },
-                          child: Container(
-                            width: double.infinity,
-                            color: Colors.transparent,
-                            child: const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 10.0),
-                              child: Text('Songs', style: TEXT_HEADER),
-                            ),
-                          ),
-                        ),
-                        actions: [
-                          IconButton(
-                            onPressed: () => searchStore.toggleViewSongs(),
-                            icon: Icon(
-                              viewSongs ? Icons.expand_less_rounded : Icons.expand_more_rounded,
-                            ),
-                          ),
-                        ],
-                        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                        elevation: 0.0,
-                        pinned: true,
-                      ),
                       SliverList(
                         delegate: SliverChildListDelegate(
                           [
-                            AnimatedSwitcher(
-                              duration: const Duration(milliseconds: 200),
-                              transitionBuilder: (child, animation) => SizeTransition(
-                                sizeFactor: animation,
-                                child: child,
+                            ListTile(
+                              title: Text(
+                                'Songs',
+                                style: TEXT_HEADER.underlined(
+                                  textColor: Colors.white,
+                                  underlineColor: LIGHT1,
+                                  thickness: 4,
+                                  distance: 8,
+                                ),
                               ),
-                              child: viewSongs
-                                  ? Column(children: [
-                                      for (final song in songs)
-                                        SongListTile(
-                                          song: song,
-                                          onTap: () => audioStore.playSong(
-                                            0,
-                                            [song],
-                                            SearchQuery(searchText),
-                                          ),
-                                          onTapMore: () => showModalBottomSheet(
-                                            context: context,
-                                            useRootNavigator: true,
-                                            isScrollControlled: true,
-                                            backgroundColor: Colors.transparent,
-                                            builder: (context) => SongBottomSheet(
-                                              song: song,
-                                            ),
-                                          ),
-                                        ),
-                                    ])
-                                  : const SizedBox.shrink(),
                             ),
+                            for (int i in songs.asMap().keys)
+                              SongListTile(
+                                song: songs[i],
+                                onTap: () => audioStore.playSong(
+                                  i,
+                                  songs,
+                                  SearchQuery(searchText),
+                                ),
+                                onTapMore: () => showModalBottomSheet(
+                                  context: context,
+                                  useRootNavigator: true,
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.transparent,
+                                  builder: (context) => SongBottomSheet(
+                                    song: songs[i],
+                                  ),
+                                ),
+                              ),
+                            const SizedBox(height: 16.0),
                           ],
                         ),
                       ),
                     ],
+                    if (smartlists.isNotEmpty)
+                      SliverList(
+                        delegate: SliverChildListDelegate(
+                          [
+                            ListTile(
+                              title: Text(
+                                'Smartlists',
+                                style: TEXT_HEADER.underlined(
+                                  textColor: Colors.white,
+                                  underlineColor: LIGHT1,
+                                  thickness: 4,
+                                  distance: 8,
+                                ),
+                              ),
+                            ),
+                            for (int i in smartlists.asMap().keys)
+                              ListTile(
+                                title: Text(smartlists[i].name),
+                                leading: const SizedBox(
+                                  child: Icon(Icons.auto_awesome_rounded),
+                                  width: 56.0,
+                                  height: 56.0,
+                                ),
+                                onTap: () => _navStore.pushOnLibrary(
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        SmartListPage(smartList: smartlists[i]),
+                                  ),
+                                ),
+                                trailing: IconButton(
+                                  icon: const Icon(Icons.play_circle_fill_rounded, size: 32.0),
+                                  onPressed: () => audioStore.playSmartList(smartlists[i]),
+                                ),
+                              ),
+                            const SizedBox(height: 16.0),
+                          ],
+                        ),
+                      ),
+                    if (playlists.isNotEmpty)
+                      SliverList(
+                        delegate: SliverChildListDelegate(
+                          [
+                            ListTile(
+                              title: Text(
+                                'Playlists',
+                                style: TEXT_HEADER.underlined(
+                                  textColor: Colors.white,
+                                  underlineColor: LIGHT1,
+                                  thickness: 4,
+                                  distance: 8,
+                                ),
+                              ),
+                            ),
+                            for (int i in playlists.asMap().keys)
+                              ListTile(
+                                title: Text(playlists[i].name),
+                                leading: const SizedBox(
+                                  child: Icon(Icons.queue_music_rounded),
+                                  width: 56.0,
+                                  height: 56.0,
+                                ),
+                                onTap: () => _navStore.pushOnLibrary(
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        PlaylistPage(playlist: playlists[i]),
+                                  ),
+                                ),
+                                trailing: IconButton(
+                                  icon: const Icon(Icons.play_circle_fill_rounded, size: 32.0),
+                                  onPressed: () => audioStore.playPlaylist(playlists[i]),
+                                ),
+                              ),
+                            const SizedBox(height: 16.0),
+                          ],
+                        ),
+                      ),
                   ],
                 ),
               );

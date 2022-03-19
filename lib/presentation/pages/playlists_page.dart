@@ -71,7 +71,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> with AutomaticKeepAliveCl
                   ),
                   trailing: IconButton(
                     icon: const Icon(Icons.play_circle_fill_rounded, size: 32.0),
-                    onPressed: () => {},
+                    onPressed: () => audioStore.playPlaylist(playlist),
                   ),
                 );
               }

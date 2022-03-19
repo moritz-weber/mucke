@@ -35,6 +35,8 @@ abstract class MusicDataInfoRepository {
   Future<List<Artist>> searchArtists(String searchText, {int? limit});
   Future<List<Album>> searchAlbums(String searchText, {int? limit});
   Future<List<Song>> searchSongs(String searchText, {int? limit});
+  Future<List<SmartList>> searchSmartLists(String searchText, {int? limit});
+  Future<List<Playlist>> searchPlaylists(String searchText, {int? limit});
 }
 
 abstract class MusicDataRepository extends MusicDataInfoRepository {

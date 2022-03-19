@@ -73,48 +73,37 @@ mixin _$SearchPageStore on _SearchPageStore, Store {
     });
   }
 
-  final _$viewArtistsAtom = Atom(name: '_SearchPageStore.viewArtists');
+  final _$searchResultsSmartListsAtom =
+      Atom(name: '_SearchPageStore.searchResultsSmartLists');
 
   @override
-  bool get viewArtists {
-    _$viewArtistsAtom.reportRead();
-    return super.viewArtists;
+  ObservableList<SmartList> get searchResultsSmartLists {
+    _$searchResultsSmartListsAtom.reportRead();
+    return super.searchResultsSmartLists;
   }
 
   @override
-  set viewArtists(bool value) {
-    _$viewArtistsAtom.reportWrite(value, super.viewArtists, () {
-      super.viewArtists = value;
+  set searchResultsSmartLists(ObservableList<SmartList> value) {
+    _$searchResultsSmartListsAtom
+        .reportWrite(value, super.searchResultsSmartLists, () {
+      super.searchResultsSmartLists = value;
     });
   }
 
-  final _$viewAlbumsAtom = Atom(name: '_SearchPageStore.viewAlbums');
+  final _$searchResultsPlaylistsAtom =
+      Atom(name: '_SearchPageStore.searchResultsPlaylists');
 
   @override
-  bool get viewAlbums {
-    _$viewAlbumsAtom.reportRead();
-    return super.viewAlbums;
+  ObservableList<Playlist> get searchResultsPlaylists {
+    _$searchResultsPlaylistsAtom.reportRead();
+    return super.searchResultsPlaylists;
   }
 
   @override
-  set viewAlbums(bool value) {
-    _$viewAlbumsAtom.reportWrite(value, super.viewAlbums, () {
-      super.viewAlbums = value;
-    });
-  }
-
-  final _$viewSongsAtom = Atom(name: '_SearchPageStore.viewSongs');
-
-  @override
-  bool get viewSongs {
-    _$viewSongsAtom.reportRead();
-    return super.viewSongs;
-  }
-
-  @override
-  set viewSongs(bool value) {
-    _$viewSongsAtom.reportWrite(value, super.viewSongs, () {
-      super.viewSongs = value;
+  set searchResultsPlaylists(ObservableList<Playlist> value) {
+    _$searchResultsPlaylistsAtom
+        .reportWrite(value, super.searchResultsPlaylists, () {
+      super.searchResultsPlaylists = value;
     });
   }
 
@@ -140,48 +129,14 @@ mixin _$SearchPageStore on _SearchPageStore, Store {
   }
 
   @override
-  void toggleViewArtists() {
-    final _$actionInfo = _$_SearchPageStoreActionController.startAction(
-        name: '_SearchPageStore.toggleViewArtists');
-    try {
-      return super.toggleViewArtists();
-    } finally {
-      _$_SearchPageStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void toggleViewAlbums() {
-    final _$actionInfo = _$_SearchPageStoreActionController.startAction(
-        name: '_SearchPageStore.toggleViewAlbums');
-    try {
-      return super.toggleViewAlbums();
-    } finally {
-      _$_SearchPageStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void toggleViewSongs() {
-    final _$actionInfo = _$_SearchPageStoreActionController.startAction(
-        name: '_SearchPageStore.toggleViewSongs');
-    try {
-      return super.toggleViewSongs();
-    } finally {
-      _$_SearchPageStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   String toString() {
     return '''
 query: ${query},
 searchResultsArtists: ${searchResultsArtists},
 searchResultsAlbums: ${searchResultsAlbums},
 searchResultsSongs: ${searchResultsSongs},
-viewArtists: ${viewArtists},
-viewAlbums: ${viewAlbums},
-viewSongs: ${viewSongs}
+searchResultsSmartLists: ${searchResultsSmartLists},
+searchResultsPlaylists: ${searchResultsPlaylists}
     ''';
   }
 }

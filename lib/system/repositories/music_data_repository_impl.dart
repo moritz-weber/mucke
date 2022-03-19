@@ -324,6 +324,38 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
     return dbResult;
   }
 
+  @override
+  Future<List<Playlist>> searchPlaylists(String searchText, {int? limit}) async {
+        if (searchText == '') return [];
+
+    final searchTextLower = searchText.toLowerCase();
+
+    // TODO: need to clean the string? sql injection?
+    final dbResult = await _playlistDataSource.searchPlaylists(_fuzzy(searchTextLower));
+
+    dbResult.sort((a, b) => -_similarity(a.name.toLowerCase(), searchTextLower)
+        .compareTo(_similarity(b.name.toLowerCase(), searchTextLower)));
+
+    if (limit != null) return dbResult.take(limit).toList();
+    return dbResult;
+  }
+
+  @override
+  Future<List<SmartList>> searchSmartLists(String searchText, {int? limit}) async {
+    if (searchText == '') return [];
+
+    final searchTextLower = searchText.toLowerCase();
+
+    // TODO: need to clean the string? sql injection?
+    final dbResult = await _playlistDataSource.searchSmartLists(_fuzzy(searchTextLower));
+
+    dbResult.sort((a, b) => -_similarity(a.name.toLowerCase(), searchTextLower)
+        .compareTo(_similarity(b.name.toLowerCase(), searchTextLower)));
+
+    if (limit != null) return dbResult.take(limit).toList();
+    return dbResult;
+  }
+
   double _similarity(String value, String searchText) {
     return value.startsWith(searchText)
         ? value.similarityTo(searchText) + 1

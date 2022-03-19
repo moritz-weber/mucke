@@ -298,6 +298,64 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
     return query.watch().map(
         (moorSongList) => moorSongList.map((moorSong) => SongModel.fromMoor(moorSong)).toList());
   }
+
+  @override
+  Future<List<PlaylistModel>> searchPlaylists(String searchText, {int? limit}) async {
+    final plSongs = await (select(playlistEntries)
+          ..orderBy([(t) => OrderingTerm(expression: t.position)]))
+        .join(
+      [innerJoin(songs, songs.path.equalsExp(playlistEntries.songPath))],
+    ).get();
+
+    final List<PlaylistModel> result = await (select(playlists)
+          ..where((tbl) => tbl.name.regexp(searchText, dotAll: true, caseSensitive: false)))
+        .get()
+        .then(
+      (moorList) {
+        return moorList.map((moorPlaylist) {
+          final moorSongs = (plSongs.where(
+                  (element) => element.readTable(playlistEntries).playlistId == moorPlaylist.id))
+              .map((e) => e.readTable(songs))
+              .toList();
+          return PlaylistModel.fromMoor(moorPlaylist, moorSongs);
+        }).toList();
+      },
+    );
+
+    if (limit != null) {
+      if (limit < 0) return [];
+      return result.take(limit).toList();
+    }
+    return result;
+  }
+
+  @override
+  Future<List<SmartListModel>> searchSmartLists(String searchText, {int? limit}) async {
+    final slArtists = await (select(smartListArtists).join(
+      [innerJoin(artists, artists.name.equalsExp(smartListArtists.artistName))],
+    )).get();
+
+    final List<SmartListModel> result = await (select(smartLists)
+          ..where((tbl) => tbl.name.regexp(searchText, dotAll: true, caseSensitive: false)))
+        .get()
+        .then(
+      (moorList) {
+        return moorList.map((moorSmartList) {
+          final moorArtists = (slArtists.where(
+                  (element) => element.readTable(smartListArtists).smartListId == moorSmartList.id))
+              .map((e) => e.readTable(artists))
+              .toList();
+          return SmartListModel.fromMoor(moorSmartList, moorArtists);
+        }).toList();
+      },
+    );
+
+    if (limit != null) {
+      if (limit < 0) return [];
+      return result.take(limit).toList();
+    }
+    return result;
+  }
 }
 
 List<OrderingTerm Function($SongsTable)> _generateOrderingTerms(sl.OrderBy orderBy) {
