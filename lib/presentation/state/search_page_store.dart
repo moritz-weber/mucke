@@ -18,7 +18,15 @@ class SearchPageStore extends _SearchPageStore with _$SearchPageStore {
 abstract class _SearchPageStore with Store {
   _SearchPageStore(
     this._musicDataInfoRepository,
-  );
+  ) {
+    _musicDataInfoRepository.songUpdateStream.listen((updates) { 
+      for (int i = 0; i < searchResultsSongs.length; i++) {
+        if (updates.keys.contains(searchResultsSongs[i].path)) {
+          searchResultsSongs[i] = updates[searchResultsSongs[i].path]!;
+        }
+      }
+    });
+  }
 
   final MusicDataInfoRepository _musicDataInfoRepository;
 
