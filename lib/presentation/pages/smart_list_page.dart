@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import '../../domain/entities/smart_list.dart';
 import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
+import '../state/navigation_store.dart';
 import '../state/smart_list_page_store.dart';
 import '../theming.dart';
 import '../widgets/song_bottom_sheet.dart';
@@ -39,6 +40,7 @@ class _SmartListPageState extends State<SmartListPage> {
   @override
   Widget build(BuildContext context) {
     final AudioStore audioStore = GetIt.I<AudioStore>();
+    final NavigationStore navStore = GetIt.I<NavigationStore>();
 
     return SafeArea(
       child: Observer(
@@ -54,12 +56,13 @@ class _SmartListPageState extends State<SmartListPage> {
               ),
               leading: IconButton(
                 icon: const Icon(Icons.chevron_left),
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => navStore.pop(context),
               ),
               actions: [
                 IconButton(
                   icon: const Icon(Icons.edit),
-                  onPressed: () => Navigator.of(context).push(
+                  onPressed: () => navStore.push(
+                    context,
                     MaterialPageRoute(
                       builder: (BuildContext context) => SmartListFormPage(
                         smartList: smartList,

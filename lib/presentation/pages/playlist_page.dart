@@ -6,6 +6,7 @@ import '../../domain/entities/playlist.dart';
 import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
 import '../state/music_data_store.dart';
+import '../state/navigation_store.dart';
 import '../theming.dart';
 import '../widgets/song_bottom_sheet.dart';
 import '../widgets/song_list_tile.dart';
@@ -19,6 +20,7 @@ class PlaylistPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final AudioStore audioStore = GetIt.I<AudioStore>();
     final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
+    final NavigationStore navStore = GetIt.I<NavigationStore>();
 
     return SafeArea(
       child: StreamBuilder<Playlist>(
@@ -34,7 +36,7 @@ class PlaylistPage extends StatelessWidget {
                 ),
                 leading: IconButton(
                   icon: const Icon(Icons.chevron_left),
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => navStore.pop(context),
                 ),
                 actions: [
                   IconButton(

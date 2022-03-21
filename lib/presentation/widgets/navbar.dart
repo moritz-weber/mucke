@@ -31,21 +31,21 @@ class _NavBarState extends State<NavBar> {
             type: BottomNavigationBarType.fixed,
             items: const [
               BottomNavigationBarItem(
-                icon: Icon(Icons.home),
+                icon: Icon(Icons.home_rounded),
                 label: 'Home',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.library_music),
+                icon: Icon(Icons.library_music_rounded),
                 label: 'Library',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.search),
+                icon: Icon(Icons.search_rounded),
                 label: 'Search',
               ),
-              // BottomNavigationBarItem(
-              //   icon: Icon(Icons.settings),
-              //   label: 'Settings',
-              // ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.settings_rounded),
+                label: 'Settings',
+              ),
             ],
           ),
         ],

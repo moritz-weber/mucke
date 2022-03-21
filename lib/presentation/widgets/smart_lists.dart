@@ -26,8 +26,7 @@ class SmartLists extends StatelessWidget {
             (_, int index) {
               final SmartList smartList = smartLists[index];
               return GestureDetector(
-                onTap: () => navStore.push(
-                  context,
+                onTap: () => navStore.pushOnLibrary(
                   MaterialPageRoute<Widget>(
                     builder: (context) => SmartListPage(smartList: smartList),
                   ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../domain/entities/artist.dart';
+import '../state/navigation_store.dart';
 
 class ArtistHeader extends StatelessWidget {
   const ArtistHeader({
@@ -12,6 +14,8 @@ class ArtistHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final navStore = GetIt.I<NavigationStore>();
+
     const double height = 144.0;
     return SliverAppBar(
       pinned: true,
@@ -22,14 +26,8 @@ class ArtistHeader extends StatelessWidget {
       ),
       leading: IconButton(
         icon: const Icon(Icons.chevron_left),
-        onPressed: () => Navigator.pop(context),
+        onPressed: () => navStore.pop(context),
       ),
-      // actions: [
-      //   IconButton(
-      //     icon: const Icon(Icons.more_vert),
-      //     onPressed: () => Navigator.pop(context),
-      //   ),
-      // ],
       titleSpacing: 48.0,
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,

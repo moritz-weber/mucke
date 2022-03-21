@@ -103,17 +103,6 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
     _log.d('updateDatabase finished');
   }
 
-  @override
-  Future<Song> incrementLikeCount(Song song) async {
-    if (song.likeCount < MAX_LIKE_COUNT) {
-      final newSong = (song as SongModel).copyWith(likeCount: song.likeCount + 1);
-      _songUpdateSubject.add({song.path: newSong});
-      await _musicDataSource.updateSongs([newSong]);
-      return newSong;
-    }
-    return song;
-  }
-
   Future<void> _updateArtists(List<ArtistModel> artists) async {
     await _musicDataSource.deleteAllArtists();
     await _musicDataSource.insertArtists(artists);

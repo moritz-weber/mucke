@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../domain/entities/artist.dart';
 import '../state/music_data_store.dart';
+import '../state/navigation_store.dart';
 import '../state/smart_list_form_store.dart';
 import '../theming.dart';
 
@@ -16,6 +17,7 @@ class SmartListArtistsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final store = formStore;
     final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
+    final NavigationStore navStore = GetIt.I<NavigationStore>();
     final initialSet = Set<Artist>.from(store.selectedArtists);
 
     return SafeArea(
@@ -30,14 +32,14 @@ class SmartListArtistsPage extends StatelessWidget {
             onPressed: () {
               store.selectedArtists.clear();
               store.selectedArtists.addAll(initialSet);
-              Navigator.pop(context);
+              navStore.pop(context);
             },
           ),
           actions: [
             IconButton(
               icon: const Icon(Icons.check),
               onPressed: () async {
-                Navigator.pop(context);
+                navStore.pop(context);
               },
             ),
           ],

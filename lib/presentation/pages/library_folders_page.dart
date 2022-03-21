@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
+import '../state/navigation_store.dart';
 import '../state/settings_store.dart';
 import '../theming.dart';
 
@@ -13,6 +14,7 @@ class LibraryFoldersPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final SettingsStore settingsStore = GetIt.I<SettingsStore>();
+    final NavigationStore navStore = GetIt.I<NavigationStore>();
 
     return SafeArea(
       child: Scaffold(
@@ -23,7 +25,7 @@ class LibraryFoldersPage extends StatelessWidget {
           ),
           leading: IconButton(
             icon: const Icon(Icons.chevron_left),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => navStore.pop(context),
           ),
           actions: [
             IconButton(

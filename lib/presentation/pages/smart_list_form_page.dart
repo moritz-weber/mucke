@@ -5,6 +5,7 @@ import 'package:reorderables/reorderables.dart';
 
 import '../../constants.dart';
 import '../../domain/entities/smart_list.dart';
+import '../state/navigation_store.dart';
 import '../state/settings_store.dart';
 import '../state/smart_list_form_store.dart';
 import '../theming.dart';
@@ -39,6 +40,7 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
   Widget build(BuildContext context) {
     final title = widget.smartList == null ? 'Create smart list' : 'Edit smart list';
     final SettingsStore settingsStore = GetIt.I<SettingsStore>();
+    final NavigationStore navStore = GetIt.I<NavigationStore>();
 
     const blockLevelTexts = <String>[
       'Exclude all songs marked for exclusion.',
@@ -56,7 +58,7 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
           ),
           leading: IconButton(
             icon: const Icon(Icons.close),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => navStore.pop(context),
           ),
           actions: [
             if (widget.smartList != null)
@@ -66,7 +68,7 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
                   // TODO: this works, but may only pop back to the smart list page...
                   // can I use pop 2x here?
                   await settingsStore.removeSmartList(widget.smartList!);
-                  Navigator.pop(context);
+                  navStore.pop(context);
                 },
               ),
             IconButton(
@@ -75,7 +77,7 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
                 store.validateAll();
                 if (!store.error.hasErrors) {
                   await store.save();
-                  Navigator.pop(context);
+                  navStore.pop(context);
                 }
               },
             ),
@@ -415,7 +417,7 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
                       child: Observer(
                         builder: (_) => GestureDetector(
                           onTap: () {
-                            Navigator.push(
+                            navStore.push(
                               context,
                               MaterialPageRoute<Widget>(
                                 builder: (BuildContext context) =>

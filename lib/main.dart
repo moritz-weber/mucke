@@ -12,6 +12,7 @@ import 'presentation/pages/currently_playing.dart';
 import 'presentation/pages/home_page.dart';
 import 'presentation/pages/library_page.dart';
 import 'presentation/pages/search_page.dart';
+import 'presentation/pages/settings_page.dart';
 import 'presentation/state/navigation_store.dart';
 import 'presentation/theming.dart';
 import 'presentation/widgets/navbar.dart';
@@ -73,6 +74,7 @@ class _RootPageState extends State<RootPage> {
     const SearchPage(
       key: PageStorageKey('SearchPage'),
     ),
+    const SettingsPage(),
   ];
 
   @override

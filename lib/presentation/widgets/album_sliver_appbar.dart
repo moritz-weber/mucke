@@ -2,10 +2,12 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../domain/entities/album.dart';
 import '../../domain/entities/song.dart';
 import '../state/album_page_store.dart';
+import '../state/navigation_store.dart';
 import '../utils.dart' as utils;
 
 class AlbumSliverAppBar extends StatefulWidget {
@@ -30,6 +32,7 @@ class _AlbumSliverAppBarState extends State<AlbumSliverAppBar> {
 
   @override
   Widget build(BuildContext context) {
+    final navStore = GetIt.I<NavigationStore>();
     final songs = widget.store.albumSongStream.value ?? [];
 
     return SliverAppBar(
@@ -48,7 +51,7 @@ class _AlbumSliverAppBarState extends State<AlbumSliverAppBar> {
       ),
       leading: IconButton(
         icon: const Icon(Icons.chevron_left),
-        onPressed: () => Navigator.pop(context),
+        onPressed: () => navStore.pop(context),
       ),
       actions: [
         Observer(

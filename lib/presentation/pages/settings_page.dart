@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
 import '../state/music_data_store.dart';
+import '../state/navigation_store.dart';
 import '../state/settings_store.dart';
 import '../theming.dart';
 import 'library_folders_page.dart';
@@ -12,8 +13,34 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final NavigationStore navStore = GetIt.I<NavigationStore>();
+
+    return Navigator(
+      key: navStore.settingsNavKey,
+      initialRoute: 'settings',
+      onGenerateRoute: (RouteSettings settings) {
+        WidgetBuilder builder;
+        switch (settings.name) {
+          case 'settings':
+            builder = (BuildContext context) => const _SettingsPageInner();
+            break;
+          default:
+            throw Exception('Invalid route: ${settings.name}');
+        }
+        return MaterialPageRoute(builder: builder, settings: settings);
+      },
+    );
+  }
+}
+
+class _SettingsPageInner extends StatelessWidget {
+  const _SettingsPageInner({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
     final SettingsStore settingsStore = GetIt.I<SettingsStore>();
+    final NavigationStore navStore = GetIt.I<NavigationStore>();
 
     return SafeArea(
       child: Scaffold(
@@ -22,11 +49,6 @@ class SettingsPage extends StatelessWidget {
             'Settings',
             style: TEXT_HEADER,
           ),
-          leading: IconButton(
-            icon: const Icon(Icons.chevron_left),
-            onPressed: () => Navigator.pop(context),
-          ),
-          titleSpacing: 0.0,
         ),
         body: ListView(
           children: [
@@ -56,7 +78,8 @@ class SettingsPage extends StatelessWidget {
             ListTile(
               title: const Text('Manage library folders'),
               trailing: const Icon(Icons.chevron_right),
-              onTap: () => Navigator.of(context).push(
+              onTap: () => navStore.push(
+                context,
                 MaterialPageRoute(
                   builder: (BuildContext context) => const LibraryFoldersPage(),
                 ),
@@ -77,13 +100,6 @@ class SettingsPage extends StatelessWidget {
                 isThreeLine: true,
               ),
             ),
-            const Divider(
-              height: 4.0,
-            ),
-            // const SettingsSection(text: 'Home page'),
-            // const ListTile(
-            //   title: Text('Soon (tm)'),
-            // ),
           ],
         ),
       ),

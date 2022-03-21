@@ -93,10 +93,12 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
     }
     _queue = queue;
     final queueToLoad = _getQueueToLoad(queue, initialIndex);
+    // if this was not set to false, _updateLoadedQueue would try to manipulate the _audioSource
+    // in some cases and _audioPlayer doesn't like that
+    isQueueLoaded = false;
     _audioSource = _songModelsToAudioSource(queueToLoad);
-    isQueueLoaded = true;
-
     await _audioPlayer.setAudioSource(_audioSource, initialIndex: _calcSourceIndex(initialIndex));
+    isQueueLoaded = true;
     _currentIndexSubject.add(initialIndex);
   }
 
