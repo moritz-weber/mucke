@@ -9,6 +9,7 @@ import '../../domain/entities/playlist.dart';
 import '../../domain/entities/smart_list.dart';
 import '../state/audio_store.dart';
 import '../state/music_data_store.dart';
+import '../state/navigation_store.dart';
 import '../state/settings_store.dart';
 import '../theming.dart';
 import 'playlist_page.dart';
@@ -31,6 +32,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> with AutomaticKeepAliveCl
     final AudioStore audioStore = GetIt.I<AudioStore>();
     final SettingsStore settingsStore = GetIt.I<SettingsStore>();
     final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
+    final NavigationStore navStore = GetIt.I<NavigationStore>();
 
     super.build(context);
     return Observer(builder: (_) {
@@ -49,7 +51,8 @@ class _PlaylistsPageState extends State<PlaylistsPage> with AutomaticKeepAliveCl
                 final SmartList smartList = smartLists[index];
                 return ListTile(
                   title: Text(smartList.name),
-                  onTap: () => Navigator.of(context).push(
+                  onTap: () => navStore.push(
+                    context,
                     MaterialPageRoute(
                       builder: (BuildContext context) => SmartListPage(smartList: smartList),
                     ),
@@ -64,7 +67,8 @@ class _PlaylistsPageState extends State<PlaylistsPage> with AutomaticKeepAliveCl
                 final Playlist playlist = playlists[i];
                 return ListTile(
                   title: Text(playlist.name),
-                  onTap: () => Navigator.of(context).push(
+                  onTap: () => navStore.push(
+                    context,
                     MaterialPageRoute(
                       builder: (BuildContext context) => PlaylistPage(playlist: playlist),
                     ),
@@ -104,7 +108,8 @@ class _PlaylistsPageState extends State<PlaylistsPage> with AutomaticKeepAliveCl
               backgroundColor: LIGHT2,
               foregroundColor: Colors.white,
               label: 'Add Smartlist',
-              onTap: () => Navigator.of(context).push(
+              onTap: () => navStore.push(
+                context,
                 MaterialPageRoute(
                   builder: (BuildContext context) => const SmartListFormPage(),
                 ),

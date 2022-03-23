@@ -75,6 +75,13 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
             albumIdMap[albumString] = album.id;
             if (album.albumArtPath != null) albumArtMap[albumString] = album.albumArtPath!;
             artistSet.add(album.artist);
+          } else {
+            // we already encountered the album (at least by albumString)
+            // make sure the id is consistent
+            if (album.id != albumIdMap[albumString]) {
+              songs.add(song.copyWith(albumId: albumIdMap[albumString]));
+              continue;
+            }
           }
           songs.add(song);
           continue;

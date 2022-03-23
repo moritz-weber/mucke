@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../domain/entities/smart_list.dart';
+import '../state/navigation_store.dart';
 import '../state/settings_store.dart';
 import '../theming.dart';
 import 'smart_list_form_page.dart';
@@ -14,6 +15,7 @@ class SmartListsSettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final SettingsStore settingsStore = GetIt.I<SettingsStore>();
+    final NavigationStore navStore = GetIt.I<NavigationStore>();
 
     return SafeArea(
       child: Scaffold(
@@ -29,7 +31,8 @@ class SmartListsSettingsPage extends StatelessWidget {
           actions: [
             IconButton(
               icon: const Icon(Icons.add),
-              onPressed: () => Navigator.of(context).push(
+              onPressed: () => navStore.push(
+                context,
                 MaterialPageRoute(
                   builder: (BuildContext context) => const SmartListFormPage(),
                 ),
@@ -47,7 +50,8 @@ class SmartListsSettingsPage extends StatelessWidget {
                 final SmartList smartList = smartLists[index];
                 return ListTile(
                   title: Text(smartList.name),
-                  onTap: () => Navigator.of(context).push(
+                  onTap: () => navStore.push(
+                    context,
                     MaterialPageRoute(
                       builder: (BuildContext context) => SmartListFormPage(smartList: smartList),
                     ),
