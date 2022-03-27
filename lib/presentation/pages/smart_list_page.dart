@@ -92,6 +92,7 @@ class _SmartListPageState extends State<SmartListPage> {
                         song: song,
                       ),
                     ),
+                    onSelect: () {},
                   );
                 },
                 separatorBuilder: (BuildContext context, int index) => const SizedBox(

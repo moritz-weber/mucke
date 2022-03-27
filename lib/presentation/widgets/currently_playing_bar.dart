@@ -39,6 +39,7 @@ class CurrentlyPlayingBar extends StatelessWidget {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(1.5),
                           ),
+                          width: 56.0,
                           child: Image(
                             image: getAlbumImage(song.albumArtPath),
                             height: 56.0,
@@ -76,11 +77,6 @@ class CurrentlyPlayingBar extends StatelessWidget {
                   backgroundColor: Colors.white10,
                 ),
                 height: 2,
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(color: Theme.of(context).primaryColor, blurRadius: 1),
-                  ],
-                ),
               ),
             ],
           );

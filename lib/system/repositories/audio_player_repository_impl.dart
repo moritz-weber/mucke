@@ -10,9 +10,9 @@ import '../../domain/entities/song.dart';
 import '../../domain/modules/dynamic_queue.dart';
 import '../../domain/modules/managed_queue_info.dart';
 import '../../domain/repositories/audio_player_repository.dart';
+import '../../domain/utils.dart';
 import '../datasources/audio_player_data_source.dart';
 import '../models/song_model.dart';
-import '../utils.dart';
 
 class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   AudioPlayerRepositoryImpl(this._audioPlayerDataSource, this._dynamicQueue) {
@@ -191,18 +191,18 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   }
 
   @override
-  Future<void> removeQueueIndex(int index) async {
-    _removeQueueIndex(index, true);
+  Future<void> removeQueueIndeces(List<int> indeces) async {
+    _removeQueueIndeces(indeces, true);
   }
 
-  Future<void> _removeQueueIndex(int index, bool permanent) async {
-    _dynamicQueue.removeQueueIndex(index, permanent);
+  Future<void> _removeQueueIndeces(List<int> indeces, bool permanent) async {
+    _dynamicQueue.removeQueueIndeces(indeces, permanent);
 
-    final newCurrentIndex = _calcNewCurrentIndexOnRemove(currentIndexStream.value, index);
+    final newCurrentIndex = _calcNewCurrentIndexOnRemove(currentIndexStream.value, indeces);
     _currentIndexSubject.add(newCurrentIndex);
     _queueSubject.add(_dynamicQueue.queue);
 
-    _audioPlayerDataSource.removeQueueIndex(index);
+    (indeces..sort(((a, b) => -a.compareTo(b)))).forEach(_audioPlayerDataSource.removeQueueIndex);
   }
 
   @override
@@ -260,16 +260,22 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
       _currentSongSubject.add(songs[_currentSongSubject.value.path]!);
     }
 
+    final oldQueue = List<Song>.from(_dynamicQueue.queue);
+
     if (_dynamicQueue.updateSongs(songs)) {
       final blockLevel = calcBlockLevel(shuffleModeStream.value, playableStream.value);
       final queue = _dynamicQueue.queue;
 
+      final indecesToRemove = <int>[];
       for (int i = 0; i < queue.length; i++) {
         final song = queue[i];
         if (song.blockLevel > blockLevel) {
-          _removeQueueIndex(i, false);
+          if (oldQueue.firstWhere((e) => e.path == song.path).blockLevel != song.blockLevel) {
+            indecesToRemove.add(i);
+          }
         }
       }
+      if (indecesToRemove.isNotEmpty) _removeQueueIndeces(indecesToRemove, false);
 
       _queueSubject.add(_dynamicQueue.queue);
     }
@@ -285,10 +291,14 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   }
 
   /// Calculate the new current index when removing the song at [removeIndex].
-  int _calcNewCurrentIndexOnRemove(int currentIndex, int removeIndex) {
+  int _calcNewCurrentIndexOnRemove(int currentIndex, List<int> removeIndeces) {
     int result = currentIndex;
-    if (removeIndex < currentIndex) {
-      result--;
+    for (final i in removeIndeces) {
+      if (i < currentIndex) {
+        result--;
+      } else {
+        break;
+      }
     }
     return result;
   }

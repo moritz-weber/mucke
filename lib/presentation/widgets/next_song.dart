@@ -13,10 +13,10 @@ class NextSong extends StatelessWidget {
     return Observer(builder: (BuildContext context) {
       final audioStore = GetIt.I<AudioStore>();
 
-      final List<Song>? queue = audioStore.queueStream.value;
+      final List<Song> queue = audioStore.queue.map((e) => e.song).toList();
       final int? index = audioStore.queueIndexStream.value;
 
-      if (index != null && queue != null && index < queue.length - 1) {
+      if (index != null && index < queue.length - 1) {
         final Song song = queue[index + 1];
         return RichText(
           textAlign: TextAlign.center,

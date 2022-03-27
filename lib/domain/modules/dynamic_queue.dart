@@ -1,16 +1,17 @@
 import 'dart:math';
 
+import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../constants.dart';
 import '../../system/models/queue_item_model.dart';
 import '../../system/models/song_model.dart';
-import '../../system/utils.dart';
 import '../entities/playable.dart';
 import '../entities/queue_item.dart';
 import '../entities/shuffle_mode.dart';
 import '../entities/song.dart';
 import '../repositories/music_data_repository.dart';
+import '../utils.dart';
 import 'managed_queue_info.dart';
 
 const int INITIAL_QUEUE_LENGTH = 50;
@@ -20,6 +21,8 @@ class DynamicQueue implements ManagedQueueInfo {
   DynamicQueue(
     this._musicDataRepository,
   );
+
+  static final _log = FimberLog('DynamicQueue');
 
   final MusicDataRepository _musicDataRepository;
 
@@ -33,7 +36,7 @@ class DynamicQueue implements ManagedQueueInfo {
   List<QueueItem> _availableSongs = [];
   final BehaviorSubject<List<QueueItem>> _availableSongsSubject = BehaviorSubject.seeded([]);
 
-  Playable? _playable;
+  final BehaviorSubject<Playable> _playableSubject = BehaviorSubject();
   ShuffleMode _shuffleMode = ShuffleMode.none;
 
   @override
@@ -42,18 +45,33 @@ class DynamicQueue implements ManagedQueueInfo {
   @override
   ValueStream<List<QueueItem>> get queueItemsStream => _queueSubject.stream;
 
+  @override
+  ValueStream<Playable> get playableStream => _playableSubject.stream;
+
   void init(
     List<QueueItem> queue,
     List<QueueItem> availableSongs,
     Playable playable,
     ShuffleMode shuffleMode,
   ) {
+    _log.d('init');
     _shuffleMode = shuffleMode;
-    _playable = playable;
+    _playableSubject.add(playable);
+    _log.d(availableSongs.length.toString());
 
-    // no push on subject here to not trigger persistence
-    _queue = queue.cast();
     _availableSongs = availableSongs;
+    _availableSongsSubject.add(_availableSongs);
+    // for every item in queue, take the corresponding object from availableSongs
+    _queue = queue
+        .map((qi) => availableSongs.firstWhere(
+              (e) => e == qi,
+              orElse: () {
+                _log.d(qi.toString());
+                return qi as QueueItemModel;
+              },
+            ))
+        .toList();
+    _queueSubject.add(_queue);
   }
 
   Future<int> generateQueue(
@@ -63,21 +81,22 @@ class DynamicQueue implements ManagedQueueInfo {
     ShuffleMode shuffleMode, {
     bool keepIndex = false,
   }) async {
+    _log.d('generateQueue');
     _shuffleMode = shuffleMode;
-    _playable = playable;
+    _playableSubject.add(playable);
 
     _availableSongs = List.generate(
       songs.length,
       (i) => QueueItemModel(songs[i] as SongModel, originalIndex: i),
     );
-    _availableSongsSubject.add(_availableSongs);
 
     final initialQueueItem = _availableSongs[startIndex];
 
-    List<QueueItem> filteredAvailableSongs = _filterAvailableSongs(
+    List<QueueItem> filteredAvailableSongs = filterAvailableSongs(
       _availableSongs,
-      index: startIndex,
+      indeces: [startIndex],
       keepIndex: keepIndex,
+      blockLevel: calcBlockLevel(_shuffleMode, _playableSubject.value),
     );
     if (filteredAvailableSongs.isEmpty) filteredAvailableSongs = _availableSongs;
 
@@ -104,17 +123,27 @@ class DynamicQueue implements ManagedQueueInfo {
       }
     }
 
+    int returnIndex = -1;
     switch (_shuffleMode) {
       case ShuffleMode.none:
-        return _generateNormalQueue(filteredAvailableSongs, newStartIndex);
+        returnIndex = await _generateNormalQueue(filteredAvailableSongs, newStartIndex);
+        break;
       case ShuffleMode.standard:
-        return await _generateShuffleQueue(filteredAvailableSongs, newStartIndex);
+        returnIndex = await _generateShuffleQueue(filteredAvailableSongs, newStartIndex);
+        break;
       case ShuffleMode.plus:
-        return await _generateShuffleQueue(filteredAvailableSongs, newStartIndex, weighted: true);
+        returnIndex =
+            await _generateShuffleQueue(filteredAvailableSongs, newStartIndex, weighted: true);
     }
+
+    // it's important to do this here because the entries in _available songs are changed by
+    // the queue generation methods
+    _availableSongsSubject.add(_availableSongs);
+    return returnIndex;
   }
 
   void addToQueue(List<Song> songs) {
+    _log.d('addToQueue');
     final queueItems = <QueueItem>[];
     int i = 0;
     for (final song in songs) {
@@ -134,6 +163,7 @@ class DynamicQueue implements ManagedQueueInfo {
   }
 
   void insertIntoQueue(List<Song> songs, int index) {
+    _log.d('insertIntoQueue');
     final queueItems = <QueueItem>[];
     int i = 0;
     for (final song in songs) {
@@ -153,63 +183,123 @@ class DynamicQueue implements ManagedQueueInfo {
   }
 
   void moveQueueItem(int oldIndex, int newIndex) {
+    _log.d('moveQueueItem');
     _queue.insert(newIndex, _queue.removeAt(oldIndex));
     _queueSubject.add(_queue);
   }
 
-  void removeQueueIndex(int index, bool permanent) {
-    final queueItem = _queue[index];
+  void removeQueueIndeces(List<int> indeces, bool permanent) {
+    _log.d('removeQueueIndeces');
 
-    if (permanent) {
-      // if a song is removed from the queue, it should not pop up again when reshuffling
-      _availableSongs.remove(queueItem);
+    for (final index in indeces..sort(((a, b) => -a.compareTo(b)))) {
+      final queueItem = _queue[index];
 
-      // this needs to update originalIndex
-      for (int i = 0; i < _availableSongs.length; i++) {
-        if (_availableSongs[i].originalIndex > queueItem.originalIndex) {
-          _availableSongs[i].originalIndex -= 1;
+      if (permanent) {
+        // if a song is removed from the queue, it should not pop up again when reshuffling
+        _availableSongs.remove(queueItem);
+
+        // this needs to update originalIndex
+        for (int i = 0; i < _availableSongs.length; i++) {
+          if (_availableSongs[i].originalIndex > queueItem.originalIndex) {
+            _availableSongs[i].originalIndex -= 1;
+          }
         }
       }
-
-      _availableSongsSubject.add(_availableSongs);
+      _queue.removeAt(index);
     }
-
-    _queue.removeAt(index);
+    
+    if (permanent) _availableSongsSubject.add(_availableSongs);
     _queueSubject.add(_queue);
   }
 
   Future<int> reshuffleQueue(ShuffleMode shuffleMode, int currentIndex) async {
+    _log.d('reshuffleQueue');
     _shuffleMode = shuffleMode;
-    final currentQueueItem = _queue[currentIndex];
+    QueueItem currentQueueItem = _queue[currentIndex];
+
+    const validSources = [QueueItemSource.original, QueueItemSource.added];
+    _availableSongs.removeWhere((element) => !validSources.contains(element.source));
 
     // make songs available again for new shuffle
     for (final qi in _availableSongs) {
       qi.isAvailable = true;
     }
 
-    final index = _availableSongs.indexOf(currentQueueItem);
+    int index = _availableSongs.indexOf(currentQueueItem);
+    int anchorIndex = -1;
+    QueueItem? anchorItem;
+    // linked songs are not in _availableSongs
+    if (index < 0) {
+      // see if at least the right song is in _availableSongs
+      index = _availableSongs.indexWhere((element) => element.song == currentQueueItem.song);
+      if (index >= 0) {
+        currentQueueItem = _availableSongs[index];
+      } else {
+        // song is not available -> add the current item to available songs
+        // if the linked song is available, place the currentQueueItem before or after
+        anchorIndex = _availableSongs.indexWhere((element) =>
+            element.originalIndex == currentQueueItem.originalIndex &&
+            validSources.contains(element.source));
+        if (anchorIndex >= 0) {
+          anchorItem = _availableSongs[anchorIndex];
+          if (currentQueueItem.source == QueueItemSource.predecessor) {
+            _availableSongs.insert(anchorIndex, currentQueueItem);
+            index = anchorIndex;
+            anchorIndex += 1;
+          } else {
+            _availableSongs.insert(anchorIndex + 1, currentQueueItem);
+            index = anchorIndex + 1;
+          }
+        } else {
+          // linked song is not available -> just add to the end
+          index = _availableSongs.length;
+          _availableSongs.add(currentQueueItem);
+        }
+      }
+    }
 
-    final filteredAvailableSongs =
-        _filterAvailableSongs(_availableSongs, keepIndex: true, index: index);
-    // TODO: what if the item is not in the filtered list?
-    final newStartIndex = filteredAvailableSongs.indexOf(currentQueueItem);
+    final indecesToKeep = [index];
+    if (anchorIndex >= 0) {
+      indecesToKeep.add(anchorIndex);
+    }
+
+    final filteredAvailableSongs = filterAvailableSongs(
+      _availableSongs,
+      keepIndex: true,
+      indeces: indecesToKeep,
+      blockLevel: calcBlockLevel(_shuffleMode, _playableSubject.value),
+    );
+    int newStartIndex = -1;
+    if (anchorIndex >= 0) {
+      newStartIndex = filteredAvailableSongs.indexOf(anchorItem!);
+    } else {
+      newStartIndex = filteredAvailableSongs.indexOf(currentQueueItem);
+    }
 
     switch (_shuffleMode) {
       case ShuffleMode.none:
-        return _generateNormalQueue(filteredAvailableSongs, newStartIndex);
+        await _generateNormalQueue(filteredAvailableSongs, newStartIndex);
+        break;
       case ShuffleMode.standard:
-        return await _generateShuffleQueue(filteredAvailableSongs, newStartIndex);
+        await _generateShuffleQueue(filteredAvailableSongs, newStartIndex);
+        break;
       case ShuffleMode.plus:
-        return await _generateShuffleQueue(filteredAvailableSongs, newStartIndex, weighted: true);
+        await _generateShuffleQueue(filteredAvailableSongs, newStartIndex, weighted: true);
     }
+
+    return _queue.indexOf(currentQueueItem);
   }
 
   Future<List<Song>> updateCurrentIndex(int currentIndex) async {
+    _log.d('updateCurrentIndex');
     final int songsAhead = _queue.length - currentIndex - 1;
     int songsToQueue = QUEUE_AHEAD - songsAhead;
 
     if (songsToQueue > 0) {
-      final filteredAvailableSongs = _filterAvailableSongs(_availableSongs);
+      final filteredAvailableSongs = filterAvailableSongs(
+        _availableSongs,
+        blockLevel: calcBlockLevel(_shuffleMode, _playableSubject.value),
+      );
       songsToQueue = min(songsToQueue, filteredAvailableSongs.length);
       if (filteredAvailableSongs.isNotEmpty) {
         List<QueueItem> newSongs = [];
@@ -229,6 +319,7 @@ class DynamicQueue implements ManagedQueueInfo {
         });
         _queue.addAll(newSongs);
         _queueSubject.add(_queue);
+        _availableSongsSubject.add(_availableSongs);
         return newSongs.map((e) => e.song).toList();
       }
     }
@@ -237,6 +328,7 @@ class DynamicQueue implements ManagedQueueInfo {
 
   /// Update songs contained in queue. Return true if any song was changed.
   bool updateSongs(Map<String, Song> songs) {
+    _log.d('updateSongs');
     bool changed = false;
 
     for (int i = 0; i < _availableSongs.length; i++) {
@@ -255,7 +347,12 @@ class DynamicQueue implements ManagedQueueInfo {
       }
     }
 
-    // TODO: update streams here? -> don't think so because only properties of songs change
+    // TODO: check if db is fine with that (when frequently changing songs)
+    // FIXME: nope, too many changes when skipping through the queue
+    if (changed) {
+      _queueSubject.add(_queue);
+      _availableSongsSubject.add(_availableSongs);
+    }
 
     return changed;
   }
@@ -301,26 +398,6 @@ class DynamicQueue implements ManagedQueueInfo {
     }
 
     return i;
-  }
-
-  List<QueueItem> _filterAvailableSongs(
-    List<QueueItem> availableSongs, {
-    bool keepIndex = false,
-    int? index,
-  }) {
-    final List<QueueItem> result = [];
-
-    final blockLevel = calcBlockLevel(_shuffleMode, _playable!);
-    final kIndex = keepIndex ? index! : -1;
-
-    for (int i = 0; i < availableSongs.length; i++) {
-      final qi = availableSongs[i];
-      if (i == kIndex || (qi.song.blockLevel <= blockLevel && qi.isAvailable)) {
-        result.add(qi);
-      }
-    }
-
-    return result;
   }
 
   Future<int> _generateNormalQueue(List<QueueItem> queueItems, int startIndex) async {

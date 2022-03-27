@@ -2,6 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+import '../domain/entities/album.dart';
+import '../domain/entities/artist.dart';
+import '../domain/entities/playable.dart';
+import '../domain/entities/playlist.dart';
+import '../domain/entities/smart_list.dart';
 import '../domain/entities/song.dart';
 import 'mucke_icons.dart';
 import 'theming.dart';
@@ -81,4 +86,23 @@ Color linkColor(Song song) {
     return Colors.blue;
   }
   return Colors.white24;
+}
+
+extension PlayableReprExt on Playable {
+  String repr() {
+    switch (type) {
+      case PlayableType.all:
+        return 'All songs';
+      case PlayableType.album:
+        return 'Album: ${(this as Album).title}';
+      case PlayableType.artist:
+        return 'Artist: ${(this as Artist).name}';
+      case PlayableType.playlist:
+        return 'Playlist: ${(this as Playlist).name}';
+      case PlayableType.smartlist:
+        return 'Smartlist: ${(this as SmartList).name}';
+      case PlayableType.search:
+        return 'Search results: ${(this as SearchQuery).query}';
+    }
+  }
 }

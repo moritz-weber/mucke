@@ -5,6 +5,7 @@ import '../../domain/entities/artist.dart';
 import '../../domain/entities/loop_mode.dart';
 import '../../domain/entities/playable.dart';
 import '../../domain/entities/playlist.dart';
+import '../../domain/entities/queue_item.dart';
 import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/entities/smart_list.dart';
 import '../../domain/entities/song.dart';
@@ -16,6 +17,7 @@ import '../../domain/usecases/play_smart_list.dart';
 import '../../domain/usecases/play_songs.dart';
 import '../../domain/usecases/seek_to_next.dart';
 import '../../domain/usecases/shuffle_all.dart';
+import '../../domain/utils.dart';
 
 part 'audio_store.g.dart';
 
@@ -51,7 +53,12 @@ abstract class _AudioStore with Store {
     this._playPlaylist,
     this._seekToNext,
     this._shuffleAll,
-  );
+  ) {
+    _audioPlayerRepository.managedQueueInfo.queueItemsStream.listen(_setQueue);
+    _audioPlayerRepository.managedQueueInfo.availableSongsStream.listen((_) => _setAvSongs());
+    _audioPlayerRepository.shuffleModeStream.listen((_) => _setAvSongs());
+    _audioPlayerRepository.playableStream.listen((_) => _setAvSongs());
+  }
 
   final AudioPlayerRepository _audioPlayerRepository;
 
@@ -74,10 +81,37 @@ abstract class _AudioStore with Store {
   late ObservableStream<Duration> currentPositionStream =
       _audioPlayerRepository.positionStream.asObservable(initialValue: const Duration(seconds: 0));
 
-  // beware that this only triggers reactions when a new list (new reference) is set
-  // doesn't work if the same reference is added to BehaviorSubject
+  @readonly
+  late List<QueueItem> _queue = [];
+
+  @action
+  void _setQueue(List<QueueItem> queue) {
+    _queue = queue;
+  }
+
+  @computed
+  int get queueLength => _queue.length;
+
   @observable
-  late ObservableStream<List<Song>> queueStream = _audioPlayerRepository.queueStream.asObservable();
+  late List<QueueItem> _availableSongs = [];
+
+  @action
+  void _setAvSongs() {
+    _availableSongs = filterAvailableSongs(
+      _audioPlayerRepository.managedQueueInfo.availableSongsStream.value,
+      blockLevel: calcBlockLevel(
+        _audioPlayerRepository.shuffleModeStream.value,
+        _audioPlayerRepository.playableStream.value,
+      ),
+    );
+  }
+
+  @computed
+  int get numAvailableSongs => _availableSongs.length;
+
+  @observable
+  late ObservableStream<Playable> playableStream =
+      _audioPlayerRepository.managedQueueInfo.playableStream.asObservable();
 
   @observable
   late ObservableStream<int> queueIndexStream =
@@ -93,9 +127,7 @@ abstract class _AudioStore with Store {
 
   @computed
   bool get hasNext =>
-      (queueIndexStream.value != null &&
-          queueStream.value != null &&
-          queueIndexStream.value! < queueStream.value!.length - 1) ||
+      (queueIndexStream.value != null && queueIndexStream.value! < _queue.length - 1) ||
       (loopModeStream.value ?? LoopMode.off) != LoopMode.off;
 
   Future<void> playSong(int index, List<Song> songList, Playable playable) async {
@@ -131,7 +163,7 @@ abstract class _AudioStore with Store {
   Future<void> moveQueueItem(int oldIndex, int newIndex) async =>
       _audioPlayerRepository.moveQueueItem(oldIndex, newIndex);
 
-  Future<void> removeQueueIndex(int index) async => _audioPlayerRepository.removeQueueIndex(index);
+  Future<void> removeQueueIndeces(List<int> indeces) async => _audioPlayerRepository.removeQueueIndeces(indeces);
 
   Future<void> playAlbum(Album album) async => _playAlbum(album);
 

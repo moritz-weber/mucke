@@ -10,12 +10,13 @@ class PersistenceActor {
   ) {
     // this is tricky, because these actors are instanciated very early
     // and the first currentIndex is null -> ignore this one
-    _audioPlayerRepository.managedQueueInfo.queueItemsStream.skip(1).listen((queue) {
+    // TODO: double check the skip count here!
+    _audioPlayerRepository.managedQueueInfo.queueItemsStream.skip(2).listen((queue) {
       _log.d('setQueue');
       _persistentStateRepository.setQueue(queue);
     });
 
-    _audioPlayerRepository.managedQueueInfo.availableSongsStream.skip(1).listen((songs) {
+    _audioPlayerRepository.managedQueueInfo.availableSongsStream.skip(2).listen((songs) {
       _log.d('setAvailableSongs');
       _persistentStateRepository.setAvailableSongs(songs);
     });

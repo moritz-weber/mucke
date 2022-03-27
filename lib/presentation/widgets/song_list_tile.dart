@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../domain/entities/queue_item.dart';
 import '../../domain/entities/song.dart';
 import '../theming.dart';
 import '../utils.dart' as utils;
@@ -16,6 +17,10 @@ class SongListTile extends StatelessWidget {
     this.highlight = false,
     this.showAlbum = true,
     this.subtitle = Subtitle.artist,
+    this.source = QueueItemSource.original,
+    required this.onSelect,
+    this.isSelectEnabled = false,
+    this.isSelected = false,
   }) : super(key: key);
 
   final Song song;
@@ -24,6 +29,10 @@ class SongListTile extends StatelessWidget {
   final bool highlight;
   final bool showAlbum;
   final Subtitle subtitle;
+  final QueueItemSource source;
+  final bool isSelectEnabled;
+  final bool isSelected;
+  final Function onSelect;
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +85,18 @@ class SongListTile extends StatelessWidget {
             ),
           ],
         );
-        break;
+    }
+
+    if (source != QueueItemSource.original) {
+      final icon = source == QueueItemSource.added ? Icons.add_circle_rounded : Icons.link_rounded;
+
+      subtitleWidget = Row(
+        children: [
+          Icon(icon, color: LIGHT1, size: 14.0),
+          const SizedBox(width: 4.0),
+          subtitleWidget,
+        ],
+      );
     }
 
     return ListTile(
@@ -111,11 +131,14 @@ class SongListTile extends StatelessWidget {
             size: 16.0,
             color: utils.likeCountColor(song.likeCount),
           ),
-          IconButton(
-            icon: const Icon(Icons.more_vert),
-            iconSize: 20.0,
-            onPressed: () => onTapMore(),
-          ),
+          if (!isSelectEnabled)
+            IconButton(
+              icon: const Icon(Icons.more_vert),
+              iconSize: 20.0,
+              onPressed: () => onTapMore(),
+            )
+          else
+            Checkbox(value: isSelected, onChanged: (value) => onSelect(value)),
         ],
       ),
     );

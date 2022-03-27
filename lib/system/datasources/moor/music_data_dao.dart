@@ -43,7 +43,8 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
             (t) => OrderingTerm(expression: t.discNumber),
             (t) => OrderingTerm(expression: t.trackNumber)
           ]))
-        .watch().distinct(const ListEquality().equals)
+        .watch()
+        .distinct(const ListEquality().equals)
         .map((moorSongList) =>
             moorSongList.map((moorSong) => SongModel.fromMoor(moorSong)).toList());
   }
@@ -55,7 +56,8 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
           ..orderBy([
             (t) => OrderingTerm(expression: t.title),
           ]))
-        .watch().distinct(const ListEquality().equals)
+        .watch()
+        .distinct(const ListEquality().equals)
         .map((moorAlbumList) {
       return moorAlbumList.map((moorAlbum) => AlbumModel.fromMoor(moorAlbum)).toList();
     });
@@ -66,7 +68,8 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
     return (select(albums)..where((tbl) => tbl.artist.equals(artist.name)))
         .join([innerJoin(songs, songs.albumId.equalsExp(albums.id))])
         .map((row) => row.readTable(songs))
-        .watch().distinct(const ListEquality().equals)
+        .watch()
+        .distinct(const ListEquality().equals)
         .map(
           (moorSongList) => moorSongList.map((moorSong) => SongModel.fromMoor(moorSong)).toList(),
         );
@@ -91,16 +94,18 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
 
   @override
   Future<void> insertSongs(List<SongModel> songModels) async {
-    await update(songs).write(const SongsCompanion(present: Value(false)));
+    transaction(() async {
+      await update(songs).write(const SongsCompanion(present: Value(false)));
 
-    await batch((batch) {
-      batch.insertAllOnConflictUpdate(
-        songs,
-        songModels.map((e) => e.toMoorInsert()).toList(),
-      );
+      await batch((batch) {
+        batch.insertAllOnConflictUpdate(
+          songs,
+          songModels.map((e) => e.toMoorInsert()).toList(),
+        );
+      });
+
+      await (delete(songs)..where((tbl) => tbl.present.equals(false))).go();
     });
-
-    await (delete(songs)..where((tbl) => tbl.present.equals(false))).go();
   }
 
   @override

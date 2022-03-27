@@ -52,7 +52,7 @@ abstract class AudioPlayerRepository extends AudioPlayerInfoRepository {
   Future<void> playNext(List<Song> songs);
   Future<void> addToNext(List<Song> songs);
   Future<void> moveQueueItem(int oldIndex, int newIndex);
-  Future<void> removeQueueIndex(int index);
+  Future<void> removeQueueIndeces(List<int> indeces);
 
   /// Set the ShuffleMode.
   Future<void> setShuffleMode(ShuffleMode shuffleMode, {bool updateQueue});

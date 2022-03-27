@@ -29,6 +29,7 @@ import 'presentation/state/artist_page_store.dart';
 import 'presentation/state/audio_store.dart';
 import 'presentation/state/music_data_store.dart';
 import 'presentation/state/navigation_store.dart';
+import 'presentation/state/queue_page_store.dart';
 import 'presentation/state/search_page_store.dart';
 import 'presentation/state/settings_store.dart';
 import 'presentation/state/smart_list_form_store.dart';
@@ -87,6 +88,11 @@ Future<void> setupGetIt() async {
     () => SettingsStore(
       settingsRepository: getIt(),
       musicDataRepository: getIt(),
+    ),
+  );
+  getIt.registerLazySingleton<QueuePageStore>(
+    () => QueuePageStore(
+      audioStore: getIt(),
     ),
   );
   getIt.registerFactoryParam<SongStore, Song, void>(

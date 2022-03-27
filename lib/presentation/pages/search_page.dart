@@ -320,6 +320,7 @@ class _SearchPageState extends State<SearchPage> {
                                     song: songs[i],
                                   ),
                                 ),
+                                onSelect: () {},
                               ),
                             const SizedBox(height: 16.0),
                           ],

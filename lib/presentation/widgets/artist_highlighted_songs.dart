@@ -44,6 +44,7 @@ class ArtistHighlightedSongs extends StatelessWidget {
                     enableGoToArtist: false,
                   ),
                 ),
+                onSelect: () {},
               );
             },
             childCount: songsHead.length,

@@ -241,20 +241,22 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
 
   @override
   Future<void> updateSmartList(SmartListModel smartListModel) async {
-    await (update(smartLists)..where((tbl) => tbl.id.equals(smartListModel.id)))
-        .write(smartListModel.toCompanion());
+    transaction(() async {
+      await (update(smartLists)..where((tbl) => tbl.id.equals(smartListModel.id)))
+          .write(smartListModel.toCompanion());
 
-    await (delete(smartListArtists)..where((tbl) => tbl.smartListId.equals(smartListModel.id)))
-        .go();
+      await (delete(smartListArtists)..where((tbl) => tbl.smartListId.equals(smartListModel.id)))
+          .go();
 
-    for (final a in smartListModel.filter.artists) {
-      await into(smartListArtists).insert(
-        SmartListArtistsCompanion(
-          smartListId: Value(smartListModel.id),
-          artistName: Value(a.name),
-        ),
-      );
-    }
+      for (final a in smartListModel.filter.artists) {
+        await into(smartListArtists).insert(
+          SmartListArtistsCompanion(
+            smartListId: Value(smartListModel.id),
+            artistName: Value(a.name),
+          ),
+        );
+      }
+    });
   }
 
   @override

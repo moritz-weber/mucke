@@ -46,6 +46,7 @@ class PersistentStateDao extends DatabaseAccessor<MoorDatabase>
             SongModel.fromMoor(row.readTable(songs)),
             originalIndex: row.readTable(queueEntries).originalIndex,
             source: row.readTable(queueEntries).type.toQueueItemType(),
+            isAvailable: row.readTable(queueEntries).isAvailable,
           );
         }).toList());
   }
@@ -64,9 +65,11 @@ class PersistentStateDao extends DatabaseAccessor<MoorDatabase>
       ));
     }
 
-    await delete(queueEntries).go();
-    await batch((batch) {
-      batch.insertAll(queueEntries, _queueEntries);
+    transaction(() async {
+      await delete(queueEntries).go();
+      await batch((batch) {
+        batch.insertAll(queueEntries, _queueEntries);
+      });
     });
   }
 
@@ -99,10 +102,11 @@ class PersistentStateDao extends DatabaseAccessor<MoorDatabase>
         isAvailable: Value(songs[i].isAvailable),
       ));
     }
-
-    await delete(availableSongEntries).go();
-    await batch((batch) {
-      batch.insertAll(availableSongEntries, _songEntries);
+    transaction(() async {
+      await delete(availableSongEntries).go();
+      await batch((batch) {
+        batch.insertAll(availableSongEntries, _songEntries);
+      });
     });
   }
 

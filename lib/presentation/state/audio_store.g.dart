@@ -9,6 +9,20 @@ part of 'audio_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$AudioStore on _AudioStore, Store {
+  Computed<int>? _$queueLengthComputed;
+
+  @override
+  int get queueLength =>
+      (_$queueLengthComputed ??= Computed<int>(() => super.queueLength,
+              name: '_AudioStore.queueLength'))
+          .value;
+  Computed<int>? _$numAvailableSongsComputed;
+
+  @override
+  int get numAvailableSongs => (_$numAvailableSongsComputed ??= Computed<int>(
+          () => super.numAvailableSongs,
+          name: '_AudioStore.numAvailableSongs'))
+      .value;
   Computed<bool>? _$hasNextComputed;
 
   @override
@@ -63,18 +77,50 @@ mixin _$AudioStore on _AudioStore, Store {
     });
   }
 
-  final _$queueStreamAtom = Atom(name: '_AudioStore.queueStream');
+  final _$_queueAtom = Atom(name: '_AudioStore._queue');
 
-  @override
-  ObservableStream<List<Song>> get queueStream {
-    _$queueStreamAtom.reportRead();
-    return super.queueStream;
+  List<QueueItem> get queue {
+    _$_queueAtom.reportRead();
+    return super._queue;
   }
 
   @override
-  set queueStream(ObservableStream<List<Song>> value) {
-    _$queueStreamAtom.reportWrite(value, super.queueStream, () {
-      super.queueStream = value;
+  List<QueueItem> get _queue => queue;
+
+  @override
+  set _queue(List<QueueItem> value) {
+    _$_queueAtom.reportWrite(value, super._queue, () {
+      super._queue = value;
+    });
+  }
+
+  final _$_availableSongsAtom = Atom(name: '_AudioStore._availableSongs');
+
+  @override
+  List<QueueItem> get _availableSongs {
+    _$_availableSongsAtom.reportRead();
+    return super._availableSongs;
+  }
+
+  @override
+  set _availableSongs(List<QueueItem> value) {
+    _$_availableSongsAtom.reportWrite(value, super._availableSongs, () {
+      super._availableSongs = value;
+    });
+  }
+
+  final _$playableStreamAtom = Atom(name: '_AudioStore.playableStream');
+
+  @override
+  ObservableStream<Playable> get playableStream {
+    _$playableStreamAtom.reportRead();
+    return super.playableStream;
+  }
+
+  @override
+  set playableStream(ObservableStream<Playable> value) {
+    _$playableStreamAtom.reportWrite(value, super.playableStream, () {
+      super.playableStream = value;
     });
   }
 
@@ -123,16 +169,42 @@ mixin _$AudioStore on _AudioStore, Store {
     });
   }
 
+  final _$_AudioStoreActionController = ActionController(name: '_AudioStore');
+
+  @override
+  void _setQueue(List<QueueItem> queue) {
+    final _$actionInfo = _$_AudioStoreActionController.startAction(
+        name: '_AudioStore._setQueue');
+    try {
+      return super._setQueue(queue);
+    } finally {
+      _$_AudioStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void _setAvSongs() {
+    final _$actionInfo = _$_AudioStoreActionController.startAction(
+        name: '_AudioStore._setAvSongs');
+    try {
+      return super._setAvSongs();
+    } finally {
+      _$_AudioStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
 currentSongStream: ${currentSongStream},
 playingStream: ${playingStream},
 currentPositionStream: ${currentPositionStream},
-queueStream: ${queueStream},
+playableStream: ${playableStream},
 queueIndexStream: ${queueIndexStream},
 shuffleModeStream: ${shuffleModeStream},
 loopModeStream: ${loopModeStream},
+queueLength: ${queueLength},
+numAvailableSongs: ${numAvailableSongs},
 hasNext: ${hasNext}
     ''';
   }

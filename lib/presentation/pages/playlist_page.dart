@@ -68,6 +68,7 @@ class PlaylistPage extends StatelessWidget {
                                     song: song,
                                   ),
                                 ),
+                                onSelect: () {},
                             ),
                             onDismissed: (direction) {
                               musicDataStore.removePlaylistEntry(uPlaylist.id, index);

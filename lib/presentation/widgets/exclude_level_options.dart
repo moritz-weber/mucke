@@ -10,14 +10,15 @@ class ExcludeLevelOptions extends StatelessWidget {
     Key? key,
     required this.songs,
     required this.musicDataStore,
+    this.callback,
   }) : super(key: key);
 
   final List<Song> songs;
   final MusicDataStore musicDataStore;
+  final Function? callback;
 
   @override
   Widget build(BuildContext context) {
-
     final lvl = _commonBlockLevel(songs);
 
     return Container(
@@ -34,28 +35,40 @@ class ExcludeLevelOptions extends StatelessWidget {
           children: [
             IconButton(
               onPressed: () {
-                if (lvl != 0) musicDataStore.setSongsBlocked(songs, 0);
+                if (lvl != 0) {
+                  musicDataStore.setSongsBlocked(songs, 0);
+                  if (callback != null) callback!();
+                }
               },
               icon: Icon(utils.blockLevelIcon(0)),
               color: lvl == 0 ? LIGHT2 : Colors.white38,
             ),
             IconButton(
               onPressed: () {
-                if (lvl != 1) musicDataStore.setSongsBlocked(songs, 1);
+                if (lvl != 1) {
+                  musicDataStore.setSongsBlocked(songs, 1);
+                  if (callback != null) callback!();
+                }
               },
               icon: Icon(utils.blockLevelIcon(1)),
               color: lvl == 1 ? LIGHT2 : Colors.white38,
             ),
             IconButton(
               onPressed: () {
-                if (lvl != 2) musicDataStore.setSongsBlocked(songs, 2);
+                if (lvl != 2) {
+                  musicDataStore.setSongsBlocked(songs, 2);
+                  if (callback != null) callback!();
+                }
               },
               icon: Icon(utils.blockLevelIcon(2)),
               color: lvl == 2 ? LIGHT2 : Colors.white38,
             ),
             IconButton(
               onPressed: () {
-                if (lvl != 3) musicDataStore.setSongsBlocked(songs, 3);
+                if (lvl != 3) {
+                  musicDataStore.setSongsBlocked(songs, 3);
+                  if (callback != null) callback!();
+                }
               },
               icon: Icon(utils.blockLevelIcon(3)),
               color: lvl == 3 ? LIGHT2 : Colors.white38,

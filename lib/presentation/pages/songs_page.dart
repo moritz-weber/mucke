@@ -48,14 +48,15 @@ class _SongsPageState extends State<SongsPage> with AutomaticKeepAliveClientMixi
                   subtitle: Subtitle.artistAlbum,
                   onTap: () => audioStore.playSong(index, songs, AllSongs()),
                   onTapMore: () => showModalBottomSheet(
-                  context: context,
-                  useRootNavigator: true,
-                  isScrollControlled: true,
-                  backgroundColor: Colors.transparent,
-                  builder: (context) => SongBottomSheet(
-                    song: song,
+                    context: context,
+                    useRootNavigator: true,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                    builder: (context) => SongBottomSheet(
+                      song: song,
+                    ),
                   ),
-                ),
+                  onSelect: () {},
                 );
               },
               separatorBuilder: (BuildContext context, int index) => const SizedBox(
