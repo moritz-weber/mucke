@@ -216,39 +216,53 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
     }
 
     if (isIndexLoaded) {
-      await _audioSource.insertAll(sourceIndex,
-          songs.map((e) => ja.AudioSource.uri(Uri.file(e.path))).toList());
+      await _audioSource.insertAll(
+          sourceIndex, songs.map((e) => ja.AudioSource.uri(Uri.file(e.path))).toList());
     } else {
       _updateCurrentIndex(_audioPlayer.currentIndex);
     }
   }
 
   @override
-  Future<void> removeQueueIndex(int index) async {
-    _log.d('removeQueueIndex: $index');
-    _queue.removeAt(index);
-    final sourceIndex = _calcSourceIndex(index);
+  Future<void> removeQueueIndices(List<int> indices) async {
+    _log.d('removeQueueIndices');
+    final sortedIndeces = List<int>.from(indices);
+    sortedIndeces.sort((a, b) => -a.compareTo(b));
+
+    bool isSomeIndexLoaded = false;
+    bool needToLoadMore = false;
+
     final currentSourceIndex = _audioPlayer.currentIndex!;
-    final isIndexLoaded = _isQueueIndexInLoadInterval(index);
+    for (final index in sortedIndeces) {
+      _queue.removeAt(index);
+      final sourceIndex = _calcSourceIndex(index);
+      final isIndexLoaded = _isQueueIndexInLoadInterval(index);
 
-    if (index < _loadStartIndex) {
-      _log.d('$index < $_loadStartIndex --> DECREMENT LOAD START INDEX');
-      _loadStartIndex--;
-    }
-    if (index < _loadEndIndex) {
-      _log.d('$index < $_loadEndIndex --> DECREMENT LOAD END INDEX');
-      _loadEndIndex--;
+      if (index < _loadStartIndex) {
+        _log.d('$index < $_loadStartIndex --> DECREMENT LOAD START INDEX');
+        _loadStartIndex--;
+      }
+      if (index < _loadEndIndex) {
+        _log.d('$index < $_loadEndIndex --> DECREMENT LOAD END INDEX');
+        _loadEndIndex--;
+      }
+
+      if (isIndexLoaded) {
+        _log.d('index is loaded');
+        isSomeIndexLoaded = true;
+        await _audioSource.removeAt(sourceIndex);
+        if (sourceIndex >= currentSourceIndex) {
+          needToLoadMore = true;
+        }
+      }
     }
 
-    if (isIndexLoaded) {
-      _log.d('index is loaded');
-      await _audioSource.removeAt(sourceIndex);
-      if (sourceIndex >= currentSourceIndex) {
+    if (isSomeIndexLoaded) {
+      if (needToLoadMore) {
         _updateLoadedQueue(currentSourceIndex);
       }
-    } else {
-      _updateCurrentIndex(_audioPlayer.currentIndex);
     }
+    _updateCurrentIndex(_audioPlayer.currentIndex);
   }
 
   @override

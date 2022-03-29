@@ -179,7 +179,7 @@ class QueuePage extends StatelessWidget {
                                 queuePageStore.setSelected(selected, index),
                           ),
                           onDismissed: (direction) {
-                            audioStore.removeQueueIndeces([index]);
+                            audioStore.removeQueueIndices([index]);
                           },
                           confirmDismiss: (direction) async => !isMultiSelectEnabled,
                         );
@@ -245,7 +245,7 @@ class QueuePage extends StatelessWidget {
               title: const Text('Remove from queue'),
               leading: const Icon(Icons.play_arrow_rounded),
               onTap: () async {
-                await audioStore.removeQueueIndeces(indeces);
+                await audioStore.removeQueueIndices(indeces);
                 Navigator.of(context, rootNavigator: true).pop();
                 queuePageStore.deselectAll();
               },

@@ -191,18 +191,18 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   }
 
   @override
-  Future<void> removeQueueIndeces(List<int> indeces) async {
-    _removeQueueIndeces(indeces, true);
+  Future<void> removeQueueIndices(List<int> indices) async {
+    _removeQueueIndices(indices, true);
   }
 
-  Future<void> _removeQueueIndeces(List<int> indeces, bool permanent) async {
-    _dynamicQueue.removeQueueIndeces(indeces, permanent);
+  Future<void> _removeQueueIndices(List<int> indices, bool permanent) async {
+    _dynamicQueue.removeQueueIndeces(indices, permanent);
 
-    final newCurrentIndex = _calcNewCurrentIndexOnRemove(currentIndexStream.value, indeces);
+    final newCurrentIndex = _calcNewCurrentIndexOnRemove(currentIndexStream.value, indices);
     _currentIndexSubject.add(newCurrentIndex);
     _queueSubject.add(_dynamicQueue.queue);
 
-    (indeces..sort(((a, b) => -a.compareTo(b)))).forEach(_audioPlayerDataSource.removeQueueIndex);
+    _audioPlayerDataSource.removeQueueIndices(indices);
   }
 
   @override
@@ -275,7 +275,7 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
           }
         }
       }
-      if (indecesToRemove.isNotEmpty) _removeQueueIndeces(indecesToRemove, false);
+      if (indecesToRemove.isNotEmpty) _removeQueueIndices(indecesToRemove, false);
 
       _queueSubject.add(_dynamicQueue.queue);
     }

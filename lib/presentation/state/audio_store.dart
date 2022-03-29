@@ -163,7 +163,7 @@ abstract class _AudioStore with Store {
   Future<void> moveQueueItem(int oldIndex, int newIndex) async =>
       _audioPlayerRepository.moveQueueItem(oldIndex, newIndex);
 
-  Future<void> removeQueueIndeces(List<int> indeces) async => _audioPlayerRepository.removeQueueIndeces(indeces);
+  Future<void> removeQueueIndices(List<int> indices) async => _audioPlayerRepository.removeQueueIndices(indices);
 
   Future<void> playAlbum(Album album) async => _playAlbum(album);
 
