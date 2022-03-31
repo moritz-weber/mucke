@@ -26,7 +26,7 @@ class AudioPlayerActor {
   Song? _currentSong;
   bool _countSongPlayback = false;
 
-  Future<void> _handleCurrentSong(Song song) async {
+  Future<void> _handleCurrentSong(Song? song) async {
     _currentSong = song;
     return _platformIntegrationRepository.setCurrentSong(song);
   }

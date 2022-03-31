@@ -31,7 +31,7 @@ class QueuePage extends StatelessWidget {
     final QueuePageStore queuePageStore = GetIt.I<QueuePageStore>();
     queuePageStore.reset();
 
-    final ObservableStream<int> queueIndexStream = audioStore.queueIndexStream;
+    final ObservableStream<int?> queueIndexStream = audioStore.queueIndexStream;
     final initialIndex = max((queueIndexStream.value ?? 0) - 2, 0);
     final ScrollController _scrollController =
         ScrollController(initialScrollOffset: initialIndex * 72.0);

@@ -123,14 +123,16 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
         updatePosition: pe.updatePosition + timeDelta,
         playing: false,
       ));
+    } else if (pe.processingState == ProcessingState.none) {
+      stop();
     } else {
       _log.d(pe.processingState.toString());
     }
   }
 
   @override
-  Future<void> setCurrentSong(SongModel songModel) async {
-    mediaItem.add(songModel.toMediaItem());
+  Future<void> setCurrentSong(SongModel? songModel) async {
+    mediaItem.add(songModel?.toMediaItem());
   }
 }
 

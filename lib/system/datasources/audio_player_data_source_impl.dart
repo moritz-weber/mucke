@@ -89,17 +89,24 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
     int initialIndex = 0,
   }) async {
     if (initialIndex >= queue.length) {
-      return;
+      // there is no queue or something is wrong -> initialize with sane defaults
+      _queue = [];
+      _audioSource = ja.ConcatenatingAudioSource(children: []);
+      _audioPlayer.setAudioSource(_audioSource);
+      _currentIndexSubject.add(0);
+      _loadStartIndex = 0;
+      _loadEndIndex = 0;
+    } else {
+      _queue = queue;
+      final queueToLoad = _getQueueToLoad(queue, initialIndex);
+      // if this was not set to false, _updateLoadedQueue would try to manipulate the _audioSource
+      // in some cases and _audioPlayer doesn't like that
+      isQueueLoaded = false;
+      _audioSource = _songModelsToAudioSource(queueToLoad);
+      await _audioPlayer.setAudioSource(_audioSource, initialIndex: _calcSourceIndex(initialIndex));
+      isQueueLoaded = true;
+      _currentIndexSubject.add(initialIndex);
     }
-    _queue = queue;
-    final queueToLoad = _getQueueToLoad(queue, initialIndex);
-    // if this was not set to false, _updateLoadedQueue would try to manipulate the _audioSource
-    // in some cases and _audioPlayer doesn't like that
-    isQueueLoaded = false;
-    _audioSource = _songModelsToAudioSource(queueToLoad);
-    await _audioPlayer.setAudioSource(_audioSource, initialIndex: _calcSourceIndex(initialIndex));
-    isQueueLoaded = true;
-    _currentIndexSubject.add(initialIndex);
   }
 
   @override
@@ -156,6 +163,8 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
         await _audioSource.addAll(songs.map((e) => ja.AudioSource.uri(Uri.file(e.path))).toList());
       }
     } else {
+      // note: when removing the whole queue and queueing new songs, this case will always be true
+      // thus, from this point on, everything will be loaded immediately
       await _audioSource.addAll(songs.map((e) => ja.AudioSource.uri(Uri.file(e.path))).toList());
     }
   }
@@ -194,17 +203,22 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
   @override
   Future<void> playNext(List<SongModel> songs) async {
     final index = currentIndexStream.value + 1;
-    _queue.insertAll(index, songs);
+    _queue.insertAll(min(index, _queue.length), songs);
+
+    if (index < _loadStartIndex) {
+      _loadStartIndex = _loadStartIndex + songs.length;
+    }
     if (index < _loadEndIndex) {
       _loadEndIndex = _loadEndIndex + songs.length;
     }
-    await _audioSource.insertAll(_audioPlayer.currentIndex! + 1,
+    await _audioSource.insertAll(min(_audioSource.length, _audioPlayer.currentIndex ?? 0 + 1),
         songs.map((e) => ja.AudioSource.uri(Uri.file(e.path))).toList());
+    print('hi');
   }
 
   @override
   Future<void> insertIntoQueue(List<SongModel> songs, int index) async {
-    _queue.insertAll(index, songs);
+    _queue.insertAll(min(index, _queue.length), songs);
 
     final sourceIndex = _calcSourceIndex(index);
     final isIndexLoaded = _isQueueIndexInLoadInterval(index);
@@ -216,8 +230,8 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
     }
 
     if (isIndexLoaded) {
-      await _audioSource.insertAll(
-          sourceIndex, songs.map((e) => ja.AudioSource.uri(Uri.file(e.path))).toList());
+      await _audioSource.insertAll(min(_audioSource.length, sourceIndex),
+          songs.map((e) => ja.AudioSource.uri(Uri.file(e.path))).toList());
     } else {
       _updateCurrentIndex(_audioPlayer.currentIndex);
     }
@@ -226,13 +240,13 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
   @override
   Future<void> removeQueueIndices(List<int> indices) async {
     _log.d('removeQueueIndices');
-    final sortedIndeces = List<int>.from(indices);
+    final sortedIndeces = Set<int>.from(indices).toList();
     sortedIndeces.sort((a, b) => -a.compareTo(b));
 
     bool isSomeIndexLoaded = false;
     bool needToLoadMore = false;
 
-    final currentSourceIndex = _audioPlayer.currentIndex!;
+    final currentSourceIndex = _audioPlayer.currentIndex ?? 0;
     for (final index in sortedIndeces) {
       _queue.removeAt(index);
       final sourceIndex = _calcSourceIndex(index);

@@ -14,8 +14,8 @@ abstract class AudioPlayerInfoRepository {
   ValueStream<List<Song>> get queueStream;
   ValueStream<Playable> get playableStream;
 
-  ValueStream<int> get currentIndexStream;
-  Stream<Song> get currentSongStream;
+  ValueStream<int?> get currentIndexStream;
+  Stream<Song?> get currentSongStream;
   Stream<PlaybackEvent> get playbackEventStream;
   Stream<bool> get playingStream;
   Stream<Duration> get positionStream;
@@ -38,7 +38,7 @@ abstract class AudioPlayerRepository extends AudioPlayerInfoRepository {
     List<QueueItem> queueItems,
     List<QueueItem> availableSongs,
     Playable playable,
-    int index,
+    int? index,
   );
 
   /// Create and load a queue from [songs] according to current AudioPlayer settings.

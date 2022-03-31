@@ -12,7 +12,7 @@ class PersistentStateRepositoryImpl implements PersistentStateRepository {
   final PersistentStateDataSource _persistentStateDataSource;
 
   @override
-  Future<int> get currentIndex => _persistentStateDataSource.currentIndex;
+  Future<int?> get currentIndex => _persistentStateDataSource.currentIndex;
 
   @override
   Future<LoopMode> get loopMode => _persistentStateDataSource.loopMode;
@@ -24,7 +24,7 @@ class PersistentStateRepositoryImpl implements PersistentStateRepository {
   Future<ShuffleMode> get shuffleMode => _persistentStateDataSource.shuffleMode;
 
   @override
-  void setCurrentIndex(int index) => _persistentStateDataSource.setCurrentIndex(index);
+  void setCurrentIndex(int? index) => _persistentStateDataSource.setCurrentIndex(index);
 
   @override
   void setLoopMode(LoopMode loopMode) => _persistentStateDataSource.setLoopMode(loopMode);

@@ -33,13 +33,13 @@ mixin _$AudioStore on _AudioStore, Store {
   final _$currentSongStreamAtom = Atom(name: '_AudioStore.currentSongStream');
 
   @override
-  ObservableStream<Song> get currentSongStream {
+  ObservableStream<Song?> get currentSongStream {
     _$currentSongStreamAtom.reportRead();
     return super.currentSongStream;
   }
 
   @override
-  set currentSongStream(ObservableStream<Song> value) {
+  set currentSongStream(ObservableStream<Song?> value) {
     _$currentSongStreamAtom.reportWrite(value, super.currentSongStream, () {
       super.currentSongStream = value;
     });
@@ -127,13 +127,13 @@ mixin _$AudioStore on _AudioStore, Store {
   final _$queueIndexStreamAtom = Atom(name: '_AudioStore.queueIndexStream');
 
   @override
-  ObservableStream<int> get queueIndexStream {
+  ObservableStream<int?> get queueIndexStream {
     _$queueIndexStreamAtom.reportRead();
     return super.queueIndexStream;
   }
 
   @override
-  set queueIndexStream(ObservableStream<int> value) {
+  set queueIndexStream(ObservableStream<int?> value) {
     _$queueIndexStreamAtom.reportWrite(value, super.queueIndexStream, () {
       super.queueIndexStream = value;
     });

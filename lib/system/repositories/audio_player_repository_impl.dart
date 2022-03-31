@@ -45,8 +45,8 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   final AudioPlayerDataSource _audioPlayerDataSource;
   final DynamicQueue _dynamicQueue;
 
-  final BehaviorSubject<int> _currentIndexSubject = BehaviorSubject();
-  final BehaviorSubject<Song> _currentSongSubject = BehaviorSubject();
+  final BehaviorSubject<int?> _currentIndexSubject = BehaviorSubject();
+  final BehaviorSubject<Song?> _currentSongSubject = BehaviorSubject();
   final BehaviorSubject<LoopMode> _loopModeSubject = BehaviorSubject();
   final BehaviorSubject<List<Song>> _queueSubject = BehaviorSubject();
   final BehaviorSubject<ShuffleMode> _shuffleModeSubject = BehaviorSubject();
@@ -68,10 +68,10 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   ValueStream<List<Song>> get queueStream => _queueSubject.stream;
 
   @override
-  ValueStream<int> get currentIndexStream => _currentIndexSubject.stream;
+  ValueStream<int?> get currentIndexStream => _currentIndexSubject.stream;
 
   @override
-  Stream<Song> get currentSongStream => _currentSongSubject.stream.distinct();
+  Stream<Song?> get currentSongStream => _currentSongSubject.stream.distinct();
 
   @override
   Stream<PlaybackEvent> get playbackEventStream => _audioPlayerDataSource.playbackEventStream;
@@ -102,23 +102,25 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
     List<QueueItem> queueItems,
     List<QueueItem> availableSongs,
     Playable playable,
-    int index,
+    int? index,
   ) async {
     _log.d('initQueue');
     _playableSubject.add(playable);
 
-    _dynamicQueue.init(
-      queueItems,
-      availableSongs,
-      playable,
-      shuffleModeStream.value,
-    );
-    _queueSubject.add(_dynamicQueue.queue);
+    if (index != null) {
+      _dynamicQueue.init(
+        queueItems,
+        availableSongs,
+        playable,
+        shuffleModeStream.value,
+      );
+      _queueSubject.add(_dynamicQueue.queue);
 
-    await _audioPlayerDataSource.loadQueue(
-      initialIndex: index,
-      queue: _dynamicQueue.queue.map((e) => e as SongModel).toList(),
-    );
+      await _audioPlayerDataSource.loadQueue(
+        initialIndex: index,
+        queue: _dynamicQueue.queue.map((e) => e as SongModel).toList(),
+      );
+    }
   }
 
   @override
@@ -150,7 +152,7 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   Future<void> moveQueueItem(int oldIndex, int newIndex) async {
     _dynamicQueue.moveQueueItem(oldIndex, newIndex);
     final newCurrentIndex = _calcNewCurrentIndexOnMove(
-      currentIndexStream.value,
+      currentIndexStream.value ?? 0,
       oldIndex,
       newIndex,
     );
@@ -182,7 +184,7 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
 
   @override
   Future<void> addToNext(List<Song> songs) async {
-    final index = _dynamicQueue.getNextNormalIndex(currentIndexStream.value + 1);
+    final index = _dynamicQueue.getNextNormalIndex(currentIndexStream.value ?? 0 + 1);
 
     _audioPlayerDataSource.insertIntoQueue(songs.map((e) => e as SongModel).toList(), index);
 
@@ -197,10 +199,25 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
 
   Future<void> _removeQueueIndices(List<int> indices, bool permanent) async {
     _dynamicQueue.removeQueueIndeces(indices, permanent);
+    final newQueue = _dynamicQueue.queue;
 
-    final newCurrentIndex = _calcNewCurrentIndexOnRemove(currentIndexStream.value, indices);
+    final newCurrentIndex = newQueue.isNotEmpty
+        ? _calcNewCurrentIndexOnRemove(currentIndexStream.value ?? 0, indices)
+        : 0;
     _currentIndexSubject.add(newCurrentIndex);
-    _queueSubject.add(_dynamicQueue.queue);
+    _queueSubject.add(newQueue);
+
+    if (newQueue.isEmpty) {
+      if (_dynamicQueue.availableSongs.isEmpty) {
+        _audioPlayerDataSource.stop();
+      } else {
+        final newSongs = await _dynamicQueue.updateCurrentIndex(newCurrentIndex);
+        if (newSongs.isNotEmpty) {
+            await _audioPlayerDataSource.addToQueue(newSongs.map((e) => e as SongModel).toList());
+            _queueSubject.add(_dynamicQueue.queue);
+          }
+      }
+    }
 
     _audioPlayerDataSource.removeQueueIndices(indices);
   }
@@ -257,7 +274,7 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   Future<void> updateSongs(Map<String, Song> songs) async {
     // TODO: handle removing songs/current song here? could be easier to coordinate with playerdatasource
     if (songs.containsKey(_currentSongSubject.valueOrNull?.path)) {
-      _currentSongSubject.add(songs[_currentSongSubject.value.path]!);
+      _currentSongSubject.add(songs[_currentSongSubject.value!.path]!);
     }
 
     final oldQueue = List<Song>.from(_dynamicQueue.queue);
@@ -285,6 +302,8 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
     if (queue != null && index != null && index < queue.length) {
       _log.d('Current song: ${queue[index]}');
       _currentSongSubject.add(queue[index]);
+    } else {
+      _currentSongSubject.add(null);
     }
     // idea: unblock index update, once the current song has been updated (via queue update)
     _blockIndexUpdate = false;

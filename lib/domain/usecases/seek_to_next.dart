@@ -10,7 +10,7 @@ class SeekToNext {
   Future<bool> call() async {
     final song = await _audioPlayerRepository.currentSongStream.first;
     final hasNext = await _audioPlayerRepository.seekToNext();
-    if (hasNext) _musicDataRepository.incrementSkipCount(song);
+    if (hasNext && song != null) _musicDataRepository.incrementSkipCount(song);
     return hasNext;
   }
 }

@@ -10,8 +10,8 @@ abstract class PersistentStateDataSource {
   Future<void> setAvailableSongs(List<QueueItemModel> songs);
   Future<List<QueueItemModel>> get availableSongs;
 
-  Future<void> setCurrentIndex(int index);
-  Future<int> get currentIndex;
+  Future<void> setCurrentIndex(int? index);
+  Future<int?> get currentIndex;
 
   Future<void> setPlayable(Playable playable);
   Future<Playable> get playable;

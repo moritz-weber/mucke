@@ -23,8 +23,8 @@ class PlatformIntegrationRepositoryImpl implements PlatformIntegrationRepository
   }
 
   @override
-  void setCurrentSong(Song song) {
+  void setCurrentSong(Song? song) {
     _log.d('setCurrentSong');
-    _platformIntegrationDataSource.setCurrentSong(song as SongModel);
+    _platformIntegrationDataSource.setCurrentSong(song != null ? song as SongModel : null);
   }
 }

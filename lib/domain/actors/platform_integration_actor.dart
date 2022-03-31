@@ -40,8 +40,10 @@ class PlatformIntegrationActor {
   }
 
   Future<void> _seekToPosition(Duration position) async {
-    final duration =
-        await _audioPlayerRepository.currentSongStream.first.then((value) => value.duration);
-    _audioPlayerRepository.seekToPosition(position.inMilliseconds / duration.inMilliseconds);
+    final song = await _audioPlayerRepository.currentSongStream.first;
+
+    if (song != null) {
+      _audioPlayerRepository.seekToPosition(position.inMilliseconds / song.duration.inMilliseconds);
+    }
   }
 }

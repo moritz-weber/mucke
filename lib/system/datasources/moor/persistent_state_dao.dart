@@ -111,14 +111,14 @@ class PersistentStateDao extends DatabaseAccessor<MoorDatabase>
   }
 
   @override
-  Future<int> get currentIndex async {
+  Future<int?> get currentIndex async {
     return (select(keyValueEntries)..where((tbl) => tbl.key.equals(PERSISTENT_INDEX)))
         .getSingle()
-        .then((event) => int.parse(event.value));
+        .then((event) => event.value != null.toString() ? int.parse(event.value) : null);
   }
 
   @override
-  Future<void> setCurrentIndex(int index) async {
+  Future<void> setCurrentIndex(int? index) async {
     (update(keyValueEntries)..where((tbl) => tbl.key.equals(PERSISTENT_INDEX)))
         .write(KeyValueEntriesCompanion(value: Value(index.toString())));
   }

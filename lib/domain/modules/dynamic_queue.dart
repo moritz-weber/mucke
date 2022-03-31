@@ -27,6 +27,8 @@ class DynamicQueue implements ManagedQueueInfo {
   final MusicDataRepository _musicDataRepository;
 
   List<Song> get queue => _queue.map((e) => e.song).toList();
+  List<Song> get availableSongs =>
+      (_availableSongs..where((element) => element.isAvailable)).map((e) => e.song).toList();
 
   /// The queue generated so far from the _availableSongs.
   List<QueueItem> _queue = [];
@@ -164,7 +166,7 @@ class DynamicQueue implements ManagedQueueInfo {
 
   void insertIntoQueue(List<Song> songs, int index) {
     _log.d('insertIntoQueue');
-    final queueItems = <QueueItem>[];
+    final queueItems = <QueueItemModel>[];
     int i = 0;
     for (final song in songs) {
       queueItems.add(QueueItemModel(
@@ -178,7 +180,7 @@ class DynamicQueue implements ManagedQueueInfo {
 
     _availableSongs.addAll(queueItems);
     _availableSongsSubject.add(_availableSongs);
-    _queue.insertAll(index, queueItems);
+    _queue.insertAll(min(_queue.length, index), queueItems);
     _queueSubject.add(_queue);
   }
 
@@ -207,7 +209,7 @@ class DynamicQueue implements ManagedQueueInfo {
       }
       _queue.removeAt(index);
     }
-    
+
     if (permanent) _availableSongsSubject.add(_availableSongs);
     _queueSubject.add(_queue);
   }
@@ -391,8 +393,9 @@ class DynamicQueue implements ManagedQueueInfo {
   }
 
   int getNextNormalIndex(int index) {
-    int i = index;
+    if (index >= queue.length) return queue.length;
 
+    int i = index;
     while (_queue[i].source == QueueItemSource.added) {
       i++;
     }

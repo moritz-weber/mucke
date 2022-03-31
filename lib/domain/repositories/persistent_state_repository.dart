@@ -7,7 +7,7 @@ abstract class PersistentStateRepository {
   Future<List<QueueItem>> get queueItems;
   Future<List<QueueItem>> get availableSongs;
   Future<Playable> get playable;
-  Future<int> get currentIndex;
+  Future<int?> get currentIndex;
 
   Future<LoopMode> get loopMode;
   Future<ShuffleMode> get shuffleMode;
@@ -17,5 +17,5 @@ abstract class PersistentStateRepository {
   void setQueue(List<QueueItem> queue);
   void setAvailableSongs(List<QueueItem> songs);
   void setPlayable(Playable playable);
-  void setCurrentIndex(int index);
+  void setCurrentIndex(int? index);
 }

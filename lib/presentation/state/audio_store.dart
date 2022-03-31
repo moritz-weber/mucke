@@ -71,7 +71,7 @@ abstract class _AudioStore with Store {
   final ShuffleAll _shuffleAll;
 
   @observable
-  late ObservableStream<Song> currentSongStream =
+  late ObservableStream<Song?> currentSongStream =
       _audioPlayerRepository.currentSongStream.asObservable();
 
   @observable
@@ -114,7 +114,7 @@ abstract class _AudioStore with Store {
       _audioPlayerRepository.managedQueueInfo.playableStream.asObservable();
 
   @observable
-  late ObservableStream<int> queueIndexStream =
+  late ObservableStream<int?> queueIndexStream =
       _audioPlayerRepository.currentIndexStream.asObservable();
 
   @observable
