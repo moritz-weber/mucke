@@ -66,15 +66,7 @@ class _SearchPageState extends State<SearchPage> {
         children: [
           Container(
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  DARK1,
-                  // Colors.transparent,
-                  Theme.of(context).scaffoldBackgroundColor,
-                ],
-              ),
+              color: Theme.of(context).primaryColor,
             ),
             child: Column(
               children: [
@@ -93,10 +85,16 @@ class _SearchPageState extends State<SearchPage> {
                         hintStyle: TEXT_HEADER.copyWith(color: Colors.white),
                         fillColor: Colors.white10,
                         filled: true,
-                        enabledBorder:
-                            const OutlineInputBorder(borderSide: BorderSide.none, gapPadding: 0.0),
-                        focusedBorder:
-                            const OutlineInputBorder(borderSide: BorderSide.none, gapPadding: 0.0),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          gapPadding: 0.0,
+                          borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          gapPadding: 0.0,
+                          borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                        ),
                         contentPadding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
                         suffixIcon: searchText.isNotEmpty
                             ? IconButton(
@@ -124,7 +122,7 @@ class _SearchPageState extends State<SearchPage> {
                   padding: const EdgeInsets.only(
                     left: HORIZONTAL_PADDING - 8.0,
                     right: HORIZONTAL_PADDING - 8.0,
-                    bottom: 16.0,
+                    bottom: 8.0,
                   ),
                   child: Observer(builder: (context) {
                     final artists = searchStore.searchResultsArtists;

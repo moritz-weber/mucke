@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mucke/presentation/theming.dart';
 
 import '../../domain/entities/album.dart';
 import '../../domain/entities/song.dart';
@@ -93,7 +94,7 @@ class _AlbumSliverAppBarState extends State<AlbumSliverAppBar> {
         Observer(builder: (context) {
           final isMultiSelectEnabled = widget.store.isMultiSelectEnabled;
           return IconButton(
-            key: const ValueKey('ALBUM_MULTISELECT'), // TODO: this allows to keep animations while rebuilding the icon
+            key: const ValueKey('ALBUM_MULTISELECT'),
             icon: isMultiSelectEnabled
                 ? const Icon(Icons.close_rounded)
                 : const Icon(Icons.checklist_rtl_rounded),
@@ -240,20 +241,22 @@ class Header extends StatelessWidget {
       height: 120,
       left: 16,
       top: Tween<double>(
-        begin: kToolbarHeight + MediaQuery.of(context).padding.top + 96,
+        begin: kToolbarHeight + MediaQuery.of(context).padding.top + 180,
         end: kToolbarHeight + MediaQuery.of(context).padding.top,
       ).evaluate(animation),
       child: Container(
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(2.0),
+          borderRadius: BorderRadius.circular(4.0),
           boxShadow: const [
-            BoxShadow(color: Colors.black26, blurRadius: 8, offset: Offset(0, 1)),
+            BoxShadow(color: LIGHT1, blurRadius: 4, offset: Offset(0, 1), spreadRadius: -3.0),
+            BoxShadow(color: Colors.black54, blurRadius: 8, offset: Offset(0, 2)),
           ],
           image: DecorationImage(
-              image: utils.getAlbumImage(album.albumArtPath),
-              fit: BoxFit.contain,
-              opacity: Tween<double>(begin: 0, end: 1).evaluate(animation)),
+            image: utils.getAlbumImage(album.albumArtPath),
+            fit: BoxFit.contain,
+            // opacity: Tween<double>(begin: 0, end: 1).evaluate(animation),
+          ),
         ),
       ),
     );

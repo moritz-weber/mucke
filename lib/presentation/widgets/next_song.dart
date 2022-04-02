@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
@@ -21,9 +22,10 @@ class NextSong extends StatelessWidget {
         return RichText(
           textAlign: TextAlign.center,
           text: TextSpan(
-            style: const TextStyle(
-              fontSize: 14,
+            style: GoogleFonts.readexPro(
+              fontSize: 13,
               color: Colors.white70,
+              fontWeight: FontWeight.w200,
             ),
             children: [
               TextSpan(

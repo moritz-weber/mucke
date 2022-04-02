@@ -28,6 +28,7 @@ class NextButton extends StatelessWidget {
               // precacheImage(FileImage(File(queue[index+2].albumArtPath)), context);
               audioStore.skipToNext();
             },
+            splashRadius: iconSize + 2,
           );
         }
         return IconButton(

@@ -35,9 +35,14 @@ class _HomePageState extends State<HomePage> {
                     child: Highlight(),
                   ),
                   const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
+                    padding: EdgeInsets.only(
+                      left: HORIZONTAL_PADDING,
+                      right: HORIZONTAL_PADDING,
+                      top: 20.0,
+                      bottom: 14.0,
+                    ),
                     child: ShuffleAllButton(
-                      verticalPad: 20.0,
+                      verticalPad: 0.0,
                       horizontalPad: 0.0,
                     ),
                   ),

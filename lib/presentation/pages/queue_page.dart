@@ -178,6 +178,26 @@ class QueuePage extends StatelessWidget {
                             onSelect: (bool selected) =>
                                 queuePageStore.setSelected(selected, index),
                           ),
+                          background: Container(
+                            width: double.infinity,
+                            color: RED,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: const [
+                                  Icon(
+                                    Icons.playlist_remove_rounded,
+                                    color: Colors.white,
+                                  ),
+                                  Icon(
+                                    Icons.playlist_remove_rounded,
+                                    color: Colors.white,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
                           onDismissed: (direction) {
                             audioStore.removeQueueIndices([index]);
                           },
@@ -243,7 +263,7 @@ class QueuePage extends StatelessWidget {
             ),
             ListTile(
               title: const Text('Remove from queue'),
-              leading: const Icon(Icons.play_arrow_rounded),
+              leading: const Icon(Icons.playlist_remove_rounded),
               onTap: () async {
                 await audioStore.removeQueueIndices(indeces);
                 Navigator.of(context, rootNavigator: true).pop();

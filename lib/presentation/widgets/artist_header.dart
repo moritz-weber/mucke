@@ -28,26 +28,19 @@ class ArtistHeader extends StatelessWidget {
         icon: const Icon(Icons.chevron_left),
         onPressed: () => navStore.pop(context),
       ),
-      titleSpacing: 48.0,
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
-        titlePadding: const EdgeInsets.only(
-          bottom: 0.0,
-          top: 0.0,
-          left: 48.0,
-          right: 48.0,
-        ),
+        titlePadding: const EdgeInsets.symmetric(horizontal: 48.0),
         title: Container(
           alignment: Alignment.center,
           height: height * 0.66,
-          // color: Colors.red,
           child: Text(
             artist.name,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 24.0,
-              color: Colors.white,
-            ),
+            style: Theme.of(context).textTheme.headline1?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24.0,
+                  color: Colors.white,
+                ),
             textAlign: TextAlign.center,
             maxLines: 3,
           ),
@@ -58,10 +51,8 @@ class ArtistHeader extends StatelessWidget {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                // Colors.deepPurpleAccent,
                 Colors.transparent,
                 Theme.of(context).scaffoldBackgroundColor,
-                // Colors.green,
               ],
             ),
           ),

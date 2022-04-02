@@ -15,32 +15,31 @@ class LibraryTabContainer extends StatelessWidget {
       child: SafeArea(
         child: Column(
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0, left: 4.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TabBar(
-                      indicatorColor: Theme.of(context).highlightColor,
-                      indicatorSize: TabBarIndicatorSize.label,
-                      indicatorWeight: 3.0,
-                      labelStyle: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20.0,
+            Container(
+              color: Theme.of(context).primaryColor,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 8.0, left: 4.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TabBar(
+                        indicatorColor: Theme.of(context).highlightColor,
+                        indicatorSize: TabBarIndicatorSize.label,
+                        indicatorWeight: 3.0,
+                        labelPadding: const EdgeInsets.symmetric(horizontal: 12.0),
+                        unselectedLabelColor: Colors.white30,
+                        isScrollable: true,
+                        tabs: const [
+                          Tab(text: 'Artists'),
+                          Tab(text: 'Albums'),
+                          Tab(text: 'Songs'),
+                          Tab(text: 'Playlists'),
+                        ],
                       ),
-                      labelPadding: const EdgeInsets.symmetric(horizontal: 12.0),
-                      unselectedLabelColor: Colors.white30,
-                      isScrollable: true,
-                      tabs: const [
-                        Tab(text: 'Artists'),
-                        Tab(text: 'Albums'),
-                        Tab(text: 'Songs'),
-                        Tab(text: 'Playlists'),
-                      ],
                     ),
-                  ),
-                  // IconButton(icon: const Icon(Icons.more_vert), onPressed: () {}),
-                ],
+                    // IconButton(icon: const Icon(Icons.more_vert), onPressed: () {}),
+                  ],
+                ),
               ),
             ),
             const Expanded(

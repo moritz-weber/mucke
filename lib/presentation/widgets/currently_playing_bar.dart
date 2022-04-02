@@ -29,44 +29,56 @@ class CurrentlyPlayingBar extends StatelessWidget {
               GestureDetector(
                 onTap: () => _onTap(context),
                 child: Container(
-                  color: Colors.white.withOpacity(0.02),
-                  child: Row(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0, bottom: 8.0, top: 8.0, right: 12.0),
-                        child: Container(
-                          clipBehavior: Clip.antiAlias,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(1.5),
-                          ),
-                          width: 56.0,
-                          child: Image(
-                            image: getAlbumImage(song.albumArtPath),
-                            height: 56.0,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              song.title,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
+                  color: Colors.transparent,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 0.0, top: 8.0),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Row(
+                        children: <Widget>[
+                          const SizedBox(width: 4.0),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                            child: Container(
+                              clipBehavior: Clip.antiAlias,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: DARK3, width: 0.4),
+                                borderRadius: BorderRadius.circular(2.0),
+                              ),
+                              width: 56.0,
+                              child: Image(
+                                image: getAlbumImage(song.albumArtPath),
+                                height: 56.0,
+                              ),
                             ),
-                            Text(
-                              song.artist,
-                              style: TEXT_SMALL_SUBTITLE.copyWith(color: Colors.white70),
-                            )
-                          ],
-                        ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  song.title,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
+                                ),
+                                Text(
+                                  song.artist,
+                                  style: TEXT_SMALL_SUBTITLE.copyWith(color: Colors.white70),
+                                )
+                              ],
+                            ),
+                          ),
+                          const PlayPauseButton(
+                            key: ValueKey('CURRENTLY_PLAYING_BAR_PLAY_PAUSE'),
+                            circle: false,
+                          ),
+                          const NextButton(
+                            key: ValueKey('CURRENTLY_PLAYING_BAR_NEXT'),
+                          ),
+                          const SizedBox(width: 4.0),
+                        ],
                       ),
-                      const PlayPauseButton(
-                        circle: false,
-                      ),
-                      const NextButton(),
-                    ],
+                    ),
                   ),
                 ),
               ),

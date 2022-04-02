@@ -19,17 +19,20 @@ class ShuffleAllButton extends StatelessWidget {
 
     return Container(
       constraints: BoxConstraints.expand(height: 40.0 + verticalPad * 2),
+      clipBehavior: Clip.none,
       child: Padding(
         padding: EdgeInsets.symmetric(
           vertical: verticalPad,
           horizontal: horizontalPad,
         ),
         child: ElevatedButton.icon(
-          icon: const Icon(Icons.shuffle),
+          icon: const Icon(Icons.shuffle_rounded),
           label: const Text('SHUFFLE ALL'),
           onPressed: () => audioStore.shuffleAll(),
           style: ElevatedButton.styleFrom(
             primary: Theme.of(context).highlightColor,
+            elevation: 2.0,
+            shape: const StadiumBorder(),
           ),
         ),
       ),

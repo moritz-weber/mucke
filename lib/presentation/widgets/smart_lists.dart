@@ -37,31 +37,47 @@ class SmartLists extends StatelessWidget {
                     vertical: 6.0,
                   ),
                   child: Container(
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0), color: Colors.white10),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: HORIZONTAL_PADDING, top: 4.0, bottom: 4.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              smartList.name,
-                              style: Theme.of(context).textTheme.headline4,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8.0),
+                      color: Theme.of(context).cardColor,
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black54,
+                          blurRadius: 8,
+                          offset: Offset(0, 1),
+                          spreadRadius: -5,
+                        ),
+                      ],
+                    ),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Padding(
+                        padding:
+                            const EdgeInsets.only(left: HORIZONTAL_PADDING, top: 4.0, bottom: 4.0, right: 4.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                smartList.name,
+                                style: Theme.of(context).textTheme.headline4,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: 8.0),
-                          IconButton(
-                            padding: EdgeInsets.zero,
-                            icon: const Icon(
-                              Icons.play_circle_fill_rounded,
-                              size: 40.0,
+                            const SizedBox(width: 8.0),
+                            IconButton(
+                              padding: EdgeInsets.zero,
+                              icon: const Icon(
+                                Icons.play_circle_fill_rounded,
+                                size: 40.0,
+                              ),
+                              iconSize: 48.0,
+                              onPressed: () => audioStore.playSmartList(smartList),
+                              splashRadius: 24.0,
                             ),
-                            iconSize: 48.0,
-                            onPressed: () => audioStore.playSmartList(smartList),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),

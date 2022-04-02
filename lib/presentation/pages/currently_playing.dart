@@ -129,6 +129,15 @@ class CurrentlyPlayingPage extends StatelessWidget {
                         const Spacer(
                           flex: 60,
                         ),
+                        const Center(
+                          child: Padding(
+                            padding: EdgeInsets.only(bottom: 8.0),
+                            child: Icon(
+                              Icons.expand_less,
+                              color: Colors.white70,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
