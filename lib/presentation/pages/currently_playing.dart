@@ -83,7 +83,7 @@ class CurrentlyPlayingPage extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           child: SizedBox(
                             width: double.infinity,
-                            height: 72.0,
+                            height: 74.0,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -96,9 +96,14 @@ class CurrentlyPlayingPage extends StatelessWidget {
                                 ),
                                 Text(
                                   '${song.artist} • ${song.album}',
-                                  style: TEXT_SUBTITLE.copyWith(
-                                    color: Colors.grey[100],
+                                  style: TextStyle(
+                                    color: Colors.grey[300],
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.w300,
                                   ),
+
+                                  // TEXT_SUBTITLE.copyWith(
+                                  // ),
                                   maxLines: 2,
                                 ),
                               ],

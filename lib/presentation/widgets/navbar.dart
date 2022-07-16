@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mucke/presentation/theming.dart';
 
+import '../theming.dart';
 import 'currently_playing_bar.dart';
 
 class NavBar extends StatefulWidget {

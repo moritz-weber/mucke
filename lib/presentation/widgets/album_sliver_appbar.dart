@@ -3,12 +3,12 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mucke/presentation/theming.dart';
 
 import '../../domain/entities/album.dart';
 import '../../domain/entities/song.dart';
 import '../state/album_page_store.dart';
 import '../state/navigation_store.dart';
+import '../theming.dart';
 import '../utils.dart' as utils;
 
 class AlbumSliverAppBar extends StatefulWidget {

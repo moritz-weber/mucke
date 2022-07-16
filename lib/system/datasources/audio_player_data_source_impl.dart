@@ -211,9 +211,8 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
     if (index < _loadEndIndex) {
       _loadEndIndex = _loadEndIndex + songs.length;
     }
-    await _audioSource.insertAll(min(_audioSource.length, _audioPlayer.currentIndex ?? 0 + 1),
+    await _audioSource.insertAll(min(_audioSource.length, (_audioPlayer.currentIndex ?? 0) + 1),
         songs.map((e) => ja.AudioSource.uri(Uri.file(e.path))).toList());
-    print('hi');
   }
 
   @override
