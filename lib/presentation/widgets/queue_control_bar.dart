@@ -24,11 +24,13 @@ class QueueControlBar extends StatelessWidget {
             verticalDirection: VerticalDirection.up,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Container(
-                color: DARK3,
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING + 2, vertical: 8.0),
-                  child: PlaybackControl(),
+              Material(
+                child: Container(
+                  color: DARK3,
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING + 2, vertical: 8.0),
+                    child: PlaybackControl(),
+                  ),
                 ),
               ),
               Container(

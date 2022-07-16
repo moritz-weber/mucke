@@ -4,6 +4,8 @@ const Color DARK1 = Color(0xff141216);
 const Color DARK2 = Color(0xFF1e1b21);
 const Color DARK25 = Color(0xFF242127);
 const Color DARK3 = Color(0xff2e2a33); // 645375 // 241d2b
+const Color DARK35 = Color(0xff3d3a42);
+const Color DARK4 = Color(0xff56525b);
 const Color LIGHT1 = Color(0xff913af1);
 const Color LIGHT2 = Color(0xffac5bfb);
 
@@ -37,7 +39,10 @@ ThemeData theme() => ThemeData(
       ),
       progressIndicatorTheme: const ProgressIndicatorThemeData(color: LIGHT2),
       sliderTheme: const SliderThemeData(
-          activeTrackColor: LIGHT2, thumbColor: LIGHT2, inactiveTrackColor: Colors.white24),
+        activeTrackColor: LIGHT2,
+        thumbColor: DARK35,
+        inactiveTrackColor: DARK4,
+      ),
       // https://api.flutter.dev/flutter/material/TextTheme-class.html
       textTheme: const TextTheme(
         headline1: TextStyle(
@@ -103,6 +108,22 @@ ThemeData theme() => ThemeData(
         indent: HORIZONTAL_PADDING,
         endIndent: HORIZONTAL_PADDING,
         space: 0.0,
+      ),
+      switchTheme: SwitchThemeData(
+        thumbColor: MaterialStateProperty.resolveWith<Color>((states) {
+          if (states.contains(MaterialState.disabled)) {
+            return Colors.white30;
+          }
+          return DARK35;
+        }),
+        trackColor: MaterialStateProperty.resolveWith<Color>((states) {
+          if (states.contains(MaterialState.selected)) {
+            return LIGHT1;
+          } else if (states.contains(MaterialState.disabled)) {
+            return Colors.white30;
+          }
+          return DARK4;
+        }),
       ),
     );
 

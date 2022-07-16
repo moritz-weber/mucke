@@ -208,6 +208,16 @@ class _SearchPageState extends State<SearchPage> {
               final smartlists = searchStore.searchResultsSmartLists;
               final playlists = searchStore.searchResultsPlaylists;
 
+              if (_textController.text.isEmpty) {
+                return const Center(
+                  child: Icon(
+                    Icons.search_rounded,
+                    size: 192,
+                    color: Colors.white30,
+                  ),
+                );
+              }
+
               return Scrollbar(
                 controller: _scrollController,
                 child: CustomScrollView(
