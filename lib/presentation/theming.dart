@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 const Color DARK1 = Color(0xff141216);
 const Color DARK2 = Color(0xFF1e1b21);
@@ -40,46 +39,44 @@ ThemeData theme() => ThemeData(
       sliderTheme: const SliderThemeData(
           activeTrackColor: LIGHT2, thumbColor: LIGHT2, inactiveTrackColor: Colors.white24),
       // https://api.flutter.dev/flutter/material/TextTheme-class.html
-      textTheme: GoogleFonts.readexProTextTheme(
-        const TextTheme(
-          headline1: TextStyle(
-            fontSize: 28.0,
-            fontWeight: FontWeight.w900,
-            color: LIGHT1,
-          ),
-          headline2: TextStyle(
-            fontSize: 24.0,
-            fontWeight: FontWeight.w900,
-            color: Colors.white,
-          ),
-          headline3: TextStyle(
-            fontSize: 20.0,
-            fontWeight: FontWeight.w900,
-            color: Colors.white,
-          ),
-          headline4: TextStyle(
-            fontSize: 18.0,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
-          ),
-          headline5: TextStyle(
-            fontSize: 18.0,
-            fontWeight: FontWeight.w400,
-            color: Colors.white70,
-          ),
-          headline6: TextStyle(fontSize: 18.0),
+      textTheme: const TextTheme(
+        headline1: TextStyle(
+          fontSize: 28.0,
+          fontWeight: FontWeight.w900,
+          color: LIGHT1,
         ),
+        headline2: TextStyle(
+          fontSize: 24.0,
+          fontWeight: FontWeight.w900,
+          color: Colors.white,
+        ),
+        headline3: TextStyle(
+          fontSize: 20.0,
+          fontWeight: FontWeight.w900,
+          color: Colors.white,
+        ),
+        headline4: TextStyle(
+          fontSize: 18.0,
+          fontWeight: FontWeight.w600,
+          color: Colors.white,
+        ),
+        headline5: TextStyle(
+          fontSize: 18.0,
+          fontWeight: FontWeight.w400,
+          color: Colors.white70,
+        ),
+        headline6: TextStyle(fontSize: 18.0),
       ),
       textSelectionTheme: const TextSelectionThemeData(
         cursorColor: LIGHT2,
       ),
-      tabBarTheme: TabBarTheme(
+      tabBarTheme: const TabBarTheme(
         labelColor: Colors.white,
-        labelStyle: GoogleFonts.readexPro(
+        labelStyle: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 20.0,
         ),
-        unselectedLabelStyle: GoogleFonts.readexPro(
+        unselectedLabelStyle: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 20.0,
         ),
@@ -87,7 +84,14 @@ ThemeData theme() => ThemeData(
       iconTheme: const IconThemeData(
         color: Colors.white,
       ),
-      appBarTheme: const AppBarTheme(color: DARK1, elevation: 0.0),
+      appBarTheme: const AppBarTheme(
+        color: DARK1,
+        elevation: 0.0,
+        titleTextStyle: TextStyle(
+          fontWeight: FontWeight.w800,
+          fontSize: 20.0,
+        ),
+      ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: DARK1,
         selectedItemColor: LIGHT1,
@@ -104,7 +108,7 @@ ThemeData theme() => ThemeData(
 
 const TextStyle TEXT_HEADER = TextStyle(
   fontSize: 20.0,
-  fontWeight: FontWeight.bold,
+  fontWeight: FontWeight.w900,
 );
 
 const TextStyle TEXT_HEADER_S = TextStyle(
@@ -119,7 +123,7 @@ const TextStyle TEXT_BIG = TextStyle(
 
 const TextStyle TEXT_SUBTITLE = TextStyle(
   fontSize: 18.0,
-  fontWeight: FontWeight.w300,
+  fontWeight: FontWeight.w200,
 );
 
 const TextStyle TEXT_SMALL_HEADLINE = TextStyle(
