@@ -180,7 +180,7 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
       if (oldIndex < oldCurrentIndex) {
         newCurrentIndex--;
       }
-      if (newIndex <= oldCurrentIndex) {
+      if (newIndex < oldCurrentIndex) {
         newCurrentIndex++;
       }
     }

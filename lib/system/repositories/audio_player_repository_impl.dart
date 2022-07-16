@@ -184,7 +184,7 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
 
   @override
   Future<void> addToNext(List<Song> songs) async {
-    final index = _dynamicQueue.getNextNormalIndex(currentIndexStream.value ?? 0 + 1);
+    final index = _dynamicQueue.getNextNormalIndex((currentIndexStream.value ?? 0) + 1);
 
     _audioPlayerDataSource.insertIntoQueue(songs.map((e) => e as SongModel).toList(), index);
 
@@ -332,7 +332,7 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
       if (oldIndex < currentIndex) {
         newCurrentIndex--;
       }
-      if (newIndex <= currentIndex) {
+      if (newIndex < currentIndex) {
         newCurrentIndex++;
       }
     }
