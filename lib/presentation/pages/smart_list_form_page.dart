@@ -9,6 +9,7 @@ import '../state/navigation_store.dart';
 import '../state/settings_store.dart';
 import '../state/smart_list_form_store.dart';
 import '../theming.dart';
+import '../widgets/switch_text_listtile.dart';
 import 'smart_lists_artists_page.dart';
 
 class SmartListFormPage extends StatefulWidget {
@@ -22,6 +23,9 @@ class SmartListFormPage extends StatefulWidget {
 
 class _SmartListFormPageState extends State<SmartListFormPage> {
   late SmartListFormStore store;
+
+  static const CARD_PADDING = 8.0;
+  static const CARD_SPACING = 16.0;
 
   @override
   void initState() {
@@ -91,395 +95,396 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
               SliverList(
                 delegate: SliverChildListDelegate(
                   [
+                    const SizedBox(height: 16.0),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
+                      padding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING - 8.0),
                       child: Observer(
                         builder: (_) => TextFormField(
                           initialValue: store.name,
                           onChanged: (value) => store.name = value,
+                          style: TEXT_HEADER,
                           decoration: InputDecoration(
                             labelText: 'Name',
+                            labelStyle: const TextStyle(color: Colors.white),
+                            floatingLabelStyle: TEXT_HEADER_S.copyWith(color: Colors.white),
                             errorText: store.error.name,
+                            errorStyle: const TextStyle(color: RED),
+                            filled: true,
+                            fillColor: DARK35,
+                            border: const OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 24.0),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
-                      child: Observer(
-                        builder: (_) {
-                          final RangeValues _currentRangeValues = RangeValues(
-                              store.minLikeCount.toDouble(), store.maxLikeCount.toDouble());
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Likes between ${store.minLikeCount} and ${store.maxLikeCount}'),
-                              RangeSlider(
-                                values: _currentRangeValues,
-                                min: 0,
-                                max: MAX_LIKE_COUNT.toDouble(),
-                                divisions: MAX_LIKE_COUNT,
-                                labels: RangeLabels(
-                                  _currentRangeValues.start.round().toString(),
-                                  _currentRangeValues.end.round().toString(),
-                                ),
-                                onChanged: (RangeValues values) {
-                                  store.minLikeCount = values.start.toInt();
-                                  store.maxLikeCount = values.end.toInt();
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      ),
+                    const SizedBox(height: 8.0),
+                    const ListTile(
+                      title: Text('Filter settings', style: TEXT_HEADER),
                     ),
-                    const SizedBox(height: 24.0),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
-                      child: Observer(
-                        builder: (_) {
-                          return Row(
-                            children: [
-                              Switch(
-                                value: store.minPlayCountEnabled,
-                                onChanged: (bool value) => store.minPlayCountEnabled = value,
-                              ),
-                              const Text('Minimum play count'),
-                              const Spacer(),
-                              SizedBox(
-                                width: 36.0,
-                                child: TextFormField(
-                                  enabled: store.minPlayCountEnabled,
-                                  keyboardType: TextInputType.number,
-                                  initialValue: store.minPlayCount,
-                                  onChanged: (value) {
-                                    store.minPlayCount = value;
-                                  },
-                                  textAlign: TextAlign.center,
-                                  decoration: InputDecoration(
-                                    errorText: store.error.minPlayCount,
-                                    errorStyle: const TextStyle(height: 0, fontSize: 0),
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 2.0,
+                          vertical: CARD_PADDING,
+                        ),
+                        child: Observer(
+                          builder: (_) {
+                            final RangeValues _currentRangeValues = RangeValues(
+                                store.minLikeCount.toDouble(), store.maxLikeCount.toDouble());
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    left: 10.0,
+                                    top: 4.0,
+                                  ),
+                                  child: Text(
+                                    'Likes between ${store.minLikeCount} and ${store.maxLikeCount}',
                                   ),
                                 ),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 24.0),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
-                      child: Observer(
-                        builder: (_) {
-                          return Row(
-                            children: [
-                              Switch(
-                                value: store.maxPlayCountEnabled,
-                                onChanged: (bool value) => store.maxPlayCountEnabled = value,
-                              ),
-                              const Text('Maximum play count'),
-                              const Spacer(),
-                              SizedBox(
-                                width: 36.0,
-                                child: TextFormField(
-                                  enabled: store.maxPlayCountEnabled,
-                                  keyboardType: TextInputType.number,
-                                  initialValue: store.maxPlayCount,
-                                  textAlign: TextAlign.center,
-                                  onChanged: (value) {
-                                    store.maxPlayCount = value;
-                                  },
-                                  decoration: InputDecoration(
-                                    errorText: store.error.maxPlayCount,
-                                    errorStyle: const TextStyle(height: 0, fontSize: 0),
+                                RangeSlider(
+                                  values: _currentRangeValues,
+                                  min: 0,
+                                  max: MAX_LIKE_COUNT.toDouble(),
+                                  divisions: MAX_LIKE_COUNT,
+                                  labels: RangeLabels(
+                                    _currentRangeValues.start.round().toString(),
+                                    _currentRangeValues.end.round().toString(),
                                   ),
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 24.0),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
-                      child: Observer(
-                        builder: (_) {
-                          return Row(
-                            children: [
-                              Switch(
-                                value: store.minSkipCountEnabled,
-                                onChanged: (bool value) => store.minSkipCountEnabled = value,
-                              ),
-                              const Text('Minimum skip count'),
-                              const Spacer(),
-                              SizedBox(
-                                width: 36.0,
-                                child: TextFormField(
-                                  enabled: store.minSkipCountEnabled,
-                                  keyboardType: TextInputType.number,
-                                  initialValue: store.minSkipCount,
-                                  onChanged: (value) {
-                                    store.minSkipCount = value;
-                                  },
-                                  textAlign: TextAlign.center,
-                                  decoration: InputDecoration(
-                                    errorText: store.error.minSkipCount,
-                                    errorStyle: const TextStyle(height: 0, fontSize: 0),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 24.0),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
-                      child: Observer(
-                        builder: (_) {
-                          return Row(
-                            children: [
-                              Switch(
-                                value: store.maxSkipCountEnabled,
-                                onChanged: (bool value) => store.maxSkipCountEnabled = value,
-                              ),
-                              const Text('Maximum skip count'),
-                              const Spacer(),
-                              SizedBox(
-                                width: 36.0,
-                                child: TextFormField(
-                                  enabled: store.maxSkipCountEnabled,
-                                  keyboardType: TextInputType.number,
-                                  initialValue: store.maxSkipCount,
-                                  textAlign: TextAlign.center,
-                                  onChanged: (value) {
-                                    store.maxSkipCount = value;
-                                  },
-                                  decoration: InputDecoration(
-                                    errorText: store.error.maxSkipCount,
-                                    errorStyle: const TextStyle(height: 0, fontSize: 0),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 24.0),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
-                      child: Observer(
-                        builder: (_) {
-                          return Row(
-                            children: [
-                              Switch(
-                                value: store.minYearEnabled,
-                                onChanged: (bool value) => store.minYearEnabled = value,
-                              ),
-                              const Text('Minimum year'),
-                              const Spacer(),
-                              SizedBox(
-                                width: 36.0,
-                                child: TextFormField(
-                                  enabled: store.minYearEnabled,
-                                  keyboardType: TextInputType.number,
-                                  initialValue: store.minYear,
-                                  onChanged: (value) {
-                                    store.minYear = value;
-                                  },
-                                  textAlign: TextAlign.center,
-                                  decoration: InputDecoration(
-                                    errorText: store.error.minYear,
-                                    errorStyle: const TextStyle(height: 0, fontSize: 0),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 24.0),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
-                      child: Observer(
-                        builder: (_) {
-                          return Row(
-                            children: [
-                              Switch(
-                                value: store.maxYearEnabled,
-                                onChanged: (bool value) => store.maxYearEnabled = value,
-                              ),
-                              const Text('Maximum year'),
-                              const Spacer(),
-                              SizedBox(
-                                width: 36.0,
-                                child: TextFormField(
-                                  enabled: store.maxYearEnabled,
-                                  keyboardType: TextInputType.number,
-                                  initialValue: store.maxYear,
-                                  textAlign: TextAlign.center,
-                                  onChanged: (value) {
-                                    store.maxYear = value;
-                                  },
-                                  decoration: InputDecoration(
-                                    errorText: store.error.maxYear,
-                                    errorStyle: const TextStyle(height: 0, fontSize: 0),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 24.0),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
-                      child: Observer(
-                        builder: (_) {
-                          return Row(
-                            children: [
-                              Switch(
-                                value: store.limitEnabled,
-                                onChanged: (bool value) => store.limitEnabled = value,
-                              ),
-                              const Text('Limit number of songs'),
-                              const Spacer(),
-                              SizedBox(
-                                width: 36.0,
-                                child: TextFormField(
-                                  enabled: store.limitEnabled,
-                                  keyboardType: TextInputType.number,
-                                  initialValue: store.limit,
-                                  textAlign: TextAlign.center,
-                                  onChanged: (value) {
-                                    store.limit = value;
+                                  onChanged: (RangeValues values) {
+                                    store.minLikeCount = values.start.toInt();
+                                    store.maxLikeCount = values.end.toInt();
                                   },
                                 ),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 24.0),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
-                      child: Observer(
-                        builder: (_) {
-                          return DropdownButton<int>(
-                            value: store.blockLevel,
-                            hint: const Text('Select which songs to exclude.'),
-                            isExpanded: true,
-                            onChanged: (int? newValue) {
-                              if (newValue != null) store.blockLevel = newValue;
-                            },
-                            items: <int>[0, 1, 2, 3].map<DropdownMenuItem<int>>((int value) {
-                              return DropdownMenuItem<int>(
-                                value: value,
-                                child: Text(
-                                  blockLevelTexts[value],
-                                  style: const TextStyle(fontSize: 14.0),
-                                ),
-                              );
-                            }).toList(),
-                          );
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 24.0),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
-                      child: Observer(
-                        builder: (_) {
-                          return Row(
-                            children: [
-                              Switch(
-                                value: store.excludeArtists,
-                                onChanged: (bool value) => store.excludeArtists = value,
-                              ),
-                              const Text('Exclude selected artists'),
-                              const Spacer(),
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 24.0),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
-                      child: Observer(
-                        builder: (_) => GestureDetector(
-                          onTap: () {
-                            navStore.push(
-                              context,
-                              MaterialPageRoute<Widget>(
-                                builder: (BuildContext context) =>
-                                    SmartListArtistsPage(formStore: store),
-                              ),
+                              ],
                             );
                           },
-                          child: Row(
-                            children: [
-                              const SizedBox(width: 60.0, height: 36),
-                              Text(
-                                  'Select artists to ${store.excludeArtists ? "exclude" : "include"} (${store.selectedArtists.length} selected)'),
-                              const Spacer(),
-                            ],
-                          ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 24.0),
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: CARD_PADDING,
+                        ),
+                        child: Column(
+                          children: [
+                            Observer(
+                              builder: (_) {
+                                return SwitchTextListTile(
+                                  title: 'Minimum play count',
+                                  switchValue: store.minPlayCountEnabled,
+                                  onSwitchChanged: (bool value) {
+                                    store.minPlayCountEnabled = value;
+                                  },
+                                  textValue: store.minPlayCount,
+                                  onTextChanged: (String value) {
+                                    store.minPlayCount = value;
+                                  },
+                                );
+                              },
+                            ),
+                            const SizedBox(height: CARD_SPACING),
+                            Observer(
+                              builder: (_) {
+                                return SwitchTextListTile(
+                                  title: 'Maximum play count',
+                                  switchValue: store.maxPlayCountEnabled,
+                                  onSwitchChanged: (bool value) {
+                                    store.maxPlayCountEnabled = value;
+                                  },
+                                  textValue: store.maxPlayCount,
+                                  onTextChanged: (String value) {
+                                    store.maxPlayCount = value;
+                                  },
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: CARD_PADDING,
+                        ),
+                        child: Column(
+                          children: [
+                            Observer(
+                              builder: (_) {
+                                return SwitchTextListTile(
+                                  title: 'Minimum skip count',
+                                  switchValue: store.minSkipCountEnabled,
+                                  onSwitchChanged: (bool value) {
+                                    store.minSkipCountEnabled = value;
+                                  },
+                                  textValue: store.minSkipCount,
+                                  onTextChanged: (String value) {
+                                    store.minSkipCount = value;
+                                  },
+                                );
+                              },
+                            ),
+                            const SizedBox(height: CARD_SPACING),
+                            Observer(
+                              builder: (_) {
+                                return SwitchTextListTile(
+                                  title: 'Maximum skip count',
+                                  switchValue: store.maxSkipCountEnabled,
+                                  onSwitchChanged: (bool value) {
+                                    store.maxSkipCountEnabled = value;
+                                  },
+                                  textValue: store.maxSkipCount,
+                                  onTextChanged: (String value) {
+                                    store.maxSkipCount = value;
+                                  },
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: CARD_PADDING,
+                        ),
+                        child: Observer(
+                          builder: (_) {
+                            return Column(
+                              children: <int>[0, 1, 2, 3].map<RadioListTile<int>>((int value) {
+                                return RadioListTile<int>(
+                                  title: Text(
+                                    blockLevelTexts[value],
+                                    style: const TextStyle(
+                                      fontSize: 14.0,
+                                    ),
+                                  ),
+                                  value: value,
+                                  groupValue: store.blockLevel,
+                                  onChanged: (int? newValue) {
+                                    setState(() {
+                                      if (newValue != null) store.blockLevel = newValue;
+                                    });
+                                  },
+                                );
+                              }).toList(),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: CARD_PADDING,
+                        ),
+                        child: Column(
+                          children: [
+                            Observer(
+                              builder: (_) {
+                                return SwitchTextListTile(
+                                  title: 'Minimum year',
+                                  switchValue: store.minYearEnabled,
+                                  onSwitchChanged: (bool value) {
+                                    store.minYearEnabled = value;
+                                  },
+                                  textValue: store.minYear,
+                                  onTextChanged: (String value) {
+                                    store.minYear = value;
+                                  },
+                                );
+                              },
+                            ),
+                            const SizedBox(height: CARD_SPACING),
+                            Observer(
+                              builder: (_) {
+                                return SwitchTextListTile(
+                                  title: 'Maximum year',
+                                  switchValue: store.maxYearEnabled,
+                                  onSwitchChanged: (bool value) {
+                                    store.maxYearEnabled = value;
+                                  },
+                                  textValue: store.maxYear,
+                                  onTextChanged: (String value) {
+                                    store.maxYear = value;
+                                  },
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: CARD_PADDING,
+                        ),
+                        child: Column(
+                          children: [
+                            Observer(
+                              builder: (_) => GestureDetector(
+                                onTap: () {
+                                  navStore.push(
+                                    context,
+                                    MaterialPageRoute<Widget>(
+                                      builder: (BuildContext context) =>
+                                          SmartListArtistsPage(formStore: store),
+                                    ),
+                                  );
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                    left: 6.0,
+                                    right: HORIZONTAL_PADDING,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      const SizedBox(width: 60.0 + 6.0, height: 48.0),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Select artists to ${store.excludeArtists ? "exclude" : "include"}: ${store.selectedArtists.length} selected.',
+                                          ),
+                                          Text(
+                                            'Include all artists if none are selected.',
+                                            style: TEXT_SMALL_SUBTITLE.copyWith(
+                                              color: Colors.white70,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const Spacer(),
+                                      const Icon(Icons.chevron_right_rounded),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: CARD_SPACING),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                left: 6.0,
+                                right: HORIZONTAL_PADDING,
+                              ),
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 60.0,
+                                    child: Observer(
+                                      builder: (_) {
+                                        return Switch(
+                                          value: store.excludeArtists,
+                                          onChanged: (bool value) => store.excludeArtists = value,
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 6.0),
+                                  const Text('Exclude selected artists'),
+                                  const Spacer(),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: CARD_PADDING,
+                        ),
+                        child: Observer(
+                          builder: (_) {
+                            return SwitchTextListTile(
+                              title: 'Limit number of songs',
+                              switchValue: store.limitEnabled,
+                              onSwitchChanged: (bool value) {
+                                store.limitEnabled = value;
+                              },
+                              textValue: store.limit,
+                              onTextChanged: (String value) {
+                                store.limit = value;
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16.0),
                     const ListTile(
                       title: Text('Order settings', style: TEXT_HEADER),
+                      subtitle: Text('Reorder options to change priorities.'),
+                    ),
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: CARD_PADDING,
+                          horizontal: 8.0,
+                        ),
+                        child: Observer(
+                          builder: (_) => ReorderableColumn(
+                            children: List<Widget>.generate(
+                              store.orderState.length,
+                              (i) => Padding(
+                                key: ValueKey(i),
+                                padding: const EdgeInsets.symmetric(vertical: 1.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(4.0),
+                                    color: DARK25,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: HORIZONTAL_PADDING - 8.0,
+                                      vertical: 12.0,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Switch(
+                                          value: store.orderState[i].enabled,
+                                          onChanged: (bool value) =>
+                                              store.setOrderEnabled(i, value),
+                                        ),
+                                        const SizedBox(width: 6.0),
+                                        Text(store.orderState[i].text),
+                                        const Spacer(),
+                                        IconButton(
+                                          icon: store.orderState[i].orderDirection ==
+                                                  OrderDirection.ascending
+                                              ? const Icon(Icons.arrow_upward_rounded)
+                                              : const Icon(Icons.arrow_downward_rounded),
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 6.0,
+                                            vertical: 8.0,
+                                          ),
+                                          visualDensity: VisualDensity.compact,
+                                          onPressed: () => store.toggleOrderDirection(i),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            onReorder: (oldIndex, newIndex) =>
+                                store.reorderOrderState(oldIndex, newIndex),
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ),
-              Observer(
-                builder: (_) => ReorderableSliverList(
-                  delegate: ReorderableSliverChildBuilderDelegate(
-                    (context, int i) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: HORIZONTAL_PADDING,
-                          vertical: 12.0,
-                        ),
-                        child: Row(
-                          children: [
-                            Switch(
-                              value: store.orderState[i].enabled,
-                              onChanged: (bool value) => store.setOrderEnabled(i, value),
-                            ),
-                            Text(store.orderState[i].text),
-                            const Spacer(),
-                            IconButton(
-                              icon: store.orderState[i].orderDirection == OrderDirection.ascending
-                                  ? const Icon(Icons.arrow_upward)
-                                  : const Icon(Icons.arrow_downward),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 6.0,
-                                vertical: 8.0,
-                              ),
-                              visualDensity: VisualDensity.compact,
-                              onPressed: () => store.toggleOrderDirection(i),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                    childCount: store.orderState.length,
-                  ),
-                  onReorder: (oldIndex, newIndex) => store.reorderOrderState(oldIndex, newIndex),
-                ),
-              )
             ],
           ),
         ),

@@ -32,6 +32,7 @@ ThemeData theme() => ThemeData(
       highlightColor: LIGHT1,
       scaffoldBackgroundColor: DARK2,
       cardColor: DARK3,
+      toggleableActiveColor: LIGHT1,
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           primary: LIGHT1,
