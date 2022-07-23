@@ -115,7 +115,10 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
                               borderSide: BorderSide.none,
                               borderRadius: BorderRadius.all(Radius.circular(4.0)),
                             ),
-                            contentPadding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+                            contentPadding: const EdgeInsets.symmetric(
+                              vertical: 4.0,
+                              horizontal: 8.0,
+                            ),
                           ),
                         ),
                       ),
@@ -133,7 +136,9 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
                         child: Observer(
                           builder: (_) {
                             final RangeValues _currentRangeValues = RangeValues(
-                                store.minLikeCount.toDouble(), store.maxLikeCount.toDouble());
+                              store.minLikeCount.toDouble(),
+                              store.maxLikeCount.toDouble(),
+                            );
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -363,7 +368,10 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
                                         ],
                                       ),
                                       const Spacer(),
-                                      const Icon(Icons.chevron_right_rounded),
+                                      const SizedBox(
+                                        width: 56.0,
+                                        child: Icon(Icons.chevron_right_rounded),
+                                      ),
                                     ],
                                   ),
                                 ),

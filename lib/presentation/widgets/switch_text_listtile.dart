@@ -10,7 +10,7 @@ class SwitchTextListTile extends StatelessWidget {
     required this.onSwitchChanged,
     required this.textValue,
     required this.onTextChanged,
-    this.errorText, 
+    this.errorText,
   }) : super(key: key);
 
   final String title;
@@ -33,11 +33,24 @@ class SwitchTextListTile extends StatelessWidget {
               onChanged: (bool value) => onSwitchChanged(value),
             ),
           ),
-          const SizedBox(width: 6.0),
-          Text(title),
-          const Spacer(),
+          Expanded(
+            child: GestureDetector(
+              onTap: () => onSwitchChanged(!switchValue),
+              child: Container(
+                color: Colors.transparent,
+                height: 48.0,
+                child: Row(
+                  children: [
+                    const SizedBox(width: 6.0),
+                    Text(title),
+                    const Spacer(),
+                  ],
+                ),
+              ),
+            ),
+          ),
           SizedBox(
-            width: 64.0,
+            width: 56.0,
             child: TextFormField(
               enabled: switchValue,
               keyboardType: TextInputType.number,
