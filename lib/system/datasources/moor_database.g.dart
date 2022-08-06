@@ -6,7 +6,7 @@ part of 'moor_database.dart';
 // MoorGenerator
 // **************************************************************************
 
-// ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
+// ignore_for_file: type=lint
 class MoorAlbum extends DataClass implements Insertable<MoorAlbum> {
   final int id;
   final String title;
@@ -209,30 +209,36 @@ class AlbumsCompanion extends UpdateCompanion<MoorAlbum> {
 }
 
 class $AlbumsTable extends Albums with TableInfo<$AlbumsTable, MoorAlbum> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $AlbumsTable(this._db, [this._alias]);
+  $AlbumsTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
   late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
       'id', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: false);
+      type: const IntType(), requiredDuringInsert: false);
   final VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
   late final GeneratedColumn<String?> title = GeneratedColumn<String?>(
       'title', aliasedName, false,
-      typeName: 'TEXT', requiredDuringInsert: true);
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _artistMeta = const VerificationMeta('artist');
+  @override
   late final GeneratedColumn<String?> artist = GeneratedColumn<String?>(
       'artist', aliasedName, false,
-      typeName: 'TEXT', requiredDuringInsert: true);
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _albumArtPathMeta =
       const VerificationMeta('albumArtPath');
+  @override
   late final GeneratedColumn<String?> albumArtPath = GeneratedColumn<String?>(
       'album_art_path', aliasedName, true,
-      typeName: 'TEXT', requiredDuringInsert: false);
+      type: const StringType(), requiredDuringInsert: false);
   final VerificationMeta _yearMeta = const VerificationMeta('year');
+  @override
   late final GeneratedColumn<int?> year = GeneratedColumn<int?>(
       'year', aliasedName, true,
-      typeName: 'INTEGER', requiredDuringInsert: false);
+      type: const IntType(), requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [id, title, artist, albumArtPath, year];
   @override
@@ -282,7 +288,7 @@ class $AlbumsTable extends Albums with TableInfo<$AlbumsTable, MoorAlbum> {
 
   @override
   $AlbumsTable createAlias(String alias) {
-    return $AlbumsTable(_db, alias);
+    return $AlbumsTable(attachedDatabase, alias);
   }
 }
 
@@ -384,13 +390,15 @@ class ArtistsCompanion extends UpdateCompanion<MoorArtist> {
 }
 
 class $ArtistsTable extends Artists with TableInfo<$ArtistsTable, MoorArtist> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $ArtistsTable(this._db, [this._alias]);
+  $ArtistsTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
   late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
       'name', aliasedName, false,
-      typeName: 'TEXT', requiredDuringInsert: true);
+      type: const StringType(), requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [name];
   @override
@@ -421,7 +429,7 @@ class $ArtistsTable extends Artists with TableInfo<$ArtistsTable, MoorArtist> {
 
   @override
   $ArtistsTable createAlias(String alias) {
-    return $ArtistsTable(_db, alias);
+    return $ArtistsTable(attachedDatabase, alias);
   }
 }
 
@@ -524,13 +532,15 @@ class LibraryFoldersCompanion extends UpdateCompanion<LibraryFolder> {
 
 class $LibraryFoldersTable extends LibraryFolders
     with TableInfo<$LibraryFoldersTable, LibraryFolder> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $LibraryFoldersTable(this._db, [this._alias]);
+  $LibraryFoldersTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _pathMeta = const VerificationMeta('path');
+  @override
   late final GeneratedColumn<String?> path = GeneratedColumn<String?>(
       'path', aliasedName, false,
-      typeName: 'TEXT', requiredDuringInsert: true);
+      type: const StringType(), requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [path];
   @override
@@ -561,7 +571,7 @@ class $LibraryFoldersTable extends LibraryFolders
 
   @override
   $LibraryFoldersTable createAlias(String alias) {
-    return $LibraryFoldersTable(_db, alias);
+    return $LibraryFoldersTable(attachedDatabase, alias);
   }
 }
 
@@ -765,31 +775,37 @@ class QueueEntriesCompanion extends UpdateCompanion<MoorQueueEntry> {
 
 class $QueueEntriesTable extends QueueEntries
     with TableInfo<$QueueEntriesTable, MoorQueueEntry> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $QueueEntriesTable(this._db, [this._alias]);
+  $QueueEntriesTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _indexMeta = const VerificationMeta('index');
+  @override
   late final GeneratedColumn<int?> index = GeneratedColumn<int?>(
       'index', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: false);
+      type: const IntType(), requiredDuringInsert: false);
   final VerificationMeta _pathMeta = const VerificationMeta('path');
+  @override
   late final GeneratedColumn<String?> path = GeneratedColumn<String?>(
       'path', aliasedName, false,
-      typeName: 'TEXT', requiredDuringInsert: true);
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _originalIndexMeta =
       const VerificationMeta('originalIndex');
+  @override
   late final GeneratedColumn<int?> originalIndex = GeneratedColumn<int?>(
       'original_index', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
   late final GeneratedColumn<int?> type = GeneratedColumn<int?>(
       'type', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _isAvailableMeta =
       const VerificationMeta('isAvailable');
+  @override
   late final GeneratedColumn<bool?> isAvailable = GeneratedColumn<bool?>(
       'is_available', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const BoolType(),
       requiredDuringInsert: true,
       defaultConstraints: 'CHECK (is_available IN (0, 1))');
   @override
@@ -849,7 +865,7 @@ class $QueueEntriesTable extends QueueEntries
 
   @override
   $QueueEntriesTable createAlias(String alias) {
-    return $QueueEntriesTable(_db, alias);
+    return $QueueEntriesTable(attachedDatabase, alias);
   }
 }
 
@@ -1056,31 +1072,37 @@ class AvailableSongEntriesCompanion
 
 class $AvailableSongEntriesTable extends AvailableSongEntries
     with TableInfo<$AvailableSongEntriesTable, AvailableSongEntry> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $AvailableSongEntriesTable(this._db, [this._alias]);
+  $AvailableSongEntriesTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _indexMeta = const VerificationMeta('index');
+  @override
   late final GeneratedColumn<int?> index = GeneratedColumn<int?>(
       'index', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: false);
+      type: const IntType(), requiredDuringInsert: false);
   final VerificationMeta _pathMeta = const VerificationMeta('path');
+  @override
   late final GeneratedColumn<String?> path = GeneratedColumn<String?>(
       'path', aliasedName, false,
-      typeName: 'TEXT', requiredDuringInsert: true);
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _originalIndexMeta =
       const VerificationMeta('originalIndex');
+  @override
   late final GeneratedColumn<int?> originalIndex = GeneratedColumn<int?>(
       'original_index', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
   late final GeneratedColumn<int?> type = GeneratedColumn<int?>(
       'type', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _isAvailableMeta =
       const VerificationMeta('isAvailable');
+  @override
   late final GeneratedColumn<bool?> isAvailable = GeneratedColumn<bool?>(
       'is_available', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const BoolType(),
       requiredDuringInsert: true,
       defaultConstraints: 'CHECK (is_available IN (0, 1))');
   @override
@@ -1140,7 +1162,7 @@ class $AvailableSongEntriesTable extends AvailableSongEntries
 
   @override
   $AvailableSongEntriesTable createAlias(String alias) {
-    return $AvailableSongEntriesTable(_db, alias);
+    return $AvailableSongEntriesTable(attachedDatabase, alias);
   }
 }
 
@@ -1694,104 +1716,124 @@ class SongsCompanion extends UpdateCompanion<MoorSong> {
 }
 
 class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $SongsTable(this._db, [this._alias]);
+  $SongsTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
   late final GeneratedColumn<String?> title = GeneratedColumn<String?>(
       'title', aliasedName, false,
-      typeName: 'TEXT', requiredDuringInsert: true);
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _albumTitleMeta = const VerificationMeta('albumTitle');
+  @override
   late final GeneratedColumn<String?> albumTitle = GeneratedColumn<String?>(
       'album_title', aliasedName, false,
-      typeName: 'TEXT', requiredDuringInsert: true);
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _albumIdMeta = const VerificationMeta('albumId');
+  @override
   late final GeneratedColumn<int?> albumId = GeneratedColumn<int?>(
       'album_id', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _artistMeta = const VerificationMeta('artist');
+  @override
   late final GeneratedColumn<String?> artist = GeneratedColumn<String?>(
       'artist', aliasedName, false,
-      typeName: 'TEXT', requiredDuringInsert: true);
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _pathMeta = const VerificationMeta('path');
+  @override
   late final GeneratedColumn<String?> path = GeneratedColumn<String?>(
       'path', aliasedName, false,
-      typeName: 'TEXT', requiredDuringInsert: true);
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _durationMeta = const VerificationMeta('duration');
+  @override
   late final GeneratedColumn<int?> duration = GeneratedColumn<int?>(
       'duration', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _albumArtPathMeta =
       const VerificationMeta('albumArtPath');
+  @override
   late final GeneratedColumn<String?> albumArtPath = GeneratedColumn<String?>(
       'album_art_path', aliasedName, true,
-      typeName: 'TEXT', requiredDuringInsert: false);
+      type: const StringType(), requiredDuringInsert: false);
   final VerificationMeta _discNumberMeta = const VerificationMeta('discNumber');
+  @override
   late final GeneratedColumn<int?> discNumber = GeneratedColumn<int?>(
       'disc_number', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _trackNumberMeta =
       const VerificationMeta('trackNumber');
+  @override
   late final GeneratedColumn<int?> trackNumber = GeneratedColumn<int?>(
       'track_number', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _yearMeta = const VerificationMeta('year');
+  @override
   late final GeneratedColumn<int?> year = GeneratedColumn<int?>(
       'year', aliasedName, true,
-      typeName: 'INTEGER', requiredDuringInsert: false);
+      type: const IntType(), requiredDuringInsert: false);
   final VerificationMeta _blockLevelMeta = const VerificationMeta('blockLevel');
+  @override
   late final GeneratedColumn<int?> blockLevel = GeneratedColumn<int?>(
       'block_level', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const IntType(),
       requiredDuringInsert: false,
       defaultValue: const Constant(0));
   final VerificationMeta _likeCountMeta = const VerificationMeta('likeCount');
+  @override
   late final GeneratedColumn<int?> likeCount = GeneratedColumn<int?>(
       'like_count', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const IntType(),
       requiredDuringInsert: false,
       defaultValue: const Constant(0));
   final VerificationMeta _skipCountMeta = const VerificationMeta('skipCount');
+  @override
   late final GeneratedColumn<int?> skipCount = GeneratedColumn<int?>(
       'skip_count', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const IntType(),
       requiredDuringInsert: false,
       defaultValue: const Constant(0));
   final VerificationMeta _playCountMeta = const VerificationMeta('playCount');
+  @override
   late final GeneratedColumn<int?> playCount = GeneratedColumn<int?>(
       'play_count', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const IntType(),
       requiredDuringInsert: false,
       defaultValue: const Constant(0));
   final VerificationMeta _presentMeta = const VerificationMeta('present');
+  @override
   late final GeneratedColumn<bool?> present = GeneratedColumn<bool?>(
       'present', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const BoolType(),
       requiredDuringInsert: false,
       defaultConstraints: 'CHECK (present IN (0, 1))',
       defaultValue: const Constant(true));
   final VerificationMeta _timeAddedMeta = const VerificationMeta('timeAdded');
+  @override
   late final GeneratedColumn<DateTime?> timeAdded = GeneratedColumn<DateTime?>(
       'time_added', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const IntType(),
       requiredDuringInsert: false,
       defaultValue: currentDateAndTime);
   final VerificationMeta _lastModifiedMeta =
       const VerificationMeta('lastModified');
+  @override
   late final GeneratedColumn<DateTime?> lastModified =
       GeneratedColumn<DateTime?>('last_modified', aliasedName, false,
-          typeName: 'INTEGER', requiredDuringInsert: true);
+          type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _previousMeta = const VerificationMeta('previous');
+  @override
   late final GeneratedColumn<bool?> previous = GeneratedColumn<bool?>(
       'previous', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const BoolType(),
       requiredDuringInsert: false,
       defaultConstraints: 'CHECK (previous IN (0, 1))',
       defaultValue: const Constant(false));
   final VerificationMeta _nextMeta = const VerificationMeta('next');
+  @override
   late final GeneratedColumn<bool?> next = GeneratedColumn<bool?>(
       'next', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const BoolType(),
       requiredDuringInsert: false,
       defaultConstraints: 'CHECK (next IN (0, 1))',
       defaultValue: const Constant(false));
@@ -1945,7 +1987,7 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
 
   @override
   $SongsTable createAlias(String alias) {
-    return $SongsTable(_db, alias);
+    return $SongsTable(attachedDatabase, alias);
   }
 }
 
@@ -2074,18 +2116,21 @@ class MoorAlbumOfDayCompanion extends UpdateCompanion<MoorAlbumOfDayData> {
 
 class $MoorAlbumOfDayTable extends MoorAlbumOfDay
     with TableInfo<$MoorAlbumOfDayTable, MoorAlbumOfDayData> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $MoorAlbumOfDayTable(this._db, [this._alias]);
+  $MoorAlbumOfDayTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _albumIdMeta = const VerificationMeta('albumId');
+  @override
   late final GeneratedColumn<int?> albumId = GeneratedColumn<int?>(
       'album_id', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: false);
+      type: const IntType(), requiredDuringInsert: false);
   final VerificationMeta _milliSecSinceEpochMeta =
       const VerificationMeta('milliSecSinceEpoch');
+  @override
   late final GeneratedColumn<int?> milliSecSinceEpoch = GeneratedColumn<int?>(
       'milli_sec_since_epoch', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      type: const IntType(), requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [albumId, milliSecSinceEpoch];
   @override
@@ -2122,7 +2167,7 @@ class $MoorAlbumOfDayTable extends MoorAlbumOfDay
 
   @override
   $MoorAlbumOfDayTable createAlias(String alias) {
-    return $MoorAlbumOfDayTable(_db, alias);
+    return $MoorAlbumOfDayTable(attachedDatabase, alias);
   }
 }
 
@@ -2130,6 +2175,8 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
   final int id;
   final String name;
   final String? shuffleMode;
+  final String icon;
+  final String gradient;
   final bool excludeArtists;
   final int blockLevel;
   final int minLikeCount;
@@ -2147,6 +2194,8 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
       {required this.id,
       required this.name,
       this.shuffleMode,
+      required this.icon,
+      required this.gradient,
       required this.excludeArtists,
       required this.blockLevel,
       required this.minLikeCount,
@@ -2169,6 +2218,10 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
           .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
       shuffleMode: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}shuffle_mode']),
+      icon: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}icon'])!,
+      gradient: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}gradient'])!,
       excludeArtists: const BoolType()
           .mapFromDatabaseResponse(data['${effectivePrefix}exclude_artists'])!,
       blockLevel: const IntType()
@@ -2205,6 +2258,8 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
     if (!nullToAbsent || shuffleMode != null) {
       map['shuffle_mode'] = Variable<String?>(shuffleMode);
     }
+    map['icon'] = Variable<String>(icon);
+    map['gradient'] = Variable<String>(gradient);
     map['exclude_artists'] = Variable<bool>(excludeArtists);
     map['block_level'] = Variable<int>(blockLevel);
     map['min_like_count'] = Variable<int>(minLikeCount);
@@ -2242,6 +2297,8 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
       shuffleMode: shuffleMode == null && nullToAbsent
           ? const Value.absent()
           : Value(shuffleMode),
+      icon: Value(icon),
+      gradient: Value(gradient),
       excludeArtists: Value(excludeArtists),
       blockLevel: Value(blockLevel),
       minLikeCount: Value(minLikeCount),
@@ -2278,6 +2335,8 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
       shuffleMode: serializer.fromJson<String?>(json['shuffleMode']),
+      icon: serializer.fromJson<String>(json['icon']),
+      gradient: serializer.fromJson<String>(json['gradient']),
       excludeArtists: serializer.fromJson<bool>(json['excludeArtists']),
       blockLevel: serializer.fromJson<int>(json['blockLevel']),
       minLikeCount: serializer.fromJson<int>(json['minLikeCount']),
@@ -2300,6 +2359,8 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
       'shuffleMode': serializer.toJson<String?>(shuffleMode),
+      'icon': serializer.toJson<String>(icon),
+      'gradient': serializer.toJson<String>(gradient),
       'excludeArtists': serializer.toJson<bool>(excludeArtists),
       'blockLevel': serializer.toJson<int>(blockLevel),
       'minLikeCount': serializer.toJson<int>(minLikeCount),
@@ -2320,6 +2381,8 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
           {int? id,
           String? name,
           String? shuffleMode,
+          String? icon,
+          String? gradient,
           bool? excludeArtists,
           int? blockLevel,
           int? minLikeCount,
@@ -2337,6 +2400,8 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
         id: id ?? this.id,
         name: name ?? this.name,
         shuffleMode: shuffleMode ?? this.shuffleMode,
+        icon: icon ?? this.icon,
+        gradient: gradient ?? this.gradient,
         excludeArtists: excludeArtists ?? this.excludeArtists,
         blockLevel: blockLevel ?? this.blockLevel,
         minLikeCount: minLikeCount ?? this.minLikeCount,
@@ -2357,6 +2422,8 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('shuffleMode: $shuffleMode, ')
+          ..write('icon: $icon, ')
+          ..write('gradient: $gradient, ')
           ..write('excludeArtists: $excludeArtists, ')
           ..write('blockLevel: $blockLevel, ')
           ..write('minLikeCount: $minLikeCount, ')
@@ -2379,6 +2446,8 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
       id,
       name,
       shuffleMode,
+      icon,
+      gradient,
       excludeArtists,
       blockLevel,
       minLikeCount,
@@ -2399,6 +2468,8 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
           other.id == this.id &&
           other.name == this.name &&
           other.shuffleMode == this.shuffleMode &&
+          other.icon == this.icon &&
+          other.gradient == this.gradient &&
           other.excludeArtists == this.excludeArtists &&
           other.blockLevel == this.blockLevel &&
           other.minLikeCount == this.minLikeCount &&
@@ -2418,6 +2489,8 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
   final Value<int> id;
   final Value<String> name;
   final Value<String?> shuffleMode;
+  final Value<String> icon;
+  final Value<String> gradient;
   final Value<bool> excludeArtists;
   final Value<int> blockLevel;
   final Value<int> minLikeCount;
@@ -2435,6 +2508,8 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.shuffleMode = const Value.absent(),
+    this.icon = const Value.absent(),
+    this.gradient = const Value.absent(),
     this.excludeArtists = const Value.absent(),
     this.blockLevel = const Value.absent(),
     this.minLikeCount = const Value.absent(),
@@ -2453,6 +2528,8 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
     this.id = const Value.absent(),
     required String name,
     this.shuffleMode = const Value.absent(),
+    this.icon = const Value.absent(),
+    this.gradient = const Value.absent(),
     this.excludeArtists = const Value.absent(),
     this.blockLevel = const Value.absent(),
     this.minLikeCount = const Value.absent(),
@@ -2473,6 +2550,8 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
     Expression<int>? id,
     Expression<String>? name,
     Expression<String?>? shuffleMode,
+    Expression<String>? icon,
+    Expression<String>? gradient,
     Expression<bool>? excludeArtists,
     Expression<int>? blockLevel,
     Expression<int>? minLikeCount,
@@ -2491,6 +2570,8 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
       if (id != null) 'id': id,
       if (name != null) 'name': name,
       if (shuffleMode != null) 'shuffle_mode': shuffleMode,
+      if (icon != null) 'icon': icon,
+      if (gradient != null) 'gradient': gradient,
       if (excludeArtists != null) 'exclude_artists': excludeArtists,
       if (blockLevel != null) 'block_level': blockLevel,
       if (minLikeCount != null) 'min_like_count': minLikeCount,
@@ -2511,6 +2592,8 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
       {Value<int>? id,
       Value<String>? name,
       Value<String?>? shuffleMode,
+      Value<String>? icon,
+      Value<String>? gradient,
       Value<bool>? excludeArtists,
       Value<int>? blockLevel,
       Value<int>? minLikeCount,
@@ -2528,6 +2611,8 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
       id: id ?? this.id,
       name: name ?? this.name,
       shuffleMode: shuffleMode ?? this.shuffleMode,
+      icon: icon ?? this.icon,
+      gradient: gradient ?? this.gradient,
       excludeArtists: excludeArtists ?? this.excludeArtists,
       blockLevel: blockLevel ?? this.blockLevel,
       minLikeCount: minLikeCount ?? this.minLikeCount,
@@ -2555,6 +2640,12 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
     }
     if (shuffleMode.present) {
       map['shuffle_mode'] = Variable<String?>(shuffleMode.value);
+    }
+    if (icon.present) {
+      map['icon'] = Variable<String>(icon.value);
+    }
+    if (gradient.present) {
+      map['gradient'] = Variable<String>(gradient.value);
     }
     if (excludeArtists.present) {
       map['exclude_artists'] = Variable<bool>(excludeArtists.value);
@@ -2604,6 +2695,8 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('shuffleMode: $shuffleMode, ')
+          ..write('icon: $icon, ')
+          ..write('gradient: $gradient, ')
           ..write('excludeArtists: $excludeArtists, ')
           ..write('blockLevel: $blockLevel, ')
           ..write('minLikeCount: $minLikeCount, ')
@@ -2624,99 +2717,132 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
 
 class $SmartListsTable extends SmartLists
     with TableInfo<$SmartListsTable, MoorSmartList> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $SmartListsTable(this._db, [this._alias]);
+  $SmartListsTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
   late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
       'id', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const IntType(),
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
   late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
       'name', aliasedName, false,
-      typeName: 'TEXT', requiredDuringInsert: true);
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _shuffleModeMeta =
       const VerificationMeta('shuffleMode');
+  @override
   late final GeneratedColumn<String?> shuffleMode = GeneratedColumn<String?>(
       'shuffle_mode', aliasedName, true,
-      typeName: 'TEXT', requiredDuringInsert: false);
+      type: const StringType(), requiredDuringInsert: false);
+  final VerificationMeta _iconMeta = const VerificationMeta('icon');
+  @override
+  late final GeneratedColumn<String?> icon = GeneratedColumn<String?>(
+      'icon', aliasedName, false,
+      type: const StringType(),
+      requiredDuringInsert: false,
+      defaultValue: const Constant('auto_awesome_rounded'));
+  final VerificationMeta _gradientMeta = const VerificationMeta('gradient');
+  @override
+  late final GeneratedColumn<String?> gradient = GeneratedColumn<String?>(
+      'gradient', aliasedName, false,
+      type: const StringType(),
+      requiredDuringInsert: false,
+      defaultValue: const Constant('sanguine'));
   final VerificationMeta _excludeArtistsMeta =
       const VerificationMeta('excludeArtists');
+  @override
   late final GeneratedColumn<bool?> excludeArtists = GeneratedColumn<bool?>(
       'exclude_artists', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const BoolType(),
       requiredDuringInsert: false,
       defaultConstraints: 'CHECK (exclude_artists IN (0, 1))',
       defaultValue: const Constant(false));
   final VerificationMeta _blockLevelMeta = const VerificationMeta('blockLevel');
+  @override
   late final GeneratedColumn<int?> blockLevel = GeneratedColumn<int?>(
       'block_level', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const IntType(),
       requiredDuringInsert: false,
       defaultValue: const Constant(0));
   final VerificationMeta _minLikeCountMeta =
       const VerificationMeta('minLikeCount');
+  @override
   late final GeneratedColumn<int?> minLikeCount = GeneratedColumn<int?>(
       'min_like_count', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const IntType(),
       requiredDuringInsert: false,
       defaultValue: const Constant(0));
   final VerificationMeta _maxLikeCountMeta =
       const VerificationMeta('maxLikeCount');
+  @override
   late final GeneratedColumn<int?> maxLikeCount = GeneratedColumn<int?>(
       'max_like_count', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const IntType(),
       requiredDuringInsert: false,
       defaultValue: const Constant(5));
   final VerificationMeta _minPlayCountMeta =
       const VerificationMeta('minPlayCount');
+  @override
   late final GeneratedColumn<int?> minPlayCount = GeneratedColumn<int?>(
       'min_play_count', aliasedName, true,
-      typeName: 'INTEGER', requiredDuringInsert: false);
+      type: const IntType(), requiredDuringInsert: false);
   final VerificationMeta _maxPlayCountMeta =
       const VerificationMeta('maxPlayCount');
+  @override
   late final GeneratedColumn<int?> maxPlayCount = GeneratedColumn<int?>(
       'max_play_count', aliasedName, true,
-      typeName: 'INTEGER', requiredDuringInsert: false);
+      type: const IntType(), requiredDuringInsert: false);
   final VerificationMeta _minSkipCountMeta =
       const VerificationMeta('minSkipCount');
+  @override
   late final GeneratedColumn<int?> minSkipCount = GeneratedColumn<int?>(
       'min_skip_count', aliasedName, true,
-      typeName: 'INTEGER', requiredDuringInsert: false);
+      type: const IntType(), requiredDuringInsert: false);
   final VerificationMeta _maxSkipCountMeta =
       const VerificationMeta('maxSkipCount');
+  @override
   late final GeneratedColumn<int?> maxSkipCount = GeneratedColumn<int?>(
       'max_skip_count', aliasedName, true,
-      typeName: 'INTEGER', requiredDuringInsert: false);
+      type: const IntType(), requiredDuringInsert: false);
   final VerificationMeta _minYearMeta = const VerificationMeta('minYear');
+  @override
   late final GeneratedColumn<int?> minYear = GeneratedColumn<int?>(
       'min_year', aliasedName, true,
-      typeName: 'INTEGER', requiredDuringInsert: false);
+      type: const IntType(), requiredDuringInsert: false);
   final VerificationMeta _maxYearMeta = const VerificationMeta('maxYear');
+  @override
   late final GeneratedColumn<int?> maxYear = GeneratedColumn<int?>(
       'max_year', aliasedName, true,
-      typeName: 'INTEGER', requiredDuringInsert: false);
+      type: const IntType(), requiredDuringInsert: false);
   final VerificationMeta _limitMeta = const VerificationMeta('limit');
+  @override
   late final GeneratedColumn<int?> limit = GeneratedColumn<int?>(
       'limit', aliasedName, true,
-      typeName: 'INTEGER', requiredDuringInsert: false);
+      type: const IntType(), requiredDuringInsert: false);
   final VerificationMeta _orderCriteriaMeta =
       const VerificationMeta('orderCriteria');
+  @override
   late final GeneratedColumn<String?> orderCriteria = GeneratedColumn<String?>(
       'order_criteria', aliasedName, false,
-      typeName: 'TEXT', requiredDuringInsert: true);
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _orderDirectionsMeta =
       const VerificationMeta('orderDirections');
+  @override
   late final GeneratedColumn<String?> orderDirections =
       GeneratedColumn<String?>('order_directions', aliasedName, false,
-          typeName: 'TEXT', requiredDuringInsert: true);
+          type: const StringType(), requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [
         id,
         name,
         shuffleMode,
+        icon,
+        gradient,
         excludeArtists,
         blockLevel,
         minLikeCount,
@@ -2754,6 +2880,14 @@ class $SmartListsTable extends SmartLists
           _shuffleModeMeta,
           shuffleMode.isAcceptableOrUnknown(
               data['shuffle_mode']!, _shuffleModeMeta));
+    }
+    if (data.containsKey('icon')) {
+      context.handle(
+          _iconMeta, icon.isAcceptableOrUnknown(data['icon']!, _iconMeta));
+    }
+    if (data.containsKey('gradient')) {
+      context.handle(_gradientMeta,
+          gradient.isAcceptableOrUnknown(data['gradient']!, _gradientMeta));
     }
     if (data.containsKey('exclude_artists')) {
       context.handle(
@@ -2844,7 +2978,7 @@ class $SmartListsTable extends SmartLists
 
   @override
   $SmartListsTable createAlias(String alias) {
-    return $SmartListsTable(_db, alias);
+    return $SmartListsTable(attachedDatabase, alias);
   }
 }
 
@@ -2973,18 +3107,21 @@ class SmartListArtistsCompanion extends UpdateCompanion<MoorSmartListArtist> {
 
 class $SmartListArtistsTable extends SmartListArtists
     with TableInfo<$SmartListArtistsTable, MoorSmartListArtist> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $SmartListArtistsTable(this._db, [this._alias]);
+  $SmartListArtistsTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _smartListIdMeta =
       const VerificationMeta('smartListId');
+  @override
   late final GeneratedColumn<int?> smartListId = GeneratedColumn<int?>(
       'smart_list_id', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _artistNameMeta = const VerificationMeta('artistName');
+  @override
   late final GeneratedColumn<String?> artistName = GeneratedColumn<String?>(
       'artist_name', aliasedName, false,
-      typeName: 'TEXT', requiredDuringInsert: true);
+      type: const StringType(), requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [smartListId, artistName];
   @override
@@ -3026,7 +3163,7 @@ class $SmartListArtistsTable extends SmartListArtists
 
   @override
   $SmartListArtistsTable createAlias(String alias) {
-    return $SmartListArtistsTable(_db, alias);
+    return $SmartListArtistsTable(attachedDatabase, alias);
   }
 }
 
@@ -3148,19 +3285,22 @@ class PlaylistsCompanion extends UpdateCompanion<MoorPlaylist> {
 
 class $PlaylistsTable extends Playlists
     with TableInfo<$PlaylistsTable, MoorPlaylist> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $PlaylistsTable(this._db, [this._alias]);
+  $PlaylistsTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
   late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
       'id', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const IntType(),
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
   late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
       'name', aliasedName, false,
-      typeName: 'TEXT', requiredDuringInsert: true);
+      type: const StringType(), requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [id, name];
   @override
@@ -3194,7 +3334,7 @@ class $PlaylistsTable extends Playlists
 
   @override
   $PlaylistsTable createAlias(String alias) {
-    return $PlaylistsTable(_db, alias);
+    return $PlaylistsTable(attachedDatabase, alias);
   }
 }
 
@@ -3348,21 +3488,25 @@ class PlaylistEntriesCompanion extends UpdateCompanion<MoorPlaylistEntry> {
 
 class $PlaylistEntriesTable extends PlaylistEntries
     with TableInfo<$PlaylistEntriesTable, MoorPlaylistEntry> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $PlaylistEntriesTable(this._db, [this._alias]);
+  $PlaylistEntriesTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _playlistIdMeta = const VerificationMeta('playlistId');
+  @override
   late final GeneratedColumn<int?> playlistId = GeneratedColumn<int?>(
       'playlist_id', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _songPathMeta = const VerificationMeta('songPath');
+  @override
   late final GeneratedColumn<String?> songPath = GeneratedColumn<String?>(
       'song_path', aliasedName, false,
-      typeName: 'TEXT', requiredDuringInsert: true);
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _positionMeta = const VerificationMeta('position');
+  @override
   late final GeneratedColumn<int?> position = GeneratedColumn<int?>(
       'position', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      type: const IntType(), requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [playlistId, songPath, position];
   @override
@@ -3407,7 +3551,7 @@ class $PlaylistEntriesTable extends PlaylistEntries
 
   @override
   $PlaylistEntriesTable createAlias(String alias) {
-    return $PlaylistEntriesTable(_db, alias);
+    return $PlaylistEntriesTable(attachedDatabase, alias);
   }
 }
 
@@ -3533,17 +3677,20 @@ class KeyValueEntriesCompanion extends UpdateCompanion<KeyValueEntry> {
 
 class $KeyValueEntriesTable extends KeyValueEntries
     with TableInfo<$KeyValueEntriesTable, KeyValueEntry> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $KeyValueEntriesTable(this._db, [this._alias]);
+  $KeyValueEntriesTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _keyMeta = const VerificationMeta('key');
+  @override
   late final GeneratedColumn<String?> key = GeneratedColumn<String?>(
       'key', aliasedName, false,
-      typeName: 'TEXT', requiredDuringInsert: true);
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _valueMeta = const VerificationMeta('value');
+  @override
   late final GeneratedColumn<String?> value = GeneratedColumn<String?>(
       'value', aliasedName, false,
-      typeName: 'TEXT', requiredDuringInsert: true);
+      type: const StringType(), requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [key, value];
   @override
@@ -3580,7 +3727,7 @@ class $KeyValueEntriesTable extends KeyValueEntries
 
   @override
   $KeyValueEntriesTable createAlias(String alias) {
-    return $KeyValueEntriesTable(_db, alias);
+    return $KeyValueEntriesTable(attachedDatabase, alias);
   }
 }
 

@@ -1,5 +1,8 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
+import '../../presentation/gradients.dart';
+import '../../presentation/icons.dart';
 import 'artist.dart';
 import 'playable.dart';
 import 'shuffle_mode.dart';
@@ -10,6 +13,8 @@ class SmartList extends Equatable implements Playable {
     required this.name,
     required this.filter,
     required this.orderBy,
+    required this.iconString,
+    required this.gradientString,
     this.shuffleMode,
   });
 
@@ -18,9 +23,13 @@ class SmartList extends Equatable implements Playable {
   final Filter filter;
   final OrderBy orderBy;
   final ShuffleMode? shuffleMode;
+  final String iconString;
+  final String gradientString;
+  IconData get icon => CUSTOM_ICONS[iconString]!;
+  Gradient get gradient => CUSTOM_GRADIENTS[gradientString]!;
 
   @override
-  List<Object?> get props => [name, filter, orderBy, shuffleMode];
+  List<Object?> get props => [name, filter, orderBy, shuffleMode, icon, gradient];
 
   @override
   PlayableType get type => PlayableType.smartlist;
@@ -111,7 +120,7 @@ extension OrderCriterionExtension on String {
         return OrderCriterion.skipCount;
       case 'OrderCriterion.songTitle':
         return OrderCriterion.songTitle;
-      case 'OrderCriterion.timeAdded':  
+      case 'OrderCriterion.timeAdded':
         return OrderCriterion.timeAdded;
       case 'OrderCriterion.year':
         return OrderCriterion.year;

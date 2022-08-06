@@ -1,40 +1,42 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../domain/entities/album.dart';
-import '../../domain/entities/song.dart';
-import '../state/album_page_store.dart';
 import '../state/navigation_store.dart';
 import '../theming.dart';
-import '../utils.dart' as utils;
 
-class AlbumSliverAppBar extends StatefulWidget {
-  const AlbumSliverAppBar({
+class CoverSliverAppBar extends StatefulWidget {
+  const CoverSliverAppBar({
     Key? key,
-    required this.album,
-    required this.store,
-    required this.onTapMultiSelectMenu,
+    required this.title,
+    this.subtitle,
+    this.subtitle2,
+    required this.actions,
+    required this.cover,
+    required this.background,
+    this.button,
   }) : super(key: key);
 
-  final Album album;
-  final AlbumPageStore store;
-  final Function onTapMultiSelectMenu;
+  final String title;
+  final String? subtitle;
+  final String? subtitle2;
+  final List<Widget> actions;
+  final Widget cover;
+  final Widget background;
+  final Widget? button;
 
   @override
-  State<AlbumSliverAppBar> createState() => _AlbumSliverAppBarState();
+  State<CoverSliverAppBar> createState() => _CoverSliverAppBarState();
 }
 
-class _AlbumSliverAppBarState extends State<AlbumSliverAppBar> {
+class _CoverSliverAppBarState extends State<CoverSliverAppBar> {
   double get maxHeight => 220 + MediaQuery.of(context).padding.top;
   double get minHeight => kToolbarHeight + MediaQuery.of(context).padding.top;
 
   @override
   Widget build(BuildContext context) {
     final navStore = GetIt.I<NavigationStore>();
-    final songs = widget.store.albumSongStream.value ?? [];
 
     return SliverAppBar(
       pinned: true,
@@ -45,63 +47,20 @@ class _AlbumSliverAppBarState extends State<AlbumSliverAppBar> {
         color: Colors.white,
       ),
       flexibleSpace: Header(
-        album: widget.album,
-        songs: songs,
         minHeight: minHeight,
         maxHeight: maxHeight,
+        background: widget.background,
+        cover: widget.cover,
+        title: widget.title,
+        subtitle: widget.subtitle,
+        subtitle2: widget.subtitle2,
+        button: widget.button,
       ),
       leading: IconButton(
-        icon: const Icon(Icons.chevron_left),
+        icon: const Icon(Icons.chevron_left_rounded),
         onPressed: () => navStore.pop(context),
       ),
-      actions: [
-        Observer(
-          builder: (context) {
-            final isMultiSelectEnabled = widget.store.selection.isMultiSelectEnabled;
-
-            if (isMultiSelectEnabled)
-              return IconButton(
-                key: GlobalKey(),
-                icon: const Icon(Icons.more_vert_rounded),
-                onPressed: () => widget.onTapMultiSelectMenu(),
-              );
-
-            return Container();
-          },
-        ),
-        Observer(
-          builder: (context) {
-            final isMultiSelectEnabled = widget.store.selection.isMultiSelectEnabled;
-            final isAllSelected = widget.store.selection.isAllSelected;
-
-            if (isMultiSelectEnabled)
-              return IconButton(
-                key: GlobalKey(),
-                icon: isAllSelected
-                    ? const Icon(Icons.deselect_rounded)
-                    : const Icon(Icons.select_all_rounded),
-                onPressed: () {
-                  if (isAllSelected)
-                    widget.store.selection.deselectAll();
-                  else
-                    widget.store.selection.selectAll();
-                },
-              );
-
-            return Container();
-          },
-        ),
-        Observer(builder: (context) {
-          final isMultiSelectEnabled = widget.store.selection.isMultiSelectEnabled;
-          return IconButton(
-            key: const ValueKey('ALBUM_MULTISELECT'),
-            icon: isMultiSelectEnabled
-                ? const Icon(Icons.close_rounded)
-                : const Icon(Icons.checklist_rtl_rounded),
-            onPressed: () => widget.store.selection.toggleMultiSelect(),
-          );
-        })
-      ],
+      actions: widget.actions,
     );
   }
 }
@@ -109,16 +68,24 @@ class _AlbumSliverAppBarState extends State<AlbumSliverAppBar> {
 class Header extends StatelessWidget {
   const Header({
     Key? key,
-    required this.album,
-    required this.songs,
     required this.maxHeight,
     required this.minHeight,
+    required this.title,
+    this.subtitle,
+    this.subtitle2,
+    required this.cover,
+    required this.background,
+    this.button,
   }) : super(key: key);
 
-  final Album album;
-  final List<Song> songs;
+  final String title;
+  final String? subtitle;
+  final String? subtitle2;
+  final Widget cover;
+  final Widget background;
   final double maxHeight;
   final double minHeight;
+  final Widget? button;
 
   @override
   Widget build(BuildContext context) {
@@ -134,11 +101,19 @@ class Header extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.only(bottom: 2.0),
-              child: _buildBackground(album, animation, maxHeight, minHeight),
+              child: _buildBackground(background, animation, maxHeight, minHeight),
             ),
             _buildGradient(animation, context),
-            _buildImage(album, animation, context),
-            _buildTitle(album, songs, animation, animation2, context),
+            _buildImage(animation, context),
+            if (button != null) _buildButton(animation, context),
+            _buildTitle(
+              animation,
+              animation2,
+              context,
+              title: title,
+              subtitle: subtitle,
+              subtitle2: subtitle2,
+            ),
           ],
         );
       },
@@ -164,15 +139,13 @@ class Header extends StatelessWidget {
   }
 
   Align _buildTitle(
-    Album album,
-    List<Song> songs,
     Animation<double> animation,
     Animation<double> animation2,
-    BuildContext context,
-  ) {
-    final totalDuration =
-        songs.fold(const Duration(milliseconds: 0), (Duration d, s) => d + s.duration);
-
+    BuildContext context, {
+    required String title,
+    String? subtitle,
+    String? subtitle2,
+  }) {
     // TODO: padding right for enabled multi select
     return Align(
       alignment: AlignmentTween(
@@ -194,7 +167,7 @@ class Header extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              album.title,
+              title,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
@@ -211,51 +184,63 @@ class Header extends StatelessWidget {
               height: Tween<double>(begin: 0, end: 8).evaluate(animation),
               width: 10.0,
             ),
-            Text(
-              album.artist,
-              style: TextStyle(
-                fontSize: Tween<double>(begin: 0, end: 16).evaluate(animation),
-                color:
-                    Colors.white.withOpacity(Tween<double>(begin: 0, end: 1).evaluate(animation2)),
-                fontWeight: FontWeight.w500,
+            if (subtitle != null)
+              Text(
+                subtitle,
+                style: TextStyle(
+                  fontSize: Tween<double>(begin: 0, end: 16).evaluate(animation),
+                  color: Colors.white
+                      .withOpacity(Tween<double>(begin: 0, end: 1).evaluate(animation2)),
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            ),
-            Text(
-              '${album.pubYear.toString()} • ${songs.length} Songs • ${utils.msToTimeString(totalDuration)}',
-              style: TextStyle(
-                fontSize: Tween<double>(begin: 0, end: 13).evaluate(animation),
-                color:
-                    Colors.white.withOpacity(Tween<double>(begin: 0, end: 1).evaluate(animation2)),
-                fontWeight: FontWeight.w300,
+            if (subtitle2 != null)
+              Text(
+                subtitle2,
+                style: TextStyle(
+                  fontSize: Tween<double>(begin: 0, end: 13).evaluate(animation),
+                  color: Colors.white
+                      .withOpacity(Tween<double>(begin: 0, end: 1).evaluate(animation2)),
+                  fontWeight: FontWeight.w300,
+                ),
               ),
-            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildImage(Album album, Animation<double> animation, BuildContext context) {
+  Widget _buildButton(Animation<double> animation, BuildContext context) {
+    return Positioned(
+      width: 96,
+      height: 48,
+      right: HORIZONTAL_PADDING,
+      top: Tween<double>(
+        begin: kToolbarHeight + MediaQuery.of(context).padding.top + 120,
+        end: kToolbarHeight + MediaQuery.of(context).padding.top + 72,
+      ).evaluate(animation),
+      child: button!,
+    );
+  }
+
+  Widget _buildImage(Animation<double> animation, BuildContext context) {
     return Positioned(
       width: 120,
       height: 120,
-      left: 16,
+      left: HORIZONTAL_PADDING,
       top: Tween<double>(
         begin: kToolbarHeight + MediaQuery.of(context).padding.top + 180,
         end: kToolbarHeight + MediaQuery.of(context).padding.top,
       ).evaluate(animation),
       child: Container(
         clipBehavior: Clip.antiAlias,
+        child: cover,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(4.0),
           boxShadow: const [
             BoxShadow(color: LIGHT1, blurRadius: 4, offset: Offset(0, 1), spreadRadius: -3.0),
             BoxShadow(color: Colors.black54, blurRadius: 8, offset: Offset(0, 2)),
           ],
-          image: DecorationImage(
-            image: utils.getAlbumImage(album.albumArtPath),
-            fit: BoxFit.contain,
-          ),
         ),
       ),
     );
@@ -286,7 +271,7 @@ class Header extends StatelessWidget {
   }
 
   Widget _buildBackground(
-    Album album,
+    Widget background,
     Animation<double> animation,
     double maxHeight,
     double minHeight,
@@ -295,11 +280,7 @@ class Header extends StatelessWidget {
       clipBehavior: Clip.hardEdge,
       child: ImageFiltered(
         imageFilter: ImageFilter.blur(sigmaX: 24.0, sigmaY: 24.0),
-        child: Image(
-          image: utils.getAlbumImage(album.albumArtPath),
-          fit: BoxFit.cover,
-          opacity: animation,
-        ),
+        child: background,
       ),
     );
   }

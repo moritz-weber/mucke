@@ -21,6 +21,8 @@ abstract class PlaylistDataSource {
     String name,
     Filter filter,
     OrderBy orderBy,
+    String iconString,
+    String gradientString,
     ShuffleMode? shuffleMode,
   );
   Future<void> updateSmartList(SmartListModel smartListModel);

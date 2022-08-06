@@ -315,7 +315,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
 
   @override
   Future<List<Playlist>> searchPlaylists(String searchText, {int? limit}) async {
-        if (searchText == '') return [];
+    if (searchText == '') return [];
 
     final searchTextLower = searchText.toLowerCase();
 
@@ -407,9 +407,18 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
     required String name,
     required Filter filter,
     required OrderBy orderBy,
+    required String iconString,
+    required String gradientString,
     ShuffleMode? shuffleMode,
   }) {
-    return _playlistDataSource.insertSmartList(name, filter, orderBy, shuffleMode);
+    return _playlistDataSource.insertSmartList(
+      name,
+      filter,
+      orderBy,
+      iconString,
+      gradientString,
+      shuffleMode,
+    );
   }
 
   @override
@@ -432,6 +441,8 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
         filter: smartList.filter,
         orderBy: smartList.orderBy,
         shuffleMode: smartList.shuffleMode,
+        iconString: smartList.iconString,
+        gradientString: smartList.gradientString,
       ),
     );
   }

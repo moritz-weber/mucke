@@ -9,6 +9,8 @@ class SmartListModel extends SmartList {
   const SmartListModel({
     required int id,
     required String name,
+    required String iconString,
+    required String gradientString,
     required Filter filter,
     required OrderBy orderBy,
     ShuffleMode? shuffleMode,
@@ -18,6 +20,8 @@ class SmartListModel extends SmartList {
           filter: filter,
           orderBy: orderBy,
           shuffleMode: shuffleMode,
+          iconString: iconString,
+          gradientString: gradientString,
         );
 
   factory SmartListModel.fromMoor(MoorSmartList moorSmartList, List<MoorArtist> artists) {
@@ -47,6 +51,8 @@ class SmartListModel extends SmartList {
       filter: filter,
       orderBy: orderBy,
       shuffleMode: moorSmartList.shuffleMode?.toShuffleMode(),
+      iconString: moorSmartList.icon,
+      gradientString: moorSmartList.gradient,
     );
   }
 
@@ -67,6 +73,8 @@ class SmartListModel extends SmartList {
         limit: m.Value(filter.limit),
         orderCriteria: m.Value(orderBy.orderCriteria.join(',')),
         orderDirections: m.Value(orderBy.orderDirections.join(',')),
+        icon: m.Value(iconString),
+        gradient: m.Value(gradientString),
       );
 
   List<SmartListArtistsCompanion> toMoorArtists() {

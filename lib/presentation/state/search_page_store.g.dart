@@ -6,10 +6,11 @@ part of 'search_page_store.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$SearchPageStore on _SearchPageStore, Store {
-  final _$queryAtom = Atom(name: '_SearchPageStore.query');
+  late final _$queryAtom =
+      Atom(name: '_SearchPageStore.query', context: context);
 
   @override
   String get query {
@@ -24,8 +25,8 @@ mixin _$SearchPageStore on _SearchPageStore, Store {
     });
   }
 
-  final _$searchResultsArtistsAtom =
-      Atom(name: '_SearchPageStore.searchResultsArtists');
+  late final _$searchResultsArtistsAtom =
+      Atom(name: '_SearchPageStore.searchResultsArtists', context: context);
 
   @override
   ObservableList<Artist> get searchResultsArtists {
@@ -41,8 +42,8 @@ mixin _$SearchPageStore on _SearchPageStore, Store {
     });
   }
 
-  final _$searchResultsAlbumsAtom =
-      Atom(name: '_SearchPageStore.searchResultsAlbums');
+  late final _$searchResultsAlbumsAtom =
+      Atom(name: '_SearchPageStore.searchResultsAlbums', context: context);
 
   @override
   ObservableList<Album> get searchResultsAlbums {
@@ -57,8 +58,8 @@ mixin _$SearchPageStore on _SearchPageStore, Store {
     });
   }
 
-  final _$searchResultsSongsAtom =
-      Atom(name: '_SearchPageStore.searchResultsSongs');
+  late final _$searchResultsSongsAtom =
+      Atom(name: '_SearchPageStore.searchResultsSongs', context: context);
 
   @override
   ObservableList<Song> get searchResultsSongs {
@@ -73,8 +74,8 @@ mixin _$SearchPageStore on _SearchPageStore, Store {
     });
   }
 
-  final _$searchResultsSmartListsAtom =
-      Atom(name: '_SearchPageStore.searchResultsSmartLists');
+  late final _$searchResultsSmartListsAtom =
+      Atom(name: '_SearchPageStore.searchResultsSmartLists', context: context);
 
   @override
   ObservableList<SmartList> get searchResultsSmartLists {
@@ -90,8 +91,8 @@ mixin _$SearchPageStore on _SearchPageStore, Store {
     });
   }
 
-  final _$searchResultsPlaylistsAtom =
-      Atom(name: '_SearchPageStore.searchResultsPlaylists');
+  late final _$searchResultsPlaylistsAtom =
+      Atom(name: '_SearchPageStore.searchResultsPlaylists', context: context);
 
   @override
   ObservableList<Playlist> get searchResultsPlaylists {
@@ -107,15 +108,16 @@ mixin _$SearchPageStore on _SearchPageStore, Store {
     });
   }
 
-  final _$searchAsyncAction = AsyncAction('_SearchPageStore.search');
+  late final _$searchAsyncAction =
+      AsyncAction('_SearchPageStore.search', context: context);
 
   @override
   Future<void> search(String searchText) {
     return _$searchAsyncAction.run(() => super.search(searchText));
   }
 
-  final _$_SearchPageStoreActionController =
-      ActionController(name: '_SearchPageStore');
+  late final _$_SearchPageStoreActionController =
+      ActionController(name: '_SearchPageStore', context: context);
 
   @override
   void reset() {

@@ -20,7 +20,11 @@ class PlaySmartList {
 
   Future<void> call(SmartList smartList) async {
     final songs = await _musicDataRepository.getSmartListSongStream(smartList).first;
-    final shuffleMode = await _audioPlayerRepository.shuffleModeStream.first;
+    ShuffleMode shuffleMode = await _audioPlayerRepository.shuffleModeStream.first;
+    if (shuffleMode != smartList.shuffleMode && smartList.shuffleMode != null) {
+      shuffleMode = smartList.shuffleMode!;
+      _audioPlayerRepository.setShuffleMode(shuffleMode, updateQueue: false);
+    }
     final rng = Random();
     final initialIndex = shuffleMode == ShuffleMode.none ? 0 : rng.nextInt(songs.length);
 

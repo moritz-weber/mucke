@@ -6,10 +6,31 @@ part of 'smart_list_form_store.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$SmartListFormStore on _SmartListStore, Store {
-  final _$nameAtom = Atom(name: '_SmartListStore.name');
+  Computed<IconData>? _$iconComputed;
+
+  @override
+  IconData get icon => (_$iconComputed ??=
+          Computed<IconData>(() => super.icon, name: '_SmartListStore.icon'))
+      .value;
+  Computed<Gradient>? _$gradientComputed;
+
+  @override
+  Gradient get gradient =>
+      (_$gradientComputed ??= Computed<Gradient>(() => super.gradient,
+              name: '_SmartListStore.gradient'))
+          .value;
+  Computed<int>? _$shuffleModeIndexComputed;
+
+  @override
+  int get shuffleModeIndex => (_$shuffleModeIndexComputed ??= Computed<int>(
+          () => super.shuffleModeIndex,
+          name: '_SmartListStore.shuffleModeIndex'))
+      .value;
+
+  late final _$nameAtom = Atom(name: '_SmartListStore.name', context: context);
 
   @override
   String? get name {
@@ -24,7 +45,40 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     });
   }
 
-  final _$minLikeCountAtom = Atom(name: '_SmartListStore.minLikeCount');
+  late final _$iconStringAtom =
+      Atom(name: '_SmartListStore.iconString', context: context);
+
+  @override
+  String get iconString {
+    _$iconStringAtom.reportRead();
+    return super.iconString;
+  }
+
+  @override
+  set iconString(String value) {
+    _$iconStringAtom.reportWrite(value, super.iconString, () {
+      super.iconString = value;
+    });
+  }
+
+  late final _$gradientStringAtom =
+      Atom(name: '_SmartListStore.gradientString', context: context);
+
+  @override
+  String get gradientString {
+    _$gradientStringAtom.reportRead();
+    return super.gradientString;
+  }
+
+  @override
+  set gradientString(String value) {
+    _$gradientStringAtom.reportWrite(value, super.gradientString, () {
+      super.gradientString = value;
+    });
+  }
+
+  late final _$minLikeCountAtom =
+      Atom(name: '_SmartListStore.minLikeCount', context: context);
 
   @override
   int get minLikeCount {
@@ -39,7 +93,8 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     });
   }
 
-  final _$maxLikeCountAtom = Atom(name: '_SmartListStore.maxLikeCount');
+  late final _$maxLikeCountAtom =
+      Atom(name: '_SmartListStore.maxLikeCount', context: context);
 
   @override
   int get maxLikeCount {
@@ -54,8 +109,8 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     });
   }
 
-  final _$minPlayCountEnabledAtom =
-      Atom(name: '_SmartListStore.minPlayCountEnabled');
+  late final _$minPlayCountEnabledAtom =
+      Atom(name: '_SmartListStore.minPlayCountEnabled', context: context);
 
   @override
   bool get minPlayCountEnabled {
@@ -70,7 +125,8 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     });
   }
 
-  final _$minPlayCountAtom = Atom(name: '_SmartListStore.minPlayCount');
+  late final _$minPlayCountAtom =
+      Atom(name: '_SmartListStore.minPlayCount', context: context);
 
   @override
   String get minPlayCount {
@@ -85,8 +141,8 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     });
   }
 
-  final _$maxPlayCountEnabledAtom =
-      Atom(name: '_SmartListStore.maxPlayCountEnabled');
+  late final _$maxPlayCountEnabledAtom =
+      Atom(name: '_SmartListStore.maxPlayCountEnabled', context: context);
 
   @override
   bool get maxPlayCountEnabled {
@@ -101,7 +157,8 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     });
   }
 
-  final _$maxPlayCountAtom = Atom(name: '_SmartListStore.maxPlayCount');
+  late final _$maxPlayCountAtom =
+      Atom(name: '_SmartListStore.maxPlayCount', context: context);
 
   @override
   String get maxPlayCount {
@@ -116,8 +173,8 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     });
   }
 
-  final _$minSkipCountEnabledAtom =
-      Atom(name: '_SmartListStore.minSkipCountEnabled');
+  late final _$minSkipCountEnabledAtom =
+      Atom(name: '_SmartListStore.minSkipCountEnabled', context: context);
 
   @override
   bool get minSkipCountEnabled {
@@ -132,7 +189,8 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     });
   }
 
-  final _$minSkipCountAtom = Atom(name: '_SmartListStore.minSkipCount');
+  late final _$minSkipCountAtom =
+      Atom(name: '_SmartListStore.minSkipCount', context: context);
 
   @override
   String get minSkipCount {
@@ -147,8 +205,8 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     });
   }
 
-  final _$maxSkipCountEnabledAtom =
-      Atom(name: '_SmartListStore.maxSkipCountEnabled');
+  late final _$maxSkipCountEnabledAtom =
+      Atom(name: '_SmartListStore.maxSkipCountEnabled', context: context);
 
   @override
   bool get maxSkipCountEnabled {
@@ -163,7 +221,8 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     });
   }
 
-  final _$maxSkipCountAtom = Atom(name: '_SmartListStore.maxSkipCount');
+  late final _$maxSkipCountAtom =
+      Atom(name: '_SmartListStore.maxSkipCount', context: context);
 
   @override
   String get maxSkipCount {
@@ -178,7 +237,8 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     });
   }
 
-  final _$minYearEnabledAtom = Atom(name: '_SmartListStore.minYearEnabled');
+  late final _$minYearEnabledAtom =
+      Atom(name: '_SmartListStore.minYearEnabled', context: context);
 
   @override
   bool get minYearEnabled {
@@ -193,7 +253,8 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     });
   }
 
-  final _$minYearAtom = Atom(name: '_SmartListStore.minYear');
+  late final _$minYearAtom =
+      Atom(name: '_SmartListStore.minYear', context: context);
 
   @override
   String get minYear {
@@ -208,7 +269,8 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     });
   }
 
-  final _$maxYearEnabledAtom = Atom(name: '_SmartListStore.maxYearEnabled');
+  late final _$maxYearEnabledAtom =
+      Atom(name: '_SmartListStore.maxYearEnabled', context: context);
 
   @override
   bool get maxYearEnabled {
@@ -223,7 +285,8 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     });
   }
 
-  final _$maxYearAtom = Atom(name: '_SmartListStore.maxYear');
+  late final _$maxYearAtom =
+      Atom(name: '_SmartListStore.maxYear', context: context);
 
   @override
   String get maxYear {
@@ -238,7 +301,8 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     });
   }
 
-  final _$limitEnabledAtom = Atom(name: '_SmartListStore.limitEnabled');
+  late final _$limitEnabledAtom =
+      Atom(name: '_SmartListStore.limitEnabled', context: context);
 
   @override
   bool get limitEnabled {
@@ -253,7 +317,8 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     });
   }
 
-  final _$limitAtom = Atom(name: '_SmartListStore.limit');
+  late final _$limitAtom =
+      Atom(name: '_SmartListStore.limit', context: context);
 
   @override
   String get limit {
@@ -268,7 +333,8 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     });
   }
 
-  final _$blockLevelAtom = Atom(name: '_SmartListStore.blockLevel');
+  late final _$blockLevelAtom =
+      Atom(name: '_SmartListStore.blockLevel', context: context);
 
   @override
   int get blockLevel {
@@ -283,7 +349,8 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     });
   }
 
-  final _$selectedArtistsAtom = Atom(name: '_SmartListStore.selectedArtists');
+  late final _$selectedArtistsAtom =
+      Atom(name: '_SmartListStore.selectedArtists', context: context);
 
   @override
   ObservableSet<Artist> get selectedArtists {
@@ -298,7 +365,8 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     });
   }
 
-  final _$excludeArtistsAtom = Atom(name: '_SmartListStore.excludeArtists');
+  late final _$excludeArtistsAtom =
+      Atom(name: '_SmartListStore.excludeArtists', context: context);
 
   @override
   bool get excludeArtists {
@@ -313,7 +381,8 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     });
   }
 
-  final _$orderStateAtom = Atom(name: '_SmartListStore.orderState');
+  late final _$orderStateAtom =
+      Atom(name: '_SmartListStore.orderState', context: context);
 
   @override
   ObservableList<OrderEntry> get orderState {
@@ -328,8 +397,57 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     });
   }
 
-  final _$_SmartListStoreActionController =
-      ActionController(name: '_SmartListStore');
+  late final _$shuffleModeAtom =
+      Atom(name: '_SmartListStore.shuffleMode', context: context);
+
+  @override
+  ShuffleMode? get shuffleMode {
+    _$shuffleModeAtom.reportRead();
+    return super.shuffleMode;
+  }
+
+  @override
+  set shuffleMode(ShuffleMode? value) {
+    _$shuffleModeAtom.reportWrite(value, super.shuffleMode, () {
+      super.shuffleMode = value;
+    });
+  }
+
+  late final _$_SmartListStoreActionController =
+      ActionController(name: '_SmartListStore', context: context);
+
+  @override
+  void setIconString(String iconString) {
+    final _$actionInfo = _$_SmartListStoreActionController.startAction(
+        name: '_SmartListStore.setIconString');
+    try {
+      return super.setIconString(iconString);
+    } finally {
+      _$_SmartListStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setGradient(String gradientString) {
+    final _$actionInfo = _$_SmartListStoreActionController.startAction(
+        name: '_SmartListStore.setGradient');
+    try {
+      return super.setGradient(gradientString);
+    } finally {
+      _$_SmartListStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setShuffleModeIndex(int index) {
+    final _$actionInfo = _$_SmartListStoreActionController.startAction(
+        name: '_SmartListStore.setShuffleModeIndex');
+    try {
+      return super.setShuffleModeIndex(index);
+    } finally {
+      _$_SmartListStoreActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void setOrderEnabled(int index, bool enabled) {
@@ -390,6 +508,8 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
   String toString() {
     return '''
 name: ${name},
+iconString: ${iconString},
+gradientString: ${gradientString},
 minLikeCount: ${minLikeCount},
 maxLikeCount: ${maxLikeCount},
 minPlayCountEnabled: ${minPlayCountEnabled},
@@ -409,7 +529,11 @@ limit: ${limit},
 blockLevel: ${blockLevel},
 selectedArtists: ${selectedArtists},
 excludeArtists: ${excludeArtists},
-orderState: ${orderState}
+orderState: ${orderState},
+shuffleMode: ${shuffleMode},
+icon: ${icon},
+gradient: ${gradient},
+shuffleModeIndex: ${shuffleModeIndex}
     ''';
   }
 }
@@ -423,7 +547,7 @@ mixin _$FormErrorState on _FormErrorState, Store {
               name: '_FormErrorState.hasErrors'))
           .value;
 
-  final _$nameAtom = Atom(name: '_FormErrorState.name');
+  late final _$nameAtom = Atom(name: '_FormErrorState.name', context: context);
 
   @override
   String? get name {
@@ -438,7 +562,8 @@ mixin _$FormErrorState on _FormErrorState, Store {
     });
   }
 
-  final _$minPlayCountAtom = Atom(name: '_FormErrorState.minPlayCount');
+  late final _$minPlayCountAtom =
+      Atom(name: '_FormErrorState.minPlayCount', context: context);
 
   @override
   String? get minPlayCount {
@@ -453,7 +578,8 @@ mixin _$FormErrorState on _FormErrorState, Store {
     });
   }
 
-  final _$maxPlayCountAtom = Atom(name: '_FormErrorState.maxPlayCount');
+  late final _$maxPlayCountAtom =
+      Atom(name: '_FormErrorState.maxPlayCount', context: context);
 
   @override
   String? get maxPlayCount {
@@ -468,7 +594,8 @@ mixin _$FormErrorState on _FormErrorState, Store {
     });
   }
 
-  final _$minSkipCountAtom = Atom(name: '_FormErrorState.minSkipCount');
+  late final _$minSkipCountAtom =
+      Atom(name: '_FormErrorState.minSkipCount', context: context);
 
   @override
   String? get minSkipCount {
@@ -483,7 +610,8 @@ mixin _$FormErrorState on _FormErrorState, Store {
     });
   }
 
-  final _$maxSkipCountAtom = Atom(name: '_FormErrorState.maxSkipCount');
+  late final _$maxSkipCountAtom =
+      Atom(name: '_FormErrorState.maxSkipCount', context: context);
 
   @override
   String? get maxSkipCount {
@@ -498,7 +626,8 @@ mixin _$FormErrorState on _FormErrorState, Store {
     });
   }
 
-  final _$minYearAtom = Atom(name: '_FormErrorState.minYear');
+  late final _$minYearAtom =
+      Atom(name: '_FormErrorState.minYear', context: context);
 
   @override
   String? get minYear {
@@ -513,7 +642,8 @@ mixin _$FormErrorState on _FormErrorState, Store {
     });
   }
 
-  final _$maxYearAtom = Atom(name: '_FormErrorState.maxYear');
+  late final _$maxYearAtom =
+      Atom(name: '_FormErrorState.maxYear', context: context);
 
   @override
   String? get maxYear {
@@ -528,7 +658,8 @@ mixin _$FormErrorState on _FormErrorState, Store {
     });
   }
 
-  final _$limitAtom = Atom(name: '_FormErrorState.limit');
+  late final _$limitAtom =
+      Atom(name: '_FormErrorState.limit', context: context);
 
   @override
   String? get limit {

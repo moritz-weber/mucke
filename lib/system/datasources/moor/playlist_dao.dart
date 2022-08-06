@@ -156,6 +156,8 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
     String name,
     sl.Filter filter,
     sl.OrderBy orderBy,
+    String iconString,
+    String gradientString,
     ShuffleMode? shuffleMode,
   ) async {
     final orderCriteria = orderBy.orderCriteria.join(',');
@@ -178,6 +180,8 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
         limit: Value(filter.limit),
         orderCriteria: Value(orderCriteria),
         orderDirections: Value(orderDirections),
+        icon: Value(iconString),
+        gradient: Value(gradientString),
       ),
     );
     for (final a in filter.artists) {

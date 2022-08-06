@@ -28,25 +28,27 @@ class _HomePageState extends State<HomePage> {
           child: CustomScrollView(
             slivers: [
               SliverList(
-                delegate: SliverChildListDelegate([
-                  const SizedBox(height: 12.0),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
-                    child: Highlight(),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(
-                      left: HORIZONTAL_PADDING,
-                      right: HORIZONTAL_PADDING,
-                      top: 20.0,
-                      bottom: 14.0,
+                delegate: SliverChildListDelegate(
+                  [
+                    const SizedBox(height: 12.0),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
+                      child: Highlight(),
                     ),
-                    child: ShuffleAllButton(
-                      verticalPad: 0.0,
-                      horizontalPad: 0.0,
+                    const Padding(
+                      padding: EdgeInsets.only(
+                        left: HORIZONTAL_PADDING,
+                        right: HORIZONTAL_PADDING,
+                        top: 20.0,
+                        bottom: 14.0,
+                      ),
+                      child: ShuffleAllButton(
+                        verticalPad: 0.0,
+                        horizontalPad: 0.0,
+                      ),
                     ),
-                  ),
-                ]),
+                  ],
+                ),
               ),
               const SmartLists(),
             ],

@@ -116,6 +116,8 @@ class SmartLists extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text()();
   TextColumn get shuffleMode => text().nullable()();
+  TextColumn get icon => text().withDefault(const Constant('auto_awesome_rounded'))();
+  TextColumn get gradient => text().withDefault(const Constant('sanguine'))();
 
   // Filter
   BoolColumn get excludeArtists => boolean().withDefault(const Constant(false))();
@@ -187,7 +189,7 @@ class MoorDatabase extends _$MoorDatabase {
   MoorDatabase.connect(DatabaseConnection connection) : super.connect(connection);
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(beforeOpen: (details) async {
@@ -233,6 +235,11 @@ class MoorDatabase extends _$MoorDatabase {
               songs.next: const Constant(false),
             }),
           );
+        }
+        if (from < 5) {
+          await m.addColumn(smartLists, smartLists.icon);
+          await m.addColumn(smartLists, smartLists.gradient);
+          await m.alterTable(TableMigration(smartLists));
         }
       });
 }

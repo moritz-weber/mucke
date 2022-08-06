@@ -6,7 +6,7 @@ part of 'audio_store.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$AudioStore on _AudioStore, Store {
   Computed<int>? _$queueLengthComputed;
@@ -30,7 +30,8 @@ mixin _$AudioStore on _AudioStore, Store {
           Computed<bool>(() => super.hasNext, name: '_AudioStore.hasNext'))
       .value;
 
-  final _$currentSongStreamAtom = Atom(name: '_AudioStore.currentSongStream');
+  late final _$currentSongStreamAtom =
+      Atom(name: '_AudioStore.currentSongStream', context: context);
 
   @override
   ObservableStream<Song?> get currentSongStream {
@@ -45,7 +46,8 @@ mixin _$AudioStore on _AudioStore, Store {
     });
   }
 
-  final _$playingStreamAtom = Atom(name: '_AudioStore.playingStream');
+  late final _$playingStreamAtom =
+      Atom(name: '_AudioStore.playingStream', context: context);
 
   @override
   ObservableStream<bool> get playingStream {
@@ -60,8 +62,8 @@ mixin _$AudioStore on _AudioStore, Store {
     });
   }
 
-  final _$currentPositionStreamAtom =
-      Atom(name: '_AudioStore.currentPositionStream');
+  late final _$currentPositionStreamAtom =
+      Atom(name: '_AudioStore.currentPositionStream', context: context);
 
   @override
   ObservableStream<Duration> get currentPositionStream {
@@ -77,7 +79,7 @@ mixin _$AudioStore on _AudioStore, Store {
     });
   }
 
-  final _$_queueAtom = Atom(name: '_AudioStore._queue');
+  late final _$_queueAtom = Atom(name: '_AudioStore._queue', context: context);
 
   List<QueueItem> get queue {
     _$_queueAtom.reportRead();
@@ -94,7 +96,8 @@ mixin _$AudioStore on _AudioStore, Store {
     });
   }
 
-  final _$_availableSongsAtom = Atom(name: '_AudioStore._availableSongs');
+  late final _$_availableSongsAtom =
+      Atom(name: '_AudioStore._availableSongs', context: context);
 
   @override
   List<QueueItem> get _availableSongs {
@@ -109,7 +112,8 @@ mixin _$AudioStore on _AudioStore, Store {
     });
   }
 
-  final _$playableStreamAtom = Atom(name: '_AudioStore.playableStream');
+  late final _$playableStreamAtom =
+      Atom(name: '_AudioStore.playableStream', context: context);
 
   @override
   ObservableStream<Playable> get playableStream {
@@ -124,7 +128,8 @@ mixin _$AudioStore on _AudioStore, Store {
     });
   }
 
-  final _$queueIndexStreamAtom = Atom(name: '_AudioStore.queueIndexStream');
+  late final _$queueIndexStreamAtom =
+      Atom(name: '_AudioStore.queueIndexStream', context: context);
 
   @override
   ObservableStream<int?> get queueIndexStream {
@@ -139,7 +144,8 @@ mixin _$AudioStore on _AudioStore, Store {
     });
   }
 
-  final _$shuffleModeStreamAtom = Atom(name: '_AudioStore.shuffleModeStream');
+  late final _$shuffleModeStreamAtom =
+      Atom(name: '_AudioStore.shuffleModeStream', context: context);
 
   @override
   ObservableStream<ShuffleMode> get shuffleModeStream {
@@ -154,7 +160,8 @@ mixin _$AudioStore on _AudioStore, Store {
     });
   }
 
-  final _$loopModeStreamAtom = Atom(name: '_AudioStore.loopModeStream');
+  late final _$loopModeStreamAtom =
+      Atom(name: '_AudioStore.loopModeStream', context: context);
 
   @override
   ObservableStream<LoopMode> get loopModeStream {
@@ -169,7 +176,8 @@ mixin _$AudioStore on _AudioStore, Store {
     });
   }
 
-  final _$_AudioStoreActionController = ActionController(name: '_AudioStore');
+  late final _$_AudioStoreActionController =
+      ActionController(name: '_AudioStore', context: context);
 
   @override
   void _setQueue(List<QueueItem> queue) {

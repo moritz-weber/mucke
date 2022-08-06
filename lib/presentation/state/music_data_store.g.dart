@@ -6,10 +6,11 @@ part of 'music_data_store.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$MusicDataStore on _MusicDataStore, Store {
-  final _$songStreamAtom = Atom(name: '_MusicDataStore.songStream');
+  late final _$songStreamAtom =
+      Atom(name: '_MusicDataStore.songStream', context: context);
 
   @override
   ObservableStream<List<Song>> get songStream {
@@ -24,7 +25,8 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
     });
   }
 
-  final _$albumStreamAtom = Atom(name: '_MusicDataStore.albumStream');
+  late final _$albumStreamAtom =
+      Atom(name: '_MusicDataStore.albumStream', context: context);
 
   @override
   ObservableStream<List<Album>> get albumStream {
@@ -39,7 +41,8 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
     });
   }
 
-  final _$artistStreamAtom = Atom(name: '_MusicDataStore.artistStream');
+  late final _$artistStreamAtom =
+      Atom(name: '_MusicDataStore.artistStream', context: context);
 
   @override
   ObservableStream<List<Artist>> get artistStream {
@@ -54,7 +57,8 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
     });
   }
 
-  final _$playlistsStreamAtom = Atom(name: '_MusicDataStore.playlistsStream');
+  late final _$playlistsStreamAtom =
+      Atom(name: '_MusicDataStore.playlistsStream', context: context);
 
   @override
   ObservableStream<List<Playlist>> get playlistsStream {
@@ -69,8 +73,8 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
     });
   }
 
-  final _$isUpdatingDatabaseAtom =
-      Atom(name: '_MusicDataStore.isUpdatingDatabase');
+  late final _$isUpdatingDatabaseAtom =
+      Atom(name: '_MusicDataStore.isUpdatingDatabase', context: context);
 
   @override
   bool get isUpdatingDatabase {
@@ -85,7 +89,8 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
     });
   }
 
-  final _$albumOfDayAtom = Atom(name: '_MusicDataStore.albumOfDay');
+  late final _$albumOfDayAtom =
+      Atom(name: '_MusicDataStore.albumOfDay', context: context);
 
   @override
   ObservableFuture<Album?> get albumOfDay {
@@ -100,8 +105,8 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
     });
   }
 
-  final _$updateDatabaseAsyncAction =
-      AsyncAction('_MusicDataStore.updateDatabase');
+  late final _$updateDatabaseAsyncAction =
+      AsyncAction('_MusicDataStore.updateDatabase', context: context);
 
   @override
   Future<void> updateDatabase() {

@@ -1,9 +1,13 @@
+import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../constants.dart';
 import '../../domain/entities/artist.dart';
+import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/entities/smart_list.dart';
 import '../../domain/repositories/music_data_repository.dart';
+import '../gradients.dart';
+import '../icons.dart';
 import '../utils.dart';
 
 part 'smart_list_form_store.g.dart';
@@ -26,8 +30,28 @@ abstract class _SmartListStore with Store {
 
   final FormErrorState error = FormErrorState();
 
+  // TODO: investigate store nesting -> CoverCustomizationStore nested here
+
   @observable
   late String? name = _smartList?.name;
+
+  @observable
+  late String iconString = _smartList?.iconString ?? CUSTOM_ICONS.keys.first;
+  @observable
+  late String gradientString = _smartList?.gradientString ?? CUSTOM_GRADIENTS.keys.first;
+  @computed
+  IconData get icon => CUSTOM_ICONS[iconString]!;
+  @computed
+  Gradient get gradient => CUSTOM_GRADIENTS[gradientString]!;
+  @action
+  void setIconString(String iconString) {
+    this.iconString = iconString;
+  }
+
+  @action
+  void setGradient(String gradientString) {
+    this.gradientString = gradientString;
+  }
 
   @observable
   late int minLikeCount = _smartList?.filter.minLikeCount ?? 0;
@@ -81,6 +105,15 @@ abstract class _SmartListStore with Store {
   @observable
   late ObservableList<OrderEntry> orderState =
       _createOrderState(_smartList?.orderBy).asObservable();
+
+  @observable
+  late ShuffleMode? shuffleMode = _smartList?.shuffleMode;
+  @computed
+  int get shuffleModeIndex => _shuffleModeIndex(shuffleMode);
+  @action
+  void setShuffleModeIndex(int index) {
+    shuffleMode = _intToShuffleMode(index);
+  }
 
   @action
   void setOrderEnabled(int index, bool enabled) {
@@ -191,6 +224,9 @@ abstract class _SmartListStore with Store {
   Future<void> _createSmartList() async {
     await _musicDataRepository.insertSmartList(
       name: name ?? 'This needs a name',
+      iconString: iconString,
+      gradientString: gradientString,
+      shuffleMode: shuffleMode,
       filter: Filter(
         artists: selectedArtists.toList(),
         excludeArtists: excludeArtists,
@@ -217,6 +253,9 @@ abstract class _SmartListStore with Store {
       SmartList(
         id: _smartList!.id,
         name: name ?? 'This needs a name',
+        iconString: iconString,
+        gradientString: gradientString,
+        shuffleMode: shuffleMode,
         filter: Filter(
           artists: selectedArtists.toList(),
           excludeArtists: excludeArtists,
@@ -337,4 +376,29 @@ List<OrderEntry> _createOrderState(OrderBy? orderBy) {
 String _intToString(int? number) {
   if (number == null) return '0';
   return number.toString();
+}
+
+int _shuffleModeIndex(ShuffleMode? shuffleMode) {
+  if (shuffleMode == null) return 0;
+  switch (shuffleMode) {
+    case ShuffleMode.none:
+      return 1;
+    case ShuffleMode.standard:
+      return 2;
+    case ShuffleMode.plus:
+      return 3;
+  }
+}
+
+ShuffleMode? _intToShuffleMode(int index) {
+  switch (index) {
+    case 0:
+      return null;
+    case 1:
+      return ShuffleMode.none;
+    case 2:
+      return ShuffleMode.standard;
+    case 3:
+      return ShuffleMode.plus;
+  }
 }

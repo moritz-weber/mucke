@@ -8,6 +8,8 @@ import '../state/audio_store.dart';
 import '../state/navigation_store.dart';
 import '../state/settings_store.dart';
 import '../theming.dart';
+import 'play_shuffle_button.dart';
+import 'playlist_cover.dart';
 
 class SmartLists extends StatelessWidget {
   const SmartLists({Key? key}) : super(key: key);
@@ -52,11 +54,23 @@ class SmartLists extends StatelessWidget {
                     child: Material(
                       color: Colors.transparent,
                       child: Padding(
-                        padding:
-                            const EdgeInsets.only(left: HORIZONTAL_PADDING, top: 4.0, bottom: 4.0, right: 4.0),
+                        padding: const EdgeInsets.fromLTRB(8.0, 8.0, 4.0, 8.0),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
+                            PlaylistCover(
+                              size: 48,
+                              gradient: smartList.gradient,
+                              icon: smartList.icon,
+                              shadows: const [
+                                BoxShadow(
+                                    color: Colors.black54,
+                                    blurRadius: 4,
+                                    offset: Offset(0, 0),
+                                    spreadRadius: -1),
+                              ],
+                            ),
+                            const SizedBox(width: 16.0),
                             Expanded(
                               child: Text(
                                 smartList.name,
@@ -66,15 +80,10 @@ class SmartLists extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(width: 8.0),
-                            IconButton(
-                              padding: EdgeInsets.zero,
-                              icon: const Icon(
-                                Icons.play_circle_fill_rounded,
-                                size: 40.0,
-                              ),
-                              iconSize: 48.0,
+                            PlayShuffleButton(
                               onPressed: () => audioStore.playSmartList(smartList),
-                              splashRadius: 24.0,
+                              shuffleMode: smartList.shuffleMode,
+                              size: 48.0,
                             ),
                           ],
                         ),

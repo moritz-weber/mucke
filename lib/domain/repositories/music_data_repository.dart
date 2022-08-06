@@ -65,6 +65,8 @@ abstract class MusicDataRepository extends MusicDataInfoRepository {
     required String name,
     required Filter filter,
     required OrderBy orderBy,
+    required String iconString,
+    required String gradientString,
     ShuffleMode? shuffleMode,
   });
   Future<void> updateSmartList(SmartList smartList);
