@@ -8,6 +8,7 @@ import 'domain/actors/persistence_actor.dart';
 import 'domain/actors/platform_integration_actor.dart';
 import 'domain/entities/album.dart';
 import 'domain/entities/artist.dart';
+import 'domain/entities/playlist.dart';
 import 'domain/entities/smart_list.dart';
 import 'domain/entities/song.dart';
 import 'domain/modules/dynamic_queue.dart';
@@ -29,6 +30,7 @@ import 'presentation/state/artist_page_store.dart';
 import 'presentation/state/audio_store.dart';
 import 'presentation/state/music_data_store.dart';
 import 'presentation/state/navigation_store.dart';
+import 'presentation/state/playlist_form_store.dart';
 import 'presentation/state/queue_page_store.dart';
 import 'presentation/state/search_page_store.dart';
 import 'presentation/state/settings_store.dart';
@@ -87,7 +89,6 @@ Future<void> setupGetIt() async {
   getIt.registerLazySingleton<SettingsStore>(
     () => SettingsStore(
       settingsRepository: getIt(),
-      musicDataRepository: getIt(),
     ),
   );
   getIt.registerLazySingleton<QueuePageStore>(
@@ -103,6 +104,9 @@ Future<void> setupGetIt() async {
   );
   getIt.registerFactoryParam<AlbumPageStore, Album, void>(
     (Album album, _) => AlbumPageStore(album: album, musicDataInfoRepository: getIt()),
+  );
+  getIt.registerFactoryParam<PlaylistFormStore, Playlist?, void>(
+    (Playlist? playlist, _) => PlaylistFormStore(musicDataRepository: getIt(), playlist: playlist),
   );
   getIt.registerFactoryParam<SmartListFormStore, SmartList?, void>(
     (SmartList? smartList, _) =>
@@ -245,6 +249,7 @@ Future<void> setupGetIt() async {
     builder: () => _platformIntegrationDataSource as AudioHandler,
     config: const AudioServiceConfig(
       androidNotificationChannelName: 'mucke',
+      androidNotificationIcon: 'drawable/ic_stat',
     ),
   );
   getIt.registerLazySingleton<AudioHandler>(() => _audioHandler);

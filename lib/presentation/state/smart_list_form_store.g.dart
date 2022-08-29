@@ -9,19 +9,6 @@ part of 'smart_list_form_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$SmartListFormStore on _SmartListStore, Store {
-  Computed<IconData>? _$iconComputed;
-
-  @override
-  IconData get icon => (_$iconComputed ??=
-          Computed<IconData>(() => super.icon, name: '_SmartListStore.icon'))
-      .value;
-  Computed<Gradient>? _$gradientComputed;
-
-  @override
-  Gradient get gradient =>
-      (_$gradientComputed ??= Computed<Gradient>(() => super.gradient,
-              name: '_SmartListStore.gradient'))
-          .value;
   Computed<int>? _$shuffleModeIndexComputed;
 
   @override
@@ -42,38 +29,6 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
   set name(String? value) {
     _$nameAtom.reportWrite(value, super.name, () {
       super.name = value;
-    });
-  }
-
-  late final _$iconStringAtom =
-      Atom(name: '_SmartListStore.iconString', context: context);
-
-  @override
-  String get iconString {
-    _$iconStringAtom.reportRead();
-    return super.iconString;
-  }
-
-  @override
-  set iconString(String value) {
-    _$iconStringAtom.reportWrite(value, super.iconString, () {
-      super.iconString = value;
-    });
-  }
-
-  late final _$gradientStringAtom =
-      Atom(name: '_SmartListStore.gradientString', context: context);
-
-  @override
-  String get gradientString {
-    _$gradientStringAtom.reportRead();
-    return super.gradientString;
-  }
-
-  @override
-  set gradientString(String value) {
-    _$gradientStringAtom.reportWrite(value, super.gradientString, () {
-      super.gradientString = value;
     });
   }
 
@@ -417,28 +372,6 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
       ActionController(name: '_SmartListStore', context: context);
 
   @override
-  void setIconString(String iconString) {
-    final _$actionInfo = _$_SmartListStoreActionController.startAction(
-        name: '_SmartListStore.setIconString');
-    try {
-      return super.setIconString(iconString);
-    } finally {
-      _$_SmartListStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void setGradient(String gradientString) {
-    final _$actionInfo = _$_SmartListStoreActionController.startAction(
-        name: '_SmartListStore.setGradient');
-    try {
-      return super.setGradient(gradientString);
-    } finally {
-      _$_SmartListStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void setShuffleModeIndex(int index) {
     final _$actionInfo = _$_SmartListStoreActionController.startAction(
         name: '_SmartListStore.setShuffleModeIndex');
@@ -508,8 +441,6 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
   String toString() {
     return '''
 name: ${name},
-iconString: ${iconString},
-gradientString: ${gradientString},
 minLikeCount: ${minLikeCount},
 maxLikeCount: ${maxLikeCount},
 minPlayCountEnabled: ${minPlayCountEnabled},
@@ -531,8 +462,6 @@ selectedArtists: ${selectedArtists},
 excludeArtists: ${excludeArtists},
 orderState: ${orderState},
 shuffleMode: ${shuffleMode},
-icon: ${icon},
-gradient: ${gradient},
 shuffleModeIndex: ${shuffleModeIndex}
     ''';
   }

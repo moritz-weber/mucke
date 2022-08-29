@@ -9,6 +9,8 @@ import '../state/navigation_store.dart';
 import '../state/search_page_store.dart';
 import '../theming.dart';
 import '../widgets/album_art_list_tile.dart';
+import '../widgets/play_shuffle_button.dart';
+import '../widgets/playlist_cover.dart';
 import '../widgets/song_bottom_sheet.dart';
 import '../widgets/song_list_tile.dart';
 import 'album_details_page.dart';
@@ -353,10 +355,10 @@ class _SearchPageState extends State<SearchPage> {
                             for (int i in smartlists.asMap().keys)
                               ListTile(
                                 title: Text(smartlists[i].name),
-                                leading: const SizedBox(
-                                  child: Icon(Icons.auto_awesome_rounded),
-                                  width: 56.0,
-                                  height: 56.0,
+                                leading: PlaylistCover(
+                                  size: 56,
+                                  gradient: smartlists[i].gradient,
+                                  icon: smartlists[i].icon,
                                 ),
                                 onTap: () => _navStore.pushOnLibrary(
                                   MaterialPageRoute(
@@ -364,8 +366,9 @@ class _SearchPageState extends State<SearchPage> {
                                         SmartListPage(smartList: smartlists[i]),
                                   ),
                                 ),
-                                trailing: IconButton(
-                                  icon: const Icon(Icons.play_circle_fill_rounded, size: 32.0),
+                                trailing: PlayShuffleButton(
+                                  size: 48.0,
+                                  shuffleMode: smartlists[i].shuffleMode,
                                   onPressed: () => audioStore.playSmartList(smartlists[i]),
                                 ),
                               ),
@@ -391,10 +394,10 @@ class _SearchPageState extends State<SearchPage> {
                             for (int i in playlists.asMap().keys)
                               ListTile(
                                 title: Text(playlists[i].name),
-                                leading: const SizedBox(
-                                  child: Icon(Icons.queue_music_rounded),
-                                  width: 56.0,
-                                  height: 56.0,
+                                leading: PlaylistCover(
+                                  size: 56,
+                                  gradient: playlists[i].gradient,
+                                  icon: playlists[i].icon,
                                 ),
                                 onTap: () => _navStore.pushOnLibrary(
                                   MaterialPageRoute(
@@ -402,9 +405,10 @@ class _SearchPageState extends State<SearchPage> {
                                         PlaylistPage(playlist: playlists[i]),
                                   ),
                                 ),
-                                trailing: IconButton(
-                                  icon: const Icon(Icons.play_circle_fill_rounded, size: 32.0),
+                                trailing: PlayShuffleButton(
+                                  size: 48.0,
                                   onPressed: () => audioStore.playPlaylist(playlists[i]),
+                                  shuffleMode: playlists[i].shuffleMode,
                                 ),
                               ),
                             const SizedBox(height: 16.0),

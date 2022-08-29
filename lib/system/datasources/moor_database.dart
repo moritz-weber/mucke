@@ -147,6 +147,9 @@ class SmartListArtists extends Table {
 class Playlists extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text()();
+  TextColumn get shuffleMode => text().nullable()();
+  TextColumn get icon => text().withDefault(const Constant('queue_music_rounded'))();
+  TextColumn get gradient => text().withDefault(const Constant('oceanblue'))();
 }
 
 @DataClassName('MoorPlaylistEntry')
@@ -189,7 +192,7 @@ class MoorDatabase extends _$MoorDatabase {
   MoorDatabase.connect(DatabaseConnection connection) : super.connect(connection);
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(beforeOpen: (details) async {
@@ -240,6 +243,12 @@ class MoorDatabase extends _$MoorDatabase {
           await m.addColumn(smartLists, smartLists.icon);
           await m.addColumn(smartLists, smartLists.gradient);
           await m.alterTable(TableMigration(smartLists));
+        }
+        if (from < 6) {
+          await m.addColumn(playlists, playlists.shuffleMode);
+          await m.addColumn(playlists, playlists.icon);
+          await m.addColumn(playlists, playlists.gradient);
+          await m.alterTable(TableMigration(playlists));
         }
       });
 }

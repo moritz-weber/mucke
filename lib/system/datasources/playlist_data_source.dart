@@ -7,8 +7,13 @@ import '../models/song_model.dart';
 abstract class PlaylistDataSource {
   Stream<List<PlaylistModel>> get playlistsStream;
   Stream<PlaylistModel> getPlaylistStream(int playlistId);
-  Future<void> insertPlaylist(String name);
-  Future<void> updatePlaylist(int id, String name);
+  Future<void> insertPlaylist(
+    String name,
+    String iconString,
+    String gradientString,
+    ShuffleMode? shuffleMode,
+  );
+  Future<void> updatePlaylist(PlaylistModel playlist);
   Future<void> removePlaylist(PlaylistModel playlist);
   Future<void> addSongsToPlaylist(PlaylistModel playlist, List<SongModel> songs);
   Future<void> removeIndex(int playlistId, int index);

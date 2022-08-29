@@ -5,8 +5,8 @@ import 'package:get_it/get_it.dart';
 import '../../domain/entities/smart_list.dart';
 import '../pages/smart_list_page.dart';
 import '../state/audio_store.dart';
+import '../state/music_data_store.dart';
 import '../state/navigation_store.dart';
-import '../state/settings_store.dart';
 import '../theming.dart';
 import 'play_shuffle_button.dart';
 import 'playlist_cover.dart';
@@ -18,11 +18,11 @@ class SmartLists extends StatelessWidget {
   Widget build(BuildContext context) {
     final AudioStore audioStore = GetIt.I<AudioStore>();
     final NavigationStore navStore = GetIt.I<NavigationStore>();
-    final SettingsStore settingsStore = GetIt.I<SettingsStore>();
+    final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
 
     return Observer(
       builder: (context) {
-        final smartLists = settingsStore.smartListsStream.value ?? [];
+        final smartLists = musicDataStore.smartListsStream.value ?? [];
         return SliverList(
           delegate: SliverChildBuilderDelegate(
             (_, int index) {

@@ -5,9 +5,8 @@ import 'package:reorderables/reorderables.dart';
 
 import '../../constants.dart';
 import '../../domain/entities/smart_list.dart';
-import '../state/cover_customization_store.dart';
+import '../state/music_data_store.dart';
 import '../state/navigation_store.dart';
-import '../state/settings_store.dart';
 import '../state/smart_list_form_store.dart';
 import '../theming.dart';
 import '../widgets/playlist_cover.dart';
@@ -46,7 +45,7 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
   @override
   Widget build(BuildContext context) {
     final title = widget.smartList == null ? 'Create smart list' : 'Edit smart list';
-    final SettingsStore settingsStore = GetIt.I<SettingsStore>();
+    final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
     final NavigationStore navStore = GetIt.I<NavigationStore>();
 
     const blockLevelTexts = <String>[
@@ -81,7 +80,7 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
                 onPressed: () async {
                   // TODO: this works, but may only pop back to the smart list page...
                   // can I use pop 2x here?
-                  await settingsStore.removeSmartList(widget.smartList!);
+                  await musicDataStore.removeSmartList(widget.smartList!);
                   navStore.pop(context);
                 },
               ),
@@ -145,18 +144,12 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
                             child: GestureDetector(
                               onTap: () {
                                 Navigator.of(context).push(
-                                  MaterialPageRoute<Map>(
+                                  MaterialPageRoute(
                                     builder: (BuildContext context) => CoverCustomizationPage(
-                                      store: CoverCustomizationStore(
-                                        gradientString: store.gradientString,
-                                        iconString: store.iconString,
-                                      ),
+                                      store: store.cover,
                                     ),
                                   ),
-                                ).then((value) {
-                                  store.setIconString(value!['iconString'] as String);
-                                  store.setGradient(value['gradientString'] as String);
-                                });
+                                );
                               },
                               child: Container(
                                 color: Colors.transparent,
@@ -164,8 +157,8 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
                                   children: [
                                     PlaylistCover(
                                       size: 64.0,
-                                      gradient: store.gradient,
-                                      icon: store.icon,
+                                      gradient: store.cover.gradient,
+                                      icon: store.cover.icon,
                                     ),
                                     const SizedBox(width: 16.0),
                                     const Text('Customize cover image'),

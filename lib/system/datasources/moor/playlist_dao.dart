@@ -67,8 +67,20 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
   }
 
   @override
-  Future<void> insertPlaylist(String name) async {
-    await into(playlists).insert(PlaylistsCompanion(name: Value(name)));
+  Future<void> insertPlaylist(
+    String name,
+    String iconString,
+    String gradientString,
+    ShuffleMode? shuffleMode,
+  ) async {
+    await into(playlists).insert(
+      PlaylistsCompanion(
+        name: Value(name),
+        icon: Value(iconString),
+        gradient: Value(gradientString),
+        shuffleMode: Value(shuffleMode?.toString()),
+      ),
+    );
   }
 
   @override
@@ -101,9 +113,9 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
   }
 
   @override
-  Future<void> updatePlaylist(int id, String name) async {
-    await (update(playlists)..where((tbl) => tbl.id.equals(id)))
-        .write(PlaylistsCompanion(name: Value(name)));
+  Future<void> updatePlaylist(PlaylistModel playlist) async {
+    await (update(playlists)..where((tbl) => tbl.id.equals(playlist.id)))
+        .write(playlist.toCompanion());
   }
 
   @override

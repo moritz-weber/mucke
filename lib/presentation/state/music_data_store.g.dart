@@ -73,6 +73,22 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
     });
   }
 
+  late final _$smartListsStreamAtom =
+      Atom(name: '_MusicDataStore.smartListsStream', context: context);
+
+  @override
+  ObservableStream<List<SmartList>> get smartListsStream {
+    _$smartListsStreamAtom.reportRead();
+    return super.smartListsStream;
+  }
+
+  @override
+  set smartListsStream(ObservableStream<List<SmartList>> value) {
+    _$smartListsStreamAtom.reportWrite(value, super.smartListsStream, () {
+      super.smartListsStream = value;
+    });
+  }
+
   late final _$isUpdatingDatabaseAtom =
       Atom(name: '_MusicDataStore.isUpdatingDatabase', context: context);
 
@@ -120,6 +136,7 @@ songStream: ${songStream},
 albumStream: ${albumStream},
 artistStream: ${artistStream},
 playlistsStream: ${playlistsStream},
+smartListsStream: ${smartListsStream},
 isUpdatingDatabase: ${isUpdatingDatabase},
 albumOfDay: ${albumOfDay}
     ''';

@@ -7,15 +7,13 @@ import 'package:get_it/get_it.dart';
 
 import '../../domain/entities/playlist.dart';
 import '../../domain/entities/smart_list.dart';
-import '../gradients.dart';
-import '../icons.dart';
 import '../state/audio_store.dart';
 import '../state/music_data_store.dart';
 import '../state/navigation_store.dart';
-import '../state/settings_store.dart';
 import '../theming.dart';
 import '../widgets/play_shuffle_button.dart';
 import '../widgets/playlist_cover.dart';
+import 'playlist_form_page.dart';
 import 'playlist_page.dart';
 import 'smart_list_form_page.dart';
 import 'smart_list_page.dart';
@@ -34,7 +32,6 @@ class _PlaylistsPageState extends State<PlaylistsPage> with AutomaticKeepAliveCl
   Widget build(BuildContext context) {
     print('PlaylistsPage.build');
     final AudioStore audioStore = GetIt.I<AudioStore>();
-    final SettingsStore settingsStore = GetIt.I<SettingsStore>();
     final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
     final NavigationStore navStore = GetIt.I<NavigationStore>();
 
@@ -42,7 +39,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> with AutomaticKeepAliveCl
     return Observer(builder: (_) {
       print('PlaylistsPage.build -> Observer.builder');
 
-      final smartLists = settingsStore.smartListsStream.value ?? [];
+      final smartLists = musicDataStore.smartListsStream.value ?? [];
       final playlists = musicDataStore.playlistsStream.value ?? [];
       return Scaffold(
         body: Scrollbar(
@@ -87,12 +84,13 @@ class _PlaylistsPageState extends State<PlaylistsPage> with AutomaticKeepAliveCl
                   ),
                   trailing: PlayShuffleButton(
                     onPressed: () => audioStore.playPlaylist(playlist),
+                    shuffleMode: playlist.shuffleMode,
                     size: 40.0,
                   ),
                   leading: PlaylistCover(
-                    gradient: CUSTOM_GRADIENTS.values.first,
+                    gradient: playlist.gradient,
                     size: 56.0,
-                    icon: CUSTOM_ICONS['queue_music_rounded'],
+                    icon: playlist.icon,
                   ),
                 );
               }
@@ -132,7 +130,12 @@ class _PlaylistsPageState extends State<PlaylistsPage> with AutomaticKeepAliveCl
               backgroundColor: LIGHT2,
               foregroundColor: Colors.white,
               label: 'Add Playlist',
-              onTap: () => _addPlaylist(context),
+              onTap: () => navStore.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => const PlaylistFormPage(),
+                ),
+              ),
             ),
           ],
         ),
@@ -140,73 +143,6 @@ class _PlaylistsPageState extends State<PlaylistsPage> with AutomaticKeepAliveCl
     });
   }
 
-  void _addPlaylist(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return const _PlaylistForm();
-      },
-    );
-  }
-
   @override
   bool get wantKeepAlive => true;
-}
-
-class _PlaylistForm extends StatefulWidget {
-  const _PlaylistForm({Key? key}) : super(key: key);
-
-  @override
-  _PlaylistFormState createState() => _PlaylistFormState();
-}
-
-class _PlaylistFormState extends State<_PlaylistForm> {
-  final _controller = TextEditingController();
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
-
-    return SimpleDialog(
-      backgroundColor: DARK3,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(HORIZONTAL_PADDING),
-          child: TextField(
-            controller: _controller,
-          ),
-        ),
-        Row(
-          children: [
-            SimpleDialogOption(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text(
-                'Cancel',
-                textAlign: TextAlign.center,
-              ),
-            ),
-            SimpleDialogOption(
-              onPressed: () {
-                musicDataStore.insertPlaylist(_controller.text);
-                print('Created playlist with name: ${_controller.text}.');
-                Navigator.pop(context);
-              },
-              child: const Text(
-                'Create',
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
 }

@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:reorderables/reorderables.dart';
 
 import '../../domain/entities/playlist.dart';
+import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/entities/song.dart';
+import '../mucke_icons.dart';
 import '../state/audio_store.dart';
 import '../state/music_data_store.dart';
 import '../state/navigation_store.dart';
 import '../theming.dart';
+import '../utils.dart' as utils;
+import '../widgets/cover_sliver_appbar.dart';
+import '../widgets/playlist_cover.dart';
 import '../widgets/song_bottom_sheet.dart';
 import '../widgets/song_list_tile.dart';
+import 'playlist_form_page.dart';
 
 class PlaylistPage extends StatelessWidget {
   const PlaylistPage({Key? key, required this.playlist}) : super(key: key);
@@ -26,28 +33,133 @@ class PlaylistPage extends StatelessWidget {
       child: StreamBuilder<Playlist>(
           stream: musicDataStore.getPlaylistStream(playlist.id),
           builder: (context, snapshot) {
-            final Playlist uPlaylist = snapshot.data ?? playlist;  // *u* for updating
+            final Playlist uPlaylist = snapshot.data ?? playlist; // *u* for updating
+
+            final totalDuration = playlist.songs.fold(
+              const Duration(milliseconds: 0),
+              (Duration d, s) => d + s.duration,
+            );
+
+            IconData playIcon = Icons.play_arrow_rounded;
+            switch (playlist.shuffleMode) {
+              case ShuffleMode.standard:
+                playIcon = Icons.shuffle_rounded;
+                break;
+              case ShuffleMode.plus:
+                playIcon = MuckeIcons.shuffle_heart;
+                break;
+              case ShuffleMode.none:
+                playIcon = MuckeIcons.shuffle_none;
+                break;
+              default:
+            }
 
             return Scaffold(
-              appBar: AppBar(
-                title: Text(
-                  uPlaylist.name,
-                  style: TEXT_HEADER,
-                ),
-                leading: IconButton(
-                  icon: const Icon(Icons.chevron_left),
-                  onPressed: () => navStore.pop(context),
-                ),
-                actions: [
-                  IconButton(
-                      icon: const Icon(Icons.edit),
-                      onPressed: () => _editPlaylist(context, uPlaylist)),
-                ],
-                titleSpacing: 0.0,
-              ),
               body: Scrollbar(
                 child: CustomScrollView(
                   slivers: [
+                    CoverSliverAppBar(
+                      actions: [
+                        Observer(
+                          builder: (context) {
+                            final isMultiSelectEnabled =
+                                false; // store.selection.isMultiSelectEnabled;
+
+                            if (!isMultiSelectEnabled)
+                              return IconButton(
+                                key: GlobalKey(),
+                                icon: const Icon(Icons.edit_rounded),
+                                onPressed: () => navStore.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) => PlaylistFormPage(
+                                      playlist: playlist,
+                                    ),
+                                  ),
+                                ),
+                              );
+
+                            return Container();
+                          },
+                        ),
+                        // Observer(
+                        //   builder: (context) {
+                        //     final isMultiSelectEnabled = false; // store.selection.isMultiSelectEnabled;
+
+                        //     if (isMultiSelectEnabled)
+                        //       return IconButton(
+                        //         key: GlobalKey(),
+                        //         icon: const Icon(Icons.more_vert_rounded),
+                        //         onPressed: () => _openMultiselectMenu(context),
+                        //       );
+
+                        //     return Container();
+                        //   },
+                        // ),
+                        // Observer(
+                        //   builder: (context) {
+                        //     final isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
+                        //     final isAllSelected = store.selection.isAllSelected;
+
+                        //     if (isMultiSelectEnabled)
+                        //       return IconButton(
+                        //         key: GlobalKey(),
+                        //         icon: isAllSelected
+                        //             ? const Icon(Icons.deselect_rounded)
+                        //             : const Icon(Icons.select_all_rounded),
+                        //         onPressed: () {
+                        //           if (isAllSelected)
+                        //             store.selection.deselectAll();
+                        //           else
+                        //             store.selection.selectAll();
+                        //         },
+                        //       );
+
+                        //     return Container();
+                        //   },
+                        // ),
+                        // Observer(
+                        //   builder: (context) {
+                        //     final isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
+                        //     return IconButton(
+                        //       key: const ValueKey('SMARTLIST_MULTISELECT'),
+                        //       icon: isMultiSelectEnabled
+                        //           ? const Icon(Icons.close_rounded)
+                        //           : const Icon(Icons.checklist_rtl_rounded),
+                        //       onPressed: () => store.selection.toggleMultiSelect(),
+                        //     );
+                        //   },
+                        // ),
+                      ],
+                      title: playlist.name,
+                      subtitle2:
+                          '${playlist.songs.length} songs • ${utils.msToTimeString(totalDuration)}',
+                      background: Container(
+                        decoration: BoxDecoration(
+                          gradient: playlist.gradient,
+                        ),
+                      ),
+                      cover: PlaylistCover(
+                        size: 120,
+                        icon: playlist.icon,
+                        gradient: playlist.gradient,
+                      ),
+                      button: ElevatedButton(
+                        onPressed: () => audioStore.playPlaylist(playlist),
+                        child: Row(
+                          children: [
+                            const Expanded(child: Center(child: Text('Play'))),
+                            Icon(playIcon),
+                          ],
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          shape: const StadiumBorder(),
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          primary: Colors.white10,
+                          shadowColor: Colors.transparent,
+                        ),
+                      ),
+                    ),
                     ReorderableSliverList(
                       delegate: ReorderableSliverChildBuilderDelegate(
                         (context, int index) {
@@ -60,15 +172,15 @@ class PlaylistPage extends StatelessWidget {
                               subtitle: Subtitle.artistAlbum,
                               onTap: () => audioStore.playSong(index, uPlaylist.songs, uPlaylist),
                               onTapMore: () => showModalBottomSheet(
-                                  context: context,
-                                  useRootNavigator: true,
-                                  isScrollControlled: true,
-                                  backgroundColor: Colors.transparent,
-                                  builder: (context) => SongBottomSheet(
-                                    song: song,
-                                  ),
+                                context: context,
+                                useRootNavigator: true,
+                                isScrollControlled: true,
+                                backgroundColor: Colors.transparent,
+                                builder: (context) => SongBottomSheet(
+                                  song: song,
                                 ),
-                                onSelect: () {},
+                              ),
+                              onSelect: () {},
                             ),
                             onDismissed: (direction) {
                               musicDataStore.removePlaylistEntry(uPlaylist.id, index);
@@ -162,7 +274,7 @@ class _PlaylistFormState extends State<_PlaylistForm> {
             ),
             SimpleDialogOption(
               onPressed: () {
-                musicDataStore.updatePlaylist(widget.playlist.id, _controller.text);
+                // musicDataStore.updatePlaylist(widget.playlist.id, _controller.text);
                 Navigator.pop(context);
               },
               child: const Text(

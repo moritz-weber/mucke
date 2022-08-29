@@ -3170,7 +3170,15 @@ class $SmartListArtistsTable extends SmartListArtists
 class MoorPlaylist extends DataClass implements Insertable<MoorPlaylist> {
   final int id;
   final String name;
-  MoorPlaylist({required this.id, required this.name});
+  final String? shuffleMode;
+  final String icon;
+  final String gradient;
+  MoorPlaylist(
+      {required this.id,
+      required this.name,
+      this.shuffleMode,
+      required this.icon,
+      required this.gradient});
   factory MoorPlaylist.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return MoorPlaylist(
@@ -3178,6 +3186,12 @@ class MoorPlaylist extends DataClass implements Insertable<MoorPlaylist> {
           .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
       name: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
+      shuffleMode: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}shuffle_mode']),
+      icon: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}icon'])!,
+      gradient: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}gradient'])!,
     );
   }
   @override
@@ -3185,6 +3199,11 @@ class MoorPlaylist extends DataClass implements Insertable<MoorPlaylist> {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['name'] = Variable<String>(name);
+    if (!nullToAbsent || shuffleMode != null) {
+      map['shuffle_mode'] = Variable<String?>(shuffleMode);
+    }
+    map['icon'] = Variable<String>(icon);
+    map['gradient'] = Variable<String>(gradient);
     return map;
   }
 
@@ -3192,6 +3211,11 @@ class MoorPlaylist extends DataClass implements Insertable<MoorPlaylist> {
     return PlaylistsCompanion(
       id: Value(id),
       name: Value(name),
+      shuffleMode: shuffleMode == null && nullToAbsent
+          ? const Value.absent()
+          : Value(shuffleMode),
+      icon: Value(icon),
+      gradient: Value(gradient),
     );
   }
 
@@ -3201,6 +3225,9 @@ class MoorPlaylist extends DataClass implements Insertable<MoorPlaylist> {
     return MoorPlaylist(
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
+      shuffleMode: serializer.fromJson<String?>(json['shuffleMode']),
+      icon: serializer.fromJson<String>(json['icon']),
+      gradient: serializer.fromJson<String>(json['gradient']),
     );
   }
   @override
@@ -3209,55 +3236,98 @@ class MoorPlaylist extends DataClass implements Insertable<MoorPlaylist> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
+      'shuffleMode': serializer.toJson<String?>(shuffleMode),
+      'icon': serializer.toJson<String>(icon),
+      'gradient': serializer.toJson<String>(gradient),
     };
   }
 
-  MoorPlaylist copyWith({int? id, String? name}) => MoorPlaylist(
+  MoorPlaylist copyWith(
+          {int? id,
+          String? name,
+          String? shuffleMode,
+          String? icon,
+          String? gradient}) =>
+      MoorPlaylist(
         id: id ?? this.id,
         name: name ?? this.name,
+        shuffleMode: shuffleMode ?? this.shuffleMode,
+        icon: icon ?? this.icon,
+        gradient: gradient ?? this.gradient,
       );
   @override
   String toString() {
     return (StringBuffer('MoorPlaylist(')
           ..write('id: $id, ')
-          ..write('name: $name')
+          ..write('name: $name, ')
+          ..write('shuffleMode: $shuffleMode, ')
+          ..write('icon: $icon, ')
+          ..write('gradient: $gradient')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name);
+  int get hashCode => Object.hash(id, name, shuffleMode, icon, gradient);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is MoorPlaylist && other.id == this.id && other.name == this.name);
+      (other is MoorPlaylist &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.shuffleMode == this.shuffleMode &&
+          other.icon == this.icon &&
+          other.gradient == this.gradient);
 }
 
 class PlaylistsCompanion extends UpdateCompanion<MoorPlaylist> {
   final Value<int> id;
   final Value<String> name;
+  final Value<String?> shuffleMode;
+  final Value<String> icon;
+  final Value<String> gradient;
   const PlaylistsCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
+    this.shuffleMode = const Value.absent(),
+    this.icon = const Value.absent(),
+    this.gradient = const Value.absent(),
   });
   PlaylistsCompanion.insert({
     this.id = const Value.absent(),
     required String name,
+    this.shuffleMode = const Value.absent(),
+    this.icon = const Value.absent(),
+    this.gradient = const Value.absent(),
   }) : name = Value(name);
   static Insertable<MoorPlaylist> custom({
     Expression<int>? id,
     Expression<String>? name,
+    Expression<String?>? shuffleMode,
+    Expression<String>? icon,
+    Expression<String>? gradient,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (name != null) 'name': name,
+      if (shuffleMode != null) 'shuffle_mode': shuffleMode,
+      if (icon != null) 'icon': icon,
+      if (gradient != null) 'gradient': gradient,
     });
   }
 
-  PlaylistsCompanion copyWith({Value<int>? id, Value<String>? name}) {
+  PlaylistsCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? name,
+      Value<String?>? shuffleMode,
+      Value<String>? icon,
+      Value<String>? gradient}) {
     return PlaylistsCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
+      shuffleMode: shuffleMode ?? this.shuffleMode,
+      icon: icon ?? this.icon,
+      gradient: gradient ?? this.gradient,
     );
   }
 
@@ -3270,6 +3340,15 @@ class PlaylistsCompanion extends UpdateCompanion<MoorPlaylist> {
     if (name.present) {
       map['name'] = Variable<String>(name.value);
     }
+    if (shuffleMode.present) {
+      map['shuffle_mode'] = Variable<String?>(shuffleMode.value);
+    }
+    if (icon.present) {
+      map['icon'] = Variable<String>(icon.value);
+    }
+    if (gradient.present) {
+      map['gradient'] = Variable<String>(gradient.value);
+    }
     return map;
   }
 
@@ -3277,7 +3356,10 @@ class PlaylistsCompanion extends UpdateCompanion<MoorPlaylist> {
   String toString() {
     return (StringBuffer('PlaylistsCompanion(')
           ..write('id: $id, ')
-          ..write('name: $name')
+          ..write('name: $name, ')
+          ..write('shuffleMode: $shuffleMode, ')
+          ..write('icon: $icon, ')
+          ..write('gradient: $gradient')
           ..write(')'))
         .toString();
   }
@@ -3301,8 +3383,28 @@ class $PlaylistsTable extends Playlists
   late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
       'name', aliasedName, false,
       type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _shuffleModeMeta =
+      const VerificationMeta('shuffleMode');
   @override
-  List<GeneratedColumn> get $columns => [id, name];
+  late final GeneratedColumn<String?> shuffleMode = GeneratedColumn<String?>(
+      'shuffle_mode', aliasedName, true,
+      type: const StringType(), requiredDuringInsert: false);
+  final VerificationMeta _iconMeta = const VerificationMeta('icon');
+  @override
+  late final GeneratedColumn<String?> icon = GeneratedColumn<String?>(
+      'icon', aliasedName, false,
+      type: const StringType(),
+      requiredDuringInsert: false,
+      defaultValue: const Constant('queue_music_rounded'));
+  final VerificationMeta _gradientMeta = const VerificationMeta('gradient');
+  @override
+  late final GeneratedColumn<String?> gradient = GeneratedColumn<String?>(
+      'gradient', aliasedName, false,
+      type: const StringType(),
+      requiredDuringInsert: false,
+      defaultValue: const Constant('oceanblue'));
+  @override
+  List<GeneratedColumn> get $columns => [id, name, shuffleMode, icon, gradient];
   @override
   String get aliasedName => _alias ?? 'playlists';
   @override
@@ -3320,6 +3422,20 @@ class $PlaylistsTable extends Playlists
           _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
     } else if (isInserting) {
       context.missing(_nameMeta);
+    }
+    if (data.containsKey('shuffle_mode')) {
+      context.handle(
+          _shuffleModeMeta,
+          shuffleMode.isAcceptableOrUnknown(
+              data['shuffle_mode']!, _shuffleModeMeta));
+    }
+    if (data.containsKey('icon')) {
+      context.handle(
+          _iconMeta, icon.isAcceptableOrUnknown(data['icon']!, _iconMeta));
+    }
+    if (data.containsKey('gradient')) {
+      context.handle(_gradientMeta,
+          gradient.isAcceptableOrUnknown(data['gradient']!, _gradientMeta));
     }
     return context;
   }

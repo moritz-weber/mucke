@@ -3,6 +3,8 @@ import 'package:mobx/mobx.dart';
 import '../../domain/entities/album.dart';
 import '../../domain/entities/artist.dart';
 import '../../domain/entities/playlist.dart';
+import '../../domain/entities/shuffle_mode.dart';
+import '../../domain/entities/smart_list.dart';
 import '../../domain/entities/song.dart';
 import '../../domain/repositories/music_data_repository.dart';
 import '../../domain/usecases/set_song_blocked.dart';
@@ -46,6 +48,10 @@ abstract class _MusicDataStore with Store {
       _musicDataRepository.playlistsStream.asObservable(initialValue: []);
 
   @observable
+  late ObservableStream<List<SmartList>> smartListsStream =
+      _musicDataRepository.smartListsStream.asObservable(initialValue: []);
+
+  @observable
   bool isUpdatingDatabase = false;
 
   @observable
@@ -70,16 +76,21 @@ abstract class _MusicDataStore with Store {
   Future<void> setLikeCount(List<Song> songs, int count) =>
       _musicDataRepository.setLikeCount(songs, count);
 
-  Future<void> insertPlaylist(String name) async {
-    _musicDataRepository.insertPlaylist(name);
+  Future<void> insertPlaylist(
+    String name,
+    String iconString,
+    String gradientString,
+    ShuffleMode? shuffleMode,
+  ) async {
+    _musicDataRepository.insertPlaylist(name, iconString, gradientString, shuffleMode);
   }
 
   Future<void> removePlaylist(Playlist playlist) async {
     _musicDataRepository.removePlaylist(playlist);
   }
 
-  Future<void> updatePlaylist(int id, String name) async {
-    _musicDataRepository.updatePlaylist(id, name);
+  Future<void> updatePlaylist(Playlist playlist) async {
+    _musicDataRepository.updatePlaylist(playlist);
   }
 
   Future<void> addSongsToPlaylist(Playlist playlist, List<Song> songs) async {
@@ -96,5 +107,9 @@ abstract class _MusicDataStore with Store {
 
   Stream<Playlist> getPlaylistStream(int playlistId) {
     return _musicDataRepository.getPlaylistStream(playlistId);
+  }
+
+  Future<void> removeSmartList(SmartList smartList) async {
+    await _musicDataRepository.removeSmartList(smartList);
   }
 }

@@ -30,18 +30,12 @@ class _CoverCustomizationPageState extends State<CoverCustomizationPage> {
           centerTitle: true,
           leading: IconButton(
             icon: const Icon(Icons.close_rounded),
-            onPressed: () => Navigator.of(context).pop({
-              'iconString': widget.store.initialIconString,
-              'gradientString': widget.store.initialGradientString,
-            }),
+            onPressed: () => Navigator.of(context).pop(),
           ),
           actions: [
             IconButton(
               icon: const Icon(Icons.check_rounded),
-              onPressed: () => Navigator.of(context).pop({
-              'iconString': widget.store.iconString,
-              'gradientString': widget.store.gradientString,
-            }),
+              onPressed: () => Navigator.of(context).pop(),
             ),
           ],
         ),
@@ -57,7 +51,7 @@ class _CoverCustomizationPageState extends State<CoverCustomizationPage> {
                     child: PlaylistCover(
                       size: 120,
                       gradient: widget.store.gradient,
-                      icon: CUSTOM_ICONS[widget.store.iconString],
+                      icon: CUSTOM_ICONS[widget.store.iconString]!,
                     ),
                   ),
                 ),

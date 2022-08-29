@@ -54,8 +54,13 @@ abstract class MusicDataRepository extends MusicDataInfoRepository {
   Future<Song> togglePreviousSongLink(Song song);
   Future<Song> toggleNextSongLink(Song song);
 
-  Future<void> insertPlaylist(String name);
-  Future<void> updatePlaylist(int id, String name);
+  Future<void> insertPlaylist(
+    String name,
+    String iconString,
+    String gradientString,
+    ShuffleMode? shuffleMode,
+  );
+  Future<void> updatePlaylist(Playlist playlist);
   Future<void> removePlaylist(Playlist playlist);
   Future<void> addSongsToPlaylist(Playlist playlist, List<Song> songs);
   Future<void> removePlaylistEntry(int playlistId, int index);

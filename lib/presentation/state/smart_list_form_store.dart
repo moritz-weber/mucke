@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../constants.dart';
@@ -9,6 +8,7 @@ import '../../domain/repositories/music_data_repository.dart';
 import '../gradients.dart';
 import '../icons.dart';
 import '../utils.dart';
+import 'cover_customization_store.dart';
 
 part 'smart_list_form_store.g.dart';
 
@@ -30,28 +30,13 @@ abstract class _SmartListStore with Store {
 
   final FormErrorState error = FormErrorState();
 
-  // TODO: investigate store nesting -> CoverCustomizationStore nested here
+  late CoverCustomizationStore cover = CoverCustomizationStore(
+    iconString: _smartList?.iconString ?? CUSTOM_ICONS.keys.first,
+    gradientString: _smartList?.gradientString ?? CUSTOM_GRADIENTS.keys.first,
+  );
 
   @observable
   late String? name = _smartList?.name;
-
-  @observable
-  late String iconString = _smartList?.iconString ?? CUSTOM_ICONS.keys.first;
-  @observable
-  late String gradientString = _smartList?.gradientString ?? CUSTOM_GRADIENTS.keys.first;
-  @computed
-  IconData get icon => CUSTOM_ICONS[iconString]!;
-  @computed
-  Gradient get gradient => CUSTOM_GRADIENTS[gradientString]!;
-  @action
-  void setIconString(String iconString) {
-    this.iconString = iconString;
-  }
-
-  @action
-  void setGradient(String gradientString) {
-    this.gradientString = gradientString;
-  }
 
   @observable
   late int minLikeCount = _smartList?.filter.minLikeCount ?? 0;
@@ -224,8 +209,8 @@ abstract class _SmartListStore with Store {
   Future<void> _createSmartList() async {
     await _musicDataRepository.insertSmartList(
       name: name ?? 'This needs a name',
-      iconString: iconString,
-      gradientString: gradientString,
+      iconString: cover.iconString,
+      gradientString: cover.gradientString,
       shuffleMode: shuffleMode,
       filter: Filter(
         artists: selectedArtists.toList(),
@@ -253,8 +238,8 @@ abstract class _SmartListStore with Store {
       SmartList(
         id: _smartList!.id,
         name: name ?? 'This needs a name',
-        iconString: iconString,
-        gradientString: gradientString,
+        iconString: cover.iconString,
+        gradientString: cover.gradientString,
         shuffleMode: shuffleMode,
         filter: Filter(
           artists: selectedArtists.toList(),

@@ -375,8 +375,13 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   }
 
   @override
-  Future<void> insertPlaylist(String name) async {
-    _playlistDataSource.insertPlaylist(name);
+  Future<void> insertPlaylist(
+    String name,
+    String iconString,
+    String gradientString,
+    ShuffleMode? shuffleMode,
+  ) async {
+    _playlistDataSource.insertPlaylist(name, iconString, gradientString, shuffleMode);
   }
 
   @override
@@ -388,8 +393,8 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   }
 
   @override
-  Future<void> updatePlaylist(int id, String name) async {
-    _playlistDataSource.updatePlaylist(id, name);
+  Future<void> updatePlaylist(Playlist playlist) async {
+    _playlistDataSource.updatePlaylist(playlist as PlaylistModel);
   }
 
   @override

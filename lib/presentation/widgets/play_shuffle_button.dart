@@ -54,18 +54,21 @@ class PlayShuffleButton extends StatelessWidget {
             if (icon != null) Positioned(
               right: 2.0,
               bottom: 2.0,
-              child: Container(
-                width: size / 2.5,
-                height: size / 2.5,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(size / 5),
-                  color: LIGHT1,
-                ),
-                child: Center(
-                  child: Icon(
-                    icon,
-                    color: Colors.white,
-                    size: (size / 2.5) * 0.66,
+              child: GestureDetector(
+                onTap: () => onPressed(),
+                child: Container(
+                  width: size / 2.5,
+                  height: size / 2.5,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(size / 5),
+                    color: LIGHT1,
+                  ),
+                  child: Center(
+                    child: Icon(
+                      icon,
+                      color: Colors.white,
+                      size: (size / 2.5) * 0.66,
+                    ),
                   ),
                 ),
               ),
