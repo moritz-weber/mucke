@@ -91,7 +91,6 @@ abstract class _PlaylistStore with Store {
         iconString: cover.iconString,
         gradientString: cover.gradientString,
         shuffleMode: shuffleMode,
-        songs: [],
       ),
     );
   }
@@ -107,10 +106,6 @@ abstract class _FormErrorState with Store {
   bool get hasErrors => name != null;
 }
 
-String _intToString(int? number) {
-  if (number == null) return '0';
-  return number.toString();
-}
 
 int _shuffleModeIndex(ShuffleMode? shuffleMode) {
   if (shuffleMode == null) return 0;
@@ -126,8 +121,6 @@ int _shuffleModeIndex(ShuffleMode? shuffleMode) {
 
 ShuffleMode? _intToShuffleMode(int index) {
   switch (index) {
-    case 0:
-      return null;
     case 1:
       return ShuffleMode.none;
     case 2:
@@ -135,4 +128,5 @@ ShuffleMode? _intToShuffleMode(int index) {
     case 3:
       return ShuffleMode.plus;
   }
+  return null;
 }

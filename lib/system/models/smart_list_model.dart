@@ -24,6 +24,18 @@ class SmartListModel extends SmartList {
           gradientString: gradientString,
         );
 
+  factory SmartListModel.fromSmartList(SmartList smartList) { 
+    return SmartListModel(
+      id: smartList.id,
+      name: smartList.name,
+      filter: smartList.filter,
+      orderBy: smartList.orderBy,
+      shuffleMode: smartList.shuffleMode,
+      iconString: smartList.iconString,
+      gradientString: smartList.gradientString,
+    );
+  }
+
   factory SmartListModel.fromMoor(MoorSmartList moorSmartList, List<MoorArtist> artists) {
     final filter = Filter(
       artists: artists.map((MoorArtist a) => ArtistModel.fromMoor(a)).toList(),

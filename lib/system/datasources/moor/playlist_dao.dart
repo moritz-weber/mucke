@@ -44,26 +44,11 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
 
   @override
   Stream<PlaylistModel> getPlaylistStream(int playlistId) {
-    final plStream = (select(playlists)
+    return (select(playlists)
           ..where((tbl) => tbl.id.equals(playlistId))
           ..limit(1))
-        .watchSingle();
-
-    final plSongStream = (select(playlistEntries)
-          ..where((tbl) => tbl.playlistId.equals(playlistId))
-          ..orderBy([(t) => OrderingTerm(expression: t.position)]))
-        .join(
-      [innerJoin(songs, songs.path.equalsExp(playlistEntries.songPath))],
-    ).watch();
-
-    return Rx.combineLatest2<MoorPlaylist, List<TypedResult>, PlaylistModel>(
-      plStream,
-      plSongStream,
-      (a, b) {
-        final moorSongs = b.map((e) => e.readTable(songs)).toList();
-        return PlaylistModel.fromMoor(a, moorSongs);
-      },
-    );
+        .watchSingle()
+        .map((event) => PlaylistModel.fromMoor(event));
   }
 
   @override
@@ -85,25 +70,20 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
 
   @override
   Stream<List<PlaylistModel>> get playlistsStream {
-    final plStream = select(playlists).watch();
+    return select(playlists)
+        .watch()
+        .map((moorPlaylists) => moorPlaylists.map((e) => PlaylistModel.fromMoor(e)).toList());
+  }
 
-    final plSongStream = (select(playlistEntries).join(
+  @override
+  Stream<List<SongModel>> getPlaylistSongStream(PlaylistModel playlist) {
+    return ((select(playlistEntries)
+          ..where((tbl) => tbl.playlistId.equals(playlist.id))
+          ..orderBy([(t) => OrderingTerm.asc(t.position)]))
+        .join(
       [innerJoin(songs, songs.path.equalsExp(playlistEntries.songPath))],
-    )).watch();
-
-    return Rx.combineLatest2<List<MoorPlaylist>, List<TypedResult>, List<PlaylistModel>>(
-      plStream,
-      plSongStream,
-      (a, b) {
-        return a.map((pl) {
-          final moorSongs =
-              (b.where((element) => element.readTable(playlistEntries).playlistId == pl.id))
-                  .map((e) => e.readTable(songs))
-                  .toList();
-          return PlaylistModel.fromMoor(pl, moorSongs);
-        }).toList();
-      },
-    );
+    )).watch().map((moorSongList) =>
+        moorSongList.map((moorSong) => SongModel.fromMoor(moorSong.readTable(songs))).toList());
   }
 
   @override
@@ -319,26 +299,13 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
 
   @override
   Future<List<PlaylistModel>> searchPlaylists(String searchText, {int? limit}) async {
-    final plSongs = await (select(playlistEntries)
-          ..orderBy([(t) => OrderingTerm(expression: t.position)]))
-        .join(
-      [innerJoin(songs, songs.path.equalsExp(playlistEntries.songPath))],
-    ).get();
-
     final List<PlaylistModel> result = await (select(playlists)
           ..where((tbl) => tbl.name.regexp(searchText, dotAll: true, caseSensitive: false)))
         .get()
         .then(
-      (moorList) {
-        return moorList.map((moorPlaylist) {
-          final moorSongs = (plSongs.where(
-                  (element) => element.readTable(playlistEntries).playlistId == moorPlaylist.id))
-              .map((e) => e.readTable(songs))
-              .toList();
-          return PlaylistModel.fromMoor(moorPlaylist, moorSongs);
-        }).toList();
-      },
-    );
+          (moorList) =>
+              moorList.map((moorPlaylist) => PlaylistModel.fromMoor(moorPlaylist)).toList(),
+        );
 
     if (limit != null) {
       if (limit < 0) return [];

@@ -79,6 +79,10 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
       .map((albums) => _sortArtistAlbums(albums));
 
   @override
+  Stream<List<Song>> getPlaylistSongStream(Playlist playlist) =>
+      _playlistDataSource.getPlaylistSongStream(playlist as PlaylistModel);
+
+  @override
   Stream<List<Song>> getSmartListSongStream(SmartList smartList) =>
       _playlistDataSource.getSmartListSongStream(smartList as SmartListModel);
 
@@ -394,7 +398,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
 
   @override
   Future<void> updatePlaylist(Playlist playlist) async {
-    _playlistDataSource.updatePlaylist(playlist as PlaylistModel);
+    _playlistDataSource.updatePlaylist(PlaylistModel.fromPlaylist(playlist));
   }
 
   @override
@@ -439,17 +443,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
 
   @override
   Future<void> updateSmartList(SmartList smartList) {
-    return _playlistDataSource.updateSmartList(
-      SmartListModel(
-        id: smartList.id,
-        name: smartList.name,
-        filter: smartList.filter,
-        orderBy: smartList.orderBy,
-        shuffleMode: smartList.shuffleMode,
-        iconString: smartList.iconString,
-        gradientString: smartList.gradientString,
-      ),
-    );
+    return _playlistDataSource.updateSmartList(SmartListModel.fromSmartList(smartList));
   }
 
   @override

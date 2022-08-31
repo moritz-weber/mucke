@@ -30,6 +30,7 @@ import 'presentation/state/artist_page_store.dart';
 import 'presentation/state/audio_store.dart';
 import 'presentation/state/music_data_store.dart';
 import 'presentation/state/navigation_store.dart';
+import 'presentation/state/play_list_page_store.dart';
 import 'presentation/state/playlist_form_store.dart';
 import 'presentation/state/queue_page_store.dart';
 import 'presentation/state/search_page_store.dart';
@@ -108,6 +109,12 @@ Future<void> setupGetIt() async {
   getIt.registerFactoryParam<PlaylistFormStore, Playlist?, void>(
     (Playlist? playlist, _) => PlaylistFormStore(musicDataRepository: getIt(), playlist: playlist),
   );
+  getIt.registerFactoryParam<PlaylistPageStore, Playlist, void>(
+    (Playlist? playlist, _) => PlaylistPageStore(
+      playlist: playlist!,
+      musicDataInfoRepository: getIt(),
+    ),
+  );
   getIt.registerFactoryParam<SmartListFormStore, SmartList?, void>(
     (SmartList? smartList, _) =>
         SmartListFormStore(musicDataRepository: getIt(), smartList: smartList),
@@ -143,6 +150,7 @@ Future<void> setupGetIt() async {
   );
   getIt.registerLazySingleton<PlayPlaylist>(
     () => PlayPlaylist(
+      getIt(),
       getIt(),
       getIt(),
     ),

@@ -5,13 +5,11 @@ import '../../presentation/gradients.dart';
 import '../../presentation/icons.dart';
 import 'playable.dart';
 import 'shuffle_mode.dart';
-import 'song.dart';
 
 class Playlist extends Equatable implements Playable {
   const Playlist({
     required this.id,
     required this.name,
-    required this.songs,
     required this.iconString,
     required this.gradientString,
     this.shuffleMode,
@@ -19,7 +17,6 @@ class Playlist extends Equatable implements Playable {
 
   final int id;
   final String name;
-  final List<Song> songs;
   final ShuffleMode? shuffleMode;
   final String iconString;
   final String gradientString;
@@ -27,7 +24,7 @@ class Playlist extends Equatable implements Playable {
   Gradient get gradient => CUSTOM_GRADIENTS[gradientString]!;
 
   @override
-  List<Object?> get props => [id, name, iconString, gradientString];
+  List<Object?> get props => [id, name, iconString, gradientString, shuffleMode];
 
   @override
   PlayableType get type => PlayableType.playlist;

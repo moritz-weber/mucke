@@ -172,14 +172,7 @@ class PersistentStateDao extends DatabaseAccessor<MoorDatabase>
         final plId = int.parse(data['id'] as String);
         // TODO: need proper getter for this
         final moorPl = await (select(playlists)..where((tbl) => tbl.id.equals(plId))).getSingle();
-        final moorSongs =
-            await (select(playlistEntries)..where((tbl) => tbl.playlistId.equals(plId)))
-                .join(
-                  [innerJoin(songs, songs.path.equalsExp(playlistEntries.songPath))],
-                )
-                .map((p0) => p0.readTable(songs))
-                .get();
-        return PlaylistModel.fromMoor(moorPl, moorSongs);
+        return PlaylistModel.fromMoor(moorPl);
       case PlayableType.smartlist:
         final slId = int.parse(data['id'] as String);
         final sl = await (select(smartLists)..where((tbl) => tbl.id.equals(slId))).getSingle();

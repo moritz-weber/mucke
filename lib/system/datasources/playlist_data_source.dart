@@ -18,6 +18,7 @@ abstract class PlaylistDataSource {
   Future<void> addSongsToPlaylist(PlaylistModel playlist, List<SongModel> songs);
   Future<void> removeIndex(int playlistId, int index);
   Future<void> moveEntry(int playlistId, int oldIndex, int newIndex);
+  Stream<List<SongModel>> getPlaylistSongStream(PlaylistModel playlist);
   Future<List<PlaylistModel>> searchPlaylists(String searchText, {int? limit});
 
   Stream<List<SmartListModel>> get smartListsStream;
