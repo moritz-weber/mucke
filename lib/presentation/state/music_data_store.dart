@@ -55,7 +55,11 @@ abstract class _MusicDataStore with Store {
   bool isUpdatingDatabase = false;
 
   @observable
-  late ObservableFuture<Album?> albumOfDay = _musicDataRepository.getAlbumOfDay().asObservable();
+  late ObservableStream<Album?> albumOfDay = _musicDataRepository.albumOfDayStream.asObservable();
+
+  @observable
+  late ObservableStream<Artist?> artistOfDay =
+      _musicDataRepository.artistOfDayStream.asObservable();
 
   @action
   Future<void> updateDatabase() async {

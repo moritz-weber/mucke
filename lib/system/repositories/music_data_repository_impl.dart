@@ -28,6 +28,22 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
     this._playlistDataSource,
   ) {
     _musicDataSource.songStream.listen((event) => _songSubject.add(event));
+    _getAlbumOfDay().then((value) => _albumOfDaySubject.add(value));
+    _getArtistOfDay().then((value) => _artistOfDaySubject.add(value));
+    _minuteStream.listen(
+      (event) {
+        _getAlbumOfDay().then((value) {
+          if (value != null) {
+            _albumOfDaySubject.add(value);
+          }
+        });
+        _getArtistOfDay().then((value) {
+          if (value != null) {
+            _artistOfDaySubject.add(value);
+          }
+        });
+      },
+    );
   }
 
   final LocalMusicFetcher _localMusicFetcher;
@@ -36,11 +52,20 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
 
   final BehaviorSubject<Map<String, Song>> _songUpdateSubject = BehaviorSubject();
   final BehaviorSubject<List<Song>> _songSubject = BehaviorSubject();
+  final Stream _minuteStream = Stream.periodic(const Duration(minutes: 1));
+  final BehaviorSubject<Album?> _albumOfDaySubject = BehaviorSubject();
+  final BehaviorSubject<Artist?> _artistOfDaySubject = BehaviorSubject();
 
   static final _log = FimberLog('MusicDataRepositoryImpl');
 
   @override
   Stream<Map<String, Song>> get songUpdateStream => _songUpdateSubject.stream;
+
+  @override
+  ValueStream<Album?> get albumOfDayStream => _albumOfDaySubject.stream;
+
+  @override
+  ValueStream<Artist?> get artistOfDayStream => _artistOfDaySubject.stream;
 
   @override
   Future<Song> getSongByPath(String path) async {
@@ -246,30 +271,6 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   }
 
   @override
-  Future<Album?> getAlbumOfDay() async {
-    final storedAlbum = await _musicDataSource.getAlbumOfDay();
-    if (storedAlbum == null || !_isAlbumValid(storedAlbum)) {
-      final albums = await _musicDataSource.albumStream.first;
-      if (albums.isNotEmpty) {
-        final rng = Random();
-        final index = rng.nextInt(albums.length);
-        _musicDataSource.setAlbumOfDay(AlbumOfDay(albums[index], _day(DateTime.now())));
-        return albums[index];
-      }
-    } else {
-      return storedAlbum.albumModel;
-    }
-  }
-
-  bool _isAlbumValid(AlbumOfDay albumOfDay) {
-    return _day(DateTime.now()).difference(_day(albumOfDay.date)).inDays < 1;
-  }
-
-  DateTime _day(DateTime dateTime) {
-    return DateTime(dateTime.year, dateTime.month, dateTime.day);
-  }
-
-  @override
   Future<List<Album>> searchAlbums(String searchText, {int? limit}) async {
     if (searchText == '') return [];
 
@@ -454,5 +455,41 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   @override
   Future<int?> getAlbumId(String title, String artist, int? year) async {
     return _musicDataSource.getAlbumId(title, artist, year);
+  }
+
+  Future<Album?> _getAlbumOfDay() async {
+    final storedAlbum = await _musicDataSource.getAlbumOfDay();
+    if (storedAlbum == null || !_isSameDay(storedAlbum.date)) {
+      final albums = await _musicDataSource.albumStream.first;
+      if (albums.isNotEmpty) {
+        final rng = Random();
+        final index = rng.nextInt(albums.length);
+        _musicDataSource.setAlbumOfDay(AlbumOfDay(albums[index], _day(DateTime.now())));
+        return albums[index];
+      }
+    }
+    return storedAlbum?.albumModel;
+  }
+
+  Future<Artist?> _getArtistOfDay() async {
+    final storedArtist = await _musicDataSource.getArtistOfDay();
+    if (storedArtist == null || !_isSameDay(storedArtist.date)) {
+      final artists = await _musicDataSource.artistStream.first;
+      if (artists.isNotEmpty) {
+        final rng = Random();
+        final index = rng.nextInt(artists.length);
+        _musicDataSource.setArtistOfDay(ArtistOfDay(artists[index], _day(DateTime.now())));
+        return artists[index];
+      }
+    }
+    return storedArtist?.artistModel;
+  }
+
+  bool _isSameDay(DateTime date) {
+    return _day(DateTime.now()).difference(_day(date)).inDays < 1;
+  }
+
+  DateTime _day(DateTime dateTime) {
+    return DateTime(dateTime.year, dateTime.month, dateTime.day);
   }
 }

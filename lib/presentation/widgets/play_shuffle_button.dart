@@ -12,6 +12,7 @@ class PlayShuffleButton extends StatelessWidget {
     this.shuffleMode,
   }) : super(key: key);
 
+  /// Main icon size will be reduced by 8.
   final double size;
   final ShuffleMode? shuffleMode;
   final Function onPressed;

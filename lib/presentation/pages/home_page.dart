@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../theming.dart';
 import '../widgets/highlight.dart';
+import '../widgets/highlight_artist.dart';
 import '../widgets/shuffle_all_button.dart';
 import '../widgets/smart_lists.dart';
 
@@ -34,6 +35,11 @@ class _HomePageState extends State<HomePage> {
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
                       child: Highlight(),
+                    ),
+                    const SizedBox(height: 12.0),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
+                      child: HighlightArtist(),
                     ),
                     const Padding(
                       padding: EdgeInsets.only(

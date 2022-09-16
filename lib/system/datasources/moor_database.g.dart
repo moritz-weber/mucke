@@ -294,24 +294,29 @@ class $AlbumsTable extends Albums with TableInfo<$AlbumsTable, MoorAlbum> {
 
 class MoorArtist extends DataClass implements Insertable<MoorArtist> {
   final String name;
-  MoorArtist({required this.name});
+  final int id;
+  MoorArtist({required this.name, required this.id});
   factory MoorArtist.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return MoorArtist(
       name: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
     );
   }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['name'] = Variable<String>(name);
+    map['id'] = Variable<int>(id);
     return map;
   }
 
   ArtistsCompanion toCompanion(bool nullToAbsent) {
     return ArtistsCompanion(
       name: Value(name),
+      id: Value(id),
     );
   }
 
@@ -320,6 +325,7 @@ class MoorArtist extends DataClass implements Insertable<MoorArtist> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return MoorArtist(
       name: serializer.fromJson<String>(json['name']),
+      id: serializer.fromJson<int>(json['id']),
     );
   }
   @override
@@ -327,47 +333,56 @@ class MoorArtist extends DataClass implements Insertable<MoorArtist> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'name': serializer.toJson<String>(name),
+      'id': serializer.toJson<int>(id),
     };
   }
 
-  MoorArtist copyWith({String? name}) => MoorArtist(
+  MoorArtist copyWith({String? name, int? id}) => MoorArtist(
         name: name ?? this.name,
+        id: id ?? this.id,
       );
   @override
   String toString() {
     return (StringBuffer('MoorArtist(')
-          ..write('name: $name')
+          ..write('name: $name, ')
+          ..write('id: $id')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => name.hashCode;
+  int get hashCode => Object.hash(name, id);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is MoorArtist && other.name == this.name);
+      (other is MoorArtist && other.name == this.name && other.id == this.id);
 }
 
 class ArtistsCompanion extends UpdateCompanion<MoorArtist> {
   final Value<String> name;
+  final Value<int> id;
   const ArtistsCompanion({
     this.name = const Value.absent(),
+    this.id = const Value.absent(),
   });
   ArtistsCompanion.insert({
     required String name,
+    this.id = const Value.absent(),
   }) : name = Value(name);
   static Insertable<MoorArtist> custom({
     Expression<String>? name,
+    Expression<int>? id,
   }) {
     return RawValuesInsertable({
       if (name != null) 'name': name,
+      if (id != null) 'id': id,
     });
   }
 
-  ArtistsCompanion copyWith({Value<String>? name}) {
+  ArtistsCompanion copyWith({Value<String>? name, Value<int>? id}) {
     return ArtistsCompanion(
       name: name ?? this.name,
+      id: id ?? this.id,
     );
   }
 
@@ -377,13 +392,17 @@ class ArtistsCompanion extends UpdateCompanion<MoorArtist> {
     if (name.present) {
       map['name'] = Variable<String>(name.value);
     }
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
     return map;
   }
 
   @override
   String toString() {
     return (StringBuffer('ArtistsCompanion(')
-          ..write('name: $name')
+          ..write('name: $name, ')
+          ..write('id: $id')
           ..write(')'))
         .toString();
   }
@@ -399,8 +418,13 @@ class $ArtistsTable extends Artists with TableInfo<$ArtistsTable, MoorArtist> {
   late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
       'name', aliasedName, false,
       type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  List<GeneratedColumn> get $columns => [name];
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [name, id];
   @override
   String get aliasedName => _alias ?? 'artists';
   @override
@@ -416,11 +440,14 @@ class $ArtistsTable extends Artists with TableInfo<$ArtistsTable, MoorArtist> {
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {name};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   MoorArtist map(Map<String, dynamic> data, {String? tablePrefix}) {
     return MoorArtist.fromData(data,
@@ -1988,186 +2015,6 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, MoorSong> {
   @override
   $SongsTable createAlias(String alias) {
     return $SongsTable(attachedDatabase, alias);
-  }
-}
-
-class MoorAlbumOfDayData extends DataClass
-    implements Insertable<MoorAlbumOfDayData> {
-  final int albumId;
-  final int milliSecSinceEpoch;
-  MoorAlbumOfDayData({required this.albumId, required this.milliSecSinceEpoch});
-  factory MoorAlbumOfDayData.fromData(Map<String, dynamic> data,
-      {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
-    return MoorAlbumOfDayData(
-      albumId: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}album_id'])!,
-      milliSecSinceEpoch: const IntType().mapFromDatabaseResponse(
-          data['${effectivePrefix}milli_sec_since_epoch'])!,
-    );
-  }
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['album_id'] = Variable<int>(albumId);
-    map['milli_sec_since_epoch'] = Variable<int>(milliSecSinceEpoch);
-    return map;
-  }
-
-  MoorAlbumOfDayCompanion toCompanion(bool nullToAbsent) {
-    return MoorAlbumOfDayCompanion(
-      albumId: Value(albumId),
-      milliSecSinceEpoch: Value(milliSecSinceEpoch),
-    );
-  }
-
-  factory MoorAlbumOfDayData.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return MoorAlbumOfDayData(
-      albumId: serializer.fromJson<int>(json['albumId']),
-      milliSecSinceEpoch: serializer.fromJson<int>(json['milliSecSinceEpoch']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'albumId': serializer.toJson<int>(albumId),
-      'milliSecSinceEpoch': serializer.toJson<int>(milliSecSinceEpoch),
-    };
-  }
-
-  MoorAlbumOfDayData copyWith({int? albumId, int? milliSecSinceEpoch}) =>
-      MoorAlbumOfDayData(
-        albumId: albumId ?? this.albumId,
-        milliSecSinceEpoch: milliSecSinceEpoch ?? this.milliSecSinceEpoch,
-      );
-  @override
-  String toString() {
-    return (StringBuffer('MoorAlbumOfDayData(')
-          ..write('albumId: $albumId, ')
-          ..write('milliSecSinceEpoch: $milliSecSinceEpoch')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(albumId, milliSecSinceEpoch);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is MoorAlbumOfDayData &&
-          other.albumId == this.albumId &&
-          other.milliSecSinceEpoch == this.milliSecSinceEpoch);
-}
-
-class MoorAlbumOfDayCompanion extends UpdateCompanion<MoorAlbumOfDayData> {
-  final Value<int> albumId;
-  final Value<int> milliSecSinceEpoch;
-  const MoorAlbumOfDayCompanion({
-    this.albumId = const Value.absent(),
-    this.milliSecSinceEpoch = const Value.absent(),
-  });
-  MoorAlbumOfDayCompanion.insert({
-    this.albumId = const Value.absent(),
-    required int milliSecSinceEpoch,
-  }) : milliSecSinceEpoch = Value(milliSecSinceEpoch);
-  static Insertable<MoorAlbumOfDayData> custom({
-    Expression<int>? albumId,
-    Expression<int>? milliSecSinceEpoch,
-  }) {
-    return RawValuesInsertable({
-      if (albumId != null) 'album_id': albumId,
-      if (milliSecSinceEpoch != null)
-        'milli_sec_since_epoch': milliSecSinceEpoch,
-    });
-  }
-
-  MoorAlbumOfDayCompanion copyWith(
-      {Value<int>? albumId, Value<int>? milliSecSinceEpoch}) {
-    return MoorAlbumOfDayCompanion(
-      albumId: albumId ?? this.albumId,
-      milliSecSinceEpoch: milliSecSinceEpoch ?? this.milliSecSinceEpoch,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (albumId.present) {
-      map['album_id'] = Variable<int>(albumId.value);
-    }
-    if (milliSecSinceEpoch.present) {
-      map['milli_sec_since_epoch'] = Variable<int>(milliSecSinceEpoch.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('MoorAlbumOfDayCompanion(')
-          ..write('albumId: $albumId, ')
-          ..write('milliSecSinceEpoch: $milliSecSinceEpoch')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $MoorAlbumOfDayTable extends MoorAlbumOfDay
-    with TableInfo<$MoorAlbumOfDayTable, MoorAlbumOfDayData> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $MoorAlbumOfDayTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _albumIdMeta = const VerificationMeta('albumId');
-  @override
-  late final GeneratedColumn<int?> albumId = GeneratedColumn<int?>(
-      'album_id', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: false);
-  final VerificationMeta _milliSecSinceEpochMeta =
-      const VerificationMeta('milliSecSinceEpoch');
-  @override
-  late final GeneratedColumn<int?> milliSecSinceEpoch = GeneratedColumn<int?>(
-      'milli_sec_since_epoch', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
-  @override
-  List<GeneratedColumn> get $columns => [albumId, milliSecSinceEpoch];
-  @override
-  String get aliasedName => _alias ?? 'moor_album_of_day';
-  @override
-  String get actualTableName => 'moor_album_of_day';
-  @override
-  VerificationContext validateIntegrity(Insertable<MoorAlbumOfDayData> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('album_id')) {
-      context.handle(_albumIdMeta,
-          albumId.isAcceptableOrUnknown(data['album_id']!, _albumIdMeta));
-    }
-    if (data.containsKey('milli_sec_since_epoch')) {
-      context.handle(
-          _milliSecSinceEpochMeta,
-          milliSecSinceEpoch.isAcceptableOrUnknown(
-              data['milli_sec_since_epoch']!, _milliSecSinceEpochMeta));
-    } else if (isInserting) {
-      context.missing(_milliSecSinceEpochMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {albumId};
-  @override
-  MoorAlbumOfDayData map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return MoorAlbumOfDayData.fromData(data,
-        prefix: tablePrefix != null ? '$tablePrefix.' : null);
-  }
-
-  @override
-  $MoorAlbumOfDayTable createAlias(String alias) {
-    return $MoorAlbumOfDayTable(attachedDatabase, alias);
   }
 }
 
@@ -3857,7 +3704,6 @@ abstract class _$MoorDatabase extends GeneratedDatabase {
   late final $AvailableSongEntriesTable availableSongEntries =
       $AvailableSongEntriesTable(this);
   late final $SongsTable songs = $SongsTable(this);
-  late final $MoorAlbumOfDayTable moorAlbumOfDay = $MoorAlbumOfDayTable(this);
   late final $SmartListsTable smartLists = $SmartListsTable(this);
   late final $SmartListArtistsTable smartListArtists =
       $SmartListArtistsTable(this);
@@ -3881,7 +3727,6 @@ abstract class _$MoorDatabase extends GeneratedDatabase {
         queueEntries,
         availableSongEntries,
         songs,
-        moorAlbumOfDay,
         smartLists,
         smartListArtists,
         playlists,

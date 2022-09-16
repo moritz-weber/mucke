@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:audiotagger/audiotagger.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -43,13 +44,17 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     final List<AlbumModel> albums = [];
     final Map<String, int> albumIdMap = {};
     final Map<String, String> albumArtMap = {};
-    final List<ArtistModel> artists = [];
-    final Set<String> artistSet = {};
+    final Set<ArtistModel> artistSet = {};
 
     final albumsInDb = (await _musicDataSource.albumStream.first)
       ..sort((a, b) => a.id.compareTo(b.id));
     int newAlbumId = albumsInDb.isNotEmpty ? albumsInDb.last.id + 1 : 0;
     _log.d('New albums start with id: $newAlbumId');
+
+    final artistsInDb = (await _musicDataSource.artistStream.first)
+      ..sort((a, b) => a.id.compareTo(b.id));
+    int newArtistId = artistsInDb.isNotEmpty ? artistsInDb.last.id + 1 : 0;
+    _log.d('New artists start with id: $newArtistId');
 
     final Directory dir = await getApplicationSupportDirectory();
 
@@ -74,7 +79,8 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
             albums.add(album);
             albumIdMap[albumString] = album.id;
             if (album.albumArtPath != null) albumArtMap[albumString] = album.albumArtPath!;
-            artistSet.add(album.artist);
+            final artist = artistsInDb.singleWhere((a) => a.name == album.artist);
+            artistSet.add(artist);
           } else {
             // we already encountered the album (at least by albumString)
             // make sure the id is consistent
@@ -107,7 +113,10 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
         // we haven't seen an album with these properties in the files yet, but there might be an entry in the database
         // in this case, we should use the corresponding ID
         albumId ??= await _musicDataSource.getAlbumId(
-                tags.album, tags.albumArtist, int.tryParse(tags.year ?? '')) ??
+              tags.album,
+              tags.albumArtist,
+              int.tryParse(tags.year ?? ''),
+            ) ??
             newAlbumId++;
         albumIdMap[albumString] = albumId;
 
@@ -120,12 +129,24 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
           albumArtMap[albumString] = albumArtPath;
         }
 
+        final String albumArtist = tags.albumArtist ?? '';
+        final String songArtist = tags.artist ?? '';
+        final String artistName = albumArtist != '' ? albumArtist : (songArtist != '' ? songArtist : DEF_ARTIST);
+
+        final artist = artistsInDb.firstWhereOrNull((a) => a.name == artistName);
+        if (artist != null) {
+          artistSet.add(artist);
+        } else if (artistSet.firstWhereOrNull((a) => a.name == artistName) == null) {
+          // artist is also not in the set already
+          artistSet.add(ArtistModel(name: artistName, id: newArtistId++));
+        }
+
+
+
+
         albums.add(
           AlbumModel.fromAudiotagger(albumId: albumId, tag: tags, albumArtPath: albumArtPath),
         );
-        final String albumArtist = tags.albumArtist ?? '';
-        final String artist = tags.artist ?? '';
-        artistSet.add(albumArtist != '' ? albumArtist : (artist != '' ? artist : DEF_ARTIST));
       } else {
         // an album with the same properties is already stored in the list
         // use it's ID regardless of the old one stored in the songModel
@@ -145,14 +166,10 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
       );
     }
 
-    for (final artist in artistSet) {
-      artists.add(ArtistModel(name: artist));
-    }
-
     return {
       'SONGS': songs,
       'ALBUMS': albums,
-      'ARTISTS': artists,
+      'ARTISTS': artistSet.toList(),
     };
   }
 }
