@@ -34,8 +34,7 @@ class ArtistOfDay {
   final ArtistModel artistModel;
   final DateTime date;
 
-  @override
-  String toString() {
-    return '{"name": "${artistModel.name}", "date": ${date.millisecondsSinceEpoch}}';
+  String toJSON() {
+    return '{"id": ${artistModel.id}, "date": ${date.millisecondsSinceEpoch}}';
   }
 }

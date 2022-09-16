@@ -79,4 +79,8 @@ class AlbumOfDay {
 
   final AlbumModel albumModel;
   final DateTime date;
+
+  String toJSON() {
+    return '{"id": ${albumModel.id}, "date": ${date.millisecondsSinceEpoch}}';
+  }
 }

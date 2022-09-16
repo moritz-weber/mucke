@@ -3,11 +3,15 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../domain/entities/artist.dart';
+import '../../domain/entities/shuffle_mode.dart';
+import '../gradients.dart';
 import '../pages/artist_details_page.dart';
 import '../state/audio_store.dart';
 import '../state/music_data_store.dart';
 import '../state/navigation_store.dart';
 import '../theming.dart';
+import 'play_shuffle_button.dart';
+import 'playlist_cover.dart';
 
 class HighlightArtist extends StatelessWidget {
   const HighlightArtist({Key? key}) : super(key: key);
@@ -50,24 +54,11 @@ class HighlightArtist extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      width: 100.0,
-                      child: AspectRatio(
-                        aspectRatio: 1,
-                        child: Container(
-                          clipBehavior: Clip.antiAlias,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(2.0),
-                            boxShadow: const [
-                              BoxShadow(color: Colors.black54, blurRadius: 4, offset: Offset(0, 0), spreadRadius: -1),
-                            ],
-                          ),
-                          // child: Image(
-                          //   image: getAlbumImage(artist.albumArtPath),
-                          //   fit: BoxFit.cover,
-                          // ),
-                        ),
-                      ),
+                    child: PlaylistCover(
+                      gradient: CUSTOM_GRADIENTS['kashmir']!,
+                      icon: Icons.person_rounded,
+                      size: 100.0,
+                      circle: true,
                     ),
                   ),
                   Expanded(
@@ -93,15 +84,12 @@ class HighlightArtist extends StatelessWidget {
                       ),
                     ),
                   ),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.play_circle_fill_rounded,
-                      size: 48.0,
-                    ),
-                    iconSize: 48.0,
-                    onPressed: () => {}, //audioStore.playArtist(artist),
-                    splashRadius: 28.0,
+                  PlayShuffleButton(
+                    onPressed: () => audioStore.shuffleArtist(artist),
+                    size: 56.0,
+                    shuffleMode: ShuffleMode.plus,
                   ),
+                  const SizedBox(width: 4.0),
                 ],
               ),
             ),

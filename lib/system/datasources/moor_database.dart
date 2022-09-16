@@ -104,14 +104,6 @@ class LibraryFolders extends Table {
   TextColumn get path => text()();
 }
 
-class MoorAlbumOfDay extends Table {
-  IntColumn get albumId => integer()();
-  IntColumn get milliSecSinceEpoch => integer()();
-
-  @override
-  Set<Column> get primaryKey => {albumId};
-}
-
 @DataClassName('MoorSmartList')
 class SmartLists extends Table {
   IntColumn get id => integer().autoIncrement()();
@@ -168,7 +160,6 @@ class PlaylistEntries extends Table {
     QueueEntries,
     AvailableSongEntries,
     Songs,
-    MoorAlbumOfDay,
     SmartLists,
     SmartListArtists,
     Playlists,
@@ -254,7 +245,6 @@ class MoorDatabase extends _$MoorDatabase {
             await m.alterTable(TableMigration(playlists));
           }
           if (from < 7) {
-            await m.addColumn(artists, artists.id);
             await m.alterTable(
               TableMigration(artists, columnTransformer: {
                 artists.id: artists.rowId,

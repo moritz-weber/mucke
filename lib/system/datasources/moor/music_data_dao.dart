@@ -13,7 +13,7 @@ import '../music_data_source_contract.dart';
 part 'music_data_dao.g.dart';
 
 @DriftAccessor(
-    tables: [Albums, Artists, Songs, MoorAlbumOfDay, Playlists, PlaylistEntries, KeyValueEntries])
+    tables: [Albums, Artists, Songs, Playlists, PlaylistEntries, KeyValueEntries])
 class MusicDataDao extends DatabaseAccessor<MoorDatabase>
     with _$MusicDataDaoMixin
     implements MusicDataSource {
@@ -189,33 +189,36 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
 
   @override
   Future<AlbumOfDay?> getAlbumOfDay() async {
-    final query = select(moorAlbumOfDay)
-        .join([innerJoin(albums, albums.id.equalsExp(moorAlbumOfDay.albumId))]);
+    final value = await (select(keyValueEntries)..where((tbl) => tbl.key.equals(ALBUM_OF_DAY)))
+        .getSingleOrNull()
+        .then((entry) => entry?.value);
 
-    return (query..limit(1)).getSingleOrNull().then(
-      (result) {
-        if (result == null) return null;
-        return AlbumOfDay(
-          AlbumModel.fromMoor(result.readTable(albums)),
-          DateTime.fromMillisecondsSinceEpoch(
-            result.readTable(moorAlbumOfDay).milliSecSinceEpoch,
-          ),
-        );
-      },
-    );
+    if (value == null) {
+      return null;
+    }
+
+    final dict = jsonDecode(value) as Map;
+
+    final int id = dict['id'] as int;
+    final int millisecondsSinceEpoch = dict['date'] as int;
+
+    final AlbumModel? album = await (select(albums)..where((tbl) => tbl.id.equals(id)))
+        .getSingleOrNull()
+        .then((value) => value == null ? null : AlbumModel.fromMoor(value));
+
+    if (album == null) return null;
+
+    return AlbumOfDay(album, DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch));
   }
 
   @override
   Future<void> setAlbumOfDay(AlbumOfDay albumOfDay) async {
-    transaction(() async {
-      await delete(moorAlbumOfDay).go();
-      await into(moorAlbumOfDay).insert(
-        MoorAlbumOfDayCompanion(
-          albumId: Value(albumOfDay.albumModel.id),
-          milliSecSinceEpoch: Value(albumOfDay.date.millisecondsSinceEpoch),
-        ),
-      );
-    });
+    await into(keyValueEntries).insertOnConflictUpdate(
+      KeyValueEntriesCompanion(
+        key: const Value(ALBUM_OF_DAY),
+        value: Value(albumOfDay.toJSON()),
+      ),
+    );
   }
 
   @override
@@ -228,11 +231,12 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
       return null;
     }
 
-    final dict = jsonDecode(value);
-    final String name = dict['name'] as String;
+    final dict = jsonDecode(value) as Map;
+
+    final int id = dict['id'] as int;
     final int millisecondsSinceEpoch = dict['date'] as int;
 
-    final ArtistModel? artist = await (select(artists)..where((tbl) => tbl.name.equals(name)))
+    final ArtistModel? artist = await (select(artists)..where((tbl) => tbl.id.equals(id)))
         .getSingleOrNull()
         .then((value) => value == null ? null : ArtistModel.fromMoor(value));
 
@@ -246,7 +250,7 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
     await into(keyValueEntries).insertOnConflictUpdate(
       KeyValueEntriesCompanion(
         key: const Value(ARTIST_OF_DAY),
-        value: Value(artistOfDay.toString()),
+        value: Value(artistOfDay.toJSON()),
       ),
     );
   }
