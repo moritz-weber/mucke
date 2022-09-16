@@ -1,3 +1,5 @@
+import 'package:rxdart/rxdart.dart';
+
 import '../entities/album.dart';
 import '../entities/artist.dart';
 import '../entities/playlist.dart';
@@ -28,10 +30,11 @@ abstract class MusicDataInfoRepository {
   Stream<List<Album>> get albumStream;
   Stream<List<Album>> getArtistAlbumStream(Artist artist);
   Future<int?> getAlbumId(String title, String artist, int? year);
-  // TODO: make this a stream? or call everytime on home screen?
-  Future<Album?> getAlbumOfDay();
 
   Stream<List<Artist>> get artistStream;
+
+  ValueStream<Album?> get albumOfDayStream;
+  ValueStream<Artist?> get artistOfDayStream;
 
   Future<List<Artist>> searchArtists(String searchText, {int? limit});
   Future<List<Album>> searchAlbums(String searchText, {int? limit});

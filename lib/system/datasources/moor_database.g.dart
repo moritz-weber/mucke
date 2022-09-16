@@ -294,24 +294,29 @@ class $AlbumsTable extends Albums with TableInfo<$AlbumsTable, MoorAlbum> {
 
 class MoorArtist extends DataClass implements Insertable<MoorArtist> {
   final String name;
-  MoorArtist({required this.name});
+  final int id;
+  MoorArtist({required this.name, required this.id});
   factory MoorArtist.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return MoorArtist(
       name: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
     );
   }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['name'] = Variable<String>(name);
+    map['id'] = Variable<int>(id);
     return map;
   }
 
   ArtistsCompanion toCompanion(bool nullToAbsent) {
     return ArtistsCompanion(
       name: Value(name),
+      id: Value(id),
     );
   }
 
@@ -320,6 +325,7 @@ class MoorArtist extends DataClass implements Insertable<MoorArtist> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return MoorArtist(
       name: serializer.fromJson<String>(json['name']),
+      id: serializer.fromJson<int>(json['id']),
     );
   }
   @override
@@ -327,47 +333,56 @@ class MoorArtist extends DataClass implements Insertable<MoorArtist> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'name': serializer.toJson<String>(name),
+      'id': serializer.toJson<int>(id),
     };
   }
 
-  MoorArtist copyWith({String? name}) => MoorArtist(
+  MoorArtist copyWith({String? name, int? id}) => MoorArtist(
         name: name ?? this.name,
+        id: id ?? this.id,
       );
   @override
   String toString() {
     return (StringBuffer('MoorArtist(')
-          ..write('name: $name')
+          ..write('name: $name, ')
+          ..write('id: $id')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => name.hashCode;
+  int get hashCode => Object.hash(name, id);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is MoorArtist && other.name == this.name);
+      (other is MoorArtist && other.name == this.name && other.id == this.id);
 }
 
 class ArtistsCompanion extends UpdateCompanion<MoorArtist> {
   final Value<String> name;
+  final Value<int> id;
   const ArtistsCompanion({
     this.name = const Value.absent(),
+    this.id = const Value.absent(),
   });
   ArtistsCompanion.insert({
     required String name,
+    this.id = const Value.absent(),
   }) : name = Value(name);
   static Insertable<MoorArtist> custom({
     Expression<String>? name,
+    Expression<int>? id,
   }) {
     return RawValuesInsertable({
       if (name != null) 'name': name,
+      if (id != null) 'id': id,
     });
   }
 
-  ArtistsCompanion copyWith({Value<String>? name}) {
+  ArtistsCompanion copyWith({Value<String>? name, Value<int>? id}) {
     return ArtistsCompanion(
       name: name ?? this.name,
+      id: id ?? this.id,
     );
   }
 
@@ -377,13 +392,17 @@ class ArtistsCompanion extends UpdateCompanion<MoorArtist> {
     if (name.present) {
       map['name'] = Variable<String>(name.value);
     }
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
     return map;
   }
 
   @override
   String toString() {
     return (StringBuffer('ArtistsCompanion(')
-          ..write('name: $name')
+          ..write('name: $name, ')
+          ..write('id: $id')
           ..write(')'))
         .toString();
   }
@@ -399,8 +418,13 @@ class $ArtistsTable extends Artists with TableInfo<$ArtistsTable, MoorArtist> {
   late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
       'name', aliasedName, false,
       type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  List<GeneratedColumn> get $columns => [name];
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [name, id];
   @override
   String get aliasedName => _alias ?? 'artists';
   @override
@@ -416,11 +440,14 @@ class $ArtistsTable extends Artists with TableInfo<$ArtistsTable, MoorArtist> {
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {name};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   MoorArtist map(Map<String, dynamic> data, {String? tablePrefix}) {
     return MoorArtist.fromData(data,

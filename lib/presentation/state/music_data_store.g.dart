@@ -109,15 +109,31 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
       Atom(name: '_MusicDataStore.albumOfDay', context: context);
 
   @override
-  ObservableFuture<Album?> get albumOfDay {
+  ObservableStream<Album?> get albumOfDay {
     _$albumOfDayAtom.reportRead();
     return super.albumOfDay;
   }
 
   @override
-  set albumOfDay(ObservableFuture<Album?> value) {
+  set albumOfDay(ObservableStream<Album?> value) {
     _$albumOfDayAtom.reportWrite(value, super.albumOfDay, () {
       super.albumOfDay = value;
+    });
+  }
+
+  late final _$artistOfDayAtom =
+      Atom(name: '_MusicDataStore.artistOfDay', context: context);
+
+  @override
+  ObservableStream<Artist?> get artistOfDay {
+    _$artistOfDayAtom.reportRead();
+    return super.artistOfDay;
+  }
+
+  @override
+  set artistOfDay(ObservableStream<Artist?> value) {
+    _$artistOfDayAtom.reportWrite(value, super.artistOfDay, () {
+      super.artistOfDay = value;
     });
   }
 
@@ -138,7 +154,8 @@ artistStream: ${artistStream},
 playlistsStream: ${playlistsStream},
 smartListsStream: ${smartListsStream},
 isUpdatingDatabase: ${isUpdatingDatabase},
-albumOfDay: ${albumOfDay}
+albumOfDay: ${albumOfDay},
+artistOfDay: ${artistOfDay}
     ''';
   }
 }

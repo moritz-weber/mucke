@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
 
+import '../../../constants.dart';
 import '../../models/album_model.dart';
 import '../../models/artist_model.dart';
 import '../../models/song_model.dart';
@@ -9,7 +12,8 @@ import '../music_data_source_contract.dart';
 
 part 'music_data_dao.g.dart';
 
-@DriftAccessor(tables: [Albums, Artists, Songs, MoorAlbumOfDay, Playlists, PlaylistEntries])
+@DriftAccessor(
+    tables: [Albums, Artists, Songs, MoorAlbumOfDay, Playlists, PlaylistEntries, KeyValueEntries])
 class MusicDataDao extends DatabaseAccessor<MoorDatabase>
     with _$MusicDataDaoMixin
     implements MusicDataSource {
@@ -212,6 +216,39 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
         ),
       );
     });
+  }
+
+  @override
+  Future<ArtistOfDay?> getArtistOfDay() async {
+    final value = await (select(keyValueEntries)..where((tbl) => tbl.key.equals(ARTIST_OF_DAY)))
+        .getSingleOrNull()
+        .then((entry) => entry?.value);
+
+    if (value == null) {
+      return null;
+    }
+
+    final dict = jsonDecode(value);
+    final String name = dict['name'] as String;
+    final int millisecondsSinceEpoch = dict['date'] as int;
+
+    final ArtistModel? artist = await (select(artists)..where((tbl) => tbl.name.equals(name)))
+        .getSingleOrNull()
+        .then((value) => value == null ? null : ArtistModel.fromMoor(value));
+
+    if (artist == null) return null;
+
+    return ArtistOfDay(artist, DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch));
+  }
+
+  @override
+  Future<void> setArtistOfDay(ArtistOfDay artistOfDay) async {
+    await into(keyValueEntries).insertOnConflictUpdate(
+      KeyValueEntriesCompanion(
+        key: const Value(ARTIST_OF_DAY),
+        value: Value(artistOfDay.toString()),
+      ),
+    );
   }
 
   @override

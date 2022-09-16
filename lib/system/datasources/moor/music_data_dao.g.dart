@@ -13,4 +13,5 @@ mixin _$MusicDataDaoMixin on DatabaseAccessor<MoorDatabase> {
   $MoorAlbumOfDayTable get moorAlbumOfDay => attachedDatabase.moorAlbumOfDay;
   $PlaylistsTable get playlists => attachedDatabase.playlists;
   $PlaylistEntriesTable get playlistEntries => attachedDatabase.playlistEntries;
+  $KeyValueEntriesTable get keyValueEntries => attachedDatabase.keyValueEntries;
 }

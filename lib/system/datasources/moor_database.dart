@@ -22,9 +22,10 @@ const String MOOR_ISOLATE = 'MOOR_ISOLATE';
 @DataClassName('MoorArtist')
 class Artists extends Table {
   TextColumn get name => text()();
+  IntColumn get id => integer()();
 
   @override
-  Set<Column> get primaryKey => {name};
+  Set<Column> get primaryKey => {id};
 }
 
 @DataClassName('MoorAlbum')
@@ -192,65 +193,76 @@ class MoorDatabase extends _$MoorDatabase {
   MoorDatabase.connect(DatabaseConnection connection) : super.connect(connection);
 
   @override
-  int get schemaVersion => 6;
+  int get schemaVersion => 7;
 
   @override
-  MigrationStrategy get migration => MigrationStrategy(beforeOpen: (details) async {
-        if (details.wasCreated) {
-          await into(keyValueEntries).insert(
-            const KeyValueEntriesCompanion(key: Value(PERSISTENT_INDEX), value: Value('0')),
-          );
-          await into(keyValueEntries).insert(
-            const KeyValueEntriesCompanion(key: Value(PERSISTENT_LOOPMODE), value: Value('0')),
-          );
-          await into(keyValueEntries).insert(
-            const KeyValueEntriesCompanion(key: Value(PERSISTENT_SHUFFLEMODE), value: Value('0')),
-          );
-          final Map initialPlayable = {
-            'id': '',
-            'type': PlayableType.all.toString(),
-          };
-          await into(keyValueEntries).insert(
-            KeyValueEntriesCompanion(
-              key: const Value(PERSISTENT_PLAYABLE),
-              value: Value(jsonEncode(initialPlayable)),
-            ),
-          );
-        }
-      }, onUpgrade: (Migrator m, int from, int to) async {
-        print('$from -> $to');
-        if (from < 2) {
-          await m.addColumn(smartLists, smartLists.blockLevel);
-          await m.alterTable(TableMigration(smartLists));
-        }
-        if (from < 3) {
-          await m.addColumn(songs, songs.lastModified);
-          await m.alterTable(
-            TableMigration(songs, columnTransformer: {
-              songs.lastModified: Constant(DateTime.fromMillisecondsSinceEpoch(0)),
-            }),
-          );
-        }
-        if (from < 4) {
-          await m.alterTable(
-            TableMigration(songs, columnTransformer: {
-              songs.previous: const Constant(false),
-              songs.next: const Constant(false),
-            }),
-          );
-        }
-        if (from < 5) {
-          await m.addColumn(smartLists, smartLists.icon);
-          await m.addColumn(smartLists, smartLists.gradient);
-          await m.alterTable(TableMigration(smartLists));
-        }
-        if (from < 6) {
-          await m.addColumn(playlists, playlists.shuffleMode);
-          await m.addColumn(playlists, playlists.icon);
-          await m.addColumn(playlists, playlists.gradient);
-          await m.alterTable(TableMigration(playlists));
-        }
-      });
+  MigrationStrategy get migration => MigrationStrategy(
+        beforeOpen: (details) async {
+          if (details.wasCreated) {
+            await into(keyValueEntries).insert(
+              const KeyValueEntriesCompanion(key: Value(PERSISTENT_INDEX), value: Value('0')),
+            );
+            await into(keyValueEntries).insert(
+              const KeyValueEntriesCompanion(key: Value(PERSISTENT_LOOPMODE), value: Value('0')),
+            );
+            await into(keyValueEntries).insert(
+              const KeyValueEntriesCompanion(key: Value(PERSISTENT_SHUFFLEMODE), value: Value('0')),
+            );
+            final Map initialPlayable = {
+              'id': '',
+              'type': PlayableType.all.toString(),
+            };
+            await into(keyValueEntries).insert(
+              KeyValueEntriesCompanion(
+                key: const Value(PERSISTENT_PLAYABLE),
+                value: Value(jsonEncode(initialPlayable)),
+              ),
+            );
+          }
+        },
+        onUpgrade: (Migrator m, int from, int to) async {
+          print('$from -> $to');
+          if (from < 2) {
+            await m.addColumn(smartLists, smartLists.blockLevel);
+            await m.alterTable(TableMigration(smartLists));
+          }
+          if (from < 3) {
+            await m.addColumn(songs, songs.lastModified);
+            await m.alterTable(
+              TableMigration(songs, columnTransformer: {
+                songs.lastModified: Constant(DateTime.fromMillisecondsSinceEpoch(0)),
+              }),
+            );
+          }
+          if (from < 4) {
+            await m.alterTable(
+              TableMigration(songs, columnTransformer: {
+                songs.previous: const Constant(false),
+                songs.next: const Constant(false),
+              }),
+            );
+          }
+          if (from < 5) {
+            await m.addColumn(smartLists, smartLists.icon);
+            await m.addColumn(smartLists, smartLists.gradient);
+            await m.alterTable(TableMigration(smartLists));
+          }
+          if (from < 6) {
+            await m.addColumn(playlists, playlists.shuffleMode);
+            await m.addColumn(playlists, playlists.icon);
+            await m.addColumn(playlists, playlists.gradient);
+            await m.alterTable(TableMigration(playlists));
+          }
+          if (from < 7) {
+            await m.addColumn(artists, artists.id);
+            await m.alterTable(
+              TableMigration(artists, columnTransformer: {
+                artists.id: artists.rowId,
+              }),
+            );
+          }
+        },
+      );
 }
 
 LazyDatabase _openConnection() {
