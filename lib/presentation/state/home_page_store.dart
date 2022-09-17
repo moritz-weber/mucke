@@ -21,4 +21,13 @@ abstract class _HomePageStore with Store {
   @observable
   late ObservableStream<List<HomeWidget>> homeWidgetsStream =
       _homeWidgetRepository.homeWidgetsStream.asObservable();
+
+  Future<void> moveHomeWidget(int oldPosition, int newPosition) =>
+      _homeWidgetRepository.moveHomeWidget(oldPosition, newPosition);
+
+  Future<void> addHomeWidget(HomeWidget homeWidget) =>
+      _homeWidgetRepository.insertHomeWidget(homeWidget);
+
+  Future<void> removeHomeWidget(HomeWidget homeWidget) =>
+      _homeWidgetRepository.removeHomeWidget(homeWidget);
 }

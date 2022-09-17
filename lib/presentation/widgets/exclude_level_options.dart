@@ -22,7 +22,7 @@ class ExcludeLevelOptions extends StatelessWidget {
     final lvl = _commonBlockLevel(songs);
 
     return Container(
-      color: Colors.white10,
+      // color: Colors.white10,
       child: Padding(
         padding: const EdgeInsets.only(
           left: HORIZONTAL_PADDING - 12,

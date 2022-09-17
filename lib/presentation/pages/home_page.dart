@@ -6,11 +6,13 @@ import '../../domain/entities/home_widgets/artist_of_day.dart';
 import '../../domain/entities/home_widgets/home_widget.dart';
 import '../../domain/entities/home_widgets/shuffle_all.dart';
 import '../state/home_page_store.dart';
+import '../state/navigation_store.dart';
 import '../theming.dart';
 import '../widgets/highlight_album.dart';
 import '../widgets/highlight_artist.dart';
 import '../widgets/shuffle_all_button.dart';
 import '../widgets/smart_lists.dart';
+import 'home_settings_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -23,6 +25,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final store = GetIt.I<HomePageStore>();
+    final NavigationStore navStore = GetIt.I<NavigationStore>();
 
     print('HomePage.build');
     return SafeArea(
@@ -31,6 +34,15 @@ class _HomePageState extends State<HomePage> {
           title: const Text(
             'Home',
           ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.edit_rounded),
+              onPressed: () => navStore.push(
+                context,
+                MaterialPageRoute(builder: (context) => const HomeSettingsPage()),
+              ),
+            ),
+          ],
         ),
         body: Observer(
           builder: (context) {

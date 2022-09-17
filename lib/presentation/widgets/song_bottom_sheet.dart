@@ -83,7 +83,7 @@ class _SongBottomSheetState extends State<SongBottomSheet> {
       final options = [
         const SizedBox.shrink(),
         Container(
-          color: Colors.white10,
+          // color: DARK3,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -95,7 +95,7 @@ class _SongBottomSheetState extends State<SongBottomSheet> {
                   contentPadding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
                 ),
               ),
-              Container(width: 1.0, height: 24.0, color: Colors.white38),
+              Container(width: 1.0, height: 24.0, color: DARK2),
               Expanded(
                 child: SwitchListTile(
                   title: const Text('Next'),
@@ -111,47 +111,54 @@ class _SongBottomSheetState extends State<SongBottomSheet> {
       ];
 
       final List<Widget> widgets = [
-        Padding(
-          padding: const EdgeInsets.all(HORIZONTAL_PADDING),
-          child: Row(
-            children: [
-              Container(
-                width: 64.0,
-                height: 64.0,
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(2.0),
-                  boxShadow: const [
-                    BoxShadow(color: Colors.black26, blurRadius: 8, offset: Offset(0, 1)),
-                  ],
-                  image: DecorationImage(
-                    image: utils.getAlbumImage(song.albumArtPath),
-                    fit: BoxFit.fill,
+        Container(
+          color: DARK2,
+          child: Padding(
+            padding: const EdgeInsets.all(HORIZONTAL_PADDING),
+            child: Row(
+              children: [
+                Container(
+                  width: 64.0,
+                  height: 64.0,
+                  clipBehavior: Clip.antiAlias,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(2.0),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 8,
+                        offset: Offset(0, 1),
+                      ),
+                    ],
+                    image: DecorationImage(
+                      image: utils.getAlbumImage(song.albumArtPath),
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 12.0),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      song.title,
-                      style: TEXT_HEADER_S,
-                    ),
-                    const SizedBox(height: 4.0),
-                    Text(
-                      '#${song.trackNumber} • ${utils.msToTimeString(song.duration)} • ${song.year}',
-                      style: TEXT_SMALL_SUBTITLE,
-                    ),
-                    Text(
-                      'played: ${song.playCount} • skipped: ${song.skipCount}',
-                      style: TEXT_SMALL_SUBTITLE,
-                    ),
-                  ],
-                ),
-              )
-            ],
+                const SizedBox(width: 12.0),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        song.title,
+                        style: TEXT_HEADER_S,
+                      ),
+                      const SizedBox(height: 4.0),
+                      Text(
+                        '#${song.trackNumber} • ${utils.msToTimeString(song.duration)} • ${song.year}',
+                        style: TEXT_SMALL_SUBTITLE,
+                      ),
+                      Text(
+                        'played: ${song.playCount} • skipped: ${song.skipCount}',
+                        style: TEXT_SMALL_SUBTITLE,
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
         ListTile(

@@ -30,15 +30,40 @@ class HomeWidgetDao extends DatabaseAccessor<MoorDatabase>
   }
 
   @override
-  Future<void> moveHomeWidget(int oldPosition, int newPosition) {
-    // TODO: implement moveHomeWidget
-    throw UnimplementedError();
+  Future<void> moveHomeWidget(int oldPosition, int newPosition) async {
+    if (oldPosition != newPosition) {
+      transaction(() async {
+        await (update(homeWidgets)..where((tbl) => tbl.position.equals(oldPosition)))
+            .write(const HomeWidgetsCompanion(position: Value(-1)));
+        if (oldPosition < newPosition) {
+          for (int i = oldPosition + 1; i <= newPosition; i++) {
+            await (update(homeWidgets)..where((tbl) => tbl.position.equals(i)))
+                .write(HomeWidgetsCompanion(position: Value(i - 1)));
+          }
+        } else {
+          for (int i = oldPosition - 1; i >= newPosition; i--) {
+            await (update(homeWidgets)..where((tbl) => tbl.position.equals(i)))
+                .write(HomeWidgetsCompanion(position: Value(i + 1)));
+          }
+        }
+        await (update(homeWidgets)..where((tbl) => tbl.position.equals(-1)))
+            .write(HomeWidgetsCompanion(position: Value(newPosition)));
+      });
+    }
   }
 
   @override
-  Future<void> removeHomeWidget(HomeWidgetModel homeWidget) {
-    // TODO: implement removeHomeWidget
-    throw UnimplementedError();
+  Future<void> removeHomeWidget(HomeWidgetModel homeWidget) async {
+    final entries = await select(homeWidgets).get();
+    final count = entries.length;
+
+    transaction(() async {
+      await (delete(homeWidgets)..where((tbl) => tbl.position.equals(homeWidget.position))).go();
+      for (int i = homeWidget.position + 1; i < count; i++) {
+        await (update(homeWidgets)..where((tbl) => tbl.position.equals(i)))
+            .write(HomeWidgetsCompanion(position: Value(i - 1)));
+      }
+    });
   }
 
   @override
