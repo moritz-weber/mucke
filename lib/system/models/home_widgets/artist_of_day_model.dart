@@ -32,7 +32,7 @@ class HomeArtistOfDayModel extends HomeArtistOfDay implements HomeWidgetModel {
 
   @override
   HomeWidgetsCompanion toMoor() {
-    final data = '{"shuffleMode": $shuffleMode}';
+    final data = '{"shuffleMode": "$shuffleMode"}';
     return HomeWidgetsCompanion(
       position: Value(position),
       type: Value(type.toString()),

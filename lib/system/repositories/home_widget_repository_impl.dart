@@ -4,7 +4,9 @@ import '../../domain/entities/home_widgets/home_widget.dart';
 import '../../domain/repositories/home_widget_repository.dart';
 import '../datasources/home_widget_data_source.dart';
 import '../models/home_widgets/album_of_day_model.dart';
+import '../models/home_widgets/artist_of_day_model.dart';
 import '../models/home_widgets/home_widget_model.dart';
+import '../models/home_widgets/playlists_model.dart';
 import '../models/home_widgets/shuffle_all_model.dart';
 
 class HomeWidgetRepositoryImpl implements HomeWidgetRepository {
@@ -48,9 +50,9 @@ class HomeWidgetRepositoryImpl implements HomeWidgetRepository {
       case HomeWidgetType.album_of_day:
         return HomeAlbumOfDayModel.fromEntity(homeWidget);
       case HomeWidgetType.artist_of_day:
-        return HomeShuffleAllModel.fromEntity(homeWidget);
+        return HomeArtistOfDayModel.fromEntity(homeWidget);
       case HomeWidgetType.playlists:
-        return HomeShuffleAllModel.fromEntity(homeWidget);
+        return HomePlaylistsModel.fromEntity(homeWidget);
     }
   }
 }
