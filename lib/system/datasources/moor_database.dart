@@ -10,6 +10,7 @@ import 'package:path_provider/path_provider.dart';
 
 import '../../constants.dart';
 import '../../domain/entities/playable.dart';
+import 'moor/home_widget_dao.dart';
 import 'moor/music_data_dao.dart';
 import 'moor/persistent_state_dao.dart';
 import 'moor/playlist_dao.dart';
@@ -152,6 +153,16 @@ class PlaylistEntries extends Table {
   IntColumn get position => integer()();
 }
 
+@DataClassName('MoorHomeWidget')
+class HomeWidgets extends Table {
+  IntColumn get position => integer()();
+  TextColumn get type => text()();
+  TextColumn get data => text().withDefault(const Constant(''))();
+
+  @override
+  Set<Column> get primaryKey => {position};
+}
+
 @DriftDatabase(
   tables: [
     Albums,
@@ -165,12 +176,14 @@ class PlaylistEntries extends Table {
     Playlists,
     PlaylistEntries,
     KeyValueEntries,
+    HomeWidgets,
   ],
   daos: [
     PersistentStateDao,
     SettingsDao,
     MusicDataDao,
     PlaylistDao,
+    HomeWidgetDao,
   ],
 )
 class MoorDatabase extends _$MoorDatabase {
@@ -184,7 +197,7 @@ class MoorDatabase extends _$MoorDatabase {
   MoorDatabase.connect(DatabaseConnection connection) : super.connect(connection);
 
   @override
-  int get schemaVersion => 7;
+  int get schemaVersion => 8;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -207,6 +220,34 @@ class MoorDatabase extends _$MoorDatabase {
               KeyValueEntriesCompanion(
                 key: const Value(PERSISTENT_PLAYABLE),
                 value: Value(jsonEncode(initialPlayable)),
+              ),
+            );
+            await into(homeWidgets).insert(
+              const HomeWidgetsCompanion(
+                position: Value(0),
+                type: Value('HomeWidgetType.album_of_day'),
+                data: Value('{}'),
+              ),
+            );
+            await into(homeWidgets).insert(
+              const HomeWidgetsCompanion(
+                position: Value(1),
+                type: Value('HomeWidgetType.artist_of_day'),
+                data: Value('{"shuffleMode": "ShuffleMode.plus"}'),
+              ),
+            );
+            await into(homeWidgets).insert(
+              const HomeWidgetsCompanion(
+                position: Value(2),
+                type: Value('HomeWidgetType.shuffle_all'),
+                data: Value('{"shuffleMode": "ShuffleMode.plus"}'),
+              ),
+            );
+            await into(homeWidgets).insert(
+              const HomeWidgetsCompanion(
+                position: Value(3),
+                type: Value('HomeWidgetType.playlists'),
+                data: Value('{}'),
               ),
             );
           }
@@ -249,6 +290,37 @@ class MoorDatabase extends _$MoorDatabase {
               TableMigration(artists, columnTransformer: {
                 artists.id: artists.rowId,
               }),
+            );
+          }
+          if (from < 8) {
+            await m.createTable(homeWidgets);
+            await into(homeWidgets).insert(
+              const HomeWidgetsCompanion(
+                position: Value(0),
+                type: Value('HomeWidgetType.album_of_day'),
+                data: Value('{}'),
+              ),
+            );
+            await into(homeWidgets).insert(
+              const HomeWidgetsCompanion(
+                position: Value(1),
+                type: Value('HomeWidgetType.artist_of_day'),
+                data: Value('{"shuffleMode": "ShuffleMode.plus"}'),
+              ),
+            );
+            await into(homeWidgets).insert(
+              const HomeWidgetsCompanion(
+                position: Value(2),
+                type: Value('HomeWidgetType.shuffle_all'),
+                data: Value('{"shuffleMode": "ShuffleMode.plus"}'),
+              ),
+            );
+            await into(homeWidgets).insert(
+              const HomeWidgetsCompanion(
+                position: Value(3),
+                type: Value('HomeWidgetType.playlists'),
+                data: Value('{}'),
+              ),
             );
           }
         },

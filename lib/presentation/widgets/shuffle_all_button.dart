@@ -1,39 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../domain/entities/shuffle_mode.dart';
+import '../mucke_icons.dart';
 import '../state/audio_store.dart';
 
 class ShuffleAllButton extends StatelessWidget {
   const ShuffleAllButton({
     Key? key,
-    required this.verticalPad,
-    required this.horizontalPad,
+    required this.shuffleMode,
   }) : super(key: key);
 
-  final double verticalPad;
-  final double horizontalPad;
+  final ShuffleMode shuffleMode;
 
   @override
   Widget build(BuildContext context) {
     final AudioStore audioStore = GetIt.I<AudioStore>();
 
     return Container(
-      constraints: BoxConstraints.expand(height: 40.0 + verticalPad * 2),
+      constraints: const BoxConstraints.expand(height: 40.0),
       clipBehavior: Clip.none,
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          vertical: verticalPad,
-          horizontal: horizontalPad,
+      child: ElevatedButton.icon(
+        icon: Icon(
+          shuffleMode == ShuffleMode.standard ? Icons.shuffle_rounded : MuckeIcons.shuffle_heart,
         ),
-        child: ElevatedButton.icon(
-          icon: const Icon(Icons.shuffle_rounded),
-          label: const Text('SHUFFLE ALL'),
-          onPressed: () => audioStore.shuffleAll(),
-          style: ElevatedButton.styleFrom(
-            primary: Theme.of(context).highlightColor,
-            elevation: 2.0,
-            shape: const StadiumBorder(),
-          ),
+        label: const Text('SHUFFLE ALL'),
+        onPressed: () => audioStore.shuffleAll(shuffleMode),
+        style: ElevatedButton.styleFrom(
+          primary: Theme.of(context).highlightColor,
+          elevation: 2.0,
+          shape: const StadiumBorder(),
         ),
       ),
     );

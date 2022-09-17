@@ -3694,6 +3694,212 @@ class $KeyValueEntriesTable extends KeyValueEntries
   }
 }
 
+class MoorHomeWidget extends DataClass implements Insertable<MoorHomeWidget> {
+  final int position;
+  final String type;
+  final String data;
+  MoorHomeWidget(
+      {required this.position, required this.type, required this.data});
+  factory MoorHomeWidget.fromData(Map<String, dynamic> data, {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return MoorHomeWidget(
+      position: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}position'])!,
+      type: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}type'])!,
+      data: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}data'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['position'] = Variable<int>(position);
+    map['type'] = Variable<String>(type);
+    map['data'] = Variable<String>(data);
+    return map;
+  }
+
+  HomeWidgetsCompanion toCompanion(bool nullToAbsent) {
+    return HomeWidgetsCompanion(
+      position: Value(position),
+      type: Value(type),
+      data: Value(data),
+    );
+  }
+
+  factory MoorHomeWidget.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return MoorHomeWidget(
+      position: serializer.fromJson<int>(json['position']),
+      type: serializer.fromJson<String>(json['type']),
+      data: serializer.fromJson<String>(json['data']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'position': serializer.toJson<int>(position),
+      'type': serializer.toJson<String>(type),
+      'data': serializer.toJson<String>(data),
+    };
+  }
+
+  MoorHomeWidget copyWith({int? position, String? type, String? data}) =>
+      MoorHomeWidget(
+        position: position ?? this.position,
+        type: type ?? this.type,
+        data: data ?? this.data,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('MoorHomeWidget(')
+          ..write('position: $position, ')
+          ..write('type: $type, ')
+          ..write('data: $data')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(position, type, data);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is MoorHomeWidget &&
+          other.position == this.position &&
+          other.type == this.type &&
+          other.data == this.data);
+}
+
+class HomeWidgetsCompanion extends UpdateCompanion<MoorHomeWidget> {
+  final Value<int> position;
+  final Value<String> type;
+  final Value<String> data;
+  const HomeWidgetsCompanion({
+    this.position = const Value.absent(),
+    this.type = const Value.absent(),
+    this.data = const Value.absent(),
+  });
+  HomeWidgetsCompanion.insert({
+    this.position = const Value.absent(),
+    required String type,
+    this.data = const Value.absent(),
+  }) : type = Value(type);
+  static Insertable<MoorHomeWidget> custom({
+    Expression<int>? position,
+    Expression<String>? type,
+    Expression<String>? data,
+  }) {
+    return RawValuesInsertable({
+      if (position != null) 'position': position,
+      if (type != null) 'type': type,
+      if (data != null) 'data': data,
+    });
+  }
+
+  HomeWidgetsCompanion copyWith(
+      {Value<int>? position, Value<String>? type, Value<String>? data}) {
+    return HomeWidgetsCompanion(
+      position: position ?? this.position,
+      type: type ?? this.type,
+      data: data ?? this.data,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (position.present) {
+      map['position'] = Variable<int>(position.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
+    }
+    if (data.present) {
+      map['data'] = Variable<String>(data.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HomeWidgetsCompanion(')
+          ..write('position: $position, ')
+          ..write('type: $type, ')
+          ..write('data: $data')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $HomeWidgetsTable extends HomeWidgets
+    with TableInfo<$HomeWidgetsTable, MoorHomeWidget> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $HomeWidgetsTable(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _positionMeta = const VerificationMeta('position');
+  @override
+  late final GeneratedColumn<int?> position = GeneratedColumn<int?>(
+      'position', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: false);
+  final VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumn<String?> type = GeneratedColumn<String?>(
+      'type', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _dataMeta = const VerificationMeta('data');
+  @override
+  late final GeneratedColumn<String?> data = GeneratedColumn<String?>(
+      'data', aliasedName, false,
+      type: const StringType(),
+      requiredDuringInsert: false,
+      defaultValue: const Constant(''));
+  @override
+  List<GeneratedColumn> get $columns => [position, type, data];
+  @override
+  String get aliasedName => _alias ?? 'home_widgets';
+  @override
+  String get actualTableName => 'home_widgets';
+  @override
+  VerificationContext validateIntegrity(Insertable<MoorHomeWidget> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('position')) {
+      context.handle(_positionMeta,
+          position.isAcceptableOrUnknown(data['position']!, _positionMeta));
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
+    if (data.containsKey('data')) {
+      context.handle(
+          _dataMeta, this.data.isAcceptableOrUnknown(data['data']!, _dataMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {position};
+  @override
+  MoorHomeWidget map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return MoorHomeWidget.fromData(data,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $HomeWidgetsTable createAlias(String alias) {
+    return $HomeWidgetsTable(attachedDatabase, alias);
+  }
+}
+
 abstract class _$MoorDatabase extends GeneratedDatabase {
   _$MoorDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   _$MoorDatabase.connect(DatabaseConnection c) : super.connect(c);
@@ -3712,11 +3918,13 @@ abstract class _$MoorDatabase extends GeneratedDatabase {
       $PlaylistEntriesTable(this);
   late final $KeyValueEntriesTable keyValueEntries =
       $KeyValueEntriesTable(this);
+  late final $HomeWidgetsTable homeWidgets = $HomeWidgetsTable(this);
   late final PersistentStateDao persistentStateDao =
       PersistentStateDao(this as MoorDatabase);
   late final SettingsDao settingsDao = SettingsDao(this as MoorDatabase);
   late final MusicDataDao musicDataDao = MusicDataDao(this as MoorDatabase);
   late final PlaylistDao playlistDao = PlaylistDao(this as MoorDatabase);
+  late final HomeWidgetDao homeWidgetDao = HomeWidgetDao(this as MoorDatabase);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
@@ -3731,6 +3939,7 @@ abstract class _$MoorDatabase extends GeneratedDatabase {
         smartListArtists,
         playlists,
         playlistEntries,
-        keyValueEntries
+        keyValueEntries,
+        homeWidgets
       ];
 }

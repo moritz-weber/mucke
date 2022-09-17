@@ -10,8 +10,8 @@ import '../state/navigation_store.dart';
 import '../theming.dart';
 import '../utils.dart';
 
-class Highlight extends StatelessWidget {
-  const Highlight({Key? key}) : super(key: key);
+class HighlightAlbum extends StatelessWidget {
+  const HighlightAlbum({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../domain/entities/album.dart';
 import '../../domain/entities/artist.dart';
+import '../../domain/entities/shuffle_mode.dart';
 import '../state/artist_page_store.dart';
 import '../state/audio_store.dart';
 import '../state/navigation_store.dart';
@@ -61,7 +62,7 @@ class _ArtistDetailsPageState extends State<ArtistDetailsPage> {
                     ),
                     child: ElevatedButton(
                       child: const Text('SHUFFLE'),
-                      onPressed: () => audioStore.shuffleArtist(widget.artist),
+                      onPressed: () => audioStore.playArtist(widget.artist, ShuffleMode.plus),
                     ),
                   ),
                   const ListTile(

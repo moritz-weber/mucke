@@ -14,7 +14,9 @@ import 'play_shuffle_button.dart';
 import 'playlist_cover.dart';
 
 class HighlightArtist extends StatelessWidget {
-  const HighlightArtist({Key? key}) : super(key: key);
+  const HighlightArtist({required this.shuffleMode, Key? key}) : super(key: key);
+
+  final ShuffleMode shuffleMode;
 
   @override
   Widget build(BuildContext context) {
@@ -85,9 +87,9 @@ class HighlightArtist extends StatelessWidget {
                     ),
                   ),
                   PlayShuffleButton(
-                    onPressed: () => audioStore.shuffleArtist(artist),
+                    onPressed: () => audioStore.playArtist(artist, shuffleMode),
                     size: 56.0,
-                    shuffleMode: ShuffleMode.plus,
+                    shuffleMode: shuffleMode,
                   ),
                   const SizedBox(width: 4.0),
                 ],

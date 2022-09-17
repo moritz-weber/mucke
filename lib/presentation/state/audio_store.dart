@@ -152,7 +152,7 @@ abstract class _AudioStore with Store {
 
   Future<void> setLoopMode(LoopMode loopMode) async => _audioPlayerRepository.setLoopMode(loopMode);
 
-  Future<void> shuffleAll() async => _shuffleAll();
+  Future<void> shuffleAll(ShuffleMode shuffleMode) async => _shuffleAll(shuffleMode);
 
   Future<void> addToQueue(List<Song> songs) async => _audioPlayerRepository.addToQueue(songs);
 
@@ -171,5 +171,5 @@ abstract class _AudioStore with Store {
 
   Future<void> playPlaylist(Playlist playlist) async => _playPlaylist(playlist);
 
-  Future<void> shuffleArtist(Artist artist) async => _playArtist(artist);
+  Future<void> playArtist(Artist artist, ShuffleMode? shuffleMode) async => _playArtist(artist, shuffleMode);
 }

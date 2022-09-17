@@ -13,6 +13,7 @@ import 'domain/entities/smart_list.dart';
 import 'domain/entities/song.dart';
 import 'domain/modules/dynamic_queue.dart';
 import 'domain/repositories/audio_player_repository.dart';
+import 'domain/repositories/home_widget_repository.dart';
 import 'domain/repositories/music_data_repository.dart';
 import 'domain/repositories/persistent_state_repository.dart';
 import 'domain/repositories/platform_integration_repository.dart';
@@ -28,6 +29,7 @@ import 'domain/usecases/shuffle_all.dart';
 import 'presentation/state/album_page_store.dart';
 import 'presentation/state/artist_page_store.dart';
 import 'presentation/state/audio_store.dart';
+import 'presentation/state/home_page_store.dart';
 import 'presentation/state/music_data_store.dart';
 import 'presentation/state/navigation_store.dart';
 import 'presentation/state/play_list_page_store.dart';
@@ -40,6 +42,7 @@ import 'presentation/state/smart_list_page_store.dart';
 import 'presentation/state/song_store.dart';
 import 'system/datasources/audio_player_data_source.dart';
 import 'system/datasources/audio_player_data_source_impl.dart';
+import 'system/datasources/home_widget_data_source.dart';
 import 'system/datasources/local_music_fetcher.dart';
 import 'system/datasources/local_music_fetcher_impl.dart';
 import 'system/datasources/moor_database.dart';
@@ -50,6 +53,7 @@ import 'system/datasources/platform_integration_data_source_impl.dart';
 import 'system/datasources/playlist_data_source.dart';
 import 'system/datasources/settings_data_source.dart';
 import 'system/repositories/audio_player_repository_impl.dart';
+import 'system/repositories/home_widget_repository_impl.dart';
 import 'system/repositories/music_data_repository_impl.dart';
 import 'system/repositories/persistent_state_repository_impl.dart';
 import 'system/repositories/platform_integration_repository_impl.dart';
@@ -81,6 +85,11 @@ Future<void> setupGetIt() async {
   );
   getIt.registerLazySingleton<NavigationStore>(
     () => NavigationStore(),
+  );
+  getIt.registerLazySingleton<HomePageStore>(
+    () => HomePageStore(
+      homeWidgetRepository: getIt(),
+    ),
   );
   getIt.registerLazySingleton<SearchPageStore>(
     () => SearchPageStore(
@@ -226,6 +235,11 @@ Future<void> setupGetIt() async {
   getIt.registerLazySingleton<PlatformIntegrationInfoRepository>(
     () => getIt<PlatformIntegrationRepository>(),
   );
+  getIt.registerLazySingleton<HomeWidgetRepository>(
+    () => HomeWidgetRepositoryImpl(
+      getIt(),
+    ),
+  );
 
   // data sources
   final MoorDatabase moorDatabase = MoorDatabase();
@@ -233,6 +247,7 @@ Future<void> setupGetIt() async {
   getIt.registerLazySingleton<PersistentStateDataSource>(() => moorDatabase.persistentStateDao);
   getIt.registerLazySingleton<SettingsDataSource>(() => moorDatabase.settingsDao);
   getIt.registerLazySingleton<PlaylistDataSource>(() => moorDatabase.playlistDao);
+  getIt.registerLazySingleton<HomeWidgetDataSource>(() => moorDatabase.homeWidgetDao);
   getIt.registerLazySingleton<LocalMusicFetcher>(
     () => LocalMusicFetcherImpl(
       getIt(),

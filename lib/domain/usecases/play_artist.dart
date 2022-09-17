@@ -18,12 +18,19 @@ class PlayArtist {
   final AudioPlayerRepository _audioPlayerRepository;
   final MusicDataRepository _musicDataRepository;
 
-  Future<void> call(Artist artist) async {
+  Future<void> call(Artist artist, ShuffleMode? shuffleMode) async {
     final songs = await _musicDataRepository.getArtistSongStream(artist).first;
-    final rng = Random();
-    final index = rng.nextInt(songs.length);
+    if (shuffleMode != null) {
+      await _audioPlayerRepository.setShuffleMode(shuffleMode, updateQueue: false);
+    }
+    
+    final activeShuffleMode = _audioPlayerRepository.shuffleModeStream.value;
+    int index = 0;
+    if (activeShuffleMode != ShuffleMode.none) {
+      final rng = Random();
+      index = rng.nextInt(songs.length);
+    }
 
-    await _audioPlayerRepository.setShuffleMode(ShuffleMode.plus, updateQueue: false);
     _playSongs(songs: songs, initialIndex: index, playable: artist, keepInitialIndex: false);
   }
 }
