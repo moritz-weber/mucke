@@ -37,6 +37,9 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
       i++;
     }
 
+    await (update(playlists)..where((tbl) => tbl.id.equals(playlist.id)))
+          .write(PlaylistsCompanion(timeChanged: Value(DateTime.now())));
+
     await batch((batch) {
       batch.insertAll(playlistEntries, entries);
     });
@@ -121,6 +124,9 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
         await (update(playlistEntries)
               ..where((tbl) => tbl.position.equals(-1) & tbl.playlistId.equals(playlistId)))
             .write(PlaylistEntriesCompanion(position: Value(newIndex)));
+
+        await (update(playlists)..where((tbl) => tbl.id.equals(playlistId)))
+          .write(PlaylistsCompanion(timeChanged: Value(DateTime.now())));
       });
     }
   }
@@ -140,6 +146,9 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
               ..where((tbl) => tbl.position.equals(i) & tbl.playlistId.equals(playlistId)))
             .write(PlaylistEntriesCompanion(position: Value(i - 1)));
       }
+
+      await (update(playlists)..where((tbl) => tbl.id.equals(playlistId)))
+          .write(PlaylistsCompanion(timeChanged: Value(DateTime.now())));
     });
   }
 

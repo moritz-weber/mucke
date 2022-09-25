@@ -7,6 +7,9 @@ import 'package:string_similarity/string_similarity.dart';
 import '../../constants.dart';
 import '../../domain/entities/album.dart';
 import '../../domain/entities/artist.dart';
+import '../../domain/entities/custom_list.dart';
+import '../../domain/entities/enums.dart';
+import '../../domain/entities/home_widgets/playlists.dart';
 import '../../domain/entities/playlist.dart';
 import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/entities/smart_list.dart';
@@ -491,5 +494,50 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
 
   DateTime _day(DateTime dateTime) {
     return DateTime(dateTime.year, dateTime.month, dateTime.day);
+  }
+
+  @override
+  Stream<List<CustomList>> getCustomListsStream({
+    HomePlaylistsOrder orderCriterion = HomePlaylistsOrder.name,
+    OrderDirection orderDirection = OrderDirection.ascending,
+    HomePlaylistsFilter filter = HomePlaylistsFilter.both,
+    int? limit,
+  }) {
+    final List<Stream<List<CustomList>>> streams = [];
+    if ([HomePlaylistsFilter.both, HomePlaylistsFilter.smartlists].contains(filter)) {
+      streams.add(_playlistDataSource.smartListsStream);
+    }
+    if ([HomePlaylistsFilter.both, HomePlaylistsFilter.playlists].contains(filter)) {
+      streams.add(_playlistDataSource.playlistsStream);
+    }
+
+    return Rx.combineLatest(streams, (List<List<CustomList>> lists) {
+      List<CustomList> combined = lists.expand((element) => element).toList();
+
+      switch (orderCriterion) {
+        case HomePlaylistsOrder.name:
+          combined.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+          break;
+        case HomePlaylistsOrder.creationDate:
+          combined.sort((a, b) => a.timeCreated.compareTo(b.timeCreated));
+          break;
+        case HomePlaylistsOrder.changeDate:
+          combined.sort((a, b) => a.timeChanged.compareTo(b.timeChanged));
+          break;
+        case HomePlaylistsOrder.history:
+          combined.sort((a, b) => a.timeLastPlayed.compareTo(b.timeLastPlayed));
+          break;
+      }
+
+      if (orderDirection == OrderDirection.descending) {
+        combined = combined.reversed.toList();
+      }
+
+      if (limit != null && limit > 0) {
+        combined = combined.take(limit).toList();
+      }
+
+      return combined;
+    });
   }
 }

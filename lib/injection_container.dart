@@ -8,6 +8,9 @@ import 'domain/actors/persistence_actor.dart';
 import 'domain/actors/platform_integration_actor.dart';
 import 'domain/entities/album.dart';
 import 'domain/entities/artist.dart';
+import 'domain/entities/home_widgets/artist_of_day.dart';
+import 'domain/entities/home_widgets/playlists.dart';
+import 'domain/entities/home_widgets/shuffle_all.dart';
 import 'domain/entities/playlist.dart';
 import 'domain/entities/smart_list.dart';
 import 'domain/entities/song.dart';
@@ -30,6 +33,9 @@ import 'presentation/state/album_page_store.dart';
 import 'presentation/state/artist_page_store.dart';
 import 'presentation/state/audio_store.dart';
 import 'presentation/state/home_page_store.dart';
+import 'presentation/state/home_widget_forms/artistofday_form_store.dart';
+import 'presentation/state/home_widget_forms/playlists_form_store.dart';
+import 'presentation/state/home_widget_forms/shuffleall_form_store.dart';
 import 'presentation/state/music_data_store.dart';
 import 'presentation/state/navigation_store.dart';
 import 'presentation/state/play_list_page_store.dart';
@@ -134,6 +140,24 @@ Future<void> setupGetIt() async {
       musicDataInfoRepository: getIt(),
     ),
   );
+  getIt.registerFactoryParam<PlaylistsFormStore, HomePlaylists, void>(
+    (HomePlaylists playlists, _) => PlaylistsFormStore(
+      homeWidgetRepository: getIt(),
+      homePlaylists: playlists,
+    ),
+  );
+  getIt.registerFactoryParam<ShuffleAllFormStore, HomeShuffleAll, void>(
+    (HomeShuffleAll shuffleAll, _) => ShuffleAllFormStore(
+      homeWidgetRepository: getIt(),
+      homeShuffleAll: shuffleAll,
+    ),
+  );
+  getIt.registerFactoryParam<ArtistOfDayFormStore, HomeArtistOfDay, void>(
+    (HomeArtistOfDay artistOfDay, _) => ArtistOfDayFormStore(
+      homeWidgetRepository: getIt(),
+      homeArtistOfDay: artistOfDay,
+    ),
+  );
 
   // use cases
   getIt.registerLazySingleton<PlayAlbum>(
@@ -166,6 +190,7 @@ Future<void> setupGetIt() async {
   );
   getIt.registerLazySingleton<PlaySongs>(
     () => PlaySongs(
+      getIt(),
       getIt(),
     ),
   );

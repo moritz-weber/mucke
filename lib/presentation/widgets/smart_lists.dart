@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../domain/entities/custom_list.dart';
+import '../../domain/entities/home_widgets/playlists.dart';
+import '../../domain/entities/playlist.dart';
 import '../../domain/entities/smart_list.dart';
+import '../pages/playlist_page.dart';
 import '../pages/smart_list_page.dart';
 import '../state/audio_store.dart';
 import '../state/music_data_store.dart';
@@ -11,7 +15,9 @@ import 'play_shuffle_button.dart';
 import 'playlist_cover.dart';
 
 class SmartLists extends StatelessWidget {
-  const SmartLists({Key? key}) : super(key: key);
+  const SmartLists({Key? key, required this.homePlaylists}) : super(key: key);
+
+  final HomePlaylists homePlaylists;
 
   @override
   Widget build(BuildContext context) {
@@ -19,24 +25,40 @@ class SmartLists extends StatelessWidget {
     final NavigationStore navStore = GetIt.I<NavigationStore>();
     final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
 
+    final customListsStream = musicDataStore.getCustomLists(
+      orderCriterion: homePlaylists.orderCriterion,
+      orderDirection: homePlaylists.orderDirection,
+      filter: homePlaylists.filter,
+      limit: homePlaylists.maxEntries,
+    );
+
     return Observer(
       builder: (context) {
-        final smartLists = musicDataStore.smartListsStream.value ?? [];
+        final customLists = customListsStream.value ?? [];
+
         return SliverList(
           delegate: SliverChildBuilderDelegate(
             (_, int index) {
-
               if (index % 2 == 1) {
                 return const SizedBox(height: 12.0);
               }
 
-              final SmartList smartList = smartLists[index ~/ 2];
+              final CustomList customList = customLists[index ~/ 2];
               return GestureDetector(
-                onTap: () => navStore.pushOnLibrary(
-                  MaterialPageRoute<Widget>(
-                    builder: (context) => SmartListPage(smartList: smartList),
-                  ),
-                ),
+                onTap: () {
+                  if (customList is SmartList)
+                    navStore.pushOnLibrary(
+                      MaterialPageRoute<Widget>(
+                        builder: (context) => SmartListPage(smartList: customList),
+                      ),
+                    );
+                  else if (customList is Playlist)
+                    navStore.pushOnLibrary(
+                      MaterialPageRoute<Widget>(
+                        builder: (context) => PlaylistPage(playlist: customList),
+                      ),
+                    );
+                },
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8.0),
@@ -59,8 +81,8 @@ class SmartLists extends StatelessWidget {
                         children: [
                           PlaylistCover(
                             size: 48,
-                            gradient: smartList.gradient,
-                            icon: smartList.icon,
+                            gradient: customList.gradient,
+                            icon: customList.icon,
                             shadows: const [
                               BoxShadow(
                                   color: Colors.black54,
@@ -72,7 +94,7 @@ class SmartLists extends StatelessWidget {
                           const SizedBox(width: 16.0),
                           Expanded(
                             child: Text(
-                              smartList.name,
+                              customList.name,
                               style: Theme.of(context).textTheme.headline4,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
@@ -80,8 +102,12 @@ class SmartLists extends StatelessWidget {
                           ),
                           const SizedBox(width: 8.0),
                           PlayShuffleButton(
-                            onPressed: () => audioStore.playSmartList(smartList),
-                            shuffleMode: smartList.shuffleMode,
+                            onPressed: () {
+                              if (customList is SmartList)
+                                audioStore.playSmartList(customList);
+                              else if (customList is Playlist) audioStore.playPlaylist(customList);
+                            },
+                            shuffleMode: customList.shuffleMode,
                             size: 48.0,
                           ),
                         ],
@@ -91,7 +117,7 @@ class SmartLists extends StatelessWidget {
                 ),
               );
             },
-            childCount: smartLists.length * 2 - 1,
+            childCount: customLists.length * 2 - 1,
           ),
         );
       },

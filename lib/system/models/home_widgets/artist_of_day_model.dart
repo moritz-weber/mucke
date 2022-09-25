@@ -9,7 +9,13 @@ import '../../datasources/moor_database.dart';
 import 'home_widget_model.dart';
 
 class HomeArtistOfDayModel extends HomeArtistOfDay implements HomeWidgetModel {
-  HomeArtistOfDayModel(super.position, super.shuffleMode);
+  HomeArtistOfDayModel(
+    int position,
+    ShuffleMode shuffleMode,
+  ) : super(
+          position: position,
+          shuffleMode: shuffleMode,
+        );
 
   factory HomeArtistOfDayModel.fromMoor(MoorHomeWidget moorHomeWidget) {
     final type = moorHomeWidget.type.toHomeWidgetType();
@@ -32,11 +38,11 @@ class HomeArtistOfDayModel extends HomeArtistOfDay implements HomeWidgetModel {
 
   @override
   HomeWidgetsCompanion toMoor() {
-    final data = '{"shuffleMode": "$shuffleMode"}';
+    final data = {'shuffleMode': '$shuffleMode'};
     return HomeWidgetsCompanion(
       position: Value(position),
       type: Value(type.toString()),
-      data: Value(data),
+      data: Value(json.encode(data)),
     );
   }
 }

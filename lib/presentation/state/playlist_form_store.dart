@@ -91,6 +91,9 @@ abstract class _PlaylistStore with Store {
         iconString: cover.iconString,
         gradientString: cover.gradientString,
         shuffleMode: shuffleMode,
+        timeChanged: DateTime.now(),
+        timeCreated: _playlist!.timeCreated,
+        timeLastPlayed: _playlist!.timeLastPlayed,
       ),
     );
   }
@@ -105,7 +108,6 @@ abstract class _FormErrorState with Store {
   @computed
   bool get hasErrors => name != null;
 }
-
 
 int _shuffleModeIndex(ShuffleMode? shuffleMode) {
   if (shuffleMode == null) return 0;

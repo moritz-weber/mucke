@@ -2,6 +2,9 @@ import 'package:rxdart/rxdart.dart';
 
 import '../entities/album.dart';
 import '../entities/artist.dart';
+import '../entities/custom_list.dart';
+import '../entities/enums.dart';
+import '../entities/home_widgets/playlists.dart';
 import '../entities/playlist.dart';
 import '../entities/shuffle_mode.dart';
 import '../entities/smart_list.dart';
@@ -26,6 +29,13 @@ abstract class MusicDataInfoRepository {
 
   Stream<List<SmartList>> get smartListsStream;
   Stream<SmartList> getSmartListStream(int smartListId);
+
+  Stream<List<CustomList>> getCustomListsStream({
+    HomePlaylistsOrder orderCriterion = HomePlaylistsOrder.name,
+    OrderDirection orderDirection = OrderDirection.ascending,
+    HomePlaylistsFilter filter = HomePlaylistsFilter.both,
+    int? limit,
+  });
 
   Stream<List<Album>> get albumStream;
   Stream<List<Album>> getArtistAlbumStream(Artist artist);

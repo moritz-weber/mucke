@@ -10,6 +10,9 @@ class PlaylistModel extends Playlist {
     required String name,
     required String iconString,
     required String gradientString,
+    required DateTime timeCreated,
+    required DateTime timeChanged,
+    required DateTime timeLastPlayed,
     ShuffleMode? shuffleMode,
   }) : super(
           id: id,
@@ -17,6 +20,9 @@ class PlaylistModel extends Playlist {
           iconString: iconString,
           gradientString: gradientString,
           shuffleMode: shuffleMode,
+          timeCreated: timeCreated,
+          timeChanged: timeChanged,
+          timeLastPlayed: timeLastPlayed,
         );
 
   factory PlaylistModel.fromPlaylist(Playlist playlist) {
@@ -26,6 +32,9 @@ class PlaylistModel extends Playlist {
       iconString: playlist.iconString,
       gradientString: playlist.gradientString,
       shuffleMode: playlist.shuffleMode,
+      timeChanged: playlist.timeChanged,
+      timeCreated: playlist.timeCreated,
+      timeLastPlayed: playlist.timeLastPlayed,
     );
   }
 
@@ -36,6 +45,9 @@ class PlaylistModel extends Playlist {
       iconString: moorPlaylist.icon,
       gradientString: moorPlaylist.gradient,
       shuffleMode: moorPlaylist.shuffleMode?.toShuffleMode(),
+      timeChanged: moorPlaylist.timeChanged,
+      timeCreated: moorPlaylist.timeCreated,
+      timeLastPlayed: moorPlaylist.timeLastPlayed,
     );
   }
 
@@ -45,5 +57,8 @@ class PlaylistModel extends Playlist {
         shuffleMode: m.Value(shuffleMode?.toString()),
         icon: m.Value(iconString),
         gradient: m.Value(gradientString),
+        timeChanged: m.Value(timeChanged),
+        timeCreated: m.Value(timeCreated),
+        timeLastPlayed: m.Value(timeLastPlayed),
       );
 }

@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../domain/entities/home_widgets/artist_of_day.dart';
 import '../../domain/entities/home_widgets/home_widget.dart';
+import '../../domain/entities/home_widgets/playlists.dart';
 import '../../domain/entities/home_widgets/shuffle_all.dart';
 import '../state/home_page_store.dart';
 import '../state/navigation_store.dart';
@@ -100,6 +101,6 @@ Widget _createHomeWidget(HomeWidget homeWidget) {
         ),
       );
     case HomeWidgetType.playlists:
-      return const SmartLists();
+      return SmartLists(homePlaylists: homeWidget as HomePlaylists);
   }
 }

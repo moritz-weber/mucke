@@ -2024,6 +2024,9 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
   final String? shuffleMode;
   final String icon;
   final String gradient;
+  final DateTime timeCreated;
+  final DateTime timeChanged;
+  final DateTime timeLastPlayed;
   final bool excludeArtists;
   final int blockLevel;
   final int minLikeCount;
@@ -2043,6 +2046,9 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
       this.shuffleMode,
       required this.icon,
       required this.gradient,
+      required this.timeCreated,
+      required this.timeChanged,
+      required this.timeLastPlayed,
       required this.excludeArtists,
       required this.blockLevel,
       required this.minLikeCount,
@@ -2069,6 +2075,12 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
           .mapFromDatabaseResponse(data['${effectivePrefix}icon'])!,
       gradient: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}gradient'])!,
+      timeCreated: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}time_created'])!,
+      timeChanged: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}time_changed'])!,
+      timeLastPlayed: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}time_last_played'])!,
       excludeArtists: const BoolType()
           .mapFromDatabaseResponse(data['${effectivePrefix}exclude_artists'])!,
       blockLevel: const IntType()
@@ -2107,6 +2119,9 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
     }
     map['icon'] = Variable<String>(icon);
     map['gradient'] = Variable<String>(gradient);
+    map['time_created'] = Variable<DateTime>(timeCreated);
+    map['time_changed'] = Variable<DateTime>(timeChanged);
+    map['time_last_played'] = Variable<DateTime>(timeLastPlayed);
     map['exclude_artists'] = Variable<bool>(excludeArtists);
     map['block_level'] = Variable<int>(blockLevel);
     map['min_like_count'] = Variable<int>(minLikeCount);
@@ -2146,6 +2161,9 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
           : Value(shuffleMode),
       icon: Value(icon),
       gradient: Value(gradient),
+      timeCreated: Value(timeCreated),
+      timeChanged: Value(timeChanged),
+      timeLastPlayed: Value(timeLastPlayed),
       excludeArtists: Value(excludeArtists),
       blockLevel: Value(blockLevel),
       minLikeCount: Value(minLikeCount),
@@ -2184,6 +2202,9 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
       shuffleMode: serializer.fromJson<String?>(json['shuffleMode']),
       icon: serializer.fromJson<String>(json['icon']),
       gradient: serializer.fromJson<String>(json['gradient']),
+      timeCreated: serializer.fromJson<DateTime>(json['timeCreated']),
+      timeChanged: serializer.fromJson<DateTime>(json['timeChanged']),
+      timeLastPlayed: serializer.fromJson<DateTime>(json['timeLastPlayed']),
       excludeArtists: serializer.fromJson<bool>(json['excludeArtists']),
       blockLevel: serializer.fromJson<int>(json['blockLevel']),
       minLikeCount: serializer.fromJson<int>(json['minLikeCount']),
@@ -2208,6 +2229,9 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
       'shuffleMode': serializer.toJson<String?>(shuffleMode),
       'icon': serializer.toJson<String>(icon),
       'gradient': serializer.toJson<String>(gradient),
+      'timeCreated': serializer.toJson<DateTime>(timeCreated),
+      'timeChanged': serializer.toJson<DateTime>(timeChanged),
+      'timeLastPlayed': serializer.toJson<DateTime>(timeLastPlayed),
       'excludeArtists': serializer.toJson<bool>(excludeArtists),
       'blockLevel': serializer.toJson<int>(blockLevel),
       'minLikeCount': serializer.toJson<int>(minLikeCount),
@@ -2230,6 +2254,9 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
           String? shuffleMode,
           String? icon,
           String? gradient,
+          DateTime? timeCreated,
+          DateTime? timeChanged,
+          DateTime? timeLastPlayed,
           bool? excludeArtists,
           int? blockLevel,
           int? minLikeCount,
@@ -2249,6 +2276,9 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
         shuffleMode: shuffleMode ?? this.shuffleMode,
         icon: icon ?? this.icon,
         gradient: gradient ?? this.gradient,
+        timeCreated: timeCreated ?? this.timeCreated,
+        timeChanged: timeChanged ?? this.timeChanged,
+        timeLastPlayed: timeLastPlayed ?? this.timeLastPlayed,
         excludeArtists: excludeArtists ?? this.excludeArtists,
         blockLevel: blockLevel ?? this.blockLevel,
         minLikeCount: minLikeCount ?? this.minLikeCount,
@@ -2271,6 +2301,9 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
           ..write('shuffleMode: $shuffleMode, ')
           ..write('icon: $icon, ')
           ..write('gradient: $gradient, ')
+          ..write('timeCreated: $timeCreated, ')
+          ..write('timeChanged: $timeChanged, ')
+          ..write('timeLastPlayed: $timeLastPlayed, ')
           ..write('excludeArtists: $excludeArtists, ')
           ..write('blockLevel: $blockLevel, ')
           ..write('minLikeCount: $minLikeCount, ')
@@ -2289,25 +2322,29 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
   }
 
   @override
-  int get hashCode => Object.hash(
-      id,
-      name,
-      shuffleMode,
-      icon,
-      gradient,
-      excludeArtists,
-      blockLevel,
-      minLikeCount,
-      maxLikeCount,
-      minPlayCount,
-      maxPlayCount,
-      minSkipCount,
-      maxSkipCount,
-      minYear,
-      maxYear,
-      limit,
-      orderCriteria,
-      orderDirections);
+  int get hashCode => Object.hashAll([
+        id,
+        name,
+        shuffleMode,
+        icon,
+        gradient,
+        timeCreated,
+        timeChanged,
+        timeLastPlayed,
+        excludeArtists,
+        blockLevel,
+        minLikeCount,
+        maxLikeCount,
+        minPlayCount,
+        maxPlayCount,
+        minSkipCount,
+        maxSkipCount,
+        minYear,
+        maxYear,
+        limit,
+        orderCriteria,
+        orderDirections
+      ]);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2317,6 +2354,9 @@ class MoorSmartList extends DataClass implements Insertable<MoorSmartList> {
           other.shuffleMode == this.shuffleMode &&
           other.icon == this.icon &&
           other.gradient == this.gradient &&
+          other.timeCreated == this.timeCreated &&
+          other.timeChanged == this.timeChanged &&
+          other.timeLastPlayed == this.timeLastPlayed &&
           other.excludeArtists == this.excludeArtists &&
           other.blockLevel == this.blockLevel &&
           other.minLikeCount == this.minLikeCount &&
@@ -2338,6 +2378,9 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
   final Value<String?> shuffleMode;
   final Value<String> icon;
   final Value<String> gradient;
+  final Value<DateTime> timeCreated;
+  final Value<DateTime> timeChanged;
+  final Value<DateTime> timeLastPlayed;
   final Value<bool> excludeArtists;
   final Value<int> blockLevel;
   final Value<int> minLikeCount;
@@ -2357,6 +2400,9 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
     this.shuffleMode = const Value.absent(),
     this.icon = const Value.absent(),
     this.gradient = const Value.absent(),
+    this.timeCreated = const Value.absent(),
+    this.timeChanged = const Value.absent(),
+    this.timeLastPlayed = const Value.absent(),
     this.excludeArtists = const Value.absent(),
     this.blockLevel = const Value.absent(),
     this.minLikeCount = const Value.absent(),
@@ -2377,6 +2423,9 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
     this.shuffleMode = const Value.absent(),
     this.icon = const Value.absent(),
     this.gradient = const Value.absent(),
+    this.timeCreated = const Value.absent(),
+    this.timeChanged = const Value.absent(),
+    this.timeLastPlayed = const Value.absent(),
     this.excludeArtists = const Value.absent(),
     this.blockLevel = const Value.absent(),
     this.minLikeCount = const Value.absent(),
@@ -2399,6 +2448,9 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
     Expression<String?>? shuffleMode,
     Expression<String>? icon,
     Expression<String>? gradient,
+    Expression<DateTime>? timeCreated,
+    Expression<DateTime>? timeChanged,
+    Expression<DateTime>? timeLastPlayed,
     Expression<bool>? excludeArtists,
     Expression<int>? blockLevel,
     Expression<int>? minLikeCount,
@@ -2419,6 +2471,9 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
       if (shuffleMode != null) 'shuffle_mode': shuffleMode,
       if (icon != null) 'icon': icon,
       if (gradient != null) 'gradient': gradient,
+      if (timeCreated != null) 'time_created': timeCreated,
+      if (timeChanged != null) 'time_changed': timeChanged,
+      if (timeLastPlayed != null) 'time_last_played': timeLastPlayed,
       if (excludeArtists != null) 'exclude_artists': excludeArtists,
       if (blockLevel != null) 'block_level': blockLevel,
       if (minLikeCount != null) 'min_like_count': minLikeCount,
@@ -2441,6 +2496,9 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
       Value<String?>? shuffleMode,
       Value<String>? icon,
       Value<String>? gradient,
+      Value<DateTime>? timeCreated,
+      Value<DateTime>? timeChanged,
+      Value<DateTime>? timeLastPlayed,
       Value<bool>? excludeArtists,
       Value<int>? blockLevel,
       Value<int>? minLikeCount,
@@ -2460,6 +2518,9 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
       shuffleMode: shuffleMode ?? this.shuffleMode,
       icon: icon ?? this.icon,
       gradient: gradient ?? this.gradient,
+      timeCreated: timeCreated ?? this.timeCreated,
+      timeChanged: timeChanged ?? this.timeChanged,
+      timeLastPlayed: timeLastPlayed ?? this.timeLastPlayed,
       excludeArtists: excludeArtists ?? this.excludeArtists,
       blockLevel: blockLevel ?? this.blockLevel,
       minLikeCount: minLikeCount ?? this.minLikeCount,
@@ -2493,6 +2554,15 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
     }
     if (gradient.present) {
       map['gradient'] = Variable<String>(gradient.value);
+    }
+    if (timeCreated.present) {
+      map['time_created'] = Variable<DateTime>(timeCreated.value);
+    }
+    if (timeChanged.present) {
+      map['time_changed'] = Variable<DateTime>(timeChanged.value);
+    }
+    if (timeLastPlayed.present) {
+      map['time_last_played'] = Variable<DateTime>(timeLastPlayed.value);
     }
     if (excludeArtists.present) {
       map['exclude_artists'] = Variable<bool>(excludeArtists.value);
@@ -2544,6 +2614,9 @@ class SmartListsCompanion extends UpdateCompanion<MoorSmartList> {
           ..write('shuffleMode: $shuffleMode, ')
           ..write('icon: $icon, ')
           ..write('gradient: $gradient, ')
+          ..write('timeCreated: $timeCreated, ')
+          ..write('timeChanged: $timeChanged, ')
+          ..write('timeLastPlayed: $timeLastPlayed, ')
           ..write('excludeArtists: $excludeArtists, ')
           ..write('blockLevel: $blockLevel, ')
           ..write('minLikeCount: $minLikeCount, ')
@@ -2600,6 +2673,30 @@ class $SmartListsTable extends SmartLists
       type: const StringType(),
       requiredDuringInsert: false,
       defaultValue: const Constant('sanguine'));
+  final VerificationMeta _timeCreatedMeta =
+      const VerificationMeta('timeCreated');
+  @override
+  late final GeneratedColumn<DateTime?> timeCreated =
+      GeneratedColumn<DateTime?>('time_created', aliasedName, false,
+          type: const IntType(),
+          requiredDuringInsert: false,
+          defaultValue: currentDateAndTime);
+  final VerificationMeta _timeChangedMeta =
+      const VerificationMeta('timeChanged');
+  @override
+  late final GeneratedColumn<DateTime?> timeChanged =
+      GeneratedColumn<DateTime?>('time_changed', aliasedName, false,
+          type: const IntType(),
+          requiredDuringInsert: false,
+          defaultValue: currentDateAndTime);
+  final VerificationMeta _timeLastPlayedMeta =
+      const VerificationMeta('timeLastPlayed');
+  @override
+  late final GeneratedColumn<DateTime?> timeLastPlayed =
+      GeneratedColumn<DateTime?>('time_last_played', aliasedName, false,
+          type: const IntType(),
+          requiredDuringInsert: false,
+          defaultValue: Constant(DateTime.fromMillisecondsSinceEpoch(0)));
   final VerificationMeta _excludeArtistsMeta =
       const VerificationMeta('excludeArtists');
   @override
@@ -2690,6 +2787,9 @@ class $SmartListsTable extends SmartLists
         shuffleMode,
         icon,
         gradient,
+        timeCreated,
+        timeChanged,
+        timeLastPlayed,
         excludeArtists,
         blockLevel,
         minLikeCount,
@@ -2735,6 +2835,24 @@ class $SmartListsTable extends SmartLists
     if (data.containsKey('gradient')) {
       context.handle(_gradientMeta,
           gradient.isAcceptableOrUnknown(data['gradient']!, _gradientMeta));
+    }
+    if (data.containsKey('time_created')) {
+      context.handle(
+          _timeCreatedMeta,
+          timeCreated.isAcceptableOrUnknown(
+              data['time_created']!, _timeCreatedMeta));
+    }
+    if (data.containsKey('time_changed')) {
+      context.handle(
+          _timeChangedMeta,
+          timeChanged.isAcceptableOrUnknown(
+              data['time_changed']!, _timeChangedMeta));
+    }
+    if (data.containsKey('time_last_played')) {
+      context.handle(
+          _timeLastPlayedMeta,
+          timeLastPlayed.isAcceptableOrUnknown(
+              data['time_last_played']!, _timeLastPlayedMeta));
     }
     if (data.containsKey('exclude_artists')) {
       context.handle(
@@ -3020,12 +3138,18 @@ class MoorPlaylist extends DataClass implements Insertable<MoorPlaylist> {
   final String? shuffleMode;
   final String icon;
   final String gradient;
+  final DateTime timeCreated;
+  final DateTime timeChanged;
+  final DateTime timeLastPlayed;
   MoorPlaylist(
       {required this.id,
       required this.name,
       this.shuffleMode,
       required this.icon,
-      required this.gradient});
+      required this.gradient,
+      required this.timeCreated,
+      required this.timeChanged,
+      required this.timeLastPlayed});
   factory MoorPlaylist.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return MoorPlaylist(
@@ -3039,6 +3163,12 @@ class MoorPlaylist extends DataClass implements Insertable<MoorPlaylist> {
           .mapFromDatabaseResponse(data['${effectivePrefix}icon'])!,
       gradient: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}gradient'])!,
+      timeCreated: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}time_created'])!,
+      timeChanged: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}time_changed'])!,
+      timeLastPlayed: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}time_last_played'])!,
     );
   }
   @override
@@ -3051,6 +3181,9 @@ class MoorPlaylist extends DataClass implements Insertable<MoorPlaylist> {
     }
     map['icon'] = Variable<String>(icon);
     map['gradient'] = Variable<String>(gradient);
+    map['time_created'] = Variable<DateTime>(timeCreated);
+    map['time_changed'] = Variable<DateTime>(timeChanged);
+    map['time_last_played'] = Variable<DateTime>(timeLastPlayed);
     return map;
   }
 
@@ -3063,6 +3196,9 @@ class MoorPlaylist extends DataClass implements Insertable<MoorPlaylist> {
           : Value(shuffleMode),
       icon: Value(icon),
       gradient: Value(gradient),
+      timeCreated: Value(timeCreated),
+      timeChanged: Value(timeChanged),
+      timeLastPlayed: Value(timeLastPlayed),
     );
   }
 
@@ -3075,6 +3211,9 @@ class MoorPlaylist extends DataClass implements Insertable<MoorPlaylist> {
       shuffleMode: serializer.fromJson<String?>(json['shuffleMode']),
       icon: serializer.fromJson<String>(json['icon']),
       gradient: serializer.fromJson<String>(json['gradient']),
+      timeCreated: serializer.fromJson<DateTime>(json['timeCreated']),
+      timeChanged: serializer.fromJson<DateTime>(json['timeChanged']),
+      timeLastPlayed: serializer.fromJson<DateTime>(json['timeLastPlayed']),
     );
   }
   @override
@@ -3086,6 +3225,9 @@ class MoorPlaylist extends DataClass implements Insertable<MoorPlaylist> {
       'shuffleMode': serializer.toJson<String?>(shuffleMode),
       'icon': serializer.toJson<String>(icon),
       'gradient': serializer.toJson<String>(gradient),
+      'timeCreated': serializer.toJson<DateTime>(timeCreated),
+      'timeChanged': serializer.toJson<DateTime>(timeChanged),
+      'timeLastPlayed': serializer.toJson<DateTime>(timeLastPlayed),
     };
   }
 
@@ -3094,13 +3236,19 @@ class MoorPlaylist extends DataClass implements Insertable<MoorPlaylist> {
           String? name,
           String? shuffleMode,
           String? icon,
-          String? gradient}) =>
+          String? gradient,
+          DateTime? timeCreated,
+          DateTime? timeChanged,
+          DateTime? timeLastPlayed}) =>
       MoorPlaylist(
         id: id ?? this.id,
         name: name ?? this.name,
         shuffleMode: shuffleMode ?? this.shuffleMode,
         icon: icon ?? this.icon,
         gradient: gradient ?? this.gradient,
+        timeCreated: timeCreated ?? this.timeCreated,
+        timeChanged: timeChanged ?? this.timeChanged,
+        timeLastPlayed: timeLastPlayed ?? this.timeLastPlayed,
       );
   @override
   String toString() {
@@ -3109,13 +3257,17 @@ class MoorPlaylist extends DataClass implements Insertable<MoorPlaylist> {
           ..write('name: $name, ')
           ..write('shuffleMode: $shuffleMode, ')
           ..write('icon: $icon, ')
-          ..write('gradient: $gradient')
+          ..write('gradient: $gradient, ')
+          ..write('timeCreated: $timeCreated, ')
+          ..write('timeChanged: $timeChanged, ')
+          ..write('timeLastPlayed: $timeLastPlayed')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name, shuffleMode, icon, gradient);
+  int get hashCode => Object.hash(id, name, shuffleMode, icon, gradient,
+      timeCreated, timeChanged, timeLastPlayed);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3124,7 +3276,10 @@ class MoorPlaylist extends DataClass implements Insertable<MoorPlaylist> {
           other.name == this.name &&
           other.shuffleMode == this.shuffleMode &&
           other.icon == this.icon &&
-          other.gradient == this.gradient);
+          other.gradient == this.gradient &&
+          other.timeCreated == this.timeCreated &&
+          other.timeChanged == this.timeChanged &&
+          other.timeLastPlayed == this.timeLastPlayed);
 }
 
 class PlaylistsCompanion extends UpdateCompanion<MoorPlaylist> {
@@ -3133,12 +3288,18 @@ class PlaylistsCompanion extends UpdateCompanion<MoorPlaylist> {
   final Value<String?> shuffleMode;
   final Value<String> icon;
   final Value<String> gradient;
+  final Value<DateTime> timeCreated;
+  final Value<DateTime> timeChanged;
+  final Value<DateTime> timeLastPlayed;
   const PlaylistsCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.shuffleMode = const Value.absent(),
     this.icon = const Value.absent(),
     this.gradient = const Value.absent(),
+    this.timeCreated = const Value.absent(),
+    this.timeChanged = const Value.absent(),
+    this.timeLastPlayed = const Value.absent(),
   });
   PlaylistsCompanion.insert({
     this.id = const Value.absent(),
@@ -3146,6 +3307,9 @@ class PlaylistsCompanion extends UpdateCompanion<MoorPlaylist> {
     this.shuffleMode = const Value.absent(),
     this.icon = const Value.absent(),
     this.gradient = const Value.absent(),
+    this.timeCreated = const Value.absent(),
+    this.timeChanged = const Value.absent(),
+    this.timeLastPlayed = const Value.absent(),
   }) : name = Value(name);
   static Insertable<MoorPlaylist> custom({
     Expression<int>? id,
@@ -3153,6 +3317,9 @@ class PlaylistsCompanion extends UpdateCompanion<MoorPlaylist> {
     Expression<String?>? shuffleMode,
     Expression<String>? icon,
     Expression<String>? gradient,
+    Expression<DateTime>? timeCreated,
+    Expression<DateTime>? timeChanged,
+    Expression<DateTime>? timeLastPlayed,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -3160,6 +3327,9 @@ class PlaylistsCompanion extends UpdateCompanion<MoorPlaylist> {
       if (shuffleMode != null) 'shuffle_mode': shuffleMode,
       if (icon != null) 'icon': icon,
       if (gradient != null) 'gradient': gradient,
+      if (timeCreated != null) 'time_created': timeCreated,
+      if (timeChanged != null) 'time_changed': timeChanged,
+      if (timeLastPlayed != null) 'time_last_played': timeLastPlayed,
     });
   }
 
@@ -3168,13 +3338,19 @@ class PlaylistsCompanion extends UpdateCompanion<MoorPlaylist> {
       Value<String>? name,
       Value<String?>? shuffleMode,
       Value<String>? icon,
-      Value<String>? gradient}) {
+      Value<String>? gradient,
+      Value<DateTime>? timeCreated,
+      Value<DateTime>? timeChanged,
+      Value<DateTime>? timeLastPlayed}) {
     return PlaylistsCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
       shuffleMode: shuffleMode ?? this.shuffleMode,
       icon: icon ?? this.icon,
       gradient: gradient ?? this.gradient,
+      timeCreated: timeCreated ?? this.timeCreated,
+      timeChanged: timeChanged ?? this.timeChanged,
+      timeLastPlayed: timeLastPlayed ?? this.timeLastPlayed,
     );
   }
 
@@ -3196,6 +3372,15 @@ class PlaylistsCompanion extends UpdateCompanion<MoorPlaylist> {
     if (gradient.present) {
       map['gradient'] = Variable<String>(gradient.value);
     }
+    if (timeCreated.present) {
+      map['time_created'] = Variable<DateTime>(timeCreated.value);
+    }
+    if (timeChanged.present) {
+      map['time_changed'] = Variable<DateTime>(timeChanged.value);
+    }
+    if (timeLastPlayed.present) {
+      map['time_last_played'] = Variable<DateTime>(timeLastPlayed.value);
+    }
     return map;
   }
 
@@ -3206,7 +3391,10 @@ class PlaylistsCompanion extends UpdateCompanion<MoorPlaylist> {
           ..write('name: $name, ')
           ..write('shuffleMode: $shuffleMode, ')
           ..write('icon: $icon, ')
-          ..write('gradient: $gradient')
+          ..write('gradient: $gradient, ')
+          ..write('timeCreated: $timeCreated, ')
+          ..write('timeChanged: $timeChanged, ')
+          ..write('timeLastPlayed: $timeLastPlayed')
           ..write(')'))
         .toString();
   }
@@ -3250,8 +3438,41 @@ class $PlaylistsTable extends Playlists
       type: const StringType(),
       requiredDuringInsert: false,
       defaultValue: const Constant('oceanblue'));
+  final VerificationMeta _timeCreatedMeta =
+      const VerificationMeta('timeCreated');
   @override
-  List<GeneratedColumn> get $columns => [id, name, shuffleMode, icon, gradient];
+  late final GeneratedColumn<DateTime?> timeCreated =
+      GeneratedColumn<DateTime?>('time_created', aliasedName, false,
+          type: const IntType(),
+          requiredDuringInsert: false,
+          defaultValue: currentDateAndTime);
+  final VerificationMeta _timeChangedMeta =
+      const VerificationMeta('timeChanged');
+  @override
+  late final GeneratedColumn<DateTime?> timeChanged =
+      GeneratedColumn<DateTime?>('time_changed', aliasedName, false,
+          type: const IntType(),
+          requiredDuringInsert: false,
+          defaultValue: currentDateAndTime);
+  final VerificationMeta _timeLastPlayedMeta =
+      const VerificationMeta('timeLastPlayed');
+  @override
+  late final GeneratedColumn<DateTime?> timeLastPlayed =
+      GeneratedColumn<DateTime?>('time_last_played', aliasedName, false,
+          type: const IntType(),
+          requiredDuringInsert: false,
+          defaultValue: Constant(DateTime.fromMillisecondsSinceEpoch(0)));
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        name,
+        shuffleMode,
+        icon,
+        gradient,
+        timeCreated,
+        timeChanged,
+        timeLastPlayed
+      ];
   @override
   String get aliasedName => _alias ?? 'playlists';
   @override
@@ -3283,6 +3504,24 @@ class $PlaylistsTable extends Playlists
     if (data.containsKey('gradient')) {
       context.handle(_gradientMeta,
           gradient.isAcceptableOrUnknown(data['gradient']!, _gradientMeta));
+    }
+    if (data.containsKey('time_created')) {
+      context.handle(
+          _timeCreatedMeta,
+          timeCreated.isAcceptableOrUnknown(
+              data['time_created']!, _timeCreatedMeta));
+    }
+    if (data.containsKey('time_changed')) {
+      context.handle(
+          _timeChangedMeta,
+          timeChanged.isAcceptableOrUnknown(
+              data['time_changed']!, _timeChangedMeta));
+    }
+    if (data.containsKey('time_last_played')) {
+      context.handle(
+          _timeLastPlayedMeta,
+          timeLastPlayed.isAcceptableOrUnknown(
+              data['time_last_played']!, _timeLastPlayedMeta));
     }
     return context;
   }

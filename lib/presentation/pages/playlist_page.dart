@@ -11,6 +11,7 @@ import '../state/audio_store.dart';
 import '../state/music_data_store.dart';
 import '../state/navigation_store.dart';
 import '../state/play_list_page_store.dart';
+import '../theming.dart';
 import '../utils.dart' as utils;
 import '../widgets/bottom_sheet/add_to_playlist.dart';
 import '../widgets/bottom_sheet/remove_from_playlist.dart';
@@ -216,6 +217,28 @@ class _PlaylistPageState extends State<PlaylistPage> {
                               onDismissed: (direction) {
                                 musicDataStore.removePlaylistEntry(playlist.id, index);
                               },
+                              background: Container(
+                                width: double.infinity,
+                                color: RED,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: HORIZONTAL_PADDING,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: const [
+                                      Icon(
+                                        Icons.playlist_remove_rounded,
+                                        color: Colors.white,
+                                      ),
+                                      Icon(
+                                        Icons.playlist_remove_rounded,
+                                        color: Colors.white,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
                             );
                           },
                           childCount: songs.length,

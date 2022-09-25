@@ -39,7 +39,7 @@ class _PlaylistFormPageState extends State<PlaylistFormPage> {
 
   @override
   Widget build(BuildContext context) {
-    final title = widget.playlist == null ? 'Create smart list' : 'Edit smart list';
+    final title = widget.playlist == null ? 'Create Playlist' : 'Edit Playlist';
     final NavigationStore navStore = GetIt.I<NavigationStore>();
     final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
 

@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart' as m;
 
+import '../../domain/entities/enums.dart';
 import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/entities/smart_list.dart';
 import '../datasources/moor_database.dart';
@@ -11,6 +12,9 @@ class SmartListModel extends SmartList {
     required String name,
     required String iconString,
     required String gradientString,
+    required DateTime timeCreated,
+    required DateTime timeChanged,
+    required DateTime timeLastPlayed,
     required Filter filter,
     required OrderBy orderBy,
     ShuffleMode? shuffleMode,
@@ -22,9 +26,12 @@ class SmartListModel extends SmartList {
           shuffleMode: shuffleMode,
           iconString: iconString,
           gradientString: gradientString,
+          timeCreated: timeCreated,
+          timeChanged: timeChanged,
+          timeLastPlayed: timeLastPlayed,
         );
 
-  factory SmartListModel.fromSmartList(SmartList smartList) { 
+  factory SmartListModel.fromSmartList(SmartList smartList) {
     return SmartListModel(
       id: smartList.id,
       name: smartList.name,
@@ -33,6 +40,9 @@ class SmartListModel extends SmartList {
       shuffleMode: smartList.shuffleMode,
       iconString: smartList.iconString,
       gradientString: smartList.gradientString,
+      timeCreated: smartList.timeCreated,
+      timeChanged: smartList.timeChanged,
+      timeLastPlayed: smartList.timeLastPlayed,
     );
   }
 
@@ -49,7 +59,7 @@ class SmartListModel extends SmartList {
       minYear: moorSmartList.minYear,
       maxYear: moorSmartList.maxYear,
       blockLevel: moorSmartList.blockLevel,
-      limit: moorSmartList.limit, 
+      limit: moorSmartList.limit,
     );
 
     final orderBy = OrderBy(
@@ -65,6 +75,9 @@ class SmartListModel extends SmartList {
       shuffleMode: moorSmartList.shuffleMode?.toShuffleMode(),
       iconString: moorSmartList.icon,
       gradientString: moorSmartList.gradient,
+      timeChanged: moorSmartList.timeChanged,
+      timeCreated: moorSmartList.timeCreated,
+      timeLastPlayed: moorSmartList.timeLastPlayed,
     );
   }
 
@@ -87,6 +100,9 @@ class SmartListModel extends SmartList {
         orderDirections: m.Value(orderBy.orderDirections.join(',')),
         icon: m.Value(iconString),
         gradient: m.Value(gradientString),
+        timeChanged: m.Value(timeChanged),
+        timeCreated: m.Value(timeCreated),
+        timeLastPlayed: m.Value(timeLastPlayed),
       );
 
   List<SmartListArtistsCompanion> toMoorArtists() {

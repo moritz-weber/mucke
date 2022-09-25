@@ -1,30 +1,42 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 
-import '../../presentation/gradients.dart';
-import '../../presentation/icons.dart';
+import 'custom_list.dart';
 import 'playable.dart';
 import 'shuffle_mode.dart';
 
-class Playlist extends Equatable implements Playable {
+class Playlist extends CustomList with EquatableMixin implements Playable {
   const Playlist({
+    required String name,
+    required String iconString,
+    required String gradientString,
+    required DateTime timeCreated,
+    required DateTime timeChanged,
+    required DateTime timeLastPlayed,
+    ShuffleMode? shuffleMode,
     required this.id,
-    required this.name,
-    required this.iconString,
-    required this.gradientString,
-    this.shuffleMode,
-  });
+  }) : super(
+          name,
+          iconString,
+          gradientString,
+          shuffleMode,
+          timeCreated,
+          timeChanged,
+          timeLastPlayed,
+        );
 
   final int id;
-  final String name;
-  final ShuffleMode? shuffleMode;
-  final String iconString;
-  final String gradientString;
-  IconData get icon => CUSTOM_ICONS[iconString]!;
-  Gradient get gradient => CUSTOM_GRADIENTS[gradientString]!;
 
   @override
-  List<Object?> get props => [id, name, iconString, gradientString, shuffleMode];
+  List<Object?> get props => [
+        id,
+        name,
+        iconString,
+        gradientString,
+        shuffleMode,
+        timeCreated,
+        timeChanged,
+        timeLastPlayed,
+      ];
 
   @override
   PlayableType get type => PlayableType.playlist;

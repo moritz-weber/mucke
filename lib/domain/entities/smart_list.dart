@@ -1,35 +1,49 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 
-import '../../presentation/gradients.dart';
-import '../../presentation/icons.dart';
 import 'artist.dart';
+import 'custom_list.dart';
+import 'enums.dart';
 import 'playable.dart';
 import 'shuffle_mode.dart';
 
-class SmartList extends Equatable implements Playable {
+class SmartList extends CustomList with EquatableMixin implements Playable {
   const SmartList({
+    required String name,
+    required String iconString,
+    required String gradientString,
+    required DateTime timeCreated,
+    required DateTime timeChanged,
+    required DateTime timeLastPlayed,
+    ShuffleMode? shuffleMode,
     required this.id,
-    required this.name,
     required this.filter,
     required this.orderBy,
-    required this.iconString,
-    required this.gradientString,
-    this.shuffleMode,
-  });
+  }) : super(
+          name,
+          iconString,
+          gradientString,
+          shuffleMode,
+          timeCreated,
+          timeChanged,
+          timeLastPlayed,
+        );
 
   final int id;
-  final String name;
   final Filter filter;
   final OrderBy orderBy;
-  final ShuffleMode? shuffleMode;
-  final String iconString;
-  final String gradientString;
-  IconData get icon => CUSTOM_ICONS[iconString]!;
-  Gradient get gradient => CUSTOM_GRADIENTS[gradientString]!;
 
   @override
-  List<Object?> get props => [name, filter, orderBy, shuffleMode, icon, gradient];
+  List<Object?> get props => [
+        name,
+        filter,
+        orderBy,
+        shuffleMode,
+        iconString,
+        gradientString,
+        timeCreated,
+        timeChanged,
+        timeLastPlayed,
+      ];
 
   @override
   PlayableType get type => PlayableType.smartlist;
@@ -124,24 +138,6 @@ extension OrderCriterionExtension on String {
         return OrderCriterion.timeAdded;
       case 'OrderCriterion.year':
         return OrderCriterion.year;
-      default:
-        return null;
-    }
-  }
-}
-
-enum OrderDirection {
-  ascending,
-  descending,
-}
-
-extension OrderDirectionExtension on String {
-  OrderDirection? toOrderDirection() {
-    switch (this) {
-      case 'OrderDirection.ascending':
-        return OrderDirection.ascending;
-      case 'OrderDirection.descending':
-        return OrderDirection.descending;
       default:
         return null;
     }

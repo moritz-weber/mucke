@@ -1,5 +1,3 @@
-// TODO: vielleicht soll Playable immer mit einer Songliste kommen?
-// dann müsste man eventuell neue Klassen definieren, die bspw. Album/Artist beinhalten
 abstract class Playable {
   PlayableType get type;
 }

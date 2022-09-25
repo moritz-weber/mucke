@@ -13,6 +13,9 @@ import '../state/home_page_store.dart';
 import '../state/navigation_store.dart';
 import '../theming.dart';
 import '../widgets/custom_modal_bottom_sheet.dart';
+import 'home_widget_forms/artistofday_form_page.dart';
+import 'home_widget_forms/playlists_form_page.dart';
+import 'home_widget_forms/shuffle_all_form_page.dart';
 
 class HomeSettingsPage extends StatelessWidget {
   const HomeSettingsPage({Key? key}) : super(key: key);
@@ -29,6 +32,13 @@ class HomeSettingsPage extends StatelessWidget {
     HomeWidgetType.artist_of_day: Icons.person_rounded,
     HomeWidgetType.playlists: Icons.playlist_play_rounded,
     HomeWidgetType.shuffle_all: Icons.shuffle_rounded,
+  };
+
+  static const hasParameters = {
+    HomeWidgetType.album_of_day: false,
+    HomeWidgetType.artist_of_day: true,
+    HomeWidgetType.playlists: true,
+    HomeWidgetType.shuffle_all: true,
   };
 
   @override
@@ -57,17 +67,6 @@ class HomeSettingsPage extends StatelessWidget {
         body: Observer(
           builder: (context) {
             final widgetEntities = homeStore.homeWidgetsStream.value ?? <HomeWidget>[];
-            final List<Widget> widgets = [
-              const SliverPadding(
-                padding: EdgeInsets.only(top: 8.0),
-              ),
-            ];
-
-            widgets.add(
-              const SliverPadding(
-                padding: EdgeInsets.only(bottom: 8.0),
-              ),
-            );
 
             return Scrollbar(
               child: CustomScrollView(
@@ -75,18 +74,86 @@ class HomeSettingsPage extends StatelessWidget {
                   ReorderableSliverList(
                     delegate: ReorderableSliverChildBuilderDelegate(
                       (context, int index) {
-                        return ListTile(
-                          title: Text(titles[widgetEntities[index].type]!),
-                          leading: Icon(icons[widgetEntities[index].type]),
-                          trailing: IconButton(
-                            onPressed: () => _onTapMore(context, widgetEntities[index]),
-                            icon: const Icon(Icons.more_vert_rounded),
+                        return Dismissible(
+                          key: UniqueKey(),
+                          child: ListTile(
+                            title: Text(titles[widgetEntities[index].type]!),
+                            leading: Icon(icons[widgetEntities[index].type]),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                if (hasParameters[widgetEntities[index].type]!)
+                                  IconButton(
+                                    onPressed: () {
+                                      switch (widgetEntities[index].type) {
+                                        case HomeWidgetType.shuffle_all:
+                                          navStore.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => ShuffleAllFormPage(
+                                                shuffleAll: widgetEntities[index] as HomeShuffleAll,
+                                              ),
+                                            ),
+                                          );
+                                          break;
+                                        case HomeWidgetType.artist_of_day:
+                                          navStore.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => ArtistOfDayFormPage(
+                                                artistOfDay:
+                                                    widgetEntities[index] as HomeArtistOfDay,
+                                              ),
+                                            ),
+                                          );
+                                          break;
+                                        case HomeWidgetType.playlists:
+                                          navStore.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => PlaylistsFormPage(
+                                                playlists: widgetEntities[index] as HomePlaylists,
+                                              ),
+                                            ),
+                                          );
+                                          break;
+                                        default:
+                                          break;
+                                      }
+                                    },
+                                    icon: const Icon(Icons.edit_rounded),
+                                  ),
+                              ],
+                            ),
+                            contentPadding: const EdgeInsets.fromLTRB(
+                              HORIZONTAL_PADDING,
+                              8.0,
+                              0.0,
+                              8.0,
+                            ),
                           ),
-                          contentPadding: const EdgeInsets.fromLTRB(
-                            HORIZONTAL_PADDING,
-                            8.0,
-                            0.0,
-                            8.0,
+                          onDismissed: (direction) {
+                            homeStore.removeHomeWidget(widgetEntities[index]);
+                          },
+                          background: Container(
+                            width: double.infinity,
+                            color: RED,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: const [
+                                  Icon(
+                                    Icons.delete_forever_rounded,
+                                    color: Colors.white,
+                                  ),
+                                  Icon(
+                                    Icons.delete_forever_rounded,
+                                    color: Colors.white,
+                                  )
+                                ],
+                              ),
+                            ),
                           ),
                         );
                       },
@@ -141,54 +208,16 @@ class HomeSettingsPage extends StatelessWidget {
     );
   }
 
-  Future<void> _onTapMore(BuildContext context, HomeWidget homeWidget) async {
-    final homeStore = GetIt.I<HomePageStore>();
-
-    showModalBottomSheet(
-      context: context,
-      useRootNavigator: true,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => Observer(builder: (context) {
-        return MyBottomSheet(
-          widgets: [
-            ListTile(
-              title: Text(titles[homeWidget.type]!),
-              subtitle: Text(
-                'Position: ${homeWidget.position + 1}',
-                style: TEXT_SMALL_SUBTITLE,
-              ),
-              leading: Icon(icons[homeWidget.type]),
-              tileColor: DARK2,
-            ),
-            ListTile(
-              title: const Text('Remove widget'),
-              leading: const Icon(
-                Icons.delete_forever_rounded,
-                color: RED,
-              ),
-              onTap: () {
-                homeStore.removeHomeWidget(homeWidget);
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      }),
-    );
-  }
-
-  // TODO: replace this with opening a custom bottom sheet for components with parameters
   HomeWidget _createHomeWidget(HomeWidgetType type, int position) {
     switch (type) {
       case HomeWidgetType.shuffle_all:
-        return HomeShuffleAll(position, ShuffleMode.plus);
+        return HomeShuffleAll(position: position, shuffleMode: ShuffleMode.plus);
       case HomeWidgetType.album_of_day:
         return HomeAlbumOfDay(position);
       case HomeWidgetType.artist_of_day:
-        return HomeArtistOfDay(position, ShuffleMode.plus);
+        return HomeArtistOfDay(position: position, shuffleMode: ShuffleMode.plus);
       case HomeWidgetType.playlists:
-        return HomePlaylists(position);
+        return HomePlaylists(position: position);
     }
   }
 }

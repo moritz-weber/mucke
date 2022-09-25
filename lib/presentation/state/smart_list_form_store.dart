@@ -2,6 +2,7 @@ import 'package:mobx/mobx.dart';
 
 import '../../constants.dart';
 import '../../domain/entities/artist.dart';
+import '../../domain/entities/enums.dart';
 import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/entities/smart_list.dart';
 import '../../domain/repositories/music_data_repository.dart';
@@ -240,6 +241,9 @@ abstract class _SmartListStore with Store {
         name: name ?? 'This needs a name',
         iconString: cover.iconString,
         gradientString: cover.gradientString,
+        timeChanged: DateTime.now(),
+        timeCreated: _smartList!.timeCreated,
+        timeLastPlayed: _smartList!.timeLastPlayed,
         shuffleMode: shuffleMode,
         filter: Filter(
           artists: selectedArtists.toList(),

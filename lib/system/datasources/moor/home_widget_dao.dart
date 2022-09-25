@@ -67,9 +67,9 @@ class HomeWidgetDao extends DatabaseAccessor<MoorDatabase>
   }
 
   @override
-  Future<void> updateHomeWidget(HomeWidgetModel homeWidget) {
-    // TODO: implement updateHomeWidget
-    throw UnimplementedError();
+  Future<void> updateHomeWidget(HomeWidgetModel homeWidget) async {
+    await (update(homeWidgets)..where((tbl) => tbl.position.equals(homeWidget.position)))
+        .write(homeWidget.toMoor());
   }
 
   HomeWidgetModel _getHomeWidget(MoorHomeWidget moorHomeWidget) {

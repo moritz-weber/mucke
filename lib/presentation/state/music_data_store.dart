@@ -2,6 +2,9 @@ import 'package:mobx/mobx.dart';
 
 import '../../domain/entities/album.dart';
 import '../../domain/entities/artist.dart';
+import '../../domain/entities/custom_list.dart';
+import '../../domain/entities/enums.dart';
+import '../../domain/entities/home_widgets/playlists.dart';
 import '../../domain/entities/playlist.dart';
 import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/entities/smart_list.dart';
@@ -60,6 +63,22 @@ abstract class _MusicDataStore with Store {
   @observable
   late ObservableStream<Artist?> artistOfDay =
       _musicDataRepository.artistOfDayStream.asObservable();
+
+  ObservableStream<List<CustomList>> getCustomLists({
+    required HomePlaylistsOrder orderCriterion,
+    required OrderDirection orderDirection,
+    required HomePlaylistsFilter filter,
+    int? limit,
+  }) {
+    return _musicDataRepository
+        .getCustomListsStream(
+          orderCriterion: orderCriterion,
+          orderDirection: orderDirection,
+          filter: filter,
+          limit: limit,
+        )
+        .asObservable();
+  }
 
   @action
   Future<void> updateDatabase() async {

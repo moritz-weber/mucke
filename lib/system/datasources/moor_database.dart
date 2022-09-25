@@ -112,6 +112,10 @@ class SmartLists extends Table {
   TextColumn get shuffleMode => text().nullable()();
   TextColumn get icon => text().withDefault(const Constant('auto_awesome_rounded'))();
   TextColumn get gradient => text().withDefault(const Constant('sanguine'))();
+  DateTimeColumn get timeCreated => dateTime().withDefault(currentDateAndTime)();
+  DateTimeColumn get timeChanged => dateTime().withDefault(currentDateAndTime)();
+  DateTimeColumn get timeLastPlayed =>
+      dateTime().withDefault(Constant(DateTime.fromMillisecondsSinceEpoch(0)))();
 
   // Filter
   BoolColumn get excludeArtists => boolean().withDefault(const Constant(false))();
@@ -144,6 +148,10 @@ class Playlists extends Table {
   TextColumn get shuffleMode => text().nullable()();
   TextColumn get icon => text().withDefault(const Constant('queue_music_rounded'))();
   TextColumn get gradient => text().withDefault(const Constant('oceanblue'))();
+  DateTimeColumn get timeCreated => dateTime().withDefault(currentDateAndTime)();
+  DateTimeColumn get timeChanged => dateTime().withDefault(currentDateAndTime)();
+  DateTimeColumn get timeLastPlayed =>
+      dateTime().withDefault(Constant(DateTime.fromMillisecondsSinceEpoch(0)))();
 }
 
 @DataClassName('MoorPlaylistEntry')
@@ -197,7 +205,7 @@ class MoorDatabase extends _$MoorDatabase {
   MoorDatabase.connect(DatabaseConnection connection) : super.connect(connection);
 
   @override
-  int get schemaVersion => 8;
+  int get schemaVersion => 9;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -244,10 +252,18 @@ class MoorDatabase extends _$MoorDatabase {
               ),
             );
             await into(homeWidgets).insert(
-              const HomeWidgetsCompanion(
-                position: Value(3),
-                type: Value('HomeWidgetType.playlists'),
-                data: Value('{}'),
+              HomeWidgetsCompanion(
+                position: const Value(3),
+                type: const Value('HomeWidgetType.playlists'),
+                data: Value(
+                  json.encode({
+                    'title': 'Your Playlists',
+                    'maxEntries': 3,
+                    'orderCriterion': 'HomePlaylistsOrder.name',
+                    'orderDirection': 'OrderDirection.ascending',
+                    'filter': 'HomePlaylistsFilter.both',
+                  }),
+                ),
               ),
             );
           }
@@ -322,6 +338,19 @@ class MoorDatabase extends _$MoorDatabase {
                 data: Value('{}'),
               ),
             );
+          }
+          if (from < 9) {
+            final now = DateTime.now();
+            await m.addColumn(smartLists, smartLists.timeLastPlayed);
+            await m.alterTable(TableMigration(smartLists, columnTransformer: {
+              smartLists.timeChanged: Constant(now),
+              smartLists.timeCreated: Constant(now),
+            }));
+            await m.addColumn(playlists, playlists.timeLastPlayed);
+            await m.alterTable(TableMigration(playlists, columnTransformer: {
+              playlists.timeChanged: Constant(now),
+              playlists.timeCreated: Constant(now),
+            }));
           }
         },
       );

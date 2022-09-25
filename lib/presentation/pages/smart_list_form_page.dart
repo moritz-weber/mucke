@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:reorderables/reorderables.dart';
 
 import '../../constants.dart';
+import '../../domain/entities/enums.dart';
 import '../../domain/entities/smart_list.dart';
 import '../state/music_data_store.dart';
 import '../state/navigation_store.dart';
