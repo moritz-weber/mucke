@@ -40,4 +40,10 @@ class Playlist extends CustomList with EquatableMixin implements Playable {
 
   @override
   PlayableType get type => PlayableType.playlist;
+  
+  @override
+  String get identifier => id.toString();
+  
+  @override
+  String get title => name;
 }

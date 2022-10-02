@@ -46,9 +46,9 @@ class SmartListModel extends SmartList {
     );
   }
 
-  factory SmartListModel.fromMoor(MoorSmartList moorSmartList, List<MoorArtist> artists) {
+  factory SmartListModel.fromMoor(MoorSmartList moorSmartList, List<MoorArtist>? artists) {
     final filter = Filter(
-      artists: artists.map((MoorArtist a) => ArtistModel.fromMoor(a)).toList(),
+      artists: artists?.map((MoorArtist a) => ArtistModel.fromMoor(a)).toList(),
       excludeArtists: moorSmartList.excludeArtists,
       minLikeCount: moorSmartList.minLikeCount,
       maxLikeCount: moorSmartList.maxLikeCount,
@@ -106,7 +106,8 @@ class SmartListModel extends SmartList {
       );
 
   List<SmartListArtistsCompanion> toMoorArtists() {
-    return filter.artists
+    if (filter.artists == null) return [];
+    return filter.artists!
         .map(
           (e) => SmartListArtistsCompanion(
             smartListId: m.Value(id),

@@ -10,6 +10,7 @@ import 'package:path_provider/path_provider.dart';
 
 import '../../constants.dart';
 import '../../domain/entities/playable.dart';
+import 'moor/history_dao.dart';
 import 'moor/home_widget_dao.dart';
 import 'moor/music_data_dao.dart';
 import 'moor/persistent_state_dao.dart';
@@ -171,6 +172,13 @@ class HomeWidgets extends Table {
   Set<Column> get primaryKey => {position};
 }
 
+@DataClassName('MoorHistoryEntry')
+class HistoryEntries extends Table {
+  DateTimeColumn get time => dateTime().withDefault(currentDateAndTime)();
+  TextColumn get type => text()();
+  TextColumn get identifier => text()();
+}
+
 @DriftDatabase(
   tables: [
     Albums,
@@ -185,6 +193,7 @@ class HomeWidgets extends Table {
     PlaylistEntries,
     KeyValueEntries,
     HomeWidgets,
+    HistoryEntries,
   ],
   daos: [
     PersistentStateDao,
@@ -192,6 +201,7 @@ class HomeWidgets extends Table {
     MusicDataDao,
     PlaylistDao,
     HomeWidgetDao,
+    HistoryDao,
   ],
 )
 class MoorDatabase extends _$MoorDatabase {
@@ -205,7 +215,7 @@ class MoorDatabase extends _$MoorDatabase {
   MoorDatabase.connect(DatabaseConnection connection) : super.connect(connection);
 
   @override
-  int get schemaVersion => 9;
+  int get schemaVersion => 10;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -262,6 +272,17 @@ class MoorDatabase extends _$MoorDatabase {
                     'orderCriterion': 'HomePlaylistsOrder.name',
                     'orderDirection': 'OrderDirection.ascending',
                     'filter': 'HomePlaylistsFilter.both',
+                  }),
+                ),
+              ),
+            );
+            await into(homeWidgets).insert(
+              HomeWidgetsCompanion(
+                position: const Value(4),
+                type: const Value('HomeWidgetType.history'),
+                data: Value(
+                  json.encode({
+                    'maxEntries': 3,
                   }),
                 ),
               ),
@@ -351,6 +372,9 @@ class MoorDatabase extends _$MoorDatabase {
               playlists.timeChanged: Constant(now),
               playlists.timeCreated: Constant(now),
             }));
+          }
+          if (from < 10) {
+            await m.createTable(historyEntries);
           }
         },
       );

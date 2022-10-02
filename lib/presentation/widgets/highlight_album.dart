@@ -25,7 +25,8 @@ class HighlightAlbum extends StatelessWidget {
         if (album == null) return Container();
 
         return GestureDetector(
-          onTap: () => navStore.pushOnLibrary(
+          onTap: () => navStore.push(
+            context,
             MaterialPageRoute<Widget>(
               builder: (context) => AlbumDetailsPage(album: album),
             ),

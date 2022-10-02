@@ -3,6 +3,7 @@ import 'package:drift/drift.dart';
 import '../../../domain/entities/home_widgets/home_widget.dart';
 import '../../models/home_widgets/album_of_day_model.dart';
 import '../../models/home_widgets/artist_of_day_model.dart';
+import '../../models/home_widgets/history_model.dart';
 import '../../models/home_widgets/home_widget_model.dart';
 import '../../models/home_widgets/playlists_model.dart';
 import '../../models/home_widgets/shuffle_all_model.dart';
@@ -84,7 +85,8 @@ class HomeWidgetDao extends DatabaseAccessor<MoorDatabase>
         return HomeArtistOfDayModel.fromMoor(moorHomeWidget);
       case HomeWidgetType.playlists:
         return HomePlaylistsModel.fromMoor(moorHomeWidget);
-      // case HomeWidgetType.history:
+      case HomeWidgetType.history:
+      return HomeHistoryModel.fromMoor(moorHomeWidget);
     }
   }
 }

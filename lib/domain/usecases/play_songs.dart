@@ -3,16 +3,19 @@ import '../entities/playlist.dart';
 import '../entities/smart_list.dart';
 import '../entities/song.dart';
 import '../repositories/audio_player_repository.dart';
+import '../repositories/history_repository.dart';
 import '../repositories/music_data_repository.dart';
 
 class PlaySongs {
   PlaySongs(
     this._audioPlayerRepository,
     this._musicDataRepository,
+    this._historyRepository,
   );
 
   final AudioPlayerRepository _audioPlayerRepository;
   final MusicDataRepository _musicDataRepository;
+  final HistoryRepository _historyRepository;
 
   /// Generate and play a queue from the [songs] according to current AudioPlayer settings.
   Future<void> call({
@@ -29,6 +32,8 @@ class PlaySongs {
         keepInitialIndex: keepInitialIndex,
       );
       _audioPlayerRepository.play();
+
+      if (playable.type != PlayableType.all) _historyRepository.addHistoryEntry(playable);
 
       if (playable.type == PlayableType.playlist) {
         playable as Playlist;

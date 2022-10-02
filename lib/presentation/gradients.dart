@@ -66,7 +66,7 @@ const CUSTOM_GRADIENTS = <String, Gradient>{
         Color(0xFFFE90AF),
       ],
   ),
-  'actarctica': LinearGradient(
+  'antarctica': LinearGradient(
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
       colors: [

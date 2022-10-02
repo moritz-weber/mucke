@@ -1,5 +1,30 @@
+import 'playlist.dart';
+import 'shuffle_mode.dart';
+import 'smart_list.dart';
+
 abstract class Playable {
+  String get identifier;
   PlayableType get type;
+  String get title;
+}
+
+extension ShuffleModeExtension on Playable {
+  ShuffleMode? getShuffleMode() {
+    switch (type) {
+      case PlayableType.all:
+        return ShuffleMode.plus;
+      case PlayableType.album:
+        return ShuffleMode.none;
+      case PlayableType.artist:
+        return ShuffleMode.plus;
+      case PlayableType.playlist:
+        return (this as Playlist).shuffleMode;
+      case PlayableType.smartlist:
+        return (this as SmartList).shuffleMode;
+      case PlayableType.search:
+        return ShuffleMode.none;
+    }
+  }
 }
 
 enum PlayableType {
@@ -9,6 +34,25 @@ enum PlayableType {
   playlist,
   smartlist,
   search,
+}
+
+extension TextExtension on PlayableType {
+  String toText() {
+    switch (this) {
+      case PlayableType.all:
+        return 'All Songs';
+      case PlayableType.album:
+        return 'Album';
+      case PlayableType.artist:
+        return 'Artist';
+      case PlayableType.playlist:
+        return 'Playlist';
+      case PlayableType.smartlist:
+        return 'Smart List';
+      case PlayableType.search:
+        return 'Search';
+    }
+  }
 }
 
 extension PlayableTypeExtension on String {
@@ -35,6 +79,12 @@ extension PlayableTypeExtension on String {
 class AllSongs implements Playable {
   @override
   PlayableType get type => PlayableType.all;
+
+  @override
+  String get identifier => 'ALL_SONGS';
+
+  @override
+  String get title => 'All Songs';
 }
 
 class SearchQuery implements Playable {
@@ -44,4 +94,10 @@ class SearchQuery implements Playable {
 
   @override
   PlayableType get type => PlayableType.search;
+
+  @override
+  String get identifier => query;
+
+  @override
+  String get title => query;
 }

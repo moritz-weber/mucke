@@ -9,6 +9,7 @@ import 'domain/actors/platform_integration_actor.dart';
 import 'domain/entities/album.dart';
 import 'domain/entities/artist.dart';
 import 'domain/entities/home_widgets/artist_of_day.dart';
+import 'domain/entities/home_widgets/history.dart';
 import 'domain/entities/home_widgets/playlists.dart';
 import 'domain/entities/home_widgets/shuffle_all.dart';
 import 'domain/entities/playlist.dart';
@@ -16,6 +17,7 @@ import 'domain/entities/smart_list.dart';
 import 'domain/entities/song.dart';
 import 'domain/modules/dynamic_queue.dart';
 import 'domain/repositories/audio_player_repository.dart';
+import 'domain/repositories/history_repository.dart';
 import 'domain/repositories/home_widget_repository.dart';
 import 'domain/repositories/music_data_repository.dart';
 import 'domain/repositories/persistent_state_repository.dart';
@@ -23,6 +25,7 @@ import 'domain/repositories/platform_integration_repository.dart';
 import 'domain/repositories/settings_repository.dart';
 import 'domain/usecases/play_album.dart';
 import 'domain/usecases/play_artist.dart';
+import 'domain/usecases/play_playable.dart';
 import 'domain/usecases/play_playlist.dart';
 import 'domain/usecases/play_smart_list.dart';
 import 'domain/usecases/play_songs.dart';
@@ -32,8 +35,10 @@ import 'domain/usecases/shuffle_all.dart';
 import 'presentation/state/album_page_store.dart';
 import 'presentation/state/artist_page_store.dart';
 import 'presentation/state/audio_store.dart';
+import 'presentation/state/history_store.dart';
 import 'presentation/state/home_page_store.dart';
 import 'presentation/state/home_widget_forms/artistofday_form_store.dart';
+import 'presentation/state/home_widget_forms/history_form_store.dart';
 import 'presentation/state/home_widget_forms/playlists_form_store.dart';
 import 'presentation/state/home_widget_forms/shuffleall_form_store.dart';
 import 'presentation/state/music_data_store.dart';
@@ -48,6 +53,7 @@ import 'presentation/state/smart_list_page_store.dart';
 import 'presentation/state/song_store.dart';
 import 'system/datasources/audio_player_data_source.dart';
 import 'system/datasources/audio_player_data_source_impl.dart';
+import 'system/datasources/history_data_source.dart';
 import 'system/datasources/home_widget_data_source.dart';
 import 'system/datasources/local_music_fetcher.dart';
 import 'system/datasources/local_music_fetcher_impl.dart';
@@ -59,6 +65,7 @@ import 'system/datasources/platform_integration_data_source_impl.dart';
 import 'system/datasources/playlist_data_source.dart';
 import 'system/datasources/settings_data_source.dart';
 import 'system/repositories/audio_player_repository_impl.dart';
+import 'system/repositories/history_repository_impl.dart';
 import 'system/repositories/home_widget_repository_impl.dart';
 import 'system/repositories/music_data_repository_impl.dart';
 import 'system/repositories/persistent_state_repository_impl.dart';
@@ -84,6 +91,7 @@ Future<void> setupGetIt() async {
       playArtist: getIt(),
       playSmartList: getIt(),
       playPlayist: getIt(),
+      playPlayable: getIt(),
       playSongs: getIt(),
       seekToNext: getIt(),
       shuffleAll: getIt(),
@@ -95,6 +103,11 @@ Future<void> setupGetIt() async {
   getIt.registerLazySingleton<HomePageStore>(
     () => HomePageStore(
       homeWidgetRepository: getIt(),
+    ),
+  );
+  getIt.registerLazySingleton<HistoryStore>(
+    () => HistoryStore(
+      historyRepository: getIt(),
     ),
   );
   getIt.registerLazySingleton<SearchPageStore>(
@@ -158,6 +171,12 @@ Future<void> setupGetIt() async {
       homeArtistOfDay: artistOfDay,
     ),
   );
+  getIt.registerFactoryParam<HistoryFormStore, HomeHistory, void>(
+    (HomeHistory history, _) => HistoryFormStore(
+      homeWidgetRepository: getIt(),
+      homeHistory: history,
+    ),
+  );
 
   // use cases
   getIt.registerLazySingleton<PlayAlbum>(
@@ -190,6 +209,18 @@ Future<void> setupGetIt() async {
   );
   getIt.registerLazySingleton<PlaySongs>(
     () => PlaySongs(
+      getIt(),
+      getIt(),
+      getIt(),
+    ),
+  );
+  getIt.registerLazySingleton<PlayPlayable>(
+    () => PlayPlayable(
+      getIt(),
+      getIt(),
+      getIt(),
+      getIt(),
+      getIt(),
       getIt(),
       getIt(),
     ),
@@ -265,6 +296,11 @@ Future<void> setupGetIt() async {
       getIt(),
     ),
   );
+  getIt.registerLazySingleton<HistoryRepository>(
+    () => HistoryRepositoryImpl(
+      getIt(),
+    ),
+  );
 
   // data sources
   final MoorDatabase moorDatabase = MoorDatabase();
@@ -273,6 +309,7 @@ Future<void> setupGetIt() async {
   getIt.registerLazySingleton<SettingsDataSource>(() => moorDatabase.settingsDao);
   getIt.registerLazySingleton<PlaylistDataSource>(() => moorDatabase.playlistDao);
   getIt.registerLazySingleton<HomeWidgetDataSource>(() => moorDatabase.homeWidgetDao);
+  getIt.registerLazySingleton<HistoryDataSource>(() => moorDatabase.historyDao);
   getIt.registerLazySingleton<LocalMusicFetcher>(
     () => LocalMusicFetcherImpl(
       getIt(),

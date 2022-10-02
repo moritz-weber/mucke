@@ -33,20 +33,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
     _musicDataSource.songStream.listen((event) => _songSubject.add(event));
     _getAlbumOfDay().then((value) => _albumOfDaySubject.add(value));
     _getArtistOfDay().then((value) => _artistOfDaySubject.add(value));
-    _minuteStream.listen(
-      (event) {
-        _getAlbumOfDay().then((value) {
-          if (value != null) {
-            _albumOfDaySubject.add(value);
-          }
-        });
-        _getArtistOfDay().then((value) {
-          if (value != null) {
-            _artistOfDaySubject.add(value);
-          }
-        });
-      },
-    );
+    _minuteStream.listen((_) => _updateHighlightStreams());
   }
 
   final LocalMusicFetcher _localMusicFetcher;
@@ -133,6 +120,8 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
     await _updateSongs(songs);
 
     _log.d('updateDatabase finished');
+
+    _updateHighlightStreams();
   }
 
   Future<void> _updateArtists(List<ArtistModel> artists) async {
@@ -458,6 +447,19 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   @override
   Future<int?> getAlbumId(String title, String artist, int? year) async {
     return _musicDataSource.getAlbumId(title, artist, year);
+  }
+
+  Future<void> _updateHighlightStreams() async {
+    _getAlbumOfDay().then((value) {
+      if (value != null) {
+        _albumOfDaySubject.add(value);
+      }
+    });
+    _getArtistOfDay().then((value) {
+      if (value != null) {
+        _artistOfDaySubject.add(value);
+      }
+    });
   }
 
   Future<Album?> _getAlbumOfDay() async {

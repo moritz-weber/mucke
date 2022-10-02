@@ -185,7 +185,8 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
         gradient: Value(gradientString),
       ),
     );
-    for (final a in filter.artists) {
+    // filter.artists has to be set when inserting
+    for (final a in filter.artists!) {
       await into(smartListArtists).insert(
         SmartListArtistsCompanion(smartListId: Value(id), artistName: Value(a.name)),
       );
@@ -253,7 +254,8 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
       await (delete(smartListArtists)..where((tbl) => tbl.smartListId.equals(smartListModel.id)))
           .go();
 
-      for (final a in smartListModel.filter.artists) {
+      // filter.artists has to be set when updating!
+      for (final a in smartListModel.filter.artists!) {
         await into(smartListArtists).insert(
           SmartListArtistsCompanion(
             smartListId: Value(smartListModel.id),
@@ -289,11 +291,12 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
 
     query = query..where((tbl) => tbl.blockLevel.isSmallerOrEqualValue(filter.blockLevel));
 
-    if (filter.artists.isNotEmpty) {
+    // when requesting the actual songs, the smart list needs to be complete -> artists set
+    if (filter.artists!.isNotEmpty) {
       if (filter.excludeArtists)
-        query = query..where((tbl) => tbl.artist.isNotIn(filter.artists.map((e) => e.name)));
+        query = query..where((tbl) => tbl.artist.isNotIn(filter.artists!.map((e) => e.name)));
       else
-        query = query..where((tbl) => tbl.artist.isIn(filter.artists.map((e) => e.name)));
+        query = query..where((tbl) => tbl.artist.isIn(filter.artists!.map((e) => e.name)));
     }
 
     if (filter.limit != null) query = query..limit(filter.limit!);

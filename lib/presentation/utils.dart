@@ -3,13 +3,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import '../domain/entities/album.dart';
-import '../domain/entities/artist.dart';
 import '../domain/entities/playable.dart';
 import '../domain/entities/playlist.dart';
 import '../domain/entities/smart_list.dart';
 import '../domain/entities/song.dart';
+import 'gradients.dart';
 import 'mucke_icons.dart';
 import 'theming.dart';
+import 'widgets/playlist_cover.dart';
 
 ImageProvider getAlbumImage(String? albumArtPath) {
   // return Image.asset('assets/no_cover.png');
@@ -94,15 +95,58 @@ extension PlayableReprExt on Playable {
       case PlayableType.all:
         return 'All songs';
       case PlayableType.album:
-        return 'Album: ${(this as Album).title}';
+        return 'Album: $title';
       case PlayableType.artist:
-        return 'Artist: ${(this as Artist).name}';
+        return 'Artist: $title';
       case PlayableType.playlist:
-        return 'Playlist: ${(this as Playlist).name}';
+        return 'Playlist: $title';
       case PlayableType.smartlist:
-        return 'Smartlist: ${(this as SmartList).name}';
+        return 'Smartlist: $title';
       case PlayableType.search:
-        return 'Search results: ${(this as SearchQuery).query}';
+        return 'Search results: $title';
     }
+  }
+}
+
+Widget createPlayableCover(Playable playable, double size) {
+  switch (playable.type) {
+    case PlayableType.all:
+      return PlaylistCover(
+          size: size, gradient: CUSTOM_GRADIENTS['toxic']!, icon: Icons.all_inclusive_rounded);
+    case PlayableType.album:
+      playable as Album;
+      return SizedBox(
+        width: size,
+        height: size,
+        child: Container(
+          clipBehavior: Clip.antiAlias,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(2.0),
+          ),
+          child: Image(
+            image: getAlbumImage(playable.albumArtPath),
+            fit: BoxFit.cover,
+          ),
+        ),
+      );
+    case PlayableType.artist:
+      return PlaylistCover(
+        gradient: CUSTOM_GRADIENTS['kashmir']!,
+        icon: Icons.person_rounded,
+        size: size,
+        circle: true,
+      );
+    case PlayableType.playlist:
+      playable as Playlist;
+      return PlaylistCover(size: size, gradient: playable.gradient, icon: playable.icon);
+    case PlayableType.smartlist:
+      playable as SmartList;
+      return PlaylistCover(size: size, gradient: playable.gradient, icon: playable.icon);
+    case PlayableType.search:
+      return PlaylistCover(
+        size: size,
+        gradient: CUSTOM_GRADIENTS['cactus']!,
+        icon: Icons.search_rounded,
+      );
   }
 }

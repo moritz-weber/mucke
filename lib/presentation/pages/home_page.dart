@@ -3,30 +3,58 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../domain/entities/home_widgets/artist_of_day.dart';
+import '../../domain/entities/home_widgets/history.dart';
 import '../../domain/entities/home_widgets/home_widget.dart';
 import '../../domain/entities/home_widgets/playlists.dart';
 import '../../domain/entities/home_widgets/shuffle_all.dart';
 import '../state/home_page_store.dart';
+import '../state/music_data_store.dart';
 import '../state/navigation_store.dart';
 import '../theming.dart';
 import '../widgets/highlight_album.dart';
 import '../widgets/highlight_artist.dart';
+import '../widgets/history_widget.dart';
 import '../widgets/shuffle_all_button.dart';
 import '../widgets/smart_lists.dart';
 import 'home_settings_page.dart';
+import 'settings_page.dart';
 
-class HomePage extends StatefulWidget {
+
+class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  Widget build(BuildContext context) {
+    final NavigationStore navStore = GetIt.I<NavigationStore>();
+
+    return Navigator(
+      key: navStore.homeNavKey,
+      initialRoute: 'home',
+      onGenerateRoute: (RouteSettings settings) {
+        WidgetBuilder builder;
+        switch (settings.name) {
+          case 'home':
+            builder = (BuildContext context) => const _HomePageInner();
+            break;
+          default:
+            throw Exception('Invalid route: ${settings.name}');
+        }
+        return MaterialPageRoute(builder: builder, settings: settings);
+      },
+    );
+  }
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageInner extends StatelessWidget {
+  const _HomePageInner({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final store = GetIt.I<HomePageStore>();
     final NavigationStore navStore = GetIt.I<NavigationStore>();
+    final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
+
+    final songStream = musicDataStore.songStream;
 
     print('HomePage.build');
     return SafeArea(
@@ -38,15 +66,45 @@ class _HomePageState extends State<HomePage> {
           actions: [
             IconButton(
               icon: const Icon(Icons.edit_rounded),
+              tooltip: 'Customize Home Page',
               onPressed: () => navStore.push(
                 context,
                 MaterialPageRoute(builder: (context) => const HomeSettingsPage()),
+              ),
+            ),
+            IconButton(
+              icon: const Icon(Icons.settings_rounded),
+              tooltip: 'Settings',
+              onPressed: () => navStore.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SettingsPage()),
               ),
             ),
           ],
         ),
         body: Observer(
           builder: (context) {
+            if (songStream.value?.isEmpty ?? true) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(32.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(Icons.music_note_rounded, size: 64.0),
+                      SizedBox(height: 24.0),
+                      Text(
+                        "Looks like you don't have any songs in your library: Go to settings, add your music folders, and update your library.",
+                        style: TEXT_BIG,
+                        textAlign: TextAlign.justify,
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+
             final widgetEntities = store.homeWidgetsStream.value;
             final List<Widget> widgets = [
               const SliverPadding(
@@ -57,8 +115,8 @@ class _HomePageState extends State<HomePage> {
             for (final HomeWidget we in widgetEntities ?? <HomeWidget>[]) {
               widgets.add(
                 SliverPadding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING, vertical: 8.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: HORIZONTAL_PADDING - 8.0, vertical: 8.0),
                   sliver: _createHomeWidget(we),
                 ),
               );
@@ -101,6 +159,12 @@ Widget _createHomeWidget(HomeWidget homeWidget) {
         ),
       );
     case HomeWidgetType.playlists:
-      return SmartLists(homePlaylists: homeWidget as HomePlaylists);
+      return SliverToBoxAdapter(
+        child: SmartLists(homePlaylists: homeWidget as HomePlaylists),
+      );
+    case HomeWidgetType.history:
+      return SliverToBoxAdapter(
+        child: HistoryWidget(history: homeWidget as HomeHistory),
+      );
   }
 }

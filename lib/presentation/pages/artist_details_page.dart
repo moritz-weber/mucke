@@ -63,6 +63,11 @@ class _ArtistDetailsPageState extends State<ArtistDetailsPage> {
                     child: ElevatedButton(
                       child: const Text('SHUFFLE'),
                       onPressed: () => audioStore.playArtist(widget.artist, ShuffleMode.plus),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).highlightColor,
+                        elevation: 2.0,
+                        shape: const StadiumBorder(),
+                      ),
                     ),
                   ),
                   const ListTile(

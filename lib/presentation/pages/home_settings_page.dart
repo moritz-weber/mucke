@@ -5,6 +5,7 @@ import 'package:reorderables/reorderables.dart';
 
 import '../../domain/entities/home_widgets/album_of_day.dart';
 import '../../domain/entities/home_widgets/artist_of_day.dart';
+import '../../domain/entities/home_widgets/history.dart';
 import '../../domain/entities/home_widgets/home_widget.dart';
 import '../../domain/entities/home_widgets/playlists.dart';
 import '../../domain/entities/home_widgets/shuffle_all.dart';
@@ -14,6 +15,7 @@ import '../state/navigation_store.dart';
 import '../theming.dart';
 import '../widgets/custom_modal_bottom_sheet.dart';
 import 'home_widget_forms/artistofday_form_page.dart';
+import 'home_widget_forms/history_form_page.dart';
 import 'home_widget_forms/playlists_form_page.dart';
 import 'home_widget_forms/shuffle_all_form_page.dart';
 
@@ -25,6 +27,7 @@ class HomeSettingsPage extends StatelessWidget {
     HomeWidgetType.artist_of_day: 'Artist of the Day',
     HomeWidgetType.playlists: 'Playlists',
     HomeWidgetType.shuffle_all: 'Shuffle All',
+    HomeWidgetType.history: 'History',
   };
 
   static const icons = {
@@ -32,6 +35,7 @@ class HomeSettingsPage extends StatelessWidget {
     HomeWidgetType.artist_of_day: Icons.person_rounded,
     HomeWidgetType.playlists: Icons.playlist_play_rounded,
     HomeWidgetType.shuffle_all: Icons.shuffle_rounded,
+    HomeWidgetType.history: Icons.history_rounded,
   };
 
   static const hasParameters = {
@@ -39,6 +43,7 @@ class HomeSettingsPage extends StatelessWidget {
     HomeWidgetType.artist_of_day: true,
     HomeWidgetType.playlists: true,
     HomeWidgetType.shuffle_all: true,
+    HomeWidgetType.history: true,
   };
 
   @override
@@ -113,6 +118,16 @@ class HomeSettingsPage extends StatelessWidget {
                                             MaterialPageRoute(
                                               builder: (context) => PlaylistsFormPage(
                                                 playlists: widgetEntities[index] as HomePlaylists,
+                                              ),
+                                            ),
+                                          );
+                                          break;
+                                        case HomeWidgetType.history:
+                                          navStore.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => HistoryFormPage(
+                                                history: widgetEntities[index] as HomeHistory,
                                               ),
                                             ),
                                           );
@@ -218,6 +233,8 @@ class HomeSettingsPage extends StatelessWidget {
         return HomeArtistOfDay(position: position, shuffleMode: ShuffleMode.plus);
       case HomeWidgetType.playlists:
         return HomePlaylists(position: position);
+      case HomeWidgetType.history:
+        return HomeHistory(position: position, maxEntries: 5);
     }
   }
 }

@@ -30,7 +30,8 @@ class HighlightArtist extends StatelessWidget {
         if (artist == null) return Container();
 
         return GestureDetector(
-          onTap: () => navStore.pushOnLibrary(
+          onTap: () => navStore.push(
+            context,
             MaterialPageRoute<Widget>(
               builder: (context) => ArtistDetailsPage(artist: artist),
             ),

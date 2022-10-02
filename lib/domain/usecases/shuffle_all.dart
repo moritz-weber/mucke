@@ -21,6 +21,8 @@ class ShuffleAll {
 
   Future<void> call(ShuffleMode shuffleMode) async {
     final List<Song> songs = await _musicDataRepository.songsStream.first;
+    if (songs.isEmpty) return;
+    
     final rng = Random();
     final index = rng.nextInt(songs.length);
 

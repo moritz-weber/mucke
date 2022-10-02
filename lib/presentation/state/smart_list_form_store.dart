@@ -84,7 +84,7 @@ abstract class _SmartListStore with Store {
 
   @observable
   late ObservableSet<Artist> selectedArtists =
-      (_smartList?.filter.artists.toSet() ?? {}).asObservable();
+      (_smartList?.filter.artists!.toSet() ?? {}).asObservable();
   @observable
   late bool excludeArtists = _smartList?.filter.excludeArtists ?? false;
 

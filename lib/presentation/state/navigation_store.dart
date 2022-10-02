@@ -12,7 +12,7 @@ abstract class _NavigationStore with Store {
   _NavigationStore();
 
   final libraryNavKey = GlobalKey<NavigatorState>();
-  final settingsNavKey = GlobalKey<NavigatorState>();
+  final homeNavKey = GlobalKey<NavigatorState>();
 
   static final _log = FimberLog('NavigationStore');
 
@@ -134,8 +134,8 @@ abstract class _NavigationStore with Store {
       if (navIndex == 1) {
         final result = !await libraryNavKey.currentState!.maybePop();
         return result;
-      } else if (navIndex == 3) {
-        final result = !await settingsNavKey.currentState!.maybePop();
+      } else if (navIndex == 0) {
+        final result = !await homeNavKey.currentState!.maybePop();
         return result;
       }
     }

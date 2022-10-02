@@ -4139,6 +4139,220 @@ class $HomeWidgetsTable extends HomeWidgets
   }
 }
 
+class MoorHistoryEntry extends DataClass
+    implements Insertable<MoorHistoryEntry> {
+  final DateTime time;
+  final String type;
+  final String identifier;
+  MoorHistoryEntry(
+      {required this.time, required this.type, required this.identifier});
+  factory MoorHistoryEntry.fromData(Map<String, dynamic> data,
+      {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return MoorHistoryEntry(
+      time: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}time'])!,
+      type: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}type'])!,
+      identifier: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}identifier'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['time'] = Variable<DateTime>(time);
+    map['type'] = Variable<String>(type);
+    map['identifier'] = Variable<String>(identifier);
+    return map;
+  }
+
+  HistoryEntriesCompanion toCompanion(bool nullToAbsent) {
+    return HistoryEntriesCompanion(
+      time: Value(time),
+      type: Value(type),
+      identifier: Value(identifier),
+    );
+  }
+
+  factory MoorHistoryEntry.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return MoorHistoryEntry(
+      time: serializer.fromJson<DateTime>(json['time']),
+      type: serializer.fromJson<String>(json['type']),
+      identifier: serializer.fromJson<String>(json['identifier']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'time': serializer.toJson<DateTime>(time),
+      'type': serializer.toJson<String>(type),
+      'identifier': serializer.toJson<String>(identifier),
+    };
+  }
+
+  MoorHistoryEntry copyWith(
+          {DateTime? time, String? type, String? identifier}) =>
+      MoorHistoryEntry(
+        time: time ?? this.time,
+        type: type ?? this.type,
+        identifier: identifier ?? this.identifier,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('MoorHistoryEntry(')
+          ..write('time: $time, ')
+          ..write('type: $type, ')
+          ..write('identifier: $identifier')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(time, type, identifier);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is MoorHistoryEntry &&
+          other.time == this.time &&
+          other.type == this.type &&
+          other.identifier == this.identifier);
+}
+
+class HistoryEntriesCompanion extends UpdateCompanion<MoorHistoryEntry> {
+  final Value<DateTime> time;
+  final Value<String> type;
+  final Value<String> identifier;
+  const HistoryEntriesCompanion({
+    this.time = const Value.absent(),
+    this.type = const Value.absent(),
+    this.identifier = const Value.absent(),
+  });
+  HistoryEntriesCompanion.insert({
+    this.time = const Value.absent(),
+    required String type,
+    required String identifier,
+  })  : type = Value(type),
+        identifier = Value(identifier);
+  static Insertable<MoorHistoryEntry> custom({
+    Expression<DateTime>? time,
+    Expression<String>? type,
+    Expression<String>? identifier,
+  }) {
+    return RawValuesInsertable({
+      if (time != null) 'time': time,
+      if (type != null) 'type': type,
+      if (identifier != null) 'identifier': identifier,
+    });
+  }
+
+  HistoryEntriesCompanion copyWith(
+      {Value<DateTime>? time, Value<String>? type, Value<String>? identifier}) {
+    return HistoryEntriesCompanion(
+      time: time ?? this.time,
+      type: type ?? this.type,
+      identifier: identifier ?? this.identifier,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (time.present) {
+      map['time'] = Variable<DateTime>(time.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
+    }
+    if (identifier.present) {
+      map['identifier'] = Variable<String>(identifier.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HistoryEntriesCompanion(')
+          ..write('time: $time, ')
+          ..write('type: $type, ')
+          ..write('identifier: $identifier')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $HistoryEntriesTable extends HistoryEntries
+    with TableInfo<$HistoryEntriesTable, MoorHistoryEntry> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $HistoryEntriesTable(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _timeMeta = const VerificationMeta('time');
+  @override
+  late final GeneratedColumn<DateTime?> time = GeneratedColumn<DateTime?>(
+      'time', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  final VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumn<String?> type = GeneratedColumn<String?>(
+      'type', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _identifierMeta = const VerificationMeta('identifier');
+  @override
+  late final GeneratedColumn<String?> identifier = GeneratedColumn<String?>(
+      'identifier', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [time, type, identifier];
+  @override
+  String get aliasedName => _alias ?? 'history_entries';
+  @override
+  String get actualTableName => 'history_entries';
+  @override
+  VerificationContext validateIntegrity(Insertable<MoorHistoryEntry> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('time')) {
+      context.handle(
+          _timeMeta, time.isAcceptableOrUnknown(data['time']!, _timeMeta));
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
+    if (data.containsKey('identifier')) {
+      context.handle(
+          _identifierMeta,
+          identifier.isAcceptableOrUnknown(
+              data['identifier']!, _identifierMeta));
+    } else if (isInserting) {
+      context.missing(_identifierMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => <GeneratedColumn>{};
+  @override
+  MoorHistoryEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return MoorHistoryEntry.fromData(data,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $HistoryEntriesTable createAlias(String alias) {
+    return $HistoryEntriesTable(attachedDatabase, alias);
+  }
+}
+
 abstract class _$MoorDatabase extends GeneratedDatabase {
   _$MoorDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   _$MoorDatabase.connect(DatabaseConnection c) : super.connect(c);
@@ -4158,12 +4372,14 @@ abstract class _$MoorDatabase extends GeneratedDatabase {
   late final $KeyValueEntriesTable keyValueEntries =
       $KeyValueEntriesTable(this);
   late final $HomeWidgetsTable homeWidgets = $HomeWidgetsTable(this);
+  late final $HistoryEntriesTable historyEntries = $HistoryEntriesTable(this);
   late final PersistentStateDao persistentStateDao =
       PersistentStateDao(this as MoorDatabase);
   late final SettingsDao settingsDao = SettingsDao(this as MoorDatabase);
   late final MusicDataDao musicDataDao = MusicDataDao(this as MoorDatabase);
   late final PlaylistDao playlistDao = PlaylistDao(this as MoorDatabase);
   late final HomeWidgetDao homeWidgetDao = HomeWidgetDao(this as MoorDatabase);
+  late final HistoryDao historyDao = HistoryDao(this as MoorDatabase);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
@@ -4179,6 +4395,7 @@ abstract class _$MoorDatabase extends GeneratedDatabase {
         playlists,
         playlistEntries,
         keyValueEntries,
-        homeWidgets
+        homeWidgets,
+        historyEntries
       ];
 }

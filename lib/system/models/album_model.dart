@@ -8,24 +8,19 @@ import 'default_values.dart';
 
 class AlbumModel extends Album {
   const AlbumModel({
-    required this.id,
-    required String title,
-    required String artist,
-    String? albumArtPath,
-    int? year,
-  }) : super(
-          title: title,
-          artist: artist,
-          albumArtPath: albumArtPath,
-          pubYear: year,
-        );
+    required super.id,
+    required super.title,
+    required super.artist,
+    super.albumArtPath,
+    super.pubYear,
+  });
 
   factory AlbumModel.fromMoor(MoorAlbum moorAlbum) => AlbumModel(
         id: moorAlbum.id,
         title: moorAlbum.title,
         artist: moorAlbum.artist,
         albumArtPath: moorAlbum.albumArtPath,
-        year: moorAlbum.year,
+        pubYear: moorAlbum.year,
       );
 
   factory AlbumModel.fromAudiotagger({
@@ -40,11 +35,9 @@ class AlbumModel extends Album {
       title: tag.album ?? DEF_ALBUM,
       artist: artist ?? DEF_ARTIST,
       albumArtPath: albumArtPath,
-      year: tag.year == null ? null : parseYear(tag.year!),
+      pubYear: tag.year == null ? null : parseYear(tag.year!),
     );
   }
-
-  final int id;
 
   @override
   String toString() {
@@ -55,14 +48,14 @@ class AlbumModel extends Album {
     String? artist,
     String? title,
     int? id,
-    int? year,
+    int? pubYear,
     String? albumArtPath,
   }) =>
       AlbumModel(
           artist: artist ?? this.artist,
           title: title ?? this.title,
           id: id ?? this.id,
-          year: year ?? pubYear,
+          pubYear: pubYear ?? this.pubYear,
           albumArtPath: albumArtPath ?? this.albumArtPath);
 
   AlbumsCompanion toAlbumsCompanion() => AlbumsCompanion(

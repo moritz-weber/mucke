@@ -8,7 +8,7 @@ enum HomeWidgetType {
   album_of_day,
   artist_of_day,
   playlists,
-  // history,
+  history,
 }
 
 extension HomeWidgetTypeExtension on String {
@@ -22,8 +22,8 @@ extension HomeWidgetTypeExtension on String {
         return HomeWidgetType.artist_of_day;
       case 'HomeWidgetType.playlists':
         return HomeWidgetType.playlists;
-      // case 'HomeWidgetType.history':
-      //   return HomeWidgetType.history;
+      case 'HomeWidgetType.history':
+        return HomeWidgetType.history;
       default:
         throw TypeError();
     }

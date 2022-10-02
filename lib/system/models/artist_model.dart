@@ -5,18 +5,14 @@ import '../datasources/moor_database.dart';
 
 class ArtistModel extends Artist {
   const ArtistModel({
-    required String name,
-    required this.id,
-  }) : super(
-          name: name,
-        );
+    required super.id,
+    required super.name,
+  });
 
   factory ArtistModel.fromMoor(MoorArtist moorArtist) => ArtistModel(
         name: moorArtist.name,
         id: moorArtist.id,
       );
-
-  final int id;
 
   @override
   String toString() {
@@ -24,6 +20,7 @@ class ArtistModel extends Artist {
   }
 
   ArtistsCompanion toArtistsCompanion() => ArtistsCompanion(
+        id: Value(id),
         name: Value(name),
       );
 }

@@ -27,7 +27,7 @@ class _NavBarState extends State<NavBar> {
         children: <Widget>[
           const CurrentlyPlayingBar(),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
             child: Container(
               clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
@@ -35,29 +35,25 @@ class _NavBarState extends State<NavBar> {
                 color: DARK2,
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4.0),
-                child: BottomNavigationBar(
+                padding: const EdgeInsets.symmetric(vertical: 0.0),
+                child: NavigationBar(
                   backgroundColor: Colors.transparent,
                   elevation: 0.0,
-                  currentIndex: widget.currentIndex,
-                  onTap: widget.onTap,
-                  type: BottomNavigationBarType.fixed,
-                  items: const [
-                    BottomNavigationBarItem(
+                  height: 72.0,
+                  selectedIndex: widget.currentIndex,
+                  onDestinationSelected: widget.onTap,
+                  destinations: const [
+                    NavigationDestination(
                       icon: Icon(Icons.home_rounded),
                       label: 'Home',
                     ),
-                    BottomNavigationBarItem(
+                    NavigationDestination(
                       icon: Icon(Icons.library_music_rounded),
                       label: 'Library',
                     ),
-                    BottomNavigationBarItem(
+                    NavigationDestination(
                       icon: Icon(Icons.search_rounded),
                       label: 'Search',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.settings_rounded),
-                      label: 'Settings',
                     ),
                   ],
                 ),

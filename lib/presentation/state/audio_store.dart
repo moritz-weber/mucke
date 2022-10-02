@@ -12,6 +12,7 @@ import '../../domain/entities/song.dart';
 import '../../domain/repositories/audio_player_repository.dart';
 import '../../domain/usecases/play_album.dart';
 import '../../domain/usecases/play_artist.dart';
+import '../../domain/usecases/play_playable.dart';
 import '../../domain/usecases/play_playlist.dart';
 import '../../domain/usecases/play_smart_list.dart';
 import '../../domain/usecases/play_songs.dart';
@@ -28,6 +29,7 @@ class AudioStore extends _AudioStore with _$AudioStore {
     required PlaySongs playSongs,
     required PlaySmartList playSmartList,
     required PlayPlaylist playPlayist,
+    required PlayPlayable playPlayable,
     required SeekToNext seekToNext,
     required ShuffleAll shuffleAll,
     required AudioPlayerRepository audioPlayerRepository,
@@ -40,6 +42,7 @@ class AudioStore extends _AudioStore with _$AudioStore {
           playPlayist,
           seekToNext,
           shuffleAll,
+          playPlayable,
         );
 }
 
@@ -52,7 +55,7 @@ abstract class _AudioStore with Store {
     this._playSmartList,
     this._playPlaylist,
     this._seekToNext,
-    this._shuffleAll,
+    this._shuffleAll, this._playPlayable,
   ) {
     _audioPlayerRepository.managedQueueInfo.queueItemsStream.listen(_setQueue);
     _audioPlayerRepository.managedQueueInfo.availableSongsStream.listen((_) => _setAvSongs());
@@ -67,6 +70,7 @@ abstract class _AudioStore with Store {
   final PlaySmartList _playSmartList;
   final PlayPlaylist _playPlaylist;
   final PlaySongs _playSongs;
+  final PlayPlayable _playPlayable;
   final SeekToNext _seekToNext;
   final ShuffleAll _shuffleAll;
 
@@ -163,7 +167,8 @@ abstract class _AudioStore with Store {
   Future<void> moveQueueItem(int oldIndex, int newIndex) async =>
       _audioPlayerRepository.moveQueueItem(oldIndex, newIndex);
 
-  Future<void> removeQueueIndices(List<int> indices) async => _audioPlayerRepository.removeQueueIndices(indices);
+  Future<void> removeQueueIndices(List<int> indices) async =>
+      _audioPlayerRepository.removeQueueIndices(indices);
 
   Future<void> playAlbum(Album album) async => _playAlbum(album);
 
@@ -171,5 +176,9 @@ abstract class _AudioStore with Store {
 
   Future<void> playPlaylist(Playlist playlist) async => _playPlaylist(playlist);
 
-  Future<void> playArtist(Artist artist, ShuffleMode? shuffleMode) async => _playArtist(artist, shuffleMode);
+  Future<void> playArtist(Artist artist, ShuffleMode? shuffleMode) async =>
+      _playArtist(artist, shuffleMode);
+
+  Future<void> playPlayable(Playable playable, ShuffleMode? shuffleMode) async =>
+      _playPlayable(playable, shuffleMode);
 }

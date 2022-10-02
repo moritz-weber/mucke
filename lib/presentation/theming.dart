@@ -14,6 +14,7 @@ const Color RED = Colors.red;
 const double HORIZONTAL_PADDING = 16.0;
 
 ThemeData theme() => ThemeData(
+      // useMaterial3: true,
       colorScheme: const ColorScheme(
         primary: DARK2,
         secondary: LIGHT2,

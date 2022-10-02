@@ -38,7 +38,7 @@ class CurrentlyPlayingBar extends StatelessWidget {
                         children: <Widget>[
                           const SizedBox(width: 4.0),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
                             child: Container(
                               clipBehavior: Clip.antiAlias,
                               decoration: BoxDecoration(

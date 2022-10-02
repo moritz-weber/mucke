@@ -8,33 +8,9 @@ import '../state/settings_store.dart';
 import '../theming.dart';
 import 'library_folders_page.dart';
 
+
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final NavigationStore navStore = GetIt.I<NavigationStore>();
-
-    return Navigator(
-      key: navStore.settingsNavKey,
-      initialRoute: 'settings',
-      onGenerateRoute: (RouteSettings settings) {
-        WidgetBuilder builder;
-        switch (settings.name) {
-          case 'settings':
-            builder = (BuildContext context) => const _SettingsPageInner();
-            break;
-          default:
-            throw Exception('Invalid route: ${settings.name}');
-        }
-        return MaterialPageRoute(builder: builder, settings: settings);
-      },
-    );
-  }
-}
-
-class _SettingsPageInner extends StatelessWidget {
-  const _SettingsPageInner({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +24,10 @@ class _SettingsPageInner extends StatelessWidget {
           title: const Text(
             'Settings',
             style: TEXT_HEADER,
+          ),
+          leading: IconButton(
+            icon: const Icon(Icons.chevron_left_rounded),
+            onPressed: () => navStore.pop(context),
           ),
         ),
         body: ListView(

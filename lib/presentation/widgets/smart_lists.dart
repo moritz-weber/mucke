@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../domain/entities/custom_list.dart';
 import '../../domain/entities/home_widgets/playlists.dart';
 import '../../domain/entities/playlist.dart';
 import '../../domain/entities/smart_list.dart';
@@ -11,6 +10,7 @@ import '../pages/smart_list_page.dart';
 import '../state/audio_store.dart';
 import '../state/music_data_store.dart';
 import '../state/navigation_store.dart';
+import '../theming.dart';
 import 'play_shuffle_button.dart';
 import 'playlist_cover.dart';
 
@@ -36,88 +36,74 @@ class SmartLists extends StatelessWidget {
       builder: (context) {
         final customLists = customListsStream.value ?? [];
 
-        return SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (_, int index) {
-              if (index % 2 == 1) {
-                return const SizedBox(height: 12.0);
-              }
-
-              final CustomList customList = customLists[index ~/ 2];
-              return GestureDetector(
-                onTap: () {
-                  if (customList is SmartList)
-                    navStore.pushOnLibrary(
-                      MaterialPageRoute<Widget>(
-                        builder: (context) => SmartListPage(smartList: customList),
-                      ),
-                    );
-                  else if (customList is Playlist)
-                    navStore.pushOnLibrary(
-                      MaterialPageRoute<Widget>(
-                        builder: (context) => PlaylistPage(playlist: customList),
-                      ),
-                    );
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    color: Theme.of(context).cardColor,
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black54,
-                        blurRadius: 8,
-                        offset: Offset(0, 1),
-                        spreadRadius: -5,
-                      ),
-                    ],
-                  ),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(8.0, 8.0, 4.0, 8.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          PlaylistCover(
-                            size: 48,
-                            gradient: customList.gradient,
-                            icon: customList.icon,
-                            shadows: const [
-                              BoxShadow(
-                                  color: Colors.black54,
-                                  blurRadius: 4,
-                                  offset: Offset(0, 0),
-                                  spreadRadius: -1),
-                            ],
-                          ),
-                          const SizedBox(width: 16.0),
-                          Expanded(
-                            child: Text(
-                              customList.name,
-                              style: Theme.of(context).textTheme.headline4,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          const SizedBox(width: 8.0),
-                          PlayShuffleButton(
-                            onPressed: () {
-                              if (customList is SmartList)
-                                audioStore.playSmartList(customList);
-                              else if (customList is Playlist) audioStore.playPlaylist(customList);
-                            },
-                            shuffleMode: customList.shuffleMode,
-                            size: 48.0,
-                          ),
-                        ],
-                      ),
-                    ),
+        return Card(
+          margin: EdgeInsets.zero,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 6.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(12.0, 20.0, 12.0, 16.0),
+                  child: Text(
+                    homePlaylists.title,
+                    style: TEXT_BIG,
                   ),
                 ),
-              );
-            },
-            childCount: customLists.length * 2 - 1,
+                ...customLists.map(
+                  (customList) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.only(left: 12.0, right: 8.0),
+                        onTap: () {
+                          if (customList is SmartList)
+                            navStore.pushOnLibrary(
+                              MaterialPageRoute<Widget>(
+                                builder: (context) => SmartListPage(smartList: customList),
+                              ),
+                            );
+                          else if (customList is Playlist)
+                            navStore.pushOnLibrary(
+                              MaterialPageRoute<Widget>(
+                                builder: (context) => PlaylistPage(playlist: customList),
+                              ),
+                            );
+                        },
+                        leading: PlaylistCover(
+                          size: 56.0,
+                          gradient: customList.gradient,
+                          icon: customList.icon,
+                        ),
+                        title: Text(
+                          customList.name,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        trailing: PlayShuffleButton(
+                          onPressed: () {
+                            if (customList is SmartList)
+                              audioStore.playSmartList(customList);
+                            else if (customList is Playlist) audioStore.playPlaylist(customList);
+                          },
+                          shuffleMode: customList.shuffleMode,
+                          size: 48.0,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                if (customLists.isEmpty)
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(12.0, 0.0, 12.0, 12.0),
+                    child: Text(
+                      'No playlists yet. You can add them in the library.',
+                      style: TEXT_HEADER_S.copyWith(color: Colors.white54),
+                    ),
+                  )
+              ],
+            ),
           ),
         );
       },

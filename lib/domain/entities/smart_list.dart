@@ -47,11 +47,17 @@ class SmartList extends CustomList with EquatableMixin implements Playable {
 
   @override
   PlayableType get type => PlayableType.smartlist;
+  
+  @override
+  String get identifier => id.toString();
+  
+  @override
+  String get title => name;
 }
 
 class Filter extends Equatable {
   const Filter({
-    required this.artists,
+    this.artists,
     required this.excludeArtists,
     this.minPlayCount,
     this.maxPlayCount,
@@ -65,7 +71,7 @@ class Filter extends Equatable {
     this.limit,
   });
 
-  final List<Artist> artists;
+  final List<Artist>? artists;
   final bool excludeArtists;
 
   final int? minPlayCount;
