@@ -8,6 +8,7 @@
             "name": "Debug",
             "request": "launch",
             "type": "dart",
+            "cwd": "./src/",
             "args": [
                 "--flavor",
                 "dev",
@@ -17,6 +18,7 @@
             "name": "Test",
             "type": "dart",
             "request": "launch",
+            "cwd": "./src/",
             "program": "./test/",
             "args": [
                 "--flavor",
@@ -27,6 +29,7 @@
             "name": "Profile",
             "type": "dart",
             "request": "launch",
+            "cwd": "./src/",
             "flutterMode": "profile",
             "args": [
                 "--flavor",
@@ -37,6 +40,7 @@
             "name": "Release",
             "type": "dart",
             "request": "launch",
+            "cwd": "./src/",
             "flutterMode": "release",
             "args": [
                 "--flavor",
@@ -47,6 +51,7 @@
             "name": "PRODUCTION",
             "type": "dart",
             "request": "launch",
+            "cwd": "./src/",
             "flutterMode": "release",
             "args": [
                 "--flavor",

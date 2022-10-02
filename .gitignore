@@ -28,7 +28,7 @@
 .packages
 .pub-cache/
 .pub/
-/build/
+build/
 
 # Web related
 lib/generated_plugin_registrant.dart
@@ -39,9 +39,5 @@ lib/generated_plugin_registrant.dart
 
 ### Custom Part ----------------------------------------------------------------
 
-assets/disease.jpg
-assets/twilight.jpg
-assets/flick.jpg
-assets/dethroned.jpg
-assets/svtvnic.jpg
+
 coverage/lcov.info
