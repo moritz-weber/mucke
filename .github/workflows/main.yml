@@ -34,4 +34,4 @@ jobs:
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags')
       with:
-        files: src/app/build/outputs/apk/release/app-prod-release.apk
+        files: build/app/outputs/flutter-apk/app-prod-release.apk
