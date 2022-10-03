@@ -1,3 +1,5 @@
+![mucke](src/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png)
+
 # mucke
 ![Build](https://github.com/moritz-weber/mucke/workflows/Build/badge.svg)
 
