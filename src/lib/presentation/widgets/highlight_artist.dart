@@ -36,37 +36,24 @@ class HighlightArtist extends StatelessWidget {
               builder: (context) => ArtistDetailsPage(artist: artist),
             ),
           ),
-          child: Container(
+          child: Card(
             clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
-              borderRadius: BorderRadius.circular(8.0),
-              boxShadow: const [
-                BoxShadow(
-                  color: Colors.black54,
-                  blurRadius: 8,
-                  offset: Offset(0, 1),
-                  spreadRadius: -5,
-                ),
-              ],
-            ),
-            child: Material(
-              color: Colors.transparent,
+            margin: EdgeInsets.zero,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(12, 12, 0, 12),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: PlaylistCover(
-                      gradient: CUSTOM_GRADIENTS['kashmir']!,
-                      icon: Icons.person_rounded,
-                      size: 100.0,
-                      circle: true,
-                    ),
+                  PlaylistCover(
+                    gradient: CUSTOM_GRADIENTS['kashmir']!,
+                    icon: Icons.person_rounded,
+                    size: 100.0,
+                    circle: true,
                   ),
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
+                      padding: const EdgeInsets.only(left: 16.0, top: 4.0, bottom: 4.0),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.max,

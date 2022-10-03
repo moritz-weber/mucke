@@ -31,50 +31,37 @@ class HighlightAlbum extends StatelessWidget {
               builder: (context) => AlbumDetailsPage(album: album),
             ),
           ),
-          child: Container(
+          child: Card(
             clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
-              borderRadius: BorderRadius.circular(8.0),
-              boxShadow: const [
-                BoxShadow(
-                  color: Colors.black54,
-                  blurRadius: 8,
-                  offset: Offset(0, 1),
-                  spreadRadius: -5,
-                ),
-              ],
-            ),
-            child: Material(
-              color: Colors.transparent,
+            margin: EdgeInsets.zero,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(12, 12, 0, 12),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      width: 100.0,
-                      child: AspectRatio(
-                        aspectRatio: 1,
-                        child: Container(
-                          clipBehavior: Clip.antiAlias,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(2.0),
-                            boxShadow: const [
-                              BoxShadow(color: Colors.black54, blurRadius: 4, offset: Offset(0, 0), spreadRadius: -1),
-                            ],
-                          ),
-                          child: Image(
-                            image: getAlbumImage(album.albumArtPath),
-                            fit: BoxFit.cover,
-                          ),
+                  SizedBox(
+                    width: 100.0,
+                    child: AspectRatio(
+                      aspectRatio: 1,
+                      child: Container(
+                        clipBehavior: Clip.antiAlias,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(2.0),
+                          boxShadow: const [
+                            BoxShadow(color: Colors.black54, blurRadius: 4, offset: Offset(0, 0), spreadRadius: -1),
+                          ],
+                        ),
+                        child: Image(
+                          image: getAlbumImage(album.albumArtPath),
+                          fit: BoxFit.cover,
                         ),
                       ),
                     ),
                   ),
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
+                      padding: const EdgeInsets.only(left: 16.0, top: 4.0, bottom: 4.0),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.max,
