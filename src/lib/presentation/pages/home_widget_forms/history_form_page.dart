@@ -49,15 +49,6 @@ class _HistoryFormPageState extends State<HistoryFormPage> {
           ),
           actions: [
             IconButton(
-              icon: const Icon(Icons.delete_rounded),
-              onPressed: () async {
-                // TODO: this works, but may only pop back to the smart list page...
-                // can I use pop 2x here?
-                // await musicDataStore.removePlaylist(widget.playlist!);
-                navStore.pop(context);
-              },
-            ),
-            IconButton(
               icon: const Icon(Icons.check_rounded),
               onPressed: () async {
                 // store.validateAll();
@@ -68,7 +59,6 @@ class _HistoryFormPageState extends State<HistoryFormPage> {
               },
             ),
           ],
-          titleSpacing: 0.0,
         ),
         body: ListTileTheme(
           contentPadding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
