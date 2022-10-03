@@ -4,7 +4,7 @@ name: Build
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -32,6 +32,6 @@ jobs:
     - run: flutter build apk --flavor prod
     - name: Github Release
       uses: softprops/action-gh-release@v1
-      if: startsWith(github.ref, 'refs/tags')
+      # if: startsWith(github.ref, 'refs/tags')
       with:
-        files: build/app/outputs/flutter-apk/app-prod-release.apk
+        files: src/build/app/outputs/flutter-apk/app-prod-release.apk
