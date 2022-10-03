@@ -221,7 +221,7 @@ class _SongBottomSheetState extends State<SongBottomSheet> {
                           else
                             setState(() => optionIndex = 1);
                         },
-                        icon: const Icon(Icons.link),
+                        icon: const Icon(Icons.link_rounded),
                         color: utils.linkColor(song),
                       ),
                       LikeButton(song: song),

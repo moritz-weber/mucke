@@ -66,7 +66,7 @@ class SongListTileNumbered extends StatelessWidget {
           ),
           if (!isSelectEnabled)
             IconButton(
-              icon: const Icon(Icons.more_vert),
+              icon: const Icon(Icons.more_vert_rounded),
               iconSize: 20.0,
               onPressed: () => onTapMore(),
             )

@@ -25,7 +25,7 @@ class ArtistHeader extends StatelessWidget {
         color: Colors.white,
       ),
       leading: IconButton(
-        icon: const Icon(Icons.chevron_left),
+        icon: const Icon(Icons.chevron_left_rounded),
         onPressed: () => navStore.pop(context),
       ),
       flexibleSpace: FlexibleSpaceBar(

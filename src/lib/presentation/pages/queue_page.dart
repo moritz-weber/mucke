@@ -44,7 +44,7 @@ class QueuePage extends StatelessWidget {
             child: SizedBox(
               width: 56.0,
               child: IconButton(
-                icon: const Icon(Icons.expand_more),
+                icon: const Icon(Icons.expand_more_rounded),
                 onPressed: () => Navigator.pop(context),
               ),
             ),

@@ -30,7 +30,7 @@ class SongCustomizationButtons extends StatelessWidget {
             children: [
               IconButton(
                 icon: Icon(
-                  song.next || song.previous ? Icons.link : Icons.link_off,
+                  song.next || song.previous ? Icons.link_rounded : Icons.link_off_rounded,
                   color: linkColor(song),
                 ),
                 iconSize: 20.0,

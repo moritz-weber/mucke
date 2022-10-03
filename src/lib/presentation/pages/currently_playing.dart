@@ -138,7 +138,7 @@ class CurrentlyPlayingPage extends StatelessWidget {
                           child: Padding(
                             padding: EdgeInsets.only(bottom: 8.0),
                             child: Icon(
-                              Icons.expand_less,
+                              Icons.expand_less_rounded,
                               color: Colors.white70,
                             ),
                           ),

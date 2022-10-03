@@ -18,7 +18,7 @@ class CurrentlyPlayingHeader extends StatelessWidget {
     return Row(
       children: [
         IconButton(
-          icon: const Icon(Icons.expand_more),
+          icon: const Icon(Icons.expand_more_rounded),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -44,7 +44,7 @@ class CurrentlyPlayingHeader extends StatelessWidget {
           ),
         ),
         IconButton(
-          icon: const Icon(Icons.more_vert),
+          icon: const Icon(Icons.more_vert_rounded),
           onPressed: () => onMoreTap(context),
         )
       ],

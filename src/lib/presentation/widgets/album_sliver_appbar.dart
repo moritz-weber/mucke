@@ -51,7 +51,7 @@ class _AlbumSliverAppBarState extends State<AlbumSliverAppBar> {
         maxHeight: maxHeight,
       ),
       leading: IconButton(
-        icon: const Icon(Icons.chevron_left),
+        icon: const Icon(Icons.chevron_left_rounded),
         onPressed: () => navStore.pop(context),
       ),
       actions: [

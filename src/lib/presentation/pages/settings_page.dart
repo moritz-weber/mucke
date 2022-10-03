@@ -57,7 +57,7 @@ class SettingsPage extends StatelessWidget {
             ),
             ListTile(
               title: const Text('Manage library folders'),
-              trailing: const Icon(Icons.chevron_right),
+              trailing: const Icon(Icons.chevron_right_rounded),
               onTap: () => navStore.push(
                 context,
                 MaterialPageRoute(

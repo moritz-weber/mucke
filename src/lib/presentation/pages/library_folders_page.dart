@@ -24,12 +24,12 @@ class LibraryFoldersPage extends StatelessWidget {
             style: TEXT_HEADER,
           ),
           leading: IconButton(
-            icon: const Icon(Icons.chevron_left),
+            icon: const Icon(Icons.chevron_left_rounded),
             onPressed: () => navStore.pop(context),
           ),
           actions: [
             IconButton(
-              icon: const Icon(Icons.add), 
+              icon: const Icon(Icons.add_rounded), 
               onPressed: () => _openFilePicker(settingsStore),
             ),
           ],
@@ -45,7 +45,7 @@ class LibraryFoldersPage extends StatelessWidget {
                 return ListTile(
                   title: Text(path),
                   trailing: IconButton(
-                    icon: const Icon(Icons.delete),
+                    icon: const Icon(Icons.delete_rounded),
                     onPressed: () => settingsStore.removeLibraryFolder(path),
                   ),
                 );

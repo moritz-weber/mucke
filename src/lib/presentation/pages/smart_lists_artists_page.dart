@@ -28,7 +28,7 @@ class SmartListArtistsPage extends StatelessWidget {
             style: TEXT_HEADER,
           ),
           leading: IconButton(
-            icon: const Icon(Icons.close),
+            icon: const Icon(Icons.close_rounded),
             onPressed: () {
               store.selectedArtists.clear();
               store.selectedArtists.addAll(initialSet);
@@ -37,7 +37,7 @@ class SmartListArtistsPage extends StatelessWidget {
           ),
           actions: [
             IconButton(
-              icon: const Icon(Icons.check),
+              icon: const Icon(Icons.check_rounded),
               onPressed: () async {
                 navStore.pop(context);
               },

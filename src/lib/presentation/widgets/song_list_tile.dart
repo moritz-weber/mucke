@@ -65,7 +65,7 @@ class SongListTile extends StatelessWidget {
         subtitleWidget = Row(
           children: [
             const Icon(
-              Icons.favorite,
+              Icons.favorite_rounded,
               size: 12.0,
             ),
             const SizedBox(width: 2.0),
@@ -75,7 +75,7 @@ class SongListTile extends StatelessWidget {
             ),
             const SizedBox(width: 8.0),
             const Icon(
-              Icons.play_arrow,
+              Icons.play_arrow_rounded,
               size: 12.0,
             ),
             const SizedBox(width: 2.0),
@@ -133,7 +133,7 @@ class SongListTile extends StatelessWidget {
           ),
           if (!isSelectEnabled)
             IconButton(
-              icon: const Icon(Icons.more_vert),
+              icon: const Icon(Icons.more_vert_rounded),
               iconSize: 20.0,
               onPressed: () => onTapMore(),
             )

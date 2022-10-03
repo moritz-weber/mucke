@@ -74,7 +74,7 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
                           if (songsByDisc.length > 1)
                             ListTile(
                               title: Text('Disc ${d + 1}', style: TEXT_HEADER),
-                              leading: const SizedBox(width: 40, child: Icon(Icons.album)),
+                              leading: const SizedBox(width: 40, child: Icon(Icons.album_rounded)),
                               contentPadding: const EdgeInsets.only(left: HORIZONTAL_PADDING),
                             ),
                           if (songsByDisc.length > 1)
