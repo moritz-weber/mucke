@@ -127,6 +127,12 @@ ThemeData theme() => ThemeData(
           return DARK4;
         }),
       ),
+      scrollbarTheme: ScrollbarThemeData(
+        thickness: MaterialStateProperty.all(4.0),
+        radius: const Radius.circular(2.0),
+        thumbColor: MaterialStateProperty.all(Colors.white12),
+        interactive: true,
+      ),
     );
 
 const TextStyle TEXT_HEADER = TextStyle(

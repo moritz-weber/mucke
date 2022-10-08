@@ -249,7 +249,7 @@ class Header extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(4.0),
           boxShadow: const [
-            BoxShadow(color: LIGHT1, blurRadius: 4, offset: Offset(0, 1), spreadRadius: -3.0),
+            // BoxShadow(color: LIGHT1, blurRadius: 4, offset: Offset(0, 1), spreadRadius: -3.0),
             BoxShadow(color: Colors.black54, blurRadius: 8, offset: Offset(0, 2)),
           ],
           image: DecorationImage(

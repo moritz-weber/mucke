@@ -53,8 +53,8 @@ class _PlaylistPageState extends State<PlaylistPage> {
     final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
     final NavigationStore navStore = GetIt.I<NavigationStore>();
 
-    return SafeArea(
-      child: Observer(
+    return Scaffold(
+      body: Observer(
         builder: (context) {
           final songs = store.playlistSongStream.value ?? [];
           final playlist = store.playlistStream.value ?? widget.playlist;
@@ -78,178 +78,176 @@ class _PlaylistPageState extends State<PlaylistPage> {
             default:
           }
 
-          return Scaffold(
-            body: Scrollbar(
-              child: CustomScrollView(
-                slivers: [
-                  CoverSliverAppBar(
-                    actions: [
-                      Observer(
-                        builder: (context) {
-                          final isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
+          return Scrollbar(
+            child: CustomScrollView(
+              slivers: [
+                CoverSliverAppBar(
+                  actions: [
+                    Observer(
+                      builder: (context) {
+                        final isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
 
-                          if (!isMultiSelectEnabled)
-                            return IconButton(
-                              key: GlobalKey(),
-                              icon: const Icon(Icons.edit_rounded),
-                              onPressed: () => navStore.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (BuildContext context) => PlaylistFormPage(
-                                    playlist: playlist,
-                                  ),
+                        if (!isMultiSelectEnabled)
+                          return IconButton(
+                            key: GlobalKey(),
+                            icon: const Icon(Icons.edit_rounded),
+                            onPressed: () => navStore.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (BuildContext context) => PlaylistFormPage(
+                                  playlist: playlist,
                                 ),
                               ),
-                            );
-
-                          return Container();
-                        },
-                      ),
-                      Observer(
-                        builder: (context) {
-                          final isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
-
-                          if (isMultiSelectEnabled)
-                            return IconButton(
-                              key: GlobalKey(),
-                              icon: const Icon(Icons.more_vert_rounded),
-                              onPressed: () => _openMultiselectMenu(context, playlist),
-                            );
-
-                          return Container();
-                        },
-                      ),
-                      Observer(
-                        builder: (context) {
-                          final isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
-                          final isAllSelected = store.selection.isAllSelected;
-
-                          if (isMultiSelectEnabled)
-                            return IconButton(
-                              key: GlobalKey(),
-                              icon: isAllSelected
-                                  ? const Icon(Icons.deselect_rounded)
-                                  : const Icon(Icons.select_all_rounded),
-                              onPressed: () {
-                                if (isAllSelected)
-                                  store.selection.deselectAll();
-                                else
-                                  store.selection.selectAll();
-                              },
-                            );
-
-                          return Container();
-                        },
-                      ),
-                      Observer(
-                        builder: (context) {
-                          final isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
-                          return IconButton(
-                            key: const ValueKey('PLAYLIST_MULTISELECT'),
-                            icon: isMultiSelectEnabled
-                                ? const Icon(Icons.close_rounded)
-                                : const Icon(Icons.checklist_rtl_rounded),
-                            onPressed: () => store.selection.toggleMultiSelect(),
+                            ),
                           );
-                        },
-                      ),
-                    ],
-                    title: playlist.name,
-                    subtitle2: '${songs.length} songs • ${utils.msToTimeString(totalDuration)}',
-                    background: Container(
-                      decoration: BoxDecoration(
-                        gradient: playlist.gradient,
-                      ),
+
+                        return Container();
+                      },
                     ),
-                    cover: PlaylistCover(
-                      size: 120,
-                      icon: playlist.icon,
+                    Observer(
+                      builder: (context) {
+                        final isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
+
+                        if (isMultiSelectEnabled)
+                          return IconButton(
+                            key: GlobalKey(),
+                            icon: const Icon(Icons.more_vert_rounded),
+                            onPressed: () => _openMultiselectMenu(context, playlist),
+                          );
+
+                        return Container();
+                      },
+                    ),
+                    Observer(
+                      builder: (context) {
+                        final isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
+                        final isAllSelected = store.selection.isAllSelected;
+
+                        if (isMultiSelectEnabled)
+                          return IconButton(
+                            key: GlobalKey(),
+                            icon: isAllSelected
+                                ? const Icon(Icons.deselect_rounded)
+                                : const Icon(Icons.select_all_rounded),
+                            onPressed: () {
+                              if (isAllSelected)
+                                store.selection.deselectAll();
+                              else
+                                store.selection.selectAll();
+                            },
+                          );
+
+                        return Container();
+                      },
+                    ),
+                    Observer(
+                      builder: (context) {
+                        final isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
+                        return IconButton(
+                          key: const ValueKey('PLAYLIST_MULTISELECT'),
+                          icon: isMultiSelectEnabled
+                              ? const Icon(Icons.close_rounded)
+                              : const Icon(Icons.checklist_rtl_rounded),
+                          onPressed: () => store.selection.toggleMultiSelect(),
+                        );
+                      },
+                    ),
+                  ],
+                  title: playlist.name,
+                  subtitle2: '${songs.length} songs • ${utils.msToTimeString(totalDuration)}',
+                  background: Container(
+                    decoration: BoxDecoration(
                       gradient: playlist.gradient,
                     ),
-                    button: ElevatedButton(
-                      onPressed: () => audioStore.playPlaylist(playlist),
-                      child: Row(
-                        children: [
-                          const Expanded(child: Center(child: Text('Play'))),
-                          Icon(playIcon),
-                        ],
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        shape: const StadiumBorder(),
-                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                        primary: Colors.white10,
-                        shadowColor: Colors.transparent,
-                      ),
+                  ),
+                  cover: PlaylistCover(
+                    size: 120,
+                    icon: playlist.icon,
+                    gradient: playlist.gradient,
+                  ),
+                  button: ElevatedButton(
+                    onPressed: () => audioStore.playPlaylist(playlist),
+                    child: Row(
+                      children: [
+                        const Expanded(child: Center(child: Text('Play'))),
+                        Icon(playIcon),
+                      ],
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      shape: const StadiumBorder(),
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      primary: Colors.white10,
+                      shadowColor: Colors.transparent,
                     ),
                   ),
-                  Observer(
-                    builder: (context) {
-                      final bool isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
-                      final List<bool> isSelected = store.selection.isSelected.toList();
+                ),
+                Observer(
+                  builder: (context) {
+                    final bool isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
+                    final List<bool> isSelected = store.selection.isSelected.toList();
 
-                      return ReorderableSliverList(
-                        enabled: !isMultiSelectEnabled,
-                        delegate: ReorderableSliverChildBuilderDelegate(
-                          (context, int index) {
-                            final Song song = songs[index];
-                            return Dismissible(
-                              key: ValueKey(song.path),
-                              child: SongListTile(
-                                song: song,
-                                showAlbum: true,
-                                subtitle: Subtitle.artistAlbum,
-                                onTap: () => audioStore.playSong(index, songs, playlist),
-                                onTapMore: () => showModalBottomSheet(
-                                  context: context,
-                                  useRootNavigator: true,
-                                  isScrollControlled: true,
-                                  backgroundColor: Colors.transparent,
-                                  // TODO: include RemoveFromPlaylist here!
-                                  builder: (context) => SongBottomSheet(
-                                    song: song,
-                                  ),
-                                ),
-                                isSelectEnabled: isMultiSelectEnabled,
-                                isSelected: isMultiSelectEnabled && isSelected[index],
-                                onSelect: (bool selected) =>
-                                    store.selection.setSelected(selected, index),
-                              ),
-                              onDismissed: (direction) {
-                                musicDataStore.removePlaylistEntry(playlist.id, index);
-                              },
-                              background: Container(
-                                width: double.infinity,
-                                color: RED,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: HORIZONTAL_PADDING,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: const [
-                                      Icon(
-                                        Icons.playlist_remove_rounded,
-                                        color: Colors.white,
-                                      ),
-                                      Icon(
-                                        Icons.playlist_remove_rounded,
-                                        color: Colors.white,
-                                      )
-                                    ],
-                                  ),
+                    return ReorderableSliverList(
+                      enabled: !isMultiSelectEnabled,
+                      delegate: ReorderableSliverChildBuilderDelegate(
+                        (context, int index) {
+                          final Song song = songs[index];
+                          return Dismissible(
+                            key: ValueKey(song.path),
+                            child: SongListTile(
+                              song: song,
+                              showAlbum: true,
+                              subtitle: Subtitle.artistAlbum,
+                              onTap: () => audioStore.playSong(index, songs, playlist),
+                              onTapMore: () => showModalBottomSheet(
+                                context: context,
+                                useRootNavigator: true,
+                                isScrollControlled: true,
+                                backgroundColor: Colors.transparent,
+                                // TODO: include RemoveFromPlaylist here!
+                                builder: (context) => SongBottomSheet(
+                                  song: song,
                                 ),
                               ),
-                            );
-                          },
-                          childCount: songs.length,
-                        ),
-                        onReorder: (oldIndex, newIndex) =>
-                            musicDataStore.movePlaylistEntry(playlist.id, oldIndex, newIndex),
-                      );
-                    },
-                  )
-                ],
-              ),
+                              isSelectEnabled: isMultiSelectEnabled,
+                              isSelected: isMultiSelectEnabled && isSelected[index],
+                              onSelect: (bool selected) =>
+                                  store.selection.setSelected(selected, index),
+                            ),
+                            onDismissed: (direction) {
+                              musicDataStore.removePlaylistEntry(playlist.id, index);
+                            },
+                            background: Container(
+                              width: double.infinity,
+                              color: RED,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: HORIZONTAL_PADDING,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: const [
+                                    Icon(
+                                      Icons.playlist_remove_rounded,
+                                      color: Colors.white,
+                                    ),
+                                    Icon(
+                                      Icons.playlist_remove_rounded,
+                                      color: Colors.white,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                        childCount: songs.length,
+                      ),
+                      onReorder: (oldIndex, newIndex) =>
+                          musicDataStore.movePlaylistEntry(playlist.id, oldIndex, newIndex),
+                    );
+                  },
+                )
+              ],
             ),
           );
         },

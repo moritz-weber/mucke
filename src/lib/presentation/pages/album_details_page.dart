@@ -54,68 +54,70 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
             discSongNums.add(songsByDisc[i].length + discSongNums[i]);
           }
 
-          return CustomScrollView(
-            slivers: <Widget>[
-              AlbumSliverAppBar(
-                album: widget.album,
-                store: store,
-                onTapMultiSelectMenu: () => _openMultiselectMenu(context),
-              ),
-              for (int d = 0; d < songsByDisc.length; d++)
-                Observer(
-                  builder: (context) {
-                    final bool isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
-                    final List<bool> isSelected = store.selection.isSelected.toList();
-
-                    return SliverList(
-                      delegate: SliverChildListDelegate(
-                        [
-                          if (songsByDisc.length > 1 && d > 0) Container(height: 8.0),
-                          if (songsByDisc.length > 1)
-                            ListTile(
-                              title: Text('Disc ${d + 1}', style: TEXT_HEADER),
-                              leading: const SizedBox(width: 40, child: Icon(Icons.album_rounded)),
-                              contentPadding: const EdgeInsets.only(left: HORIZONTAL_PADDING),
-                            ),
-                          if (songsByDisc.length > 1)
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: HORIZONTAL_PADDING,
+          return Scrollbar(
+            child: CustomScrollView(
+              slivers: <Widget>[
+                AlbumSliverAppBar(
+                  album: widget.album,
+                  store: store,
+                  onTapMultiSelectMenu: () => _openMultiselectMenu(context),
+                ),
+                for (int d = 0; d < songsByDisc.length; d++)
+                  Observer(
+                    builder: (context) {
+                      final bool isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
+                      final List<bool> isSelected = store.selection.isSelected.toList();
+          
+                      return SliverList(
+                        delegate: SliverChildListDelegate(
+                          [
+                            if (songsByDisc.length > 1 && d > 0) Container(height: 8.0),
+                            if (songsByDisc.length > 1)
+                              ListTile(
+                                title: Text('Disc ${d + 1}', style: TEXT_HEADER),
+                                leading: const SizedBox(width: 40, child: Icon(Icons.album_rounded)),
+                                contentPadding: const EdgeInsets.only(left: HORIZONTAL_PADDING),
                               ),
-                              child: Container(
-                                height: 1.0,
-                                color: Colors.white10,
-                              ),
-                            ),
-                          for (int s = 0; s < songsByDisc[d].length; s++)
-                            SongListTileNumbered(
-                              song: songsByDisc[d][s],
-                              isSelectEnabled: isMultiSelectEnabled,
-                              isSelected: isMultiSelectEnabled && isSelected[s + discSongNums[d]],
-                              onTap: () => audioStore.playSong(
-                                s + _calcOffset(d, songsByDisc),
-                                store.albumSongStream.value!,
-                                widget.album,
-                              ),
-                              onTapMore: () => showModalBottomSheet(
-                                context: context,
-                                useRootNavigator: true,
-                                isScrollControlled: true,
-                                backgroundColor: Colors.transparent,
-                                builder: (context) => SongBottomSheet(
-                                  song: songsByDisc[d][s],
-                                  enableGoToAlbum: false,
+                            if (songsByDisc.length > 1)
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: HORIZONTAL_PADDING,
+                                ),
+                                child: Container(
+                                  height: 1.0,
+                                  color: Colors.white10,
                                 ),
                               ),
-                              onSelect: (bool selected) =>
-                                  store.selection.setSelected(selected, s + discSongNums[d]),
-                            )
-                        ],
-                      ),
-                    );
-                  },
-                ),
-            ],
+                            for (int s = 0; s < songsByDisc[d].length; s++)
+                              SongListTileNumbered(
+                                song: songsByDisc[d][s],
+                                isSelectEnabled: isMultiSelectEnabled,
+                                isSelected: isMultiSelectEnabled && isSelected[s + discSongNums[d]],
+                                onTap: () => audioStore.playSong(
+                                  s + _calcOffset(d, songsByDisc),
+                                  store.albumSongStream.value!,
+                                  widget.album,
+                                ),
+                                onTapMore: () => showModalBottomSheet(
+                                  context: context,
+                                  useRootNavigator: true,
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.transparent,
+                                  builder: (context) => SongBottomSheet(
+                                    song: songsByDisc[d][s],
+                                    enableGoToAlbum: false,
+                                  ),
+                                ),
+                                onSelect: (bool selected) =>
+                                    store.selection.setSelected(selected, s + discSongNums[d]),
+                              )
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+              ],
+            ),
           );
         },
       ),

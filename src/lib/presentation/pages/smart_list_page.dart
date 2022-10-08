@@ -49,8 +49,8 @@ class _SmartListPageState extends State<SmartListPage> {
     final AudioStore audioStore = GetIt.I<AudioStore>();
     final NavigationStore navStore = GetIt.I<NavigationStore>();
 
-    return SafeArea(
-      child: Observer(
+    return Scaffold(
+      body: Observer(
         builder: (context) {
           final songs = store.smartListSongStream.value ?? [];
           final smartList = store.smartListStream.value ?? widget.smartList;
@@ -74,146 +74,144 @@ class _SmartListPageState extends State<SmartListPage> {
             default:
           }
 
-          return Scaffold(
-            body: Scrollbar(
-              child: CustomScrollView(
-                slivers: [
-                  CoverSliverAppBar(
-                    actions: [
-                      Observer(
-                        builder: (context) {
-                          final isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
+          return Scrollbar(
+            child: CustomScrollView(
+              slivers: [
+                CoverSliverAppBar(
+                  actions: [
+                    Observer(
+                      builder: (context) {
+                        final isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
 
-                          if (!isMultiSelectEnabled)
-                            return IconButton(
-                              key: GlobalKey(),
-                              icon: const Icon(Icons.edit_rounded),
-                              onPressed: () => navStore.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (BuildContext context) => SmartListFormPage(
-                                    smartList: smartList,
-                                  ),
+                        if (!isMultiSelectEnabled)
+                          return IconButton(
+                            key: GlobalKey(),
+                            icon: const Icon(Icons.edit_rounded),
+                            onPressed: () => navStore.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (BuildContext context) => SmartListFormPage(
+                                  smartList: smartList,
                                 ),
                               ),
-                            );
-
-                          return Container();
-                        },
-                      ),
-                      Observer(
-                        builder: (context) {
-                          final isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
-
-                          if (isMultiSelectEnabled)
-                            return IconButton(
-                              key: GlobalKey(),
-                              icon: const Icon(Icons.more_vert_rounded),
-                              onPressed: () => _openMultiselectMenu(context),
-                            );
-
-                          return Container();
-                        },
-                      ),
-                      Observer(
-                        builder: (context) {
-                          final isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
-                          final isAllSelected = store.selection.isAllSelected;
-
-                          if (isMultiSelectEnabled)
-                            return IconButton(
-                              key: GlobalKey(),
-                              icon: isAllSelected
-                                  ? const Icon(Icons.deselect_rounded)
-                                  : const Icon(Icons.select_all_rounded),
-                              onPressed: () {
-                                if (isAllSelected)
-                                  store.selection.deselectAll();
-                                else
-                                  store.selection.selectAll();
-                              },
-                            );
-
-                          return Container();
-                        },
-                      ),
-                      Observer(
-                        builder: (context) {
-                          final isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
-                          return IconButton(
-                            key: const ValueKey('SMARTLIST_MULTISELECT'),
-                            icon: isMultiSelectEnabled
-                                ? const Icon(Icons.close_rounded)
-                                : const Icon(Icons.checklist_rtl_rounded),
-                            onPressed: () => store.selection.toggleMultiSelect(),
+                            ),
                           );
-                        },
-                      ),
-                    ],
-                    title: smartList.name,
-                    subtitle2: '${songs.length} songs • ${utils.msToTimeString(totalDuration)}',
-                    background: Container(
-                      decoration: BoxDecoration(
-                        gradient: smartList.gradient,
-                      ),
+
+                        return Container();
+                      },
                     ),
-                    cover: PlaylistCover(
-                      size: 120,
-                      icon: smartList.icon,
+                    Observer(
+                      builder: (context) {
+                        final isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
+
+                        if (isMultiSelectEnabled)
+                          return IconButton(
+                            key: GlobalKey(),
+                            icon: const Icon(Icons.more_vert_rounded),
+                            onPressed: () => _openMultiselectMenu(context),
+                          );
+
+                        return Container();
+                      },
+                    ),
+                    Observer(
+                      builder: (context) {
+                        final isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
+                        final isAllSelected = store.selection.isAllSelected;
+
+                        if (isMultiSelectEnabled)
+                          return IconButton(
+                            key: GlobalKey(),
+                            icon: isAllSelected
+                                ? const Icon(Icons.deselect_rounded)
+                                : const Icon(Icons.select_all_rounded),
+                            onPressed: () {
+                              if (isAllSelected)
+                                store.selection.deselectAll();
+                              else
+                                store.selection.selectAll();
+                            },
+                          );
+
+                        return Container();
+                      },
+                    ),
+                    Observer(
+                      builder: (context) {
+                        final isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
+                        return IconButton(
+                          key: const ValueKey('SMARTLIST_MULTISELECT'),
+                          icon: isMultiSelectEnabled
+                              ? const Icon(Icons.close_rounded)
+                              : const Icon(Icons.checklist_rtl_rounded),
+                          onPressed: () => store.selection.toggleMultiSelect(),
+                        );
+                      },
+                    ),
+                  ],
+                  title: smartList.name,
+                  subtitle2: '${songs.length} songs • ${utils.msToTimeString(totalDuration)}',
+                  background: Container(
+                    decoration: BoxDecoration(
                       gradient: smartList.gradient,
                     ),
-                    button: ElevatedButton(
-                      onPressed: () => audioStore.playSmartList(smartList),
-                      child: Row(
-                        children: [
-                          const Expanded(child: Center(child: Text('Play'))),
-                          Icon(playIcon),
-                        ],
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        shape: const StadiumBorder(),
-                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                        primary: Colors.white10,
-                        shadowColor: Colors.transparent,
-                      ),
+                  ),
+                  cover: PlaylistCover(
+                    size: 120,
+                    icon: smartList.icon,
+                    gradient: smartList.gradient,
+                  ),
+                  button: ElevatedButton(
+                    onPressed: () => audioStore.playSmartList(smartList),
+                    child: Row(
+                      children: [
+                        const Expanded(child: Center(child: Text('Play'))),
+                        Icon(playIcon),
+                      ],
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      shape: const StadiumBorder(),
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      backgroundColor: Colors.white10,
+                      shadowColor: Colors.transparent,
                     ),
                   ),
-                  Observer(
-                    builder: (context) {
-                      final bool isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
-                      final List<bool> isSelected = store.selection.isSelected.toList();
+                ),
+                Observer(
+                  builder: (context) {
+                    final bool isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
+                    final List<bool> isSelected = store.selection.isSelected.toList();
 
-                      return SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                            final Song song = songs[index];
-                            return SongListTile(
-                              song: song,
-                              showAlbum: true,
-                              subtitle: Subtitle.artistAlbum,
-                              isSelectEnabled: isMultiSelectEnabled,
-                              isSelected: isMultiSelectEnabled && isSelected[index],
-                              onTap: () => audioStore.playSong(index, songs, smartList),
-                              onTapMore: () => showModalBottomSheet(
-                                context: context,
-                                useRootNavigator: true,
-                                isScrollControlled: true,
-                                backgroundColor: Colors.transparent,
-                                builder: (context) => SongBottomSheet(
-                                  song: song,
-                                ),
+                    return SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          final Song song = songs[index];
+                          return SongListTile(
+                            song: song,
+                            showAlbum: true,
+                            subtitle: Subtitle.artistAlbum,
+                            isSelectEnabled: isMultiSelectEnabled,
+                            isSelected: isMultiSelectEnabled && isSelected[index],
+                            onTap: () => audioStore.playSong(index, songs, smartList),
+                            onTapMore: () => showModalBottomSheet(
+                              context: context,
+                              useRootNavigator: true,
+                              isScrollControlled: true,
+                              backgroundColor: Colors.transparent,
+                              builder: (context) => SongBottomSheet(
+                                song: song,
                               ),
-                              onSelect: (bool selected) =>
-                                  store.selection.setSelected(selected, index),
-                            );
-                          },
-                          childCount: songs.length,
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
+                            ),
+                            onSelect: (bool selected) =>
+                                store.selection.setSelected(selected, index),
+                          );
+                        },
+                        childCount: songs.length,
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
           );
         },
