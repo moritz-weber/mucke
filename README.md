@@ -21,8 +21,4 @@ A music player that gets the best out of your local collection.
 
 ## Previews
 
-<img src="assets/screenshots/like.png" width="18%" />
-<img src="assets/screenshots/exclude.png" width="18%" />
-<img src="assets/screenshots/link.png" width="18%" />
-<img src="assets/screenshots/smartlist.png" width="18%" />
-<img src="assets/screenshots/home.png" width="18%" />
+<img src="assets/screenshots/like.png" width="18%" />&nbsp;<img src="assets/screenshots/exclude.png" width="18%" />&nbsp;<img src="assets/screenshots/link.png" width="18%" />&nbsp;<img src="assets/screenshots/smartlist.png" width="18%" />&nbsp;<img src="assets/screenshots/home.png" width="18%" />
