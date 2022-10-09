@@ -2,7 +2,7 @@ name: mucke
 description: music player
 publish_to: none
 
-version: 1.0.1+2
+version: 1.0.2+3
 
 environment:
   sdk: ">=2.17.0 <3.0.0"
@@ -24,7 +24,6 @@ dependencies:
   flutter_mobx: ^2.0.0  # MIT
   flutter_speed_dial: ^5.0.0  # MIT
   get_it: ^7.1.3  # MIT
-  # google_fonts: ^2.3.1  # Apache 2.0
   just_audio: ^0.9.18  # MIT
   mobx: ^2.0.1  # MIT
   path: ^1.8.0  # BSD 3
