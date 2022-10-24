@@ -33,6 +33,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     final List<aq.SongModel> aqSongs = [];
 
     for (final libDir in libDirs) {
+      await _onAudioQuery.scanMedia(libDir.path);
       aqSongs.addAll(await _onAudioQuery.querySongs(path: libDir.path));
     }
 
