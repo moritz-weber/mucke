@@ -1,5 +1,6 @@
 import 'package:audiotagger/models/tag.dart';
 import 'package:drift/drift.dart';
+import 'package:on_audio_query/on_audio_query.dart' as aq;
 
 import '../../domain/entities/album.dart';
 import '../datasources/moor_database.dart';
@@ -36,6 +37,24 @@ class AlbumModel extends Album {
       artist: artist ?? DEF_ARTIST,
       albumArtPath: albumArtPath,
       pubYear: tag.year == null ? null : parseYear(tag.year!),
+    );
+  }
+
+    factory AlbumModel.fromOnAudioQuery({
+    required aq.SongModel songModel,
+    required int albumId,
+    String? albumArtPath,
+  }) {
+    final data = songModel.getMap;
+    final albumArtist = data['album_artist'] as String? ?? '';
+    final artist = albumArtist != '' ? albumArtist : songModel.artist;
+
+    return AlbumModel(
+      id: albumId,
+      title: songModel.album ?? DEF_ALBUM,
+      artist: artist ?? DEF_ARTIST,
+      albumArtPath: albumArtPath,
+      pubYear: data['year'] == null ? null : parseYear(data['year'] as String?),
     );
   }
 

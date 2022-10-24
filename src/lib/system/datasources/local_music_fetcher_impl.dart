@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:audiotagger/audiotagger.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
+import 'package:on_audio_query/on_audio_query.dart' as aq;
 import 'package:path_provider/path_provider.dart';
 
 import '../models/album_model.dart';
@@ -14,11 +14,11 @@ import 'music_data_source_contract.dart';
 import 'settings_data_source.dart';
 
 class LocalMusicFetcherImpl implements LocalMusicFetcher {
-  LocalMusicFetcherImpl(this._settingsDataSource, this._audiotagger, this._musicDataSource);
+  LocalMusicFetcherImpl(this._settingsDataSource, this._musicDataSource, this._onAudioQuery);
 
   static final _log = FimberLog('LocalMusicFetcher');
 
-  final Audiotagger _audiotagger;
+  final aq.OnAudioQuery _onAudioQuery;
   final SettingsDataSource _settingsDataSource;
   final MusicDataSource _musicDataSource;
 
@@ -30,14 +30,10 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     final musicDirectories = await _settingsDataSource.libraryFoldersStream.first;
     final libDirs = musicDirectories.map((e) => Directory(e));
 
-    final List<File> files = [];
+    final List<aq.SongModel> aqSongs = [];
 
     for (final libDir in libDirs) {
-      await for (final entity in libDir.list(recursive: true, followLinks: false)) {
-        if (entity is File && entity.path.endsWith('.mp3')) {
-          files.add(entity);
-        }
-      }
+      aqSongs.addAll(await _onAudioQuery.querySongs(path: libDir.path));
     }
 
     final List<SongModel> songs = [];
@@ -58,14 +54,15 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
 
     final Directory dir = await getApplicationSupportDirectory();
 
-    for (final file in files.toSet()) {
-      final fileStats = file.statSync();
+    for (final aqSong in aqSongs.toSet()) {
+      if (aqSong.data.toLowerCase().endsWith('.wma')) continue;
+      final data = aqSong.getMap;
       // changed includes the creation time
       // => also update, when the file was created later (and wasn't really changed)
       // this is used as a workaround because android
       // doesn't seem to return the correct modification time
-      final lastModified = _dateMax(fileStats.modified, fileStats.changed);
-      final song = await _musicDataSource.getSongByPath(file.path);
+      final lastModified = DateTime.fromMillisecondsSinceEpoch((aqSong.dateModified ?? 0) * 1000);
+      final song = await _musicDataSource.getSongByPath(aqSong.data);
 
       int? albumId;
       String albumString;
@@ -97,30 +94,25 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
         }
       }
       // completely new song -> new album ids should start after existing ones
-      final tags = await _audiotagger.readTags(path: file.path);
-      final audioFile = await _audiotagger.readAudioFile(path: file.path);
-
-      if (tags == null || audioFile == null) {
-        _log.w('Could not read ${file.path}');
-        continue;
-      }
       // this is new information
       // is the album ID still correct or do we find another album with the same properties?
-      albumString = '${tags.album}___${tags.albumArtist}__${tags.year}';
+      final String albumArtist = data['album_artist'] as String? ?? '';
+      final String year = data['year'] as String? ?? '';
+      albumString = '${aqSong.album}___${albumArtist}__$year';
 
       String? albumArtPath;
       if (!albumIdMap.containsKey(albumString)) {
         // we haven't seen an album with these properties in the files yet, but there might be an entry in the database
         // in this case, we should use the corresponding ID
         albumId ??= await _musicDataSource.getAlbumId(
-              tags.album,
-              tags.albumArtist,
-              int.tryParse(tags.year ?? ''),
+              aqSong.album,
+              albumArtist,
+              int.tryParse(year),
             ) ??
             newAlbumId++;
         albumIdMap[albumString] = albumId;
 
-        final albumArt = await _audiotagger.readArtwork(path: file.path);
+        final albumArt = await _onAudioQuery.queryArtwork(aqSong.albumId ?? -1, aq.ArtworkType.ALBUM, size: 640);
 
         if (albumArt != null && albumArt.isNotEmpty) {
           albumArtPath = '${dir.path}/$albumId';
@@ -129,9 +121,9 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
           albumArtMap[albumString] = albumArtPath;
         }
 
-        final String albumArtist = tags.albumArtist ?? '';
-        final String songArtist = tags.artist ?? '';
-        final String artistName = albumArtist != '' ? albumArtist : (songArtist != '' ? songArtist : DEF_ARTIST);
+        final String songArtist = aqSong.artist ?? '';
+        final String artistName =
+            albumArtist != '' ? albumArtist : (songArtist != '' ? songArtist : DEF_ARTIST);
 
         final artist = artistsInDb.firstWhereOrNull((a) => a.name == artistName);
         if (artist != null) {
@@ -141,11 +133,9 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
           artistSet.add(ArtistModel(name: artistName, id: newArtistId++));
         }
 
-
-
-
         albums.add(
-          AlbumModel.fromAudiotagger(albumId: albumId, tag: tags, albumArtPath: albumArtPath),
+          AlbumModel.fromOnAudioQuery(
+              albumId: albumId, songModel: aqSong, albumArtPath: albumArtPath),
         );
       } else {
         // an album with the same properties is already stored in the list
@@ -155,10 +145,9 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
       }
 
       songs.add(
-        SongModel.fromAudiotagger(
-          path: file.path,
-          tag: tags,
-          audioFile: audioFile,
+        SongModel.fromOnAudioQuery(
+          path: aqSong.data,
+          songModel: aqSong,
           albumId: albumId,
           albumArtPath: albumArtPath,
           lastModified: lastModified,
@@ -172,9 +161,4 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
       'ARTISTS': artistSet.toList(),
     };
   }
-}
-
-DateTime _dateMax(DateTime a, DateTime b) {
-  if (a.isAfter(b)) return a;
-  return b;
 }
