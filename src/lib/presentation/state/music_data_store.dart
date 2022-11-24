@@ -64,6 +64,9 @@ abstract class _MusicDataStore with Store {
   late ObservableStream<Artist?> artistOfDay =
       _musicDataRepository.artistOfDayStream.asObservable();
 
+  @computed
+  bool get songListIsEmpty => songStream.value?.isEmpty ?? true;
+
   ObservableStream<List<CustomList>> getCustomLists({
     required HomePlaylistsOrder orderCriterion,
     required OrderDirection orderDirection,

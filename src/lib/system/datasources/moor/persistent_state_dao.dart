@@ -153,26 +153,34 @@ class PersistentStateDao extends DatabaseAccessor<MoorDatabase>
   Future<Playable> get playable async {
     final entry = await (select(keyValueEntries)
           ..where((tbl) => tbl.key.equals(PERSISTENT_PLAYABLE)))
-        .getSingle();
+        .getSingleOrNull();
+    if (entry == null) return AllSongs();
+
     final data = jsonDecode(entry.value);
     final playableType = (data['type'] as String).toPlayableType();
 
+    Playable? result;
+
     switch (playableType) {
       case PlayableType.all:
-        return AllSongs();
+        result = AllSongs();
+        break;
       case PlayableType.album:
-        return (select(albums)..where((tbl) => tbl.id.equals(int.parse(data['id'] as String))))
-            .getSingle()
-            .then((value) => AlbumModel.fromMoor(value));
+        result = await (select(albums)..where((tbl) => tbl.id.equals(int.parse(data['id'] as String))))
+            .getSingleOrNull()
+            .then((value) => value == null ? null : AlbumModel.fromMoor(value));
+        break;
       case PlayableType.artist:
-        return (select(artists)..where((tbl) => tbl.name.equals(data['id'] as String)))
-            .getSingle()
-            .then((value) => ArtistModel.fromMoor(value));
+        result = await (select(artists)..where((tbl) => tbl.name.equals(data['id'] as String)))
+            .getSingleOrNull()
+            .then((value) => value == null ? null : ArtistModel.fromMoor(value));
+        break;
       case PlayableType.playlist:
         final plId = int.parse(data['id'] as String);
         // TODO: need proper getter for this
         final moorPl = await (select(playlists)..where((tbl) => tbl.id.equals(plId))).getSingle();
-        return PlaylistModel.fromMoor(moorPl);
+        result = PlaylistModel.fromMoor(moorPl);
+        break;
       case PlayableType.smartlist:
         final slId = int.parse(data['id'] as String);
         final sl = await (select(smartLists)..where((tbl) => tbl.id.equals(slId))).getSingle();
@@ -182,10 +190,17 @@ class PersistentStateDao extends DatabaseAccessor<MoorDatabase>
           [innerJoin(artists, artists.name.equalsExp(smartListArtists.artistName))],
         )).map((p0) => p0.readTable(artists)).get();
 
-        return SmartListModel.fromMoor(sl, slArtists);
+        result = SmartListModel.fromMoor(sl, slArtists);
+        break;
       case PlayableType.search:
-        return SearchQuery(data['id'] as String);
+        result = SearchQuery(data['id'] as String);
+        break;
     }
+
+    if (result == null) {
+      return AllSongs();
+    }
+    return result;
   }
 
   @override
