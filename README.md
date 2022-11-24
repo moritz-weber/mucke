@@ -21,7 +21,7 @@ A music player that gets the best out of your local collection.
 
 ## Previews
 
-<img src="assets/screenshots/like.png" width="18%" />&nbsp;<img src="assets/screenshots/exclude.png" width="18%" />&nbsp;<img src="assets/screenshots/link.png" width="18%" />&nbsp;<img src="assets/screenshots/smartlist.png" width="18%" />&nbsp;<img src="assets/screenshots/home.png" width="18%" />
+<img src="metadata/en-US/images/phoneScreenshots/1.png" width="18%" />&nbsp;<img src="metadata/en-US/images/phoneScreenshots/2.png" width="18%" />&nbsp;<img src="metadata/en-US/images/phoneScreenshots/3.png" width="18%" />&nbsp;<img src="metadata/en-US/images/phoneScreenshots/4.png" width="18%" />&nbsp;<img src="metadata/en-US/images/phoneScreenshots/5.png" width="18%" />
 
 ## Limitations
 

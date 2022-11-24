@@ -1,0 +1,7 @@
+mucke gets the best out of your local music collection:
+
+- Like songs to hear them more often in shuffle mode.
+- Exclude songs from playing in shuffle mode.
+- Link songs together to play them back-to-back in shuffle mode.
+- Create smart playlists by filtering and sorting your library.
+- Customize your landing page for a quick start.
