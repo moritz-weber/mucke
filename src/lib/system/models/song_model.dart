@@ -2,6 +2,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:audiotagger/models/audiofile.dart';
 import 'package:audiotagger/models/tag.dart';
 import 'package:drift/drift.dart';
+import 'package:on_audio_query/on_audio_query.dart' as aq;
 
 import '../../domain/entities/song.dart';
 import '../datasources/moor_database.dart';
@@ -98,6 +99,39 @@ class SongModel extends Song {
     );
   }
 
+  factory SongModel.fromOnAudioQuery({
+    required String path,
+    required aq.SongModel songModel,
+    String? albumArtPath,
+    required int albumId,
+    required DateTime lastModified,
+  }) {
+
+    final data = songModel.getMap;
+    final trackNumber = _parseTrackNumber(songModel.track);
+
+    return SongModel(
+      title: songModel.title,
+      artist: songModel.artist ?? DEF_ARTIST,
+      album: songModel.album ?? DEF_ALBUM,
+      albumId: albumId,
+      path: path,
+      duration: Duration(milliseconds: songModel.duration ?? DEF_DURATION),
+      blockLevel: 0,
+      discNumber: trackNumber[0],
+      trackNumber: trackNumber[1],
+      albumArtPath: albumArtPath,
+      next: false,
+      previous: false,
+      likeCount: 0,
+      playCount: 0,
+      skipCount: 0,
+      year: parseYear(data['year'] as String?),
+      timeAdded: DateTime.fromMillisecondsSinceEpoch(0),
+      lastModified: lastModified,
+    );
+  }
+
   final int albumId;
   final DateTime lastModified;
 
@@ -141,7 +175,7 @@ class SongModel extends Song {
         trackNumber: trackNumber ?? this.trackNumber,
         likeCount: likeCount ?? this.likeCount,
         skipCount: skipCount ?? this.skipCount,
-        playCount: playCount ?? this.playCount, 
+        playCount: playCount ?? this.playCount,
         timeAdded: timeAdded ?? this.timeAdded,
         lastModified: lastModified ?? this.lastModified,
         year: year ?? this.year,
@@ -209,6 +243,22 @@ class SongModel extends Song {
       return 1;
     }
     return int.parse(numberString);
+  }
+
+  static List<int> _parseTrackNumber(int? number) {
+    if (number == null) return [1, 1];
+
+    final numString = number.toString();
+    final firstZero = numString.indexOf('0');
+
+    if (firstZero < 0 || firstZero == numString.length - 1) {
+      return [1, number];
+    }
+
+    final disc = numString.substring(0, firstZero);
+    final track = numString.substring(firstZero + 1);
+
+    return [int.parse(disc), int.parse(track)];
   }
 }
 

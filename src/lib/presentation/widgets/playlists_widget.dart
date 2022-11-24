@@ -14,8 +14,8 @@ import '../theming.dart';
 import 'play_shuffle_button.dart';
 import 'playlist_cover.dart';
 
-class SmartLists extends StatelessWidget {
-  const SmartLists({Key? key, required this.homePlaylists}) : super(key: key);
+class PlaylistsWidget extends StatelessWidget {
+  const PlaylistsWidget({Key? key, required this.homePlaylists}) : super(key: key);
 
   final HomePlaylists homePlaylists;
 
@@ -34,6 +34,7 @@ class SmartLists extends StatelessWidget {
 
     return Observer(
       builder: (context) {
+        print('PlaylistsWidget.build -> Observer');
         final customLists = customListsStream.value ?? [];
 
         return Card(

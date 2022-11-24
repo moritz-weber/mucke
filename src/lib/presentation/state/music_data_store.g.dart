@@ -9,6 +9,14 @@ part of 'music_data_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$MusicDataStore on _MusicDataStore, Store {
+  Computed<bool>? _$songListIsEmptyComputed;
+
+  @override
+  bool get songListIsEmpty =>
+      (_$songListIsEmptyComputed ??= Computed<bool>(() => super.songListIsEmpty,
+              name: '_MusicDataStore.songListIsEmpty'))
+          .value;
+
   late final _$songStreamAtom =
       Atom(name: '_MusicDataStore.songStream', context: context);
 
@@ -155,7 +163,8 @@ playlistsStream: ${playlistsStream},
 smartListsStream: ${smartListsStream},
 isUpdatingDatabase: ${isUpdatingDatabase},
 albumOfDay: ${albumOfDay},
-artistOfDay: ${artistOfDay}
+artistOfDay: ${artistOfDay},
+songListIsEmpty: ${songListIsEmpty}
     ''';
   }
 }

@@ -14,8 +14,8 @@ import '../theming.dart';
 import '../widgets/highlight_album.dart';
 import '../widgets/highlight_artist.dart';
 import '../widgets/history_widget.dart';
+import '../widgets/playlists_widget.dart';
 import '../widgets/shuffle_all_button.dart';
-import '../widgets/smart_lists.dart';
 import 'home_settings_page.dart';
 import 'settings_page.dart';
 
@@ -54,7 +54,7 @@ class _HomePageInner extends StatelessWidget {
     final NavigationStore navStore = GetIt.I<NavigationStore>();
     final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
 
-    final songStream = musicDataStore.songStream;
+    
 
     print('HomePage.build');
     return SafeArea(
@@ -84,7 +84,8 @@ class _HomePageInner extends StatelessWidget {
         ),
         body: Observer(
           builder: (context) {
-            if (songStream.value?.isEmpty ?? true) {
+            final songListIsEmpty = musicDataStore.songListIsEmpty;
+            if (songListIsEmpty) {
               return Center(
                 child: Padding(
                   padding: const EdgeInsets.all(32.0),
@@ -160,7 +161,7 @@ Widget _createHomeWidget(HomeWidget homeWidget) {
       );
     case HomeWidgetType.playlists:
       return SliverToBoxAdapter(
-        child: SmartLists(homePlaylists: homeWidget as HomePlaylists),
+        child: PlaylistsWidget(homePlaylists: homeWidget as HomePlaylists),
       );
     case HomeWidgetType.history:
       return SliverToBoxAdapter(
