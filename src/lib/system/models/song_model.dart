@@ -1,6 +1,4 @@
 import 'package:audio_service/audio_service.dart';
-import 'package:audiotagger/models/audiofile.dart';
-import 'package:audiotagger/models/tag.dart';
 import 'package:drift/drift.dart';
 import 'package:on_audio_query/on_audio_query.dart' as aq;
 
@@ -68,36 +66,6 @@ class SongModel extends Song {
         lastModified: moorSong.lastModified,
         year: moorSong.year,
       );
-
-  factory SongModel.fromAudiotagger({
-    required String path,
-    required Tag tag,
-    required AudioFile audioFile,
-    String? albumArtPath,
-    required int albumId,
-    required DateTime lastModified,
-  }) {
-    return SongModel(
-      title: tag.title ?? DEF_TITLE,
-      artist: tag.artist ?? DEF_ARTIST,
-      album: tag.album ?? DEF_ALBUM,
-      albumId: albumId,
-      path: path,
-      duration: Duration(milliseconds: (audioFile.length ?? DEF_DURATION) * 1000),
-      blockLevel: 0,
-      discNumber: _parseNumber(tag.discNumber),
-      trackNumber: _parseNumber(tag.trackNumber),
-      albumArtPath: albumArtPath,
-      next: false,
-      previous: false,
-      likeCount: 0,
-      playCount: 0,
-      skipCount: 0,
-      year: parseYear(tag.year),
-      timeAdded: DateTime.fromMillisecondsSinceEpoch(0),
-      lastModified: lastModified,
-    );
-  }
 
   factory SongModel.fromOnAudioQuery({
     required String path,
@@ -237,13 +205,6 @@ class SongModel extends Song {
             'skipCount': skipCount,
             'timeAdded': timeAdded.millisecondsSinceEpoch,
           });
-
-  static int _parseNumber(String? numberString) {
-    if (numberString == null || numberString == '') {
-      return 1;
-    }
-    return int.parse(numberString);
-  }
 
   static List<int> _parseTrackNumber(int? number) {
     if (number == null) return [1, 1];

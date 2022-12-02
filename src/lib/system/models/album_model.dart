@@ -1,4 +1,3 @@
-import 'package:audiotagger/models/tag.dart';
 import 'package:drift/drift.dart';
 import 'package:on_audio_query/on_audio_query.dart' as aq;
 
@@ -23,22 +22,6 @@ class AlbumModel extends Album {
         albumArtPath: moorAlbum.albumArtPath,
         pubYear: moorAlbum.year,
       );
-
-  factory AlbumModel.fromAudiotagger({
-    required Tag tag,
-    required int albumId,
-    String? albumArtPath,
-  }) {
-    final artist = tag.albumArtist != '' ? tag.albumArtist : tag.artist;
-
-    return AlbumModel(
-      id: albumId,
-      title: tag.album ?? DEF_ALBUM,
-      artist: artist ?? DEF_ARTIST,
-      albumArtPath: albumArtPath,
-      pubYear: tag.year == null ? null : parseYear(tag.year!),
-    );
-  }
 
     factory AlbumModel.fromOnAudioQuery({
     required aq.SongModel songModel,
