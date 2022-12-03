@@ -9,7 +9,7 @@ environment:
   flutter: ">=1.20.0"
 
 dependencies:
-  audio_service: ^0.18.0  # MIT
+  audio_service: ^0.18.7  # MIT
   audio_session: ^0.1.5  # MIT
   collection: ^1.15.0  # BSD 3
   drift: ^1.0.0  # MIT
