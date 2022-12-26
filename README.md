@@ -23,6 +23,14 @@ A music player that gets the best out of your local collection.
 
 <img src="metadata/en-US/images/phoneScreenshots/1.png" width="18%" />&nbsp;<img src="metadata/en-US/images/phoneScreenshots/2.png" width="18%" />&nbsp;<img src="metadata/en-US/images/phoneScreenshots/3.png" width="18%" />&nbsp;<img src="metadata/en-US/images/phoneScreenshots/4.png" width="18%" />&nbsp;<img src="metadata/en-US/images/phoneScreenshots/5.png" width="18%" />
 
+## Download
+
+[<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png"
+     alt="Get it on IzzyOnDroid"
+     height="80">](https://apt.izzysoft.de/fdroid/index/apk/rocks.mucke)
+
+or get it from the [Releases section](https://github.com/moritz-weber/mucke/releases/latest).
+
 ## Limitations
 
 - Currently only support MP3 files.
