@@ -30,7 +30,3 @@ A music player that gets the best out of your local collection.
      height="80">](https://apt.izzysoft.de/fdroid/index/apk/rocks.mucke)
 
 or get it from the [Releases section](https://github.com/moritz-weber/mucke/releases/latest).
-
-## Limitations
-
-- Currently only support MP3 files.
