@@ -18,11 +18,28 @@ jobs:
     env:
       KEYSTORE_GITHUB: ${{ secrets.KEYSTORE_GITHUB }}
       KEY_PROPERTIES_GITHUB: ${{ secrets.KEY_PROPERTIES_GITHUB }}
-      KEY_PROPERTIES_DUMMY: ${{ secrets.KEY_PROPERTIES_DUMMY }}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v3
+    - uses: actions/setup-java@v2
+      with:
+        java-version: '12.x'
+        distribution: 'zulu'
     - run: echo $KEYSTORE_GITHUB | base64 -d > android/github.jks
-    - run: echo $KEY_PROPERTIES_DUMMY | base64 -d > android/key.properties
-    - run: cat android/key.properties
+    - run: echo $KEY_PROPERTIES_GITHUB | base64 -d > android/key.properties
+    - uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.3.3'
+    - run: flutter pub get
+    - run: flutter build apk --flavor github
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3.1.0
+      with:
+        name: app-release.apk
+        path: src/build/app/outputs/flutter-apk/app-github-release.apk
+    - name: Github Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags')
+      with:
+        files: src/build/app/outputs/flutter-apk/app-github-release.apk
