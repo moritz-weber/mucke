@@ -26,7 +26,7 @@ jobs:
       with:
         java-version: '12.x'
         distribution: 'zulu'
-    - run: mkdir -p signing
+    - run: mkdir -p ../signing
     - run: echo $KEYSTORE_GITHUB | base64 --decode > ../signing/github.jks
     - run: echo $KEY_PROPERTIES_GITHUB > android/key.properties
     - uses: subosito/flutter-action@v2
