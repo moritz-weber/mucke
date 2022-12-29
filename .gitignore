@@ -42,3 +42,5 @@ lib/generated_plugin_registrant.dart
 
 coverage/lcov.info
 assets/screenshots/src
+signing/github.jks
+src/android/key.properties
