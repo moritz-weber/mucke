@@ -9,6 +9,50 @@ import '../models/playback_event_model.dart';
 import '../models/song_model.dart';
 import 'platform_integration_data_source.dart';
 
+const favs = [
+  MediaControl(
+    androidIcon: 'drawable/favorite_0',
+    label: 'Like',
+    action: MediaAction.rewind,
+  ),
+  MediaControl(
+    androidIcon: 'drawable/favorite_1',
+    label: 'Like',
+    action: MediaAction.rewind,
+  ),
+  MediaControl(
+    androidIcon: 'drawable/favorite_2',
+    label: 'Like',
+    action: MediaAction.rewind,
+  ),
+  MediaControl(
+    androidIcon: 'drawable/favorite_3',
+    label: 'Like',
+    action: MediaAction.rewind,
+  ),
+];
+
+const playCtrl = MediaControl(
+  androidIcon: 'drawable/play',
+  label: 'Play',
+  action: MediaAction.play,
+);
+const pauseCtrl = MediaControl(
+  androidIcon: 'drawable/pause',
+  label: 'Pause',
+  action: MediaAction.pause,
+);
+const nextCtrl = MediaControl(
+  androidIcon: 'drawable/skip_next',
+  label: 'Next',
+  action: MediaAction.skipToNext,
+);
+const prevCtrl = MediaControl(
+  androidIcon: 'drawable/skip_prev',
+  label: 'Previous',
+  action: MediaAction.skipToPrevious,
+);
+
 class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
     implements PlatformIntegrationDataSource {
   PlatformIntegrationDataSourceImpl();
@@ -53,6 +97,13 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
   }
 
   @override
+  Future<void> rewind() async {
+    _log.d('rewind -> like');
+    _eventSubject.add(PlatformIntegrationEvent(
+        type: PlatformIntegrationEventType.like, payload: {'path': mediaItem.value?.id}));
+  }
+
+  @override
   Future<void> click([MediaButton button = MediaButton.media]) async {
     _log.i(button.toString());
     final session = await AudioSession.instance;
@@ -89,39 +140,45 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
 
   @override
   Future<void> handlePlaybackEvent(PlaybackEventModel pe) async {
+    final mi = mediaItem.value;
+    final int likeCount = mi == null ? 0 : mi.extras!['likeCount'] as int;
+
     if (pe.processingState == ProcessingState.ready) {
       final timeDelta = DateTime.now().difference(pe.updateTime);
       if (pe.playing) {
         playbackState.add(playbackState.value.copyWith(
-          controls: [MediaControl.skipToPrevious, MediaControl.pause, MediaControl.skipToNext],
+          controls: [favs[likeCount], prevCtrl, pauseCtrl, nextCtrl],
           systemActions: const {
             MediaAction.seek,
           },
           playing: true,
           processingState: AudioProcessingState.ready,
           updatePosition: pe.updatePosition + timeDelta,
+          androidCompactActionIndices: [0, 2, 3],
         ));
       } else {
         playbackState.add(playbackState.value.copyWith(
-          controls: [MediaControl.skipToPrevious, MediaControl.play, MediaControl.skipToNext],
+          controls: [favs[likeCount], prevCtrl, playCtrl, nextCtrl],
           systemActions: const {
             MediaAction.seek,
           },
           processingState: AudioProcessingState.ready,
           updatePosition: pe.updatePosition + timeDelta,
           playing: false,
+          androidCompactActionIndices: [0, 2, 3],
         ));
       }
     } else if (pe.processingState == ProcessingState.completed) {
       final timeDelta = DateTime.now().difference(pe.updateTime);
       playbackState.add(playbackState.value.copyWith(
-        controls: [MediaControl.skipToPrevious, MediaControl.play, MediaControl.skipToNext],
+        controls: [favs[likeCount], prevCtrl, playCtrl, nextCtrl],
         systemActions: const {
           MediaAction.seek,
         },
         processingState: AudioProcessingState.ready,
         updatePosition: pe.updatePosition + timeDelta,
         playing: false,
+        androidCompactActionIndices: [0, 2, 3],
       ));
     } else if (pe.processingState == ProcessingState.none) {
       stop();
@@ -133,6 +190,17 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
   @override
   Future<void> setCurrentSong(SongModel? songModel) async {
     mediaItem.add(songModel?.toMediaItem());
+
+    if (songModel != null) {
+      final state = playbackState.value;
+      final controls = state.controls.sublist(1);
+      final timeDelta = state.playing ? DateTime.now().difference(state.updateTime) : Duration.zero;
+
+      playbackState.add(playbackState.value.copyWith(
+        controls: [favs[songModel.likeCount]] + controls,
+        updatePosition: state.updatePosition + timeDelta,
+      ));
+    }
   }
 }
 

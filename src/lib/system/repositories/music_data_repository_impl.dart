@@ -176,6 +176,12 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   }
 
   @override
+  Future<void> incrementLikeCount(Song song) async {
+    final count = song.likeCount < MAX_LIKE_COUNT ? song.likeCount + 1 : 0;
+    await setLikeCount([song], count);
+  }
+
+  @override
   Future<Song> resetSkipCount(Song song) async {
     final newSong = (song as SongModel).copyWith(skipCount: 0);
     _songUpdateSubject.add({song.path: newSong});

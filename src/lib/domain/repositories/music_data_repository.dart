@@ -62,6 +62,7 @@ abstract class MusicDataRepository extends MusicDataInfoRepository {
   Future<Song> resetSkipCount(Song song);
 
   Future<void> setLikeCount(List<Song> songs, int count);
+  Future<void> incrementLikeCount(Song song);
 
   Future<Song> incrementPlayCount(Song song);
 
