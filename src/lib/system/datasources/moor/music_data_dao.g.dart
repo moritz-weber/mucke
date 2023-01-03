@@ -13,4 +13,8 @@ mixin _$MusicDataDaoMixin on DatabaseAccessor<MoorDatabase> {
   $PlaylistsTable get playlists => attachedDatabase.playlists;
   $PlaylistEntriesTable get playlistEntries => attachedDatabase.playlistEntries;
   $KeyValueEntriesTable get keyValueEntries => attachedDatabase.keyValueEntries;
+  $BlockedFilesTable get blockedFiles => attachedDatabase.blockedFiles;
+  $HistoryEntriesTable get historyEntries => attachedDatabase.historyEntries;
+  $SmartListArtistsTable get smartListArtists =>
+      attachedDatabase.smartListArtists;
 }

@@ -15,4 +15,5 @@ mixin _$PlaylistDaoMixin on DatabaseAccessor<MoorDatabase> {
   $SmartListsTable get smartLists => attachedDatabase.smartLists;
   $SmartListArtistsTable get smartListArtists =>
       attachedDatabase.smartListArtists;
+  $HistoryEntriesTable get historyEntries => attachedDatabase.historyEntries;
 }

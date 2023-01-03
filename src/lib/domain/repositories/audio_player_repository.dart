@@ -60,4 +60,5 @@ abstract class AudioPlayerRepository extends AudioPlayerInfoRepository {
 
   /// Current scope: update song information in queue, don't affect playback/queue.
   Future<void> updateSongs(Map<String, Song> songs);
+  Future<void> removeBlockedSongs(List<String> paths);
 }

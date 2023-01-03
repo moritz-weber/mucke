@@ -14,9 +14,6 @@ class AudioPlayerActor {
         .listen(_platformIntegrationRepository.handlePlaybackEvent);
     _audioPlayerRepository.positionStream
         .listen((duration) => _handlePosition(duration, _currentSong));
-
-    // TODO: this doesn't quite fit the design: listening to audioplayer events
-    _musicDataRepository.songUpdateStream.listen(_handleSongUpdate);
   }
 
   final AudioPlayerRepository _audioPlayerRepository;
@@ -44,9 +41,5 @@ class AudioPlayerActor {
       if (updatedSong.skipCount > 0)
         _musicDataRepository.resetSkipCount(updatedSong);
     }
-  }
-
-  void _handleSongUpdate(Map<String, Song> songs) {
-    _audioPlayerRepository.updateSongs(songs);
   }
 }

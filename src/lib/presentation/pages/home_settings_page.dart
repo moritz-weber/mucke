@@ -58,6 +58,7 @@ class HomeSettingsPage extends StatelessWidget {
             'Home Customization',
             style: TEXT_HEADER,
           ),
+          centerTitle: true,
           leading: IconButton(
             icon: const Icon(Icons.chevron_left_rounded),
             onPressed: () => navStore.pop(context),

@@ -4353,6 +4353,148 @@ class $HistoryEntriesTable extends HistoryEntries
   }
 }
 
+class BlockedFile extends DataClass implements Insertable<BlockedFile> {
+  final String path;
+  BlockedFile({required this.path});
+  factory BlockedFile.fromData(Map<String, dynamic> data, {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return BlockedFile(
+      path: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}path'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['path'] = Variable<String>(path);
+    return map;
+  }
+
+  BlockedFilesCompanion toCompanion(bool nullToAbsent) {
+    return BlockedFilesCompanion(
+      path: Value(path),
+    );
+  }
+
+  factory BlockedFile.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return BlockedFile(
+      path: serializer.fromJson<String>(json['path']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'path': serializer.toJson<String>(path),
+    };
+  }
+
+  BlockedFile copyWith({String? path}) => BlockedFile(
+        path: path ?? this.path,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('BlockedFile(')
+          ..write('path: $path')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => path.hashCode;
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is BlockedFile && other.path == this.path);
+}
+
+class BlockedFilesCompanion extends UpdateCompanion<BlockedFile> {
+  final Value<String> path;
+  const BlockedFilesCompanion({
+    this.path = const Value.absent(),
+  });
+  BlockedFilesCompanion.insert({
+    required String path,
+  }) : path = Value(path);
+  static Insertable<BlockedFile> custom({
+    Expression<String>? path,
+  }) {
+    return RawValuesInsertable({
+      if (path != null) 'path': path,
+    });
+  }
+
+  BlockedFilesCompanion copyWith({Value<String>? path}) {
+    return BlockedFilesCompanion(
+      path: path ?? this.path,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (path.present) {
+      map['path'] = Variable<String>(path.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('BlockedFilesCompanion(')
+          ..write('path: $path')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $BlockedFilesTable extends BlockedFiles
+    with TableInfo<$BlockedFilesTable, BlockedFile> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $BlockedFilesTable(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _pathMeta = const VerificationMeta('path');
+  @override
+  late final GeneratedColumn<String?> path = GeneratedColumn<String?>(
+      'path', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [path];
+  @override
+  String get aliasedName => _alias ?? 'blocked_files';
+  @override
+  String get actualTableName => 'blocked_files';
+  @override
+  VerificationContext validateIntegrity(Insertable<BlockedFile> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('path')) {
+      context.handle(
+          _pathMeta, path.isAcceptableOrUnknown(data['path']!, _pathMeta));
+    } else if (isInserting) {
+      context.missing(_pathMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {path};
+  @override
+  BlockedFile map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return BlockedFile.fromData(data,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $BlockedFilesTable createAlias(String alias) {
+    return $BlockedFilesTable(attachedDatabase, alias);
+  }
+}
+
 abstract class _$MoorDatabase extends GeneratedDatabase {
   _$MoorDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   _$MoorDatabase.connect(DatabaseConnection c) : super.connect(c);
@@ -4373,6 +4515,7 @@ abstract class _$MoorDatabase extends GeneratedDatabase {
       $KeyValueEntriesTable(this);
   late final $HomeWidgetsTable homeWidgets = $HomeWidgetsTable(this);
   late final $HistoryEntriesTable historyEntries = $HistoryEntriesTable(this);
+  late final $BlockedFilesTable blockedFiles = $BlockedFilesTable(this);
   late final PersistentStateDao persistentStateDao =
       PersistentStateDao(this as MoorDatabase);
   late final SettingsDao settingsDao = SettingsDao(this as MoorDatabase);
@@ -4396,6 +4539,7 @@ abstract class _$MoorDatabase extends GeneratedDatabase {
         playlistEntries,
         keyValueEntries,
         homeWidgets,
-        historyEntries
+        historyEntries,
+        blockedFiles
       ];
 }

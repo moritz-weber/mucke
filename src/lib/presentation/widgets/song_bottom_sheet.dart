@@ -10,6 +10,7 @@ import '../pages/artist_details_page.dart';
 import '../state/audio_store.dart';
 import '../state/music_data_store.dart';
 import '../state/navigation_store.dart';
+import '../state/settings_store.dart';
 import '../state/song_store.dart';
 import '../theming.dart';
 import '../utils.dart' as utils;
@@ -61,6 +62,7 @@ class _SongBottomSheetState extends State<SongBottomSheet> {
     final AudioStore audioStore = GetIt.I<AudioStore>();
     final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
     final NavigationStore navStore = GetIt.I<NavigationStore>();
+    final SettingsStore settingsStore = GetIt.I<SettingsStore>();
 
     int optionIndex = 0;
 
@@ -276,6 +278,14 @@ class _SongBottomSheetState extends State<SongBottomSheet> {
           ),
         ],
         AddToPlaylistTile(songs: [song], musicDataStore: musicDataStore),
+        ListTile(
+          title: const Text('Block from library'),
+            leading: const Icon(Icons.block),
+            onTap: () {
+              settingsStore.addBlockedFiles([song.path]);
+              Navigator.of(context, rootNavigator: true).pop();
+            },
+        ),
       ];
 
       return MyBottomSheet(widgets: widgets);

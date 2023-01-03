@@ -43,11 +43,46 @@ mixin _$SettingsStore on _SettingsStore, Store {
     });
   }
 
+  late final _$fileExtensionsStreamAtom =
+      Atom(name: '_SettingsStore.fileExtensionsStream', context: context);
+
+  @override
+  ObservableStream<String> get fileExtensionsStream {
+    _$fileExtensionsStreamAtom.reportRead();
+    return super.fileExtensionsStream;
+  }
+
+  @override
+  set fileExtensionsStream(ObservableStream<String> value) {
+    _$fileExtensionsStreamAtom.reportWrite(value, super.fileExtensionsStream,
+        () {
+      super.fileExtensionsStream = value;
+    });
+  }
+
+  late final _$blockedFilesStreamAtom =
+      Atom(name: '_SettingsStore.blockedFilesStream', context: context);
+
+  @override
+  ObservableStream<Set<String>> get blockedFilesStream {
+    _$blockedFilesStreamAtom.reportRead();
+    return super.blockedFilesStream;
+  }
+
+  @override
+  set blockedFilesStream(ObservableStream<Set<String>> value) {
+    _$blockedFilesStreamAtom.reportWrite(value, super.blockedFilesStream, () {
+      super.blockedFilesStream = value;
+    });
+  }
+
   @override
   String toString() {
     return '''
 libraryFoldersStream: ${libraryFoldersStream},
-manageExternalStorageGranted: ${manageExternalStorageGranted}
+manageExternalStorageGranted: ${manageExternalStorageGranted},
+fileExtensionsStream: ${fileExtensionsStream},
+blockedFilesStream: ${blockedFilesStream}
     ''';
   }
 }

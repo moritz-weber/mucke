@@ -12,6 +12,7 @@ import '../entities/song.dart';
 
 abstract class MusicDataInfoRepository {
   Stream<Map<String, Song>> get songUpdateStream;
+  Stream<List<String>> get songRemovalStream;
 
   Future<Song> getSongByPath(String path);
   Stream<Song> getSongStream(String path);
@@ -51,6 +52,8 @@ abstract class MusicDataInfoRepository {
   Future<List<Song>> searchSongs(String searchText, {int? limit});
   Future<List<SmartList>> searchSmartLists(String searchText, {int? limit});
   Future<List<Playlist>> searchPlaylists(String searchText, {int? limit});
+
+  ValueStream<Set<String>> get blockedFilesStream;
 }
 
 abstract class MusicDataRepository extends MusicDataInfoRepository {
@@ -91,4 +94,7 @@ abstract class MusicDataRepository extends MusicDataInfoRepository {
   });
   Future<void> updateSmartList(SmartList smartList);
   Future<void> removeSmartList(SmartList smartList);
+
+  Future<void> addBlockedFiles(List<String> paths);
+  Future<void> removeBlockedFiles(List<String> paths);
 }

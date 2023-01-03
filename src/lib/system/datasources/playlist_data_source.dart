@@ -20,6 +20,7 @@ abstract class PlaylistDataSource {
   Future<void> moveEntry(int playlistId, int oldIndex, int newIndex);
   Stream<List<SongModel>> getPlaylistSongStream(PlaylistModel playlist);
   Future<List<PlaylistModel>> searchPlaylists(String searchText, {int? limit});
+  Future<void> removeBlockedSongs(List<String> paths);
 
   Stream<List<SmartListModel>> get smartListsStream;
   Stream<SmartListModel> getSmartListStream(int smartListId);

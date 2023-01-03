@@ -9,6 +9,7 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 import '../../constants.dart';
+import '../../defaults.dart';
 import '../../domain/entities/playable.dart';
 import 'moor/history_dao.dart';
 import 'moor/home_widget_dao.dart';
@@ -179,6 +180,13 @@ class HistoryEntries extends Table {
   TextColumn get identifier => text()();
 }
 
+class BlockedFiles extends Table {
+  TextColumn get path => text()();
+
+  @override
+  Set<Column> get primaryKey => {path};
+}
+
 @DriftDatabase(
   tables: [
     Albums,
@@ -194,6 +202,7 @@ class HistoryEntries extends Table {
     KeyValueEntries,
     HomeWidgets,
     HistoryEntries,
+    BlockedFiles,
   ],
   daos: [
     PersistentStateDao,
@@ -215,7 +224,7 @@ class MoorDatabase extends _$MoorDatabase {
   MoorDatabase.connect(DatabaseConnection connection) : super.connect(connection);
 
   @override
-  int get schemaVersion => 10;
+  int get schemaVersion => 11;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -229,6 +238,9 @@ class MoorDatabase extends _$MoorDatabase {
             );
             await into(keyValueEntries).insert(
               const KeyValueEntriesCompanion(key: Value(PERSISTENT_SHUFFLEMODE), value: Value('0')),
+            );
+            await into(keyValueEntries).insert(
+              const KeyValueEntriesCompanion(key: Value(SETTING_ALLOWED_EXTENSIONS), value: Value(ALLOWED_FILE_EXTENSIONS)),
             );
             final Map initialPlayable = {
               'id': '',
@@ -375,6 +387,12 @@ class MoorDatabase extends _$MoorDatabase {
           }
           if (from < 10) {
             await m.createTable(historyEntries);
+          }
+          if (from < 11) {
+            await m.createTable(blockedFiles);
+            await into(keyValueEntries).insert(
+              const KeyValueEntriesCompanion(key: Value(SETTING_ALLOWED_EXTENSIONS), value: Value(ALLOWED_FILE_EXTENSIONS)),
+            );
           }
         },
       );

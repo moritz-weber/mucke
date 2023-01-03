@@ -1,11 +1,12 @@
 import 'package:drift/drift.dart';
 
+import '../../../constants.dart';
 import '../moor_database.dart';
 import '../settings_data_source.dart';
 
 part 'settings_dao.g.dart';
 
-@DriftAccessor(tables: [LibraryFolders, KeyValueEntries])
+@DriftAccessor(tables: [LibraryFolders, KeyValueEntries, BlockedFiles])
 class SettingsDao extends DatabaseAccessor<MoorDatabase>
     with _$SettingsDaoMixin
     implements SettingsDataSource {
@@ -23,5 +24,18 @@ class SettingsDao extends DatabaseAccessor<MoorDatabase>
   @override
   Future<void> addLibraryFolder(String path) async {
     await into(libraryFolders).insert(LibraryFoldersCompanion(path: Value(path)));
+  }
+
+  @override
+  Stream<String> get fileExtensionsStream =>
+      (select(keyValueEntries)..where((tbl) => tbl.key.equals(SETTING_ALLOWED_EXTENSIONS)))
+          .watchSingle()
+          .map((event) => event.value);
+
+  @override
+  Future<void> setFileExtension(String extensions) async {
+    print(extensions);
+    await (update(keyValueEntries)..where((tbl) => tbl.key.equals(SETTING_ALLOWED_EXTENSIONS)))
+        .write(KeyValueEntriesCompanion(value: Value(extensions)));
   }
 }

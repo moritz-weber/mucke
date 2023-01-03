@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../../domain/entities/playable.dart';
 import '../../../domain/entities/shuffle_mode.dart';
 import '../../../domain/entities/smart_list.dart' as sl;
 import '../../models/playlist_model.dart';
@@ -11,8 +12,16 @@ import '../playlist_data_source.dart';
 
 part 'playlist_dao.g.dart';
 
-@DriftAccessor(
-    tables: [Albums, Artists, Songs, Playlists, PlaylistEntries, SmartLists, SmartListArtists])
+@DriftAccessor(tables: [
+  Albums,
+  Artists,
+  Songs,
+  Playlists,
+  PlaylistEntries,
+  SmartLists,
+  SmartListArtists,
+  HistoryEntries
+])
 class PlaylistDao extends DatabaseAccessor<MoorDatabase>
     with _$PlaylistDaoMixin
     implements PlaylistDataSource {
@@ -38,7 +47,7 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
     }
 
     await (update(playlists)..where((tbl) => tbl.id.equals(playlist.id)))
-          .write(PlaylistsCompanion(timeChanged: Value(DateTime.now())));
+        .write(PlaylistsCompanion(timeChanged: Value(DateTime.now())));
 
     await batch((batch) {
       batch.insertAll(playlistEntries, entries);
@@ -93,6 +102,11 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
   Future<void> removePlaylist(PlaylistModel playlist) async {
     await (delete(playlists)..where((tbl) => tbl.id.equals(playlist.id))).go();
     await (delete(playlistEntries)..where((tbl) => tbl.playlistId.equals(playlist.id))).go();
+    await (delete(historyEntries)
+          ..where((tbl) =>
+              tbl.type.equals(PlayableType.playlist.toString()) &
+              tbl.identifier.equals(playlist.id.toString())))
+        .go();
   }
 
   @override
@@ -126,7 +140,7 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
             .write(PlaylistEntriesCompanion(position: Value(newIndex)));
 
         await (update(playlists)..where((tbl) => tbl.id.equals(playlistId)))
-          .write(PlaylistsCompanion(timeChanged: Value(DateTime.now())));
+            .write(PlaylistsCompanion(timeChanged: Value(DateTime.now())));
       });
     }
   }
@@ -197,6 +211,11 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
   Future<void> removeSmartList(SmartListModel smartListModel) async {
     await (delete(smartLists)..where((tbl) => tbl.id.equals(smartListModel.id))).go();
     await (delete(smartListArtists)..where((tbl) => tbl.smartListId.equals(smartListModel.id)))
+        .go();
+    await (delete(historyEntries)
+          ..where((tbl) =>
+              tbl.type.equals(PlayableType.playlist.toString()) &
+              tbl.identifier.equals(smartListModel.id.toString())))
         .go();
   }
 
@@ -352,6 +371,56 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
       return result.take(limit).toList();
     }
     return result;
+  }
+
+  @override
+  Future<void> removeBlockedSongs(List<String> paths) async {
+    final Map<int, List<int>> playlistIndexMap = {};
+
+    // gather the playlist entries to remove
+    for (final path in paths) {
+      final entries =
+          await (select(playlistEntries)..where((tbl) => tbl.songPath.equals(path))).get();
+      for (final entry in entries) {
+        if (playlistIndexMap.containsKey(entry.playlistId)) {
+          playlistIndexMap[entry.playlistId]!.add(entry.position);
+        } else {
+          playlistIndexMap[entry.playlistId] = [entry.position];
+        }
+      }
+    }
+
+    for (final playlistId in playlistIndexMap.keys) {
+      final indices = List<int>.from(playlistIndexMap[playlistId]!);
+      indices.sort();
+
+      final entries =
+          await (select(playlistEntries)..where((tbl) => tbl.playlistId.equals(playlistId))).get();
+
+      int removedCount = 0;
+
+      transaction(() async {
+        for (final index
+            in List.generate(entries.length - indices.first, (i) => i + indices.first)) {
+          if (indices.isNotEmpty && index == indices.first) {
+            // remove the entry
+            await (delete(playlistEntries)
+                  ..where((tbl) => tbl.position.equals(index) & tbl.playlistId.equals(playlistId)))
+                .go();
+            removedCount += 1;
+            indices.removeAt(0);
+          } else {
+            // adapt entry position
+            await (update(playlistEntries)
+                  ..where((tbl) => tbl.position.equals(index) & tbl.playlistId.equals(playlistId)))
+                .write(PlaylistEntriesCompanion(position: Value(index - removedCount)));
+          }
+
+          await (update(playlists)..where((tbl) => tbl.id.equals(playlistId)))
+              .write(PlaylistsCompanion(timeChanged: Value(DateTime.now())));
+        }
+      });
+    }
   }
 }
 

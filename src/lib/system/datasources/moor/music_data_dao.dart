@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
 
 import '../../../constants.dart';
+import '../../../domain/entities/playable.dart';
 import '../../models/album_model.dart';
 import '../../models/artist_model.dart';
 import '../../models/song_model.dart';
@@ -12,8 +13,17 @@ import '../music_data_source_contract.dart';
 
 part 'music_data_dao.g.dart';
 
-@DriftAccessor(
-    tables: [Albums, Artists, Songs, Playlists, PlaylistEntries, KeyValueEntries])
+@DriftAccessor(tables: [
+  Albums,
+  Artists,
+  Songs,
+  Playlists,
+  PlaylistEntries,
+  KeyValueEntries,
+  BlockedFiles,
+  HistoryEntries,
+  SmartListArtists
+])
 class MusicDataDao extends DatabaseAccessor<MoorDatabase>
     with _$MusicDataDaoMixin
     implements MusicDataSource {
@@ -98,6 +108,8 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
 
   @override
   Future<void> insertSongs(List<SongModel> songModels) async {
+    final List<SongModel> deletedSongs = [];
+
     transaction(() async {
       await update(songs).write(const SongsCompanion(present: Value(false)));
 
@@ -107,9 +119,25 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
           songModels.map((e) => e.toMoorInsert()).toList(),
         );
       });
-
-      await (delete(songs)..where((tbl) => tbl.present.equals(false))).go();
     });
+
+    deletedSongs.addAll(await (select(songs)..where((tbl) => tbl.present.equals(false))).get().then(
+        (moorSongList) => moorSongList.map((moorSong) => SongModel.fromMoor(moorSong)).toList()));
+
+    await (delete(songs)..where((tbl) => tbl.present.equals(false))).go();
+
+    final Set<String> artistSet = {};
+    final Set<int> albumSet = {};
+
+    for (final song in deletedSongs) {
+      artistSet.add(song.artist);
+      albumSet.add(song.albumId);
+    }
+
+    // delete empty albums
+    albumSet.forEach(_deleteAlbumIfEmpty);
+    // delete artists without albums
+    artistSet.forEach(_deleteArtistIfEmpty);
   }
 
   @override
@@ -318,5 +346,76 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
           ))
         .getSingleOrNull()
         .then((v) => v?.id);
+  }
+
+  @override
+  Future<void> addBlockedFiles(List<String> paths) async {
+    final Set<String> artistSet = {};
+    final Set<int> albumSet = {};
+
+    for (final path in paths) {
+      final song = await getSongByPath(path);
+      artistSet.add(song!.artist);
+      albumSet.add(song.albumId);
+    }
+
+    await batch((batch) {
+      batch.insertAllOnConflictUpdate(
+        blockedFiles,
+        paths.map((e) => BlockedFilesCompanion(path: Value(e))),
+      );
+
+      // delete songs
+      batch.deleteWhere<$SongsTable, dynamic>(songs, (tbl) => tbl.path.isIn(paths));
+    });
+
+    // delete empty albums
+    albumSet.forEach(_deleteAlbumIfEmpty);
+
+    // delete artists without albums
+    artistSet.forEach(_deleteArtistIfEmpty);
+  }
+
+  // Delete empty albums and all their database appearances.
+  Future<void> _deleteAlbumIfEmpty(int albumId) async {
+    final aSongs = await (select(songs)..where((tbl) => tbl.albumId.equals(albumId))).get();
+    if (aSongs.isEmpty) {
+      await (delete(albums)..where((tbl) => tbl.id.equals(albumId))).go();
+      // delete history entries with this album
+      await (delete(historyEntries)
+            ..where((tbl) =>
+                tbl.type.equals(PlayableType.album.toString()) &
+                tbl.identifier.equals(albumId.toString())))
+          .go();
+    }
+  }
+
+  // Delete empty artists and all their database appearances.
+  Future<void> _deleteArtistIfEmpty(String name) async {
+    final aAlbums = await (select(albums)..where((tbl) => tbl.artist.equals(name))).get();
+    if (aAlbums.isEmpty) {
+      final emptyArtists = await (select(artists)..where((tbl) => tbl.name.equals(name))).get();
+      await (delete(artists)..where((tbl) => tbl.name.equals(name))).go();
+      await (delete(smartListArtists)..where((tbl) => tbl.artistName.equals(name))).go();
+
+      for (final emptyArtist in emptyArtists) {
+        (delete(historyEntries)
+              ..where((tbl) =>
+                  tbl.type.equals(PlayableType.artist.toString()) &
+                  tbl.identifier.equals(emptyArtist.id.toString())))
+            .go();
+      }
+    }
+  }
+
+  @override
+  Stream<Set<String>> get blockedFilesStream =>
+      select(blockedFiles).watch().map((value) => value.map((e) => e.path).toSet());
+
+  @override
+  Future<void> removeBlockedFiles(List<String> paths) async {
+    await batch((batch) {
+      batch.deleteWhere<$BlockedFilesTable, dynamic>(blockedFiles, (tbl) => tbl.path.isIn(paths));
+    });
   }
 }
