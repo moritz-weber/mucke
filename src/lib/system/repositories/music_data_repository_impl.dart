@@ -128,6 +128,8 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
     await _updateAlbums(albums);
     await _musicDataSource.insertSongs(songs);
 
+    await _musicDataSource.cleanupDatabase();
+
     _log.d('updateDatabase finished');
 
     _updateHighlightStreams();

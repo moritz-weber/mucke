@@ -39,4 +39,6 @@ abstract class MusicDataSource {
   Stream<Set<String>> get blockedFilesStream;
   Future<void> addBlockedFiles(List<String> paths);
   Future<void> removeBlockedFiles(List<String> paths);
+
+  Future<void> cleanupDatabase();
 }

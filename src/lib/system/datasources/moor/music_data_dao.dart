@@ -418,4 +418,41 @@ class MusicDataDao extends DatabaseAccessor<MoorDatabase>
       batch.deleteWhere<$BlockedFilesTable, dynamic>(blockedFiles, (tbl) => tbl.path.isIn(paths));
     });
   }
+
+  @override
+  Future<void> cleanupDatabase() async {
+    // get album history entries
+    final albumHistoryEntries = await (select(historyEntries)
+          ..where((tbl) => tbl.type.equals(PlayableType.album.toString())))
+        .get();
+
+    // delete history entries with missing album
+    for (final entry in albumHistoryEntries) {
+      if ((await (select(albums)..where((tbl) => tbl.id.equals(int.parse(entry.identifier)))).get())
+          .isEmpty) {
+        (delete(historyEntries)
+              ..where((tbl) =>
+                  tbl.type.equals(PlayableType.album.toString()) &
+                  tbl.identifier.equals(entry.identifier)))
+            .go();
+      }
+    }
+
+    // get album history entries
+    final artistHistoryEntries = await (select(historyEntries)
+          ..where((tbl) => tbl.type.equals(PlayableType.artist.toString())))
+        .get();
+
+    // delete history entries with missing album
+    for (final entry in artistHistoryEntries) {
+      if ((await (select(artists)..where((tbl) => tbl.id.equals(int.parse(entry.identifier)))).get())
+          .isEmpty) {
+        (delete(historyEntries)
+              ..where((tbl) =>
+                  tbl.type.equals(PlayableType.artist.toString()) &
+                  tbl.identifier.equals(entry.identifier)))
+            .go();
+      }
+    }
+  }
 }
