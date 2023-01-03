@@ -77,7 +77,7 @@ class _SongBottomSheetState extends State<SongBottomSheet> {
       Album? album;
 
       if (albums != null && albums.isNotEmpty) {
-        album = albums.singleWhere((a) => a.title == song.album);
+        album = albums.singleWhere((a) => a.id == song.albumId);
         if (artists != null && artists.isNotEmpty)
           artist = artists.singleWhere((a) => a.name == album!.artist);
       }

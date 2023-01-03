@@ -11,7 +11,7 @@ class SongModel extends Song {
   const SongModel({
     required String title,
     required String album,
-    required this.albumId,
+    required int albumId,
     required String artist,
     required String path,
     required Duration duration,
@@ -29,6 +29,7 @@ class SongModel extends Song {
     int? year,
   }) : super(
           album: album,
+          albumId: albumId,
           artist: artist,
           blockLevel: blockLevel,
           duration: duration,
@@ -100,7 +101,6 @@ class SongModel extends Song {
     );
   }
 
-  final int albumId;
   final DateTime lastModified;
 
   @override

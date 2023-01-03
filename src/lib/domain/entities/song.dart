@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 class Song extends Equatable {
   const Song({
     required this.album,
+    required this.albumId,
     required this.artist,
     required this.blockLevel,
     required this.duration,
@@ -21,6 +22,7 @@ class Song extends Equatable {
   });
 
   final String album;
+  final int albumId;
   final String artist;
 
   /// 0: not blocked, 3: always blocked
