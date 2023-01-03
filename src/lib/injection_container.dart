@@ -4,6 +4,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 import 'domain/actors/audio_player_actor.dart';
+import 'domain/actors/music_data_actor.dart';
 import 'domain/actors/persistence_actor.dart';
 import 'domain/actors/platform_integration_actor.dart';
 import 'domain/entities/album.dart';
@@ -118,6 +119,7 @@ Future<void> setupGetIt() async {
   getIt.registerLazySingleton<SettingsStore>(
     () => SettingsStore(
       settingsRepository: getIt(),
+      musicDataRepository: getIt(),
     ),
   );
   getIt.registerLazySingleton<QueuePageStore>(
@@ -356,6 +358,13 @@ Future<void> setupGetIt() async {
   getIt.registerSingleton<AudioPlayerActor>(
     AudioPlayerActor(
       getIt(),
+      getIt(),
+      getIt(),
+    ),
+  );
+
+  getIt.registerSingleton<MusicDataActor>(
+    MusicDataActor(
       getIt(),
       getIt(),
     ),

@@ -6,13 +6,14 @@ import '../datasources/settings_data_source.dart';
 
 class SettingsRepositoryImpl implements SettingsRepository {
   SettingsRepositoryImpl(this._settingsDataSource) {
-    Permission.manageExternalStorage.isGranted
-        .then(_manageExternalStorageGrantedSubject.add);
+    Permission.manageExternalStorage.isGranted.then(_manageExternalStorageGrantedSubject.add);
+    _settingsDataSource.fileExtensionsStream.listen(_fileExtensionsSubject.add);
   }
 
   final SettingsDataSource _settingsDataSource;
 
   final BehaviorSubject<bool> _manageExternalStorageGrantedSubject = BehaviorSubject();
+  final BehaviorSubject<String> _fileExtensionsSubject = BehaviorSubject();
 
   @override
   Stream<List<String>> get libraryFoldersStream => _settingsDataSource.libraryFoldersStream;
@@ -45,5 +46,13 @@ class SettingsRepositoryImpl implements SettingsRepository {
         _manageExternalStorageGrantedSubject.add(await Permission.manageExternalStorage.isGranted);
       }
     }
+  }
+
+  @override
+  ValueStream<String> get fileExtensionsStream => _fileExtensionsSubject.stream;
+
+  @override
+  Future<void> setFileExtension(String extensions) async {
+    await _settingsDataSource.setFileExtension(extensions);
   }
 }

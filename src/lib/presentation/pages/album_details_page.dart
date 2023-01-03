@@ -7,6 +7,7 @@ import '../../domain/entities/song.dart';
 import '../state/album_page_store.dart';
 import '../state/audio_store.dart';
 import '../state/music_data_store.dart';
+import '../state/settings_store.dart';
 import '../theming.dart';
 import '../widgets/album_sliver_appbar.dart';
 import '../widgets/bottom_sheet/add_to_playlist.dart';
@@ -67,7 +68,7 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
                     builder: (context) {
                       final bool isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
                       final List<bool> isSelected = store.selection.isSelected.toList();
-          
+
                       return SliverList(
                         delegate: SliverChildListDelegate(
                           [
@@ -75,7 +76,8 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
                             if (songsByDisc.length > 1)
                               ListTile(
                                 title: Text('Disc ${d + 1}', style: TEXT_HEADER),
-                                leading: const SizedBox(width: 40, child: Icon(Icons.album_rounded)),
+                                leading:
+                                    const SizedBox(width: 40, child: Icon(Icons.album_rounded)),
                                 contentPadding: const EdgeInsets.only(left: HORIZONTAL_PADDING),
                               ),
                             if (songsByDisc.length > 1)
@@ -151,6 +153,7 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
   Future<void> _openMultiselectMenu(BuildContext context) async {
     final audioStore = GetIt.I<AudioStore>();
     final musicDataStore = GetIt.I<MusicDataStore>();
+    final settingsStore = GetIt.I<SettingsStore>();
 
     showModalBottomSheet(
       context: context,
@@ -201,6 +204,14 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
               },
             ),
             AddToPlaylistTile(songs: songs, musicDataStore: musicDataStore),
+            ListTile(
+              title: const Text('Block from library'),
+              leading: const Icon(Icons.block),
+              onTap: () {
+                settingsStore.addBlockedFiles(songs.map((e) => e.path).toList());
+                Navigator.of(context, rootNavigator: true).pop();
+              },
+            ),
           ],
         );
       }),

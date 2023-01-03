@@ -198,7 +198,7 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   }
 
   Future<void> _removeQueueIndices(List<int> indices, bool permanent) async {
-    _dynamicQueue.removeQueueIndeces(indices, permanent);
+    _dynamicQueue.removeQueueIndices(indices, permanent);
     final newQueue = _dynamicQueue.queue;
 
     final newCurrentIndex = newQueue.isNotEmpty
@@ -213,9 +213,9 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
       } else {
         final newSongs = await _dynamicQueue.updateCurrentIndex(newCurrentIndex);
         if (newSongs.isNotEmpty) {
-            await _audioPlayerDataSource.addToQueue(newSongs.map((e) => e as SongModel).toList());
-            _queueSubject.add(_dynamicQueue.queue);
-          }
+          await _audioPlayerDataSource.addToQueue(newSongs.map((e) => e as SongModel).toList());
+          _queueSubject.add(_dynamicQueue.queue);
+        }
       }
     }
 
@@ -294,6 +294,21 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
       }
       if (indecesToRemove.isNotEmpty) _removeQueueIndices(indecesToRemove, false);
 
+      _queueSubject.add(_dynamicQueue.queue);
+    }
+  }
+
+  @override
+  Future<void> removeBlockedSongs(List<String> paths) async {
+    final pathSet = Set<String>.from(paths);
+    final oldQueue = List<Song>.from(_dynamicQueue.queue);
+
+    if (_dynamicQueue.removeSongs(pathSet)) {
+      final indicesToRemove = <int>[];
+      for (int i = 0; i < oldQueue.length; i++) {
+        if (pathSet.contains(oldQueue[i].path)) indicesToRemove.add(i);
+      }
+      if (indicesToRemove.isNotEmpty) _audioPlayerDataSource.removeQueueIndices(indicesToRemove);
       _queueSubject.add(_dynamicQueue.queue);
     }
   }

@@ -166,7 +166,8 @@ class PersistentStateDao extends DatabaseAccessor<MoorDatabase>
         result = AllSongs();
         break;
       case PlayableType.album:
-        result = await (select(albums)..where((tbl) => tbl.id.equals(int.parse(data['id'] as String))))
+        result = await (select(albums)
+              ..where((tbl) => tbl.id.equals(int.parse(data['id'] as String))))
             .getSingleOrNull()
             .then((value) => value == null ? null : AlbumModel.fromMoor(value));
         break;
@@ -178,19 +179,25 @@ class PersistentStateDao extends DatabaseAccessor<MoorDatabase>
       case PlayableType.playlist:
         final plId = int.parse(data['id'] as String);
         // TODO: need proper getter for this
-        final moorPl = await (select(playlists)..where((tbl) => tbl.id.equals(plId))).getSingle();
-        result = PlaylistModel.fromMoor(moorPl);
+        final moorPl =
+            await (select(playlists)..where((tbl) => tbl.id.equals(plId))).getSingleOrNull();
+        result = moorPl == null ? null : PlaylistModel.fromMoor(moorPl);
         break;
       case PlayableType.smartlist:
         final slId = int.parse(data['id'] as String);
-        final sl = await (select(smartLists)..where((tbl) => tbl.id.equals(slId))).getSingle();
+        final sl =
+            await (select(smartLists)..where((tbl) => tbl.id.equals(slId))).getSingleOrNull();
 
-        final slArtists =
-            await ((select(smartListArtists)..where((tbl) => tbl.smartListId.equals(slId))).join(
-          [innerJoin(artists, artists.name.equalsExp(smartListArtists.artistName))],
-        )).map((p0) => p0.readTable(artists)).get();
+        if (sl == null)
+          result = null;
+        else {
+          final slArtists =
+              await ((select(smartListArtists)..where((tbl) => tbl.smartListId.equals(slId))).join(
+            [innerJoin(artists, artists.name.equalsExp(smartListArtists.artistName))],
+          )).map((p0) => p0.readTable(artists)).get();
 
-        result = SmartListModel.fromMoor(sl, slArtists);
+          result = SmartListModel.fromMoor(sl, slArtists);
+        }
         break;
       case PlayableType.search:
         result = SearchQuery(data['id'] as String);

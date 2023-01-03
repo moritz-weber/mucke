@@ -35,4 +35,8 @@ abstract class MusicDataSource {
   Future<List<SongModel>> searchSongs(String searchText, {int? limit});
 
   Future<int?> getAlbumId(String? title, String? artist, int? year);
+
+  Stream<Set<String>> get blockedFilesStream;
+  Future<void> addBlockedFiles(List<String> paths);
+  Future<void> removeBlockedFiles(List<String> paths);
 }

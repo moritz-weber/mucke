@@ -1,6 +1,4 @@
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
@@ -8,8 +6,8 @@ import '../state/navigation_store.dart';
 import '../state/settings_store.dart';
 import '../theming.dart';
 
-class LibraryFoldersPage extends StatelessWidget {
-  const LibraryFoldersPage({Key? key}) : super(key: key);
+class BlockedFilesPage extends StatelessWidget {
+  const BlockedFilesPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +18,7 @@ class LibraryFoldersPage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
-            'Library Folders',
+            'Blocked Files',
             style: TEXT_HEADER,
           ),
           centerTitle: true,
@@ -28,26 +26,25 @@ class LibraryFoldersPage extends StatelessWidget {
             icon: const Icon(Icons.chevron_left_rounded),
             onPressed: () => navStore.pop(context),
           ),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.add_rounded), 
-              onPressed: () => _openFilePicker(settingsStore),
-            ),
-          ],
           titleSpacing: 0.0,
         ),
         body: Observer(
           builder: (context) {
-            final folders = settingsStore.libraryFoldersStream.value ?? [];
+            final paths = settingsStore.blockedFilesStream.value?.toList() ?? [];
             return ListView.separated(
-              itemCount: folders.length,
+              itemCount: paths.length,
               itemBuilder: (_, int index) {
-                final String path = folders[index];
+                final String path = paths[index];
+                final split = path.split('/');
                 return ListTile(
-                  title: Text(path),
+                  title: Text(split.last),
+                  subtitle: Text(
+                    split.sublist(0, split.length - 1).join('/'),
+                    style: TEXT_SMALL_SUBTITLE,
+                  ),
                   trailing: IconButton(
                     icon: const Icon(Icons.delete_rounded),
-                    onPressed: () => settingsStore.removeLibraryFolder(path),
+                    onPressed: () => settingsStore.removeBlockedFiles([path]),
                   ),
                 );
               },
@@ -59,15 +56,5 @@ class LibraryFoldersPage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Future<void> _openFilePicker(SettingsStore store) async {
-    try {
-      store.addLibraryFolder(await FilePicker.platform.getDirectoryPath());
-    } on PlatformException catch (e) {
-      print('Unsupported operation' + e.toString());
-    } catch (ex) {
-      print(ex);
-    }
   }
 }

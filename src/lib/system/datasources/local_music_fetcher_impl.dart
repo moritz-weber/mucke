@@ -30,6 +30,10 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     final musicDirectories = await _settingsDataSource.libraryFoldersStream.first;
     final libDirs = musicDirectories.map((e) => Directory(e));
 
+    final extString = await _settingsDataSource.fileExtensionsStream.first;
+    final allowedExtensions = getExtensionSet(extString);
+    final blockedPaths = await _musicDataSource.blockedFilesStream.first;
+
     final List<aq.SongModel> aqSongs = [];
 
     for (final libDir in libDirs) {
@@ -56,7 +60,9 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     final Directory dir = await getApplicationSupportDirectory();
 
     for (final aqSong in aqSongs.toSet()) {
-      if (aqSong.data.toLowerCase().endsWith('.wma')) continue;
+      if (!allowedExtensions.contains(aqSong.fileExtension.toLowerCase())) continue;
+      if (blockedPaths.contains(aqSong.data)) continue;
+      
       final data = aqSong.getMap;
       // changed includes the creation time
       // => also update, when the file was created later (and wasn't really changed)
@@ -161,5 +167,12 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
       'ALBUMS': albums,
       'ARTISTS': artistSet.toList(),
     };
+  }
+
+  Set<String> getExtensionSet(String extString) {
+    List<String> extensions = extString.toLowerCase().split(',');
+    extensions = extensions.map((e) => e.trim()).toList();
+    extensions = extensions.whereNot((element) => element.isEmpty).toList();
+    return Set<String>.from(extensions);
   }
 }

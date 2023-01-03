@@ -190,10 +190,10 @@ class DynamicQueue implements ManagedQueueInfo {
     _queueSubject.add(_queue);
   }
 
-  void removeQueueIndeces(List<int> indeces, bool permanent) {
-    _log.d('removeQueueIndeces');
+  void removeQueueIndices(List<int> indices, bool permanent) {
+    _log.d('removeQueueIndices');
 
-    for (final index in indeces..sort(((a, b) => -a.compareTo(b)))) {
+    for (final index in indices..sort(((a, b) => -a.compareTo(b)))) {
       final queueItem = _queue[index];
 
       if (permanent) {
@@ -331,10 +331,13 @@ class DynamicQueue implements ManagedQueueInfo {
   /// Update songs contained in queue. Return true if any song was changed.
   bool updateSongs(Map<String, Song> songs) {
     _log.d('updateSongs');
-    bool changed = false;
+    bool queueChanged = false;
+    bool availableSongsChanged = false;
 
     for (int i = 0; i < _availableSongs.length; i++) {
       if (songs.containsKey(_availableSongs[i].song.path)) {
+        availableSongsChanged = true;
+
         final oldQueueItem = _availableSongs[i] as QueueItemModel;
         final newQueueItem = (_availableSongs[i] as QueueItemModel).copyWith(
           song: songs[_availableSongs[i].song.path]! as SongModel,
@@ -344,19 +347,55 @@ class DynamicQueue implements ManagedQueueInfo {
         final index = _queue.indexOf(oldQueueItem);
         if (index > -1) {
           _queue[index] = newQueueItem;
-          changed = true;
+          queueChanged = true;
         }
       }
     }
 
     // TODO: check if db is fine with that (when frequently changing songs)
     // FIXME: nope, too many changes when skipping through the queue
-    if (changed) {
-      _queueSubject.add(_queue);
-      _availableSongsSubject.add(_availableSongs);
+    if (availableSongsChanged) _availableSongsSubject.add(_availableSongs);
+    if (queueChanged) _queueSubject.add(_queue);
+
+    return queueChanged;
+  }
+
+  bool removeSongs(Set<String> paths) {
+    _log.d('removeSongs');
+    bool queueChanged = false;
+    bool availableSongsChanged = false;
+
+    final List<int> removedOriginalIndices = [];
+
+    for (int i = 0; i < _availableSongs.length; i++) {
+      if (paths.contains(_availableSongs[i].song.path)) {
+        availableSongsChanged = true;
+        final queueItem = _availableSongs.removeAt(i);
+        removedOriginalIndices.add(queueItem.originalIndex);
+
+        final index = _queue.indexOf(queueItem);
+        if (index > -1) {
+          _queue.removeAt(index);
+          queueChanged = true;
+        }
+      }
+    }
+    removedOriginalIndices.sort();
+    // this needs to update originalIndex
+    for (int i = 0; i < _availableSongs.length; i++) {
+      final originalIndex = _availableSongs[i].originalIndex;
+      for (int j = 0; j < removedOriginalIndices.length; j++) {
+        if (originalIndex > removedOriginalIndices[j]) {
+          _availableSongs[i].originalIndex -= 1;
+        } else
+          break;
+      }
     }
 
-    return changed;
+    if (availableSongsChanged) _availableSongsSubject.add(_availableSongs);
+    if (queueChanged) _queueSubject.add(_queue);
+
+    return queueChanged;
   }
 
   Future<List<QueueItem>> getQueueItemWithLinks(QueueItem queueItem, List<QueueItem> pool) async {

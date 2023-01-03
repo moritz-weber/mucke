@@ -34,6 +34,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
     _getAlbumOfDay().then((value) => _albumOfDaySubject.add(value));
     _getArtistOfDay().then((value) => _artistOfDaySubject.add(value));
     _minuteStream.listen((_) => _updateHighlightStreams());
+    _musicDataSource.blockedFilesStream.listen(_blockedFilesSubject.add);
   }
 
   final LocalMusicFetcher _localMusicFetcher;
@@ -41,10 +42,12 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   final PlaylistDataSource _playlistDataSource;
 
   final BehaviorSubject<Map<String, Song>> _songUpdateSubject = BehaviorSubject();
+  final BehaviorSubject<List<String>> _songRemovalSubject = BehaviorSubject();
   final BehaviorSubject<List<Song>> _songSubject = BehaviorSubject();
   final Stream _minuteStream = Stream.periodic(const Duration(minutes: 1));
   final BehaviorSubject<Album?> _albumOfDaySubject = BehaviorSubject();
   final BehaviorSubject<Artist?> _artistOfDaySubject = BehaviorSubject();
+  final BehaviorSubject<Set<String>> _blockedFilesSubject = BehaviorSubject();
 
   static final _log = FimberLog('MusicDataRepositoryImpl');
 
@@ -72,6 +75,12 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
 
   @override
   Stream<List<Artist>> get artistStream => _musicDataSource.artistStream;
+
+  @override
+  ValueStream<Set<String>> get blockedFilesStream => _blockedFilesSubject.stream;
+
+  @override
+  Stream<List<String>> get songRemovalStream => _songRemovalSubject.stream;
 
   @override
   Stream<List<Song>> getAlbumSongStream(Album album) =>
@@ -117,7 +126,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
 
     await _updateArtists(artists);
     await _updateAlbums(albums);
-    await _updateSongs(songs);
+    await _musicDataSource.insertSongs(songs);
 
     _log.d('updateDatabase finished');
 
@@ -132,10 +141,6 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   Future<void> _updateAlbums(List<AlbumModel> albums) async {
     await _musicDataSource.deleteAllAlbums();
     await _musicDataSource.insertAlbums(albums);
-  }
-
-  Future<void> _updateSongs(List<SongModel> songs) async {
-    await _musicDataSource.insertSongs(songs);
   }
 
   @override
@@ -547,5 +552,18 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
 
       return combined;
     });
+  }
+
+  @override
+  Future<void> addBlockedFiles(List<String> paths) async {
+    _songRemovalSubject.add(paths);
+    await _playlistDataSource.removeBlockedSongs(paths);
+    await _musicDataSource.addBlockedFiles(paths);
+    _updateHighlightStreams();
+  }
+
+  @override
+  Future<void> removeBlockedFiles(List<String> paths) async {
+    await _musicDataSource.removeBlockedFiles(paths);
   }
 }
