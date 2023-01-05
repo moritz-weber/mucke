@@ -2,6 +2,7 @@ import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mucke/presentation/widgets/album_background_list.dart';
 
 import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
@@ -30,19 +31,20 @@ class CurrentlyPlayingPage extends StatelessWidget {
       body: SafeArea(
         child: GestureDetector(
           onVerticalDragEnd: (dragEndDetails) {
-            if (dragEndDetails.primaryVelocity! < 0) {
+            if (dragEndDetails.primaryVelocity! < -1) {
               _openQueue(context);
-            } else if (dragEndDetails.primaryVelocity! > 0) {
+            } else if (dragEndDetails.primaryVelocity! > 1) {
               Navigator.pop(context);
             }
           },
+          /*
           onHorizontalDragEnd: (dragEndDetails) {
             if (dragEndDetails.primaryVelocity! < 0) {
               audioStore.skipToNext();
             } else if (dragEndDetails.primaryVelocity! > 0) {
               audioStore.skipToPrevious();
             }
-          },
+          },*/
           child: Observer(
             builder: (BuildContext context) {
               _log.d('Observer.build');
@@ -51,8 +53,10 @@ class CurrentlyPlayingPage extends StatelessWidget {
 
               return Stack(
                 children: [
-                  AlbumBackground(
-                    song: song,
+                  AlbumBackgroundList(
+                    child: AlbumBackground(
+                      song: song,
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
@@ -135,7 +139,8 @@ class CurrentlyPlayingPage extends StatelessWidget {
                           flex: 30,
                         ),
                         const Padding(
-                          padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 10.0),
+                          padding: EdgeInsets.only(
+                              left: 16.0, right: 16.0, top: 10.0),
                           child: TimeProgressIndicator(),
                         ),
                         const Spacer(
