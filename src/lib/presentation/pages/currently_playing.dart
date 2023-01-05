@@ -53,10 +53,8 @@ class CurrentlyPlayingPage extends StatelessWidget {
 
               return Stack(
                 children: [
-                  AlbumBackgroundList(
-                    child: AlbumBackground(
-                      song: song,
-                    ),
+                  AlbumBackground(
+                    song: song,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
@@ -76,13 +74,15 @@ class CurrentlyPlayingPage extends StatelessWidget {
                         Expanded(
                           flex: 720,
                           child: Center(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8.0,
-                                vertical: 0.0,
-                              ),
-                              child: AlbumArt(
-                                song: song,
+                            child: AlbumArtSwipe(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8.0,
+                                  vertical: 0.0,
+                                ),
+                                child: AlbumArt(
+                                  song: song,
+                                ),
                               ),
                             ),
                           ),

@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mucke/presentation/widgets/album_background.dart';
+import 'package:mucke/presentation/widgets/album_art.dart';
 
 import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
 
-class AlbumBackgroundList extends StatefulWidget {
-  const AlbumBackgroundList({Key? key, required this.child}) : super(key: key);
+class AlbumArtSwipe extends StatefulWidget {
+  const AlbumArtSwipe({Key? key, required this.child}) : super(key: key);
 
   final Widget child;
 
   @override
-  _AlbumBackgroundListState createState() =>
-      _AlbumBackgroundListState(child: child);
+  _AlbumArtSwipeState createState() => _AlbumArtSwipeState(child: child);
 }
 
-class _AlbumBackgroundListState extends State<AlbumBackgroundList> {
-  _AlbumBackgroundListState({required this.child}) : super();
+class _AlbumArtSwipeState extends State<AlbumArtSwipe> {
+  _AlbumArtSwipeState({required this.child}) : super();
 
   Widget child;
 
@@ -48,18 +47,18 @@ class _AlbumBackgroundListState extends State<AlbumBackgroundList> {
   static final AudioStore audioStore = GetIt.I<AudioStore>();
   void _onHorizontalSwipe(DismissDirection direction) {
     if (direction == DismissDirection.startToEnd) {
-      audioStore.skipToNext();
-      final Song? song = audioStore.currentSongStream.value;
-      if (song == null) return;
-      setState(() {
-        child = AlbumBackground(song: song);
-      });
-    } else {
       audioStore.skipToPrevious();
       final Song? song = audioStore.currentSongStream.value;
       if (song == null) return;
       setState(() {
-        child = AlbumBackground(song: song);
+        child = AlbumArt(song: song);
+      });
+    } else {
+      audioStore.skipToNext();
+      final Song? song = audioStore.currentSongStream.value;
+      if (song == null) return;
+      setState(() {
+        child = AlbumArt(song: song);
       });
     }
   }
