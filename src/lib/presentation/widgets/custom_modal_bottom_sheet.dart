@@ -12,12 +12,15 @@ class MyBottomSheet extends StatelessWidget {
     final int count = 2 * widgets.length - 1;
 
     return Padding(
-      padding: const EdgeInsets.all(12.0),
+      padding: const EdgeInsets.all(0.0),
       child: Container(
         clipBehavior: Clip.antiAlias,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8.0),
-          boxShadow: const [
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(8.0),
+            topRight: Radius.circular(8.0),
+          ),
+          boxShadow: [
             BoxShadow(
               color: Colors.black26,
               blurRadius: 8,

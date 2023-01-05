@@ -36,7 +36,7 @@ ThemeData theme() => ThemeData(
       toggleableActiveColor: LIGHT1,
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          primary: LIGHT1,
+          backgroundColor: LIGHT1,
         ),
       ),
       progressIndicatorTheme: const ProgressIndicatorThemeData(color: LIGHT2),

@@ -8,7 +8,6 @@ import 'package:get_it/get_it.dart';
 
 import 'domain/actors/persistence_actor.dart';
 import 'injection_container.dart';
-import 'presentation/pages/currently_playing.dart';
 import 'presentation/pages/home_page.dart';
 import 'presentation/pages/library_page.dart';
 import 'presentation/pages/search_page.dart';
@@ -44,7 +43,7 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  // This widget is the root of the application.
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
@@ -56,8 +55,13 @@ class MyApp extends StatelessWidget {
       theme: theme(),
       initialRoute: '/',
       routes: {
-        '/': (context) => const RootPage(),
-        '/playing': (context) => const CurrentlyPlayingPage(),
+        '/': (context) => AnnotatedRegion<SystemUiOverlayStyle>(
+              child: const RootPage(),
+              value: SystemUiOverlayStyle.dark.copyWith(
+                systemNavigationBarColor: DARK1,
+                statusBarIconBrightness: Brightness.light,
+              ),
+            ),
       },
     );
   }
