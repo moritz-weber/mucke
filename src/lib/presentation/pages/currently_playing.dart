@@ -37,14 +37,6 @@ class CurrentlyPlayingPage extends StatelessWidget {
               Navigator.pop(context);
             }
           },
-          /*
-          onHorizontalDragEnd: (dragEndDetails) {
-            if (dragEndDetails.primaryVelocity! < 0) {
-              audioStore.skipToNext();
-            } else if (dragEndDetails.primaryVelocity! > 0) {
-              audioStore.skipToPrevious();
-            }
-          },*/
           child: Observer(
             builder: (BuildContext context) {
               _log.d('Observer.build');
