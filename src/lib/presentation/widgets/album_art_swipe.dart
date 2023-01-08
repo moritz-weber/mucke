@@ -18,6 +18,7 @@ class _AlbumArtSwipeState extends State<AlbumArtSwipe> {
   _AlbumArtSwipeState({required this.child}) : super();
 
   Widget child;
+  bool startToEnd = false;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,9 @@ class _AlbumArtSwipeState extends State<AlbumArtSwipe> {
         switchOutCurve: Curves.easeOut,
         transitionBuilder: (child, animation) {
           return SlideTransition(
-            position: Tween<Offset>(begin: Offset(1, 0), end: Offset(0, 0))
+            position: Tween<Offset>(
+                    begin: Offset(startToEnd ? -1 : 1, 0),
+                    end: const Offset(0, 0))
                 .animate(animation),
             child: child,
           );
@@ -46,19 +49,24 @@ class _AlbumArtSwipeState extends State<AlbumArtSwipe> {
 
   static final AudioStore audioStore = GetIt.I<AudioStore>();
   void _onHorizontalSwipe(DismissDirection direction) {
-    if (direction == DismissDirection.startToEnd) {
+    final int? queueIndex = audioStore.queueIndexStream.value;
+    if (queueIndex == null) return;
+
+    if (direction == DismissDirection.startToEnd && audioStore.hasPrevious) {
       audioStore.skipToPrevious();
-      final Song? song = audioStore.currentSongStream.value;
+      final Song? song = audioStore.queue[queueIndex - 1].song;
       if (song == null) return;
       setState(() {
         child = AlbumArt(song: song);
+        startToEnd = true;
       });
-    } else {
+    } else if (audioStore.hasNext) {
       audioStore.skipToNext();
-      final Song? song = audioStore.currentSongStream.value;
+      final Song? song = audioStore.queue[queueIndex + 1].song;
       if (song == null) return;
       setState(() {
         child = AlbumArt(song: song);
+        startToEnd = false;
       });
     }
   }

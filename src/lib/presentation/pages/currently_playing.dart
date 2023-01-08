@@ -2,7 +2,7 @@ import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mucke/presentation/widgets/album_background_list.dart';
+import 'package:mucke/presentation/widgets/album_art_swipe.dart';
 
 import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
@@ -74,12 +74,12 @@ class CurrentlyPlayingPage extends StatelessWidget {
                         Expanded(
                           flex: 720,
                           child: Center(
-                            child: AlbumArtSwipe(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8.0,
-                                  vertical: 0.0,
-                                ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8.0,
+                                vertical: 0.0,
+                              ),
+                              child: AlbumArtSwipe(
                                 child: AlbumArt(
                                   song: song,
                                 ),
