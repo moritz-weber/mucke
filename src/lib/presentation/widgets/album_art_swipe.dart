@@ -22,27 +22,25 @@ class _AlbumArtSwipeState extends State<AlbumArtSwipe> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 1000),
-        switchInCurve: Curves.easeIn,
-        switchOutCurve: Curves.easeOut,
-        transitionBuilder: (child, animation) {
-          return SlideTransition(
-            position: Tween<Offset>(
-                    begin: Offset(startToEnd ? -1 : 1, 0),
-                    end: const Offset(0, 0))
-                .animate(animation),
-            child: child,
-          );
-        },
-        child: Dismissible(
-          key: UniqueKey(),
-          resizeDuration: null,
-          onDismissed: _onHorizontalSwipe,
-          direction: DismissDirection.horizontal,
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 1000),
+      switchInCurve: Curves.easeIn,
+      switchOutCurve: Curves.easeOut,
+      transitionBuilder: (child, animation) {
+        return SlideTransition(
+          position: Tween<Offset>(
+                  begin: Offset(startToEnd ? -1 : 1, 0),
+                  end: const Offset(0, 0))
+              .animate(animation),
           child: child,
-        ),
+        );
+      },
+      child: Dismissible(
+        key: UniqueKey(),
+        resizeDuration: null,
+        onDismissed: _onHorizontalSwipe,
+        direction: DismissDirection.horizontal,
+        child: child,
       ),
     );
   }
