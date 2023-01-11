@@ -7,7 +7,6 @@ import 'package:mucke/presentation/widgets/album_art_swipe.dart';
 import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
 import '../theming.dart';
-import '../widgets/album_art.dart';
 import '../widgets/album_background.dart';
 import '../widgets/currently_playing_header.dart';
 import '../widgets/playback_control.dart';
@@ -41,7 +40,9 @@ class CurrentlyPlayingPage extends StatelessWidget {
             builder: (BuildContext context) {
               _log.d('Observer.build');
               final Song? song = audioStore.currentSongStream.value;
+              final int? queueIndex = audioStore.queueIndexStream.value;
               if (song == null) return Container();
+              if (queueIndex == null) return Container();
 
               return Stack(
                 children: [
@@ -72,9 +73,7 @@ class CurrentlyPlayingPage extends StatelessWidget {
                                 vertical: 0.0,
                               ),
                               child: AlbumArtSwipe(
-                                child: AlbumArt(
-                                  song: song,
-                                ),
+                                queueIndex: queueIndex,
                               ),
                             ),
                           ),
@@ -131,8 +130,7 @@ class CurrentlyPlayingPage extends StatelessWidget {
                           flex: 30,
                         ),
                         const Padding(
-                          padding: EdgeInsets.only(
-                              left: 16.0, right: 16.0, top: 10.0),
+                          padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 10.0),
                           child: TimeProgressIndicator(),
                         ),
                         const Spacer(
