@@ -2,11 +2,11 @@ import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mucke/presentation/widgets/album_art_swipe.dart';
 
 import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
 import '../theming.dart';
-import '../widgets/album_art.dart';
 import '../widgets/album_background.dart';
 import '../widgets/currently_playing_header.dart';
 import '../widgets/playback_control.dart';
@@ -30,9 +30,9 @@ class CurrentlyPlayingPage extends StatelessWidget {
       body: SafeArea(
         child: GestureDetector(
           onVerticalDragEnd: (dragEndDetails) {
-            if (dragEndDetails.primaryVelocity! < 0) {
+            if (dragEndDetails.primaryVelocity! < -1) {
               _openQueue(context);
-            } else if (dragEndDetails.primaryVelocity! > 0) {
+            } else if (dragEndDetails.primaryVelocity! > 1) {
               Navigator.pop(context);
             }
           },
@@ -40,7 +40,9 @@ class CurrentlyPlayingPage extends StatelessWidget {
             builder: (BuildContext context) {
               _log.d('Observer.build');
               final Song? song = audioStore.currentSongStream.value;
+              final int? queueIndex = audioStore.queueIndexStream.value;
               if (song == null) return Container();
+              if (queueIndex == null) return Container();
 
               return Stack(
                 children: [
@@ -70,8 +72,8 @@ class CurrentlyPlayingPage extends StatelessWidget {
                                 horizontal: 8.0,
                                 vertical: 0.0,
                               ),
-                              child: AlbumArt(
-                                song: song,
+                              child: AlbumArtSwipe(
+                                queueIndex: queueIndex,
                               ),
                             ),
                           ),

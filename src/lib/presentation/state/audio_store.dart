@@ -55,10 +55,12 @@ abstract class _AudioStore with Store {
     this._playSmartList,
     this._playPlaylist,
     this._seekToNext,
-    this._shuffleAll, this._playPlayable,
+    this._shuffleAll,
+    this._playPlayable,
   ) {
     _audioPlayerRepository.managedQueueInfo.queueItemsStream.listen(_setQueue);
-    _audioPlayerRepository.managedQueueInfo.availableSongsStream.listen((_) => _setAvSongs());
+    _audioPlayerRepository.managedQueueInfo.availableSongsStream
+        .listen((_) => _setAvSongs());
     _audioPlayerRepository.shuffleModeStream.listen((_) => _setAvSongs());
     _audioPlayerRepository.playableStream.listen((_) => _setAvSongs());
   }
@@ -79,11 +81,13 @@ abstract class _AudioStore with Store {
       _audioPlayerRepository.currentSongStream.asObservable();
 
   @observable
-  late ObservableStream<bool> playingStream = _audioPlayerRepository.playingStream.asObservable();
+  late ObservableStream<bool> playingStream =
+      _audioPlayerRepository.playingStream.asObservable();
 
   @observable
-  late ObservableStream<Duration> currentPositionStream =
-      _audioPlayerRepository.positionStream.asObservable(initialValue: const Duration(seconds: 0));
+  late ObservableStream<Duration> currentPositionStream = _audioPlayerRepository
+      .positionStream
+      .asObservable(initialValue: const Duration(seconds: 0));
 
   @readonly
   late List<QueueItem> _queue = [];
@@ -131,11 +135,22 @@ abstract class _AudioStore with Store {
 
   @computed
   bool get hasNext =>
-      (queueIndexStream.value != null && queueIndexStream.value! < _queue.length - 1) ||
+      (queueIndexStream.value != null &&
+          queueIndexStream.value! < _queue.length - 1) ||
       (loopModeStream.value ?? LoopMode.off) != LoopMode.off;
 
-  Future<void> playSong(int index, List<Song> songList, Playable playable) async {
-    _playSongs(songs: songList, initialIndex: index, playable: playable, keepInitialIndex: true);
+  @computed
+  bool get hasPrevious =>
+      (queueIndexStream.value != null && queueIndexStream.value! > 0) ||
+      (loopModeStream.value ?? LoopMode.off) != LoopMode.off;
+
+  Future<void> playSong(
+      int index, List<Song> songList, Playable playable) async {
+    _playSongs(
+        songs: songList,
+        initialIndex: index,
+        playable: playable,
+        keepInitialIndex: true);
   }
 
   Future<void> play() async => _audioPlayerRepository.play();
@@ -144,9 +159,11 @@ abstract class _AudioStore with Store {
 
   Future<void> skipToNext() async => _seekToNext();
 
-  Future<void> skipToPrevious() async => _audioPlayerRepository.seekToPrevious();
+  Future<void> skipToPrevious() async =>
+      _audioPlayerRepository.seekToPrevious();
 
-  Future<void> seekToIndex(int index) async => _audioPlayerRepository.seekToIndex(index);
+  Future<void> seekToIndex(int index) async =>
+      _audioPlayerRepository.seekToIndex(index);
 
   Future<void> seekToPosition(double position) async =>
       _audioPlayerRepository.seekToPosition(position);
@@ -154,15 +171,20 @@ abstract class _AudioStore with Store {
   Future<void> setShuffleMode(ShuffleMode shuffleMode) async =>
       _audioPlayerRepository.setShuffleMode(shuffleMode);
 
-  Future<void> setLoopMode(LoopMode loopMode) async => _audioPlayerRepository.setLoopMode(loopMode);
+  Future<void> setLoopMode(LoopMode loopMode) async =>
+      _audioPlayerRepository.setLoopMode(loopMode);
 
-  Future<void> shuffleAll(ShuffleMode shuffleMode) async => _shuffleAll(shuffleMode);
+  Future<void> shuffleAll(ShuffleMode shuffleMode) async =>
+      _shuffleAll(shuffleMode);
 
-  Future<void> addToQueue(List<Song> songs) async => _audioPlayerRepository.addToQueue(songs);
+  Future<void> addToQueue(List<Song> songs) async =>
+      _audioPlayerRepository.addToQueue(songs);
 
-  Future<void> playNext(List<Song> songs) async => _audioPlayerRepository.playNext(songs);
+  Future<void> playNext(List<Song> songs) async =>
+      _audioPlayerRepository.playNext(songs);
 
-  Future<void> appendToNext(List<Song> songs) async => _audioPlayerRepository.addToNext(songs);
+  Future<void> appendToNext(List<Song> songs) async =>
+      _audioPlayerRepository.addToNext(songs);
 
   Future<void> moveQueueItem(int oldIndex, int newIndex) async =>
       _audioPlayerRepository.moveQueueItem(oldIndex, newIndex);
@@ -172,13 +194,15 @@ abstract class _AudioStore with Store {
 
   Future<void> playAlbum(Album album) async => _playAlbum(album);
 
-  Future<void> playSmartList(SmartList smartList) async => _playSmartList(smartList);
+  Future<void> playSmartList(SmartList smartList) async =>
+      _playSmartList(smartList);
 
   Future<void> playPlaylist(Playlist playlist) async => _playPlaylist(playlist);
 
   Future<void> playArtist(Artist artist, ShuffleMode? shuffleMode) async =>
       _playArtist(artist, shuffleMode);
 
-  Future<void> playPlayable(Playable playable, ShuffleMode? shuffleMode) async =>
+  Future<void> playPlayable(
+          Playable playable, ShuffleMode? shuffleMode) async =>
       _playPlayable(playable, shuffleMode);
 }
