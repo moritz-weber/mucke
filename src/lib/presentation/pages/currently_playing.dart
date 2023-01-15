@@ -2,11 +2,11 @@ import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mucke/presentation/widgets/album_art_swipe.dart';
 
 import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
 import '../theming.dart';
+import '../widgets/album_art_swipe.dart';
 import '../widgets/album_background.dart';
 import '../widgets/currently_playing_header.dart';
 import '../widgets/playback_control.dart';
@@ -25,64 +25,50 @@ class CurrentlyPlayingPage extends StatelessWidget {
     _log.d('build started');
     final AudioStore audioStore = GetIt.I<AudioStore>();
 
-    // TODO: everything wrapped in Observer and most components have Observer themselves
     return Scaffold(
       body: SafeArea(
         child: GestureDetector(
           onVerticalDragEnd: (dragEndDetails) {
-            if (dragEndDetails.primaryVelocity! < -1) {
+            if (dragEndDetails.primaryVelocity! < 0) {
               _openQueue(context);
-            } else if (dragEndDetails.primaryVelocity! > 1) {
+            } else if (dragEndDetails.primaryVelocity! > 0) {
               Navigator.pop(context);
             }
           },
-          child: Observer(
-            builder: (BuildContext context) {
-              _log.d('Observer.build');
-              final Song? song = audioStore.currentSongStream.value;
-              final int? queueIndex = audioStore.queueIndexStream.value;
-              if (song == null) return Container();
-              if (queueIndex == null) return Container();
-
-              return Stack(
-                children: [
-                  AlbumBackground(
-                    song: song,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      left: 12.0,
-                      right: 12.0,
+          child: Stack(
+            children: [
+              const AlbumBackground(),
+              Material(
+                color: Colors.transparent,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12.0, right: 12.0),
+                      child: CurrentlyPlayingHeader(
+                        onTap: _openQueue,
+                        onMoreTap: _openMoreMenu,
+                      ),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CurrentlyPlayingHeader(
-                          onTap: _openQueue,
-                          onMoreTap: _openMoreMenu,
-                        ),
-                        const Spacer(
-                          flex: 10,
-                        ),
-                        Expanded(
-                          flex: 720,
-                          child: Center(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8.0,
-                                vertical: 0.0,
-                              ),
-                              child: AlbumArtSwipe(
-                                queueIndex: queueIndex,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const Spacer(
-                          flex: 50,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    const Spacer(
+                      flex: 10,
+                    ),
+                    const Expanded(
+                      flex: 720,
+                      child: Center(
+                        child: AlbumArtSwipe(),
+                      ),
+                    ),
+                    const Spacer(
+                      flex: 50,
+                    ),
+                    Observer(
+                      builder: (BuildContext context) {
+                        final Song? song = audioStore.currentSongStream.value;
+              
+                        if (song == null) return Container();
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0 + 12.0),
                           child: SizedBox(
                             width: double.infinity,
                             height: 74.0,
@@ -103,54 +89,51 @@ class CurrentlyPlayingPage extends StatelessWidget {
                                     fontSize: 18.0,
                                     fontWeight: FontWeight.w300,
                                   ),
-
-                                  // TEXT_SUBTITLE.copyWith(
-                                  // ),
                                   maxLines: 2,
                                 ),
                               ],
                             ),
                           ),
-                        ),
-                        const Spacer(
-                          flex: 50,
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.only(left: 6.0, right: 6.0),
-                          child: SongCustomizationButtons(),
-                        ),
-                        const Spacer(
-                          flex: 20,
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 2.0),
-                          child: PlaybackControl(),
-                        ),
-                        const Spacer(
-                          flex: 30,
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 10.0),
-                          child: TimeProgressIndicator(),
-                        ),
-                        const Spacer(
-                          flex: 60,
-                        ),
-                        const Center(
-                          child: Padding(
-                            padding: EdgeInsets.only(bottom: 8.0),
-                            child: Icon(
-                              Icons.expand_less_rounded,
-                              color: Colors.white70,
-                            ),
-                          ),
-                        ),
-                      ],
+                        );
+                      },
                     ),
-                  ),
-                ],
-              );
-            },
+                    const Spacer(
+                      flex: 50,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12.0 + 6.0),
+                      child: SongCustomizationButtons(),
+                    ),
+                    const Spacer(
+                      flex: 20,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12.0 + 2.0),
+                      child: PlaybackControl(),
+                    ),
+                    const Spacer(
+                      flex: 30,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 12.0 + 16.0, right: 12.0 + 16.0, top: 10.0),
+                      child: TimeProgressIndicator(),
+                    ),
+                    const Spacer(
+                      flex: 60,
+                    ),
+                    const Center(
+                      child: Padding(
+                        padding: EdgeInsets.only(bottom: 8.0),
+                        child: Icon(
+                          Icons.expand_less_rounded,
+                          color: Colors.white70,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ),
