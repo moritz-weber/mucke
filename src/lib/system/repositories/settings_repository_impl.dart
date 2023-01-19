@@ -14,6 +14,7 @@ class SettingsRepositoryImpl implements SettingsRepository {
 
   final BehaviorSubject<bool> _manageExternalStorageGrantedSubject = BehaviorSubject();
   final BehaviorSubject<String> _fileExtensionsSubject = BehaviorSubject();
+  final BehaviorSubject<bool> _playAlbumsInOrderSubject = BehaviorSubject();
 
   @override
   Stream<List<String>> get libraryFoldersStream => _settingsDataSource.libraryFoldersStream;
@@ -54,5 +55,13 @@ class SettingsRepositoryImpl implements SettingsRepository {
   @override
   Future<void> setFileExtension(String extensions) async {
     await _settingsDataSource.setFileExtension(extensions);
+  }
+
+  @override
+  ValueStream<bool> get playAlbumsInOrderStream => _playAlbumsInOrderSubject.stream;
+
+  @override
+  Future<void> setPlayAlbumsInOrder(bool playInOrder) async {
+    await _settingsDataSource.setPlayAlbumsInOrder(playInOrder);
   }
 }

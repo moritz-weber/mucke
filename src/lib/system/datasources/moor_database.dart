@@ -224,7 +224,7 @@ class MoorDatabase extends _$MoorDatabase {
   MoorDatabase.connect(DatabaseConnection connection) : super.connect(connection);
 
   @override
-  int get schemaVersion => 11;
+  int get schemaVersion => 12;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -240,7 +240,12 @@ class MoorDatabase extends _$MoorDatabase {
               const KeyValueEntriesCompanion(key: Value(PERSISTENT_SHUFFLEMODE), value: Value('0')),
             );
             await into(keyValueEntries).insert(
-              const KeyValueEntriesCompanion(key: Value(SETTING_ALLOWED_EXTENSIONS), value: Value(ALLOWED_FILE_EXTENSIONS)),
+              const KeyValueEntriesCompanion(
+                  key: Value(SETTING_ALLOWED_EXTENSIONS), value: Value(ALLOWED_FILE_EXTENSIONS)),
+            );
+            await into(keyValueEntries).insert(
+              const KeyValueEntriesCompanion(
+                  key: Value(SETTING_ALLOWED_EXTENSIONS), value: Value('false')),
             );
             final Map initialPlayable = {
               'id': '',
@@ -391,8 +396,15 @@ class MoorDatabase extends _$MoorDatabase {
           if (from < 11) {
             await m.createTable(blockedFiles);
             await into(keyValueEntries).insert(
-              const KeyValueEntriesCompanion(key: Value(SETTING_ALLOWED_EXTENSIONS), value: Value(ALLOWED_FILE_EXTENSIONS)),
+              const KeyValueEntriesCompanion(
+                  key: Value(SETTING_ALLOWED_EXTENSIONS), value: Value(ALLOWED_FILE_EXTENSIONS)),
             );
+          }
+          if (from < 12) {
+            await into(keyValueEntries).insert(const KeyValueEntriesCompanion(
+              key: Value(SETTING_PLAY_ALBUMS_IN_ORDER),
+              value: Value('false'),
+            ));
           }
         },
       );

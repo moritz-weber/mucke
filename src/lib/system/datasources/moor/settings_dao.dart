@@ -38,4 +38,23 @@ class SettingsDao extends DatabaseAccessor<MoorDatabase>
     await (update(keyValueEntries)..where((tbl) => tbl.key.equals(SETTING_ALLOWED_EXTENSIONS)))
         .write(KeyValueEntriesCompanion(value: Value(extensions)));
   }
+
+  @override
+  Stream<bool> get playAlbumsInOrderStream =>
+      (select(keyValueEntries)..where((tbl) => tbl.key.equals(SETTING_PLAY_ALBUMS_IN_ORDER)))
+          .watchSingle()
+          .map(
+        (event) {
+          print(event);
+          print(event.value);
+          return event.value == 'true';
+        },
+      );
+
+  @override
+  Future<void> setPlayAlbumsInOrder(bool playInOrder) async {
+    print(playInOrder);
+    await (update(keyValueEntries)..where((tbl) => tbl.key.equals(SETTING_PLAY_ALBUMS_IN_ORDER)))
+        .write(KeyValueEntriesCompanion(value: Value(playInOrder ? 'true' : 'false')));
+  }
 }
