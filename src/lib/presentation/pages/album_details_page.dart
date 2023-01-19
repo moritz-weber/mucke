@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mucke/presentation/mucke_icons.dart';
 
 import '../../domain/entities/album.dart';
 import '../../domain/entities/song.dart';
@@ -9,8 +10,9 @@ import '../state/audio_store.dart';
 import '../state/music_data_store.dart';
 import '../state/settings_store.dart';
 import '../theming.dart';
-import '../widgets/album_sliver_appbar.dart';
+import '../utils.dart' as utils;
 import '../widgets/bottom_sheet/add_to_playlist.dart';
+import '../widgets/cover_sliver_appbar.dart';
 import '../widgets/custom_modal_bottom_sheet.dart';
 import '../widgets/exclude_level_options.dart';
 import '../widgets/like_count_options.dart';
@@ -49,6 +51,10 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
     return Scaffold(
       body: Observer(
         builder: (BuildContext context) {
+          final album = widget.album;
+          final songs = store.albumSongStream.value ?? [];
+          final totalDuration =
+              songs.fold(const Duration(milliseconds: 0), (Duration d, s) => d + s.duration);
           final songsByDisc = _songsByDisc(store.albumSongStream.value ?? []);
           final discSongNums = [0];
           for (int i = 0; i < songsByDisc.length - 1; i++) {
@@ -58,10 +64,91 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
           return Scrollbar(
             child: CustomScrollView(
               slivers: <Widget>[
-                AlbumSliverAppBar(
-                  album: widget.album,
-                  store: store,
-                  onTapMultiSelectMenu: () => _openMultiselectMenu(context),
+                CoverSliverAppBar(
+                  title: album.title,
+                  subtitle2:
+                      '${album.pubYear.toString()} • ${songs.length} Songs • ${utils.msToTimeString(totalDuration)}',
+                  actions: [
+                    Observer(
+                      builder: (context) {
+                        final isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
+
+                        if (isMultiSelectEnabled)
+                          return IconButton(
+                            key: GlobalKey(),
+                            icon: const Icon(Icons.more_vert_rounded),
+                            onPressed: () => _openMultiselectMenu(context),
+                          );
+
+                        return Container();
+                      },
+                    ),
+                    Observer(
+                      builder: (context) {
+                        final isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
+                        final isAllSelected = store.selection.isAllSelected;
+
+                        if (isMultiSelectEnabled)
+                          return IconButton(
+                            key: GlobalKey(),
+                            icon: isAllSelected
+                                ? const Icon(Icons.deselect_rounded)
+                                : const Icon(Icons.select_all_rounded),
+                            onPressed: () {
+                              if (isAllSelected)
+                                store.selection.deselectAll();
+                              else
+                                store.selection.selectAll();
+                            },
+                          );
+
+                        return Container();
+                      },
+                    ),
+                    Observer(builder: (context) {
+                      final isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
+                      return IconButton(
+                        key: const ValueKey('ALBUM_MULTISELECT'),
+                        icon: isMultiSelectEnabled
+                            ? const Icon(Icons.close_rounded)
+                            : const Icon(Icons.checklist_rtl_rounded),
+                        onPressed: () => store.selection.toggleMultiSelect(),
+                      );
+                    })
+                  ],
+                  cover: Container(
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4.0),
+                      boxShadow: const [
+                        BoxShadow(color: Colors.black54, blurRadius: 8, offset: Offset(0, 2)),
+                      ],
+                      image: DecorationImage(
+                        image: utils.getAlbumImage(album.albumArtPath),
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+                  background: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                  button: ElevatedButton(
+                    onPressed: () => audioStore.playAlbum(album),
+                    child: Row(
+                      children: const [
+                        Expanded(child: Center(child: Text('Play'))),
+                        Icon(MuckeIcons.shuffle_none),
+                      ],
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      shape: const StadiumBorder(),
+                      backgroundColor: Colors.white10,
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      shadowColor: Colors.transparent,
+                    ),
+                  ),
                 ),
                 for (int d = 0; d < songsByDisc.length; d++)
                   Observer(
