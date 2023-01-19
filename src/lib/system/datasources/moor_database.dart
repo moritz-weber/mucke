@@ -245,7 +245,7 @@ class MoorDatabase extends _$MoorDatabase {
             );
             await into(keyValueEntries).insert(
               const KeyValueEntriesCompanion(
-                  key: Value(SETTING_ALLOWED_EXTENSIONS), value: Value('false')),
+                  key: Value(SETTING_PLAY_ALBUMS_IN_ORDER), value: Value('false')),
             );
             final Map initialPlayable = {
               'id': '',
