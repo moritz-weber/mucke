@@ -8,6 +8,7 @@ class SettingsRepositoryImpl implements SettingsRepository {
   SettingsRepositoryImpl(this._settingsDataSource) {
     Permission.manageExternalStorage.isGranted.then(_manageExternalStorageGrantedSubject.add);
     _settingsDataSource.fileExtensionsStream.listen(_fileExtensionsSubject.add);
+    _settingsDataSource.playAlbumsInOrderStream.listen(_playAlbumsInOrderSubject.add);
   }
 
   final SettingsDataSource _settingsDataSource;

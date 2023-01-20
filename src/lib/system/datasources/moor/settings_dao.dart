@@ -43,13 +43,7 @@ class SettingsDao extends DatabaseAccessor<MoorDatabase>
   Stream<bool> get playAlbumsInOrderStream =>
       (select(keyValueEntries)..where((tbl) => tbl.key.equals(SETTING_PLAY_ALBUMS_IN_ORDER)))
           .watchSingle()
-          .map(
-        (event) {
-          print(event);
-          print(event.value);
-          return event.value == 'true';
-        },
-      );
+          .map((event) => event.value == 'true');
 
   @override
   Future<void> setPlayAlbumsInOrder(bool playInOrder) async {
