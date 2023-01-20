@@ -31,8 +31,15 @@ class _AlbumArtSwipeState extends State<AlbumArtSwipe> {
     controller = PageController(initialPage: audioStore.queueIndexStream.value!);
 
     audioStore.queueIndexStream.distinct().listen((value) {
+      final int streamLength = audioStore.queueIndexStream.length.value ?? 0;
+      final int? previousIndex = audioStore.queueIndexStream.elementAt(streamLength - 2).value;
+
+      if (value == null ||
+          (previousIndex != null && audioStore.queue[value] == audioStore.queue[previousIndex]))
+        return;
+
       // only animate if not already on the same page (rounded)
-      if (controller.positions.isNotEmpty && value != null && value != controller.page?.round()) {
+      if (controller.positions.isNotEmpty && value != controller.page?.round()) {
         AlbumArtSwipe._log.v('Animate to page: $value | Currently at page: ${controller.page}');
         seekingCount++;
         controller
