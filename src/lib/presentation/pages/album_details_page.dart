@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
@@ -66,6 +68,7 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
               slivers: <Widget>[
                 CoverSliverAppBar(
                   title: album.title,
+                  subtitle: album.artist,
                   subtitle2:
                       '${album.pubYear.toString()} • ${songs.length} Songs • ${utils.msToTimeString(totalDuration)}',
                   actions: [
@@ -129,9 +132,15 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
                       ),
                     ),
                   ),
-                  background: Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.transparent,
+                  background: ClipRect(
+                    clipBehavior: Clip.hardEdge,
+                    child: ImageFiltered(
+                      imageFilter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
+                      child: Image(
+                        image: utils.getAlbumImage(album.albumArtPath),
+                        fit: BoxFit.cover,
+                        opacity: const AlwaysStoppedAnimation(1.0),
+                      ),
                     ),
                   ),
                   button: ElevatedButton(
