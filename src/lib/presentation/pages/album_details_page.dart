@@ -191,10 +191,9 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
                                 song: songsByDisc[d][s],
                                 isSelectEnabled: isMultiSelectEnabled,
                                 isSelected: isMultiSelectEnabled && isSelected[s + discSongNums[d]],
-                                onTap: () => audioStore.playSong(
-                                  s + _calcOffset(d, songsByDisc),
-                                  store.albumSongStream.value!,
+                                onTap: () => audioStore.playAlbumFromIndex(
                                   widget.album,
+                                  s + _calcOffset(d, songsByDisc),
                                 ),
                                 onTapMore: () => showModalBottomSheet(
                                   context: context,
