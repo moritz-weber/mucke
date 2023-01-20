@@ -26,12 +26,6 @@ abstract class _SettingsStore with Store {
       _settingsRepository.libraryFoldersStream.asObservable(initialValue: []);
 
   @observable
-  late ObservableStream<bool> manageExternalStorageGranted =
-      _settingsRepository.manageExternalStorageGranted.asObservable(
-    initialValue: _settingsRepository.manageExternalStorageGranted.valueOrNull ?? false,
-  );
-
-  @observable
   late ObservableStream<String> fileExtensionsStream =
       _settingsRepository.fileExtensionsStream.asObservable(initialValue: '');
 
@@ -48,10 +42,6 @@ abstract class _SettingsStore with Store {
 
   Future<void> removeLibraryFolder(String? path) async {
     await _settingsRepository.removeLibraryFolder(path);
-  }
-
-  Future<void> setManageExternalStorageGranted(bool granted) async {
-    await _settingsRepository.setManageExternalStorageGranted(granted);
   }
 
   Future<void> setFileExtensions(String? extensions) async {
