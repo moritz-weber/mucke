@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -25,26 +27,36 @@ class _AlbumArtSwipeState extends State<AlbumArtSwipe> {
   int seekingCount = 0;
   bool get isSeekActive => seekingCount <= 0;
 
+  late StreamSubscription _streamSubscription;
+
   @override
   void initState() {
     super.initState();
     controller = PageController(initialPage: audioStore.queueIndexStream.value!);
 
-    audioStore.queueIndexStream.distinct().listen((value) {
+    _streamSubscription = audioStore.queueIndexStream.listen((value) {
+      AlbumArtSwipe._log.d('index: $value');
+      if (value == null) return;
+      AlbumArtSwipe._log.d('queue item: ${audioStore.queue[value]}');
+
       // only animate if not already on the same page (rounded)
-      if (controller.positions.isNotEmpty && value != null && value != controller.page?.round()) {
-        AlbumArtSwipe._log.v('Animate to page: $value | Currently at page: ${controller.page}');
-        seekingCount++;
-        controller
-            .animateToPage(
-          value,
-          duration: const Duration(milliseconds: 600),
-          curve: Curves.easeInOut,
-        )
-            .then((_) {
-          AlbumArtSwipe._log.v('Animation done ($value) -> enable seek');
+      if (controller.positions.isNotEmpty && value != controller.page?.round()) {
+        if ((value - (controller.page ?? value)).abs() > 1.6) {
+          AlbumArtSwipe._log.d('jump to: $value');
+          seekingCount++;
+          controller.jumpToPage(value);
           seekingCount--;
-        });
+        } else {
+          AlbumArtSwipe._log.d('seek to: $value');
+          seekingCount++;
+          controller
+              .animateToPage(
+                value,
+                duration: const Duration(milliseconds: 600),
+                curve: Curves.easeInOut,
+              )
+              .then((_) => seekingCount--);
+        }
       }
     });
   }
@@ -52,15 +64,17 @@ class _AlbumArtSwipeState extends State<AlbumArtSwipe> {
   @override
   void dispose() {
     controller.dispose();
+    _streamSubscription.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    const Key key = ValueKey('ALBUM_ART_SLIDE');
+    const Key key = ValueKey('ALBUM_ART_SWIPE');
 
     return Observer(builder: (context) {
-      AlbumArtSwipe._log.v('Build PageView');
+      AlbumArtSwipe._log.d('Build PageView');
+      final queue = audioStore.queue;
       return PageView.builder(
         key: key,
         controller: controller,
@@ -69,7 +83,7 @@ class _AlbumArtSwipeState extends State<AlbumArtSwipe> {
           return Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
-              child: AlbumArt(song: audioStore.queue[index].song),
+              child: AlbumArt(song: queue[index].song),
             ),
           );
         },
@@ -79,9 +93,7 @@ class _AlbumArtSwipeState extends State<AlbumArtSwipe> {
   }
 
   void _conditionalSeek(int index) {
-    AlbumArtSwipe._log.v('Seek triggered to: $index | Current page: ${controller.page}');
     if (isSeekActive && index != audioStore.queueIndexStream.value) {
-      AlbumArtSwipe._log.v('Seeking to: $index');
       audioStore.seekToIndex(index);
     }
   }
