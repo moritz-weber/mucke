@@ -133,16 +133,17 @@ class SettingsPage extends StatelessWidget {
                 final blockedFiles = settingsStore.numBlockedFiles;
 
                 return ListTile(
-                title: const Text('Manage blocked files'),
-                subtitle: Text('Number of currently blocked files: $blockedFiles'),
-                trailing: const Icon(Icons.chevron_right_rounded),
-                onTap: () => navStore.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => const BlockedFilesPage(),
+                  title: const Text('Manage blocked files'),
+                  subtitle: Text('Number of currently blocked files: $blockedFiles'),
+                  trailing: const Icon(Icons.chevron_right_rounded),
+                  onTap: () => navStore.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => const BlockedFilesPage(),
+                    ),
                   ),
-                ),
-              );},
+                );
+              },
             ),
             const Divider(
               height: 4.0,
@@ -154,6 +155,21 @@ class SettingsPage extends StatelessWidget {
                 title: const Text('Grant permission to manage all files'),
                 subtitle: const Text(
                   'This permission can improve library updates in some cases. Revoking the permission will result in a restart of the app.',
+                  style: TEXT_SMALL_SUBTITLE,
+                ),
+                isThreeLine: true,
+              ),
+            ),
+            const Divider(
+              height: 4.0,
+            ),
+            Observer(
+              builder: (context) => SwitchListTile(
+                value: settingsStore.playAlbumsInOrderStream.value ?? false,
+                onChanged: settingsStore.setPlayAlbumsInOrder,
+                title: const Text('Play albums in order'),
+                subtitle: const Text(
+                  'When you click a song in an album the songs will be played in order instead of keeping the previous play mode.',
                   style: TEXT_SMALL_SUBTITLE,
                 ),
                 isThreeLine: true,

@@ -29,6 +29,13 @@ mixin _$AudioStore on _AudioStore, Store {
   bool get hasNext => (_$hasNextComputed ??=
           Computed<bool>(() => super.hasNext, name: '_AudioStore.hasNext'))
       .value;
+  Computed<bool>? _$hasPreviousComputed;
+
+  @override
+  bool get hasPrevious =>
+      (_$hasPreviousComputed ??= Computed<bool>(() => super.hasPrevious,
+              name: '_AudioStore.hasPrevious'))
+          .value;
 
   late final _$currentSongStreamAtom =
       Atom(name: '_AudioStore.currentSongStream', context: context);
@@ -213,7 +220,8 @@ shuffleModeStream: ${shuffleModeStream},
 loopModeStream: ${loopModeStream},
 queueLength: ${queueLength},
 numAvailableSongs: ${numAvailableSongs},
-hasNext: ${hasNext}
+hasNext: ${hasNext},
+hasPrevious: ${hasPrevious}
     ''';
   }
 }
