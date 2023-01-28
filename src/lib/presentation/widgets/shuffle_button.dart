@@ -29,6 +29,7 @@ class ShuffleButton extends StatelessWidget {
               ),
               iconSize: iconSize,
               onPressed: () => audioStore.setShuffleMode(ShuffleMode.standard),
+              splashRadius: iconSize / 2 + 6.0,
             );
           case ShuffleMode.standard:
             return IconButton(
@@ -38,6 +39,7 @@ class ShuffleButton extends StatelessWidget {
               ),
               iconSize: iconSize,
               onPressed: () => audioStore.setShuffleMode(ShuffleMode.plus),
+              splashRadius: iconSize / 2 + 6.0,
             );
           case ShuffleMode.plus:
             return IconButton(
@@ -48,6 +50,7 @@ class ShuffleButton extends StatelessWidget {
               ),
               iconSize: iconSize,
               onPressed: () => audioStore.setShuffleMode(ShuffleMode.none),
+              splashRadius: iconSize / 2 + 6.0,
             );
           case null:
             return Container();

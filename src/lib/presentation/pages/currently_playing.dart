@@ -26,79 +26,82 @@ class CurrentlyPlayingPage extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          GestureDetector(
-            onVerticalDragEnd: (dragEndDetails) {
-              if (dragEndDetails.primaryVelocity! < 0) {
-                _openQueue(context);
-              } else if (dragEndDetails.primaryVelocity! > 0) {
-                Navigator.pop(context);
-              }
-            },
-            child: const AlbumBackground(),
-          ),
+          const AlbumBackground(),
           SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                  child: CurrentlyPlayingHeader(
-                    onTap: _openQueue,
-                    onMoreTap: _openMoreMenu,
-                  ),
-                ),
-                const Spacer(
-                  flex: 10,
-                ),
-                const Expanded(
-                  flex: 720,
-                  child: Center(
-                    child: AlbumArtSwipe(),
-                  ),
-                ),
-                const Spacer(
-                  flex: 50,
-                ),
-                Observer(
-                  builder: (BuildContext context) {
-                    final Song? song = audioStore.currentSongStream.value;
-
-                    if (song == null) return Container();
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0 + 12.0),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 74.0,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              song.title,
-                              overflow: TextOverflow.fade,
-                              softWrap: false,
-                              maxLines: 1,
-                              style: TEXT_BIG,
-                            ),
-                            Text(
-                              '${song.artist} • ${song.album}',
-                              style: TextStyle(
-                                color: Colors.grey[300],
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.w300,
-                              ),
-                              maxLines: 2,
-                            ),
-                          ],
-                        ),
+            child: GestureDetector(
+              onVerticalDragEnd: (dragEndDetails) {
+                if (dragEndDetails.primaryVelocity! < 0) {
+                  _openQueue(context);
+                } else if (dragEndDetails.primaryVelocity! > 0) {
+                  Navigator.pop(context);
+                }
+              },
+              child: Container(
+                color: Colors.transparent,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      child: CurrentlyPlayingHeader(
+                        onTap: _openQueue,
+                        onMoreTap: _openMoreMenu,
                       ),
-                    );
-                  },
+                    ),
+                    const Spacer(
+                      flex: 10,
+                    ),
+                    const Expanded(
+                      flex: 720,
+                      child: Center(
+                        child: AlbumArtSwipe(),
+                      ),
+                    ),
+                    const Spacer(
+                      flex: 50,
+                    ),
+                    Observer(
+                      builder: (BuildContext context) {
+                        final Song? song = audioStore.currentSongStream.value;
+
+                        if (song == null) return Container();
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0 + 12.0),
+                          child: SizedBox(
+                            width: double.infinity,
+                            height: 74.0,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  song.title,
+                                  overflow: TextOverflow.fade,
+                                  softWrap: false,
+                                  maxLines: 1,
+                                  style: TEXT_BIG,
+                                ),
+                                Text(
+                                  '${song.artist} • ${song.album}',
+                                  style: TextStyle(
+                                    color: Colors.grey[300],
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                                  maxLines: 2,
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    const Spacer(
+                      flex: 10,
+                    ),
+                    const CurrentlyPlayingControl(),
+                  ],
                 ),
-                const Spacer(
-                  flex: 10,
-                ),
-                const CurrentlyPlayingControl(),
-              ],
+              ),
             ),
           ),
         ],
