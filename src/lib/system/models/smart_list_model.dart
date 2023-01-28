@@ -54,17 +54,23 @@ class SmartListModel extends SmartList {
       maxLikeCount: moorSmartList.maxLikeCount,
       minPlayCount: moorSmartList.minPlayCount,
       maxPlayCount: moorSmartList.maxPlayCount,
-      minSkipCount: moorSmartList.minSkipCount,
-      maxSkipCount: moorSmartList.maxSkipCount,
       minYear: moorSmartList.minYear,
       maxYear: moorSmartList.maxYear,
       blockLevel: moorSmartList.blockLevel,
       limit: moorSmartList.limit,
     );
 
+    final criteria = _parseOrderCriteria(moorSmartList.orderCriteria);
+    final directions = _parseOrderDirections(moorSmartList.orderDirections);
+
+    final filteredDirections = <OrderDirection>[];
+    criteria.asMap().forEach((key, value) {
+      if (value != null) filteredDirections.add(directions[key]);
+    });
+
     final orderBy = OrderBy(
-      orderCriteria: _parseOrderCriteria(moorSmartList.orderCriteria),
-      orderDirections: _parseOrderDirections(moorSmartList.orderDirections),
+      orderCriteria: criteria.whereType<OrderCriterion>().toList(),
+      orderDirections: filteredDirections,
     );
 
     return SmartListModel(
@@ -90,8 +96,8 @@ class SmartListModel extends SmartList {
         maxPlayCount: m.Value(filter.maxPlayCount),
         minLikeCount: m.Value(filter.minLikeCount),
         maxLikeCount: m.Value(filter.maxLikeCount),
-        minSkipCount: m.Value(filter.minSkipCount),
-        maxSkipCount: m.Value(filter.maxSkipCount),
+        minSkipCount: const m.Value(null),
+        maxSkipCount: const m.Value(null),
         minYear: m.Value(filter.minYear),
         maxYear: m.Value(filter.maxYear),
         blockLevel: m.Value(filter.blockLevel),
@@ -118,10 +124,10 @@ class SmartListModel extends SmartList {
   }
 }
 
-List<OrderCriterion> _parseOrderCriteria(String orderCriteria) {
+List<OrderCriterion?> _parseOrderCriteria(String orderCriteria) {
   if (orderCriteria == '') return [];
   final ocList = orderCriteria.split(',');
-  return ocList.map((e) => e.toOrderCriterion()!).toList();
+  return ocList.map((e) => e.toOrderCriterion()).toList();
 }
 
 List<OrderDirection> _parseOrderDirections(String orderDirections) {

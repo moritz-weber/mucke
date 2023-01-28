@@ -128,70 +128,6 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     });
   }
 
-  late final _$minSkipCountEnabledAtom =
-      Atom(name: '_SmartListStore.minSkipCountEnabled', context: context);
-
-  @override
-  bool get minSkipCountEnabled {
-    _$minSkipCountEnabledAtom.reportRead();
-    return super.minSkipCountEnabled;
-  }
-
-  @override
-  set minSkipCountEnabled(bool value) {
-    _$minSkipCountEnabledAtom.reportWrite(value, super.minSkipCountEnabled, () {
-      super.minSkipCountEnabled = value;
-    });
-  }
-
-  late final _$minSkipCountAtom =
-      Atom(name: '_SmartListStore.minSkipCount', context: context);
-
-  @override
-  String get minSkipCount {
-    _$minSkipCountAtom.reportRead();
-    return super.minSkipCount;
-  }
-
-  @override
-  set minSkipCount(String value) {
-    _$minSkipCountAtom.reportWrite(value, super.minSkipCount, () {
-      super.minSkipCount = value;
-    });
-  }
-
-  late final _$maxSkipCountEnabledAtom =
-      Atom(name: '_SmartListStore.maxSkipCountEnabled', context: context);
-
-  @override
-  bool get maxSkipCountEnabled {
-    _$maxSkipCountEnabledAtom.reportRead();
-    return super.maxSkipCountEnabled;
-  }
-
-  @override
-  set maxSkipCountEnabled(bool value) {
-    _$maxSkipCountEnabledAtom.reportWrite(value, super.maxSkipCountEnabled, () {
-      super.maxSkipCountEnabled = value;
-    });
-  }
-
-  late final _$maxSkipCountAtom =
-      Atom(name: '_SmartListStore.maxSkipCount', context: context);
-
-  @override
-  String get maxSkipCount {
-    _$maxSkipCountAtom.reportRead();
-    return super.maxSkipCount;
-  }
-
-  @override
-  set maxSkipCount(String value) {
-    _$maxSkipCountAtom.reportWrite(value, super.maxSkipCount, () {
-      super.maxSkipCount = value;
-    });
-  }
-
   late final _$minYearEnabledAtom =
       Atom(name: '_SmartListStore.minYearEnabled', context: context);
 
@@ -447,10 +383,6 @@ minPlayCountEnabled: ${minPlayCountEnabled},
 minPlayCount: ${minPlayCount},
 maxPlayCountEnabled: ${maxPlayCountEnabled},
 maxPlayCount: ${maxPlayCount},
-minSkipCountEnabled: ${minSkipCountEnabled},
-minSkipCount: ${minSkipCount},
-maxSkipCountEnabled: ${maxSkipCountEnabled},
-maxSkipCount: ${maxSkipCount},
 minYearEnabled: ${minYearEnabled},
 minYear: ${minYear},
 maxYearEnabled: ${maxYearEnabled},
@@ -523,38 +455,6 @@ mixin _$FormErrorState on _FormErrorState, Store {
     });
   }
 
-  late final _$minSkipCountAtom =
-      Atom(name: '_FormErrorState.minSkipCount', context: context);
-
-  @override
-  String? get minSkipCount {
-    _$minSkipCountAtom.reportRead();
-    return super.minSkipCount;
-  }
-
-  @override
-  set minSkipCount(String? value) {
-    _$minSkipCountAtom.reportWrite(value, super.minSkipCount, () {
-      super.minSkipCount = value;
-    });
-  }
-
-  late final _$maxSkipCountAtom =
-      Atom(name: '_FormErrorState.maxSkipCount', context: context);
-
-  @override
-  String? get maxSkipCount {
-    _$maxSkipCountAtom.reportRead();
-    return super.maxSkipCount;
-  }
-
-  @override
-  set maxSkipCount(String? value) {
-    _$maxSkipCountAtom.reportWrite(value, super.maxSkipCount, () {
-      super.maxSkipCount = value;
-    });
-  }
-
   late final _$minYearAtom =
       Atom(name: '_FormErrorState.minYear', context: context);
 
@@ -609,8 +509,6 @@ mixin _$FormErrorState on _FormErrorState, Store {
 name: ${name},
 minPlayCount: ${minPlayCount},
 maxPlayCount: ${maxPlayCount},
-minSkipCount: ${minSkipCount},
-maxSkipCount: ${maxSkipCount},
 minYear: ${minYear},
 maxYear: ${maxYear},
 limit: ${limit},

@@ -37,9 +37,7 @@ class AudioPlayerActor {
       _countSongPlayback = true;
     } else if (position > song.duration * 0.95 && _countSongPlayback) {
       _countSongPlayback = false;
-      final updatedSong = await _musicDataRepository.incrementPlayCount(song);
-      if (updatedSong.skipCount > 0)
-        _musicDataRepository.resetSkipCount(updatedSong);
+      await _musicDataRepository.incrementPlayCount(song);
     }
   }
 }

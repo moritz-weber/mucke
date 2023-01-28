@@ -271,48 +271,6 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
                           padding: const EdgeInsets.symmetric(
                             vertical: CARD_PADDING,
                           ),
-                          child: Column(
-                            children: [
-                              Observer(
-                                builder: (_) {
-                                  return SwitchTextListTile(
-                                    title: 'Minimum skip count',
-                                    switchValue: store.minSkipCountEnabled,
-                                    onSwitchChanged: (bool value) {
-                                      store.minSkipCountEnabled = value;
-                                    },
-                                    textValue: store.minSkipCount,
-                                    onTextChanged: (String value) {
-                                      store.minSkipCount = value;
-                                    },
-                                  );
-                                },
-                              ),
-                              const SizedBox(height: CARD_SPACING),
-                              Observer(
-                                builder: (_) {
-                                  return SwitchTextListTile(
-                                    title: 'Maximum skip count',
-                                    switchValue: store.maxSkipCountEnabled,
-                                    onSwitchChanged: (bool value) {
-                                      store.maxSkipCountEnabled = value;
-                                    },
-                                    textValue: store.maxSkipCount,
-                                    onTextChanged: (String value) {
-                                      store.maxSkipCount = value;
-                                    },
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Card(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: CARD_PADDING,
-                          ),
                           child: Observer(
                             builder: (_) {
                               return Column(
