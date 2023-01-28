@@ -18,6 +18,7 @@ class PreviousButton extends StatelessWidget {
       onPressed: () {
         audioStore.skipToPrevious();
       },
+      splashRadius: iconSize / 2 + 6.0,
     );
   }
 }

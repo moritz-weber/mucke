@@ -30,6 +30,7 @@ class LoopButton extends StatelessWidget {
               onPressed: () {
                 audioStore.setLoopMode(LoopMode.all);
               },
+              splashRadius: iconSize / 2 + 6.0,
             );
           case LoopMode.one:
             return IconButton(
@@ -41,6 +42,7 @@ class LoopButton extends StatelessWidget {
               onPressed: () {
                 audioStore.setLoopMode(LoopMode.off);
               },
+              splashRadius: iconSize / 2 + 6.0,
             );
           case LoopMode.all:
             return IconButton(
@@ -52,6 +54,7 @@ class LoopButton extends StatelessWidget {
               onPressed: () {
                 audioStore.setLoopMode(LoopMode.one);
               },
+              splashRadius: iconSize / 2 + 6.0,
             );
           case null:
             return Container();

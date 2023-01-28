@@ -10,7 +10,6 @@ class Song extends Equatable {
     required this.path,
     required this.title,
     required this.likeCount,
-    required this.skipCount,
     required this.playCount,
     required this.discNumber,
     required this.next,
@@ -33,7 +32,6 @@ class Song extends Equatable {
   final String title;
 
   final int likeCount;
-  final int skipCount;
   final int playCount;
 
   final int discNumber;
@@ -59,7 +57,6 @@ class Song extends Equatable {
         previous,
         likeCount,
         playCount,
-        skipCount,
         timeAdded,
       ];
 }

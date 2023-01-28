@@ -20,6 +20,7 @@ import '../../domain/usecases/play_songs.dart';
 import '../../domain/usecases/seek_to_next.dart';
 import '../../domain/usecases/shuffle_all.dart';
 import '../../domain/utils.dart';
+import '../utils.dart' as utils;
 
 part 'audio_store.g.dart';
 
@@ -90,6 +91,10 @@ abstract class _AudioStore with Store {
   @observable
   late ObservableStream<Duration> currentPositionStream =
       _audioPlayerRepository.positionStream.asObservable(initialValue: const Duration(seconds: 0));
+
+  @computed
+  String get positionString =>
+      utils.msToTimeString(currentPositionStream.value ?? const Duration(seconds: 0));
 
   @readonly
   late List<QueueItem> _queue = [];

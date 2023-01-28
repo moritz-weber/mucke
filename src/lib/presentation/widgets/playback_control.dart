@@ -13,15 +13,15 @@ class PlaybackControl extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: const [
-        LoopButton(iconSize: 20.0),
-        PreviousButton(iconSize: 32.0),
+        LoopButton(iconSize: 24.0),
+        PreviousButton(iconSize: 48.0),
         PlayPauseButton(
           circle: true,
-          iconSize: 52.0,
+          iconSize: 60.0,
         ),
-        NextButton(iconSize: 32.0),
+        NextButton(iconSize: 48.0),
         ShuffleButton(
-          iconSize: 20.0,
+          iconSize: 24.0,
         ),
       ],
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

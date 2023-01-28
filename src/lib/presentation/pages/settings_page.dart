@@ -150,21 +150,6 @@ class SettingsPage extends StatelessWidget {
             ),
             Observer(
               builder: (context) => SwitchListTile(
-                value: settingsStore.manageExternalStorageGranted.value ?? false,
-                onChanged: settingsStore.setManageExternalStorageGranted,
-                title: const Text('Grant permission to manage all files'),
-                subtitle: const Text(
-                  'This permission can improve library updates in some cases. Revoking the permission will result in a restart of the app.',
-                  style: TEXT_SMALL_SUBTITLE,
-                ),
-                isThreeLine: true,
-              ),
-            ),
-            const Divider(
-              height: 4.0,
-            ),
-            Observer(
-              builder: (context) => SwitchListTile(
                 value: settingsStore.playAlbumsInOrderStream.value ?? false,
                 onChanged: settingsStore.setPlayAlbumsInOrder,
                 title: const Text('Play albums in order'),

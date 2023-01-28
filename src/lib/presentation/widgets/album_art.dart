@@ -13,24 +13,14 @@ class AlbumArt extends StatelessWidget {
     return AspectRatio(
       aspectRatio: 1.0,
       child: Container(
-        clipBehavior: Clip.antiAlias,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(2.0),
-          boxShadow: const [
+        decoration: const BoxDecoration(
+          boxShadow: [
             BoxShadow(color: Colors.black26, blurRadius: 8, offset: Offset(0, 1)),
           ],
         ),
-        child: Stack(
-          children: [
-            Container(
-              width: double.infinity,
-              height: double.infinity,
-              child: Image(
-                image: getAlbumImage(song.albumArtPath),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ],
+        child: Image(
+          image: getAlbumImage(song.albumArtPath),
+          fit: BoxFit.cover,
         ),
       ),
     );

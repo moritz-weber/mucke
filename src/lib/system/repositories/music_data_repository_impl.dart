@@ -163,14 +163,6 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   }
 
   @override
-  Future<Song> incrementSkipCount(Song song) async {
-    final newSong = (song as SongModel).copyWith(skipCount: song.skipCount + 1);
-    _songUpdateSubject.add({song.path: newSong});
-    await _musicDataSource.updateSongs([newSong]);
-    return newSong;
-  }
-
-  @override
   Future<void> setLikeCount(List<Song> songs, int count) async {
     if (0 <= count && count <= MAX_LIKE_COUNT) {
       final changedSongs = songs.where((e) => e.likeCount != count);
@@ -186,14 +178,6 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   Future<void> incrementLikeCount(Song song) async {
     final count = song.likeCount < MAX_LIKE_COUNT ? song.likeCount + 1 : 0;
     await setLikeCount([song], count);
-  }
-
-  @override
-  Future<Song> resetSkipCount(Song song) async {
-    final newSong = (song as SongModel).copyWith(skipCount: 0);
-    _songUpdateSubject.add({song.path: newSong});
-    await _musicDataSource.updateSongs([newSong]);
-    return newSong;
   }
 
   @override
@@ -258,7 +242,6 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
         (a, b) {
           int r = -a.likeCount.compareTo(b.likeCount);
           if (r == 0) r = -a.playCount.compareTo(b.playCount);
-          if (r == 0) r = a.skipCount.compareTo(b.skipCount);
           if (r == 0) r = a.title.compareTo(b.title);
           return r;
         },

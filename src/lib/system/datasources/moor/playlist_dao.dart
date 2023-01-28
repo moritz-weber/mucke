@@ -185,8 +185,6 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
         excludeArtists: Value(filter.excludeArtists),
         minPlayCount: Value(filter.minPlayCount),
         maxPlayCount: Value(filter.maxPlayCount),
-        minSkipCount: Value(filter.minSkipCount),
-        maxSkipCount: Value(filter.maxSkipCount),
         minLikeCount: Value(filter.minLikeCount),
         maxLikeCount: Value(filter.maxLikeCount),
         minYear: Value(filter.minYear),
@@ -232,6 +230,7 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
       slArtistStream,
       (a, b) {
         return a.map((sl) {
+        print(sl);
           final moorArtists =
               (b.where((element) => element.readTable(smartListArtists).smartListId == sl.id))
                   .map((e) => e.readTable(artists))
@@ -297,11 +296,6 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
       query = query..where((tbl) => tbl.playCount.isBiggerOrEqualValue(filter.minPlayCount));
     if (filter.maxPlayCount != null)
       query = query..where((tbl) => tbl.playCount.isSmallerOrEqualValue(filter.maxPlayCount));
-
-    if (filter.minSkipCount != null)
-      query = query..where((tbl) => tbl.skipCount.isBiggerOrEqualValue(filter.minSkipCount));
-    if (filter.maxSkipCount != null)
-      query = query..where((tbl) => tbl.skipCount.isSmallerOrEqualValue(filter.maxSkipCount));
 
     if (filter.minYear != null)
       query = query..where((tbl) => tbl.year.isBiggerOrEqualValue(filter.minYear));
@@ -451,14 +445,6 @@ List<OrderingTerm Function($SongsTable)> _generateOrderingTerms(sl.OrderBy order
         orderingTerms.add(
           ($SongsTable t) => OrderingTerm(
             expression: t.playCount,
-            mode: mode,
-          ),
-        );
-        break;
-      case sl.OrderCriterion.skipCount:
-        orderingTerms.add(
-          ($SongsTable t) => OrderingTerm(
-            expression: t.skipCount,
             mode: mode,
           ),
         );

@@ -29,7 +29,7 @@ class PlayPauseButton extends StatelessWidget {
             onPressed: () {
               audioStore.pause();
             },
-            splashRadius: iconSize + 2,
+            splashRadius: iconSize / 2 + 6.0,
           );
         } else {
           return IconButton(
@@ -40,7 +40,7 @@ class PlayPauseButton extends StatelessWidget {
             onPressed: () {
               audioStore.play();
             },
-            splashRadius: iconSize + 2,
+            splashRadius: iconSize / 2 + 6.0,
           );
         }
       },

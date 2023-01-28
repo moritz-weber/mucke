@@ -153,7 +153,7 @@ class _SongBottomSheetState extends State<SongBottomSheet> {
                         style: TEXT_SMALL_SUBTITLE,
                       ),
                       Text(
-                        'played: ${song.playCount} • skipped: ${song.skipCount}',
+                        'Played ${song.playCount} times',
                         style: TEXT_SMALL_SUBTITLE,
                       ),
                     ],

@@ -25,7 +25,7 @@ class QueueControlBar extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               const Material(
-                color: DARK3,
+                color: DARK1,
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING + 2, vertical: 8.0),
                   child: PlaybackControl(),

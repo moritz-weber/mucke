@@ -34,23 +34,6 @@ mixin _$SettingsStore on _SettingsStore, Store {
     });
   }
 
-  late final _$manageExternalStorageGrantedAtom = Atom(
-      name: '_SettingsStore.manageExternalStorageGranted', context: context);
-
-  @override
-  ObservableStream<bool> get manageExternalStorageGranted {
-    _$manageExternalStorageGrantedAtom.reportRead();
-    return super.manageExternalStorageGranted;
-  }
-
-  @override
-  set manageExternalStorageGranted(ObservableStream<bool> value) {
-    _$manageExternalStorageGrantedAtom
-        .reportWrite(value, super.manageExternalStorageGranted, () {
-      super.manageExternalStorageGranted = value;
-    });
-  }
-
   late final _$fileExtensionsStreamAtom =
       Atom(name: '_SettingsStore.fileExtensionsStream', context: context);
 
@@ -105,7 +88,6 @@ mixin _$SettingsStore on _SettingsStore, Store {
   String toString() {
     return '''
 libraryFoldersStream: ${libraryFoldersStream},
-manageExternalStorageGranted: ${manageExternalStorageGranted},
 fileExtensionsStream: ${fileExtensionsStream},
 blockedFilesStream: ${blockedFilesStream},
 playAlbumsInOrderStream: ${playAlbumsInOrderStream},

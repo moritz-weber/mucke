@@ -11,19 +11,21 @@ class LikeButton extends StatelessWidget {
     Key? key,
     required this.song,
     this.iconSize = 20.0,
+    this.visualDensity = VisualDensity.compact,
   }) : super(key: key);
 
   final double iconSize;
   final Song song;
+  final VisualDensity visualDensity;
 
   @override
   Widget build(BuildContext context) {
     final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
 
     return IconButton(
+      iconSize: iconSize,
       icon: Icon(
         likeCountIcon(song.likeCount),
-        size: iconSize,
         color: likeCountColor(song.likeCount),
       ),
       onPressed: () {
@@ -33,7 +35,7 @@ class LikeButton extends StatelessWidget {
           musicDataStore.setLikeCount([song], 0);
         }
       },
-      visualDensity: VisualDensity.compact,
+      visualDensity: visualDensity,
     );
   }
 }
