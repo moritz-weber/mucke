@@ -11,17 +11,17 @@ class CurrentlyPlayingControl extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: const [
-        SizedBox(height: 12.0),
+        SizedBox(height: 10.0),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 12.0 + 2.0),
           child: SongCustomizationButtons(),
         ),
-        SizedBox(height: 12.0),
+        SizedBox(height: 10.0),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 12.0 + 2.0),
           child: PlaybackControl(),
         ),
-        SizedBox(height: 12.0),
+        SizedBox(height: 10.0),
         Padding(
           padding: EdgeInsets.only(left: 12.0 - 4.0, right: 12.0 - 4.0),
           child: TimeProgressIndicator(),
