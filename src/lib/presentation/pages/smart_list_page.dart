@@ -10,6 +10,7 @@ import '../state/audio_store.dart';
 import '../state/music_data_store.dart';
 import '../state/navigation_store.dart';
 import '../state/smart_list_page_store.dart';
+import '../theming.dart';
 import '../utils.dart' as utils;
 import '../widgets/bottom_sheet/add_to_playlist.dart';
 import '../widgets/cover_sliver_appbar.dart';
@@ -172,8 +173,7 @@ class _SmartListPageState extends State<SmartListPage> {
                     style: ElevatedButton.styleFrom(
                       shape: const StadiumBorder(),
                       padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                      backgroundColor: Colors.white10,
-                      shadowColor: Colors.transparent,
+                      backgroundColor: LIGHT1,
                     ),
                   ),
                 ),

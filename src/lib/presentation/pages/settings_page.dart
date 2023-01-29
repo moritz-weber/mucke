@@ -145,9 +145,7 @@ class SettingsPage extends StatelessWidget {
                 );
               },
             ),
-            const Divider(
-              height: 4.0,
-            ),
+            const SettingsSection(text: 'Playback'),
             Observer(
               builder: (context) => SwitchListTile(
                 value: settingsStore.playAlbumsInOrderStream.value ?? false,

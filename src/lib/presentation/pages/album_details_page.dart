@@ -1,9 +1,6 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mucke/presentation/mucke_icons.dart';
 
 import '../../domain/entities/album.dart';
 import '../../domain/entities/song.dart';
@@ -119,43 +116,25 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
                       );
                     })
                   ],
-                  cover: Container(
-                    clipBehavior: Clip.antiAlias,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4.0),
-                      boxShadow: const [
-                        BoxShadow(color: Colors.black54, blurRadius: 8, offset: Offset(0, 2)),
-                      ],
-                      image: DecorationImage(
-                        image: utils.getAlbumImage(album.albumArtPath),
-                        fit: BoxFit.contain,
-                      ),
-                    ),
+                  cover: Image(
+                    image: utils.getAlbumImage(album.albumArtPath),
+                    fit: BoxFit.cover,
                   ),
-                  background: ClipRect(
-                    clipBehavior: Clip.hardEdge,
-                    child: ImageFiltered(
-                      imageFilter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
-                      child: Image(
-                        image: utils.getAlbumImage(album.albumArtPath),
-                        fit: BoxFit.cover,
-                        opacity: const AlwaysStoppedAnimation(1.0),
-                      ),
-                    ),
+                  background: Image(
+                    image: utils.getAlbumImage(album.albumArtPath),
+                    fit: BoxFit.cover,
                   ),
-                  button: ElevatedButton(
-                    onPressed: () => audioStore.playAlbum(album),
-                    child: Row(
-                      children: const [
-                        Expanded(child: Center(child: Text('Play'))),
-                        Icon(MuckeIcons.shuffle_none),
-                      ],
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      shape: const StadiumBorder(),
-                      backgroundColor: Colors.white10,
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                      shadowColor: Colors.transparent,
+                  button: SizedBox(
+                    width: 48,
+                    child: ElevatedButton(
+                      onPressed: () => audioStore.playAlbum(album),
+                      child: const Icon(Icons.play_arrow_rounded),
+                      style: ElevatedButton.styleFrom(
+                        shape: const StadiumBorder(),
+                        backgroundColor: LIGHT1,
+                        fixedSize: const Size.fromHeight(48),
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      ),
                     ),
                   ),
                 ),

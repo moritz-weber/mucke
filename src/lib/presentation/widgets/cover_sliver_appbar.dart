@@ -187,6 +187,8 @@ class Header extends StatelessWidget {
             if (subtitle != null)
               Text(
                 subtitle,
+                maxLines: 1,
+                overflow: TextOverflow.fade,
                 style: TextStyle(
                   fontSize: Tween<double>(begin: 0, end: 16).evaluate(animation),
                   color: Colors.white
@@ -217,9 +219,9 @@ class Header extends StatelessWidget {
       right: HORIZONTAL_PADDING,
       top: Tween<double>(
         begin: kToolbarHeight + MediaQuery.of(context).padding.top + 120,
-        end: kToolbarHeight + MediaQuery.of(context).padding.top + 72,
+        end: kToolbarHeight + MediaQuery.of(context).padding.top + 72 + 24,
       ).evaluate(animation),
-      child: button!,
+      child: Align(child: button!, alignment: Alignment.bottomRight),
     );
   }
 
@@ -238,7 +240,6 @@ class Header extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(4.0),
           boxShadow: const [
-            BoxShadow(color: LIGHT1, blurRadius: 4, offset: Offset(0, 1), spreadRadius: -3.0),
             BoxShadow(color: Colors.black54, blurRadius: 8, offset: Offset(0, 2)),
           ],
         ),
