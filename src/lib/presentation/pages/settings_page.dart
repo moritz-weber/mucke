@@ -133,16 +133,30 @@ class SettingsPage extends StatelessWidget {
                 final blockedFiles = settingsStore.numBlockedFiles;
 
                 return ListTile(
-                title: const Text('Manage blocked files'),
-                subtitle: Text('Number of currently blocked files: $blockedFiles'),
-                trailing: const Icon(Icons.chevron_right_rounded),
-                onTap: () => navStore.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => const BlockedFilesPage(),
+                  title: const Text('Manage blocked files'),
+                  subtitle: Text('Number of currently blocked files: $blockedFiles'),
+                  trailing: const Icon(Icons.chevron_right_rounded),
+                  onTap: () => navStore.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => const BlockedFilesPage(),
+                    ),
                   ),
+                );
+              },
+            ),
+            const SettingsSection(text: 'Playback'),
+            Observer(
+              builder: (context) => SwitchListTile(
+                value: settingsStore.playAlbumsInOrderStream.value ?? false,
+                onChanged: settingsStore.setPlayAlbumsInOrder,
+                title: const Text('Play albums in order'),
+                subtitle: const Text(
+                  'When you click a song in an album the songs will be played in order instead of keeping the previous play mode.',
+                  style: TEXT_SMALL_SUBTITLE,
                 ),
-              );},
+                isThreeLine: true,
+              ),
             ),
           ],
         ),

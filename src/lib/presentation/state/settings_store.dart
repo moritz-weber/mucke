@@ -36,6 +36,12 @@ abstract class _SettingsStore with Store {
   @computed
   int get numBlockedFiles => blockedFilesStream.value!.length;
 
+  @observable
+  late ObservableStream<bool> playAlbumsInOrderStream =
+      _settingsRepository.playAlbumsInOrderStream.asObservable(
+    initialValue: false,
+  );
+
   Future<void> addLibraryFolder(String? path) async {
     await _settingsRepository.addLibraryFolder(path);
   }
@@ -54,6 +60,10 @@ abstract class _SettingsStore with Store {
 
   Future<void> removeBlockedFiles(List<String> paths) async {
     await _musicDataRepository.removeBlockedFiles(paths);
+  }
+
+  Future<void> setPlayAlbumsInOrder(bool playInOrder) async {
+    await _settingsRepository.setPlayAlbumsInOrder(playInOrder);
   }
 
   void dispose() {}

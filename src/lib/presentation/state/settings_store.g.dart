@@ -67,12 +67,30 @@ mixin _$SettingsStore on _SettingsStore, Store {
     });
   }
 
+  late final _$playAlbumsInOrderStreamAtom =
+      Atom(name: '_SettingsStore.playAlbumsInOrderStream', context: context);
+
+  @override
+  ObservableStream<bool> get playAlbumsInOrderStream {
+    _$playAlbumsInOrderStreamAtom.reportRead();
+    return super.playAlbumsInOrderStream;
+  }
+
+  @override
+  set playAlbumsInOrderStream(ObservableStream<bool> value) {
+    _$playAlbumsInOrderStreamAtom
+        .reportWrite(value, super.playAlbumsInOrderStream, () {
+      super.playAlbumsInOrderStream = value;
+    });
+  }
+
   @override
   String toString() {
     return '''
 libraryFoldersStream: ${libraryFoldersStream},
 fileExtensionsStream: ${fileExtensionsStream},
 blockedFilesStream: ${blockedFilesStream},
+playAlbumsInOrderStream: ${playAlbumsInOrderStream},
 numBlockedFiles: ${numBlockedFiles}
     ''';
   }

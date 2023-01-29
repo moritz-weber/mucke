@@ -1,6 +1,7 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:mucke/domain/usecases/play_album_from_index.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 import 'domain/actors/audio_player_actor.dart';
@@ -89,6 +90,7 @@ Future<void> setupGetIt() async {
     () => AudioStore(
       audioPlayerRepository: getIt(),
       playAlbum: getIt(),
+      playAlbumFromIndex: getIt(),
       playArtist: getIt(),
       playSmartList: getIt(),
       playPlayist: getIt(),
@@ -183,6 +185,14 @@ Future<void> setupGetIt() async {
   // use cases
   getIt.registerLazySingleton<PlayAlbum>(
     () => PlayAlbum(
+      getIt(),
+      getIt(),
+      getIt(),
+    ),
+  );
+  getIt.registerLazySingleton<PlayAlbumFromIndex>(
+    () => PlayAlbumFromIndex(
+      getIt(),
       getIt(),
       getIt(),
       getIt(),

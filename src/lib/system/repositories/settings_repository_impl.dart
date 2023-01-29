@@ -6,11 +6,13 @@ import '../datasources/settings_data_source.dart';
 class SettingsRepositoryImpl implements SettingsRepository {
   SettingsRepositoryImpl(this._settingsDataSource) {
     _settingsDataSource.fileExtensionsStream.listen(_fileExtensionsSubject.add);
+    _settingsDataSource.playAlbumsInOrderStream.listen(_playAlbumsInOrderSubject.add);
   }
 
   final SettingsDataSource _settingsDataSource;
 
   final BehaviorSubject<String> _fileExtensionsSubject = BehaviorSubject();
+  final BehaviorSubject<bool> _playAlbumsInOrderSubject = BehaviorSubject();
 
   @override
   Stream<List<String>> get libraryFoldersStream => _settingsDataSource.libraryFoldersStream;
@@ -33,5 +35,13 @@ class SettingsRepositoryImpl implements SettingsRepository {
   @override
   Future<void> setFileExtension(String extensions) async {
     await _settingsDataSource.setFileExtension(extensions);
+  }
+
+  @override
+  ValueStream<bool> get playAlbumsInOrderStream => _playAlbumsInOrderSubject.stream;
+
+  @override
+  Future<void> setPlayAlbumsInOrder(bool playInOrder) async {
+    await _settingsDataSource.setPlayAlbumsInOrder(playInOrder);
   }
 }

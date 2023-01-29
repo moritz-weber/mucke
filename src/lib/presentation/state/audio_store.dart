@@ -11,6 +11,7 @@ import '../../domain/entities/smart_list.dart';
 import '../../domain/entities/song.dart';
 import '../../domain/repositories/audio_player_repository.dart';
 import '../../domain/usecases/play_album.dart';
+import '../../domain/usecases/play_album_from_index.dart';
 import '../../domain/usecases/play_artist.dart';
 import '../../domain/usecases/play_playable.dart';
 import '../../domain/usecases/play_playlist.dart';
@@ -26,6 +27,7 @@ part 'audio_store.g.dart';
 class AudioStore extends _AudioStore with _$AudioStore {
   AudioStore({
     required PlayAlbum playAlbum,
+    required PlayAlbumFromIndex playAlbumFromIndex,
     required PlayArtist playArtist,
     required PlaySongs playSongs,
     required PlaySmartList playSmartList,
@@ -38,6 +40,7 @@ class AudioStore extends _AudioStore with _$AudioStore {
           playSongs,
           audioPlayerRepository,
           playAlbum,
+          playAlbumFromIndex,
           playArtist,
           playSmartList,
           playPlayist,
@@ -52,6 +55,7 @@ abstract class _AudioStore with Store {
     this._playSongs,
     this._audioPlayerRepository,
     this._playAlbum,
+    this._playAlbumFromIndex,
     this._playArtist,
     this._playSmartList,
     this._playPlaylist,
@@ -68,6 +72,7 @@ abstract class _AudioStore with Store {
   final AudioPlayerRepository _audioPlayerRepository;
 
   final PlayAlbum _playAlbum;
+  final PlayAlbumFromIndex _playAlbumFromIndex;
   final PlayArtist _playArtist;
   final PlaySmartList _playSmartList;
   final PlayPlaylist _playPlaylist;
@@ -182,6 +187,9 @@ abstract class _AudioStore with Store {
       _audioPlayerRepository.removeQueueIndices(indices);
 
   Future<void> playAlbum(Album album) async => _playAlbum(album);
+
+  Future<void> playAlbumFromIndex(Album album, int initialIndex) async =>
+      _playAlbumFromIndex(album, initialIndex);
 
   Future<void> playSmartList(SmartList smartList) async => _playSmartList(smartList);
 

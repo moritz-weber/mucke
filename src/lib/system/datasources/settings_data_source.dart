@@ -5,4 +5,7 @@ abstract class SettingsDataSource {
 
   Stream<String> get fileExtensionsStream;
   Future<void> setFileExtension(String extensions);
+
+  Stream<bool> get playAlbumsInOrderStream;
+  Future<void> setPlayAlbumsInOrder(bool playInOrder);
 }
