@@ -4,7 +4,7 @@ name: Build
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
-on: [push, pull_request, workflow_dispatch]
+on: [push, workflow_dispatch]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -30,7 +30,7 @@ jobs:
     - run: echo $KEY_PROPERTIES_GITHUB | base64 -d > android/key.properties
     - uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.3.3'
+        flutter-version: '3.7.3'
     - run: flutter pub get
     - run: flutter build apk --flavor github
     - name: Upload a Build Artifact
