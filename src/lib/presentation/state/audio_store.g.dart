@@ -93,6 +93,22 @@ mixin _$AudioStore on _AudioStore, Store {
     });
   }
 
+  late final _$queueStreamAtom =
+      Atom(name: '_AudioStore.queueStream', context: context);
+
+  @override
+  ObservableStream<List<QueueItem>> get queueStream {
+    _$queueStreamAtom.reportRead();
+    return super.queueStream;
+  }
+
+  @override
+  set queueStream(ObservableStream<List<QueueItem>> value) {
+    _$queueStreamAtom.reportWrite(value, super.queueStream, () {
+      super.queueStream = value;
+    });
+  }
+
   late final _$_queueAtom = Atom(name: '_AudioStore._queue', context: context);
 
   List<QueueItem> get queue {
@@ -221,6 +237,7 @@ mixin _$AudioStore on _AudioStore, Store {
 currentSongStream: ${currentSongStream},
 playingStream: ${playingStream},
 currentPositionStream: ${currentPositionStream},
+queueStream: ${queueStream},
 playableStream: ${playableStream},
 queueIndexStream: ${queueIndexStream},
 shuffleModeStream: ${shuffleModeStream},

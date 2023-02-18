@@ -96,6 +96,10 @@ abstract class _AudioStore with Store {
   String get positionString =>
       utils.msToTimeString(currentPositionStream.value ?? const Duration(seconds: 0));
 
+  @observable
+  late ObservableStream<List<QueueItem>> queueStream =
+      _audioPlayerRepository.managedQueueInfo.queueItemsStream.asObservable();
+
   @readonly
   late List<QueueItem> _queue = [];
 
