@@ -2,7 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:on_audio_query/on_audio_query.dart' as aq;
 
 import '../../domain/entities/album.dart';
-import '../datasources/moor_database.dart';
+import '../datasources/drift_database.dart';
 import '../utils.dart';
 import 'default_values.dart';
 
@@ -15,12 +15,12 @@ class AlbumModel extends Album {
     super.pubYear,
   });
 
-  factory AlbumModel.fromMoor(MoorAlbum moorAlbum) => AlbumModel(
-        id: moorAlbum.id,
-        title: moorAlbum.title,
-        artist: moorAlbum.artist,
-        albumArtPath: moorAlbum.albumArtPath,
-        pubYear: moorAlbum.year,
+  factory AlbumModel.fromDrift(DriftAlbum driftAlbum) => AlbumModel(
+        id: driftAlbum.id,
+        title: driftAlbum.title,
+        artist: driftAlbum.artist,
+        albumArtPath: driftAlbum.albumArtPath,
+        pubYear: driftAlbum.year,
       );
 
     factory AlbumModel.fromOnAudioQuery({

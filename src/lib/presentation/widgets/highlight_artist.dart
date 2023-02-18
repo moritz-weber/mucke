@@ -66,7 +66,7 @@ class HighlightArtist extends StatelessWidget {
                           Container(height: 6.0),
                           Text(
                             artist.name,
-                            style: Theme.of(context).textTheme.headline4,
+                            style: Theme.of(context).textTheme.headlineMedium,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),

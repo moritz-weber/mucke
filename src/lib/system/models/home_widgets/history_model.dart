@@ -4,7 +4,7 @@ import 'package:drift/drift.dart';
 
 import '../../../domain/entities/home_widgets/history.dart';
 import '../../../domain/entities/home_widgets/home_widget.dart';
-import '../../datasources/moor_database.dart';
+import '../../datasources/drift_database.dart';
 import 'home_widget_model.dart';
 
 class HomeHistoryModel extends HomeHistory implements HomeWidgetModel {
@@ -16,15 +16,15 @@ class HomeHistoryModel extends HomeHistory implements HomeWidgetModel {
           maxEntries: maxEntries,
         );
 
-  factory HomeHistoryModel.fromMoor(MoorHomeWidget moorHomeWidget) {
-    final type = moorHomeWidget.type.toHomeWidgetType();
+  factory HomeHistoryModel.fromDrift(DriftHomeWidget driftHomeWidget) {
+    final type = driftHomeWidget.type.toHomeWidgetType();
     if (type != HomeWidgetType.history) {
       throw TypeError();
     }
 
-    final data = jsonDecode(moorHomeWidget.data);
+    final data = jsonDecode(driftHomeWidget.data);
     final maxEntries = data['maxEntries'] as int;
-    return HomeHistoryModel(moorHomeWidget.position, maxEntries);
+    return HomeHistoryModel(driftHomeWidget.position, maxEntries);
   }
 
   factory HomeHistoryModel.fromEntity(HomeWidget entity) {
@@ -36,7 +36,7 @@ class HomeHistoryModel extends HomeHistory implements HomeWidgetModel {
   }
 
   @override
-  HomeWidgetsCompanion toMoor() {
+  HomeWidgetsCompanion toDrift() {
     final data = {'maxEntries': maxEntries};
     return HomeWidgetsCompanion(
       position: Value(position),

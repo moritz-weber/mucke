@@ -5,7 +5,7 @@ import 'package:drift/drift.dart';
 import '../../../domain/entities/enums.dart';
 import '../../../domain/entities/home_widgets/home_widget.dart';
 import '../../../domain/entities/home_widgets/playlists.dart';
-import '../../datasources/moor_database.dart';
+import '../../datasources/drift_database.dart';
 import 'home_widget_model.dart';
 
 class HomePlaylistsModel extends HomePlaylists implements HomeWidgetModel {
@@ -25,16 +25,16 @@ class HomePlaylistsModel extends HomePlaylists implements HomeWidgetModel {
           filter: filter,
         );
 
-  factory HomePlaylistsModel.fromMoor(MoorHomeWidget moorHomeWidget) {
-    final type = moorHomeWidget.type.toHomeWidgetType();
+  factory HomePlaylistsModel.fromDrift(DriftHomeWidget driftHomeWidget) {
+    final type = driftHomeWidget.type.toHomeWidgetType();
     if (type != HomeWidgetType.playlists) {
       throw TypeError();
     }
 
-    final data = json.decode(moorHomeWidget.data);
+    final data = json.decode(driftHomeWidget.data);
 
     return HomePlaylistsModel(
-      moorHomeWidget.position,
+      driftHomeWidget.position,
       data['maxEntries'] as int,
       data['title'] as String,
       (data['orderCriterion'] as String).toHomePlaylistsOrder()!,
@@ -59,7 +59,7 @@ class HomePlaylistsModel extends HomePlaylists implements HomeWidgetModel {
   }
 
   @override
-  HomeWidgetsCompanion toMoor() {
+  HomeWidgetsCompanion toDrift() {
     final Map<String, dynamic> data = {
       'title': title,
       'maxEntries': maxEntries,

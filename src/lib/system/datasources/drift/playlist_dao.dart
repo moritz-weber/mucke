@@ -7,7 +7,7 @@ import '../../../domain/entities/smart_list.dart' as sl;
 import '../../models/playlist_model.dart';
 import '../../models/smart_list_model.dart';
 import '../../models/song_model.dart';
-import '../moor_database.dart';
+import '../drift_database.dart';
 import '../playlist_data_source.dart';
 
 part 'playlist_dao.g.dart';
@@ -22,10 +22,10 @@ part 'playlist_dao.g.dart';
   SmartListArtists,
   HistoryEntries
 ])
-class PlaylistDao extends DatabaseAccessor<MoorDatabase>
+class PlaylistDao extends DatabaseAccessor<MainDatabase>
     with _$PlaylistDaoMixin
     implements PlaylistDataSource {
-  PlaylistDao(MoorDatabase db) : super(db);
+  PlaylistDao(MainDatabase db) : super(db);
 
   @override
   Future<void> addSongsToPlaylist(PlaylistModel playlist, List<SongModel> songs) async {
@@ -60,7 +60,7 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
           ..where((tbl) => tbl.id.equals(playlistId))
           ..limit(1))
         .watchSingle()
-        .map((event) => PlaylistModel.fromMoor(event));
+        .map((event) => PlaylistModel.fromDrift(event));
   }
 
   @override
@@ -84,7 +84,7 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
   Stream<List<PlaylistModel>> get playlistsStream {
     return select(playlists)
         .watch()
-        .map((moorPlaylists) => moorPlaylists.map((e) => PlaylistModel.fromMoor(e)).toList());
+        .map((driftPlaylists) => driftPlaylists.map((e) => PlaylistModel.fromDrift(e)).toList());
   }
 
   @override
@@ -94,8 +94,8 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
           ..orderBy([(t) => OrderingTerm.asc(t.position)]))
         .join(
       [innerJoin(songs, songs.path.equalsExp(playlistEntries.songPath))],
-    )).watch().map((moorSongList) =>
-        moorSongList.map((moorSong) => SongModel.fromMoor(moorSong.readTable(songs))).toList());
+    )).watch().map((driftSongList) =>
+        driftSongList.map((driftSong) => SongModel.fromDrift(driftSong.readTable(songs))).toList());
   }
 
   @override
@@ -225,17 +225,17 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
       [innerJoin(artists, artists.name.equalsExp(smartListArtists.artistName))],
     )).watch();
 
-    return Rx.combineLatest2<List<MoorSmartList>, List<TypedResult>, List<SmartListModel>>(
+    return Rx.combineLatest2<List<DriftSmartList>, List<TypedResult>, List<SmartListModel>>(
       slStream,
       slArtistStream,
       (a, b) {
         return a.map((sl) {
         print(sl);
-          final moorArtists =
+          final driftArtists =
               (b.where((element) => element.readTable(smartListArtists).smartListId == sl.id))
                   .map((e) => e.readTable(artists))
                   .toList();
-          return SmartListModel.fromMoor(sl, moorArtists);
+          return SmartListModel.fromDrift(sl, driftArtists);
         }).toList();
       },
     );
@@ -253,12 +253,12 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
       [innerJoin(artists, artists.name.equalsExp(smartListArtists.artistName))],
     ).watch();
 
-    return Rx.combineLatest2<MoorSmartList, List<TypedResult>, SmartListModel>(
+    return Rx.combineLatest2<DriftSmartList, List<TypedResult>, SmartListModel>(
       slStream,
       slArtistStream,
       (a, b) {
-        final moorArtists = b.map((e) => e.readTable(artists)).toList();
-        return SmartListModel.fromMoor(a, moorArtists);
+        final driftArtists = b.map((e) => e.readTable(artists)).toList();
+        return SmartListModel.fromDrift(a, driftArtists);
       },
     );
   }
@@ -286,21 +286,21 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
 
   @override
   Stream<List<SongModel>> getSmartListSongStream(SmartListModel smartList) {
-    SimpleSelectStatement<$SongsTable, MoorSong> query = select(songs);
+    SimpleSelectStatement<$SongsTable, DriftSong> query = select(songs);
 
     final filter = smartList.filter;
     query = query..where((tbl) => tbl.likeCount.isBiggerOrEqualValue(filter.minLikeCount));
     query = query..where((tbl) => tbl.likeCount.isSmallerOrEqualValue(filter.maxLikeCount));
 
     if (filter.minPlayCount != null)
-      query = query..where((tbl) => tbl.playCount.isBiggerOrEqualValue(filter.minPlayCount));
+      query = query..where((tbl) => tbl.playCount.isBiggerOrEqualValue(filter.minPlayCount!));
     if (filter.maxPlayCount != null)
-      query = query..where((tbl) => tbl.playCount.isSmallerOrEqualValue(filter.maxPlayCount));
+      query = query..where((tbl) => tbl.playCount.isSmallerOrEqualValue(filter.maxPlayCount!));
 
     if (filter.minYear != null)
-      query = query..where((tbl) => tbl.year.isBiggerOrEqualValue(filter.minYear));
+      query = query..where((tbl) => tbl.year.isBiggerOrEqualValue(filter.minYear!));
     if (filter.maxYear != null)
-      query = query..where((tbl) => tbl.year.isSmallerOrEqualValue(filter.maxYear));
+      query = query..where((tbl) => tbl.year.isSmallerOrEqualValue(filter.maxYear!));
 
     query = query..where((tbl) => tbl.blockLevel.isSmallerOrEqualValue(filter.blockLevel));
 
@@ -319,7 +319,7 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
     query = query..orderBy(orderingTerms);
 
     return query.watch().map(
-        (moorSongList) => moorSongList.map((moorSong) => SongModel.fromMoor(moorSong)).toList());
+        (driftSongList) => driftSongList.map((driftSong) => SongModel.fromDrift(driftSong)).toList());
   }
 
   @override
@@ -328,8 +328,8 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
           ..where((tbl) => tbl.name.regexp(searchText, dotAll: true, caseSensitive: false)))
         .get()
         .then(
-          (moorList) =>
-              moorList.map((moorPlaylist) => PlaylistModel.fromMoor(moorPlaylist)).toList(),
+          (driftList) =>
+              driftList.map((driftPlaylist) => PlaylistModel.fromDrift(driftPlaylist)).toList(),
         );
 
     if (limit != null) {
@@ -349,13 +349,13 @@ class PlaylistDao extends DatabaseAccessor<MoorDatabase>
           ..where((tbl) => tbl.name.regexp(searchText, dotAll: true, caseSensitive: false)))
         .get()
         .then(
-      (moorList) {
-        return moorList.map((moorSmartList) {
-          final moorArtists = (slArtists.where(
-                  (element) => element.readTable(smartListArtists).smartListId == moorSmartList.id))
+      (driftList) {
+        return driftList.map((driftSmartList) {
+          final driftArtists = (slArtists.where(
+                  (element) => element.readTable(smartListArtists).smartListId == driftSmartList.id))
               .map((e) => e.readTable(artists))
               .toList();
-          return SmartListModel.fromMoor(moorSmartList, moorArtists);
+          return SmartListModel.fromDrift(driftSmartList, driftArtists);
         }).toList();
       },
     );
@@ -423,7 +423,7 @@ List<OrderingTerm Function($SongsTable)> _generateOrderingTerms(sl.OrderBy order
 
   int i = 0;
   while (i < orderBy.orderCriteria.length) {
-    final OrderingMode mode = orderBy.orderDirections[i].toMoor();
+    final OrderingMode mode = orderBy.orderDirections[i].toDrift();
     switch (orderBy.orderCriteria[i]) {
       case sl.OrderCriterion.artistName:
         orderingTerms.add(

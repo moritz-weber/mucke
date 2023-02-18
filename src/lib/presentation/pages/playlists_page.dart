@@ -108,7 +108,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> with AutomaticKeepAliveCl
           ),
           elevation: 8.0,
           isOpenOnStart: false,
-          animationSpeed: 200,
+          animationDuration: const Duration(milliseconds: 200),
           spacing: 4.0,
           spaceBetweenChildren: 4.0,
           useRotationAnimation: true,

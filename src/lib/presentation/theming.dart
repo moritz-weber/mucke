@@ -33,7 +33,6 @@ ThemeData theme() => ThemeData(
       highlightColor: LIGHT1,
       scaffoldBackgroundColor: DARK2,
       cardColor: DARK3,
-      toggleableActiveColor: LIGHT1,
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: LIGHT1,
@@ -47,32 +46,32 @@ ThemeData theme() => ThemeData(
       ),
       // https://api.flutter.dev/flutter/material/TextTheme-class.html
       textTheme: const TextTheme(
-        headline1: TextStyle(
+        displayLarge: TextStyle(
           fontSize: 28.0,
           fontWeight: FontWeight.w900,
           color: LIGHT1,
         ),
-        headline2: TextStyle(
+        displayMedium: TextStyle(
           fontSize: 24.0,
           fontWeight: FontWeight.w900,
           color: Colors.white,
         ),
-        headline3: TextStyle(
+        displaySmall: TextStyle(
           fontSize: 20.0,
           fontWeight: FontWeight.w900,
           color: Colors.white,
         ),
-        headline4: TextStyle(
+        headlineMedium: TextStyle(
           fontSize: 18.0,
           fontWeight: FontWeight.w600,
           color: Colors.white,
         ),
-        headline5: TextStyle(
+        headlineSmall: TextStyle(
           fontSize: 18.0,
           fontWeight: FontWeight.w400,
           color: Colors.white70,
         ),
-        headline6: TextStyle(fontSize: 18.0),
+        titleLarge: TextStyle(fontSize: 18.0),
       ),
       textSelectionTheme: const TextSelectionThemeData(
         cursorColor: LIGHT2,

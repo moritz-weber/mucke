@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:isolate';
 
 import 'package:drift/drift.dart';
-import 'package:drift/isolate.dart';
 import 'package:drift/native.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -11,18 +9,18 @@ import 'package:path_provider/path_provider.dart';
 import '../../constants.dart';
 import '../../defaults.dart';
 import '../../domain/entities/playable.dart';
-import 'moor/history_dao.dart';
-import 'moor/home_widget_dao.dart';
-import 'moor/music_data_dao.dart';
-import 'moor/persistent_state_dao.dart';
-import 'moor/playlist_dao.dart';
-import 'moor/settings_dao.dart';
+import 'drift/history_dao.dart';
+import 'drift/home_widget_dao.dart';
+import 'drift/music_data_dao.dart';
+import 'drift/persistent_state_dao.dart';
+import 'drift/playlist_dao.dart';
+import 'drift/settings_dao.dart';
 
-part 'moor_database.g.dart';
+part 'drift_database.g.dart';
 
-const String MOOR_ISOLATE = 'MOOR_ISOLATE';
+const String DRIFT_ISOLATE = 'DRIFT_ISOLATE';
 
-@DataClassName('MoorArtist')
+@DataClassName('DriftArtist')
 class Artists extends Table {
   TextColumn get name => text()();
   IntColumn get id => integer()();
@@ -31,7 +29,7 @@ class Artists extends Table {
   Set<Column> get primaryKey => {id};
 }
 
-@DataClassName('MoorAlbum')
+@DataClassName('DriftAlbum')
 class Albums extends Table {
   IntColumn get id => integer()();
   TextColumn get title => text()();
@@ -43,7 +41,7 @@ class Albums extends Table {
   Set<Column> get primaryKey => {id};
 }
 
-@DataClassName('MoorSong')
+@DataClassName('DriftSong')
 class Songs extends Table {
   TextColumn get title => text()();
   TextColumn get albumTitle => text()();
@@ -70,7 +68,7 @@ class Songs extends Table {
   Set<Column> get primaryKey => {path};
 }
 
-@DataClassName('MoorQueueEntry')
+@DataClassName('DriftQueueEntry')
 class QueueEntries extends Table {
   IntColumn get index => integer()();
   TextColumn get path => text()();
@@ -107,7 +105,7 @@ class LibraryFolders extends Table {
   TextColumn get path => text()();
 }
 
-@DataClassName('MoorSmartList')
+@DataClassName('DriftSmartList')
 class SmartLists extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text()();
@@ -137,13 +135,13 @@ class SmartLists extends Table {
   TextColumn get orderDirections => text()();
 }
 
-@DataClassName('MoorSmartListArtist')
+@DataClassName('DriftSmartListArtist')
 class SmartListArtists extends Table {
   IntColumn get smartListId => integer()();
   TextColumn get artistName => text()();
 }
 
-@DataClassName('MoorPlaylist')
+@DataClassName('DriftPlaylist')
 class Playlists extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text()();
@@ -156,14 +154,14 @@ class Playlists extends Table {
       dateTime().withDefault(Constant(DateTime.fromMillisecondsSinceEpoch(0)))();
 }
 
-@DataClassName('MoorPlaylistEntry')
+@DataClassName('DriftPlaylistEntry')
 class PlaylistEntries extends Table {
   IntColumn get playlistId => integer()();
   TextColumn get songPath => text()();
   IntColumn get position => integer()();
 }
 
-@DataClassName('MoorHomeWidget')
+@DataClassName('DriftHomeWidget')
 class HomeWidgets extends Table {
   IntColumn get position => integer()();
   TextColumn get type => text()();
@@ -173,7 +171,7 @@ class HomeWidgets extends Table {
   Set<Column> get primaryKey => {position};
 }
 
-@DataClassName('MoorHistoryEntry')
+@DataClassName('DriftHistoryEntry')
 class HistoryEntries extends Table {
   DateTimeColumn get time => dateTime().withDefault(currentDateAndTime)();
   TextColumn get type => text()();
@@ -213,15 +211,12 @@ class BlockedFiles extends Table {
     HistoryDao,
   ],
 )
-class MoorDatabase extends _$MoorDatabase {
-  /// Use MoorMusicDataSource in main isolate only.
-  MoorDatabase() : super(_openConnection());
+class MainDatabase extends _$MainDatabase {
+  /// Use DriftMusicDataSource in main isolate only.
+  MainDatabase() : super(_openConnection());
 
   /// Used for testing with in-memory database.
-  MoorDatabase.withQueryExecutor(QueryExecutor e) : super(e);
-
-  /// Used to connect to a database on another isolate.
-  MoorDatabase.connect(DatabaseConnection connection) : super.connect(connection);
+  MainDatabase.withQueryExecutor(QueryExecutor e) : super(e);
 
   @override
   int get schemaVersion => 12;
@@ -419,45 +414,4 @@ LazyDatabase _openConnection() {
     final File file = File(p.join(dbFolder.path, 'db.sqlite'));
     return NativeDatabase(file);
   });
-}
-
-Future<DriftIsolate> createMoorIsolate() async {
-  // this method is called from the main isolate. Since we can't use
-  // getApplicationDocumentsDirectory on a background isolate, we calculate
-  // the database path in the foreground isolate and then inform the
-  // background isolate about the path.
-  final dir = await getApplicationDocumentsDirectory();
-  final path = p.join(dir.path, 'db.sqlite');
-  final receivePort = ReceivePort();
-
-  await Isolate.spawn(
-    _startBackground,
-    _IsolateStartRequest(receivePort.sendPort, path),
-  );
-
-  // _startBackground will send the MoorIsolate to this ReceivePort
-  return await receivePort.first as DriftIsolate;
-}
-
-void _startBackground(_IsolateStartRequest request) {
-  // this is the entry point from the background isolate! Let's create
-  // the database from the path we received
-  final executor = NativeDatabase(File(request.targetPath));
-  // we're using MoorIsolate.inCurrent here as this method already runs on a
-  // background isolate. If we used MoorIsolate.spawn, a third isolate would be
-  // started which is not what we want!
-  final moorIsolate = DriftIsolate.inCurrent(
-    () => DatabaseConnection.fromExecutor(executor),
-  );
-  // inform the starting isolate about this, so that it can call .connect()
-  request.sendMoorIsolate.send(moorIsolate);
-}
-
-// used to bundle the SendPort and the target path, since isolate entry point
-// functions can only take one parameter.
-class _IsolateStartRequest {
-  _IsolateStartRequest(this.sendMoorIsolate, this.targetPath);
-
-  final SendPort sendMoorIsolate;
-  final String targetPath;
 }

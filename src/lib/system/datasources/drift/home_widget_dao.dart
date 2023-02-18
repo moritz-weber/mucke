@@ -8,15 +8,15 @@ import '../../models/home_widgets/home_widget_model.dart';
 import '../../models/home_widgets/playlists_model.dart';
 import '../../models/home_widgets/shuffle_all_model.dart';
 import '../home_widget_data_source.dart';
-import '../moor_database.dart';
+import '../drift_database.dart';
 
 part 'home_widget_dao.g.dart';
 
 @DriftAccessor(tables: [HomeWidgets, KeyValueEntries])
-class HomeWidgetDao extends DatabaseAccessor<MoorDatabase>
+class HomeWidgetDao extends DatabaseAccessor<MainDatabase>
     with _$HomeWidgetDaoMixin
     implements HomeWidgetDataSource {
-  HomeWidgetDao(MoorDatabase db) : super(db);
+  HomeWidgetDao(MainDatabase db) : super(db);
 
   @override
   Stream<List<HomeWidgetModel>> get homeWidgetsStream {
@@ -27,7 +27,7 @@ class HomeWidgetDao extends DatabaseAccessor<MoorDatabase>
 
   @override
   Future<void> insertHomeWidget(HomeWidgetModel homeWidget) async {
-    into(homeWidgets).insert(homeWidget.toMoor());
+    into(homeWidgets).insert(homeWidget.toDrift());
   }
 
   @override
@@ -70,23 +70,23 @@ class HomeWidgetDao extends DatabaseAccessor<MoorDatabase>
   @override
   Future<void> updateHomeWidget(HomeWidgetModel homeWidget) async {
     await (update(homeWidgets)..where((tbl) => tbl.position.equals(homeWidget.position)))
-        .write(homeWidget.toMoor());
+        .write(homeWidget.toDrift());
   }
 
-  HomeWidgetModel _getHomeWidget(MoorHomeWidget moorHomeWidget) {
-    final type = moorHomeWidget.type.toHomeWidgetType();
+  HomeWidgetModel _getHomeWidget(DriftHomeWidget driftHomeWidget) {
+    final type = driftHomeWidget.type.toHomeWidgetType();
 
     switch (type) {
       case HomeWidgetType.shuffle_all:
-        return HomeShuffleAllModel.fromMoor(moorHomeWidget);
+        return HomeShuffleAllModel.fromDrift(driftHomeWidget);
       case HomeWidgetType.album_of_day:
-        return HomeAlbumOfDayModel.fromMoor(moorHomeWidget);
+        return HomeAlbumOfDayModel.fromDrift(driftHomeWidget);
       case HomeWidgetType.artist_of_day:
-        return HomeArtistOfDayModel.fromMoor(moorHomeWidget);
+        return HomeArtistOfDayModel.fromDrift(driftHomeWidget);
       case HomeWidgetType.playlists:
-        return HomePlaylistsModel.fromMoor(moorHomeWidget);
+        return HomePlaylistsModel.fromDrift(driftHomeWidget);
       case HomeWidgetType.history:
-      return HomeHistoryModel.fromMoor(moorHomeWidget);
+      return HomeHistoryModel.fromDrift(driftHomeWidget);
     }
   }
 }

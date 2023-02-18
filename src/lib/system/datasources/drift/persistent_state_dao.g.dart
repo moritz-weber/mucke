@@ -1,12 +1,9 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'playlist_dao.dart';
+part of 'persistent_state_dao.dart';
 
-// **************************************************************************
-// DaoGenerator
-// **************************************************************************
-
-mixin _$PlaylistDaoMixin on DatabaseAccessor<MoorDatabase> {
+// ignore_for_file: type=lint
+mixin _$PersistentStateDaoMixin on DatabaseAccessor<MainDatabase> {
   $AlbumsTable get albums => attachedDatabase.albums;
   $ArtistsTable get artists => attachedDatabase.artists;
   $SongsTable get songs => attachedDatabase.songs;
@@ -15,5 +12,8 @@ mixin _$PlaylistDaoMixin on DatabaseAccessor<MoorDatabase> {
   $SmartListsTable get smartLists => attachedDatabase.smartLists;
   $SmartListArtistsTable get smartListArtists =>
       attachedDatabase.smartListArtists;
-  $HistoryEntriesTable get historyEntries => attachedDatabase.historyEntries;
+  $QueueEntriesTable get queueEntries => attachedDatabase.queueEntries;
+  $AvailableSongEntriesTable get availableSongEntries =>
+      attachedDatabase.availableSongEntries;
+  $KeyValueEntriesTable get keyValueEntries => attachedDatabase.keyValueEntries;
 }

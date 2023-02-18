@@ -2,11 +2,8 @@
 
 part of 'history_dao.dart';
 
-// **************************************************************************
-// DaoGenerator
-// **************************************************************************
-
-mixin _$HistoryDaoMixin on DatabaseAccessor<MoorDatabase> {
+// ignore_for_file: type=lint
+mixin _$HistoryDaoMixin on DatabaseAccessor<MainDatabase> {
   $HistoryEntriesTable get historyEntries => attachedDatabase.historyEntries;
   $AlbumsTable get albums => attachedDatabase.albums;
   $ArtistsTable get artists => attachedDatabase.artists;

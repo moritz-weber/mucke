@@ -5,7 +5,7 @@ import 'package:drift/drift.dart';
 import '../../../domain/entities/home_widgets/artist_of_day.dart';
 import '../../../domain/entities/home_widgets/home_widget.dart';
 import '../../../domain/entities/shuffle_mode.dart';
-import '../../datasources/moor_database.dart';
+import '../../datasources/drift_database.dart';
 import 'home_widget_model.dart';
 
 class HomeArtistOfDayModel extends HomeArtistOfDay implements HomeWidgetModel {
@@ -17,15 +17,15 @@ class HomeArtistOfDayModel extends HomeArtistOfDay implements HomeWidgetModel {
           shuffleMode: shuffleMode,
         );
 
-  factory HomeArtistOfDayModel.fromMoor(MoorHomeWidget moorHomeWidget) {
-    final type = moorHomeWidget.type.toHomeWidgetType();
+  factory HomeArtistOfDayModel.fromDrift(DriftHomeWidget driftHomeWidget) {
+    final type = driftHomeWidget.type.toHomeWidgetType();
     if (type != HomeWidgetType.artist_of_day) {
       throw TypeError();
     }
 
-    final data = jsonDecode(moorHomeWidget.data);
+    final data = jsonDecode(driftHomeWidget.data);
     final shuffleMode = (data['shuffleMode'] as String).toShuffleMode();
-    return HomeArtistOfDayModel(moorHomeWidget.position, shuffleMode);
+    return HomeArtistOfDayModel(driftHomeWidget.position, shuffleMode);
   }
 
   factory HomeArtistOfDayModel.fromEntity(HomeWidget entity) {
@@ -37,7 +37,7 @@ class HomeArtistOfDayModel extends HomeArtistOfDay implements HomeWidgetModel {
   }
 
   @override
-  HomeWidgetsCompanion toMoor() {
+  HomeWidgetsCompanion toDrift() {
     final data = {'shuffleMode': '$shuffleMode'};
     return HomeWidgetsCompanion(
       position: Value(position),

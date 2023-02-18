@@ -36,7 +36,7 @@ class ArtistHeader extends StatelessWidget {
           height: height * 0.66,
           child: Text(
             artist.name,
-            style: Theme.of(context).textTheme.headline1?.copyWith(
+            style: Theme.of(context).textTheme.displayLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   fontSize: 24.0,
                   color: Colors.white,

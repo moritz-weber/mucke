@@ -14,7 +14,7 @@ import '../../models/queue_item_model.dart';
 import '../../models/shuffle_mode_model.dart';
 import '../../models/smart_list_model.dart';
 import '../../models/song_model.dart';
-import '../moor_database.dart';
+import '../drift_database.dart';
 import '../persistent_state_data_source.dart';
 
 part 'persistent_state_dao.g.dart';
@@ -31,10 +31,10 @@ part 'persistent_state_dao.g.dart';
   AvailableSongEntries,
   KeyValueEntries,
 ])
-class PersistentStateDao extends DatabaseAccessor<MoorDatabase>
+class PersistentStateDao extends DatabaseAccessor<MainDatabase>
     with _$PersistentStateDaoMixin
     implements PersistentStateDataSource {
-  PersistentStateDao(MoorDatabase db) : super(db);
+  PersistentStateDao(MainDatabase db) : super(db);
 
   @override
   Future<List<QueueItemModel>> get queueItems {
@@ -43,7 +43,7 @@ class PersistentStateDao extends DatabaseAccessor<MoorDatabase>
 
     return query.get().then((rows) => rows.map((row) {
           return QueueItemModel(
-            SongModel.fromMoor(row.readTable(songs)),
+            SongModel.fromDrift(row.readTable(songs)),
             originalIndex: row.readTable(queueEntries).originalIndex,
             source: row.readTable(queueEntries).type.toQueueItemType(),
             isAvailable: row.readTable(queueEntries).isAvailable,
@@ -53,7 +53,7 @@ class PersistentStateDao extends DatabaseAccessor<MoorDatabase>
 
   @override
   Future<void> setQueueItems(List<QueueItemModel> queue) async {
-    final _queueEntries = <Insertable<MoorQueueEntry>>[];
+    final _queueEntries = <Insertable<DriftQueueEntry>>[];
 
     for (var i = 0; i < queue.length; i++) {
       _queueEntries.add(QueueEntriesCompanion(
@@ -81,7 +81,7 @@ class PersistentStateDao extends DatabaseAccessor<MoorDatabase>
 
     return query.get().then((rows) => rows.map((row) {
           return QueueItemModel(
-            SongModel.fromMoor(row.readTable(songs)),
+            SongModel.fromDrift(row.readTable(songs)),
             originalIndex: row.readTable(availableSongEntries).originalIndex,
             source: row.readTable(availableSongEntries).type.toQueueItemType(),
             isAvailable: row.readTable(availableSongEntries).isAvailable,
@@ -169,19 +169,19 @@ class PersistentStateDao extends DatabaseAccessor<MoorDatabase>
         result = await (select(albums)
               ..where((tbl) => tbl.id.equals(int.parse(data['id'] as String))))
             .getSingleOrNull()
-            .then((value) => value == null ? null : AlbumModel.fromMoor(value));
+            .then((value) => value == null ? null : AlbumModel.fromDrift(value));
         break;
       case PlayableType.artist:
         result = await (select(artists)..where((tbl) => tbl.name.equals(data['id'] as String)))
             .getSingleOrNull()
-            .then((value) => value == null ? null : ArtistModel.fromMoor(value));
+            .then((value) => value == null ? null : ArtistModel.fromDrift(value));
         break;
       case PlayableType.playlist:
         final plId = int.parse(data['id'] as String);
         // TODO: need proper getter for this
-        final moorPl =
+        final driftPl =
             await (select(playlists)..where((tbl) => tbl.id.equals(plId))).getSingleOrNull();
-        result = moorPl == null ? null : PlaylistModel.fromMoor(moorPl);
+        result = driftPl == null ? null : PlaylistModel.fromDrift(driftPl);
         break;
       case PlayableType.smartlist:
         final slId = int.parse(data['id'] as String);
@@ -196,7 +196,7 @@ class PersistentStateDao extends DatabaseAccessor<MoorDatabase>
             [innerJoin(artists, artists.name.equalsExp(smartListArtists.artistName))],
           )).map((p0) => p0.readTable(artists)).get();
 
-          result = SmartListModel.fromMoor(sl, slArtists);
+          result = SmartListModel.fromDrift(sl, slArtists);
         }
         break;
       case PlayableType.search:

@@ -3,7 +3,7 @@ import 'package:drift/drift.dart' as m;
 import '../../domain/entities/enums.dart';
 import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/entities/smart_list.dart';
-import '../datasources/moor_database.dart';
+import '../datasources/drift_database.dart';
 import 'artist_model.dart';
 
 class SmartListModel extends SmartList {
@@ -46,22 +46,22 @@ class SmartListModel extends SmartList {
     );
   }
 
-  factory SmartListModel.fromMoor(MoorSmartList moorSmartList, List<MoorArtist>? artists) {
+  factory SmartListModel.fromDrift(DriftSmartList driftSmartList, List<DriftArtist>? artists) {
     final filter = Filter(
-      artists: artists?.map((MoorArtist a) => ArtistModel.fromMoor(a)).toList(),
-      excludeArtists: moorSmartList.excludeArtists,
-      minLikeCount: moorSmartList.minLikeCount,
-      maxLikeCount: moorSmartList.maxLikeCount,
-      minPlayCount: moorSmartList.minPlayCount,
-      maxPlayCount: moorSmartList.maxPlayCount,
-      minYear: moorSmartList.minYear,
-      maxYear: moorSmartList.maxYear,
-      blockLevel: moorSmartList.blockLevel,
-      limit: moorSmartList.limit,
+      artists: artists?.map((DriftArtist a) => ArtistModel.fromDrift(a)).toList(),
+      excludeArtists: driftSmartList.excludeArtists,
+      minLikeCount: driftSmartList.minLikeCount,
+      maxLikeCount: driftSmartList.maxLikeCount,
+      minPlayCount: driftSmartList.minPlayCount,
+      maxPlayCount: driftSmartList.maxPlayCount,
+      minYear: driftSmartList.minYear,
+      maxYear: driftSmartList.maxYear,
+      blockLevel: driftSmartList.blockLevel,
+      limit: driftSmartList.limit,
     );
 
-    final criteria = _parseOrderCriteria(moorSmartList.orderCriteria);
-    final directions = _parseOrderDirections(moorSmartList.orderDirections);
+    final criteria = _parseOrderCriteria(driftSmartList.orderCriteria);
+    final directions = _parseOrderDirections(driftSmartList.orderDirections);
 
     final filteredDirections = <OrderDirection>[];
     criteria.asMap().forEach((key, value) {
@@ -74,16 +74,16 @@ class SmartListModel extends SmartList {
     );
 
     return SmartListModel(
-      id: moorSmartList.id,
-      name: moorSmartList.name,
+      id: driftSmartList.id,
+      name: driftSmartList.name,
       filter: filter,
       orderBy: orderBy,
-      shuffleMode: moorSmartList.shuffleMode?.toShuffleMode(),
-      iconString: moorSmartList.icon,
-      gradientString: moorSmartList.gradient,
-      timeChanged: moorSmartList.timeChanged,
-      timeCreated: moorSmartList.timeCreated,
-      timeLastPlayed: moorSmartList.timeLastPlayed,
+      shuffleMode: driftSmartList.shuffleMode?.toShuffleMode(),
+      iconString: driftSmartList.icon,
+      gradientString: driftSmartList.gradient,
+      timeChanged: driftSmartList.timeChanged,
+      timeCreated: driftSmartList.timeCreated,
+      timeLastPlayed: driftSmartList.timeLastPlayed,
     );
   }
 
@@ -111,7 +111,7 @@ class SmartListModel extends SmartList {
         timeLastPlayed: m.Value(timeLastPlayed),
       );
 
-  List<SmartListArtistsCompanion> toMoorArtists() {
+  List<SmartListArtistsCompanion> toDriftArtists() {
     if (filter.artists == null) return [];
     return filter.artists!
         .map(
@@ -136,8 +136,8 @@ List<OrderDirection> _parseOrderDirections(String orderDirections) {
   return odList.map((e) => e.toOrderDirection()!).toList();
 }
 
-extension ToMoorExtension on OrderDirection {
-  m.OrderingMode toMoor() {
+extension ToDriftExtension on OrderDirection {
+  m.OrderingMode toDrift() {
     switch (this) {
       case OrderDirection.ascending:
         return m.OrderingMode.asc;

@@ -176,7 +176,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
                     style: ElevatedButton.styleFrom(
                       shape: const StadiumBorder(),
                       padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                      primary: Colors.white10,
+                      backgroundColor: Colors.white10,
                       shadowColor: Colors.transparent,
                     ),
                   ),

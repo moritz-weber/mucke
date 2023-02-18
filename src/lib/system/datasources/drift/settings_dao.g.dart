@@ -2,11 +2,8 @@
 
 part of 'settings_dao.dart';
 
-// **************************************************************************
-// DaoGenerator
-// **************************************************************************
-
-mixin _$SettingsDaoMixin on DatabaseAccessor<MoorDatabase> {
+// ignore_for_file: type=lint
+mixin _$SettingsDaoMixin on DatabaseAccessor<MainDatabase> {
   $LibraryFoldersTable get libraryFolders => attachedDatabase.libraryFolders;
   $KeyValueEntriesTable get keyValueEntries => attachedDatabase.keyValueEntries;
   $BlockedFilesTable get blockedFiles => attachedDatabase.blockedFiles;

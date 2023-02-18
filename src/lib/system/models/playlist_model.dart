@@ -2,7 +2,7 @@ import 'package:drift/drift.dart' as m;
 
 import '../../domain/entities/playlist.dart';
 import '../../domain/entities/shuffle_mode.dart';
-import '../datasources/moor_database.dart';
+import '../datasources/drift_database.dart';
 
 class PlaylistModel extends Playlist {
   const PlaylistModel({
@@ -38,16 +38,16 @@ class PlaylistModel extends Playlist {
     );
   }
 
-  factory PlaylistModel.fromMoor(MoorPlaylist moorPlaylist) {
+  factory PlaylistModel.fromDrift(DriftPlaylist driftPlaylist) {
     return PlaylistModel(
-      id: moorPlaylist.id,
-      name: moorPlaylist.name,
-      iconString: moorPlaylist.icon,
-      gradientString: moorPlaylist.gradient,
-      shuffleMode: moorPlaylist.shuffleMode?.toShuffleMode(),
-      timeChanged: moorPlaylist.timeChanged,
-      timeCreated: moorPlaylist.timeCreated,
-      timeLastPlayed: moorPlaylist.timeLastPlayed,
+      id: driftPlaylist.id,
+      name: driftPlaylist.name,
+      iconString: driftPlaylist.icon,
+      gradientString: driftPlaylist.gradient,
+      shuffleMode: driftPlaylist.shuffleMode?.toShuffleMode(),
+      timeChanged: driftPlaylist.timeChanged,
+      timeCreated: driftPlaylist.timeCreated,
+      timeLastPlayed: driftPlaylist.timeLastPlayed,
     );
   }
 

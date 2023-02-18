@@ -346,8 +346,6 @@ int _shuffleModeIndex(ShuffleMode? shuffleMode) {
 
 ShuffleMode? _intToShuffleMode(int index) {
   switch (index) {
-    case 0:
-      return null;
     case 1:
       return ShuffleMode.none;
     case 2:
@@ -355,4 +353,5 @@ ShuffleMode? _intToShuffleMode(int index) {
     case 3:
       return ShuffleMode.plus;
   }
+  return null;
 }

@@ -3,7 +3,7 @@ import 'package:drift/drift.dart';
 import 'package:on_audio_query/on_audio_query.dart' as aq;
 
 import '../../domain/entities/song.dart';
-import '../datasources/moor_database.dart';
+import '../datasources/drift_database.dart';
 import '../utils.dart';
 import 'default_values.dart';
 
@@ -45,24 +45,24 @@ class SongModel extends Song {
           year: year,
         );
 
-  factory SongModel.fromMoor(MoorSong moorSong) => SongModel(
-        album: moorSong.albumTitle,
-        albumId: moorSong.albumId,
-        artist: moorSong.artist,
-        blockLevel: moorSong.blockLevel,
-        duration: Duration(milliseconds: moorSong.duration),
-        path: moorSong.path,
-        title: moorSong.title,
-        albumArtPath: moorSong.albumArtPath,
-        discNumber: moorSong.discNumber,
-        next: moorSong.next,
-        previous: moorSong.previous,
-        trackNumber: moorSong.trackNumber,
-        likeCount: moorSong.likeCount,
-        playCount: moorSong.playCount,
-        timeAdded: moorSong.timeAdded,
-        lastModified: moorSong.lastModified,
-        year: moorSong.year,
+  factory SongModel.fromDrift(DriftSong driftSong) => SongModel(
+        album: driftSong.albumTitle,
+        albumId: driftSong.albumId,
+        artist: driftSong.artist,
+        blockLevel: driftSong.blockLevel,
+        duration: Duration(milliseconds: driftSong.duration),
+        path: driftSong.path,
+        title: driftSong.title,
+        albumArtPath: driftSong.albumArtPath,
+        discNumber: driftSong.discNumber,
+        next: driftSong.next,
+        previous: driftSong.previous,
+        trackNumber: driftSong.trackNumber,
+        likeCount: driftSong.likeCount,
+        playCount: driftSong.playCount,
+        timeAdded: driftSong.timeAdded,
+        lastModified: driftSong.lastModified,
+        year: driftSong.year,
       );
 
   factory SongModel.fromOnAudioQuery({
@@ -163,7 +163,7 @@ class SongModel extends Song {
         lastModified: Value(lastModified),
       );
 
-  SongsCompanion toMoorInsert() => SongsCompanion(
+  SongsCompanion toDriftInsert() => SongsCompanion(
         albumTitle: Value(album),
         albumId: Value(albumId),
         artist: Value(artist),

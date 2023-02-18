@@ -2,19 +2,19 @@ import 'package:drift/drift.dart';
 
 import '../../domain/entities/history_entry.dart';
 import '../../domain/entities/playable.dart';
-import '../datasources/moor_database.dart';
+import '../datasources/drift_database.dart';
 
 class HistoryEntryModel extends HistoryEntry {
   HistoryEntryModel({required super.time, required super.playable});
 
-  factory HistoryEntryModel.fromMoor(MoorHistoryEntry moorHistoryEntry, Playable playable) {
+  factory HistoryEntryModel.fromDrift(DriftHistoryEntry driftHistoryEntry, Playable playable) {
     return HistoryEntryModel(
-      time: moorHistoryEntry.time,
+      time: driftHistoryEntry.time,
       playable: playable,
     );
   }
 
-  HistoryEntriesCompanion toMoor() {
+  HistoryEntriesCompanion toDrift() {
     return HistoryEntriesCompanion(
       time: Value(time),
       type: Value(playable.type.toString()),

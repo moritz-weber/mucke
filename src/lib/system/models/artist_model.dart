@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 
 import '../../domain/entities/artist.dart';
-import '../datasources/moor_database.dart';
+import '../datasources/drift_database.dart';
 
 class ArtistModel extends Artist {
   const ArtistModel({
@@ -9,9 +9,9 @@ class ArtistModel extends Artist {
     required super.name,
   });
 
-  factory ArtistModel.fromMoor(MoorArtist moorArtist) => ArtistModel(
-        name: moorArtist.name,
-        id: moorArtist.id,
+  factory ArtistModel.fromDrift(DriftArtist driftArtist) => ArtistModel(
+        name: driftArtist.name,
+        id: driftArtist.id,
       );
 
   @override

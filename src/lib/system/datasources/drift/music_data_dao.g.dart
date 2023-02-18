@@ -2,11 +2,8 @@
 
 part of 'music_data_dao.dart';
 
-// **************************************************************************
-// DaoGenerator
-// **************************************************************************
-
-mixin _$MusicDataDaoMixin on DatabaseAccessor<MoorDatabase> {
+// ignore_for_file: type=lint
+mixin _$MusicDataDaoMixin on DatabaseAccessor<MainDatabase> {
   $AlbumsTable get albums => attachedDatabase.albums;
   $ArtistsTable get artists => attachedDatabase.artists;
   $SongsTable get songs => attachedDatabase.songs;

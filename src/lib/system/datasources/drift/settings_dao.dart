@@ -1,16 +1,16 @@
 import 'package:drift/drift.dart';
 
 import '../../../constants.dart';
-import '../moor_database.dart';
+import '../drift_database.dart';
 import '../settings_data_source.dart';
 
 part 'settings_dao.g.dart';
 
 @DriftAccessor(tables: [LibraryFolders, KeyValueEntries, BlockedFiles])
-class SettingsDao extends DatabaseAccessor<MoorDatabase>
+class SettingsDao extends DatabaseAccessor<MainDatabase>
     with _$SettingsDaoMixin
     implements SettingsDataSource {
-  SettingsDao(MoorDatabase attachedDatabase) : super(attachedDatabase);
+  SettingsDao(MainDatabase attachedDatabase) : super(attachedDatabase);
 
   @override
   Stream<List<String>> get libraryFoldersStream =>

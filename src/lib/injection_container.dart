@@ -1,7 +1,6 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:mucke/domain/usecases/play_album_from_index.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 import 'domain/actors/audio_player_actor.dart';
@@ -26,6 +25,7 @@ import 'domain/repositories/persistent_state_repository.dart';
 import 'domain/repositories/platform_integration_repository.dart';
 import 'domain/repositories/settings_repository.dart';
 import 'domain/usecases/play_album.dart';
+import 'domain/usecases/play_album_from_index.dart';
 import 'domain/usecases/play_artist.dart';
 import 'domain/usecases/play_playable.dart';
 import 'domain/usecases/play_playlist.dart';
@@ -55,11 +55,11 @@ import 'presentation/state/smart_list_page_store.dart';
 import 'presentation/state/song_store.dart';
 import 'system/datasources/audio_player_data_source.dart';
 import 'system/datasources/audio_player_data_source_impl.dart';
+import 'system/datasources/drift_database.dart';
 import 'system/datasources/history_data_source.dart';
 import 'system/datasources/home_widget_data_source.dart';
 import 'system/datasources/local_music_fetcher.dart';
 import 'system/datasources/local_music_fetcher_impl.dart';
-import 'system/datasources/moor_database.dart';
 import 'system/datasources/music_data_source_contract.dart';
 import 'system/datasources/persistent_state_data_source.dart';
 import 'system/datasources/platform_integration_data_source.dart';
@@ -314,13 +314,13 @@ Future<void> setupGetIt() async {
   );
 
   // data sources
-  final MoorDatabase moorDatabase = MoorDatabase();
-  getIt.registerLazySingleton<MusicDataSource>(() => moorDatabase.musicDataDao);
-  getIt.registerLazySingleton<PersistentStateDataSource>(() => moorDatabase.persistentStateDao);
-  getIt.registerLazySingleton<SettingsDataSource>(() => moorDatabase.settingsDao);
-  getIt.registerLazySingleton<PlaylistDataSource>(() => moorDatabase.playlistDao);
-  getIt.registerLazySingleton<HomeWidgetDataSource>(() => moorDatabase.homeWidgetDao);
-  getIt.registerLazySingleton<HistoryDataSource>(() => moorDatabase.historyDao);
+  final MainDatabase driftDatabase = MainDatabase();
+  getIt.registerLazySingleton<MusicDataSource>(() => driftDatabase.musicDataDao);
+  getIt.registerLazySingleton<PersistentStateDataSource>(() => driftDatabase.persistentStateDao);
+  getIt.registerLazySingleton<SettingsDataSource>(() => driftDatabase.settingsDao);
+  getIt.registerLazySingleton<PlaylistDataSource>(() => driftDatabase.playlistDao);
+  getIt.registerLazySingleton<HomeWidgetDataSource>(() => driftDatabase.homeWidgetDao);
+  getIt.registerLazySingleton<HistoryDataSource>(() => driftDatabase.historyDao);
   getIt.registerLazySingleton<LocalMusicFetcher>(
     () => LocalMusicFetcherImpl(
       getIt(),
