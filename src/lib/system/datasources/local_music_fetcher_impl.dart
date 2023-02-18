@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:on_audio_query/on_audio_query.dart' as aq;
 import 'package:path_provider/path_provider.dart';
@@ -9,6 +10,7 @@ import '../models/album_model.dart';
 import '../models/artist_model.dart';
 import '../models/default_values.dart';
 import '../models/song_model.dart';
+import '../utils.dart';
 import 'local_music_fetcher.dart';
 import 'music_data_source_contract.dart';
 import 'settings_data_source.dart';
@@ -25,7 +27,6 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
   @override
   Future<Map<String, List>> getLocalMusic() async {
     // FIXME: it seems that songs currently loaded in queue are not updated
-    // example: when Brainwashed/Four Walls was loaded, the tags were not updated as opposed to the rest of the album
 
     final musicDirectories = await _settingsDataSource.libraryFoldersStream.first;
     final libDirs = musicDirectories.map((e) => Directory(e));
@@ -44,7 +45,10 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     final List<SongModel> songs = [];
     final List<AlbumModel> albums = [];
     final Map<String, int> albumIdMap = {};
-    final Map<String, String> albumArtMap = {};
+    final Map<int, String> albumArtMap = {};
+
+    /// album id, background color
+    final Map<int, Color?> colorMap = {};
     final Set<ArtistModel> artistSet = {};
 
     final albumsInDb = (await _musicDataSource.albumStream.first)
@@ -62,7 +66,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     for (final aqSong in aqSongs.toSet()) {
       if (!allowedExtensions.contains(aqSong.fileExtension.toLowerCase())) continue;
       if (blockedPaths.contains(aqSong.data)) continue;
-      
+
       final data = aqSong.getMap;
       // changed includes the creation time
       // => also update, when the file was created later (and wasn't really changed)
@@ -73,27 +77,43 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
 
       int? albumId;
       String albumString;
+      Color? color;
       if (song != null) {
         if (!lastModified.isAfter(song.lastModified)) {
           // file hasn't changed -> use existing songmodel
 
           final album = albumsInDb.singleWhere((a) => a.id == song.albumId);
           albumString = '${album.title}___${album.artist}__${album.pubYear}';
+
           if (!albumIdMap.containsKey(albumString)) {
-            albums.add(album);
             albumIdMap[albumString] = album.id;
-            if (album.albumArtPath != null) albumArtMap[albumString] = album.albumArtPath!;
+            if (album.albumArtPath != null) {
+              albumArtMap[album.id] = album.albumArtPath!;
+              if (album.color == null) {
+                // we have an album cover, but no color -> try to get one
+                color = await getBackgroundColor(FileImage(File(album.albumArtPath!)));
+                colorMap[album.id] = color;
+              } else {
+                colorMap[album.id] = album.color;
+              }
+            }
+            albums.add(album.copyWith(color: color));
             final artist = artistsInDb.singleWhere((a) => a.name == album.artist);
             artistSet.add(artist);
           } else {
             // we already encountered the album (at least by albumString)
             // make sure the id is consistent
             if (album.id != albumIdMap[albumString]) {
-              songs.add(song.copyWith(albumId: albumIdMap[albumString]));
+              songs.add(
+                song.copyWith(
+                  albumId: albumIdMap[albumString],
+                  color: colorMap[albumIdMap[albumString]],
+                ),
+              );
               continue;
             }
           }
-          songs.add(song);
+          songs.add(song.copyWith(color: colorMap[album.id]));
           continue;
         } else {
           // read new info but keep albumId
@@ -119,13 +139,20 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
             newAlbumId++;
         albumIdMap[albumString] = albumId;
 
-        final albumArt = await _onAudioQuery.queryArtwork(aqSong.albumId ?? -1, aq.ArtworkType.ALBUM, size: 640);
+        final albumArt = await _onAudioQuery.queryArtwork(
+          aqSong.albumId ?? -1,
+          aq.ArtworkType.ALBUM,
+          size: 600,
+        );
 
         if (albumArt != null && albumArt.isNotEmpty) {
           albumArtPath = '${dir.path}/$albumId';
           final file = File(albumArtPath);
           file.writeAsBytesSync(albumArt);
-          albumArtMap[albumString] = albumArtPath;
+          albumArtMap[albumId] = albumArtPath;
+
+          color = await getBackgroundColor(FileImage(file));
+          colorMap[albumId] = color;
         }
 
         final String songArtist = aqSong.artist ?? '';
@@ -142,13 +169,18 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
 
         albums.add(
           AlbumModel.fromOnAudioQuery(
-              albumId: albumId, songModel: aqSong, albumArtPath: albumArtPath),
+            albumId: albumId,
+            songModel: aqSong,
+            albumArtPath: albumArtPath,
+            color: color,
+          ),
         );
       } else {
         // an album with the same properties is already stored in the list
         // use it's ID regardless of the old one stored in the songModel
         albumId = albumIdMap[albumString]!;
-        albumArtPath = albumArtMap[albumString];
+        albumArtPath = albumArtMap[albumId];
+        color = colorMap[albumId];
       }
 
       songs.add(
@@ -157,6 +189,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
           songModel: aqSong,
           albumId: albumId,
           albumArtPath: albumArtPath,
+          color: color,
           lastModified: lastModified,
         ),
       );

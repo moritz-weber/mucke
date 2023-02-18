@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:equatable/equatable.dart';
 
 import 'playable.dart';
@@ -8,6 +10,7 @@ class Album extends Equatable implements Playable{
     required this.title,
     required this.artist,
     this.albumArtPath,
+    this.color,
     this.pubYear,
   });
 
@@ -17,6 +20,7 @@ class Album extends Equatable implements Playable{
   final String artist;
   final int? pubYear;
   final String? albumArtPath;
+  final Color? color;
 
   @override
   List<Object?> get props => [id, title, artist, albumArtPath, pubYear];

@@ -230,7 +230,6 @@ class PlaylistDao extends DatabaseAccessor<MainDatabase>
       slArtistStream,
       (a, b) {
         return a.map((sl) {
-        print(sl);
           final driftArtists =
               (b.where((element) => element.readTable(smartListArtists).smartListId == sl.id))
                   .map((e) => e.readTable(artists))

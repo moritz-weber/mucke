@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:palette_generator/palette_generator.dart';
 
 import '../../domain/entities/song.dart';
+import '../../system/utils.dart';
 import '../state/audio_store.dart';
 import '../theming.dart';
 import '../utils.dart';
@@ -56,38 +56,23 @@ class _AlbumBackgroundState extends State<AlbumBackground> {
 
   Future<void> _setBackgroundWidget(Song? song) async {
     if (song == null) return;
+    final Color color =
+        song.color ?? await getBackgroundColor(getAlbumImage(song.albumArtPath)) ?? DARK3;
 
-    PaletteGenerator.fromImageProvider(
-      getAlbumImage(song.albumArtPath),
-      targets: PaletteTarget.baseTargets,
-    ).then((paletteGenerator) {
-      final colors = <Color?>[
-        paletteGenerator.vibrantColor?.color,
-        paletteGenerator.lightVibrantColor?.color,
-        paletteGenerator.mutedColor?.color,
-        paletteGenerator.darkVibrantColor?.color,
-        paletteGenerator.lightMutedColor?.color,
-        paletteGenerator.dominantColor?.color,
-        DARK3,
-      ];
-
-      final Color? color = colors.firstWhere((c) => c != null);
-
-      setState(() {
-        _backgroundWidget = Container(
-          key: ValueKey(song.albumArtPath),
-          width: double.infinity,
-          height: double.infinity,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Color.lerp(DARK3, color, 0.4) ?? DARK3, DARK1],
-              stops: const [0.0, 1.0],
-            ),
+    setState(() {
+      _backgroundWidget = Container(
+        key: ValueKey(song.albumArtPath),
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Color.lerp(DARK3, color, 0.4) ?? DARK3, DARK1],
+            stops: const [0.0, 1.0],
           ),
-        );
-      });
+        ),
+      );
     });
   }
 }

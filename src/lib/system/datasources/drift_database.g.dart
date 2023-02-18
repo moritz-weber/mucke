@@ -29,13 +29,19 @@ class $AlbumsTable extends Albums with TableInfo<$AlbumsTable, DriftAlbum> {
   late final GeneratedColumn<String> albumArtPath = GeneratedColumn<String>(
       'album_art_path', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _colorMeta = const VerificationMeta('color');
+  @override
+  late final GeneratedColumn<int> color = GeneratedColumn<int>(
+      'color', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _yearMeta = const VerificationMeta('year');
   @override
   late final GeneratedColumn<int> year = GeneratedColumn<int>(
       'year', aliasedName, true,
       type: DriftSqlType.int, requiredDuringInsert: false);
   @override
-  List<GeneratedColumn> get $columns => [id, title, artist, albumArtPath, year];
+  List<GeneratedColumn> get $columns =>
+      [id, title, artist, albumArtPath, color, year];
   @override
   String get aliasedName => _alias ?? 'albums';
   @override
@@ -66,6 +72,10 @@ class $AlbumsTable extends Albums with TableInfo<$AlbumsTable, DriftAlbum> {
           albumArtPath.isAcceptableOrUnknown(
               data['album_art_path']!, _albumArtPathMeta));
     }
+    if (data.containsKey('color')) {
+      context.handle(
+          _colorMeta, color.isAcceptableOrUnknown(data['color']!, _colorMeta));
+    }
     if (data.containsKey('year')) {
       context.handle(
           _yearMeta, year.isAcceptableOrUnknown(data['year']!, _yearMeta));
@@ -87,6 +97,8 @@ class $AlbumsTable extends Albums with TableInfo<$AlbumsTable, DriftAlbum> {
           .read(DriftSqlType.string, data['${effectivePrefix}artist'])!,
       albumArtPath: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}album_art_path']),
+      color: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}color']),
       year: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}year']),
     );
@@ -103,12 +115,14 @@ class DriftAlbum extends DataClass implements Insertable<DriftAlbum> {
   final String title;
   final String artist;
   final String? albumArtPath;
+  final int? color;
   final int? year;
   const DriftAlbum(
       {required this.id,
       required this.title,
       required this.artist,
       this.albumArtPath,
+      this.color,
       this.year});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -118,6 +132,9 @@ class DriftAlbum extends DataClass implements Insertable<DriftAlbum> {
     map['artist'] = Variable<String>(artist);
     if (!nullToAbsent || albumArtPath != null) {
       map['album_art_path'] = Variable<String>(albumArtPath);
+    }
+    if (!nullToAbsent || color != null) {
+      map['color'] = Variable<int>(color);
     }
     if (!nullToAbsent || year != null) {
       map['year'] = Variable<int>(year);
@@ -133,6 +150,8 @@ class DriftAlbum extends DataClass implements Insertable<DriftAlbum> {
       albumArtPath: albumArtPath == null && nullToAbsent
           ? const Value.absent()
           : Value(albumArtPath),
+      color:
+          color == null && nullToAbsent ? const Value.absent() : Value(color),
       year: year == null && nullToAbsent ? const Value.absent() : Value(year),
     );
   }
@@ -145,6 +164,7 @@ class DriftAlbum extends DataClass implements Insertable<DriftAlbum> {
       title: serializer.fromJson<String>(json['title']),
       artist: serializer.fromJson<String>(json['artist']),
       albumArtPath: serializer.fromJson<String?>(json['albumArtPath']),
+      color: serializer.fromJson<int?>(json['color']),
       year: serializer.fromJson<int?>(json['year']),
     );
   }
@@ -156,6 +176,7 @@ class DriftAlbum extends DataClass implements Insertable<DriftAlbum> {
       'title': serializer.toJson<String>(title),
       'artist': serializer.toJson<String>(artist),
       'albumArtPath': serializer.toJson<String?>(albumArtPath),
+      'color': serializer.toJson<int?>(color),
       'year': serializer.toJson<int?>(year),
     };
   }
@@ -165,6 +186,7 @@ class DriftAlbum extends DataClass implements Insertable<DriftAlbum> {
           String? title,
           String? artist,
           Value<String?> albumArtPath = const Value.absent(),
+          Value<int?> color = const Value.absent(),
           Value<int?> year = const Value.absent()}) =>
       DriftAlbum(
         id: id ?? this.id,
@@ -172,6 +194,7 @@ class DriftAlbum extends DataClass implements Insertable<DriftAlbum> {
         artist: artist ?? this.artist,
         albumArtPath:
             albumArtPath.present ? albumArtPath.value : this.albumArtPath,
+        color: color.present ? color.value : this.color,
         year: year.present ? year.value : this.year,
       );
   @override
@@ -181,13 +204,14 @@ class DriftAlbum extends DataClass implements Insertable<DriftAlbum> {
           ..write('title: $title, ')
           ..write('artist: $artist, ')
           ..write('albumArtPath: $albumArtPath, ')
+          ..write('color: $color, ')
           ..write('year: $year')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, title, artist, albumArtPath, year);
+  int get hashCode => Object.hash(id, title, artist, albumArtPath, color, year);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -196,6 +220,7 @@ class DriftAlbum extends DataClass implements Insertable<DriftAlbum> {
           other.title == this.title &&
           other.artist == this.artist &&
           other.albumArtPath == this.albumArtPath &&
+          other.color == this.color &&
           other.year == this.year);
 }
 
@@ -204,12 +229,14 @@ class AlbumsCompanion extends UpdateCompanion<DriftAlbum> {
   final Value<String> title;
   final Value<String> artist;
   final Value<String?> albumArtPath;
+  final Value<int?> color;
   final Value<int?> year;
   const AlbumsCompanion({
     this.id = const Value.absent(),
     this.title = const Value.absent(),
     this.artist = const Value.absent(),
     this.albumArtPath = const Value.absent(),
+    this.color = const Value.absent(),
     this.year = const Value.absent(),
   });
   AlbumsCompanion.insert({
@@ -217,6 +244,7 @@ class AlbumsCompanion extends UpdateCompanion<DriftAlbum> {
     required String title,
     required String artist,
     this.albumArtPath = const Value.absent(),
+    this.color = const Value.absent(),
     this.year = const Value.absent(),
   })  : title = Value(title),
         artist = Value(artist);
@@ -225,6 +253,7 @@ class AlbumsCompanion extends UpdateCompanion<DriftAlbum> {
     Expression<String>? title,
     Expression<String>? artist,
     Expression<String>? albumArtPath,
+    Expression<int>? color,
     Expression<int>? year,
   }) {
     return RawValuesInsertable({
@@ -232,6 +261,7 @@ class AlbumsCompanion extends UpdateCompanion<DriftAlbum> {
       if (title != null) 'title': title,
       if (artist != null) 'artist': artist,
       if (albumArtPath != null) 'album_art_path': albumArtPath,
+      if (color != null) 'color': color,
       if (year != null) 'year': year,
     });
   }
@@ -241,12 +271,14 @@ class AlbumsCompanion extends UpdateCompanion<DriftAlbum> {
       Value<String>? title,
       Value<String>? artist,
       Value<String?>? albumArtPath,
+      Value<int?>? color,
       Value<int?>? year}) {
     return AlbumsCompanion(
       id: id ?? this.id,
       title: title ?? this.title,
       artist: artist ?? this.artist,
       albumArtPath: albumArtPath ?? this.albumArtPath,
+      color: color ?? this.color,
       year: year ?? this.year,
     );
   }
@@ -266,6 +298,9 @@ class AlbumsCompanion extends UpdateCompanion<DriftAlbum> {
     if (albumArtPath.present) {
       map['album_art_path'] = Variable<String>(albumArtPath.value);
     }
+    if (color.present) {
+      map['color'] = Variable<int>(color.value);
+    }
     if (year.present) {
       map['year'] = Variable<int>(year.value);
     }
@@ -279,6 +314,7 @@ class AlbumsCompanion extends UpdateCompanion<DriftAlbum> {
           ..write('title: $title, ')
           ..write('artist: $artist, ')
           ..write('albumArtPath: $albumArtPath, ')
+          ..write('color: $color, ')
           ..write('year: $year')
           ..write(')'))
         .toString();
@@ -1221,6 +1257,11 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, DriftSong> {
   late final GeneratedColumn<String> albumArtPath = GeneratedColumn<String>(
       'album_art_path', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _colorMeta = const VerificationMeta('color');
+  @override
+  late final GeneratedColumn<int> color = GeneratedColumn<int>(
+      'color', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _discNumberMeta =
       const VerificationMeta('discNumber');
   @override
@@ -1331,6 +1372,7 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, DriftSong> {
         path,
         duration,
         albumArtPath,
+        color,
         discNumber,
         trackNumber,
         year,
@@ -1396,6 +1438,10 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, DriftSong> {
           _albumArtPathMeta,
           albumArtPath.isAcceptableOrUnknown(
               data['album_art_path']!, _albumArtPathMeta));
+    }
+    if (data.containsKey('color')) {
+      context.handle(
+          _colorMeta, color.isAcceptableOrUnknown(data['color']!, _colorMeta));
     }
     if (data.containsKey('disc_number')) {
       context.handle(
@@ -1482,6 +1528,8 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, DriftSong> {
           .read(DriftSqlType.int, data['${effectivePrefix}duration'])!,
       albumArtPath: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}album_art_path']),
+      color: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}color']),
       discNumber: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}disc_number'])!,
       trackNumber: attachedDatabase.typeMapping
@@ -1523,6 +1571,7 @@ class DriftSong extends DataClass implements Insertable<DriftSong> {
   final String path;
   final int duration;
   final String? albumArtPath;
+  final int? color;
   final int discNumber;
   final int trackNumber;
   final int? year;
@@ -1543,6 +1592,7 @@ class DriftSong extends DataClass implements Insertable<DriftSong> {
       required this.path,
       required this.duration,
       this.albumArtPath,
+      this.color,
       required this.discNumber,
       required this.trackNumber,
       this.year,
@@ -1566,6 +1616,9 @@ class DriftSong extends DataClass implements Insertable<DriftSong> {
     map['duration'] = Variable<int>(duration);
     if (!nullToAbsent || albumArtPath != null) {
       map['album_art_path'] = Variable<String>(albumArtPath);
+    }
+    if (!nullToAbsent || color != null) {
+      map['color'] = Variable<int>(color);
     }
     map['disc_number'] = Variable<int>(discNumber);
     map['track_number'] = Variable<int>(trackNumber);
@@ -1595,6 +1648,8 @@ class DriftSong extends DataClass implements Insertable<DriftSong> {
       albumArtPath: albumArtPath == null && nullToAbsent
           ? const Value.absent()
           : Value(albumArtPath),
+      color:
+          color == null && nullToAbsent ? const Value.absent() : Value(color),
       discNumber: Value(discNumber),
       trackNumber: Value(trackNumber),
       year: year == null && nullToAbsent ? const Value.absent() : Value(year),
@@ -1621,6 +1676,7 @@ class DriftSong extends DataClass implements Insertable<DriftSong> {
       path: serializer.fromJson<String>(json['path']),
       duration: serializer.fromJson<int>(json['duration']),
       albumArtPath: serializer.fromJson<String?>(json['albumArtPath']),
+      color: serializer.fromJson<int?>(json['color']),
       discNumber: serializer.fromJson<int>(json['discNumber']),
       trackNumber: serializer.fromJson<int>(json['trackNumber']),
       year: serializer.fromJson<int?>(json['year']),
@@ -1646,6 +1702,7 @@ class DriftSong extends DataClass implements Insertable<DriftSong> {
       'path': serializer.toJson<String>(path),
       'duration': serializer.toJson<int>(duration),
       'albumArtPath': serializer.toJson<String?>(albumArtPath),
+      'color': serializer.toJson<int?>(color),
       'discNumber': serializer.toJson<int>(discNumber),
       'trackNumber': serializer.toJson<int>(trackNumber),
       'year': serializer.toJson<int?>(year),
@@ -1669,6 +1726,7 @@ class DriftSong extends DataClass implements Insertable<DriftSong> {
           String? path,
           int? duration,
           Value<String?> albumArtPath = const Value.absent(),
+          Value<int?> color = const Value.absent(),
           int? discNumber,
           int? trackNumber,
           Value<int?> year = const Value.absent(),
@@ -1690,6 +1748,7 @@ class DriftSong extends DataClass implements Insertable<DriftSong> {
         duration: duration ?? this.duration,
         albumArtPath:
             albumArtPath.present ? albumArtPath.value : this.albumArtPath,
+        color: color.present ? color.value : this.color,
         discNumber: discNumber ?? this.discNumber,
         trackNumber: trackNumber ?? this.trackNumber,
         year: year.present ? year.value : this.year,
@@ -1713,6 +1772,7 @@ class DriftSong extends DataClass implements Insertable<DriftSong> {
           ..write('path: $path, ')
           ..write('duration: $duration, ')
           ..write('albumArtPath: $albumArtPath, ')
+          ..write('color: $color, ')
           ..write('discNumber: $discNumber, ')
           ..write('trackNumber: $trackNumber, ')
           ..write('year: $year, ')
@@ -1738,6 +1798,7 @@ class DriftSong extends DataClass implements Insertable<DriftSong> {
       path,
       duration,
       albumArtPath,
+      color,
       discNumber,
       trackNumber,
       year,
@@ -1761,6 +1822,7 @@ class DriftSong extends DataClass implements Insertable<DriftSong> {
           other.path == this.path &&
           other.duration == this.duration &&
           other.albumArtPath == this.albumArtPath &&
+          other.color == this.color &&
           other.discNumber == this.discNumber &&
           other.trackNumber == this.trackNumber &&
           other.year == this.year &&
@@ -1783,6 +1845,7 @@ class SongsCompanion extends UpdateCompanion<DriftSong> {
   final Value<String> path;
   final Value<int> duration;
   final Value<String?> albumArtPath;
+  final Value<int?> color;
   final Value<int> discNumber;
   final Value<int> trackNumber;
   final Value<int?> year;
@@ -1803,6 +1866,7 @@ class SongsCompanion extends UpdateCompanion<DriftSong> {
     this.path = const Value.absent(),
     this.duration = const Value.absent(),
     this.albumArtPath = const Value.absent(),
+    this.color = const Value.absent(),
     this.discNumber = const Value.absent(),
     this.trackNumber = const Value.absent(),
     this.year = const Value.absent(),
@@ -1824,6 +1888,7 @@ class SongsCompanion extends UpdateCompanion<DriftSong> {
     required String path,
     required int duration,
     this.albumArtPath = const Value.absent(),
+    this.color = const Value.absent(),
     required int discNumber,
     required int trackNumber,
     this.year = const Value.absent(),
@@ -1853,6 +1918,7 @@ class SongsCompanion extends UpdateCompanion<DriftSong> {
     Expression<String>? path,
     Expression<int>? duration,
     Expression<String>? albumArtPath,
+    Expression<int>? color,
     Expression<int>? discNumber,
     Expression<int>? trackNumber,
     Expression<int>? year,
@@ -1874,6 +1940,7 @@ class SongsCompanion extends UpdateCompanion<DriftSong> {
       if (path != null) 'path': path,
       if (duration != null) 'duration': duration,
       if (albumArtPath != null) 'album_art_path': albumArtPath,
+      if (color != null) 'color': color,
       if (discNumber != null) 'disc_number': discNumber,
       if (trackNumber != null) 'track_number': trackNumber,
       if (year != null) 'year': year,
@@ -1897,6 +1964,7 @@ class SongsCompanion extends UpdateCompanion<DriftSong> {
       Value<String>? path,
       Value<int>? duration,
       Value<String?>? albumArtPath,
+      Value<int?>? color,
       Value<int>? discNumber,
       Value<int>? trackNumber,
       Value<int?>? year,
@@ -1917,6 +1985,7 @@ class SongsCompanion extends UpdateCompanion<DriftSong> {
       path: path ?? this.path,
       duration: duration ?? this.duration,
       albumArtPath: albumArtPath ?? this.albumArtPath,
+      color: color ?? this.color,
       discNumber: discNumber ?? this.discNumber,
       trackNumber: trackNumber ?? this.trackNumber,
       year: year ?? this.year,
@@ -1955,6 +2024,9 @@ class SongsCompanion extends UpdateCompanion<DriftSong> {
     }
     if (albumArtPath.present) {
       map['album_art_path'] = Variable<String>(albumArtPath.value);
+    }
+    if (color.present) {
+      map['color'] = Variable<int>(color.value);
     }
     if (discNumber.present) {
       map['disc_number'] = Variable<int>(discNumber.value);
@@ -2005,6 +2077,7 @@ class SongsCompanion extends UpdateCompanion<DriftSong> {
           ..write('path: $path, ')
           ..write('duration: $duration, ')
           ..write('albumArtPath: $albumArtPath, ')
+          ..write('color: $color, ')
           ..write('discNumber: $discNumber, ')
           ..write('trackNumber: $trackNumber, ')
           ..write('year: $year, ')

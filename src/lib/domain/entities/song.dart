@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:equatable/equatable.dart';
 
 class Song extends Equatable {
@@ -17,6 +19,7 @@ class Song extends Equatable {
     required this.timeAdded,
     required this.trackNumber,
     this.albumArtPath,
+    this.color,
     this.year,
   });
 
@@ -41,6 +44,7 @@ class Song extends Equatable {
   final bool previous;
 
   final String? albumArtPath;
+  final Color? color;
   final int? year;
 
   final DateTime timeAdded;

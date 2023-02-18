@@ -35,6 +35,7 @@ class Albums extends Table {
   TextColumn get title => text()();
   TextColumn get artist => text()();
   TextColumn get albumArtPath => text().nullable()();
+  IntColumn get color => integer().nullable()();
   IntColumn get year => integer().nullable()();
 
   @override
@@ -50,6 +51,7 @@ class Songs extends Table {
   TextColumn get path => text()();
   IntColumn get duration => integer()();
   TextColumn get albumArtPath => text().nullable()();
+  IntColumn get color => integer().nullable()();
   IntColumn get discNumber => integer()();
   IntColumn get trackNumber => integer()();
   IntColumn get year => integer().nullable()();
@@ -219,7 +221,7 @@ class MainDatabase extends _$MainDatabase {
   MainDatabase.withQueryExecutor(QueryExecutor e) : super(e);
 
   @override
-  int get schemaVersion => 12;
+  int get schemaVersion => 16;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -392,7 +394,9 @@ class MainDatabase extends _$MainDatabase {
             await m.createTable(blockedFiles);
             await into(keyValueEntries).insert(
               const KeyValueEntriesCompanion(
-                  key: Value(SETTING_ALLOWED_EXTENSIONS), value: Value(ALLOWED_FILE_EXTENSIONS)),
+                key: Value(SETTING_ALLOWED_EXTENSIONS),
+                value: Value(ALLOWED_FILE_EXTENSIONS),
+              ),
             );
           }
           if (from < 12) {
@@ -400,6 +404,10 @@ class MainDatabase extends _$MainDatabase {
               key: Value(SETTING_PLAY_ALBUMS_IN_ORDER),
               value: Value('false'),
             ));
+          }
+          if (from < 13) {
+            await m.addColumn(songs, songs.color);
+            await m.addColumn(albums, albums.color);
           }
         },
       );

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:drift/drift.dart';
 import 'package:on_audio_query/on_audio_query.dart' as aq;
@@ -17,6 +19,7 @@ class SongModel extends Song {
     required Duration duration,
     required int blockLevel,
     String? albumArtPath,
+    Color? color,
     required int discNumber,
     required bool next,
     required bool previous,
@@ -35,6 +38,7 @@ class SongModel extends Song {
           path: path,
           title: title,
           albumArtPath: albumArtPath,
+          color: color,
           discNumber: discNumber,
           next: next,
           previous: previous,
@@ -45,34 +49,40 @@ class SongModel extends Song {
           year: year,
         );
 
-  factory SongModel.fromDrift(DriftSong driftSong) => SongModel(
-        album: driftSong.albumTitle,
-        albumId: driftSong.albumId,
-        artist: driftSong.artist,
-        blockLevel: driftSong.blockLevel,
-        duration: Duration(milliseconds: driftSong.duration),
-        path: driftSong.path,
-        title: driftSong.title,
-        albumArtPath: driftSong.albumArtPath,
-        discNumber: driftSong.discNumber,
-        next: driftSong.next,
-        previous: driftSong.previous,
-        trackNumber: driftSong.trackNumber,
-        likeCount: driftSong.likeCount,
-        playCount: driftSong.playCount,
-        timeAdded: driftSong.timeAdded,
-        lastModified: driftSong.lastModified,
-        year: driftSong.year,
-      );
+  factory SongModel.fromDrift(DriftSong driftSong) {
+    Color? color;
+    if (driftSong.color != null) color = Color(driftSong.color!);
+
+    return SongModel(
+      album: driftSong.albumTitle,
+      albumId: driftSong.albumId,
+      artist: driftSong.artist,
+      blockLevel: driftSong.blockLevel,
+      duration: Duration(milliseconds: driftSong.duration),
+      path: driftSong.path,
+      title: driftSong.title,
+      albumArtPath: driftSong.albumArtPath,
+      color: color,
+      discNumber: driftSong.discNumber,
+      next: driftSong.next,
+      previous: driftSong.previous,
+      trackNumber: driftSong.trackNumber,
+      likeCount: driftSong.likeCount,
+      playCount: driftSong.playCount,
+      timeAdded: driftSong.timeAdded,
+      lastModified: driftSong.lastModified,
+      year: driftSong.year,
+    );
+  }
 
   factory SongModel.fromOnAudioQuery({
     required String path,
     required aq.SongModel songModel,
     String? albumArtPath,
+    Color? color,
     required int albumId,
     required DateTime lastModified,
   }) {
-
     final data = songModel.getMap;
     final trackNumber = _parseTrackNumber(songModel.track);
 
@@ -87,6 +97,7 @@ class SongModel extends Song {
       discNumber: trackNumber[0],
       trackNumber: trackNumber[1],
       albumArtPath: albumArtPath,
+      color: color,
       next: false,
       previous: false,
       likeCount: 0,
@@ -113,6 +124,7 @@ class SongModel extends Song {
     String? path,
     String? title,
     String? albumArtPath,
+    Color? color,
     int? discNumber,
     bool? next,
     bool? previous,
@@ -132,6 +144,7 @@ class SongModel extends Song {
         path: path ?? this.path,
         title: title ?? this.title,
         albumArtPath: albumArtPath ?? this.albumArtPath,
+        color: color ?? this.color,
         discNumber: discNumber ?? this.discNumber,
         next: next ?? this.next,
         previous: previous ?? this.previous,
@@ -152,6 +165,7 @@ class SongModel extends Song {
         path: Value(path),
         title: Value(title),
         albumArtPath: Value(albumArtPath),
+        color: Value(color?.value),
         discNumber: Value(discNumber),
         year: Value(year),
         next: Value(next),
@@ -171,6 +185,7 @@ class SongModel extends Song {
         path: Value(path),
         duration: Value(duration.inMilliseconds),
         albumArtPath: Value(albumArtPath),
+        color: Value(color?.value),
         discNumber: Value(discNumber),
         trackNumber: Value(trackNumber),
         year: Value(year),
@@ -196,6 +211,7 @@ class SongModel extends Song {
             'likeCount': likeCount,
             'playCount': playCount,
             'timeAdded': timeAdded.millisecondsSinceEpoch,
+            'color': color?.value,
           });
 
   static List<int> _parseTrackNumber(int? number) {
