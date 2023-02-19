@@ -30,3 +30,7 @@ A music player that gets the best out of your local collection.
      height="80">](https://f-droid.org/packages/rocks.mucke/)
 
 Or get the latest APK from the [Releases section](https://github.com/moritz-weber/mucke/releases/latest).
+
+## Thanks
+
+Thanks to [@maxxs.arts](https://www.instagram.com/maxxs.arts/) for designing the logo 🤘
