@@ -6,8 +6,8 @@ import '../../models/artist_model.dart';
 import '../../models/history_entry_model.dart';
 import '../../models/playlist_model.dart';
 import '../../models/smart_list_model.dart';
-import '../history_data_source.dart';
 import '../drift_database.dart';
+import '../history_data_source.dart';
 
 part 'history_dao.g.dart';
 

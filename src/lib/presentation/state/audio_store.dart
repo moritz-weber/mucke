@@ -146,7 +146,7 @@ abstract class _AudioStore with Store {
 
   @computed
   bool get hasNext =>
-      (queueIndexStream.value != null && queueIndexStream.value! < _queue.length - 1) ||
+      (queueIndexStream.value != null && queueIndexStream.value! < queueLength - 1) ||
       (loopModeStream.value ?? LoopMode.off) != LoopMode.off;
 
   @computed

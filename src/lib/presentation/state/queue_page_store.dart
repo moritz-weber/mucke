@@ -30,14 +30,14 @@ abstract class _QueuePageStore with Store {
 
   @action
   void reset() {
-    isSelected = List.generate(_audioStore.queue.length, (index) => false).asObservable();
+    isSelected = List.generate(_audioStore.queueLength, (index) => false).asObservable();
     isMultiSelectEnabled = false;
   }
 
   @action
   void toggleMultiSelect() {
     if (!isMultiSelectEnabled) {
-      isSelected = List.generate(_audioStore.queue.length, (index) => false).asObservable();
+      isSelected = List.generate(_audioStore.queueLength, (index) => false).asObservable();
     }
     isMultiSelectEnabled = !isMultiSelectEnabled;
   }
@@ -49,12 +49,12 @@ abstract class _QueuePageStore with Store {
 
   @action
   void selectAll() {
-    isSelected = List.generate(_audioStore.queue.length, (index) => true).asObservable();
+    isSelected = List.generate(_audioStore.queueLength, (index) => true).asObservable();
   }
 
   @action
   void deselectAll() {
-    isSelected = List.generate(_audioStore.queue.length, (index) => false).asObservable();
+    isSelected = List.generate(_audioStore.queueLength, (index) => false).asObservable();
   }
 
   void dispose() {}

@@ -7,8 +7,8 @@ import '../../models/home_widgets/history_model.dart';
 import '../../models/home_widgets/home_widget_model.dart';
 import '../../models/home_widgets/playlists_model.dart';
 import '../../models/home_widgets/shuffle_all_model.dart';
-import '../home_widget_data_source.dart';
 import '../drift_database.dart';
+import '../home_widget_data_source.dart';
 
 part 'home_widget_dao.g.dart';
 

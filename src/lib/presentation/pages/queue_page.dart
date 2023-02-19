@@ -51,38 +51,40 @@ class QueuePage extends StatelessWidget {
           ),
           leadingWidth: 56 + HORIZONTAL_PADDING,
           toolbarHeight: 80.0,
-          title: Observer(builder: (context) {
-            final playable = audioStore.playableStream.value;
-            final numAvailableSongs = audioStore.numAvailableSongs;
+          title: Observer(
+            builder: (context) {
+              final playable = audioStore.playableStream.value;
+              final numAvailableSongs = audioStore.numAvailableSongs;
 
-            Widget subTitle = Container();
+              Widget subTitle = Container();
 
-            if (playable != null) {
-              subTitle = Text(
-                playable.repr(),
-                maxLines: 1,
+              if (playable != null) {
+                subTitle = Text(
+                  playable.repr(),
+                  maxLines: 1,
+                );
+              }
+
+              String text = '${audioStore.queueLength} songs in queue';
+              if (numAvailableSongs > 0) text += ', $numAvailableSongs more available';
+
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Currently playing'.toUpperCase(),
+                    style: TEXT_SMALL_HEADLINE,
+                  ),
+                  subTitle,
+                  const SizedBox(height: 4.0),
+                  Text(
+                    text,
+                    style: TEXT_SMALL_SUBTITLE.copyWith(color: Colors.white70),
+                  ),
+                ],
               );
-            }
-
-            String text = '${audioStore.queueLength} songs in queue';
-            if (numAvailableSongs > 0) text += ', $numAvailableSongs more available';
-
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Currently playing'.toUpperCase(),
-                  style: TEXT_SMALL_HEADLINE,
-                ),
-                subTitle,
-                const SizedBox(height: 4.0),
-                Text(
-                  text,
-                  style: TEXT_SMALL_SUBTITLE.copyWith(color: Colors.white70),
-                ),
-              ],
-            );
-          }),
+            },
+          ),
           centerTitle: false,
           actions: [
             Observer(
