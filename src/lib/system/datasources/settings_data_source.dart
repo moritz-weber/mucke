@@ -8,4 +8,7 @@ abstract class SettingsDataSource {
 
   Stream<bool> get playAlbumsInOrderStream;
   Future<void> setPlayAlbumsInOrder(bool playInOrder);
+
+  Stream<int> get listenedPercentageStream;
+  Future<void> setListenedPercentage(int percentage);
 }

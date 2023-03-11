@@ -47,8 +47,19 @@ class SettingsDao extends DatabaseAccessor<MainDatabase>
 
   @override
   Future<void> setPlayAlbumsInOrder(bool playInOrder) async {
-    print(playInOrder);
     await (update(keyValueEntries)..where((tbl) => tbl.key.equals(SETTING_PLAY_ALBUMS_IN_ORDER)))
         .write(KeyValueEntriesCompanion(value: Value(playInOrder ? 'true' : 'false')));
+  }
+
+  @override
+  Stream<int> get listenedPercentageStream =>
+      (select(keyValueEntries)..where((tbl) => tbl.key.equals(LISTENED_PERCENTAGE)))
+          .watchSingle()
+          .map((event) => int.parse(event.value));
+
+  @override
+  Future<void> setListenedPercentage(int percentage) async {
+    await (update(keyValueEntries)..where((tbl) => tbl.key.equals(LISTENED_PERCENTAGE)))
+        .write(KeyValueEntriesCompanion(value: Value(percentage.toString())));
   }
 }

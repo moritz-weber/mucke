@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
@@ -158,6 +160,10 @@ class SettingsPage extends StatelessWidget {
                 isThreeLine: true,
               ),
             ),
+            const Divider(
+              height: 4.0,
+            ),
+            PercentageSlider(settingsStore),
           ],
         ),
       ),
@@ -188,6 +194,72 @@ class SettingsSection extends StatelessWidget {
           distance: 8,
         ),
       ),
+    );
+  }
+}
+
+class PercentageSlider extends StatefulWidget {
+  const PercentageSlider(this.settingsStore, {super.key});
+
+  final SettingsStore settingsStore;
+
+  @override
+  State<PercentageSlider> createState() => _PercentageSliderState();
+}
+
+class _PercentageSliderState extends State<PercentageSlider> {
+  late double _value;
+  late StreamSubscription _streamSubscription;
+
+  @override
+  void initState() {
+    _value = (widget.settingsStore.listenedPercentageStream.value ?? 50).toDouble();
+    _streamSubscription = widget.settingsStore.listenedPercentageStream.listen(
+      (value) => setState(() => _value = value.toDouble()),
+    );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _streamSubscription.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(
+            left: HORIZONTAL_PADDING,
+            right: HORIZONTAL_PADDING,
+            top: 16.0,
+          ),
+          child: Text(
+            'Count songs as played after: ${_value.round()}%',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4.0),
+          child: Slider(
+            value: _value,
+            onChanged: (value) {
+              setState(() {
+                _value = value;
+              });
+            },
+            onChangeEnd: (value) {
+              widget.settingsStore.setListenedPercentage(value.round());
+            },
+            min: 1,
+            max: 99,
+          ),
+        ),
+      ],
     );
   }
 }

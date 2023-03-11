@@ -294,6 +294,9 @@ Future<void> setupGetIt() async {
       getIt(),
     ),
   );
+  getIt.registerLazySingleton<SettingsInfoRepository>(
+    () => getIt<SettingsRepository>(),
+  );
   getIt.registerLazySingleton<PlatformIntegrationRepository>(
     () => PlatformIntegrationRepositoryImpl(
       getIt(),
@@ -366,6 +369,7 @@ Future<void> setupGetIt() async {
 
   getIt.registerSingleton<AudioPlayerActor>(
     AudioPlayerActor(
+      getIt(),
       getIt(),
       getIt(),
       getIt(),

@@ -67,6 +67,23 @@ mixin _$SettingsStore on _SettingsStore, Store {
     });
   }
 
+  late final _$listenedPercentageStreamAtom =
+      Atom(name: '_SettingsStore.listenedPercentageStream', context: context);
+
+  @override
+  ObservableStream<int> get listenedPercentageStream {
+    _$listenedPercentageStreamAtom.reportRead();
+    return super.listenedPercentageStream;
+  }
+
+  @override
+  set listenedPercentageStream(ObservableStream<int> value) {
+    _$listenedPercentageStreamAtom
+        .reportWrite(value, super.listenedPercentageStream, () {
+      super.listenedPercentageStream = value;
+    });
+  }
+
   late final _$playAlbumsInOrderStreamAtom =
       Atom(name: '_SettingsStore.playAlbumsInOrderStream', context: context);
 
@@ -90,6 +107,7 @@ mixin _$SettingsStore on _SettingsStore, Store {
 libraryFoldersStream: ${libraryFoldersStream},
 fileExtensionsStream: ${fileExtensionsStream},
 blockedFilesStream: ${blockedFilesStream},
+listenedPercentageStream: ${listenedPercentageStream},
 playAlbumsInOrderStream: ${playAlbumsInOrderStream},
 numBlockedFiles: ${numBlockedFiles}
     ''';

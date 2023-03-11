@@ -6,3 +6,4 @@
 - Fix bug with smart lists in history entries
 - Added logging to files
 - Implement natural sorting for album songs (#59)
+- Add option for counting songs as played (#38)

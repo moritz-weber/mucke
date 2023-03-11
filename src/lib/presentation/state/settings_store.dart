@@ -33,6 +33,10 @@ abstract class _SettingsStore with Store {
   late ObservableStream<Set<String>> blockedFilesStream =
       _musicDataRepository.blockedFilesStream.asObservable(initialValue: {});
 
+  @observable
+  late ObservableStream<int> listenedPercentageStream =
+      _settingsRepository.listenedPercentageStream.asObservable();
+
   @computed
   int get numBlockedFiles => blockedFilesStream.value!.length;
 
@@ -64,6 +68,10 @@ abstract class _SettingsStore with Store {
 
   Future<void> setPlayAlbumsInOrder(bool playInOrder) async {
     await _settingsRepository.setPlayAlbumsInOrder(playInOrder);
+  }
+
+  Future<void> setListenedPercentage(int percentage) async {
+    await _settingsRepository.setListenedPercentage(percentage);
   }
 
   void dispose() {}

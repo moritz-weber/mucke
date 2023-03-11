@@ -221,7 +221,7 @@ class MainDatabase extends _$MainDatabase {
   MainDatabase.withQueryExecutor(QueryExecutor e) : super(e);
 
   @override
-  int get schemaVersion => 16;
+  int get schemaVersion => 17;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -238,7 +238,9 @@ class MainDatabase extends _$MainDatabase {
             );
             await into(keyValueEntries).insert(
               const KeyValueEntriesCompanion(
-                  key: Value(SETTING_ALLOWED_EXTENSIONS), value: Value(ALLOWED_FILE_EXTENSIONS)),
+                key: Value(SETTING_ALLOWED_EXTENSIONS),
+                value: Value(ALLOWED_FILE_EXTENSIONS),
+              ),
             );
             await into(keyValueEntries).insert(
               const KeyValueEntriesCompanion(
@@ -299,6 +301,12 @@ class MainDatabase extends _$MainDatabase {
                     'maxEntries': 3,
                   }),
                 ),
+              ),
+            );
+            await into(keyValueEntries).insert(
+              const KeyValueEntriesCompanion(
+                key: Value(LISTENED_PERCENTAGE),
+                value: Value('95'),
               ),
             );
           }
@@ -408,6 +416,14 @@ class MainDatabase extends _$MainDatabase {
           if (from < 13) {
             await m.addColumn(songs, songs.color);
             await m.addColumn(albums, albums.color);
+          }
+          if (from < 17) {
+            await into(keyValueEntries).insert(
+              const KeyValueEntriesCompanion(
+                key: Value(LISTENED_PERCENTAGE),
+                value: Value('95'),
+              ),
+            );
           }
         },
       );
