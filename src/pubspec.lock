@@ -289,6 +289,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.6"
+  fimber_io:
+    dependency: "direct main"
+    description:
+      name: fimber_io
+      sha256: "73eb090d4442f845a6ab4eeebbe973ca0f767fd67520ce4e2167aa2e3ae1bea9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.6.6"
   fixnum:
     dependency: transitive
     description:
@@ -318,14 +326,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.5"
-  flutter_fimber_filelogger:
-    dependency: "direct main"
-    description:
-      name: flutter_fimber_filelogger
-      sha256: "1f6e36528ae2dc2fa2f23d12af7da41b6c7dbbc194858470f9fab53d61351100"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0"
   flutter_mobx:
     dependency: "direct main"
     description:
@@ -424,14 +424,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
-  intl:
-    dependency: transitive
-    description:
-      name: intl
-      sha256: "910f85bce16fb5c6f614e117efa303e85a1731bb0081edf3604a2ae6e9a3cc91"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.17.0"
   io:
     dependency: transitive
     description:

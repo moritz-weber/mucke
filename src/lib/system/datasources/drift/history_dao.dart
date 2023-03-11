@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../../domain/entities/playable.dart';
 import '../../models/album_model.dart';
@@ -28,7 +29,8 @@ class HistoryDao extends DatabaseAccessor<MainDatabase>
   }
 
   @override
-  Stream<List<HistoryEntryModel>> historyStream({int? limit, required bool unique, required bool includeSearch}) {
+  Stream<List<HistoryEntryModel>> historyStream(
+      {int? limit, required bool unique, required bool includeSearch}) {
     // <- make a function out of this? for limit and sorting options?
     final query = select(historyEntries).join([
       leftOuterJoin(playlists, playlists.id.cast<String>().equalsExp(historyEntries.identifier)),
@@ -52,31 +54,46 @@ class HistoryDao extends DatabaseAccessor<MainDatabase>
       query.limit(limit);
     }
 
-    return query.watch().map((results) => results.map((e) {
+    final historyStream = query.watch();
+    final slArtistStream = (select(smartListArtists).join(
+      [innerJoin(artists, artists.name.equalsExp(smartListArtists.artistName))],
+    )).watch();
+
+    return Rx.combineLatest2<List<TypedResult>, List<TypedResult>, List<HistoryEntryModel>>(
+      historyStream,
+      slArtistStream,
+      (history, slArtists) {
+        return history.map((e) {
           final entry = e.readTable(historyEntries);
           final etype = entry.type.toPlayableType();
 
+          Playable playable = SearchQuery('Something went wrong here!');
+
           switch (etype) {
             case PlayableType.album:
-              return HistoryEntryModel.fromDrift(entry, AlbumModel.fromDrift(e.readTable(albums)));
+              playable = AlbumModel.fromDrift(e.readTable(albums));
+              break;
             case PlayableType.artist:
-              return HistoryEntryModel.fromDrift(entry, ArtistModel.fromDrift(e.readTable(artists)));
+              playable = ArtistModel.fromDrift(e.readTable(artists));
+              break;
             case PlayableType.playlist:
-              return HistoryEntryModel.fromDrift(
-                  entry, PlaylistModel.fromDrift(e.readTable(playlists)));
+              playable = PlaylistModel.fromDrift(e.readTable(playlists));
+              break;
             case PlayableType.smartlist:
-              return HistoryEntryModel.fromDrift(
-                entry,
-                SmartListModel.fromDrift(
-                  e.readTable(smartLists),
-                  null, // TODO: how do we open a SmartListPage with an incomplete SmartListModel?
-                ),
-              );
+              final driftArtists = (slArtists.where((element) =>
+                  element.readTable(smartListArtists).smartListId ==
+                  int.parse(entry.identifier))).map((e) => e.readTable(artists)).toList();
+              playable = SmartListModel.fromDrift(e.readTable(smartLists), driftArtists);
+              break;
             case PlayableType.search:
-              return HistoryEntryModel.fromDrift(entry, SearchQuery(entry.identifier));
-            default:
-              return HistoryEntryModel.fromDrift(entry, SearchQuery('Something went wrong here!'));
+              playable = SearchQuery(entry.identifier);
+              break;
+            case PlayableType.all:
+              break;
           }
-        }).toList());
+          return HistoryEntryModel.fromDrift(entry, playable);
+        }).toList();
+      },
+    );
   }
 }

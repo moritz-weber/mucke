@@ -41,6 +41,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
       await _onAudioQuery.scanMedia(libDir.path);
       aqSongs.addAll(await _onAudioQuery.querySongs(path: libDir.path));
     }
+    _log.d('Found ${aqSongs.length} songs');
 
     final List<SongModel> songs = [];
     final List<AlbumModel> albums = [];
@@ -66,6 +67,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     for (final aqSong in aqSongs.toSet()) {
       if (!allowedExtensions.contains(aqSong.fileExtension.toLowerCase())) continue;
       if (blockedPaths.contains(aqSong.data)) continue;
+      _log.d('Checking song: ${aqSong.data}');
 
       final data = aqSong.getMap;
       // changed includes the creation time

@@ -16,10 +16,10 @@ dependencies:
   equatable: ^2.0.3  # MIT
   file_picker: ^5.2.5  # MIT
   fimber: ^0.6.1  # Apache 2.0
+  fimber_io: ^0.6.6  # Apache 2.0
   flutter:
     sdk: flutter
   flutter_fimber: ^0.6.3  # Apache 2.0
-  flutter_fimber_filelogger: ^2.0.0  # DEPRECATED -> fimber_io
   flutter_mobx: ^2.0.0  # MIT
   flutter_speed_dial: ^6.2.0  # MIT
   get_it: ^7.1.3  # MIT

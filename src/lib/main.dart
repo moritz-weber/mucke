@@ -1,10 +1,10 @@
 import 'package:audio_session/audio_session.dart';
-import 'package:fimber/fimber.dart';
+import 'package:fimber_io/fimber_io.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_fimber_filelogger/flutter_fimber_filelogger.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'domain/actors/persistence_actor.dart';
 import 'injection_container.dart';
@@ -17,19 +17,16 @@ import 'presentation/widgets/navbar.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final dir = await getExternalStorageDirectory();
+  Fimber.plantTree(TimedRollingFileTree(
+    filenamePrefix: '${dir?.path}/logs/',
+  ));
+  // Fimber.plantTree(DebugTree());
+
   await setupGetIt();
 
   final session = await AudioSession.instance;
   await session.configure(const AudioSessionConfiguration.music());
-
-  Fimber.plantTree(
-    FileLoggerTree(
-      levels: FileLoggerLevels.ALL,
-      numberOfDays: 10,
-      logDateFormat: 'HH:mm:ss',
-    ),
-  );
-  Fimber.plantTree(DebugTree());
 
   await GetIt.I<PersistenceActor>().init();
 
