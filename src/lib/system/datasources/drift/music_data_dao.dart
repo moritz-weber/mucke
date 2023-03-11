@@ -31,29 +31,23 @@ class MusicDataDao extends DatabaseAccessor<MainDatabase>
 
   @override
   Stream<List<SongModel>> get songStream {
-    return (select(songs)..orderBy([(t) => OrderingTerm(expression: t.title)]))
-        .watch()
-        .map((driftSongList) => driftSongList
-            .map((driftSong) => SongModel.fromDrift(driftSong))
-            .toList());
+    return (select(songs)..orderBy([(t) => OrderingTerm(expression: t.title)])).watch().map(
+        (driftSongList) =>
+            driftSongList.map((driftSong) => SongModel.fromDrift(driftSong)).toList());
   }
 
   @override
   Stream<List<AlbumModel>> get albumStream {
-    return (select(albums)..orderBy([(t) => OrderingTerm(expression: t.title)]))
-        .watch()
-        .map((driftAlbumList) => driftAlbumList
-            .map((driftAlbum) => AlbumModel.fromDrift(driftAlbum))
-            .toList());
+    return (select(albums)..orderBy([(t) => OrderingTerm(expression: t.title)])).watch().map(
+        (driftAlbumList) =>
+            driftAlbumList.map((driftAlbum) => AlbumModel.fromDrift(driftAlbum)).toList());
   }
 
   @override
   Stream<List<ArtistModel>> get artistStream {
-    return (select(artists)..orderBy([(t) => OrderingTerm(expression: t.name)]))
-        .watch()
-        .map((driftArtistList) => driftArtistList
-            .map((driftArtist) => ArtistModel.fromDrift(driftArtist))
-            .toList());
+    return (select(artists)..orderBy([(t) => OrderingTerm(expression: t.name)])).watch().map(
+        (driftArtistList) =>
+            driftArtistList.map((driftArtist) => ArtistModel.fromDrift(driftArtist)).toList());
   }
 
   @override
@@ -62,28 +56,22 @@ class MusicDataDao extends DatabaseAccessor<MainDatabase>
           ..where((tbl) => tbl.albumId.equals(album.id))
           ..orderBy([
             (t) => OrderingTerm(expression: t.discNumber),
-            (t) => OrderingTerm(expression: t.trackNumber)
-          ]))
-        .watch()
-        .distinct(const ListEquality().equals)
-        .map((driftSongList) => driftSongList
-            .map((driftSong) => SongModel.fromDrift(driftSong))
-            .toList());
-  }
-
-  @override
-  Stream<List<AlbumModel>> getArtistAlbumStream(ArtistModel artist) {
-    return (select(albums)
-          ..where((tbl) => tbl.artist.equals(artist.name))
-          ..orderBy([
+            (t) => OrderingTerm(expression: t.trackNumber),
             (t) => OrderingTerm(expression: t.title),
           ]))
         .watch()
         .distinct(const ListEquality().equals)
+        .map((driftSongList) =>
+            driftSongList.map((driftSong) => SongModel.fromDrift(driftSong)).toList());
+  }
+
+  @override
+  Stream<List<AlbumModel>> getArtistAlbumStream(ArtistModel artist) {
+    return (select(albums)..where((tbl) => tbl.artist.equals(artist.name)))
+        .watch()
+        .distinct(const ListEquality().equals)
         .map((driftAlbumList) {
-      return driftAlbumList
-          .map((driftAlbum) => AlbumModel.fromDrift(driftAlbum))
-          .toList();
+      return driftAlbumList.map((driftAlbum) => AlbumModel.fromDrift(driftAlbum)).toList();
     });
   }
 
@@ -95,17 +83,14 @@ class MusicDataDao extends DatabaseAccessor<MainDatabase>
         .watch()
         .distinct(const ListEquality().equals)
         .map(
-          (driftSongList) => driftSongList
-              .map((driftSong) => SongModel.fromDrift(driftSong))
-              .toList(),
+          (driftSongList) =>
+              driftSongList.map((driftSong) => SongModel.fromDrift(driftSong)).toList(),
         );
   }
 
   @override
   Future<SongModel?> getSongByPath(String path) async {
-    return (select(songs)..where((t) => t.path.equals(path)))
-        .getSingleOrNull()
-        .then(
+    return (select(songs)..where((t) => t.path.equals(path))).getSingleOrNull().then(
           (driftSong) => driftSong == null ? null : SongModel.fromDrift(driftSong),
         );
   }
@@ -135,12 +120,9 @@ class MusicDataDao extends DatabaseAccessor<MainDatabase>
       });
     });
 
-    deletedSongs.addAll(await (select(songs)
-          ..where((tbl) => tbl.present.equals(false)))
-        .get()
-        .then((driftSongList) => driftSongList
-            .map((driftSong) => SongModel.fromDrift(driftSong))
-            .toList()));
+    deletedSongs.addAll(await (select(songs)..where((tbl) => tbl.present.equals(false))).get().then(
+        (driftSongList) =>
+            driftSongList.map((driftSong) => SongModel.fromDrift(driftSong)).toList()));
 
     await (delete(songs)..where((tbl) => tbl.present.equals(false))).go();
 
@@ -187,9 +169,8 @@ class MusicDataDao extends DatabaseAccessor<MainDatabase>
             (t) => OrderingTerm(expression: t.trackNumber)
           ]))
         .get()
-        .then((driftSongList) => driftSongList
-            .map((driftSong) => SongModel.fromDrift(driftSong))
-            .toList());
+        .then((driftSongList) =>
+            driftSongList.map((driftSong) => SongModel.fromDrift(driftSong)).toList());
 
     SongModel? prevSong;
     for (final s in albumSongs) {
@@ -210,9 +191,8 @@ class MusicDataDao extends DatabaseAccessor<MainDatabase>
             (t) => OrderingTerm(expression: t.trackNumber)
           ]))
         .get()
-        .then((driftSongList) => driftSongList
-            .map((driftSong) => SongModel.fromDrift(driftSong))
-            .toList());
+        .then((driftSongList) =>
+            driftSongList.map((driftSong) => SongModel.fromDrift(driftSong)).toList());
 
     bool current = false;
     SongModel? nextSong;
@@ -231,15 +211,13 @@ class MusicDataDao extends DatabaseAccessor<MainDatabase>
   @override
   Future<void> updateSongs(List<SongModel> songModels) async {
     await batch((batch) {
-      batch.replaceAll(
-          songs, songModels.map((e) => e.toSongsCompanion()).toList());
+      batch.replaceAll(songs, songModels.map((e) => e.toSongsCompanion()).toList());
     });
   }
 
   @override
   Future<AlbumOfDay?> getAlbumOfDay() async {
-    final value = await (select(keyValueEntries)
-          ..where((tbl) => tbl.key.equals(ALBUM_OF_DAY)))
+    final value = await (select(keyValueEntries)..where((tbl) => tbl.key.equals(ALBUM_OF_DAY)))
         .getSingleOrNull()
         .then((entry) => entry?.value);
 
@@ -252,15 +230,13 @@ class MusicDataDao extends DatabaseAccessor<MainDatabase>
     final int id = dict['id'] as int;
     final int millisecondsSinceEpoch = dict['date'] as int;
 
-    final AlbumModel? album = await (select(albums)
-          ..where((tbl) => tbl.id.equals(id)))
+    final AlbumModel? album = await (select(albums)..where((tbl) => tbl.id.equals(id)))
         .getSingleOrNull()
         .then((value) => value == null ? null : AlbumModel.fromDrift(value));
 
     if (album == null) return null;
 
-    return AlbumOfDay(
-        album, DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch));
+    return AlbumOfDay(album, DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch));
   }
 
   @override
@@ -275,8 +251,7 @@ class MusicDataDao extends DatabaseAccessor<MainDatabase>
 
   @override
   Future<ArtistOfDay?> getArtistOfDay() async {
-    final value = await (select(keyValueEntries)
-          ..where((tbl) => tbl.key.equals(ARTIST_OF_DAY)))
+    final value = await (select(keyValueEntries)..where((tbl) => tbl.key.equals(ARTIST_OF_DAY)))
         .getSingleOrNull()
         .then((entry) => entry?.value);
 
@@ -289,15 +264,13 @@ class MusicDataDao extends DatabaseAccessor<MainDatabase>
     final int id = dict['id'] as int;
     final int millisecondsSinceEpoch = dict['date'] as int;
 
-    final ArtistModel? artist = await (select(artists)
-          ..where((tbl) => tbl.id.equals(id)))
+    final ArtistModel? artist = await (select(artists)..where((tbl) => tbl.id.equals(id)))
         .getSingleOrNull()
         .then((value) => value == null ? null : ArtistModel.fromDrift(value));
 
     if (artist == null) return null;
 
-    return ArtistOfDay(
-        artist, DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch));
+    return ArtistOfDay(artist, DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch));
   }
 
   @override
@@ -313,13 +286,10 @@ class MusicDataDao extends DatabaseAccessor<MainDatabase>
   @override
   Future<List<AlbumModel>> searchAlbums(String searchText, {int? limit}) async {
     final List<AlbumModel> result = await (select(albums)
-          ..where((tbl) =>
-              tbl.title.regexp(searchText, dotAll: true, caseSensitive: false)))
+          ..where((tbl) => tbl.title.regexp(searchText, dotAll: true, caseSensitive: false)))
         .get()
         .then(
-          (driftList) => driftList
-              .map((driftAlbum) => AlbumModel.fromDrift(driftAlbum))
-              .toList(),
+          (driftList) => driftList.map((driftAlbum) => AlbumModel.fromDrift(driftAlbum)).toList(),
         );
 
     if (limit != null) {
@@ -330,16 +300,13 @@ class MusicDataDao extends DatabaseAccessor<MainDatabase>
   }
 
   @override
-  Future<List<ArtistModel>> searchArtists(String searchText,
-      {int? limit}) async {
+  Future<List<ArtistModel>> searchArtists(String searchText, {int? limit}) async {
     final List<ArtistModel> result = await (select(artists)
-          ..where((tbl) =>
-              tbl.name.regexp(searchText, dotAll: true, caseSensitive: false)))
+          ..where((tbl) => tbl.name.regexp(searchText, dotAll: true, caseSensitive: false)))
         .get()
         .then(
-          (driftList) => driftList
-              .map((driftArtist) => ArtistModel.fromDrift(driftArtist))
-              .toList(),
+          (driftList) =>
+              driftList.map((driftArtist) => ArtistModel.fromDrift(driftArtist)).toList(),
         );
 
     if (limit != null) {
@@ -352,13 +319,10 @@ class MusicDataDao extends DatabaseAccessor<MainDatabase>
   @override
   Future<List<SongModel>> searchSongs(String searchText, {int? limit}) async {
     final List<SongModel> result = await (select(songs)
-          ..where((tbl) =>
-              tbl.title.regexp(searchText, dotAll: true, caseSensitive: false)))
+          ..where((tbl) => tbl.title.regexp(searchText, dotAll: true, caseSensitive: false)))
         .get()
         .then(
-          (driftList) => driftList
-              .map((driftSong) => SongModel.fromDrift(driftSong))
-              .toList(),
+          (driftList) => driftList.map((driftSong) => SongModel.fromDrift(driftSong)).toList(),
         );
 
     if (limit != null) {
@@ -370,10 +334,7 @@ class MusicDataDao extends DatabaseAccessor<MainDatabase>
 
   @override
   Stream<SongModel> getSongStream(String path) {
-    return (select(songs)..where((t) => t.path.equals(path)))
-        .watchSingle()
-        .distinct()
-        .map(
+    return (select(songs)..where((t) => t.path.equals(path))).watchSingle().distinct().map(
           (driftSong) => SongModel.fromDrift(driftSong),
         );
   }
@@ -409,8 +370,7 @@ class MusicDataDao extends DatabaseAccessor<MainDatabase>
       );
 
       // delete songs
-      batch.deleteWhere<$SongsTable, dynamic>(
-          songs, (tbl) => tbl.path.isIn(paths));
+      batch.deleteWhere<$SongsTable, dynamic>(songs, (tbl) => tbl.path.isIn(paths));
     });
 
     // delete empty albums
@@ -422,9 +382,7 @@ class MusicDataDao extends DatabaseAccessor<MainDatabase>
 
   // Delete empty albums and all their database appearances.
   Future<void> _deleteAlbumIfEmpty(int albumId) async {
-    final aSongs = await (select(songs)
-          ..where((tbl) => tbl.albumId.equals(albumId)))
-        .get();
+    final aSongs = await (select(songs)..where((tbl) => tbl.albumId.equals(albumId))).get();
     if (aSongs.isEmpty) {
       await (delete(albums)..where((tbl) => tbl.id.equals(albumId))).go();
       // delete history entries with this album
@@ -438,15 +396,11 @@ class MusicDataDao extends DatabaseAccessor<MainDatabase>
 
   // Delete empty artists and all their database appearances.
   Future<void> _deleteArtistIfEmpty(String name) async {
-    final aAlbums =
-        await (select(albums)..where((tbl) => tbl.artist.equals(name))).get();
+    final aAlbums = await (select(albums)..where((tbl) => tbl.artist.equals(name))).get();
     if (aAlbums.isEmpty) {
-      final emptyArtists =
-          await (select(artists)..where((tbl) => tbl.name.equals(name))).get();
+      final emptyArtists = await (select(artists)..where((tbl) => tbl.name.equals(name))).get();
       await (delete(artists)..where((tbl) => tbl.name.equals(name))).go();
-      await (delete(smartListArtists)
-            ..where((tbl) => tbl.artistName.equals(name)))
-          .go();
+      await (delete(smartListArtists)..where((tbl) => tbl.artistName.equals(name))).go();
 
       for (final emptyArtist in emptyArtists) {
         (delete(historyEntries)
@@ -459,15 +413,13 @@ class MusicDataDao extends DatabaseAccessor<MainDatabase>
   }
 
   @override
-  Stream<Set<String>> get blockedFilesStream => select(blockedFiles)
-      .watch()
-      .map((value) => value.map((e) => e.path).toSet());
+  Stream<Set<String>> get blockedFilesStream =>
+      select(blockedFiles).watch().map((value) => value.map((e) => e.path).toSet());
 
   @override
   Future<void> removeBlockedFiles(List<String> paths) async {
     await batch((batch) {
-      batch.deleteWhere<$BlockedFilesTable, dynamic>(
-          blockedFiles, (tbl) => tbl.path.isIn(paths));
+      batch.deleteWhere<$BlockedFilesTable, dynamic>(blockedFiles, (tbl) => tbl.path.isIn(paths));
     });
   }
 
@@ -480,9 +432,7 @@ class MusicDataDao extends DatabaseAccessor<MainDatabase>
 
     // delete history entries with missing album
     for (final entry in albumHistoryEntries) {
-      if ((await (select(albums)
-                ..where((tbl) => tbl.id.equals(int.parse(entry.identifier))))
-              .get())
+      if ((await (select(albums)..where((tbl) => tbl.id.equals(int.parse(entry.identifier)))).get())
           .isEmpty) {
         (delete(historyEntries)
               ..where((tbl) =>
@@ -499,8 +449,7 @@ class MusicDataDao extends DatabaseAccessor<MainDatabase>
 
     // delete history entries with missing album
     for (final entry in artistHistoryEntries) {
-      if ((await (select(artists)
-                ..where((tbl) => tbl.id.equals(int.parse(entry.identifier))))
+      if ((await (select(artists)..where((tbl) => tbl.id.equals(int.parse(entry.identifier))))
               .get())
           .isEmpty) {
         (delete(historyEntries)

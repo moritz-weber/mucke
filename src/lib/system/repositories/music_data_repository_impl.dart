@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:fimber/fimber.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:string_similarity/string_similarity.dart';
@@ -83,8 +84,9 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   Stream<List<String>> get songRemovalStream => _songRemovalSubject.stream;
 
   @override
-  Stream<List<Song>> getAlbumSongStream(Album album) =>
-      _musicDataSource.getAlbumSongStream(album as AlbumModel);
+  Stream<List<Song>> getAlbumSongStream(Album album) => _musicDataSource
+      .getAlbumSongStream(album as AlbumModel)
+      .map((songs) => _sortAlbumSongs(songs));
 
   @override
   Stream<List<Song>> getArtistSongStream(Artist artist) =>
@@ -246,6 +248,15 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
           return r;
         },
       );
+  }
+
+  List<Song> _sortAlbumSongs(List<Song> songs) {
+    return songs
+      ..sort((a, b) {
+        if (a.discNumber != b.discNumber) return a.discNumber.compareTo(b.discNumber);
+        if (a.trackNumber != b.trackNumber) return a.trackNumber.compareTo(b.trackNumber);
+        return compareNatural(a.title, b.title);
+      });
   }
 
   List<Album> _sortArtistAlbums(List<Album> albums) {
