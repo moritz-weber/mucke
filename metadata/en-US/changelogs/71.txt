@@ -1,0 +1,5 @@
+- Add option for counting songs as played (#38)
+- Fix album cover bug on currently playing page (#57)
+- Implement natural sorting for album songs (#59)
+- Fix bug with smart lists in history entries
+- Added logging to files
