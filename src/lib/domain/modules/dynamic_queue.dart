@@ -435,7 +435,7 @@ class DynamicQueue implements ManagedQueueInfo {
     if (index >= queue.length) return queue.length;
 
     int i = index;
-    while (_queue[i].source == QueueItemSource.added) {
+    while (i < queue.length && _queue[i].source == QueueItemSource.added) {
       i++;
     }
 

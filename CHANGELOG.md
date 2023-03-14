@@ -1,3 +1,7 @@
+## Unreleased Changes
+
+- Fixed bug in "Append to manually queued songs"
+
 ## 1.2.0
 
 - Upgrade to Flutter 3.7 & dependency updates
