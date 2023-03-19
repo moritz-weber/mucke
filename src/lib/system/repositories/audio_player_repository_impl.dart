@@ -151,7 +151,7 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   @override
   Future<void> moveQueueItem(int oldIndex, int newIndex) async {
     _dynamicQueue.moveQueueItem(oldIndex, newIndex);
-    final newCurrentIndex = _calcNewCurrentIndexOnMove(
+    final newCurrentIndex = _audioPlayerDataSource.calcNewCurrentIndexOnMove(
       currentIndexStream.value ?? 0,
       oldIndex,
       newIndex,
@@ -335,23 +335,6 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
       }
     }
     return result;
-  }
-
-  /// Calculate the new current index when moving a song from [oldIndex] to [newIndex].
-  int _calcNewCurrentIndexOnMove(int currentIndex, int oldIndex, int newIndex) {
-    int newCurrentIndex = currentIndex;
-    if (oldIndex == currentIndex) {
-      // moving the currently playing song
-      newCurrentIndex = newIndex;
-    } else {
-      if (oldIndex < currentIndex) {
-        newCurrentIndex--;
-      }
-      if (newIndex < currentIndex) {
-        newCurrentIndex++;
-      }
-    }
-    return newCurrentIndex;
   }
 
   @override

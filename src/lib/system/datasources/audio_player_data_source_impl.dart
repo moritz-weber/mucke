@@ -172,18 +172,7 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
   @override
   Future<void> moveQueueItem(int oldIndex, int newIndex) async {
     _log.d('moveQueueItem: $oldIndex -> $newIndex');
-    final int oldCurrentIndex = currentIndexStream.value;
-    int newCurrentIndex = oldCurrentIndex;
-    if (oldIndex == oldCurrentIndex) {
-      newCurrentIndex = newIndex;
-    } else {
-      if (oldIndex < oldCurrentIndex) {
-        newCurrentIndex--;
-      }
-      if (newIndex < oldCurrentIndex) {
-        newCurrentIndex++;
-      }
-    }
+    final newCurrentIndex = calcNewCurrentIndexOnMove(currentIndexStream.value, oldIndex, newIndex);
 
     final song = _queue[oldIndex];
     final newQueue = List<SongModel>.from(_queue);
@@ -501,5 +490,25 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
     if (duration != null) {
       await _audioPlayer.seek(duration * position);
     }
+  }
+  
+  @override
+  int calcNewCurrentIndexOnMove(int currentIndex, int oldIndex, int newIndex) {
+    int newCurrentIndex = currentIndex;
+    if (oldIndex == currentIndex) {
+      // moving the currently playing song
+      newCurrentIndex = newIndex;
+    } else {
+      if (oldIndex < currentIndex) {
+        // equality is caught by the first if
+        newCurrentIndex--;
+      }
+      if (oldIndex > currentIndex && newIndex <= currentIndex) {
+        newCurrentIndex++;
+      } else if (newIndex < currentIndex) {
+        newCurrentIndex++;
+      }
+    }
+    return newCurrentIndex;
   }
 }

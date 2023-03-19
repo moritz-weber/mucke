@@ -35,4 +35,7 @@ abstract class AudioPlayerDataSource {
   Future<void> seekToIndex(int index);
 
   Future<void> setLoopMode(LoopMode loopMode);
+
+  /// Calculate the new current index when moving a song from [oldIndex] to [newIndex].
+  int calcNewCurrentIndexOnMove(int currentIndex, int oldIndex, int newIndex);
 }

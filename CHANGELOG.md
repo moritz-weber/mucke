@@ -1,6 +1,7 @@
 ## Unreleased Changes
 
 - Fixed bug in "Append to manually queued songs"
+- Fixed bug in queue when moving a song directly before the currently playing song
 
 ## 1.2.0
 
