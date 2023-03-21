@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
@@ -39,10 +40,11 @@ class _HistoryFormPageState extends State<HistoryFormPage> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            'Edit History Widget',
+          title: Text(
+            L10n.of(context)!.history,
             style: TEXT_HEADER,
           ),
+          centerTitle: true,
           leading: IconButton(
             icon: const Icon(Icons.close_rounded),
             onPressed: () => navStore.pop(context),
@@ -69,8 +71,8 @@ class _HistoryFormPageState extends State<HistoryFormPage> {
                   delegate: SliverChildListDelegate(
                     [
                       const SizedBox(height: 16.0),
-                      const ListTile(
-                        title: Text('Display Settings', style: TEXT_HEADER),
+                      ListTile(
+                        title: Text(L10n.of(context)!.displaySettings, style: TEXT_HEADER),
                       ),
                       Card(
                         child: Padding(
@@ -88,7 +90,7 @@ class _HistoryFormPageState extends State<HistoryFormPage> {
                                       child: Container(
                                         color: Colors.transparent,
                                         height: 48.0,
-                                        child: const Text('Maximum Number of Entries'),
+                                        child: Text(L10n.of(context)!.maxNumberEntries),
                                         alignment: Alignment.centerLeft,
                                       ),
                                     ),

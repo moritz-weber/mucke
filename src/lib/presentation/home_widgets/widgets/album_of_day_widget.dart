@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../domain/entities/album.dart';
-import '../pages/album_details_page.dart';
-import '../state/audio_store.dart';
-import '../state/music_data_store.dart';
-import '../state/navigation_store.dart';
-import '../theming.dart';
-import '../utils.dart';
+import '../../../domain/entities/album.dart';
+import '../../pages/album_details_page.dart';
+import '../../state/audio_store.dart';
+import '../../state/music_data_store.dart';
+import '../../state/navigation_store.dart';
+import '../../theming.dart';
+import '../../utils.dart';
 
-class HighlightAlbum extends StatelessWidget {
-  const HighlightAlbum({Key? key}) : super(key: key);
+class AlbumOfDayWidget extends StatelessWidget {
+  const AlbumOfDayWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +69,7 @@ class HighlightAlbum extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Album of the Day'.toUpperCase(),
+                            L10n.of(context)!.albumOfTheDay.toUpperCase(),
                             style: TEXT_SMALL_HEADLINE,
                           ),
                           Container(height: 6.0),

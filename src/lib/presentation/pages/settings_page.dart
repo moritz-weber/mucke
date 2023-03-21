@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
@@ -26,8 +27,8 @@ class SettingsPage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            'Settings',
+          title: Text(
+            L10n.of(context)!.settings,
             style: TEXT_HEADER,
           ),
           leading: IconButton(
@@ -38,14 +39,16 @@ class SettingsPage extends StatelessWidget {
         ),
         body: ListView(
           children: [
-            const SettingsSection(text: 'Library'),
+            SettingsSection(text: L10n.of(context)!.library),
             ListTile(
-              title: const Text('Update library'),
+              title: Text(L10n.of(context)!.updateLibrary),
               subtitle: Observer(builder: (_) {
                 final int artistCount = musicDataStore.artistStream.value?.length ?? 0;
                 final int albumCount = musicDataStore.albumStream.value?.length ?? 0;
                 final int songCount = musicDataStore.songStream.value?.length ?? 0;
-                return Text('$artistCount artists, $albumCount albums, $songCount songs');
+                return Text(
+                  L10n.of(context)!.artistsAlbumsSongs(artistCount, albumCount, songCount),
+                );
               }),
               onTap: () => musicDataStore.updateDatabase(),
               trailing: Observer(builder: (_) {
@@ -62,7 +65,7 @@ class SettingsPage extends StatelessWidget {
               height: 4.0,
             ),
             ListTile(
-              title: const Text('Manage library folders'),
+              title: Text(L10n.of(context)!.manageLibraryFolders),
               trailing: const Icon(Icons.chevron_right_rounded),
               onTap: () => navStore.push(
                 context,
@@ -74,9 +77,12 @@ class SettingsPage extends StatelessWidget {
             const Divider(
               height: 4.0,
             ),
-            const ListTile(
-              title: Text('Allowed file extensions'),
-              subtitle: Text('Comma-separated list. Lower- or uppercase does not matter.'),
+            ListTile(
+              title: Text(L10n.of(context)!.allowedFileExtensions),
+              subtitle: Text(
+                L10n.of(context)!.allowedFileExtensionsDescription,
+                style: TEXT_SMALL_SUBTITLE,
+              ),
             ),
             Padding(
               padding: const EdgeInsets.only(
@@ -135,8 +141,8 @@ class SettingsPage extends StatelessWidget {
                 final blockedFiles = settingsStore.numBlockedFiles;
 
                 return ListTile(
-                  title: const Text('Manage blocked files'),
-                  subtitle: Text('Number of currently blocked files: $blockedFiles'),
+                  title: Text(L10n.of(context)!.manageBlockedFiles),
+                  subtitle: Text(L10n.of(context)!.numberOfBlockedFiles(blockedFiles)),
                   trailing: const Icon(Icons.chevron_right_rounded),
                   onTap: () => navStore.push(
                     context,
@@ -147,14 +153,14 @@ class SettingsPage extends StatelessWidget {
                 );
               },
             ),
-            const SettingsSection(text: 'Playback'),
+            SettingsSection(text: L10n.of(context)!.playback),
             Observer(
               builder: (context) => SwitchListTile(
                 value: settingsStore.playAlbumsInOrderStream.value ?? false,
                 onChanged: settingsStore.setPlayAlbumsInOrder,
-                title: const Text('Play albums in order'),
-                subtitle: const Text(
-                  'When you click a song in an album the songs will be played in order instead of keeping the previous play mode.',
+                title: Text(L10n.of(context)!.playAlbumsInOrder),
+                subtitle: Text(
+                  L10n.of(context)!.playAlbumsInOrderDescription,
                   style: TEXT_SMALL_SUBTITLE,
                 ),
                 isThreeLine: true,
@@ -239,7 +245,7 @@ class _PercentageSliderState extends State<PercentageSlider> {
             top: 16.0,
           ),
           child: Text(
-            'Count songs as played after: ${_value.round()}%',
+            L10n.of(context)!.countSongsPlayed(_value.round()),
             style: Theme.of(context).textTheme.titleMedium,
           ),
         ),

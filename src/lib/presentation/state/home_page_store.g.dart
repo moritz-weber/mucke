@@ -13,13 +13,13 @@ mixin _$HomePageStore on _HomePageStore, Store {
       Atom(name: '_HomePageStore.homeWidgetsStream', context: context);
 
   @override
-  ObservableStream<List<HomeWidget>> get homeWidgetsStream {
+  ObservableStream<List<HomeWidgetRepr>> get homeWidgetsStream {
     _$homeWidgetsStreamAtom.reportRead();
     return super.homeWidgetsStream;
   }
 
   @override
-  set homeWidgetsStream(ObservableStream<List<HomeWidget>> value) {
+  set homeWidgetsStream(ObservableStream<List<HomeWidgetRepr>> value) {
     _$homeWidgetsStreamAtom.reportWrite(value, super.homeWidgetsStream, () {
       super.homeWidgetsStream = value;
     });

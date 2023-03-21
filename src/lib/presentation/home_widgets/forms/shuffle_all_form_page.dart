@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../../domain/entities/home_widgets/shuffle_all.dart';
 import '../../../domain/entities/shuffle_mode.dart';
+import '../../l10n_utils.dart';
 import '../../state/home_widget_forms/shuffleall_form_store.dart';
 import '../../state/navigation_store.dart';
 import '../../theming.dart';
@@ -37,19 +39,14 @@ class _ShuffleAllFormPageState extends State<ShuffleAllFormPage> {
   Widget build(BuildContext context) {
     final NavigationStore navStore = GetIt.I<NavigationStore>();
 
-    const playbackModeTexts = <String>[
-      'Normal Mode',
-      'Shuffle Mode',
-      'Favorite Shuffle Mode',
-    ];
-
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            'Edit Shuffle All Widget',
+          title: Text(
+            L10n.of(context)!.shuffleAll,
             style: TEXT_HEADER,
           ),
+          centerTitle: true,
           leading: IconButton(
             icon: const Icon(Icons.close_rounded),
             onPressed: () => navStore.pop(context),
@@ -76,8 +73,8 @@ class _ShuffleAllFormPageState extends State<ShuffleAllFormPage> {
                   delegate: SliverChildListDelegate(
                     [
                       const SizedBox(height: 16.0),
-                      const ListTile(
-                        title: Text('Playback Settings', style: TEXT_HEADER),
+                      ListTile(
+                        title: Text(L10n.of(context)!.playback, style: TEXT_HEADER),
                       ),
                       Card(
                         child: Padding(
@@ -91,7 +88,7 @@ class _ShuffleAllFormPageState extends State<ShuffleAllFormPage> {
                                   (int value) {
                                     return RadioListTile<int>(
                                       title: Text(
-                                        playbackModeTexts[value],
+                                        ShuffleMode.values[value].toText(context),
                                         style: const TextStyle(
                                           fontSize: 14.0,
                                         ),

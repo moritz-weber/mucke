@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/localizations.dart';
 
 import '../theming.dart';
 import 'currently_playing_bar.dart';
@@ -42,18 +43,18 @@ class _NavBarState extends State<NavBar> {
                   height: 72.0,
                   selectedIndex: widget.currentIndex,
                   onDestinationSelected: widget.onTap,
-                  destinations: const [
+                  destinations: [
                     NavigationDestination(
-                      icon: Icon(Icons.home_rounded),
-                      label: 'Home',
+                      icon: const Icon(Icons.home_rounded),
+                      label: L10n.of(context)!.home,
                     ),
                     NavigationDestination(
-                      icon: Icon(Icons.library_music_rounded),
-                      label: 'Library',
+                      icon: const Icon(Icons.library_music_rounded),
+                      label: L10n.of(context)!.library,
                     ),
                     NavigationDestination(
-                      icon: Icon(Icons.search_rounded),
-                      label: 'Search',
+                      icon: const Icon(Icons.search_rounded),
+                      label: L10n.of(context)!.search,
                     ),
                   ],
                 ),

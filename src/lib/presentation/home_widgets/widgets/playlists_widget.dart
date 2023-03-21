@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../domain/entities/home_widgets/playlists.dart';
-import '../../domain/entities/playlist.dart';
-import '../../domain/entities/smart_list.dart';
-import '../pages/playlist_page.dart';
-import '../pages/smart_list_page.dart';
-import '../state/audio_store.dart';
-import '../state/music_data_store.dart';
-import '../state/navigation_store.dart';
-import '../theming.dart';
-import 'play_shuffle_button.dart';
-import 'playlist_cover.dart';
+import '../../../domain/entities/home_widgets/playlists.dart';
+import '../../../domain/entities/playlist.dart';
+import '../../../domain/entities/smart_list.dart';
+import '../../pages/playlist_page.dart';
+import '../../pages/smart_list_page.dart';
+import '../../state/audio_store.dart';
+import '../../state/music_data_store.dart';
+import '../../state/navigation_store.dart';
+import '../../theming.dart';
+import '../../widgets/play_shuffle_button.dart';
+import '../../widgets/playlist_cover.dart';
 
 class PlaylistsWidget extends StatelessWidget {
   const PlaylistsWidget({Key? key, required this.homePlaylists}) : super(key: key);
@@ -34,7 +35,6 @@ class PlaylistsWidget extends StatelessWidget {
 
     return Observer(
       builder: (context) {
-        print('PlaylistsWidget.build -> Observer');
         final customLists = customListsStream.value ?? [];
 
         return Card(
@@ -99,7 +99,7 @@ class PlaylistsWidget extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(12.0, 0.0, 12.0, 12.0),
                     child: Text(
-                      'No playlists yet. You can add them in the library.',
+                      L10n.of(context)!.noPlaylistsYet,
                       style: TEXT_HEADER_S.copyWith(color: Colors.white54),
                     ),
                   )
