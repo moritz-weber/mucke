@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
@@ -40,31 +41,32 @@ class _PlaylistsFormPageState extends State<PlaylistsFormPage> {
   Widget build(BuildContext context) {
     final NavigationStore navStore = GetIt.I<NavigationStore>();
 
-    const orderCriterionTexts = <String>[
-      'Name',
-      'Creation Date',
-      'Change Date',
-      'Last Time Played',
+    final orderCriterionTexts = <String>[
+      L10n.of(context)!.name,
+      L10n.of(context)!.creationDate,
+      L10n.of(context)!.changeDate,
+      L10n.of(context)!.lastTimePlayed,
     ];
 
-    const orderDirectionTexts = <String>[
-      'Ascending',
-      'Descending',
+    final orderDirectionTexts = <String>[
+      L10n.of(context)!.ascending,
+      L10n.of(context)!.descending,
     ];
 
-    const filterTexts = <String>[
-      'Both',
-      'Playlists Only',
-      'Smart Lists Only',
+    final filterTexts = <String>[
+      L10n.of(context)!.both,
+      L10n.of(context)!.playlistsOnly,
+      L10n.of(context)!.smartlistsOnly,
     ];
 
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            'Edit Playlists Widget',
+          title: Text(
+            L10n.of(context)!.playlists,
             style: TEXT_HEADER,
           ),
+          centerTitle: true,
           leading: IconButton(
             icon: const Icon(Icons.close_rounded),
             onPressed: () => navStore.pop(context),
@@ -99,7 +101,7 @@ class _PlaylistsFormPageState extends State<PlaylistsFormPage> {
                             onChanged: (value) => store.title = value,
                             style: TEXT_HEADER,
                             decoration: InputDecoration(
-                              labelText: 'Name',
+                              labelText: L10n.of(context)!.name,
                               labelStyle: const TextStyle(color: Colors.white),
                               floatingLabelStyle: TEXT_HEADER_S.copyWith(color: Colors.white),
                               // errorText: store.error.name,
@@ -119,8 +121,8 @@ class _PlaylistsFormPageState extends State<PlaylistsFormPage> {
                         ),
                       ),
                       const SizedBox(height: 8.0),
-                      const ListTile(
-                        title: Text('Sorting and Filter Settings', style: TEXT_HEADER),
+                      ListTile(
+                        title: Text(L10n.of(context)!.sortingFilterSettings, style: TEXT_HEADER),
                       ),
                       Card(
                         child: Padding(
@@ -130,7 +132,7 @@ class _PlaylistsFormPageState extends State<PlaylistsFormPage> {
                           child: Observer(
                             builder: (_) {
                               return SwitchTextListTile(
-                                title: 'Maximum number of entries',
+                                title: L10n.of(context)!.maxNumberEntries,
                                 switchValue: store.maxEntriesEnabled,
                                 onSwitchChanged: (bool value) {
                                   store.maxEntriesEnabled = value;

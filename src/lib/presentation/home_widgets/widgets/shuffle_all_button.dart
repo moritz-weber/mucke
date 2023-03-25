@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../domain/entities/shuffle_mode.dart';
-import '../mucke_icons.dart';
-import '../state/audio_store.dart';
+import '../../../domain/entities/shuffle_mode.dart';
+import '../../mucke_icons.dart';
+import '../../state/audio_store.dart';
 
 class ShuffleAllButton extends StatelessWidget {
   const ShuffleAllButton({
@@ -24,7 +25,7 @@ class ShuffleAllButton extends StatelessWidget {
         icon: Icon(
           shuffleMode == ShuffleMode.standard ? Icons.shuffle_rounded : MuckeIcons.shuffle_heart,
         ),
-        label: const Text('SHUFFLE ALL'),
+        label: Text(L10n.of(context)!.shuffleAll.toUpperCase()),
         onPressed: () => audioStore.shuffleAll(shuffleMode),
         style: ElevatedButton.styleFrom(
           backgroundColor: Theme.of(context).highlightColor,

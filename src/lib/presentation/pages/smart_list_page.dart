@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/entities/smart_list.dart';
 import '../../domain/entities/song.dart';
+import '../l10n_utils.dart';
 import '../mucke_icons.dart';
 import '../state/audio_store.dart';
 import '../state/music_data_store.dart';
@@ -151,7 +153,7 @@ class _SmartListPageState extends State<SmartListPage> {
                     ),
                   ],
                   title: smartList.name,
-                  subtitle2: '${songs.length} songs • ${utils.msToTimeString(totalDuration)}',
+                  subtitle2: '${L10n.of(context)!.nSongs(songs.length).capitalize()} • ${utils.msToTimeString(totalDuration)}',
                   background: Container(
                     decoration: BoxDecoration(
                       gradient: smartList.gradient,
@@ -166,7 +168,7 @@ class _SmartListPageState extends State<SmartListPage> {
                     onPressed: () => audioStore.playSmartList(smartList),
                     child: Row(
                       children: [
-                        const Expanded(child: Center(child: Text('Play'))),
+                        Expanded(child: Center(child: Text(L10n.of(context)!.play))),
                         Icon(playIcon),
                       ],
                     ),
@@ -239,10 +241,10 @@ class _SmartListPageState extends State<SmartListPage> {
         return MyBottomSheet(
           widgets: [
             ListTile(
-              title: Text('${songs.length} songs selected'),
+              title: Text(L10n.of(context)!.nSongsSelected(songs.length).capitalize()),
             ),
             ListTile(
-              title: const Text('Play next'),
+              title: Text(L10n.of(context)!.playNext),
               leading: const Icon(Icons.play_arrow_rounded),
               onTap: () {
                 audioStore.playNext(songs);
@@ -250,7 +252,7 @@ class _SmartListPageState extends State<SmartListPage> {
               },
             ),
             ListTile(
-              title: const Text('Append to manually queued songs'),
+              title: Text(L10n.of(context)!.appendToQueued),
               leading: const Icon(Icons.play_arrow_rounded),
               onTap: () {
                 audioStore.appendToNext(songs);
@@ -258,7 +260,7 @@ class _SmartListPageState extends State<SmartListPage> {
               },
             ),
             ListTile(
-              title: const Text('Add to queue'),
+              title: Text(L10n.of(context)!.addToQueue),
               leading: const Icon(Icons.queue_rounded),
               onTap: () {
                 audioStore.addToQueue(songs);

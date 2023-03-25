@@ -1,24 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../domain/entities/home_widgets/artist_of_day.dart';
-import '../../domain/entities/home_widgets/history.dart';
-import '../../domain/entities/home_widgets/home_widget.dart';
-import '../../domain/entities/home_widgets/playlists.dart';
-import '../../domain/entities/home_widgets/shuffle_all.dart';
+import '../home_widgets/home_widget_repr.dart';
 import '../state/home_page_store.dart';
 import '../state/music_data_store.dart';
 import '../state/navigation_store.dart';
 import '../theming.dart';
-import '../widgets/highlight_album.dart';
-import '../widgets/highlight_artist.dart';
-import '../widgets/history_widget.dart';
-import '../widgets/playlists_widget.dart';
-import '../widgets/shuffle_all_button.dart';
 import 'home_settings_page.dart';
 import 'settings_page.dart';
-
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -54,19 +45,15 @@ class _HomePageInner extends StatelessWidget {
     final NavigationStore navStore = GetIt.I<NavigationStore>();
     final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
 
-    
-
     print('HomePage.build');
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            'Home',
-          ),
+          title: Text(L10n.of(context)!.home),
           actions: [
             IconButton(
               icon: const Icon(Icons.edit_rounded),
-              tooltip: 'Customize Home Page',
+              tooltip: L10n.of(context)!.customizeHomePage,
               onPressed: () => navStore.push(
                 context,
                 MaterialPageRoute(builder: (context) => const HomeSettingsPage()),
@@ -74,7 +61,7 @@ class _HomePageInner extends StatelessWidget {
             ),
             IconButton(
               icon: const Icon(Icons.settings_rounded),
-              tooltip: 'Settings',
+              tooltip: L10n.of(context)!.settings,
               onPressed: () => navStore.push(
                 context,
                 MaterialPageRoute(builder: (context) => const SettingsPage()),
@@ -92,11 +79,11 @@ class _HomePageInner extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(Icons.music_note_rounded, size: 64.0),
-                      SizedBox(height: 24.0),
+                    children: [
+                      const Icon(Icons.music_note_rounded, size: 64.0),
+                      const SizedBox(height: 24.0),
                       Text(
-                        "Looks like you don't have any songs in your library: Go to settings, add your music folders, and update your library.",
+                        L10n.of(context)!.noSongsYet,
                         style: TEXT_BIG,
                         textAlign: TextAlign.justify,
                       ),
@@ -113,12 +100,14 @@ class _HomePageInner extends StatelessWidget {
               ),
             ];
 
-            for (final HomeWidget we in widgetEntities ?? <HomeWidget>[]) {
+            for (final we in widgetEntities ?? <HomeWidgetRepr>[]) {
               widgets.add(
                 SliverPadding(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: HORIZONTAL_PADDING - 8.0, vertical: 8.0),
-                  sliver: _createHomeWidget(we),
+                    horizontal: HORIZONTAL_PADDING - 8.0,
+                    vertical: 8.0,
+                  ),
+                  sliver: SliverToBoxAdapter(child: we.widget()),
                 ),
               );
             }
@@ -138,34 +127,5 @@ class _HomePageInner extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-Widget _createHomeWidget(HomeWidget homeWidget) {
-  switch (homeWidget.type) {
-    case HomeWidgetType.shuffle_all:
-      return SliverToBoxAdapter(
-        child: ShuffleAllButton(
-          shuffleMode: (homeWidget as HomeShuffleAll).shuffleMode,
-        ),
-      );
-    case HomeWidgetType.album_of_day:
-      return const SliverToBoxAdapter(
-        child: HighlightAlbum(),
-      );
-    case HomeWidgetType.artist_of_day:
-      return SliverToBoxAdapter(
-        child: HighlightArtist(
-          shuffleMode: (homeWidget as HomeArtistOfDay).shuffleMode,
-        ),
-      );
-    case HomeWidgetType.playlists:
-      return SliverToBoxAdapter(
-        child: PlaylistsWidget(homePlaylists: homeWidget as HomePlaylists),
-      );
-    case HomeWidgetType.history:
-      return SliverToBoxAdapter(
-        child: HistoryWidget(history: homeWidget as HomeHistory),
-      );
   }
 }

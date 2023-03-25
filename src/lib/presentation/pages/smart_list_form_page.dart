@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:reorderables/reorderables.dart';
@@ -6,6 +7,7 @@ import 'package:reorderables/reorderables.dart';
 import '../../constants.dart';
 import '../../domain/entities/enums.dart';
 import '../../domain/entities/smart_list.dart';
+import '../l10n_utils.dart';
 import '../state/music_data_store.dart';
 import '../state/navigation_store.dart';
 import '../state/smart_list_form_store.dart';
@@ -45,22 +47,24 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
 
   @override
   Widget build(BuildContext context) {
-    final title = widget.smartList == null ? 'Create smart list' : 'Edit smart list';
+    final title = widget.smartList == null
+        ? L10n.of(context)!.createSmartlist
+        : L10n.of(context)!.editSmartlist;
     final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
     final NavigationStore navStore = GetIt.I<NavigationStore>();
 
-    const blockLevelTexts = <String>[
-      'Exclude all songs marked for exclusion.',
-      'Exclude songs marked for exclusion in shuffle mode.',
-      'Exclude only songs marked as always exclude.',
-      "Don't exclude any songs.",
+    final blockLevelTexts = <String>[
+      L10n.of(context)!.excludeAllSongs,
+      L10n.of(context)!.excludeInShuffle,
+      L10n.of(context)!.excludeAlways,
+      L10n.of(context)!.dontExclude,
     ];
 
-    const playbackModeTexts = <String>[
-      'None (keep currently active shuffle mode)',
-      'Normal mode',
-      'Shuffle mode',
-      'Favorite shuffle mode',
+    final playbackModeTexts = <String>[
+      L10n.of(context)!.noShuffle,
+      L10n.of(context)!.normalMode,
+      L10n.of(context)!.shuffleMode,
+      L10n.of(context)!.favShuffleMode,
     ];
 
     return SafeArea(
@@ -70,6 +74,7 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
             title,
             style: TEXT_HEADER,
           ),
+          centerTitle: true,
           leading: IconButton(
             icon: const Icon(Icons.close_rounded),
             onPressed: () => navStore.pop(context),
@@ -79,7 +84,7 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
               IconButton(
                 icon: const Icon(Icons.delete_rounded),
                 onPressed: () async {
-                  // TODO: this works, but may only pop back to the smart list page...
+                  // TODO: this works, but may only pop back to the smartlist page...
                   // can I use pop 2x here?
                   await musicDataStore.removeSmartList(widget.smartList!);
                   navStore.pop(context);
@@ -115,10 +120,10 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
                             onChanged: (value) => store.name = value,
                             style: TEXT_HEADER,
                             decoration: InputDecoration(
-                              labelText: 'Name',
+                              labelText: L10n.of(context)!.name,
                               labelStyle: const TextStyle(color: Colors.white),
                               floatingLabelStyle: TEXT_HEADER_S.copyWith(color: Colors.white),
-                              errorText: store.error.name,
+                              errorText: store.error.name ? L10n.of(context)!.nameMustNotBeEmpty : null,
                               errorStyle: const TextStyle(color: RED),
                               filled: true,
                               fillColor: DARK35,
@@ -162,7 +167,7 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
                                       icon: store.cover.icon,
                                     ),
                                     const SizedBox(width: 16.0),
-                                    const Text('Customize cover image'),
+                                    Text(L10n.of(context)!.customizeCover),
                                     const Spacer(),
                                     const SizedBox(
                                       width: 56.0,
@@ -177,8 +182,8 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
                         ),
                       ),
                       const SizedBox(height: 8.0),
-                      const ListTile(
-                        title: Text('Filter Settings', style: TEXT_HEADER),
+                      ListTile(
+                        title: Text(L10n.of(context)!.filterSettings, style: TEXT_HEADER),
                       ),
                       Card(
                         child: Padding(
@@ -201,7 +206,8 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
                                       top: 4.0,
                                     ),
                                     child: Text(
-                                      'Likes between ${store.minLikeCount} and ${store.maxLikeCount}',
+                                      L10n.of(context)!
+                                          .filterLikes(store.minLikeCount, store.maxLikeCount),
                                     ),
                                   ),
                                   RangeSlider(
@@ -234,7 +240,7 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
                               Observer(
                                 builder: (_) {
                                   return SwitchTextListTile(
-                                    title: 'Minimum play count',
+                                    title: L10n.of(context)!.minPlayCount,
                                     switchValue: store.minPlayCountEnabled,
                                     onSwitchChanged: (bool value) {
                                       store.minPlayCountEnabled = value;
@@ -250,7 +256,7 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
                               Observer(
                                 builder: (_) {
                                   return SwitchTextListTile(
-                                    title: 'Maximum play count',
+                                    title: L10n.of(context)!.maxPlayCount,
                                     switchValue: store.maxPlayCountEnabled,
                                     onSwitchChanged: (bool value) {
                                       store.maxPlayCountEnabled = value;
@@ -306,7 +312,7 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
                               Observer(
                                 builder: (_) {
                                   return SwitchTextListTile(
-                                    title: 'Minimum year',
+                                    title: L10n.of(context)!.minYear,
                                     switchValue: store.minYearEnabled,
                                     onSwitchChanged: (bool value) {
                                       store.minYearEnabled = value;
@@ -322,7 +328,7 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
                               Observer(
                                 builder: (_) {
                                   return SwitchTextListTile(
-                                    title: 'Maximum year',
+                                    title: L10n.of(context)!.maxYear,
                                     switchValue: store.maxYearEnabled,
                                     onSwitchChanged: (bool value) {
                                       store.maxYearEnabled = value;
@@ -368,10 +374,14 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              'Select artists to ${store.excludeArtists ? "exclude" : "include"}: ${store.selectedArtists.length} selected.',
+                                              store.excludeArtists
+                                                  ? L10n.of(context)!.selectArtistsExclude(
+                                                      store.selectedArtists.length)
+                                                  : L10n.of(context)!.selectArtistsInclude(
+                                                      store.selectedArtists.length),
                                             ),
                                             Text(
-                                              'Include all artists if none are selected.',
+                                              L10n.of(context)!.includeAllArtists,
                                               style: TEXT_SMALL_SUBTITLE.copyWith(
                                                 color: Colors.white70,
                                               ),
@@ -408,7 +418,7 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
                                       ),
                                     ),
                                     const SizedBox(width: 6.0),
-                                    const Text('Exclude selected artists'),
+                                    Text(L10n.of(context)!.excludeArtists),
                                     const Spacer(),
                                   ],
                                 ),
@@ -425,7 +435,7 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
                           child: Observer(
                             builder: (_) {
                               return SwitchTextListTile(
-                                title: 'Limit number of songs',
+                                title: L10n.of(context)!.limitSongs,
                                 switchValue: store.limitEnabled,
                                 onSwitchChanged: (bool value) {
                                   store.limitEnabled = value;
@@ -440,9 +450,9 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
                         ),
                       ),
                       const SizedBox(height: 16.0),
-                      const ListTile(
-                        title: Text('Order Settings', style: TEXT_HEADER),
-                        subtitle: Text('Reorder options to change priorities.'),
+                      ListTile(
+                        title: Text(L10n.of(context)!.orderSettings, style: TEXT_HEADER),
+                        subtitle: Text(L10n.of(context)!.orderSettingsDescription),
                       ),
                       Card(
                         child: Padding(
@@ -475,7 +485,7 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
                                                 store.setOrderEnabled(i, value),
                                           ),
                                           const SizedBox(width: 6.0),
-                                          Text(store.orderState[i].text),
+                                          Text(store.orderState[i].orderCriterion.toText(context)),
                                           const Spacer(),
                                           IconButton(
                                             icon: store.orderState[i].orderDirection ==
@@ -502,8 +512,8 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
                         ),
                       ),
                       const SizedBox(height: 8.0),
-                      const ListTile(
-                        title: Text('Default Playback Settings', style: TEXT_HEADER),
+                      ListTile(
+                        title: Text(L10n.of(context)!.playbackMode, style: TEXT_HEADER),
                       ),
                       Card(
                         child: Padding(

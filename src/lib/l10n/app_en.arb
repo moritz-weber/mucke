@@ -1,0 +1,207 @@
+{
+    "home": "Home",
+    "customizeHomePage": "Customize Home Page",
+    "settings": "Settings",
+    "noSongsYet": "Looks like you don't have any songs in your library: Go to settings, add your music folders, and update your library.",
+    "library": "Library",
+    "search": "Search",
+    "updateLibrary": "Update library",
+    "artistsAlbumsSongs": "{artistCount} artists, {albumCount} albums, {songCount} songs",
+    "@artistsAlbumsSongs": {
+        "placeholders": {
+            "artistCount": {
+                "type": "int",
+                "example": "3"
+            },
+            "albumCount": {
+                "type": "int",
+                "example": "6"
+            },
+            "songCount": {
+                "type": "int",
+                "example": "60"
+            }
+        }
+    },
+    "manageLibraryFolders": "Manage library folders",
+    "allowedFileExtensions": "Allowed file extensions",
+    "allowedFileExtensionsDescription": "Comma-separated list. Lower- or uppercase does not matter.",
+    "manageBlockedFiles": "Manage blocked files",
+    "numberOfBlockedFiles": "Number of currently blocked files: {blockedFiles}",
+    "@numberOfBlockedFiles": {
+        "placeholders": {
+            "blockedFiles": {
+                "type": "int",
+                "example": "3"
+            }
+        }
+    },
+    "playback": "Playback",
+    "playAlbumsInOrder": "Play albums in order",
+    "playAlbumsInOrderDescription": "When you click a song in an album the songs will be played in order instead of keeping the previous play mode.",
+    "countSongsPlayed": "Count songs as played after: {percentage}%",
+    "@countSongsPlayed": {
+        "placeholders": {
+            "percentage": {
+                "type": "int"
+            }
+        }
+    },
+    "libraryFolders": "Library Folders",
+    "blockedFiles": "Blocked Files",
+    "homeCustomization": "Home Customization",
+    "albumOfTheDay": "Album of the Day",
+    "artistOfTheDay": "Artist of the Day",
+    "shuffleAll": "Shuffle All",
+    "history": "History",
+    "addWidgetToHome": "Add a Widget to Your Home Page",
+    "noPlaylistsYet": "No playlists yet. You can add them in the library.",
+    "lastPlayed": "Last played",
+    "noHistoryYet": "Nothing to see here yet. Play something.",
+    "allSongs": "All Songs",
+    "song": "Song",
+    "songs": "Songs",
+    "nSongs": "{count, plural, =0{no songs} =1{one song} other{{count} songs}}",
+    "@nSongs": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            }
+        }
+    },
+    "album": "Album",
+    "albums": "Albums",
+    "artist": "Artist",
+    "artists": "Artists",
+    "playlist": "Playlist",
+    "playlists": "Playlists",
+    "smartlist": "Smartlist",
+    "smartlists": "Smartlists",
+    "noShuffle": "None (keep currently active shuffle mode)",
+    "normalMode": "Normal Mode",
+    "shuffleMode": "Shuffle Mode",
+    "favShuffleMode": "Favorite Shuffle Mode",
+    "name": "Name",
+    "sortingFilterSettings": "Sorting and Filter Settings",
+    "maxNumberEntries": "Maximum number of entries",
+    "creationDate": "Creation Date",
+    "changeDate": "Change Date",
+    "lastTimePlayed": "Last Time Played",
+    "ascending": "Ascending",
+    "descending": "Descending",
+    "both": "Both",
+    "playlistsOnly": "Playlists Only",
+    "smartlistsOnly": "Smartlists Only",
+    "displaySettings": "Display Settings",
+    "addSmartlist": "Add Smartlist",
+    "addPlaylist": "Add Playlist",
+    "createPlaylist": "Create Playlist",
+    "editPlaylist": "Edit Playlist",
+    "customizeCover": "Customize Cover",
+    "playbackMode": "Playback Mode",
+    "excludeAllSongs": "Exclude all songs marked for exclusion.",
+    "excludeInShuffle": "Exclude songs marked for exclusion in shuffle mode.",
+    "excludeAlways": "Exclude only songs marked as always exclude.",
+    "dontExclude": "Don't exclude any songs.",
+    "filterSettings": "Filter Settings",
+    "filterLikes": "Likes between {min} and {max}",
+    "@filterLikes": {
+        "placeholders": {
+            "min": {
+                "type": "int"
+            },
+            "max": {
+                "type": "int"
+            }
+        }
+    },
+    "minPlayCount": "Minimum play count",
+    "maxPlayCount": "Maximum play count",
+    "minYear": "Minimum Year",
+    "maxYear": "Maximum Year",
+    "selectArtistsExclude": "Select artists to exclude: {num} selected.",
+    "@selectArtistsExclude": {
+        "placeholders": {
+            "num": {
+                "type": "int"
+            }
+        }
+    },
+    "selectArtistsInclude": "Select artists to include: {num} selected.",
+    "@selectArtistsInclude": {
+        "placeholders": {
+            "num": {
+                "type": "int"
+            }
+        }
+    },
+    "includeAllArtists": "Include all artists if none are selected.",
+    "excludeArtists": "Exclude selected artists",
+    "limitSongs": "Limit number of songs",
+    "orderSettings": "Order Settings",
+    "orderSettingsDescription": "Reorder options to change priorities.",
+    "createSmartlist": "Create Smartlist",
+    "editSmartlist": "Edit Smartlist",
+    "play": "Play",
+    "nSongsSelected": "{count, plural, =0{no songs selected} =1{one song selected} other{{count} songs selected}}",
+    "@nSongsSelected": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            }
+        }
+    },
+    "playNext": "Play next",
+    "appendToQueued": "Append to manually queued songs",
+    "addToQueue": "Add to queue",
+    "disc": "Disc",
+    "blockFromLibrary": "Remove and block from library",
+    "highlights": "Highlights",
+    "shuffle": "Shuffle",
+    "selectArtists": "Select Artists",
+    "removeFromQueue": "Remove from queue",
+    "currentlyPlaying": "Currently playing",
+    "nSongsInQueue": "{count, plural, =0{no songs} =1{one song} other{{count} songs}} in queue",
+    "@nSongsInQueue": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            }
+        }
+    },
+    "moreAvailable": "{num} more available",
+    "@moreAvailable": {
+        "placeholders": {
+            "num": {
+                "type": "int"
+            }
+        }
+    },
+    "nameMustNotBeEmpty": "The name must not be empty.",
+    "artistName": "Artist name",
+    "likeCount": "Like count",
+    "playCount": "Play count",
+    "songTitle": "Song title",
+    "year": "Year",
+    "timeAdded": "Time added",
+    "addToPlaylist": "Add to playlist",
+    "removeFromPlaylist": "Remove from playlist",
+    "cancel": "Cancel",
+    "nextUp": "Next up",
+    "previousSong": "previous",
+    "nextSong": "next",
+    "playedNTimes": "{count, plural, =0{not played yet} =1{played one time} other{played {count} times}}",
+    "@playedNTimes": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            }
+        }
+    },
+    "alwaysPlayPrevious": "Always play previous song before",
+    "alwaysPlayNext": "Always play next song after",
+    "dontExcludeSong": "Don't exclude this song.",
+    "excludeShuffleAllSong": "Exclude when shuffling all songs.",
+    "excludeShuffleSong": "Exclude when shuffling.",
+    "alwaysExcludeSong": "Always exclude this song."
+}

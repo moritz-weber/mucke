@@ -303,7 +303,7 @@ class PlaylistDao extends DatabaseAccessor<MainDatabase>
 
     query = query..where((tbl) => tbl.blockLevel.isSmallerOrEqualValue(filter.blockLevel));
 
-    // when requesting the actual songs, the smart list needs to be complete -> artists set
+    // when requesting the actual songs, the smartlist needs to be complete -> artists set
     if (filter.artists!.isNotEmpty) {
       if (filter.excludeArtists)
         query = query..where((tbl) => tbl.artist.isNotIn(filter.artists!.map((e) => e.name)));

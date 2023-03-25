@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../../../domain/entities/playlist.dart';
@@ -15,7 +16,7 @@ class AddToPlaylistTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-          title: const Text('Add to playlist'),
+          title: Text(L10n.of(context)!.addToPlaylist),
           leading: const Icon(Icons.playlist_add_rounded),
           onTap: () {
             Navigator.of(context, rootNavigator: true).pop();
@@ -55,8 +56,8 @@ class AddToPlaylistTile extends StatelessWidget {
                           onPressed: () {
                             Navigator.pop(context);
                           },
-                          child: const Text(
-                            'Cancel',
+                          child: Text(
+                            L10n.of(context)!.cancel,
                             textAlign: TextAlign.right,
                           ),
                         ),

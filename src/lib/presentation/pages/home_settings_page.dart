@@ -1,50 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:reorderables/reorderables.dart';
 
-import '../../domain/entities/home_widgets/album_of_day.dart';
-import '../../domain/entities/home_widgets/artist_of_day.dart';
-import '../../domain/entities/home_widgets/history.dart';
-import '../../domain/entities/home_widgets/home_widget.dart';
-import '../../domain/entities/home_widgets/playlists.dart';
-import '../../domain/entities/home_widgets/shuffle_all.dart';
-import '../../domain/entities/shuffle_mode.dart';
+import '../home_widgets/album_of_day_repr.dart';
+import '../home_widgets/artist_of_day_repr.dart';
+import '../home_widgets/history_repr.dart';
+import '../home_widgets/home_widget_repr.dart';
+import '../home_widgets/playlists_repr.dart';
+import '../home_widgets/shuffle_all_repr.dart';
 import '../state/home_page_store.dart';
 import '../state/navigation_store.dart';
 import '../theming.dart';
 import '../widgets/custom_modal_bottom_sheet.dart';
-import 'home_widget_forms/artistofday_form_page.dart';
-import 'home_widget_forms/history_form_page.dart';
-import 'home_widget_forms/playlists_form_page.dart';
-import 'home_widget_forms/shuffle_all_form_page.dart';
 
 class HomeSettingsPage extends StatelessWidget {
   const HomeSettingsPage({Key? key}) : super(key: key);
-
-  static const titles = {
-    HomeWidgetType.album_of_day: 'Album of the Day',
-    HomeWidgetType.artist_of_day: 'Artist of the Day',
-    HomeWidgetType.playlists: 'Playlists',
-    HomeWidgetType.shuffle_all: 'Shuffle All',
-    HomeWidgetType.history: 'History',
-  };
-
-  static const icons = {
-    HomeWidgetType.album_of_day: Icons.album_rounded,
-    HomeWidgetType.artist_of_day: Icons.person_rounded,
-    HomeWidgetType.playlists: Icons.playlist_play_rounded,
-    HomeWidgetType.shuffle_all: Icons.shuffle_rounded,
-    HomeWidgetType.history: Icons.history_rounded,
-  };
-
-  static const hasParameters = {
-    HomeWidgetType.album_of_day: false,
-    HomeWidgetType.artist_of_day: true,
-    HomeWidgetType.playlists: true,
-    HomeWidgetType.shuffle_all: true,
-    HomeWidgetType.history: true,
-  };
 
   @override
   Widget build(BuildContext context) {
@@ -54,8 +26,8 @@ class HomeSettingsPage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            'Home Customization',
+          title: Text(
+            L10n.of(context)!.homeCustomization,
             style: TEXT_HEADER,
           ),
           centerTitle: true,
@@ -72,7 +44,7 @@ class HomeSettingsPage extends StatelessWidget {
         ),
         body: Observer(
           builder: (context) {
-            final widgetEntities = homeStore.homeWidgetsStream.value ?? <HomeWidget>[];
+            final widgetReprs = homeStore.homeWidgetsStream.value ?? <HomeWidgetRepr>[];
 
             return Scrollbar(
               child: CustomScrollView(
@@ -83,59 +55,20 @@ class HomeSettingsPage extends StatelessWidget {
                         return Dismissible(
                           key: UniqueKey(),
                           child: ListTile(
-                            title: Text(titles[widgetEntities[index].type]!),
-                            leading: Icon(icons[widgetEntities[index].type]),
+                            title: Text(widgetReprs[index].title(context)),
+                            leading: Icon(widgetReprs[index].icon),
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                if (hasParameters[widgetEntities[index].type]!)
+                                if (widgetReprs[index].hasParameters)
                                   IconButton(
                                     onPressed: () {
-                                      switch (widgetEntities[index].type) {
-                                        case HomeWidgetType.shuffle_all:
-                                          navStore.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => ShuffleAllFormPage(
-                                                shuffleAll: widgetEntities[index] as HomeShuffleAll,
-                                              ),
-                                            ),
-                                          );
-                                          break;
-                                        case HomeWidgetType.artist_of_day:
-                                          navStore.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => ArtistOfDayFormPage(
-                                                artistOfDay:
-                                                    widgetEntities[index] as HomeArtistOfDay,
-                                              ),
-                                            ),
-                                          );
-                                          break;
-                                        case HomeWidgetType.playlists:
-                                          navStore.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => PlaylistsFormPage(
-                                                playlists: widgetEntities[index] as HomePlaylists,
-                                              ),
-                                            ),
-                                          );
-                                          break;
-                                        case HomeWidgetType.history:
-                                          navStore.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => HistoryFormPage(
-                                                history: widgetEntities[index] as HomeHistory,
-                                              ),
-                                            ),
-                                          );
-                                          break;
-                                        default:
-                                          break;
-                                      }
+                                      navStore.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => widgetReprs[index].formPage()!,
+                                        ),
+                                      );
                                     },
                                     icon: const Icon(Icons.edit_rounded),
                                   ),
@@ -149,7 +82,7 @@ class HomeSettingsPage extends StatelessWidget {
                             ),
                           ),
                           onDismissed: (direction) {
-                            homeStore.removeHomeWidget(widgetEntities[index]);
+                            homeStore.removeHomeWidget(widgetReprs[index].homeWidgetEntity);
                           },
                           background: Container(
                             width: double.infinity,
@@ -173,7 +106,7 @@ class HomeSettingsPage extends StatelessWidget {
                           ),
                         );
                       },
-                      childCount: widgetEntities.length,
+                      childCount: widgetReprs.length,
                     ),
                     onReorder: (oldIndex, newIndex) {
                       homeStore.moveHomeWidget(oldIndex, newIndex);
@@ -190,7 +123,15 @@ class HomeSettingsPage extends StatelessWidget {
 
   Future<void> _onTapAdd(BuildContext context) async {
     final homeStore = GetIt.I<HomePageStore>();
-    final homeWidgets = homeStore.homeWidgetsStream.value ?? <HomeWidget>[];
+    final homeWidgets = homeStore.homeWidgetsStream.value ?? <HomeWidgetRepr>[];
+
+    final homeWidgetReprs = [
+      ShuffleAllRepr.fromPosition(homeWidgets.length),
+      AlbumOfDayRepr.fromPosition(homeWidgets.length),
+      ArtistOfDayRepr.fromPosition(homeWidgets.length),
+      HistoryRepr.fromPosition(homeWidgets.length),
+      PlaylistsRepr.fromPosition(homeWidgets.length),
+    ];
 
     showModalBottomSheet(
       context: context,
@@ -200,21 +141,19 @@ class HomeSettingsPage extends StatelessWidget {
       builder: (context) => Observer(builder: (context) {
         return MyBottomSheet(
           widgets: [
-            const ListTile(
+            ListTile(
               title: Text(
-                'Add a Widget to Your Home Page',
+                L10n.of(context)!.addWidgetToHome,
                 style: TEXT_HEADER_S,
               ),
               tileColor: DARK2,
             ),
-            for (final type in HomeWidgetType.values)
+            for (final homeWidgetRepr in homeWidgetReprs)
               ListTile(
-                title: Text(titles[type]!),
-                leading: Icon(icons[type]),
+                title: Text(homeWidgetRepr.title(context)),
+                leading: Icon(homeWidgetRepr.icon),
                 onTap: () {
-                  homeStore.addHomeWidget(
-                    _createHomeWidget(type, homeWidgets.length),
-                  );
+                  homeStore.addHomeWidget(homeWidgetRepr.homeWidgetEntity);
                   Navigator.of(context).pop();
                 },
               ),
@@ -222,20 +161,5 @@ class HomeSettingsPage extends StatelessWidget {
         );
       }),
     );
-  }
-
-  HomeWidget _createHomeWidget(HomeWidgetType type, int position) {
-    switch (type) {
-      case HomeWidgetType.shuffle_all:
-        return HomeShuffleAll(position: position, shuffleMode: ShuffleMode.plus);
-      case HomeWidgetType.album_of_day:
-        return HomeAlbumOfDay(position);
-      case HomeWidgetType.artist_of_day:
-        return HomeArtistOfDay(position: position, shuffleMode: ShuffleMode.plus);
-      case HomeWidgetType.playlists:
-        return HomePlaylists(position: position);
-      case HomeWidgetType.history:
-        return HomeHistory(position: position, maxEntries: 5);
-    }
   }
 }

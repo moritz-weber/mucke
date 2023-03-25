@@ -6,7 +6,7 @@ import '../../datasources/drift_database.dart';
 import 'home_widget_model.dart';
 
 class HomeAlbumOfDayModel extends HomeAlbumOfDay implements HomeWidgetModel {
-  HomeAlbumOfDayModel(super.position);
+  HomeAlbumOfDayModel(int position) : super(position: position);
 
   factory HomeAlbumOfDayModel.fromDrift(DriftHomeWidget driftHomeWidget) {
     final type = driftHomeWidget.type.toHomeWidgetType();

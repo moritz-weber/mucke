@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get_it/get_it.dart';
@@ -52,7 +53,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> with AutomaticKeepAliveCl
                 final SmartList smartList = smartLists[index];
                 return ListTile(
                   title: Text(smartList.name),
-                  subtitle: const Text('Smart list'),
+                  subtitle: Text(L10n.of(context)!.smartlist),
                   onTap: () => navStore.push(
                     context,
                     MaterialPageRoute(
@@ -75,7 +76,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> with AutomaticKeepAliveCl
                 final Playlist playlist = playlists[i];
                 return ListTile(
                   title: Text(playlist.name),
-                  subtitle: const Text('Playlist'),
+                  subtitle: Text(L10n.of(context)!.playlist),
                   onTap: () => navStore.push(
                     context,
                     MaterialPageRoute(
@@ -117,7 +118,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> with AutomaticKeepAliveCl
               child: const Icon(Icons.auto_awesome_rounded),
               backgroundColor: LIGHT2,
               foregroundColor: Colors.white,
-              label: 'Add Smartlist',
+              label: L10n.of(context)!.addSmartlist,
               onTap: () => navStore.push(
                 context,
                 MaterialPageRoute(
@@ -129,7 +130,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> with AutomaticKeepAliveCl
               child: const Icon(Icons.playlist_add_rounded),
               backgroundColor: LIGHT2,
               foregroundColor: Colors.white,
-              label: 'Add Playlist',
+              label: L10n.of(context)!.addPlaylist,
               onTap: () => navStore.push(
                 context,
                 MaterialPageRoute(

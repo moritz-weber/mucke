@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
@@ -17,8 +18,8 @@ class BlockedFilesPage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            'Blocked Files',
+          title: Text(
+            L10n.of(context)!.blockedFiles,
             style: TEXT_HEADER,
           ),
           centerTitle: true,

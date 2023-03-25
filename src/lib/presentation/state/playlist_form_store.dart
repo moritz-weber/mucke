@@ -71,12 +71,12 @@ abstract class _PlaylistStore with Store {
   }
 
   void _validateName(String? name) {
-    error.name = name == null || name == '' ? 'The name must not be empty.' : null;
+    error.name = name == null || name == '';
   }
 
   Future<void> _createPlaylist() async {
     await _musicDataRepository.insertPlaylist(
-      name ?? 'This needs a name',
+      name!,
       cover.iconString,
       cover.gradientString,
       shuffleMode,
@@ -87,7 +87,7 @@ abstract class _PlaylistStore with Store {
     await _musicDataRepository.updatePlaylist(
       Playlist(
         id: _playlist!.id,
-        name: name ?? 'This needs a name',
+        name: name!,
         iconString: cover.iconString,
         gradientString: cover.gradientString,
         shuffleMode: shuffleMode,
@@ -103,10 +103,10 @@ class FormErrorState = _FormErrorState with _$FormErrorState;
 
 abstract class _FormErrorState with Store {
   @observable
-  String? name;
+  bool name = false;
 
   @computed
-  bool get hasErrors => name != null;
+  bool get hasErrors => name;
 }
 
 int _shuffleModeIndex(ShuffleMode? shuffleMode) {

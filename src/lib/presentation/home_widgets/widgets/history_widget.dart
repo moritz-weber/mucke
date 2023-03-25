@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../domain/entities/album.dart';
-import '../../domain/entities/artist.dart';
-import '../../domain/entities/home_widgets/history.dart';
-import '../../domain/entities/playable.dart';
-import '../../domain/entities/playlist.dart';
-import '../../domain/entities/smart_list.dart';
-import '../pages/album_details_page.dart';
-import '../pages/artist_details_page.dart';
-import '../pages/playlist_page.dart';
-import '../pages/smart_list_page.dart';
-import '../state/audio_store.dart';
-import '../state/history_store.dart';
-import '../state/navigation_store.dart';
-import '../theming.dart';
-import '../utils.dart';
-import 'play_shuffle_button.dart';
+import '../../../domain/entities/album.dart';
+import '../../../domain/entities/artist.dart';
+import '../../../domain/entities/home_widgets/history.dart';
+import '../../../domain/entities/playable.dart';
+import '../../../domain/entities/playlist.dart';
+import '../../../domain/entities/smart_list.dart';
+import '../../l10n_utils.dart';
+import '../../pages/album_details_page.dart';
+import '../../pages/artist_details_page.dart';
+import '../../pages/playlist_page.dart';
+import '../../pages/smart_list_page.dart';
+import '../../state/audio_store.dart';
+import '../../state/history_store.dart';
+import '../../state/navigation_store.dart';
+import '../../theming.dart';
+import '../../utils.dart';
+import '../../widgets/play_shuffle_button.dart';
 
 class HistoryWidget extends StatelessWidget {
   const HistoryWidget({Key? key, required this.history}) : super(key: key);
@@ -44,10 +46,10 @@ class HistoryWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(12.0, 20.0, 12.0, 16.0),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(12.0, 20.0, 12.0, 16.0),
                   child: Text(
-                    'Last Played',
+                    L10n.of(context)!.lastPlayed,
                     style: TEXT_BIG,
                   ),
                 ),
@@ -61,7 +63,7 @@ class HistoryWidget extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      subtitle: Text(historyEntry.playable.type.toText()),
+                      subtitle: Text(historyEntry.playable.type.toText(context)),
                       trailing: PlayShuffleButton(
                         onPressed: () {
                           audioStore.playPlayable(historyEntry.playable, shuffleMode);
@@ -101,7 +103,7 @@ class HistoryWidget extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(12.0, 0.0, 12.0, 12.0),
                     child: Text(
-                      'Nothing to see here yet. Play something.',
+                      L10n.of(context)!.noHistoryYet,
                       style: TEXT_HEADER_S.copyWith(color: Colors.white54),
                     ),
                   )

@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../domain/entities/artist.dart';
-import '../../domain/entities/shuffle_mode.dart';
-import '../gradients.dart';
-import '../pages/artist_details_page.dart';
-import '../state/audio_store.dart';
-import '../state/music_data_store.dart';
-import '../state/navigation_store.dart';
-import '../theming.dart';
-import 'play_shuffle_button.dart';
-import 'playlist_cover.dart';
+import '../../../domain/entities/artist.dart';
+import '../../../domain/entities/shuffle_mode.dart';
+import '../../gradients.dart';
+import '../../pages/artist_details_page.dart';
+import '../../state/audio_store.dart';
+import '../../state/music_data_store.dart';
+import '../../state/navigation_store.dart';
+import '../../theming.dart';
+import '../../widgets/play_shuffle_button.dart';
+import '../../widgets/playlist_cover.dart';
 
-class HighlightArtist extends StatelessWidget {
-  const HighlightArtist({required this.shuffleMode, Key? key}) : super(key: key);
+class ArtistOfDayWidget extends StatelessWidget {
+  const ArtistOfDayWidget({required this.shuffleMode, Key? key}) : super(key: key);
 
   final ShuffleMode shuffleMode;
 
@@ -60,7 +61,7 @@ class HighlightArtist extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Artist of the Day'.toUpperCase(),
+                            L10n.of(context)!.artistOfTheDay.toUpperCase(),
                             style: TEXT_SMALL_HEADLINE,
                           ),
                           Container(height: 6.0),

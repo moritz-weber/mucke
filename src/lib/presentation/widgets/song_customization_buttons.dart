@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
@@ -72,7 +73,7 @@ class SongCustomizationButtons extends StatelessWidget {
             final song = audioStore.currentSongStream.value;
             if (song == null) return Container();
             return SwitchListTile(
-              title: const Text('Always play previous song before'),
+              title: Text(L10n.of(context)!.alwaysPlayPrevious),
               value: song.previous,
               onChanged: (bool value) {
                 musicDataStore.togglePreviousSongLink(song);
@@ -83,7 +84,7 @@ class SongCustomizationButtons extends StatelessWidget {
             final song = audioStore.currentSongStream.value;
             if (song == null) return Container();
             return SwitchListTile(
-              title: const Text('Always play next song after'),
+              title: Text(L10n.of(context)!.alwaysPlayNext),
               value: song.next,
               onChanged: (bool value) {
                 musicDataStore.toggleNextSongLink(song);
@@ -102,11 +103,11 @@ class SongCustomizationButtons extends StatelessWidget {
     const TextStyle _active = TextStyle(color: Colors.white);
     const TextStyle _inactive = TextStyle(color: Colors.white54);
 
-    const descriptions = <String>[
-      "Don't exclude this song.",
-      'Exclude when shuffling all songs.',
-      'Exclude when shuffling.',
-      'Always exclude this song.'
+    final descriptions = <String>[
+      L10n.of(context)!.dontExcludeSong,
+      L10n.of(context)!.excludeShuffleAllSong,
+      L10n.of(context)!.excludeShuffleSong,
+      L10n.of(context)!.alwaysExcludeSong,
     ];
 
     showModalBottomSheet(

@@ -84,13 +84,13 @@ mixin _$FormErrorState on _FormErrorState, Store {
   late final _$nameAtom = Atom(name: '_FormErrorState.name', context: context);
 
   @override
-  String? get name {
+  bool get name {
     _$nameAtom.reportRead();
     return super.name;
   }
 
   @override
-  set name(String? value) {
+  set name(bool value) {
     _$nameAtom.reportWrite(value, super.name, () {
       super.name = value;
     });

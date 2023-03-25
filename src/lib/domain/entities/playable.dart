@@ -36,25 +36,6 @@ enum PlayableType {
   search,
 }
 
-extension TextExtension on PlayableType {
-  String toText() {
-    switch (this) {
-      case PlayableType.all:
-        return 'All Songs';
-      case PlayableType.album:
-        return 'Album';
-      case PlayableType.artist:
-        return 'Artist';
-      case PlayableType.playlist:
-        return 'Playlist';
-      case PlayableType.smartlist:
-        return 'Smart List';
-      case PlayableType.search:
-        return 'Search';
-    }
-  }
-}
-
 extension PlayableTypeExtension on String {
   PlayableType toPlayableType() {
     switch (this) {

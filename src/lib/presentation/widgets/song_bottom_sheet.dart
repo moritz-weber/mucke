@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../domain/entities/album.dart';
 import '../../domain/entities/artist.dart';
 import '../../domain/entities/song.dart';
+import '../l10n_utils.dart';
 import '../pages/album_details_page.dart';
 import '../pages/artist_details_page.dart';
 import '../state/audio_store.dart';
@@ -91,7 +93,7 @@ class _SongBottomSheetState extends State<SongBottomSheet> {
             children: [
               Expanded(
                 child: SwitchListTile(
-                  title: const Text('Previous'),
+                  title: Text(L10n.of(context)!.previousSong.capitalize()),
                   value: song.previous,
                   onChanged: (_) => musicDataStore.togglePreviousSongLink(song),
                   contentPadding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
@@ -100,7 +102,7 @@ class _SongBottomSheetState extends State<SongBottomSheet> {
               Container(width: 1.0, height: 24.0, color: DARK2),
               Expanded(
                 child: SwitchListTile(
-                  title: const Text('Next'),
+                  title: Text(L10n.of(context)!.nextSong.capitalize()),
                   value: song.next,
                   onChanged: (_) => musicDataStore.toggleNextSongLink(song),
                   contentPadding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
@@ -153,7 +155,7 @@ class _SongBottomSheetState extends State<SongBottomSheet> {
                         style: TEXT_SMALL_SUBTITLE,
                       ),
                       Text(
-                        'Played ${song.playCount} times',
+                        L10n.of(context)!.playedNTimes(song.playCount).capitalize(),
                         style: TEXT_SMALL_SUBTITLE,
                       ),
                     ],
@@ -253,7 +255,7 @@ class _SongBottomSheetState extends State<SongBottomSheet> {
           ),
         if (widget.enableQueueActions) ...[
           ListTile(
-            title: const Text('Play next'),
+            title: Text(L10n.of(context)!.playNext),
             leading: const Icon(Icons.play_arrow_rounded),
             onTap: () {
               audioStore.playNext([song]);
@@ -261,7 +263,7 @@ class _SongBottomSheetState extends State<SongBottomSheet> {
             },
           ),
           ListTile(
-            title: const Text('Append to manually queued songs'),
+            title: Text(L10n.of(context)!.appendToQueued),
             leading: const Icon(Icons.play_arrow_rounded),
             onTap: () {
               audioStore.appendToNext([song]);
@@ -269,7 +271,7 @@ class _SongBottomSheetState extends State<SongBottomSheet> {
             },
           ),
           ListTile(
-            title: const Text('Add to queue'),
+            title: Text(L10n.of(context)!.addToQueue),
             leading: const Icon(Icons.queue_rounded),
             onTap: () {
               audioStore.addToQueue([song]);
@@ -279,12 +281,12 @@ class _SongBottomSheetState extends State<SongBottomSheet> {
         ],
         AddToPlaylistTile(songs: [song], musicDataStore: musicDataStore),
         ListTile(
-          title: const Text('Block from library'),
-            leading: const Icon(Icons.block),
-            onTap: () {
-              settingsStore.addBlockedFiles([song.path]);
-              Navigator.of(context, rootNavigator: true).pop();
-            },
+          title: Text(L10n.of(context)!.blockFromLibrary),
+          leading: const Icon(Icons.block),
+          onTap: () {
+            settingsStore.addBlockedFiles([song.path]);
+            Navigator.of(context, rootNavigator: true).pop();
+          },
         ),
       ];
 
