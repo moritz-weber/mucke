@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/localizations.dart';
 
 import '../theming.dart';
 import 'next_song.dart';
@@ -34,7 +35,7 @@ class CurrentlyPlayingHeader extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    'Next up'.toUpperCase(),
+                    L10n.of(context)!.nextUp.toUpperCase(),
                     style: TEXT_SMALL_HEADLINE,
                   ),
                   const NextSong(),

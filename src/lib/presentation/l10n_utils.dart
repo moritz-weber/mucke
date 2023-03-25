@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/localizations.dart';
 
 import '../domain/entities/playable.dart';
 import '../domain/entities/shuffle_mode.dart';
+import '../domain/entities/smart_list.dart';
 
 extension PlayableTextExtension on PlayableType {
   String toText(BuildContext context) {
@@ -23,6 +24,25 @@ extension PlayableTextExtension on PlayableType {
   }
 }
 
+extension OrderCriterionExtension on OrderCriterion {
+  String toText(BuildContext context) {
+    switch (this) {
+      case OrderCriterion.artistName:
+        return L10n.of(context)!.artistName;
+      case OrderCriterion.likeCount:
+        return L10n.of(context)!.likeCount;
+      case OrderCriterion.playCount:
+        return L10n.of(context)!.playCount;
+      case OrderCriterion.songTitle:
+        return L10n.of(context)!.songTitle;
+      case OrderCriterion.timeAdded:
+        return L10n.of(context)!.timeAdded;
+      case OrderCriterion.year:
+        return L10n.of(context)!.year;
+    }
+  }
+}
+
 extension ShuffleTextExtension on ShuffleMode {
   String toText(BuildContext context) {
     switch (this) {
@@ -33,5 +53,11 @@ extension ShuffleTextExtension on ShuffleMode {
       case ShuffleMode.plus:
         return L10n.of(context)!.favShuffleMode;
     }
+  }
+}
+
+extension StringExtension on String {
+  String capitalize() {
+    return '${this[0].toUpperCase()}${substring(1)}';
   }
 }

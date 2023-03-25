@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
@@ -8,6 +9,7 @@ import 'package:reorderables/reorderables.dart';
 
 import '../../domain/entities/queue_item.dart';
 import '../../domain/entities/song.dart';
+import '../l10n_utils.dart';
 import '../state/audio_store.dart';
 import '../state/music_data_store.dart';
 import '../state/queue_page_store.dart';
@@ -65,14 +67,14 @@ class QueuePage extends StatelessWidget {
                 );
               }
 
-              String text = '${audioStore.queueLength} songs in queue';
-              if (numAvailableSongs > 0) text += ', $numAvailableSongs more available';
+              String text = L10n.of(context)!.nSongsInQueue(audioStore.queueLength);
+              if (numAvailableSongs > 0) text += ', ${L10n.of(context)!.moreAvailable(numAvailableSongs)}';
 
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Currently playing'.toUpperCase(),
+                    L10n.of(context)!.currentlyPlaying.toUpperCase(),
                     style: TEXT_SMALL_HEADLINE,
                   ),
                   subTitle,
@@ -248,7 +250,7 @@ class QueuePage extends StatelessWidget {
         return MyBottomSheet(
           widgets: [
             ListTile(
-              title: Text('${songs.length} songs selected'),
+              title: Text(L10n.of(context)!.nSongsSelected(songs.length).capitalize()),
             ),
             LikeCountOptions(songs: songs, musicDataStore: musicDataStore),
             Container(
@@ -264,7 +266,7 @@ class QueuePage extends StatelessWidget {
               },
             ),
             ListTile(
-              title: const Text('Remove from queue'),
+              title: Text(L10n.of(context)!.removeFromQueue),
               leading: const Icon(Icons.playlist_remove_rounded),
               onTap: () async {
                 await audioStore.removeQueueIndices(indeces);

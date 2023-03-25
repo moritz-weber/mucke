@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
@@ -83,7 +84,7 @@ class _SearchPageState extends State<SearchPage> {
                     return TextField(
                       controller: _textController,
                       decoration: InputDecoration(
-                        hintText: 'Search',
+                        hintText: L10n.of(context)!.search,
                         hintStyle: TEXT_HEADER.copyWith(color: Colors.white),
                         fillColor: Colors.white10,
                         filled: true,
@@ -231,7 +232,7 @@ class _SearchPageState extends State<SearchPage> {
                           [
                             ListTile(
                               title: Text(
-                                'Artists',
+                                L10n.of(context)!.artists,
                                 style: TEXT_HEADER.underlined(
                                   textColor: Colors.white,
                                   underlineColor: LIGHT1,
@@ -269,7 +270,7 @@ class _SearchPageState extends State<SearchPage> {
                           [
                             ListTile(
                               title: Text(
-                                'Albums',
+                                L10n.of(context)!.albums,
                                 style: TEXT_HEADER.underlined(
                                   textColor: Colors.white,
                                   underlineColor: LIGHT1,
@@ -304,7 +305,7 @@ class _SearchPageState extends State<SearchPage> {
                           [
                             ListTile(
                               title: Text(
-                                'Songs',
+                                L10n.of(context)!.songs,
                                 style: TEXT_HEADER.underlined(
                                   textColor: Colors.white,
                                   underlineColor: LIGHT1,
@@ -343,7 +344,7 @@ class _SearchPageState extends State<SearchPage> {
                           [
                             ListTile(
                               title: Text(
-                                'Smartlists',
+                                L10n.of(context)!.smartlists,
                                 style: TEXT_HEADER.underlined(
                                   textColor: Colors.white,
                                   underlineColor: LIGHT1,
@@ -382,7 +383,7 @@ class _SearchPageState extends State<SearchPage> {
                           [
                             ListTile(
                               title: Text(
-                                'Playlists',
+                                L10n.of(context)!.playlists,
                                 style: TEXT_HEADER.underlined(
                                   textColor: Colors.white,
                                   underlineColor: LIGHT1,

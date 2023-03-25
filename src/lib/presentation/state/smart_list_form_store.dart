@@ -94,7 +94,7 @@ abstract class _SmartListStore with Store {
   @action
   void setOrderEnabled(int index, bool enabled) {
     final os = orderState[index];
-    orderState[index] = OrderEntry(enabled, os.orderCriterion, os.orderDirection, os.text);
+    orderState[index] = OrderEntry(enabled, os.orderCriterion, os.orderDirection);
   }
 
   @action
@@ -103,7 +103,7 @@ abstract class _SmartListStore with Store {
     final direction = os.orderDirection == OrderDirection.ascending
         ? OrderDirection.descending
         : OrderDirection.ascending;
-    orderState[index] = OrderEntry(os.enabled, os.orderCriterion, direction, os.text);
+    orderState[index] = OrderEntry(os.enabled, os.orderCriterion, direction);
   }
 
   @action
@@ -162,7 +162,7 @@ abstract class _SmartListStore with Store {
   }
 
   void _validateName(String? name) {
-    error.name = name == null || name == '' ? 'The name must not be empty.' : null;
+    error.name = name == null || name == '';
   }
 
   void _validateMinPlayCount(bool enabled, String number) {
@@ -187,7 +187,7 @@ abstract class _SmartListStore with Store {
 
   Future<void> _createSmartList() async {
     await _musicDataRepository.insertSmartList(
-      name: name ?? 'This needs a name',
+      name: name!,
       iconString: cover.iconString,
       gradientString: cover.gradientString,
       shuffleMode: shuffleMode,
@@ -214,7 +214,7 @@ abstract class _SmartListStore with Store {
     await _musicDataRepository.updateSmartList(
       SmartList(
         id: _smartList!.id,
-        name: name ?? 'This needs a name',
+        name: name!,
         iconString: cover.iconString,
         gradientString: cover.gradientString,
         timeChanged: DateTime.now(),
@@ -246,7 +246,7 @@ class FormErrorState = _FormErrorState with _$FormErrorState;
 
 abstract class _FormErrorState with Store {
   @observable
-  String? name;
+  bool name = false;
 
   @observable
   String? minPlayCount;
@@ -265,7 +265,7 @@ abstract class _FormErrorState with Store {
 
   @computed
   bool get hasErrors =>
-      name != null ||
+      name ||
       minPlayCount != null ||
       maxPlayCount != null ||
       minYear != null ||
@@ -278,38 +278,21 @@ class OrderEntry {
     this.enabled,
     this.orderCriterion,
     this.orderDirection,
-    this.text,
   );
 
   final bool enabled;
   final OrderCriterion orderCriterion;
   final OrderDirection orderDirection;
-  final String text;
 }
 
 List<OrderEntry> _createOrderState(OrderBy? orderBy) {
-  final descriptions = {
-    OrderCriterion.songTitle: 'Song title',
-    OrderCriterion.likeCount: 'Like count',
-    OrderCriterion.playCount: 'Play count',
-    OrderCriterion.artistName: 'Artist name',
-    OrderCriterion.year: 'Year',
-    OrderCriterion.timeAdded: 'Time added',
-  };
-
   final defaultState = [
-    OrderEntry(false, OrderCriterion.songTitle, OrderDirection.ascending,
-        descriptions[OrderCriterion.songTitle]!),
-    OrderEntry(false, OrderCriterion.likeCount, OrderDirection.ascending,
-        descriptions[OrderCriterion.likeCount]!),
-    OrderEntry(false, OrderCriterion.playCount, OrderDirection.ascending,
-        descriptions[OrderCriterion.playCount]!),
-    OrderEntry(false, OrderCriterion.artistName, OrderDirection.ascending,
-        descriptions[OrderCriterion.artistName]!),
-    OrderEntry(
-        false, OrderCriterion.year, OrderDirection.ascending, descriptions[OrderCriterion.year]!),
-    OrderEntry(false, OrderCriterion.timeAdded, OrderDirection.ascending,
-        descriptions[OrderCriterion.timeAdded]!),
+    OrderEntry(false, OrderCriterion.songTitle, OrderDirection.ascending),
+    OrderEntry(false, OrderCriterion.likeCount, OrderDirection.ascending),
+    OrderEntry(false, OrderCriterion.playCount, OrderDirection.ascending),
+    OrderEntry(false, OrderCriterion.artistName, OrderDirection.ascending),
+    OrderEntry(false, OrderCriterion.year, OrderDirection.ascending),
+    OrderEntry(false, OrderCriterion.timeAdded, OrderDirection.ascending),
   ];
 
   if (orderBy == null) {
@@ -318,8 +301,7 @@ List<OrderEntry> _createOrderState(OrderBy? orderBy) {
     final orderState = <OrderEntry>[];
     for (int i = 0; i < orderBy.orderCriteria.length; i++) {
       final criterion = orderBy.orderCriteria[i];
-      orderState
-          .add(OrderEntry(true, criterion, orderBy.orderDirections[i], descriptions[criterion]!));
+      orderState.add(OrderEntry(true, criterion, orderBy.orderDirections[i]));
       defaultState.removeWhere((entry) => entry.orderCriterion == criterion);
     }
 

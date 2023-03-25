@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/localizations.dart';
 
 import 'albums_page.dart';
 import 'artists_page.dart';
@@ -29,11 +30,11 @@ class LibraryTabContainer extends StatelessWidget {
                         labelPadding: const EdgeInsets.symmetric(horizontal: 12.0),
                         unselectedLabelColor: Colors.white30,
                         isScrollable: true,
-                        tabs: const [
-                          Tab(text: 'Artists'),
-                          Tab(text: 'Albums'),
-                          Tab(text: 'Songs'),
-                          Tab(text: 'Playlists'),
+                        tabs: [
+                          Tab(text: L10n.of(context)!.artists),
+                          Tab(text: L10n.of(context)!.albums),
+                          Tab(text: L10n.of(context)!.songs),
+                          Tab(text: L10n.of(context)!.playlists),
                         ],
                       ),
                     ),

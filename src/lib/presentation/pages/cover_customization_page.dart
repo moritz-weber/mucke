@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../gradients.dart';
@@ -24,8 +25,8 @@ class _CoverCustomizationPageState extends State<CoverCustomizationPage> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            'Customize Cover',
+          title: Text(
+            L10n.of(context)!.customizeCover,
           ),
           centerTitle: true,
           leading: IconButton(

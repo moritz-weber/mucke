@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../domain/entities/album.dart';
 import '../../domain/entities/song.dart';
+import '../l10n_utils.dart';
 import '../state/album_page_store.dart';
 import '../state/audio_store.dart';
 import '../state/music_data_store.dart';
@@ -67,7 +69,7 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
                   title: album.title,
                   subtitle: album.artist,
                   subtitle2:
-                      '${album.pubYear.toString()} • ${songs.length} Songs • ${utils.msToTimeString(totalDuration)}',
+                      '${album.pubYear.toString()} • ${L10n.of(context)!.nSongs(songs.length)} • ${utils.msToTimeString(totalDuration)}',
                   actions: [
                     Observer(
                       builder: (context) {
@@ -150,7 +152,7 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
                             if (songsByDisc.length > 1 && d > 0) Container(height: 8.0),
                             if (songsByDisc.length > 1)
                               ListTile(
-                                title: Text('Disc ${d + 1}', style: TEXT_HEADER),
+                                title: Text('${L10n.of(context)!.disc} ${d + 1}', style: TEXT_HEADER),
                                 leading:
                                     const SizedBox(width: 40, child: Icon(Icons.album_rounded)),
                                 contentPadding: const EdgeInsets.only(left: HORIZONTAL_PADDING),
@@ -245,7 +247,7 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
         return MyBottomSheet(
           widgets: [
             ListTile(
-              title: Text('${songs.length} songs selected'),
+              title: Text(L10n.of(context)!.nSongsSelected(songs.length).capitalize()),
             ),
             LikeCountOptions(songs: songs, musicDataStore: musicDataStore),
             Container(
@@ -254,7 +256,7 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
             ),
             ExcludeLevelOptions(songs: songs, musicDataStore: musicDataStore),
             ListTile(
-              title: const Text('Play next'),
+              title: Text(L10n.of(context)!.playNext),
               leading: const Icon(Icons.play_arrow_rounded),
               onTap: () {
                 audioStore.playNext(songs);
@@ -262,7 +264,7 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
               },
             ),
             ListTile(
-              title: const Text('Append to manually queued songs'),
+              title: Text(L10n.of(context)!.appendToQueued),
               leading: const Icon(Icons.play_arrow_rounded),
               onTap: () {
                 audioStore.appendToNext(songs);
@@ -270,7 +272,7 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
               },
             ),
             ListTile(
-              title: const Text('Add to queue'),
+              title: Text(L10n.of(context)!.addToQueue),
               leading: const Icon(Icons.queue_rounded),
               onTap: () {
                 audioStore.addToQueue(songs);
@@ -279,7 +281,7 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
             ),
             AddToPlaylistTile(songs: songs, musicDataStore: musicDataStore),
             ListTile(
-              title: const Text('Block from library'),
+              title: Text(L10n.of(context)!.blockFromLibrary),
               leading: const Icon(Icons.block),
               onTap: () {
                 settingsStore.addBlockedFiles(songs.map((e) => e.path).toList());

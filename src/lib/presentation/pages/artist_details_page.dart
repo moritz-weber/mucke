@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
@@ -61,7 +62,7 @@ class _ArtistDetailsPageState extends State<ArtistDetailsPage> {
                       bottom: 8.0,
                     ),
                     child: ElevatedButton(
-                      child: const Text('SHUFFLE'),
+                      child: Text(L10n.of(context)!.shuffle.toUpperCase()),
                       onPressed: () => audioStore.playArtist(widget.artist, ShuffleMode.plus),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(context).highlightColor,
@@ -70,9 +71,9 @@ class _ArtistDetailsPageState extends State<ArtistDetailsPage> {
                       ),
                     ),
                   ),
-                  const ListTile(
-                    title: Text('Highlights', style: TEXT_HEADER),
-                    contentPadding: EdgeInsets.symmetric(
+                  ListTile(
+                    title: Text(L10n.of(context)!.highlights, style: TEXT_HEADER),
+                    contentPadding: const EdgeInsets.symmetric(
                       horizontal: HORIZONTAL_PADDING,
                       vertical: 0.0,
                     ),
@@ -85,9 +86,9 @@ class _ArtistDetailsPageState extends State<ArtistDetailsPage> {
             SliverList(
               delegate: SliverChildListDelegate(
                 [
-                  const ListTile(
-                    title: Text('Albums', style: TEXT_HEADER),
-                    contentPadding: EdgeInsets.symmetric(
+                  ListTile(
+                    title: Text(L10n.of(context)!.albums, style: TEXT_HEADER),
+                    contentPadding: const EdgeInsets.symmetric(
                       horizontal: HORIZONTAL_PADDING,
                       vertical: 0.0,
                     ),

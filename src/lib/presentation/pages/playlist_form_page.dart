@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
@@ -39,15 +40,16 @@ class _PlaylistFormPageState extends State<PlaylistFormPage> {
 
   @override
   Widget build(BuildContext context) {
-    final title = widget.playlist == null ? 'Create Playlist' : 'Edit Playlist';
+    final title =
+        widget.playlist == null ? L10n.of(context)!.createPlaylist : L10n.of(context)!.editPlaylist;
     final NavigationStore navStore = GetIt.I<NavigationStore>();
     final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
 
-    const playbackModeTexts = <String>[
-      'None (keep currently active shuffle mode)',
-      'Normal mode',
-      'Shuffle mode',
-      'Favorite shuffle mode',
+    final playbackModeTexts = <String>[
+      L10n.of(context)!.noShuffle,
+      L10n.of(context)!.normalMode,
+      L10n.of(context)!.shuffleMode,
+      L10n.of(context)!.favShuffleMode,
     ];
 
     return SafeArea(
@@ -57,6 +59,7 @@ class _PlaylistFormPageState extends State<PlaylistFormPage> {
             title,
             style: TEXT_HEADER,
           ),
+          centerTitle: true,
           leading: IconButton(
             icon: const Icon(Icons.close_rounded),
             onPressed: () => navStore.pop(context),
@@ -66,7 +69,7 @@ class _PlaylistFormPageState extends State<PlaylistFormPage> {
               IconButton(
                 icon: const Icon(Icons.delete_rounded),
                 onPressed: () async {
-                  // TODO: this works, but may only pop back to the smart list page...
+                  // TODO: this works, but may only pop back to the smartlist page...
                   // can I use pop 2x here?
                   await musicDataStore.removePlaylist(widget.playlist!);
                   navStore.pop(context);
@@ -102,10 +105,10 @@ class _PlaylistFormPageState extends State<PlaylistFormPage> {
                             onChanged: (value) => store.name = value,
                             style: TEXT_HEADER,
                             decoration: InputDecoration(
-                              labelText: 'Name',
+                              labelText: L10n.of(context)!.name,
                               labelStyle: const TextStyle(color: Colors.white),
                               floatingLabelStyle: TEXT_HEADER_S.copyWith(color: Colors.white),
-                              errorText: store.error.name,
+                              errorText: store.error.name ? L10n.of(context)!.nameMustNotBeEmpty : null,
                               errorStyle: const TextStyle(color: RED),
                               filled: true,
                               fillColor: DARK35,
@@ -149,7 +152,7 @@ class _PlaylistFormPageState extends State<PlaylistFormPage> {
                                       icon: store.cover.icon,
                                     ),
                                     const SizedBox(width: 16.0),
-                                    const Text('Customize cover image'),
+                                    Text(L10n.of(context)!.customizeCover),
                                     const Spacer(),
                                     const SizedBox(
                                       width: 56.0,
@@ -164,8 +167,8 @@ class _PlaylistFormPageState extends State<PlaylistFormPage> {
                         ),
                       ),
                       const SizedBox(height: 8.0),
-                      const ListTile(
-                        title: Text('Default Playback Settings', style: TEXT_HEADER),
+                      ListTile(
+                        title: Text(L10n.of(context)!.playbackMode, style: TEXT_HEADER),
                       ),
                       Card(
                         child: Padding(

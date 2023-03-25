@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/localizations.dart';
 
 import '../../../domain/entities/playlist.dart';
 import '../../state/music_data_store.dart';
@@ -20,7 +21,7 @@ class RemoveFromPlaylistTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: const Text('Remove from playlist'),
+      title: Text(L10n.of(context)!.removeFromPlaylist),
       leading: const Icon(Icons.playlist_remove_rounded),
       onTap: () {
         songPositions.sort();
