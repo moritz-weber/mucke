@@ -24,6 +24,25 @@ extension PlayableTextExtension on PlayableType {
   }
 }
 
+extension PlayableReprExt on Playable {
+  String repr(BuildContext context) {
+    switch (type) {
+      case PlayableType.all:
+        return L10n.of(context)!.allSongs;
+      case PlayableType.album:
+        return '${L10n.of(context)!.album}: $title';
+      case PlayableType.artist:
+        return '${L10n.of(context)!.artist}: $title';
+      case PlayableType.playlist:
+        return '${L10n.of(context)!.playlist}: $title';
+      case PlayableType.smartlist:
+        return '${L10n.of(context)!.smartlist}: $title';
+      case PlayableType.search:
+        return '${L10n.of(context)!.search}: $title';
+    }
+  }
+}
+
 extension OrderCriterionExtension on OrderCriterion {
   String toText(BuildContext context) {
     switch (this) {

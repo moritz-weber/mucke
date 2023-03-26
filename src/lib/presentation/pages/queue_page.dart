@@ -62,7 +62,7 @@ class QueuePage extends StatelessWidget {
 
               if (playable != null) {
                 subTitle = Text(
-                  playable.repr(),
+                  playable.repr(context),
                   maxLines: 1,
                 );
               }
