@@ -14,7 +14,7 @@ class CoverSliverAppBar extends StatefulWidget {
     this.subtitle2,
     required this.actions,
     required this.cover,
-    required this.background,
+    required this.backgroundColor,
     this.button,
   }) : super(key: key);
 
@@ -23,7 +23,7 @@ class CoverSliverAppBar extends StatefulWidget {
   final String? subtitle2;
   final List<Widget> actions;
   final Widget cover;
-  final Widget background;
+  final Color backgroundColor;
   final Widget? button;
 
   @override
@@ -49,7 +49,7 @@ class _CoverSliverAppBarState extends State<CoverSliverAppBar> {
       flexibleSpace: Header(
         minHeight: minHeight,
         maxHeight: maxHeight,
-        background: widget.background,
+        backgroundColor: widget.backgroundColor,
         cover: widget.cover,
         title: widget.title,
         subtitle: widget.subtitle,
@@ -61,6 +61,8 @@ class _CoverSliverAppBarState extends State<CoverSliverAppBar> {
         onPressed: () => navStore.pop(context),
       ),
       actions: widget.actions,
+      snap: true,
+      floating: true,
     );
   }
 }
@@ -74,7 +76,7 @@ class Header extends StatelessWidget {
     this.subtitle,
     this.subtitle2,
     required this.cover,
-    required this.background,
+    required this.backgroundColor,
     this.button,
   }) : super(key: key);
 
@@ -82,7 +84,7 @@ class Header extends StatelessWidget {
   final String? subtitle;
   final String? subtitle2;
   final Widget cover;
-  final Widget background;
+  final Color backgroundColor;
   final double maxHeight;
   final double minHeight;
   final Widget? button;
@@ -99,10 +101,6 @@ class Header extends StatelessWidget {
         return Stack(
           fit: StackFit.expand,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 2.0),
-              child: _buildBackground(background, animation, maxHeight, minHeight),
-            ),
             _buildGradient(animation, context),
             _buildImage(animation, context),
             if (button != null) _buildButton(animation, context),
@@ -149,7 +147,7 @@ class Header extends StatelessWidget {
     // TODO: padding right for enabled multi select
     return Align(
       alignment: AlignmentTween(
-        begin: Alignment.centerLeft,
+        begin: Alignment.center,
         end: Alignment.topLeft,
       ).evaluate(animation),
       child: Container(
@@ -178,6 +176,7 @@ class Header extends StatelessWidget {
                   FontWeight.w600,
                   Tween<double>(begin: 0, end: 1).evaluate(animation),
                 ),
+                height: 1.1,
               ),
             ),
             Container(
@@ -215,7 +214,7 @@ class Header extends StatelessWidget {
   Widget _buildButton(Animation<double> animation, BuildContext context) {
     return Positioned(
       width: 96,
-      height: 48,
+      height: 56,
       right: HORIZONTAL_PADDING,
       top: Tween<double>(
         begin: kToolbarHeight + MediaQuery.of(context).padding.top + 120,
@@ -252,13 +251,9 @@ class Header extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
+            backgroundColor,
             ColorTween(
-                  begin: Theme.of(context).primaryColor,
-                  end: Theme.of(context).primaryColor.withOpacity(0.2),
-                ).evaluate(animation) ??
-                Colors.transparent,
-            ColorTween(
-                  begin: Theme.of(context).primaryColor,
+                  begin: backgroundColor,
                   end: Theme.of(context).scaffoldBackgroundColor,
                 ).evaluate(animation) ??
                 Colors.transparent,
@@ -267,21 +262,6 @@ class Header extends StatelessWidget {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
-      ),
-    );
-  }
-
-  Widget _buildBackground(
-    Widget background,
-    Animation<double> animation,
-    double maxHeight,
-    double minHeight,
-  ) {
-    return ClipRect(
-      clipBehavior: Clip.hardEdge,
-      child: ImageFiltered(
-        imageFilter: ImageFilter.blur(sigmaX: 24.0, sigmaY: 24.0),
-        child: background,
       ),
     );
   }

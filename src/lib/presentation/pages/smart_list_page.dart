@@ -12,11 +12,11 @@ import '../state/audio_store.dart';
 import '../state/music_data_store.dart';
 import '../state/navigation_store.dart';
 import '../state/smart_list_page_store.dart';
-import '../theming.dart';
 import '../utils.dart' as utils;
 import '../widgets/bottom_sheet/add_to_playlist.dart';
 import '../widgets/cover_sliver_appbar.dart';
 import '../widgets/custom_modal_bottom_sheet.dart';
+import '../widgets/play_shuffle_button.dart';
 import '../widgets/playlist_cover.dart';
 import '../widgets/song_bottom_sheet.dart';
 import '../widgets/song_list_tile.dart';
@@ -153,30 +153,18 @@ class _SmartListPageState extends State<SmartListPage> {
                     ),
                   ],
                   title: smartList.name,
-                  subtitle2: '${L10n.of(context)!.nSongs(songs.length).capitalize()} • ${utils.msToTimeString(totalDuration)}',
-                  background: Container(
-                    decoration: BoxDecoration(
-                      gradient: smartList.gradient,
-                    ),
-                  ),
+                  subtitle2:
+                      '${L10n.of(context)!.nSongs(songs.length).capitalize()} • ${utils.msToTimeString(totalDuration)}',
+                  backgroundColor: utils.bgColor(smartList.gradient.colors.first),
                   cover: PlaylistCover(
                     size: 120,
                     icon: smartList.icon,
                     gradient: smartList.gradient,
                   ),
-                  button: ElevatedButton(
+                  button: PlayShuffleButton(
                     onPressed: () => audioStore.playSmartList(smartList),
-                    child: Row(
-                      children: [
-                        Expanded(child: Center(child: Text(L10n.of(context)!.play))),
-                        Icon(playIcon),
-                      ],
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      shape: const StadiumBorder(),
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                      backgroundColor: LIGHT1,
-                    ),
+                    shuffleMode: smartList.shuffleMode,
+                    size: 56,
                   ),
                 ),
                 Observer(
@@ -190,8 +178,6 @@ class _SmartListPageState extends State<SmartListPage> {
                           final Song song = songs[index];
                           return SongListTile(
                             song: song,
-                            showAlbum: true,
-                            subtitle: Subtitle.artistAlbum,
                             isSelectEnabled: isMultiSelectEnabled,
                             isSelected: isMultiSelectEnabled && isSelected[index],
                             onTap: () => audioStore.playSong(index, songs, smartList),

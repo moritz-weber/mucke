@@ -23,7 +23,7 @@ class SwitchTextListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 6.0, right: HORIZONTAL_PADDING),
+      padding: const EdgeInsets.only(left: 8.0 - 4.0, right: 8.0),
       child: Row(
         children: [
           SizedBox(

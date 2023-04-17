@@ -24,6 +24,7 @@ abstract class MusicDataInfoRepository {
   Stream<List<Song>> getSmartListSongStream(SmartList smartList);
   Future<List<Song>> getPredecessors(Song song);
   Future<List<Song>> getSuccessors(Song song);
+  Future<List<bool>> isSongFirstLast(Song song);
 
   Stream<List<Playlist>> get playlistsStream;
   Stream<Playlist> getPlaylistStream(int playlistId);

@@ -23,100 +23,98 @@ class HomeSettingsPage extends StatelessWidget {
     final homeStore = GetIt.I<HomePageStore>();
     final navStore = GetIt.I<NavigationStore>();
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            L10n.of(context)!.homeCustomization,
-            style: TEXT_HEADER,
-          ),
-          centerTitle: true,
-          leading: IconButton(
-            icon: const Icon(Icons.chevron_left_rounded),
-            onPressed: () => navStore.pop(context),
-          ),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.add_rounded),
-              onPressed: () => _onTapAdd(context),
-            ),
-          ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          L10n.of(context)!.homeCustomization,
+          style: TEXT_HEADER,
         ),
-        body: Observer(
-          builder: (context) {
-            final widgetReprs = homeStore.homeWidgetsStream.value ?? <HomeWidgetRepr>[];
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.chevron_left_rounded),
+          onPressed: () => navStore.pop(context),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add_rounded),
+            onPressed: () => _onTapAdd(context),
+          ),
+        ],
+      ),
+      body: Observer(
+        builder: (context) {
+          final widgetReprs = homeStore.homeWidgetsStream.value ?? <HomeWidgetRepr>[];
 
-            return Scrollbar(
-              child: CustomScrollView(
-                slivers: [
-                  ReorderableSliverList(
-                    delegate: ReorderableSliverChildBuilderDelegate(
-                      (context, int index) {
-                        return Dismissible(
-                          key: UniqueKey(),
-                          child: ListTile(
-                            title: Text(widgetReprs[index].title(context)),
-                            leading: Icon(widgetReprs[index].icon),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                if (widgetReprs[index].hasParameters)
-                                  IconButton(
-                                    onPressed: () {
-                                      navStore.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => widgetReprs[index].formPage()!,
-                                        ),
-                                      );
-                                    },
-                                    icon: const Icon(Icons.edit_rounded),
-                                  ),
+          return Scrollbar(
+            child: CustomScrollView(
+              slivers: [
+                ReorderableSliverList(
+                  delegate: ReorderableSliverChildBuilderDelegate(
+                    (context, int index) {
+                      return Dismissible(
+                        key: UniqueKey(),
+                        child: ListTile(
+                          title: Text(widgetReprs[index].title(context)),
+                          leading: Icon(widgetReprs[index].icon),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (widgetReprs[index].hasParameters)
+                                IconButton(
+                                  onPressed: () {
+                                    navStore.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => widgetReprs[index].formPage()!,
+                                      ),
+                                    );
+                                  },
+                                  icon: const Icon(Icons.edit_rounded),
+                                ),
+                            ],
+                          ),
+                          contentPadding: const EdgeInsets.fromLTRB(
+                            HORIZONTAL_PADDING,
+                            8.0,
+                            0.0,
+                            8.0,
+                          ),
+                        ),
+                        onDismissed: (direction) {
+                          homeStore.removeHomeWidget(widgetReprs[index].homeWidgetEntity);
+                        },
+                        background: Container(
+                          width: double.infinity,
+                          color: RED,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: const [
+                                Icon(
+                                  Icons.delete_forever_rounded,
+                                  color: Colors.white,
+                                ),
+                                Icon(
+                                  Icons.delete_forever_rounded,
+                                  color: Colors.white,
+                                )
                               ],
                             ),
-                            contentPadding: const EdgeInsets.fromLTRB(
-                              HORIZONTAL_PADDING,
-                              8.0,
-                              0.0,
-                              8.0,
-                            ),
                           ),
-                          onDismissed: (direction) {
-                            homeStore.removeHomeWidget(widgetReprs[index].homeWidgetEntity);
-                          },
-                          background: Container(
-                            width: double.infinity,
-                            color: RED,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: const [
-                                  Icon(
-                                    Icons.delete_forever_rounded,
-                                    color: Colors.white,
-                                  ),
-                                  Icon(
-                                    Icons.delete_forever_rounded,
-                                    color: Colors.white,
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                      childCount: widgetReprs.length,
-                    ),
-                    onReorder: (oldIndex, newIndex) {
-                      homeStore.moveHomeWidget(oldIndex, newIndex);
+                        ),
+                      );
                     },
+                    childCount: widgetReprs.length,
                   ),
-                ],
-              ),
-            );
-          },
-        ),
+                  onReorder: (oldIndex, newIndex) {
+                    homeStore.moveHomeWidget(oldIndex, newIndex);
+                  },
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

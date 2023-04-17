@@ -37,6 +37,7 @@ dependencies:
   reorderables: ^0.6.0  # MIT
   sqlite3_flutter_libs: ^0.5.0  # MIT
   string_similarity: ^2.0.0  # MIT
+  text_scroll: ^0.2.0  # MIT
 
 dev_dependencies:
   build_runner: ^2.3.3  # BSD 3

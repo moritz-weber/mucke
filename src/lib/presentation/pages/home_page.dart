@@ -46,85 +46,83 @@ class _HomePageInner extends StatelessWidget {
     final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
 
     print('HomePage.build');
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(L10n.of(context)!.home),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.edit_rounded),
-              tooltip: L10n.of(context)!.customizeHomePage,
-              onPressed: () => navStore.push(
-                context,
-                MaterialPageRoute(builder: (context) => const HomeSettingsPage()),
-              ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(L10n.of(context)!.home),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit_rounded),
+            tooltip: L10n.of(context)!.customizeHomePage,
+            onPressed: () => navStore.push(
+              context,
+              MaterialPageRoute(builder: (context) => const HomeSettingsPage()),
             ),
-            IconButton(
-              icon: const Icon(Icons.settings_rounded),
-              tooltip: L10n.of(context)!.settings,
-              onPressed: () => navStore.push(
-                context,
-                MaterialPageRoute(builder: (context) => const SettingsPage()),
-              ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.settings_rounded),
+            tooltip: L10n.of(context)!.settings,
+            onPressed: () => navStore.push(
+              context,
+              MaterialPageRoute(builder: (context) => const SettingsPage()),
             ),
-          ],
-        ),
-        body: Observer(
-          builder: (context) {
-            final songListIsEmpty = musicDataStore.songListIsEmpty;
-            if (songListIsEmpty) {
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(32.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.music_note_rounded, size: 64.0),
-                      const SizedBox(height: 24.0),
-                      Text(
-                        L10n.of(context)!.noSongsYet,
-                        style: TEXT_BIG,
-                        textAlign: TextAlign.justify,
-                      ),
-                    ],
-                  ),
+          ),
+        ],
+      ),
+      body: Observer(
+        builder: (context) {
+          final songListIsEmpty = musicDataStore.songListIsEmpty;
+          if (songListIsEmpty) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(32.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.music_note_rounded, size: 64.0),
+                    const SizedBox(height: 24.0),
+                    Text(
+                      L10n.of(context)!.noSongsYet,
+                      style: TEXT_BIG,
+                      textAlign: TextAlign.justify,
+                    ),
+                  ],
                 ),
-              );
-            }
-
-            final widgetEntities = store.homeWidgetsStream.value;
-            final List<Widget> widgets = [
-              const SliverPadding(
-                padding: EdgeInsets.only(top: 8.0),
               ),
-            ];
+            );
+          }
 
-            for (final we in widgetEntities ?? <HomeWidgetRepr>[]) {
-              widgets.add(
-                SliverPadding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: HORIZONTAL_PADDING - 8.0,
-                    vertical: 8.0,
-                  ),
-                  sliver: SliverToBoxAdapter(child: we.widget()),
-                ),
-              );
-            }
+          final widgetEntities = store.homeWidgetsStream.value;
+          final List<Widget> widgets = [
+            const SliverPadding(
+              padding: EdgeInsets.only(top: 8.0),
+            ),
+          ];
 
+          for (final we in widgetEntities ?? <HomeWidgetRepr>[]) {
             widgets.add(
-              const SliverPadding(
-                padding: EdgeInsets.only(bottom: 8.0),
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: HORIZONTAL_PADDING - 8.0,
+                  vertical: 8.0,
+                ),
+                sliver: SliverToBoxAdapter(child: we.widget()),
               ),
             );
+          }
 
-            return Scrollbar(
-              child: CustomScrollView(
-                slivers: widgets,
-              ),
-            );
-          },
-        ),
+          widgets.add(
+            const SliverPadding(
+              padding: EdgeInsets.only(bottom: 8.0),
+            ),
+          );
+
+          return Scrollbar(
+            child: CustomScrollView(
+              slivers: widgets,
+            ),
+          );
+        },
       ),
     );
   }

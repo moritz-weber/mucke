@@ -103,6 +103,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> with AutomaticKeepAliveCl
         ),
         floatingActionButton: SpeedDial(
           child: const Icon(Icons.add_rounded),
+          backgroundColor: Theme.of(context).highlightColor,
           activeChild: Transform.rotate(
             angle: pi / 4,
             child: const Icon(Icons.add_rounded),
@@ -125,6 +126,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> with AutomaticKeepAliveCl
                   builder: (BuildContext context) => const SmartListFormPage(),
                 ),
               ),
+              shape: const CircleBorder(),
             ),
             SpeedDialChild(
               child: const Icon(Icons.playlist_add_rounded),
@@ -137,6 +139,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> with AutomaticKeepAliveCl
                   builder: (BuildContext context) => const PlaylistFormPage(),
                 ),
               ),
+              shape: const CircleBorder(),
             ),
           ],
         ),

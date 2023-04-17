@@ -460,4 +460,11 @@ class MusicDataDao extends DatabaseAccessor<MainDatabase>
       }
     }
   }
+
+  @override
+  Future<List<SongModel>> getSongsFromSameAlbum(SongModel song) async {
+    return (select(songs)..where((tbl) => tbl.albumId.equals(song.albumId)))
+        .get()
+        .then((driftSongs) => driftSongs.map(SongModel.fromDrift).toList());
+  }
 }

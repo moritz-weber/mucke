@@ -48,8 +48,8 @@ class _ArtistDetailsPageState extends State<ArtistDetailsPage> {
     final AudioStore audioStore = GetIt.I<AudioStore>();
 
     return Observer(
-      builder: (BuildContext context) => SafeArea(
-        child: CustomScrollView(
+      builder: (BuildContext context) => Scaffold(
+        body: CustomScrollView(
           slivers: [
             ArtistHeader(artist: widget.artist),
             SliverList(

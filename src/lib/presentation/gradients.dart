@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 const CUSTOM_GRADIENTS = <String, Gradient>{
-'sanguine': LinearGradient(
+  'sanguine': LinearGradient(
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
       colors: [

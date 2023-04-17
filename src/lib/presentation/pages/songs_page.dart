@@ -37,15 +37,13 @@ class _SongsPageState extends State<SongsPage> with AutomaticKeepAliveClientMixi
           final List<Song> songs = songStream.value ?? [];
           return Scrollbar(
             controller: _scrollController,
-            child: ListView.separated(
+            child: ListView.builder(
               controller: _scrollController,
               itemCount: songs.length,
               itemBuilder: (_, int index) {
                 final Song song = songs[index];
                 return SongListTile(
                   song: song,
-                  showAlbum: true,
-                  subtitle: Subtitle.artistAlbum,
                   onTap: () => audioStore.playSong(index, songs, AllSongs()),
                   onTapMore: () => showModalBottomSheet(
                     context: context,
@@ -59,9 +57,6 @@ class _SongsPageState extends State<SongsPage> with AutomaticKeepAliveClientMixi
                   onSelect: () {},
                 );
               },
-              separatorBuilder: (BuildContext context, int index) => const SizedBox(
-                height: 4.0,
-              ),
             ),
           );
         case StreamStatus.waiting:

@@ -24,154 +24,152 @@ class SettingsPage extends StatelessWidget {
 
     final TextEditingController _textController = TextEditingController();
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            L10n.of(context)!.settings,
-            style: TEXT_HEADER,
-          ),
-          leading: IconButton(
-            icon: const Icon(Icons.chevron_left_rounded),
-            onPressed: () => navStore.pop(context),
-          ),
-          centerTitle: true,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          L10n.of(context)!.settings,
+          style: TEXT_HEADER,
         ),
-        body: ListView(
-          children: [
-            SettingsSection(text: L10n.of(context)!.library),
-            ListTile(
-              title: Text(L10n.of(context)!.updateLibrary),
-              subtitle: Observer(builder: (_) {
-                final int artistCount = musicDataStore.artistStream.value?.length ?? 0;
-                final int albumCount = musicDataStore.albumStream.value?.length ?? 0;
-                final int songCount = musicDataStore.songStream.value?.length ?? 0;
-                return Text(
-                  L10n.of(context)!.artistsAlbumsSongs(artistCount, albumCount, songCount),
-                );
-              }),
-              onTap: () => musicDataStore.updateDatabase(),
-              trailing: Observer(builder: (_) {
-                if (musicDataStore.isUpdatingDatabase) {
-                  return const CircularProgressIndicator();
-                }
-                return Container(
-                  height: 0,
-                  width: 0,
-                );
-              }),
-            ),
-            const Divider(
-              height: 4.0,
-            ),
-            ListTile(
-              title: Text(L10n.of(context)!.manageLibraryFolders),
-              trailing: const Icon(Icons.chevron_right_rounded),
-              onTap: () => navStore.push(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) => const LibraryFoldersPage(),
-                ),
+        leading: IconButton(
+          icon: const Icon(Icons.chevron_left_rounded),
+          onPressed: () => navStore.pop(context),
+        ),
+        centerTitle: true,
+      ),
+      body: ListView(
+        children: [
+          SettingsSection(text: L10n.of(context)!.library),
+          ListTile(
+            title: Text(L10n.of(context)!.updateLibrary),
+            subtitle: Observer(builder: (_) {
+              final int artistCount = musicDataStore.artistStream.value?.length ?? 0;
+              final int albumCount = musicDataStore.albumStream.value?.length ?? 0;
+              final int songCount = musicDataStore.songStream.value?.length ?? 0;
+              return Text(
+                L10n.of(context)!.artistsAlbumsSongs(artistCount, albumCount, songCount),
+              );
+            }),
+            onTap: () => musicDataStore.updateDatabase(),
+            trailing: Observer(builder: (_) {
+              if (musicDataStore.isUpdatingDatabase) {
+                return const CircularProgressIndicator();
+              }
+              return Container(
+                height: 0,
+                width: 0,
+              );
+            }),
+          ),
+          const Divider(
+            height: 4.0,
+          ),
+          ListTile(
+            title: Text(L10n.of(context)!.manageLibraryFolders),
+            trailing: const Icon(Icons.chevron_right_rounded),
+            onTap: () => navStore.push(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => const LibraryFoldersPage(),
               ),
             ),
-            const Divider(
-              height: 4.0,
+          ),
+          const Divider(
+            height: 4.0,
+          ),
+          ListTile(
+            title: Text(L10n.of(context)!.allowedFileExtensions),
+            subtitle: Text(
+              L10n.of(context)!.allowedFileExtensionsDescription,
+              style: TEXT_SMALL_SUBTITLE,
             ),
-            ListTile(
-              title: Text(L10n.of(context)!.allowedFileExtensions),
-              subtitle: Text(
-                L10n.of(context)!.allowedFileExtensionsDescription,
-                style: TEXT_SMALL_SUBTITLE,
-              ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+              left: HORIZONTAL_PADDING,
+              right: HORIZONTAL_PADDING,
+              bottom: 16.0,
             ),
-            Padding(
-              padding: const EdgeInsets.only(
-                left: HORIZONTAL_PADDING,
-                right: HORIZONTAL_PADDING,
-                bottom: 16.0,
-              ),
-              child: Observer(
-                builder: (context) {
-                  final text = settingsStore.fileExtensionsStream.value;
-                  if (text == null) return Container();
-                  if (_textController.text == '') _textController.text = text;
+            child: Observer(
+              builder: (context) {
+                final text = settingsStore.fileExtensionsStream.value;
+                if (text == null) return Container();
+                if (_textController.text == '') _textController.text = text;
 
-                  return Row(
-                    children: [
-                      Expanded(
-                        child: TextFormField(
-                          controller: _textController,
-                          onChanged: (value) => settingsStore.setFileExtensions(value),
-                          textAlign: TextAlign.start,
-                          decoration: const InputDecoration(
-                            filled: true,
-                            fillColor: DARK35,
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                            ),
-                            errorStyle: TextStyle(height: 0, fontSize: 0),
-                            contentPadding: EdgeInsets.only(
-                              top: 0.0,
-                              bottom: 0.0,
-                              left: 6.0,
-                              right: 6.0,
-                            ),
+                return Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: _textController,
+                        onChanged: (value) => settingsStore.setFileExtensions(value),
+                        textAlign: TextAlign.start,
+                        decoration: const InputDecoration(
+                          filled: true,
+                          fillColor: DARK35,
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                          ),
+                          errorStyle: TextStyle(height: 0, fontSize: 0),
+                          contentPadding: EdgeInsets.only(
+                            top: 0.0,
+                            bottom: 0.0,
+                            left: 6.0,
+                            right: 6.0,
                           ),
                         ),
                       ),
-                      const SizedBox(width: 8.0),
-                      IconButton(
-                        icon: const Icon(Icons.settings_backup_restore_rounded),
-                        onPressed: () {
-                          _textController.text = ALLOWED_FILE_EXTENSIONS;
-                          settingsStore.setFileExtensions(ALLOWED_FILE_EXTENSIONS);
-                        },
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ),
-            const Divider(
-              height: 4.0,
-            ),
-            Observer(
-              builder: (_) {
-                final blockedFiles = settingsStore.numBlockedFiles;
-
-                return ListTile(
-                  title: Text(L10n.of(context)!.manageBlockedFiles),
-                  subtitle: Text(L10n.of(context)!.numberOfBlockedFiles(blockedFiles)),
-                  trailing: const Icon(Icons.chevron_right_rounded),
-                  onTap: () => navStore.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => const BlockedFilesPage(),
                     ),
-                  ),
+                    const SizedBox(width: 8.0),
+                    IconButton(
+                      icon: const Icon(Icons.settings_backup_restore_rounded),
+                      onPressed: () {
+                        _textController.text = ALLOWED_FILE_EXTENSIONS;
+                        settingsStore.setFileExtensions(ALLOWED_FILE_EXTENSIONS);
+                      },
+                    ),
+                  ],
                 );
               },
             ),
-            SettingsSection(text: L10n.of(context)!.playback),
-            Observer(
-              builder: (context) => SwitchListTile(
-                value: settingsStore.playAlbumsInOrderStream.value ?? false,
-                onChanged: settingsStore.setPlayAlbumsInOrder,
-                title: Text(L10n.of(context)!.playAlbumsInOrder),
-                subtitle: Text(
-                  L10n.of(context)!.playAlbumsInOrderDescription,
-                  style: TEXT_SMALL_SUBTITLE,
+          ),
+          const Divider(
+            height: 4.0,
+          ),
+          Observer(
+            builder: (_) {
+              final blockedFiles = settingsStore.numBlockedFiles;
+
+              return ListTile(
+                title: Text(L10n.of(context)!.manageBlockedFiles),
+                subtitle: Text(L10n.of(context)!.numberOfBlockedFiles(blockedFiles)),
+                trailing: const Icon(Icons.chevron_right_rounded),
+                onTap: () => navStore.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => const BlockedFilesPage(),
+                  ),
                 ),
-                isThreeLine: true,
+              );
+            },
+          ),
+          SettingsSection(text: L10n.of(context)!.playback),
+          Observer(
+            builder: (context) => SwitchListTile(
+              value: settingsStore.playAlbumsInOrderStream.value ?? false,
+              onChanged: settingsStore.setPlayAlbumsInOrder,
+              title: Text(L10n.of(context)!.playAlbumsInOrder),
+              subtitle: Text(
+                L10n.of(context)!.playAlbumsInOrderDescription,
+                style: TEXT_SMALL_SUBTITLE,
               ),
+              isThreeLine: true,
             ),
-            const Divider(
-              height: 4.0,
-            ),
-            PercentageSlider(settingsStore),
-          ],
-        ),
+          ),
+          const Divider(
+            height: 4.0,
+          ),
+          PercentageSlider(settingsStore),
+        ],
       ),
     );
   }

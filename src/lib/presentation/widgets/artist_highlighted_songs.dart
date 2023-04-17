@@ -31,8 +31,7 @@ class ArtistHighlightedSongs extends StatelessWidget {
               final Song song = songsHead[index];
               return SongListTile(
                 song: song,
-                showAlbum: true,
-                subtitle: Subtitle.stats,
+                showPlayCount: true,
                 onTap: () => audioStore.playSong(index, songs, artistPageStore.artist),
                 onTapMore: () => showModalBottomSheet(
                   context: context,

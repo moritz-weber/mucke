@@ -14,17 +14,17 @@ const Color RED = Colors.red;
 const double HORIZONTAL_PADDING = 16.0;
 
 ThemeData theme() => ThemeData(
-      // useMaterial3: true,
+      useMaterial3: true,
       colorScheme: const ColorScheme(
         primary: DARK2,
-        secondary: LIGHT2,
+        secondary: LIGHT1,
         surface: DARK3,
         background: DARK2,
         error: RED,
         onPrimary: Colors.white,
         onSecondary: Colors.white,
         onSurface: Colors.white,
-        onBackground: Colors.white,
+        onBackground: Colors.white10, // only seen used in Switch so far
         onError: Colors.white,
         brightness: Brightness.dark,
       ),
@@ -36,6 +36,7 @@ ThemeData theme() => ThemeData(
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: LIGHT1,
+          foregroundColor: Colors.white,
         ),
       ),
       progressIndicatorTheme: const ProgressIndicatorThemeData(color: LIGHT2),
@@ -79,17 +80,21 @@ ThemeData theme() => ThemeData(
       tabBarTheme: const TabBarTheme(
         labelColor: Colors.white,
         labelStyle: TextStyle(
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w800,
           fontSize: 20.0,
         ),
         unselectedLabelStyle: TextStyle(
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w800,
           fontSize: 20.0,
         ),
       ),
       iconTheme: const IconThemeData(
         color: Colors.white,
       ),
+      iconButtonTheme: IconButtonThemeData(
+          style: IconButton.styleFrom(
+        foregroundColor: Colors.white,
+      )),
       appBarTheme: const AppBarTheme(
         color: DARK1,
         elevation: 0.0,
@@ -109,6 +114,7 @@ ThemeData theme() => ThemeData(
         indent: HORIZONTAL_PADDING,
         endIndent: HORIZONTAL_PADDING,
         space: 0.0,
+        color: Colors.white10,
       ),
       switchTheme: SwitchThemeData(
         thumbColor: MaterialStateProperty.resolveWith<Color>((states) {
@@ -132,11 +138,23 @@ ThemeData theme() => ThemeData(
         thumbColor: MaterialStateProperty.all(Colors.white12),
         interactive: true,
       ),
+      listTileTheme: const ListTileThemeData(
+        iconColor: Colors.white,
+      ),
+      radioTheme: RadioThemeData(
+          fillColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+        if (states.contains(MaterialState.disabled)) {
+          return Colors.white30;
+        } else if (states.contains(MaterialState.selected)) {
+          return LIGHT1;
+        }
+        return Colors.white;
+      })),
     );
 
 const TextStyle TEXT_HEADER = TextStyle(
   fontSize: 20.0,
-  fontWeight: FontWeight.w900,
+  fontWeight: FontWeight.w800,
 );
 
 const TextStyle TEXT_HEADER_S = TextStyle(
@@ -155,12 +173,12 @@ const TextStyle TEXT_SUBTITLE = TextStyle(
 );
 
 const TextStyle TEXT_SMALL_HEADLINE = TextStyle(
-  fontSize: 12.0,
+  fontSize: 13.0,
   fontWeight: FontWeight.normal,
 );
 
 const TextStyle TEXT_SMALL_SUBTITLE = TextStyle(
-  fontSize: 12.0,
+  fontSize: 13.0,
   fontWeight: FontWeight.w300,
 );
 

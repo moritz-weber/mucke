@@ -6,7 +6,6 @@ import '../domain/entities/album.dart';
 import '../domain/entities/playable.dart';
 import '../domain/entities/playlist.dart';
 import '../domain/entities/smart_list.dart';
-import '../domain/entities/song.dart';
 import 'gradients.dart';
 import 'mucke_icons.dart';
 import 'theming.dart';
@@ -46,6 +45,8 @@ String? validateNumber(bool enabled, String number) {
   return int.tryParse(number) == null ? 'Error' : null;
 }
 
+Color bgColor(Color? color) => Color.lerp(DARK3, color, 0.4) ?? DARK3;
+
 IconData blockLevelIcon(int blockLevel) {
   switch (blockLevel) {
     case 1:
@@ -75,15 +76,26 @@ IconData likeCountIcon(int likeCount) {
 }
 
 Color likeCountColor(int likeCount) {
-  return likeCount == 3 ? LIGHT2 : Colors.white.withOpacity(0.24 + 0.18 * likeCount);
+  return likeCount == 3 ? LIGHT1 : Colors.white.withOpacity(0.24 + 0.18 * likeCount);
 }
 
-Color linkColor(Song song) {
-  if (song.next && song.previous) {
-    return LIGHT2;
-  } else if (song.next) {
+IconData linkIcon(bool prev, bool next) {
+  if (prev && next) {
+    return MuckeIcons.link_both;
+  } else if (prev) {
+    return MuckeIcons.link_prev;
+  } else if (next) {
+    return MuckeIcons.link_next;
+  }
+  return Icons.link_off_rounded;
+}
+
+Color linkColor(bool prev, bool next) {
+  if (next && prev) {
+    return LIGHT1;
+  } else if (next) {
     return Colors.red;
-  } else if (song.previous) {
+  } else if (prev) {
     return Colors.blue;
   }
   return Colors.white24;

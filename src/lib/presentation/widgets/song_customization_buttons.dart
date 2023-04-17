@@ -31,8 +31,8 @@ class SongCustomizationButtons extends StatelessWidget {
             children: [
               IconButton(
                 icon: Icon(
-                  song.next || song.previous ? Icons.link_rounded : Icons.link_off_rounded,
-                  color: linkColor(song),
+                  linkIcon(song.previous, song.next),
+                  color: linkColor(song.previous, song.next),
                 ),
                 iconSize: 24.0,
                 onPressed: () => _editLinks(context),
@@ -72,24 +72,42 @@ class SongCustomizationButtons extends StatelessWidget {
           Observer(builder: (context) {
             final song = audioStore.currentSongStream.value;
             if (song == null) return Container();
-            return SwitchListTile(
-              title: Text(L10n.of(context)!.alwaysPlayPrevious),
-              value: song.previous,
-              onChanged: (bool value) {
-                musicDataStore.togglePreviousSongLink(song);
-              },
-            );
+            final firstLast = musicDataStore.isSongFirstLast(song);
+            return FutureBuilder(
+                future: firstLast,
+                builder: (context, AsyncSnapshot<List<bool>> snapshot) {
+                  if (snapshot.hasData)
+                    return SwitchListTile(
+                      title: Text(L10n.of(context)!.alwaysPlayPrevious),
+                      value: song.previous,
+                      onChanged: snapshot.data![0]
+                          ? null
+                          : (bool value) {
+                              musicDataStore.togglePreviousSongLink(song);
+                            },
+                    );
+                  return Container();
+                });
           }),
           Observer(builder: (context) {
             final song = audioStore.currentSongStream.value;
             if (song == null) return Container();
-            return SwitchListTile(
-              title: Text(L10n.of(context)!.alwaysPlayNext),
-              value: song.next,
-              onChanged: (bool value) {
-                musicDataStore.toggleNextSongLink(song);
-              },
-            );
+            final firstLast = musicDataStore.isSongFirstLast(song);
+            return FutureBuilder(
+                future: firstLast,
+                builder: (context, AsyncSnapshot<List<bool>> snapshot) {
+                  if (snapshot.hasData)
+                    return SwitchListTile(
+                      title: Text(L10n.of(context)!.alwaysPlayNext),
+                      value: song.next,
+                      onChanged: snapshot.data![1]
+                          ? null
+                          : (bool value) {
+                              musicDataStore.toggleNextSongLink(song);
+                            },
+                    );
+                  return Container();
+                });
           }),
         ],
       ),

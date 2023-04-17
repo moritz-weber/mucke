@@ -29,12 +29,7 @@ class CurrentlyPlayingBar extends StatelessWidget {
               if (song == null) return Container();
 
               return Padding(
-                padding: const EdgeInsets.only(
-                  bottom: 0.0,
-                  top: 8.0,
-                  left: 4.0,
-                  right: 4.0,
-                ),
+                padding: const EdgeInsets.only(top: 8.0),
                 child: Row(
                   children: <Widget>[
                     Padding(
@@ -54,7 +49,7 @@ class CurrentlyPlayingBar extends StatelessWidget {
                           Text(
                             song.title,
                             overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
+                            maxLines: 1,
                           ),
                           Text(
                             song.artist,
