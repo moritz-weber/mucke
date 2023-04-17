@@ -4,6 +4,7 @@
 - Fixed bug in queue when moving a song directly before the currently playing song
 - Migration to Material 3 widgets including extensive UI changes
 - New Icons for linked songs
+- Added German translation (#51)
 
 ## 1.2.0
 

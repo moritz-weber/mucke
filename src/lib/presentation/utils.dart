@@ -101,25 +101,6 @@ Color linkColor(bool prev, bool next) {
   return Colors.white24;
 }
 
-extension PlayableReprExt on Playable {
-  String repr() {
-    switch (type) {
-      case PlayableType.all:
-        return 'All songs';
-      case PlayableType.album:
-        return 'Album: $title';
-      case PlayableType.artist:
-        return 'Artist: $title';
-      case PlayableType.playlist:
-        return 'Playlist: $title';
-      case PlayableType.smartlist:
-        return 'Smartlist: $title';
-      case PlayableType.search:
-        return 'Search results: $title';
-    }
-  }
-}
-
 Widget createPlayableCover(Playable playable, double size) {
   switch (playable.type) {
     case PlayableType.all:
