@@ -21,61 +21,59 @@ class SmartListArtistsPage extends StatelessWidget {
     final NavigationStore navStore = GetIt.I<NavigationStore>();
     final initialSet = Set<Artist>.from(store.selectedArtists);
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            L10n.of(context)!.selectArtists,
-            style: TEXT_HEADER,
-          ),
-          leading: IconButton(
-            icon: const Icon(Icons.close_rounded),
-            onPressed: () {
-              store.selectedArtists.clear();
-              store.selectedArtists.addAll(initialSet);
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          L10n.of(context)!.selectArtists,
+          style: TEXT_HEADER,
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.close_rounded),
+          onPressed: () {
+            store.selectedArtists.clear();
+            store.selectedArtists.addAll(initialSet);
+            navStore.pop(context);
+          },
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.check_rounded),
+            onPressed: () async {
               navStore.pop(context);
             },
           ),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.check_rounded),
-              onPressed: () async {
-                navStore.pop(context);
-              },
-            ),
-          ],
-          titleSpacing: 0.0,
-        ),
-        body: Observer(builder: (_) {
-          final List<Artist> artists = musicDataStore.artistStream.value ?? [];
-          final selectedArtists = store.selectedArtists.toSet();
-
-          return Scrollbar(
-            child: ListView.separated(
-              itemCount: artists.length,
-              itemBuilder: (_, int index) {
-                final Artist artist = artists[index];
-                return CheckboxListTile(
-                  title: Text(artist.name),
-                  value: selectedArtists.contains(artist),
-                  onChanged: (bool? value) {
-                    if (value != null) {
-                      if (value) {
-                        store.addArtist(artist);
-                      } else {
-                        store.removeArtist(artist);
-                      }
-                    }
-                  },
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) => const SizedBox(
-                height: 4.0,
-              ),
-            ),
-          );
-        }),
+        ],
+        titleSpacing: 0.0,
       ),
+      body: Observer(builder: (_) {
+        final List<Artist> artists = musicDataStore.artistStream.value ?? [];
+        final selectedArtists = store.selectedArtists.toSet();
+
+        return Scrollbar(
+          child: ListView.separated(
+            itemCount: artists.length,
+            itemBuilder: (_, int index) {
+              final Artist artist = artists[index];
+              return CheckboxListTile(
+                title: Text(artist.name),
+                value: selectedArtists.contains(artist),
+                onChanged: (bool? value) {
+                  if (value != null) {
+                    if (value) {
+                      store.addArtist(artist);
+                    } else {
+                      store.removeArtist(artist);
+                    }
+                  }
+                },
+              );
+            },
+            separatorBuilder: (BuildContext context, int index) => const SizedBox(
+              height: 4.0,
+            ),
+          ),
+        );
+      }),
     );
   }
 }

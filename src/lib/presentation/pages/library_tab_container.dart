@@ -13,45 +13,45 @@ class LibraryTabContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 4,
-      child: SafeArea(
-        child: Column(
-          children: <Widget>[
-            Container(
-              color: Theme.of(context).primaryColor,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 8.0, left: 4.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TabBar(
-                        indicatorColor: Theme.of(context).highlightColor,
-                        indicatorSize: TabBarIndicatorSize.label,
-                        indicatorWeight: 3.0,
-                        labelPadding: const EdgeInsets.symmetric(horizontal: 12.0),
-                        unselectedLabelColor: Colors.white30,
-                        isScrollable: true,
-                        tabs: [
-                          Tab(text: L10n.of(context)!.artists),
-                          Tab(text: L10n.of(context)!.albums),
-                          Tab(text: L10n.of(context)!.songs),
-                          Tab(text: L10n.of(context)!.playlists),
-                        ],
-                      ),
+      child: Scaffold(
+        appBar: AppBar(
+          toolbarHeight: 8.0,
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(48),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4.0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: TabBar(
+                  indicator: UnderlineTabIndicator(
+                    borderRadius: BorderRadius.zero,
+                    borderSide: BorderSide(
+                      color: Theme.of(context).highlightColor,
+                      width: 3.0,
                     ),
+                  ),
+                  indicatorSize: TabBarIndicatorSize.label,
+                  labelPadding: const EdgeInsets.fromLTRB(12.0, 0.0, 12.0, 3.0),
+                  unselectedLabelColor: Colors.white30,
+                  isScrollable: true,
+                  dividerColor: Colors.transparent,
+                  tabs: [
+                    Tab(text: L10n.of(context)!.artists),
+                    Tab(text: L10n.of(context)!.albums),
+                    Tab(text: L10n.of(context)!.songs),
+                    Tab(text: L10n.of(context)!.playlists),
                   ],
                 ),
               ),
             ),
-            const Expanded(
-              child: TabBarView(
-                children: <Widget>[
-                  ArtistsPage(key: PageStorageKey('ArtistsPage')),
-                  AlbumsPage(key: PageStorageKey('AlbumsPage')),
-                  SongsPage(key: PageStorageKey('SongsPage')),
-                  PlaylistsPage(key: PageStorageKey('PlaylistsPage'))
-                ],
-              ),
-            )
+          ),
+        ),
+        body: const TabBarView(
+          children: <Widget>[
+            ArtistsPage(key: PageStorageKey('ArtistsPage')),
+            AlbumsPage(key: PageStorageKey('AlbumsPage')),
+            SongsPage(key: PageStorageKey('SongsPage')),
+            PlaylistsPage(key: PageStorageKey('PlaylistsPage'))
           ],
         ),
       ),

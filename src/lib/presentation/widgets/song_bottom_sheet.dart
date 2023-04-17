@@ -7,6 +7,7 @@ import '../../domain/entities/album.dart';
 import '../../domain/entities/artist.dart';
 import '../../domain/entities/song.dart';
 import '../l10n_utils.dart';
+import '../mucke_icons.dart';
 import '../pages/album_details_page.dart';
 import '../pages/artist_details_page.dart';
 import '../state/audio_store.dart';
@@ -66,11 +67,10 @@ class _SongBottomSheetState extends State<SongBottomSheet> {
     final NavigationStore navStore = GetIt.I<NavigationStore>();
     final SettingsStore settingsStore = GetIt.I<SettingsStore>();
 
-    int optionIndex = 0;
-
     return Observer(builder: (context) {
       final song = store.songStream.value;
       if (song == null) return Container();
+      final firstLast = musicDataStore.isSongFirstLast(song);
 
       final albums = musicDataStore.albumStream.value;
       final artists = musicDataStore.artistStream.value;
@@ -84,42 +84,18 @@ class _SongBottomSheetState extends State<SongBottomSheet> {
           artist = artists.singleWhere((a) => a.name == album!.artist);
       }
 
-      final options = [
-        const SizedBox.shrink(),
-        Container(
-          // color: DARK3,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: SwitchListTile(
-                  title: Text(L10n.of(context)!.previousSong.capitalize()),
-                  value: song.previous,
-                  onChanged: (_) => musicDataStore.togglePreviousSongLink(song),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
-                ),
-              ),
-              Container(width: 1.0, height: 24.0, color: DARK2),
-              Expanded(
-                child: SwitchListTile(
-                  title: Text(L10n.of(context)!.nextSong.capitalize()),
-                  value: song.next,
-                  onChanged: (_) => musicDataStore.toggleNextSongLink(song),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
-                ),
-              ),
-            ],
-          ),
-        ),
-        ExcludeLevelOptions(songs: [song], musicDataStore: musicDataStore),
-      ];
-
       final List<Widget> widgets = [
         Container(
           color: DARK2,
           child: Padding(
-            padding: const EdgeInsets.all(HORIZONTAL_PADDING),
+            padding: const EdgeInsets.fromLTRB(
+              HORIZONTAL_PADDING,
+              HORIZONTAL_PADDING,
+              HORIZONTAL_PADDING - 14.0,
+              HORIZONTAL_PADDING,
+            ),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
                   width: 64.0,
@@ -149,18 +125,28 @@ class _SongBottomSheetState extends State<SongBottomSheet> {
                         song.title,
                         style: TEXT_HEADER_S,
                       ),
-                      const SizedBox(height: 4.0),
+                      const SizedBox(height: 2.0),
                       Text(
                         '#${song.trackNumber} • ${utils.msToTimeString(song.duration)} • ${song.year}',
                         style: TEXT_SMALL_SUBTITLE,
                       ),
                       Text(
                         L10n.of(context)!.playedNTimes(song.playCount).capitalize(),
-                        style: TEXT_SMALL_SUBTITLE,
+                        style: TEXT_SMALL_SUBTITLE.copyWith(height: 1.2),
                       ),
                     ],
                   ),
-                )
+                ),
+                SizedBox(
+                  height: 64.0,
+                  child: Center(
+                    child: LikeButton(
+                      song: song,
+                      iconSize: 28.0,
+                      visualDensity: VisualDensity.standard,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -169,7 +155,6 @@ class _SongBottomSheetState extends State<SongBottomSheet> {
           title: Text('${song.album}'),
           leading: const Icon(Icons.album_rounded),
           trailing: widget.enableGoToAlbum ? const Icon(Icons.open_in_new_rounded) : null,
-          visualDensity: VisualDensity.compact,
           onTap: widget.enableGoToAlbum
               ? () {
                   if (album != null) {
@@ -190,7 +175,6 @@ class _SongBottomSheetState extends State<SongBottomSheet> {
           title: Text(song.artist),
           leading: const Icon(Icons.person_rounded),
           trailing: widget.enableGoToArtist ? const Icon(Icons.open_in_new_rounded) : null,
-          visualDensity: VisualDensity.compact,
           onTap: widget.enableGoToArtist
               ? () {
                   if (artist != null) {
@@ -208,51 +192,62 @@ class _SongBottomSheetState extends State<SongBottomSheet> {
               : () {},
         ),
         if (widget.enableSongCustomization)
-          StatefulBuilder(
-            builder: (context, setState) => Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: HORIZONTAL_PADDING - 12.0, vertical: 4.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          if (optionIndex == 1)
-                            setState(() => optionIndex = 0);
-                          else
-                            setState(() => optionIndex = 1);
-                        },
-                        icon: const Icon(Icons.link_rounded),
-                        color: utils.linkColor(song),
-                      ),
-                      LikeButton(song: song),
-                      IconButton(
-                        onPressed: () {
-                          if (optionIndex == 2)
-                            setState(() => optionIndex = 0);
-                          else
-                            setState(() => optionIndex = 2);
-                        },
-                        icon: Icon(utils.blockLevelIcon(song.blockLevel)),
-                        color: utils.blockLevelColor(song.blockLevel),
-                      ),
-                    ],
-                  ),
-                ),
-                AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 100),
-                  transitionBuilder: (child, animation) => SizeTransition(
-                    sizeFactor: animation,
-                    child: child,
-                  ),
-                  child: options[optionIndex],
-                ),
-              ],
-            ),
-          ),
+          ExcludeLevelOptions(songs: [song], musicDataStore: musicDataStore),
+        if (widget.enableSongCustomization)
+          FutureBuilder(
+              future: firstLast,
+              builder: (context, AsyncSnapshot<List<bool>> snapshot) {
+                if (snapshot.hasData)
+                  return Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          flex: 5,
+                          child: SwitchListTile(
+                            secondary: Icon(
+                              MuckeIcons.link_prev,
+                              color: song.previous
+                                  ? utils.linkColor(true, false)
+                                  : utils.linkColor(true, false).withOpacity(0.5),
+                            ),
+                            value: song.previous,
+                            onChanged: snapshot.data![0]
+                                ? null
+                                : (_) => musicDataStore.togglePreviousSongLink(song),
+                            contentPadding:
+                                const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Center(
+                            child: Container(width: 1.0, height: 24.0, color: DARK2),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 5,
+                          child: SwitchListTile(
+                            secondary: Icon(
+                              MuckeIcons.link_next,
+                              color: song.next
+                                  ? utils.linkColor(false, true)
+                                  : utils.linkColor(false, true).withOpacity(0.5),
+                            ),
+                            value: song.next,
+                            onChanged: snapshot.data![1]
+                                ? null
+                                : (_) => musicDataStore.toggleNextSongLink(song),
+                            contentPadding:
+                                const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                else
+                  return Container();
+              }),
         if (widget.enableQueueActions) ...[
           ListTile(
             title: Text(L10n.of(context)!.playNext),

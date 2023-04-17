@@ -30,17 +30,13 @@ class ArtistHeader extends StatelessWidget {
       ),
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
-        titlePadding: const EdgeInsets.symmetric(horizontal: 48.0),
+        titlePadding: EdgeInsets.only(left: 48.0, right: 48.0, top: MediaQuery.of(context).padding.top),
         title: Container(
           alignment: Alignment.center,
           height: height * 0.66,
           child: Text(
             artist.name,
-            style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24.0,
-                  color: Colors.white,
-                ),
+            style: Theme.of(context).textTheme.displaySmall,
             textAlign: TextAlign.center,
             maxLines: 3,
           ),

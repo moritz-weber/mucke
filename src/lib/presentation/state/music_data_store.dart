@@ -138,4 +138,9 @@ abstract class _MusicDataStore with Store {
   Future<void> removeSmartList(SmartList smartList) async {
     await _musicDataRepository.removeSmartList(smartList);
   }
+
+  Future<List<bool>> isSongFirstLast(Song? song) async {
+    if (song == null) return Future.value([false, false]);
+    return await _musicDataRepository.isSongFirstLast(song);
+  }
 }

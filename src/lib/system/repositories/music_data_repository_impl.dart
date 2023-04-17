@@ -562,4 +562,11 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   Future<void> removeBlockedFiles(List<String> paths) async {
     await _musicDataSource.removeBlockedFiles(paths);
   }
+  
+  @override
+  Future<List<bool>> isSongFirstLast(Song song) async {
+    final songs = await _musicDataSource.getSongsFromSameAlbum(song as SongModel).then(_sortAlbumSongs);
+
+    return [songs.indexOf(song) == 0, songs.indexOf(song) == songs.length - 1];
+  }
 }

@@ -50,154 +50,153 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
     final AudioStore audioStore = GetIt.I<AudioStore>();
 
     return Scaffold(
-      body: Observer(
-        builder: (BuildContext context) {
-          final album = widget.album;
-          final songs = store.albumSongStream.value ?? [];
-          final totalDuration =
-              songs.fold(const Duration(milliseconds: 0), (Duration d, s) => d + s.duration);
-          final songsByDisc = _songsByDisc(store.albumSongStream.value ?? []);
-          final discSongNums = [0];
-          for (int i = 0; i < songsByDisc.length - 1; i++) {
-            discSongNums.add(songsByDisc[i].length + discSongNums[i]);
-          }
+      body: Material(
+        child: Observer(
+          builder: (BuildContext context) {
+            final album = widget.album;
+            final songs = store.albumSongStream.value ?? [];
+            final totalDuration =
+                songs.fold(const Duration(milliseconds: 0), (Duration d, s) => d + s.duration);
+            final songsByDisc = _songsByDisc(store.albumSongStream.value ?? []);
+            final discSongNums = [0];
+            for (int i = 0; i < songsByDisc.length - 1; i++) {
+              discSongNums.add(songsByDisc[i].length + discSongNums[i]);
+            }
 
-          return Scrollbar(
-            child: CustomScrollView(
-              slivers: <Widget>[
-                CoverSliverAppBar(
-                  title: album.title,
-                  subtitle: album.artist,
-                  subtitle2:
-                      '${album.pubYear.toString()} • ${L10n.of(context)!.nSongs(songs.length)} • ${utils.msToTimeString(totalDuration)}',
-                  actions: [
-                    Observer(
-                      builder: (context) {
+            return Scrollbar(
+              child: CustomScrollView(
+                slivers: <Widget>[
+                  CoverSliverAppBar(
+                    title: album.title,
+                    subtitle: album.artist,
+                    subtitle2:
+                        '${album.pubYear.toString()} • ${L10n.of(context)!.nSongs(songs.length)} • ${utils.msToTimeString(totalDuration)}',
+                    actions: [
+                      Observer(
+                        builder: (context) {
+                          final isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
+
+                          if (isMultiSelectEnabled)
+                            return IconButton(
+                              key: GlobalKey(),
+                              icon: const Icon(Icons.more_vert_rounded),
+                              onPressed: () => _openMultiselectMenu(context),
+                            );
+
+                          return Container();
+                        },
+                      ),
+                      Observer(
+                        builder: (context) {
+                          final isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
+                          final isAllSelected = store.selection.isAllSelected;
+
+                          if (isMultiSelectEnabled)
+                            return IconButton(
+                              key: GlobalKey(),
+                              icon: isAllSelected
+                                  ? const Icon(Icons.deselect_rounded)
+                                  : const Icon(Icons.select_all_rounded),
+                              onPressed: () {
+                                if (isAllSelected)
+                                  store.selection.deselectAll();
+                                else
+                                  store.selection.selectAll();
+                              },
+                            );
+
+                          return Container();
+                        },
+                      ),
+                      Observer(builder: (context) {
                         final isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
-
-                        if (isMultiSelectEnabled)
-                          return IconButton(
-                            key: GlobalKey(),
-                            icon: const Icon(Icons.more_vert_rounded),
-                            onPressed: () => _openMultiselectMenu(context),
-                          );
-
-                        return Container();
-                      },
+                        return IconButton(
+                          key: const ValueKey('ALBUM_MULTISELECT'),
+                          icon: isMultiSelectEnabled
+                              ? const Icon(Icons.close_rounded)
+                              : const Icon(Icons.checklist_rtl_rounded),
+                          onPressed: () => store.selection.toggleMultiSelect(),
+                        );
+                      })
+                    ],
+                    cover: Image(
+                      image: utils.getAlbumImage(album.albumArtPath),
+                      fit: BoxFit.cover,
                     ),
-                    Observer(
-                      builder: (context) {
-                        final isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
-                        final isAllSelected = store.selection.isAllSelected;
-
-                        if (isMultiSelectEnabled)
-                          return IconButton(
-                            key: GlobalKey(),
-                            icon: isAllSelected
-                                ? const Icon(Icons.deselect_rounded)
-                                : const Icon(Icons.select_all_rounded),
-                            onPressed: () {
-                              if (isAllSelected)
-                                store.selection.deselectAll();
-                              else
-                                store.selection.selectAll();
-                            },
-                          );
-
-                        return Container();
-                      },
-                    ),
-                    Observer(builder: (context) {
-                      final isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
-                      return IconButton(
-                        key: const ValueKey('ALBUM_MULTISELECT'),
-                        icon: isMultiSelectEnabled
-                            ? const Icon(Icons.close_rounded)
-                            : const Icon(Icons.checklist_rtl_rounded),
-                        onPressed: () => store.selection.toggleMultiSelect(),
-                      );
-                    })
-                  ],
-                  cover: Image(
-                    image: utils.getAlbumImage(album.albumArtPath),
-                    fit: BoxFit.cover,
-                  ),
-                  background: Image(
-                    image: utils.getAlbumImage(album.albumArtPath),
-                    fit: BoxFit.cover,
-                  ),
-                  button: SizedBox(
-                    width: 48,
-                    child: ElevatedButton(
-                      onPressed: () => audioStore.playAlbum(album),
-                      child: const Icon(Icons.play_arrow_rounded),
-                      style: ElevatedButton.styleFrom(
-                        shape: const StadiumBorder(),
-                        backgroundColor: LIGHT1,
-                        fixedSize: const Size.fromHeight(48),
-                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    backgroundColor: utils.bgColor(album.color),
+                    button: SizedBox(
+                      width: 48,
+                      child: Center(
+                        child: ElevatedButton(
+                          onPressed: () => audioStore.playAlbum(album),
+                          child: const Icon(Icons.play_arrow_rounded),
+                          style: ElevatedButton.styleFrom(
+                            shape: const StadiumBorder(),
+                            backgroundColor: LIGHT1,
+                            fixedSize: const Size.fromHeight(48),
+                            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                for (int d = 0; d < songsByDisc.length; d++)
-                  Observer(
-                    builder: (context) {
-                      final bool isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
-                      final List<bool> isSelected = store.selection.isSelected.toList();
+                  for (int d = 0; d < songsByDisc.length; d++)
+                    Observer(
+                      builder: (context) {
+                        final bool isMultiSelectEnabled = store.selection.isMultiSelectEnabled;
+                        final List<bool> isSelected = store.selection.isSelected.toList();
 
-                      return SliverList(
-                        delegate: SliverChildListDelegate(
-                          [
-                            if (songsByDisc.length > 1 && d > 0) Container(height: 8.0),
-                            if (songsByDisc.length > 1)
-                              ListTile(
-                                title: Text('${L10n.of(context)!.disc} ${d + 1}', style: TEXT_HEADER),
-                                leading:
-                                    const SizedBox(width: 40, child: Icon(Icons.album_rounded)),
-                                contentPadding: const EdgeInsets.only(left: HORIZONTAL_PADDING),
-                              ),
-                            if (songsByDisc.length > 1)
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: HORIZONTAL_PADDING,
-                                ),
-                                child: Container(
-                                  height: 1.0,
-                                  color: Colors.white10,
-                                ),
-                              ),
-                            for (int s = 0; s < songsByDisc[d].length; s++)
-                              SongListTileNumbered(
-                                song: songsByDisc[d][s],
-                                isSelectEnabled: isMultiSelectEnabled,
-                                isSelected: isMultiSelectEnabled && isSelected[s + discSongNums[d]],
-                                onTap: () => audioStore.playAlbumFromIndex(
-                                  widget.album,
-                                  s + _calcOffset(d, songsByDisc),
-                                ),
-                                onTapMore: () => showModalBottomSheet(
-                                  context: context,
-                                  useRootNavigator: true,
-                                  isScrollControlled: true,
-                                  backgroundColor: Colors.transparent,
-                                  builder: (context) => SongBottomSheet(
-                                    song: songsByDisc[d][s],
-                                    enableGoToAlbum: false,
+                        return SliverList(
+                          delegate: SliverChildListDelegate(
+                            [
+                              if (songsByDisc.length > 1 && d > 0) Container(height: 8.0),
+                              if (songsByDisc.length > 1)
+                                ListTile(
+                                  title: Text(
+                                    '${L10n.of(context)!.disc} ${d + 1}',
+                                    style: TEXT_HEADER,
                                   ),
+                                  leading: const SizedBox(
+                                    width: 40,
+                                    child: Icon(Icons.album_rounded),
+                                  ),
+                                  contentPadding: const EdgeInsets.only(left: HORIZONTAL_PADDING),
                                 ),
-                                onSelect: (bool selected) =>
-                                    store.selection.setSelected(selected, s + discSongNums[d]),
-                              )
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-              ],
-            ),
-          );
-        },
+                              if (songsByDisc.length > 1)
+                                const Divider(indent: HORIZONTAL_PADDING, endIndent: HORIZONTAL_PADDING),
+                              for (int s = 0; s < songsByDisc[d].length; s++)
+                                SongListTileNumbered(
+                                  song: songsByDisc[d][s],
+                                  isSelectEnabled: isMultiSelectEnabled,
+                                  isSelected:
+                                      isMultiSelectEnabled && isSelected[s + discSongNums[d]],
+                                  onTap: () => audioStore.playAlbumFromIndex(
+                                    widget.album,
+                                    s + _calcOffset(d, songsByDisc),
+                                  ),
+                                  onTapMore: () => showModalBottomSheet(
+                                    context: context,
+                                    useRootNavigator: true,
+                                    isScrollControlled: true,
+                                    backgroundColor: Colors.transparent,
+                                    builder: (context) => SongBottomSheet(
+                                      song: songsByDisc[d][s],
+                                      enableGoToAlbum: false,
+                                    ),
+                                  ),
+                                  onSelect: (bool selected) =>
+                                      store.selection.setSelected(selected, s + discSongNums[d]),
+                                )
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }

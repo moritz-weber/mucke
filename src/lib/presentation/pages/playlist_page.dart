@@ -19,6 +19,7 @@ import '../widgets/bottom_sheet/add_to_playlist.dart';
 import '../widgets/bottom_sheet/remove_from_playlist.dart';
 import '../widgets/cover_sliver_appbar.dart';
 import '../widgets/custom_modal_bottom_sheet.dart';
+import '../widgets/play_shuffle_button.dart';
 import '../widgets/playlist_cover.dart';
 import '../widgets/song_bottom_sheet.dart';
 import '../widgets/song_list_tile.dart';
@@ -156,31 +157,18 @@ class _PlaylistPageState extends State<PlaylistPage> {
                     ),
                   ],
                   title: playlist.name,
-                  subtitle2: '${L10n.of(context)!.nSongs(songs.length).capitalize()} • ${utils.msToTimeString(totalDuration)}',
-                  background: Container(
-                    decoration: BoxDecoration(
-                      gradient: playlist.gradient,
-                    ),
-                  ),
+                  subtitle2:
+                      '${L10n.of(context)!.nSongs(songs.length).capitalize()} • ${utils.msToTimeString(totalDuration)}',
+                  backgroundColor: utils.bgColor(playlist.gradient.colors.first),
                   cover: PlaylistCover(
                     size: 120,
                     icon: playlist.icon,
                     gradient: playlist.gradient,
                   ),
-                  button: ElevatedButton(
+                  button: PlayShuffleButton(
                     onPressed: () => audioStore.playPlaylist(playlist),
-                    child: Row(
-                      children: [
-                        Expanded(child: Center(child: Text(L10n.of(context)!.play))),
-                        Icon(playIcon),
-                      ],
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      shape: const StadiumBorder(),
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                      backgroundColor: Colors.white10,
-                      shadowColor: Colors.transparent,
-                    ),
+                    shuffleMode: playlist.shuffleMode,
+                    size: 56,
                   ),
                 ),
                 Observer(
@@ -197,8 +185,6 @@ class _PlaylistPageState extends State<PlaylistPage> {
                             key: ValueKey(song.path),
                             child: SongListTile(
                               song: song,
-                              showAlbum: true,
-                              subtitle: Subtitle.artistAlbum,
                               onTap: () => audioStore.playSong(index, songs, playlist),
                               onTapMore: () => showModalBottomSheet(
                                 context: context,

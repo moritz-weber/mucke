@@ -2,6 +2,7 @@ import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:text_scroll/text_scroll.dart';
 
 import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
@@ -69,25 +70,41 @@ class CurrentlyPlayingPage extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 16.0 + 12.0),
                           child: SizedBox(
                             width: double.infinity,
-                            height: 74.0,
+                            height: 58.0,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
+                                TextScroll(
                                   song.title,
-                                  overflow: TextOverflow.fade,
-                                  softWrap: false,
-                                  maxLines: 1,
+                                  mode: TextScrollMode.endless,
+                                  velocity: const Velocity(pixelsPerSecond: Offset(40, 0)),
+                                  delayBefore: const Duration(milliseconds: 500),
+                                  pauseBetween: const Duration(milliseconds: 2000),
+                                  pauseOnBounce: const Duration(milliseconds: 1000),
                                   style: TEXT_BIG,
+                                  textAlign: TextAlign.left,
+                                  fadedBorder: true,
+                                  fadedBorderWidth: 0.02,
+                                  fadeBorderVisibility: FadeBorderVisibility.auto,
+                                  intervalSpaces: 30,
                                 ),
-                                Text(
+                                TextScroll(
                                   '${song.artist} • ${song.album}',
+                                  mode: TextScrollMode.endless,
+                                  velocity: const Velocity(pixelsPerSecond: Offset(40, 0)),
+                                  delayBefore: const Duration(milliseconds: 500),
+                                  pauseBetween: const Duration(milliseconds: 2000),
+                                  pauseOnBounce: const Duration(milliseconds: 1000),
                                   style: TextStyle(
                                     color: Colors.grey[300],
                                     fontSize: 18.0,
                                     fontWeight: FontWeight.w300,
                                   ),
-                                  maxLines: 2,
+                                  textAlign: TextAlign.left,
+                                  fadedBorder: true,
+                                  fadedBorderWidth: 0.02,
+                                  fadeBorderVisibility: FadeBorderVisibility.auto,
+                                  intervalSpaces: 30,
                                 ),
                               ],
                             ),

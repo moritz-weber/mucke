@@ -68,7 +68,7 @@ class _AlbumBackgroundState extends State<AlbumBackground> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color.lerp(DARK3, color, 0.4) ?? DARK3, DARK1],
+            colors: [bgColor(color), DARK1],
             stops: const [0.0, 1.0],
           ),
         ),

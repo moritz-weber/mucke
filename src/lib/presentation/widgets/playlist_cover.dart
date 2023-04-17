@@ -43,6 +43,7 @@ class PlaylistCover extends StatelessWidget {
           child: Icon(
             icon,
             size: size / 2.0,
+            color: Colors.white,
           ),
         ),
         decoration: deco,

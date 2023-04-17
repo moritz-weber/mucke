@@ -36,34 +36,51 @@ class SongListTileNumbered extends StatelessWidget {
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
       ),
-      subtitle: Text(
-        '${msToTimeString(song.duration)} • ${song.artist}',
-        style: const TextStyle(
-          fontWeight: FontWeight.w300,
-        ),
+      subtitle: Row(
+        children: [
+          Text(
+              '${msToTimeString(song.duration)} • ',
+              style: const TextStyle(
+                fontWeight: FontWeight.w300,
+              ),
+            ),
+          Icon(
+              likeCountIcon(song.likeCount),
+              size: 13.0,
+              color: likeCountColor(song.likeCount),
+            ),
+            if (song.blockLevel > 0)
+              Padding(
+                padding: const EdgeInsets.only(left: 2.0),
+                child: Icon(
+                  blockLevelIcon(song.blockLevel),
+                  size: 13.0,
+                  color: Colors.white38,
+                ),
+              ),
+            if (song.next || song.previous)
+              Padding(
+                padding: const EdgeInsets.only(left: 2.0),
+                child: Icon(
+                  linkIcon(song.previous, song.next),
+                  size: 13.0,
+                  color: linkColor(song.previous, song.next).withOpacity(0.7),
+                ),
+              ),
+          Expanded(
+            child: Text(
+              ' • ${song.artist}',
+              style: const TextStyle(
+                fontWeight: FontWeight.w300,
+              ),
+            ),
+          ),
+        ],
       ),
       onTap: () => onTap(),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (song.blockLevel > 0)
-            Padding(
-              padding: const EdgeInsets.only(right: 4.0),
-              child: Icon(
-                blockLevelIcon(song.blockLevel),
-                size: 16.0,
-                color: Colors.white38,
-              ),
-            ),
-          Icon(
-            likeCountIcon(song.likeCount),
-            size: 16.0,
-            color: song.likeCount == 3
-                ? LIGHT2
-                : Colors.white.withOpacity(
-                    0.2 + 0.18 * song.likeCount,
-                  ),
-          ),
           if (!isSelectEnabled)
             IconButton(
               icon: const Icon(Icons.more_vert_rounded),

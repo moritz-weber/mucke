@@ -8,8 +8,7 @@ import '../state/music_data_store.dart';
 import '../state/navigation_store.dart';
 import '../state/playlist_form_store.dart';
 import '../theming.dart';
-import '../widgets/playlist_cover.dart';
-import 'cover_customization_page.dart';
+import '../widgets/cover_customization_card.dart';
 
 class PlaylistFormPage extends StatefulWidget {
   const PlaylistFormPage({Key? key, this.playlist}) : super(key: key);
@@ -52,159 +51,121 @@ class _PlaylistFormPageState extends State<PlaylistFormPage> {
       L10n.of(context)!.favShuffleMode,
     ];
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            title,
-            style: TEXT_HEADER,
-          ),
-          centerTitle: true,
-          leading: IconButton(
-            icon: const Icon(Icons.close_rounded),
-            onPressed: () => navStore.pop(context),
-          ),
-          actions: [
-            if (widget.playlist != null)
-              IconButton(
-                icon: const Icon(Icons.delete_rounded),
-                onPressed: () async {
-                  // TODO: this works, but may only pop back to the smartlist page...
-                  // can I use pop 2x here?
-                  await musicDataStore.removePlaylist(widget.playlist!);
-                  navStore.pop(context);
-                },
-              ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          title,
+          style: TEXT_HEADER,
+        ),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.close_rounded),
+          onPressed: () => navStore.pop(context),
+        ),
+        actions: [
+          if (widget.playlist != null)
             IconButton(
-              icon: const Icon(Icons.check_rounded),
+              icon: const Icon(Icons.delete_rounded),
               onPressed: () async {
-                store.validateAll();
-                if (!store.error.hasErrors) {
-                  await store.save();
-                  navStore.pop(context);
-                }
+                // TODO: this works, but may only pop back to the smartlist page...
+                // can I use pop 2x here?
+                await musicDataStore.removePlaylist(widget.playlist!);
+                navStore.pop(context);
               },
             ),
-          ],
-          titleSpacing: 0.0,
-        ),
-        body: ListTileTheme(
-          contentPadding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
-          child: Scrollbar(
-            child: CustomScrollView(
-              slivers: [
-                SliverList(
-                  delegate: SliverChildListDelegate(
-                    [
-                      const SizedBox(height: 16.0),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                        child: Observer(
-                          builder: (_) => TextFormField(
-                            initialValue: store.name,
-                            onChanged: (value) => store.name = value,
-                            style: TEXT_HEADER,
-                            decoration: InputDecoration(
-                              labelText: L10n.of(context)!.name,
-                              labelStyle: const TextStyle(color: Colors.white),
-                              floatingLabelStyle: TEXT_HEADER_S.copyWith(color: Colors.white),
-                              errorText: store.error.name ? L10n.of(context)!.nameMustNotBeEmpty : null,
-                              errorStyle: const TextStyle(color: RED),
-                              filled: true,
-                              fillColor: DARK35,
-                              border: const OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                                borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(
-                                vertical: 4.0,
-                                horizontal: 12.0,
-                              ),
+          IconButton(
+            icon: const Icon(Icons.check_rounded),
+            onPressed: () async {
+              store.validateAll();
+              if (!store.error.hasErrors) {
+                await store.save();
+                navStore.pop(context);
+              }
+            },
+          ),
+        ],
+        titleSpacing: 0.0,
+      ),
+      body: ListTileTheme(
+        contentPadding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
+        child: Scrollbar(
+          child: CustomScrollView(
+            slivers: [
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    const SizedBox(height: 16.0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      child: Observer(
+                        builder: (_) => TextFormField(
+                          initialValue: store.name,
+                          onChanged: (value) => store.name = value,
+                          style: TEXT_HEADER,
+                          decoration: InputDecoration(
+                            labelText: L10n.of(context)!.name,
+                            labelStyle: const TextStyle(color: Colors.white),
+                            floatingLabelStyle: TEXT_HEADER_S.copyWith(color: Colors.white),
+                            errorText:
+                                store.error.name ? L10n.of(context)!.nameMustNotBeEmpty : null,
+                            errorStyle: const TextStyle(color: RED),
+                            filled: true,
+                            fillColor: DARK35,
+                            border: const OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                              vertical: 4.0,
+                              horizontal: 12.0,
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(height: 4.0),
-                      Observer(
-                        builder: (context) => Card(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: CARD_PADDING,
-                              horizontal: 10.0,
-                            ),
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (BuildContext context) => CoverCustomizationPage(
-                                      store: store.cover,
+                    ),
+                    const SizedBox(height: 4.0),
+                    Observer(
+                      builder: (context) => CoverCustomizationCard(store: store.cover),
+                    ),
+                    const SizedBox(height: 8.0),
+                    ListTile(
+                      title: Text(L10n.of(context)!.playbackMode, style: TEXT_HEADER),
+                    ),
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: CARD_PADDING,
+                        ),
+                        child: Observer(
+                          builder: (_) {
+                            return Column(
+                              children: <int>[0, 1, 2, 3].map<RadioListTile<int>>((int value) {
+                                return RadioListTile<int>(
+                                  title: Text(
+                                    playbackModeTexts[value],
+                                    style: const TextStyle(
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.normal,
                                     ),
                                   ),
+                                  value: value,
+                                  groupValue: store.shuffleModeIndex,
+                                  onChanged: (int? newValue) {
+                                    setState(() {
+                                      if (newValue != null) store.setShuffleModeIndex(newValue);
+                                    });
+                                  },
                                 );
-                              },
-                              child: Container(
-                                color: Colors.transparent,
-                                child: Row(
-                                  children: [
-                                    PlaylistCover(
-                                      size: 64.0,
-                                      gradient: store.cover.gradient,
-                                      icon: store.cover.icon,
-                                    ),
-                                    const SizedBox(width: 16.0),
-                                    Text(L10n.of(context)!.customizeCover),
-                                    const Spacer(),
-                                    const SizedBox(
-                                      width: 56.0,
-                                      child: Icon(Icons.chevron_right_rounded),
-                                    ),
-                                    const SizedBox(width: 6.0),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
+                              }).toList(),
+                            );
+                          },
                         ),
                       ),
-                      const SizedBox(height: 8.0),
-                      ListTile(
-                        title: Text(L10n.of(context)!.playbackMode, style: TEXT_HEADER),
-                      ),
-                      Card(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: CARD_PADDING,
-                          ),
-                          child: Observer(
-                            builder: (_) {
-                              return Column(
-                                children: <int>[0, 1, 2, 3].map<RadioListTile<int>>((int value) {
-                                  return RadioListTile<int>(
-                                    title: Text(
-                                      playbackModeTexts[value],
-                                      style: const TextStyle(
-                                        fontSize: 14.0,
-                                      ),
-                                    ),
-                                    value: value,
-                                    groupValue: store.shuffleModeIndex,
-                                    onChanged: (int? newValue) {
-                                      setState(() {
-                                        if (newValue != null) store.setShuffleModeIndex(newValue);
-                                      });
-                                    },
-                                  );
-                                }).toList(),
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

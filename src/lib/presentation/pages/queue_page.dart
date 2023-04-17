@@ -38,187 +38,181 @@ class QueuePage extends StatelessWidget {
     final ScrollController _scrollController =
         ScrollController(initialScrollOffset: initialIndex * 72.0);
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          leading: Padding(
-            padding: const EdgeInsets.only(left: HORIZONTAL_PADDING),
-            child: SizedBox(
-              width: 56.0,
-              child: IconButton(
-                icon: const Icon(Icons.expand_more_rounded),
-                onPressed: () => Navigator.pop(context),
-              ),
+    return Scaffold(
+      appBar: AppBar(
+        leading: Padding(
+          padding: const EdgeInsets.only(left: HORIZONTAL_PADDING),
+          child: SizedBox(
+            width: 56.0,
+            child: IconButton(
+              icon: const Icon(Icons.expand_more_rounded),
+              onPressed: () => Navigator.pop(context),
             ),
           ),
-          leadingWidth: 56 + HORIZONTAL_PADDING,
-          toolbarHeight: 80.0,
-          title: Observer(
-            builder: (context) {
-              final playable = audioStore.playableStream.value;
-              final numAvailableSongs = audioStore.numAvailableSongs;
-
-              Widget subTitle = Container();
-
-              if (playable != null) {
-                subTitle = Text(
-                  playable.repr(),
-                  maxLines: 1,
-                );
-              }
-
-              String text = L10n.of(context)!.nSongsInQueue(audioStore.queueLength);
-              if (numAvailableSongs > 0) text += ', ${L10n.of(context)!.moreAvailable(numAvailableSongs)}';
-
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    L10n.of(context)!.currentlyPlaying.toUpperCase(),
-                    style: TEXT_SMALL_HEADLINE,
-                  ),
-                  subTitle,
-                  const SizedBox(height: 4.0),
-                  Text(
-                    text,
-                    style: TEXT_SMALL_SUBTITLE.copyWith(color: Colors.white70),
-                  ),
-                ],
-              );
-            },
-          ),
-          centerTitle: false,
-          actions: [
-            Observer(
-              builder: (context) {
-                final isMultiSelectEnabled = queuePageStore.isMultiSelectEnabled;
-
-                if (isMultiSelectEnabled)
-                  return IconButton(
-                    key: GlobalKey(),
-                    icon: const Icon(Icons.more_vert_rounded),
-                    onPressed: () => _openMultiselectMenu(context),
-                  );
-
-                return Container();
-              },
-            ),
-            Observer(
-              builder: (context) {
-                final isMultiSelectEnabled = queuePageStore.isMultiSelectEnabled;
-                final isAllSelected = queuePageStore.isAllSelected;
-
-                if (isMultiSelectEnabled)
-                  return IconButton(
-                    key: GlobalKey(),
-                    icon: isAllSelected
-                        ? const Icon(Icons.deselect_rounded)
-                        : const Icon(Icons.select_all_rounded),
-                    onPressed: () {
-                      if (isAllSelected)
-                        queuePageStore.deselectAll();
-                      else
-                        queuePageStore.selectAll();
-                    },
-                  );
-
-                return Container();
-              },
-            ),
-            Observer(builder: (context) {
-              final isMultiSelectEnabled = queuePageStore.isMultiSelectEnabled;
-              return IconButton(
-                key: const ValueKey('QUEUE_MULTISELECT'),
-                icon: isMultiSelectEnabled
-                    ? const Icon(Icons.close_rounded)
-                    : const Icon(Icons.checklist_rtl_rounded),
-                onPressed: () => queuePageStore.toggleMultiSelect(),
-              );
-            })
-          ],
         ),
-        body: Observer(
-          builder: (BuildContext context) {
-            print('QueuePage.build -> Observer.build');
-            final queue = audioStore.queue;
-            final isMultiSelectEnabled = queuePageStore.isMultiSelectEnabled;
-            final isSelected = queuePageStore.isSelected.toList();
+        leadingWidth: 56 + HORIZONTAL_PADDING,
+        toolbarHeight: 80.0,
+        title: Observer(
+          builder: (context) {
+            final playable = audioStore.playableStream.value;
+            final numAvailableSongs = audioStore.numAvailableSongs;
 
-            while (isSelected.length < queue.length) isSelected.add(false);
+            Widget subTitle = Container();
 
-            final int activeIndex = queueIndexStream.value ?? -1;
-            return Scrollbar(
-              child: CustomScrollView(
-                controller: _scrollController,
-                slivers: [
-                  ReorderableSliverList(
-                    delegate: ReorderableSliverChildBuilderDelegate(
-                      (context, int index) {
-                        final QueueItem? queueItem = queue[index];
-                        if (queueItem == null) return Container();
-                        return Dismissible(
-                          key: ValueKey(queueItem.toString()),
-                          child: SongListTile(
-                            song: queueItem.song,
-                            highlight: index == activeIndex,
-                            source: queueItem.source,
-                            isSelectEnabled: isMultiSelectEnabled,
-                            isSelected: isMultiSelectEnabled && isSelected[index],
-                            onTap: () async {
-                              await audioStore.seekToIndex(index);
-                              audioStore.play();
-                            },
-                            onTapMore: () => showModalBottomSheet(
-                              context: context,
-                              useRootNavigator: true,
-                              isScrollControlled: true,
-                              backgroundColor: Colors.transparent,
-                              builder: (context) => SongBottomSheet(
-                                song: queueItem.song,
-                                enableQueueActions: false,
-                                numNavPop: 3,
-                              ),
-                            ),
-                            onSelect: (bool selected) =>
-                                queuePageStore.setSelected(selected, index),
-                          ),
-                          background: Container(
-                            width: double.infinity,
-                            color: RED,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: const [
-                                  Icon(
-                                    Icons.playlist_remove_rounded,
-                                    color: Colors.white,
-                                  ),
-                                  Icon(
-                                    Icons.playlist_remove_rounded,
-                                    color: Colors.white,
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                          onDismissed: (direction) {
-                            audioStore.removeQueueIndices([index]);
-                          },
-                          confirmDismiss: (direction) async => !isMultiSelectEnabled,
-                        );
-                      },
-                      childCount: queue.length,
-                    ),
-                    onReorder: (oldIndex, newIndex) => audioStore.moveQueueItem(oldIndex, newIndex),
-                  )
-                ],
-              ),
+            if (playable != null) {
+              subTitle = Text(
+                playable.repr(),
+                maxLines: 1,
+              );
+            }
+
+            String text = L10n.of(context)!.nSongsInQueue(audioStore.queueLength);
+            if (numAvailableSongs > 0) text += ', ${L10n.of(context)!.moreAvailable(numAvailableSongs)}';
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                subTitle,
+                const SizedBox(height: 4.0),
+                Text(
+                  text,
+                  style: TEXT_SMALL_SUBTITLE.copyWith(color: Colors.white70),
+                ),
+              ],
             );
           },
         ),
-        bottomNavigationBar: const QueueControlBar(),
+        centerTitle: false,
+        actions: [
+          Observer(
+            builder: (context) {
+              final isMultiSelectEnabled = queuePageStore.isMultiSelectEnabled;
+
+              if (isMultiSelectEnabled)
+                return IconButton(
+                  key: GlobalKey(),
+                  icon: const Icon(Icons.more_vert_rounded),
+                  onPressed: () => _openMultiselectMenu(context),
+                );
+
+              return Container();
+            },
+          ),
+          Observer(
+            builder: (context) {
+              final isMultiSelectEnabled = queuePageStore.isMultiSelectEnabled;
+              final isAllSelected = queuePageStore.isAllSelected;
+
+              if (isMultiSelectEnabled)
+                return IconButton(
+                  key: GlobalKey(),
+                  icon: isAllSelected
+                      ? const Icon(Icons.deselect_rounded)
+                      : const Icon(Icons.select_all_rounded),
+                  onPressed: () {
+                    if (isAllSelected)
+                      queuePageStore.deselectAll();
+                    else
+                      queuePageStore.selectAll();
+                  },
+                );
+
+              return Container();
+            },
+          ),
+          Observer(builder: (context) {
+            final isMultiSelectEnabled = queuePageStore.isMultiSelectEnabled;
+            return IconButton(
+              key: const ValueKey('QUEUE_MULTISELECT'),
+              icon: isMultiSelectEnabled
+                  ? const Icon(Icons.close_rounded)
+                  : const Icon(Icons.checklist_rtl_rounded),
+              onPressed: () => queuePageStore.toggleMultiSelect(),
+            );
+          })
+        ],
       ),
+      body: Observer(
+        builder: (BuildContext context) {
+          print('QueuePage.build -> Observer.build');
+          final queue = audioStore.queue;
+          final isMultiSelectEnabled = queuePageStore.isMultiSelectEnabled;
+          final isSelected = queuePageStore.isSelected.toList();
+
+          while (isSelected.length < queue.length) isSelected.add(false);
+
+          final int activeIndex = queueIndexStream.value ?? -1;
+          return Scrollbar(
+            child: CustomScrollView(
+              controller: _scrollController,
+              slivers: [
+                ReorderableSliverList(
+                  delegate: ReorderableSliverChildBuilderDelegate(
+                    (context, int index) {
+                      final QueueItem? queueItem = queue[index];
+                      if (queueItem == null) return Container();
+                      return Dismissible(
+                        key: ValueKey(queueItem.toString()),
+                        child: SongListTile(
+                          song: queueItem.song,
+                          highlight: index == activeIndex,
+                          source: queueItem.source,
+                          isSelectEnabled: isMultiSelectEnabled,
+                          isSelected: isMultiSelectEnabled && isSelected[index],
+                          onTap: () async {
+                            await audioStore.seekToIndex(index);
+                            audioStore.play();
+                          },
+                          onTapMore: () => showModalBottomSheet(
+                            context: context,
+                            useRootNavigator: true,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            builder: (context) => SongBottomSheet(
+                              song: queueItem.song,
+                              enableQueueActions: false,
+                              numNavPop: 3,
+                            ),
+                          ),
+                          onSelect: (bool selected) =>
+                              queuePageStore.setSelected(selected, index),
+                        ),
+                        background: Container(
+                          width: double.infinity,
+                          color: RED,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: const [
+                                Icon(
+                                  Icons.playlist_remove_rounded,
+                                  color: Colors.white,
+                                ),
+                                Icon(
+                                  Icons.playlist_remove_rounded,
+                                  color: Colors.white,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        onDismissed: (direction) {
+                          audioStore.removeQueueIndices([index]);
+                        },
+                        confirmDismiss: (direction) async => !isMultiSelectEnabled,
+                      );
+                    },
+                    childCount: queue.length,
+                  ),
+                  onReorder: (oldIndex, newIndex) => audioStore.moveQueueItem(oldIndex, newIndex),
+                )
+              ],
+            ),
+          );
+        },
+      ),
+      bottomNavigationBar: const QueueControlBar(),
     );
   }
 
