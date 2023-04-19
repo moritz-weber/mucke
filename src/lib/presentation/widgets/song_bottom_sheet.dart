@@ -91,7 +91,7 @@ class _SongBottomSheetState extends State<SongBottomSheet> {
             padding: const EdgeInsets.fromLTRB(
               HORIZONTAL_PADDING,
               HORIZONTAL_PADDING,
-              HORIZONTAL_PADDING - 14.0,
+              HORIZONTAL_PADDING - 12.0,
               HORIZONTAL_PADDING,
             ),
             child: Row(

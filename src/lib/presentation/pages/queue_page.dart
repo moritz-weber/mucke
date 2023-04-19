@@ -14,7 +14,6 @@ import '../state/audio_store.dart';
 import '../state/music_data_store.dart';
 import '../state/queue_page_store.dart';
 import '../theming.dart';
-import '../utils.dart';
 import '../widgets/bottom_sheet/add_to_playlist.dart';
 import '../widgets/custom_modal_bottom_sheet.dart';
 import '../widgets/exclude_level_options.dart';
@@ -61,7 +60,7 @@ class QueuePage extends StatelessWidget {
 
             if (playable != null) {
               subTitle = Text(
-                playable.repr(),
+                playable.repr(context),
                 maxLines: 1,
               );
             }
