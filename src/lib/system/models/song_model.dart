@@ -84,7 +84,7 @@ class SongModel extends Song {
     required DateTime lastModified,
   }) {
     final data = songModel.getMap;
-    final trackNumber = _parseTrackNumber(songModel.track);
+    final trackNumber = parseTrackNumber(songModel.track);
 
     return SongModel(
       title: songModel.title,
@@ -214,18 +214,18 @@ class SongModel extends Song {
             'color': color?.value,
           });
 
-  static List<int> _parseTrackNumber(int? number) {
+  static List<int> parseTrackNumber(int? number) {
     if (number == null) return [1, 1];
 
     final numString = number.toString();
-    final firstZero = numString.indexOf('0');
 
-    if (firstZero < 0 || firstZero == numString.length - 1) {
+    if (numString.length < 4) {
+      // does not contain a disc number
       return [1, number];
     }
 
-    final disc = numString.substring(0, firstZero);
-    final track = numString.substring(firstZero + 1);
+    final disc = numString.substring(0, numString.length - 3);
+    final track = numString.substring(numString.length - 3);
 
     return [int.parse(disc), int.parse(track)];
   }

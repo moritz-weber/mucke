@@ -5,6 +5,7 @@
 - Migration to Material 3 widgets including extensive UI changes
 - New Icons for linked songs
 - Added German translation (#51)
+- Fixed track number parsing for three digits (#76)
 
 ## 1.2.0
 
