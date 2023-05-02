@@ -153,7 +153,7 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
                               if (songsByDisc.length > 1)
                                 ListTile(
                                   title: Text(
-                                    '${L10n.of(context)!.disc} ${d + 1}',
+                                    '${L10n.of(context)!.disc} ${songsByDisc[d].first.discNumber}',
                                     style: TEXT_HEADER,
                                   ),
                                   leading: const SizedBox(
