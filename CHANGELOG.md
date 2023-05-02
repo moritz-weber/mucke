@@ -6,6 +6,7 @@
 - New Icons for linked songs
 - Added German translation (#51)
 - Fixed track number parsing for three digits (#76)
+- Fixed library loading for Android 13 (#77)
 
 ## 1.2.0
 

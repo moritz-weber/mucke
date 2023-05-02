@@ -37,6 +37,11 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
 
     final List<aq.SongModel> aqSongs = [];
 
+    final permissions = await _onAudioQuery.permissionsStatus(); 
+    if (!permissions) {
+      await _onAudioQuery.permissionsRequest();
+    }
+
     for (final libDir in libDirs) {
       await _onAudioQuery.scanMedia(libDir.path);
       aqSongs.addAll(await _onAudioQuery.querySongs(path: libDir.path));
