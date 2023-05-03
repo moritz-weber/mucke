@@ -1,0 +1,7 @@
+mucke holt das Beste aus deiner lokalen Musiksammlung heraus:
+
+- Like Songs, um sie im Shuffle-Modus öfter zu hören.
+- Schließe Lieder von der Wiedergabe im Zufallsmodus aus.
+- Verknüpfe Songs miteinander, um sie im Zufallswiedergabemodus nacheinander abzuspielen.
+- Erstelle intelligente Wiedergabelisten, die deine Bibliothek filtern und sortieren.
+- Passe deine Startseite für einen schnellen Start an.

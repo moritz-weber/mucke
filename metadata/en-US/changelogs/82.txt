@@ -1,0 +1,6 @@
+- Migration to Material 3 widgets including extensive UI changes
+- Added German translation
+- Fixed library loading for Android 13
+- Fixed track number parsing for three digits
+- Fixed bug in "Append to manually queued songs"
+- Fixed bug in queue when moving a song directly before the currently playing song
