@@ -1,3 +1,7 @@
+## 1.3.1
+
+- Fixed bug with translation priorities (#79)
+
 ## 1.3.0
 
 - Fixed bug in "Append to manually queued songs"

@@ -3,3 +3,4 @@ template-arb-file: app_en.arb
 output-localization-file: localizations.dart
 output-class: L10n
 untranslated-messages-file: missing-translations.txt
+preferred-supported-locales: [ en ]
