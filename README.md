@@ -1,5 +1,5 @@
 ![Build](https://github.com/moritz-weber/mucke/workflows/Build/badge.svg)
-
+[![Translation status](https://hosted.weblate.org/widgets/mucke/-/app/svg-badge.svg)](https://hosted.weblate.org/engage/mucke/)
 
 # mucke
 
