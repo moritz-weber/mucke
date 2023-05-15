@@ -1,1 +1,311 @@
-{}
+{
+  "home": "Головна",
+  "@home": {},
+  "settings": "Налаштування",
+  "@settings": {},
+  "library": "Бібліотека",
+  "@library": {},
+  "manageLibraryFolders": "Керування папками бібліотеки",
+  "@manageLibraryFolders": {},
+  "allowedFileExtensions": "Допустимі розширення файлів",
+  "@allowedFileExtensions": {},
+  "allowedFileExtensionsDescription": "Список через кому. Малі чи великі літери не мають значення.",
+  "@allowedFileExtensionsDescription": {},
+  "numberOfBlockedFiles": "Кількість заблокованих на даний момент файлів: {blockedFiles}",
+  "@numberOfBlockedFiles": {
+    "placeholders": {
+      "blockedFiles": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "playAlbumsInOrder": "Відтворювати альбоми по порядку",
+  "@playAlbumsInOrder": {},
+  "countSongsPlayed": "Порахуйте пісні, які були відтворені після: {percentage}%",
+  "@countSongsPlayed": {
+    "placeholders": {
+      "percentage": {
+        "type": "int"
+      }
+    }
+  },
+  "libraryFolders": "Папки бібліотеки",
+  "@libraryFolders": {},
+  "homeCustomization": "Налаштування Головної сторінки",
+  "@homeCustomization": {},
+  "albumOfTheDay": "Альбом дня",
+  "@albumOfTheDay": {},
+  "noPlaylistsYet": "Поки що немає плейлистів. Ви можете додати їх у бібліотеці.",
+  "@noPlaylistsYet": {},
+  "lastPlayed": "Останнє відтворення",
+  "@lastPlayed": {},
+  "allSongs": "Всі пісні",
+  "@allSongs": {},
+  "song": "Пісня",
+  "@song": {},
+  "songs": "Пісні",
+  "@songs": {},
+  "album": "Альбом",
+  "@album": {},
+  "albums": "Альбоми",
+  "@albums": {},
+  "artist": "Виконавець",
+  "@artist": {},
+  "artists": "Виконавці",
+  "@artists": {},
+  "playlist": "Список відтворення",
+  "@playlist": {},
+  "playlists": "Списки відтворення",
+  "@playlists": {},
+  "smartlist": "Розумний список",
+  "@smartlist": {},
+  "smartlists": "Розумні списки",
+  "@smartlists": {},
+  "noShuffle": "Ні (зберегти активний режим перемішування)",
+  "@noShuffle": {},
+  "shuffleMode": "Режим перемішування",
+  "@shuffleMode": {},
+  "name": "Ім'я",
+  "@name": {},
+  "sortingFilterSettings": "Налаштування сортування та фільтрів",
+  "@sortingFilterSettings": {},
+  "changeDate": "Дата зміни",
+  "@changeDate": {},
+  "lastTimePlayed": "Востаннє відтворено",
+  "@lastTimePlayed": {},
+  "ascending": "За зростанням",
+  "@ascending": {},
+  "descending": "За спаданням",
+  "@descending": {},
+  "playlistsOnly": "Тільки списки відтворення",
+  "@playlistsOnly": {},
+  "smartlistsOnly": "Тільки розумні списки",
+  "@smartlistsOnly": {},
+  "addSmartlist": "Додати розумний список",
+  "@addSmartlist": {},
+  "addPlaylist": "Додати список відтворення",
+  "@addPlaylist": {},
+  "customizeCover": "Налаштувати обкладинку",
+  "@customizeCover": {},
+  "playbackMode": "Режим відтворення",
+  "@playbackMode": {},
+  "excludeAllSongs": "Виключіть всі пісні, позначені для виключення.",
+  "@excludeAllSongs": {},
+  "dontExclude": "Не виключати жодної пісні.",
+  "@dontExclude": {},
+  "filterSettings": "Налаштування фільтрів",
+  "@filterSettings": {},
+  "filterLikes": "Вподобання між {min} та {max}",
+  "@filterLikes": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "minPlayCount": "Мінімальна кількість відтворення",
+  "@minPlayCount": {},
+  "minYear": "Мінімальний рік",
+  "@minYear": {},
+  "maxYear": "Максимальний рік",
+  "@maxYear": {},
+  "includeAllArtists": "Включити всіх виконавців, якщо жоден не був вибраний.",
+  "@includeAllArtists": {},
+  "limitSongs": "Обмеження на кількість пісень",
+  "@limitSongs": {},
+  "orderSettings": "Сортування",
+  "@orderSettings": {},
+  "orderSettingsDescription": "Перевпорядкуйте варіанти, щоб змінити пріоритети.",
+  "@orderSettingsDescription": {},
+  "editSmartlist": "Редагувати розумний список",
+  "@editSmartlist": {},
+  "play": "Грати",
+  "@play": {},
+  "playNext": "Грати далі",
+  "@playNext": {},
+  "appendToQueued": "Додати до пісні, поставлених у чергу вручну",
+  "@appendToQueued": {},
+  "addToQueue": "Додати в чергу",
+  "@addToQueue": {},
+  "disc": "Диск",
+  "@disc": {},
+  "highlights": "Основні моменти",
+  "@highlights": {},
+  "shuffle": "Перемішати",
+  "@shuffle": {},
+  "selectArtists": "Вибрати виконавців",
+  "@selectArtists": {},
+  "removeFromQueue": "Видалити з черги",
+  "@removeFromQueue": {},
+  "currentlyPlaying": "Зараз грає",
+  "@currentlyPlaying": {},
+  "moreAvailable": "Доступно ще {num}",
+  "@moreAvailable": {
+    "placeholders": {
+      "num": {
+        "type": "int"
+      }
+    }
+  },
+  "nameMustNotBeEmpty": "Ім'я не повинно бути порожнім.",
+  "@nameMustNotBeEmpty": {},
+  "artistName": "Ім'я виконавця",
+  "@artistName": {},
+  "likeCount": "Кількість вподобань",
+  "@likeCount": {},
+  "songTitle": "Назва пісні",
+  "@songTitle": {},
+  "year": "Рік",
+  "@year": {},
+  "timeAdded": "Час додавання",
+  "@timeAdded": {},
+  "addToPlaylist": "Додати до списку відтворення",
+  "@addToPlaylist": {},
+  "previousSong": "попередня",
+  "@previousSong": {},
+  "nextSong": "наступна",
+  "@nextSong": {},
+  "playedNTimes": "{count, plural, =0{ще не грали} =1{грали один раз} other{грали {count} разів}}",
+  "@playedNTimes": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "alwaysPlayPrevious": "Завжди відтворювати попередню пісню",
+  "@alwaysPlayPrevious": {},
+  "alwaysPlayNext": "Завжди відтворювати наступну пісню",
+  "@alwaysPlayNext": {},
+  "dontExcludeSong": "Не виключати цю пісню.",
+  "@dontExcludeSong": {},
+  "excludeShuffleSong": "Виключити при перемішуванні.",
+  "@excludeShuffleSong": {},
+  "customizeHomePage": "Налаштувати Головну сторінку",
+  "@customizeHomePage": {},
+  "playback": "Відтворення",
+  "@playback": {},
+  "noSongsYet": "Схоже, у вашій бібліотеці немає жодної пісні: Перейдіть до налаштувань, додайте папки з музикою та оновіть бібліотеку.",
+  "@noSongsYet": {},
+  "updateLibrary": "Оновити бібліотеку",
+  "@updateLibrary": {},
+  "artistsAlbumsSongs": "{artistCount} виконавці, {albumCount} альбоми, {songCount} пісні",
+  "@artistsAlbumsSongs": {
+    "placeholders": {
+      "artistCount": {
+        "type": "int",
+        "example": "3"
+      },
+      "albumCount": {
+        "type": "int",
+        "example": "6"
+      },
+      "songCount": {
+        "type": "int",
+        "example": "60"
+      }
+    }
+  },
+  "search": "Пошук",
+  "@search": {},
+  "manageBlockedFiles": "Керування заблокованими файлами",
+  "@manageBlockedFiles": {},
+  "playAlbumsInOrderDescription": "Коли ви натискаєте на пісню в альбомі, пісні відтворюватимуться по порядку, замість того, щоб зберігати попередній режим відтворення.",
+  "@playAlbumsInOrderDescription": {},
+  "blockedFiles": "Заблоковані файли",
+  "@blockedFiles": {},
+  "history": "Історія",
+  "@history": {},
+  "createPlaylist": "Створити список відтворення",
+  "@createPlaylist": {},
+  "artistOfTheDay": "Виконавець дня",
+  "@artistOfTheDay": {},
+  "shuffleAll": "Перемішати все",
+  "@shuffleAll": {},
+  "noHistoryYet": "Поки що тут нема на що дивитися. Відтворіть що-небудь.",
+  "@noHistoryYet": {},
+  "addWidgetToHome": "Додати віджет на Головну сторінку",
+  "@addWidgetToHome": {},
+  "selectArtistsExclude": "Виберіть виконавців, яких потрібно виключити: {num} вибрано.",
+  "@selectArtistsExclude": {
+    "placeholders": {
+      "num": {
+        "type": "int"
+      }
+    }
+  },
+  "normalMode": "Звичайний режим",
+  "@normalMode": {},
+  "favShuffleMode": "Улюблений режим перемішування",
+  "@favShuffleMode": {},
+  "nSongs": "{count, plural, =0{немає пісень} =1{одна пісня} other{{count} пісні}}",
+  "@nSongs": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "maxNumberEntries": "Максимальна кількість записів",
+  "@maxNumberEntries": {},
+  "displaySettings": "Налаштування дисплею",
+  "@displaySettings": {},
+  "creationDate": "Дата створення",
+  "@creationDate": {},
+  "both": "Обидва",
+  "@both": {},
+  "editPlaylist": "Редагувати список відтворення",
+  "@editPlaylist": {},
+  "excludeInShuffle": "Виключити пісні, позначені для виключення в режимі перемішування.",
+  "@excludeInShuffle": {},
+  "excludeAlways": "Виключати лише пісні, позначені як завжди виключати.",
+  "@excludeAlways": {},
+  "maxPlayCount": "Максимальна кількість відтворення",
+  "@maxPlayCount": {},
+  "selectArtistsInclude": "Виберіть виконавців, яких потрібно включити: {num} вибрано.",
+  "@selectArtistsInclude": {
+    "placeholders": {
+      "num": {
+        "type": "int"
+      }
+    }
+  },
+  "excludeArtists": "Виключити вибраних виконавців",
+  "@excludeArtists": {},
+  "nSongsSelected": "{count, plural, =0{пісні не вибрано} =1{вибрано одну пісню} other{вибрано {count} пісень}}",
+  "@nSongsSelected": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "createSmartlist": "Створити розумний список",
+  "@createSmartlist": {},
+  "blockFromLibrary": "Видалити та заблокувати з бібліотеки",
+  "@blockFromLibrary": {},
+  "nSongsInQueue": "{count, plural, =0{немає пісень} =1{одна пісня} other{{count} пісні}}в черзі",
+  "@nSongsInQueue": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "removeFromPlaylist": "Видалити зі списку відтворення",
+  "@removeFromPlaylist": {},
+  "playCount": "Кількість відтворень",
+  "@playCount": {},
+  "cancel": "Скасувати",
+  "@cancel": {},
+  "nextUp": "Далі",
+  "@nextUp": {},
+  "excludeShuffleAllSong": "Виключити під час перемішування всіх пісень.",
+  "@excludeShuffleAllSong": {},
+  "alwaysExcludeSong": "Завжди виключати цю пісню.",
+  "@alwaysExcludeSong": {}
+}

@@ -1,0 +1,56 @@
+{
+  "home": "Accueil",
+  "@home": {},
+  "customizeHomePage": "Personnaliser la page d'accueil",
+  "@customizeHomePage": {},
+  "settings": "Paramètres",
+  "@settings": {},
+  "noSongsYet": "Il semble que vous n'ayez aucune chanson dans votre bibliothèque : Allez dans les paramètres, ajoutez vos dossiers musicaux et mettez à jour votre bibliothèque.",
+  "@noSongsYet": {},
+  "library": "Bibliothèque",
+  "@library": {},
+  "search": "Recherche",
+  "@search": {},
+  "updateLibrary": "Mettre à jour la bibliothèque",
+  "@updateLibrary": {},
+  "artistsAlbumsSongs": "{artistCount} artistes, {albumCount} albums, {songCount} chansons",
+  "@artistsAlbumsSongs": {
+    "placeholders": {
+      "artistCount": {
+        "type": "int",
+        "example": "3"
+      },
+      "albumCount": {
+        "type": "int",
+        "example": "6"
+      },
+      "songCount": {
+        "type": "int",
+        "example": "60"
+      }
+    }
+  },
+  "manageLibraryFolders": "Gérer les dossiers de la bibliothèque",
+  "@manageLibraryFolders": {},
+  "allowedFileExtensionsDescription": "Liste séparée par des virgules. Les minuscules et les majuscules n'ont pas d'importance.",
+  "@allowedFileExtensionsDescription": {},
+  "manageBlockedFiles": "Gérer les fichiers bloqués",
+  "@manageBlockedFiles": {},
+  "numberOfBlockedFiles": "Nombre de fichiers actuellement bloqués : {blockedFiles}",
+  "@numberOfBlockedFiles": {
+    "placeholders": {
+      "blockedFiles": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "playback": "Lecture",
+  "@playback": {},
+  "playAlbumsInOrder": "Lire les albums dans l'ordre",
+  "@playAlbumsInOrder": {},
+  "allowedFileExtensions": "Extensions de fichiers autorisées",
+  "@allowedFileExtensions": {},
+  "playAlbumsInOrderDescription": "Lorsque vous cliquez sur une chanson dans un album, les chansons sont lues dans l'ordre au lieu de conserver le mode de lecture précédent.",
+  "@playAlbumsInOrderDescription": {}
+}
