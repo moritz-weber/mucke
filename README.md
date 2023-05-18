@@ -31,6 +31,12 @@ A music player that gets the best out of your local collection.
 
 Or get the latest APK from the [Releases section](https://github.com/moritz-weber/mucke/releases/latest).
 
+## Translations
+
+mucke uses [Weblate](https://hosted.weblate.org/engage/mucke/) for community translations of the app. Feel free to contribute to any language you know:
+
+[![Translation status](https://hosted.weblate.org/widgets/mucke/-/multi-auto.svg)](https://hosted.weblate.org/engage/mucke/)
+
 ## Thanks
 
 Thanks to [@maxxs.arts](https://www.instagram.com/maxxs.arts/) for designing the logo 🤘
