@@ -187,7 +187,7 @@
   "@home": {},
   "settings": "Configuració",
   "@settings": {},
-  "noSongsYet": "Sembla que no hi ha cançons en la vostra llibreria: Aneu a configuració, afegiu carpetes amb música i actualitzeu la llibreria.",
+  "noSongsYet": "Sembla que no hi ha cançons a vostra llibreria: Aneu a configuració, afegiu carpetes amb música i actualitzeu la llibreria.",
   "@noSongsYet": {},
   "artistsAlbumsSongs": "{artistCount} artistes, {albumCount} àlbums, {songCount} cançons",
   "@artistsAlbumsSongs": {
