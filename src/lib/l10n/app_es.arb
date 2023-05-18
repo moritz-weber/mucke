@@ -1,1 +1,8 @@
-{}
+{
+  "home": "Inicio",
+  "@home": {},
+  "customizeHomePage": "Personalizar la página de inicio",
+  "@customizeHomePage": {},
+  "settings": "Ajustes",
+  "@settings": {}
+}
