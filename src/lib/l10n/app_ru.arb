@@ -1,1 +1,311 @@
-{}
+{
+  "home": "Главная",
+  "@home": {},
+  "settings": "Настройки",
+  "@settings": {},
+  "noSongsYet": "Похоже, что у вас нет ни одной песни в вашей медиатеке: перейдите в настройки, добавьте свои папки с треками и обновите медиатеку.",
+  "@noSongsYet": {},
+  "normalMode": "Обычный режим",
+  "@normalMode": {},
+  "manageLibraryFolders": "Управление папками библиотеки",
+  "@manageLibraryFolders": {},
+  "allowedFileExtensionsDescription": "Список, разделенный запятыми. Строчные или прописные буквы не имеют значения.",
+  "@allowedFileExtensionsDescription": {},
+  "numberOfBlockedFiles": "Количество заблокированных в данный момент файлов: {blockedFiles}",
+  "@numberOfBlockedFiles": {
+    "placeholders": {
+      "blockedFiles": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "libraryFolders": "Папки библиотеки",
+  "@libraryFolders": {},
+  "blockedFiles": "Заблокированные файлы",
+  "@blockedFiles": {},
+  "albumOfTheDay": "Альбом дня",
+  "@albumOfTheDay": {},
+  "artists": "Исполнители",
+  "@artists": {},
+  "addSmartlist": "Добавить смарт-список",
+  "@addSmartlist": {},
+  "artistOfTheDay": "Артист дня",
+  "@artistOfTheDay": {},
+  "noPlaylistsYet": "Плейлистов пока нет. Вы можете добавить их в библиотеке.",
+  "@noPlaylistsYet": {},
+  "songs": "Песни",
+  "@songs": {},
+  "nSongs": "{count, plural, =0{песен нет} =1{одна песня} other{{count} песни}}",
+  "@nSongs": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "albums": "Альбомы",
+  "@albums": {},
+  "artist": "Исполнитель",
+  "@artist": {},
+  "displaySettings": "Настройки отображения",
+  "@displaySettings": {},
+  "playlist": "Плейлист",
+  "@playlist": {},
+  "noShuffle": "Нет (сохранить текущий активный режим перемешивания)",
+  "@noShuffle": {},
+  "shuffleMode": "Режим перемешивания",
+  "@shuffleMode": {},
+  "sortingFilterSettings": "Настройка сортировки и фильтров",
+  "@sortingFilterSettings": {},
+  "lastTimePlayed": "Последнее воспроизведение",
+  "@lastTimePlayed": {},
+  "minYear": "Минимальный год",
+  "@minYear": {},
+  "smartlistsOnly": "Только смарт-списки",
+  "@smartlistsOnly": {},
+  "playbackMode": "Режим воспроизведения",
+  "@playbackMode": {},
+  "selectArtistsExclude": "Выберите исполнителей, которых хотите исключить: {num} выбрано.",
+  "@selectArtistsExclude": {
+    "placeholders": {
+      "num": {
+        "type": "int"
+      }
+    }
+  },
+  "excludeAlways": "Исключать только песни, помеченные как всегда исключаемые.",
+  "@excludeAlways": {},
+  "maxYear": "Максимальный год",
+  "@maxYear": {},
+  "excludeArtists": "Исключить выбранных исполнителей",
+  "@excludeArtists": {},
+  "editSmartlist": "Редактировать смарт-список",
+  "@editSmartlist": {},
+  "createSmartlist": "Создать смарт-список",
+  "@createSmartlist": {},
+  "songTitle": "Название песни",
+  "@songTitle": {},
+  "addToQueue": "Добавить в очередь",
+  "@addToQueue": {},
+  "removeFromQueue": "Удалить из очереди",
+  "@removeFromQueue": {},
+  "likeCount": "Количество лайков",
+  "@likeCount": {},
+  "playCount": "Количество воспроизведений",
+  "@playCount": {},
+  "year": "Год",
+  "@year": {},
+  "currentlyPlaying": "Сейчас играет",
+  "@currentlyPlaying": {},
+  "selectArtists": "Выбрать исполнителей",
+  "@selectArtists": {},
+  "nSongsInQueue": "{count, plural, =0{песен нет} =1{одна песня} other{{count} песен}} в очереди",
+  "@nSongsInQueue": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "customizeHomePage": "Настроить главную страницу",
+  "@customizeHomePage": {},
+  "library": "Библиотека",
+  "@library": {},
+  "search": "Поиск",
+  "@search": {},
+  "updateLibrary": "Обновить библиотеку",
+  "@updateLibrary": {},
+  "artistsAlbumsSongs": "{artistCount} исполнителей, {albumCount} альбомов, {songCount} треков",
+  "@artistsAlbumsSongs": {
+    "placeholders": {
+      "artistCount": {
+        "type": "int",
+        "example": "3"
+      },
+      "albumCount": {
+        "type": "int",
+        "example": "6"
+      },
+      "songCount": {
+        "type": "int",
+        "example": "60"
+      }
+    }
+  },
+  "allowedFileExtensions": "Разрешенные расширения файлов",
+  "@allowedFileExtensions": {},
+  "manageBlockedFiles": "Управление заблокированными файлами",
+  "@manageBlockedFiles": {},
+  "playback": "Воспроизведение",
+  "@playback": {},
+  "playAlbumsInOrder": "Воспроизводить альбомы по порядку",
+  "@playAlbumsInOrder": {},
+  "playAlbumsInOrderDescription": "Когда вы нажимаете на песню в альбоме, песни будут воспроизводиться по порядку, вместо сохранения предыдущего режима воспроизведения.",
+  "@playAlbumsInOrderDescription": {},
+  "countSongsPlayed": "Подсчитывать песни, которые были воспроизведены после: {percentage}%",
+  "@countSongsPlayed": {
+    "placeholders": {
+      "percentage": {
+        "type": "int"
+      }
+    }
+  },
+  "homeCustomization": "Настройка главной страницы",
+  "@homeCustomization": {},
+  "shuffleAll": "Перемещать все",
+  "@shuffleAll": {},
+  "history": "История",
+  "@history": {},
+  "addWidgetToHome": "Добавить виджет на домашнюю страницу",
+  "@addWidgetToHome": {},
+  "lastPlayed": "Последнее воспроизведение",
+  "@lastPlayed": {},
+  "noHistoryYet": "Пока здесь не на что смотреть. Послушайте что-нибудь.",
+  "@noHistoryYet": {},
+  "allSongs": "Все песни",
+  "@allSongs": {},
+  "song": "Песня",
+  "@song": {},
+  "album": "Альбом",
+  "@album": {},
+  "playlists": "Плейлисты",
+  "@playlists": {},
+  "smartlist": "Умный список",
+  "@smartlist": {},
+  "smartlists": "Умные списки",
+  "@smartlists": {},
+  "favShuffleMode": "Режим перемешивания по избранному",
+  "@favShuffleMode": {},
+  "name": "Имя",
+  "@name": {},
+  "maxNumberEntries": "Максимальное количество записей",
+  "@maxNumberEntries": {},
+  "creationDate": "Дата создания",
+  "@creationDate": {},
+  "changeDate": "Дата изменения",
+  "@changeDate": {},
+  "ascending": "По возрастанию",
+  "@ascending": {},
+  "descending": "По убыванию",
+  "@descending": {},
+  "both": "Оба",
+  "@both": {},
+  "playlistsOnly": "Только плейлисты",
+  "@playlistsOnly": {},
+  "addPlaylist": "Добавить плейлист",
+  "@addPlaylist": {},
+  "createPlaylist": "Создать плейлист",
+  "@createPlaylist": {},
+  "editPlaylist": "Изменить плейлист",
+  "@editPlaylist": {},
+  "customizeCover": "Изменить обложку",
+  "@customizeCover": {},
+  "excludeAllSongs": "Исключить все песни, помеченные для исключения.",
+  "@excludeAllSongs": {},
+  "excludeInShuffle": "Исключить песни, помеченные для исключения в режиме перемешивания.",
+  "@excludeInShuffle": {},
+  "dontExclude": "Не исключать любые песни.",
+  "@dontExclude": {},
+  "filterSettings": "Настройка фильтров",
+  "@filterSettings": {},
+  "filterLikes": "Количество лайков от {min} до {max}",
+  "@filterLikes": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "minPlayCount": "Минимальное количество воспроизведений",
+  "@minPlayCount": {},
+  "maxPlayCount": "Максимальное количество воспроизведений",
+  "@maxPlayCount": {},
+  "selectArtistsInclude": "Выберите исполнителей, которых хотите включить: {num} выбрано.",
+  "@selectArtistsInclude": {
+    "placeholders": {
+      "num": {
+        "type": "int"
+      }
+    }
+  },
+  "includeAllArtists": "Включить всех исполнителей, если ни один не выбран.",
+  "@includeAllArtists": {},
+  "limitSongs": "Ограничение количества песен",
+  "@limitSongs": {},
+  "orderSettings": "Сортировка",
+  "@orderSettings": {},
+  "orderSettingsDescription": "Измените порядок опций, чтобы изменить приоритеты.",
+  "@orderSettingsDescription": {},
+  "play": "Играть",
+  "@play": {},
+  "nSongsSelected": "{count, plural, =0{песни не выбраны} =1{выбрана одна песня} other{выбрано {count} песен}}",
+  "@nSongsSelected": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "playNext": "Играть дальше",
+  "@playNext": {},
+  "appendToQueued": "Добавлять к песням, помещенным в очередь вручную",
+  "@appendToQueued": {},
+  "disc": "Диск",
+  "@disc": {},
+  "blockFromLibrary": "Удалить из библиотеки и заблокировать",
+  "@blockFromLibrary": {},
+  "highlights": "Основные моменты",
+  "@highlights": {},
+  "shuffle": "Перемешать",
+  "@shuffle": {},
+  "moreAvailable": "Доступно еще {num}",
+  "@moreAvailable": {
+    "placeholders": {
+      "num": {
+        "type": "int"
+      }
+    }
+  },
+  "nameMustNotBeEmpty": "Имя не должно быть пустым.",
+  "@nameMustNotBeEmpty": {},
+  "artistName": "Имя исполнителя",
+  "@artistName": {},
+  "timeAdded": "Время добавления",
+  "@timeAdded": {},
+  "addToPlaylist": "Добавить в список воспроизведения",
+  "@addToPlaylist": {},
+  "removeFromPlaylist": "Удалить из списка воспроизведения",
+  "@removeFromPlaylist": {},
+  "cancel": "Отменить",
+  "@cancel": {},
+  "nextUp": "Далее",
+  "@nextUp": {},
+  "previousSong": "предыдущая",
+  "@previousSong": {},
+  "nextSong": "следующая",
+  "@nextSong": {},
+  "playedNTimes": "{count, plural, =0{еще не играло} =1{играло один раз} other{играло {count} раз}}",
+  "@playedNTimes": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "alwaysPlayPrevious": "Всегда воспроизводить предыдущую песню",
+  "@alwaysPlayPrevious": {},
+  "alwaysPlayNext": "Всегда воспроизводить следующую песню",
+  "@alwaysPlayNext": {},
+  "dontExcludeSong": "Не исключать эту песню.",
+  "@dontExcludeSong": {},
+  "excludeShuffleAllSong": "Исключить при перемешивании всех песен.",
+  "@excludeShuffleAllSong": {},
+  "excludeShuffleSong": "Исключить при перемешивании.",
+  "@excludeShuffleSong": {},
+  "alwaysExcludeSong": "Всегда исключать эту песню.",
+  "@alwaysExcludeSong": {}
+}
