@@ -1,1 +1,54 @@
-{}
+{
+  "updateLibrary": "Kemaskini pustaka",
+  "@updateLibrary": {},
+  "artistsAlbumsSongs": "{artistCount} artis, {albumCount} album, {songCount} lagu",
+  "@artistsAlbumsSongs": {
+    "placeholders": {
+      "artistCount": {
+        "type": "int",
+        "example": "3"
+      },
+      "albumCount": {
+        "type": "int",
+        "example": "6"
+      },
+      "songCount": {
+        "type": "int",
+        "example": "60"
+      }
+    }
+  },
+  "playback": "Main balik",
+  "@playback": {},
+  "playAlbumsInOrder": "Mainkan album mengikut urutan",
+  "@playAlbumsInOrder": {},
+  "home": "Rumah",
+  "@home": {},
+  "settings": "Tetapan",
+  "@settings": {},
+  "customizeHomePage": "Sesuaikan Laman Utama",
+  "@customizeHomePage": {},
+  "noSongsYet": "Nampaknya anda tidak mempunyai sebarang lagu dalam pustaka anda: Pergi ke tetapan, tambah folder muzik anda, dan kemas kini pustaka anda.",
+  "@noSongsYet": {},
+  "library": "Pustaka",
+  "@library": {},
+  "search": "Cari",
+  "@search": {},
+  "manageLibraryFolders": "Menguruskan folder pustaka",
+  "@manageLibraryFolders": {},
+  "allowedFileExtensionsDescription": "Senarai dipisahkan koma. Huruf kecil atau huruf besar tidak penting.",
+  "@allowedFileExtensionsDescription": {},
+  "manageBlockedFiles": "Urus fail yang disekat",
+  "@manageBlockedFiles": {},
+  "numberOfBlockedFiles": "Bilangan fail yang disekat pada masa ini: {blockedFiles}",
+  "@numberOfBlockedFiles": {
+    "placeholders": {
+      "blockedFiles": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "playAlbumsInOrderDescription": "Apabila anda mengklik lagu dalam album, lagu-lagu akan dimainkan mengikut turutan dan bukannya mengekalkan mod main sebelumnya.",
+  "@playAlbumsInOrderDescription": {}
+}
