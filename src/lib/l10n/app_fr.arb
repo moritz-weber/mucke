@@ -52,5 +52,7 @@
   "allowedFileExtensions": "Extensions de fichiers autorisées",
   "@allowedFileExtensions": {},
   "playAlbumsInOrderDescription": "Lorsque vous cliquez sur une chanson dans un album, les chansons sont lues dans l'ordre au lieu de conserver le mode de lecture précédent.",
-  "@playAlbumsInOrderDescription": {}
+  "@playAlbumsInOrderDescription": {},
+  "libraryFolders": "Dossiers de bibliothèque",
+  "@libraryFolders": {}
 }
