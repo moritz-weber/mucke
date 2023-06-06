@@ -27,6 +27,10 @@ dependencies:
   get_it: ^7.1.3  # MIT
   intl: any
   just_audio: ^0.9.18  # MIT
+  metadata_god:
+    git:
+      url: https://github.com/FriederHannenheim/metadata_god.git
+      path: packages/metadata_god
   mobx: 2.1.3  # MIT
   on_audio_query: 2.6.1  # BSD 3
   on_audio_query_platform_interface: 1.4.0

@@ -2,7 +2,9 @@ import 'dart:ui';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:drift/drift.dart';
+import 'package:metadata_god/metadata_god.dart';
 import 'package:on_audio_query/on_audio_query.dart' as aq;
+import 'package:path/path.dart' as p;
 
 import '../../domain/entities/song.dart';
 import '../datasources/drift_database.dart';
@@ -75,34 +77,31 @@ class SongModel extends Song {
     );
   }
 
-  factory SongModel.fromOnAudioQuery({
+  factory SongModel.fromMetadata({
     required String path,
-    required aq.SongModel songModel,
+    required Metadata songData,
     String? albumArtPath,
     Color? color,
     required int albumId,
     required DateTime lastModified,
   }) {
-    final data = songModel.getMap;
-    final trackNumber = parseTrackNumber(songModel.track);
-
     return SongModel(
-      title: songModel.title,
-      artist: songModel.artist ?? DEF_ARTIST,
-      album: songModel.album ?? DEF_ALBUM,
+      title: songData.title ?? p.basenameWithoutExtension(path),
+      artist: songData.artist ?? DEF_ARTIST,
+      album: songData.album ?? DEF_ALBUM,
       albumId: albumId,
       path: path,
-      duration: Duration(milliseconds: songModel.duration ?? DEF_DURATION),
+      duration: songData.duration ?? const Duration(milliseconds: DEF_DURATION),
       blockLevel: 0,
-      discNumber: trackNumber[0],
-      trackNumber: trackNumber[1],
+      discNumber: songData.discNumber ?? 1,
+      trackNumber: songData.trackNumber ?? 1,
       albumArtPath: albumArtPath,
       color: color,
       next: false,
       previous: false,
       likeCount: 0,
       playCount: 0,
-      year: parseYear(data['year'] as String?),
+      year: songData.year,
       timeAdded: DateTime.fromMillisecondsSinceEpoch(0),
       lastModified: lastModified,
     );
@@ -213,22 +212,6 @@ class SongModel extends Song {
             'timeAdded': timeAdded.millisecondsSinceEpoch,
             'color': color?.value,
           });
-
-  static List<int> parseTrackNumber(int? number) {
-    if (number == null) return [1, 1];
-
-    final numString = number.toString();
-
-    if (numString.length < 4) {
-      // does not contain a disc number
-      return [1, number];
-    }
-
-    final disc = numString.substring(0, numString.length - 3);
-    final track = numString.substring(numString.length - 3);
-
-    return [int.parse(disc), int.parse(track)];
-  }
 }
 
 // TODO: maybe move to another file
