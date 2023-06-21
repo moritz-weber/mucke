@@ -168,7 +168,6 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
         albumIdMap[albumString] = albumId;
 
         final albumArt = songData.picture;
-        _log.d('has picture: ${albumArt != null}');
 
         if (albumArt != null) {
           albumArtPath = '${dir.path}/$albumId';
