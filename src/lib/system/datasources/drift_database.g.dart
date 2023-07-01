@@ -585,23 +585,29 @@ class LibraryFolder extends DataClass implements Insertable<LibraryFolder> {
 
 class LibraryFoldersCompanion extends UpdateCompanion<LibraryFolder> {
   final Value<String> path;
+  final Value<int> rowid;
   const LibraryFoldersCompanion({
     this.path = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   LibraryFoldersCompanion.insert({
     required String path,
+    this.rowid = const Value.absent(),
   }) : path = Value(path);
   static Insertable<LibraryFolder> custom({
     Expression<String>? path,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (path != null) 'path': path,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
-  LibraryFoldersCompanion copyWith({Value<String>? path}) {
+  LibraryFoldersCompanion copyWith({Value<String>? path, Value<int>? rowid}) {
     return LibraryFoldersCompanion(
       path: path ?? this.path,
+      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -611,13 +617,17 @@ class LibraryFoldersCompanion extends UpdateCompanion<LibraryFolder> {
     if (path.present) {
       map['path'] = Variable<String>(path.value);
     }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
     return map;
   }
 
   @override
   String toString() {
     return (StringBuffer('LibraryFoldersCompanion(')
-          ..write('path: $path')
+          ..write('path: $path, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -1858,6 +1868,7 @@ class SongsCompanion extends UpdateCompanion<DriftSong> {
   final Value<DateTime> lastModified;
   final Value<bool> previous;
   final Value<bool> next;
+  final Value<int> rowid;
   const SongsCompanion({
     this.title = const Value.absent(),
     this.albumTitle = const Value.absent(),
@@ -1879,6 +1890,7 @@ class SongsCompanion extends UpdateCompanion<DriftSong> {
     this.lastModified = const Value.absent(),
     this.previous = const Value.absent(),
     this.next = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   SongsCompanion.insert({
     required String title,
@@ -1901,6 +1913,7 @@ class SongsCompanion extends UpdateCompanion<DriftSong> {
     required DateTime lastModified,
     this.previous = const Value.absent(),
     this.next = const Value.absent(),
+    this.rowid = const Value.absent(),
   })  : title = Value(title),
         albumTitle = Value(albumTitle),
         albumId = Value(albumId),
@@ -1931,6 +1944,7 @@ class SongsCompanion extends UpdateCompanion<DriftSong> {
     Expression<DateTime>? lastModified,
     Expression<bool>? previous,
     Expression<bool>? next,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (title != null) 'title': title,
@@ -1953,6 +1967,7 @@ class SongsCompanion extends UpdateCompanion<DriftSong> {
       if (lastModified != null) 'last_modified': lastModified,
       if (previous != null) 'previous': previous,
       if (next != null) 'next': next,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
@@ -1976,7 +1991,8 @@ class SongsCompanion extends UpdateCompanion<DriftSong> {
       Value<DateTime>? timeAdded,
       Value<DateTime>? lastModified,
       Value<bool>? previous,
-      Value<bool>? next}) {
+      Value<bool>? next,
+      Value<int>? rowid}) {
     return SongsCompanion(
       title: title ?? this.title,
       albumTitle: albumTitle ?? this.albumTitle,
@@ -1998,6 +2014,7 @@ class SongsCompanion extends UpdateCompanion<DriftSong> {
       lastModified: lastModified ?? this.lastModified,
       previous: previous ?? this.previous,
       next: next ?? this.next,
+      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -2064,6 +2081,9 @@ class SongsCompanion extends UpdateCompanion<DriftSong> {
     if (next.present) {
       map['next'] = Variable<bool>(next.value);
     }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
     return map;
   }
 
@@ -2089,7 +2109,8 @@ class SongsCompanion extends UpdateCompanion<DriftSong> {
           ..write('timeAdded: $timeAdded, ')
           ..write('lastModified: $lastModified, ')
           ..write('previous: $previous, ')
-          ..write('next: $next')
+          ..write('next: $next, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -3167,30 +3188,36 @@ class DriftSmartListArtist extends DataClass
 class SmartListArtistsCompanion extends UpdateCompanion<DriftSmartListArtist> {
   final Value<int> smartListId;
   final Value<String> artistName;
+  final Value<int> rowid;
   const SmartListArtistsCompanion({
     this.smartListId = const Value.absent(),
     this.artistName = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   SmartListArtistsCompanion.insert({
     required int smartListId,
     required String artistName,
+    this.rowid = const Value.absent(),
   })  : smartListId = Value(smartListId),
         artistName = Value(artistName);
   static Insertable<DriftSmartListArtist> custom({
     Expression<int>? smartListId,
     Expression<String>? artistName,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (smartListId != null) 'smart_list_id': smartListId,
       if (artistName != null) 'artist_name': artistName,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
   SmartListArtistsCompanion copyWith(
-      {Value<int>? smartListId, Value<String>? artistName}) {
+      {Value<int>? smartListId, Value<String>? artistName, Value<int>? rowid}) {
     return SmartListArtistsCompanion(
       smartListId: smartListId ?? this.smartListId,
       artistName: artistName ?? this.artistName,
+      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -3203,6 +3230,9 @@ class SmartListArtistsCompanion extends UpdateCompanion<DriftSmartListArtist> {
     if (artistName.present) {
       map['artist_name'] = Variable<String>(artistName.value);
     }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
     return map;
   }
 
@@ -3210,7 +3240,8 @@ class SmartListArtistsCompanion extends UpdateCompanion<DriftSmartListArtist> {
   String toString() {
     return (StringBuffer('SmartListArtistsCompanion(')
           ..write('smartListId: $smartListId, ')
-          ..write('artistName: $artistName')
+          ..write('artistName: $artistName, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -3779,15 +3810,18 @@ class PlaylistEntriesCompanion extends UpdateCompanion<DriftPlaylistEntry> {
   final Value<int> playlistId;
   final Value<String> songPath;
   final Value<int> position;
+  final Value<int> rowid;
   const PlaylistEntriesCompanion({
     this.playlistId = const Value.absent(),
     this.songPath = const Value.absent(),
     this.position = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   PlaylistEntriesCompanion.insert({
     required int playlistId,
     required String songPath,
     required int position,
+    this.rowid = const Value.absent(),
   })  : playlistId = Value(playlistId),
         songPath = Value(songPath),
         position = Value(position);
@@ -3795,20 +3829,26 @@ class PlaylistEntriesCompanion extends UpdateCompanion<DriftPlaylistEntry> {
     Expression<int>? playlistId,
     Expression<String>? songPath,
     Expression<int>? position,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (playlistId != null) 'playlist_id': playlistId,
       if (songPath != null) 'song_path': songPath,
       if (position != null) 'position': position,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
   PlaylistEntriesCompanion copyWith(
-      {Value<int>? playlistId, Value<String>? songPath, Value<int>? position}) {
+      {Value<int>? playlistId,
+      Value<String>? songPath,
+      Value<int>? position,
+      Value<int>? rowid}) {
     return PlaylistEntriesCompanion(
       playlistId: playlistId ?? this.playlistId,
       songPath: songPath ?? this.songPath,
       position: position ?? this.position,
+      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -3824,6 +3864,9 @@ class PlaylistEntriesCompanion extends UpdateCompanion<DriftPlaylistEntry> {
     if (position.present) {
       map['position'] = Variable<int>(position.value);
     }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
     return map;
   }
 
@@ -3832,7 +3875,8 @@ class PlaylistEntriesCompanion extends UpdateCompanion<DriftPlaylistEntry> {
     return (StringBuffer('PlaylistEntriesCompanion(')
           ..write('playlistId: $playlistId, ')
           ..write('songPath: $songPath, ')
-          ..write('position: $position')
+          ..write('position: $position, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -3961,30 +4005,36 @@ class KeyValueEntry extends DataClass implements Insertable<KeyValueEntry> {
 class KeyValueEntriesCompanion extends UpdateCompanion<KeyValueEntry> {
   final Value<String> key;
   final Value<String> value;
+  final Value<int> rowid;
   const KeyValueEntriesCompanion({
     this.key = const Value.absent(),
     this.value = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   KeyValueEntriesCompanion.insert({
     required String key,
     required String value,
+    this.rowid = const Value.absent(),
   })  : key = Value(key),
         value = Value(value);
   static Insertable<KeyValueEntry> custom({
     Expression<String>? key,
     Expression<String>? value,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (key != null) 'key': key,
       if (value != null) 'value': value,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
   KeyValueEntriesCompanion copyWith(
-      {Value<String>? key, Value<String>? value}) {
+      {Value<String>? key, Value<String>? value, Value<int>? rowid}) {
     return KeyValueEntriesCompanion(
       key: key ?? this.key,
       value: value ?? this.value,
+      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -3997,6 +4047,9 @@ class KeyValueEntriesCompanion extends UpdateCompanion<KeyValueEntry> {
     if (value.present) {
       map['value'] = Variable<String>(value.value);
     }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
     return map;
   }
 
@@ -4004,7 +4057,8 @@ class KeyValueEntriesCompanion extends UpdateCompanion<KeyValueEntry> {
   String toString() {
     return (StringBuffer('KeyValueEntriesCompanion(')
           ..write('key: $key, ')
-          ..write('value: $value')
+          ..write('value: $value, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -4365,35 +4419,44 @@ class HistoryEntriesCompanion extends UpdateCompanion<DriftHistoryEntry> {
   final Value<DateTime> time;
   final Value<String> type;
   final Value<String> identifier;
+  final Value<int> rowid;
   const HistoryEntriesCompanion({
     this.time = const Value.absent(),
     this.type = const Value.absent(),
     this.identifier = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   HistoryEntriesCompanion.insert({
     this.time = const Value.absent(),
     required String type,
     required String identifier,
+    this.rowid = const Value.absent(),
   })  : type = Value(type),
         identifier = Value(identifier);
   static Insertable<DriftHistoryEntry> custom({
     Expression<DateTime>? time,
     Expression<String>? type,
     Expression<String>? identifier,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (time != null) 'time': time,
       if (type != null) 'type': type,
       if (identifier != null) 'identifier': identifier,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
   HistoryEntriesCompanion copyWith(
-      {Value<DateTime>? time, Value<String>? type, Value<String>? identifier}) {
+      {Value<DateTime>? time,
+      Value<String>? type,
+      Value<String>? identifier,
+      Value<int>? rowid}) {
     return HistoryEntriesCompanion(
       time: time ?? this.time,
       type: type ?? this.type,
       identifier: identifier ?? this.identifier,
+      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -4409,6 +4472,9 @@ class HistoryEntriesCompanion extends UpdateCompanion<DriftHistoryEntry> {
     if (identifier.present) {
       map['identifier'] = Variable<String>(identifier.value);
     }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
     return map;
   }
 
@@ -4417,7 +4483,8 @@ class HistoryEntriesCompanion extends UpdateCompanion<DriftHistoryEntry> {
     return (StringBuffer('HistoryEntriesCompanion(')
           ..write('time: $time, ')
           ..write('type: $type, ')
-          ..write('identifier: $identifier')
+          ..write('identifier: $identifier, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -4523,23 +4590,29 @@ class BlockedFile extends DataClass implements Insertable<BlockedFile> {
 
 class BlockedFilesCompanion extends UpdateCompanion<BlockedFile> {
   final Value<String> path;
+  final Value<int> rowid;
   const BlockedFilesCompanion({
     this.path = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   BlockedFilesCompanion.insert({
     required String path,
+    this.rowid = const Value.absent(),
   }) : path = Value(path);
   static Insertable<BlockedFile> custom({
     Expression<String>? path,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (path != null) 'path': path,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
-  BlockedFilesCompanion copyWith({Value<String>? path}) {
+  BlockedFilesCompanion copyWith({Value<String>? path, Value<int>? rowid}) {
     return BlockedFilesCompanion(
       path: path ?? this.path,
+      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -4549,13 +4622,17 @@ class BlockedFilesCompanion extends UpdateCompanion<BlockedFile> {
     if (path.present) {
       map['path'] = Variable<String>(path.value);
     }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
     return map;
   }
 
   @override
   String toString() {
     return (StringBuffer('BlockedFilesCompanion(')
-          ..write('path: $path')
+          ..write('path: $path, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }

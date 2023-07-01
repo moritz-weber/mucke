@@ -1,3 +1,8 @@
+## Unreleased
+
+- Implemented data export and import (#89)
+- Moved database to separate isolate for non-blocking operation
+
 ## 1.3.1
 
 - Fixed bug with translation priorities (#79)

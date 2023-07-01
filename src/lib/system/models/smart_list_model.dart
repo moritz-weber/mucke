@@ -5,6 +5,8 @@ import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/entities/smart_list.dart';
 import '../datasources/drift_database.dart';
 import 'artist_model.dart';
+import 'filter_model.dart';
+import 'orderby_model.dart';
 
 class SmartListModel extends SmartList {
   const SmartListModel({
@@ -47,7 +49,7 @@ class SmartListModel extends SmartList {
   }
 
   factory SmartListModel.fromDrift(DriftSmartList driftSmartList, List<DriftArtist>? artists) {
-    final filter = Filter(
+    final filter = FilterModel(
       artists: artists?.map((DriftArtist a) => ArtistModel.fromDrift(a)).toList(),
       excludeArtists: driftSmartList.excludeArtists,
       minLikeCount: driftSmartList.minLikeCount,
@@ -68,7 +70,7 @@ class SmartListModel extends SmartList {
       if (value != null) filteredDirections.add(directions[key]);
     });
 
-    final orderBy = OrderBy(
+    final orderBy = OrderByModel(
       orderCriteria: criteria.whereType<OrderCriterion>().toList(),
       orderDirections: filteredDirections,
     );
@@ -122,6 +124,19 @@ class SmartListModel extends SmartList {
         )
         .toList();
   }
+
+  Map<String, dynamic> toExportMap() => {
+        'id': id,
+        'name': name,
+        'iconString': iconString,
+        'gradientString': gradientString,
+        'timeCreated': timeCreated.millisecondsSinceEpoch,
+        'timeChanged': timeChanged.millisecondsSinceEpoch,
+        'timeLastPlayed': timeLastPlayed.millisecondsSinceEpoch,
+        'shuffleMode': shuffleMode?.toString(),
+        'filter': (filter as FilterModel).toExportMap(),
+        'orderBy': (orderBy as OrderByModel).toExportMap(),
+      };
 }
 
 List<OrderCriterion?> _parseOrderCriteria(String orderCriteria) {

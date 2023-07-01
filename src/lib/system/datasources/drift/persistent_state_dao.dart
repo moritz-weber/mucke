@@ -37,11 +37,11 @@ class PersistentStateDao extends DatabaseAccessor<MainDatabase>
   PersistentStateDao(MainDatabase db) : super(db);
 
   @override
-  Future<List<QueueItemModel>> get queueItems {
+  Future<List<QueueItemModel>> get queueItems async {
     final query = (select(queueEntries)..orderBy([(t) => OrderingTerm(expression: t.index)]))
         .join([innerJoin(songs, songs.path.equalsExp(queueEntries.path))]);
 
-    return query.get().then((rows) => rows.map((row) {
+    return await query.get().then((rows) => rows.map((row) {
           return QueueItemModel(
             SongModel.fromDrift(row.readTable(songs)),
             originalIndex: row.readTable(queueEntries).originalIndex,
@@ -65,7 +65,7 @@ class PersistentStateDao extends DatabaseAccessor<MainDatabase>
       ));
     }
 
-    transaction(() async {
+    await transaction(() async {
       await delete(queueEntries).go();
       await batch((batch) {
         batch.insertAll(queueEntries, _queueEntries);
@@ -74,12 +74,12 @@ class PersistentStateDao extends DatabaseAccessor<MainDatabase>
   }
 
   @override
-  Future<List<QueueItemModel>> get availableSongs {
+  Future<List<QueueItemModel>> get availableSongs async {
     final query = (select(availableSongEntries)
           ..orderBy([(t) => OrderingTerm(expression: t.index)]))
         .join([innerJoin(songs, songs.path.equalsExp(availableSongEntries.path))]);
 
-    return query.get().then((rows) => rows.map((row) {
+    return await query.get().then((rows) => rows.map((row) {
           return QueueItemModel(
             SongModel.fromDrift(row.readTable(songs)),
             originalIndex: row.readTable(availableSongEntries).originalIndex,
@@ -102,7 +102,7 @@ class PersistentStateDao extends DatabaseAccessor<MainDatabase>
         isAvailable: Value(songs[i].isAvailable),
       ));
     }
-    transaction(() async {
+    await transaction(() async {
       await delete(availableSongEntries).go();
       await batch((batch) {
         batch.insertAll(availableSongEntries, _songEntries);
@@ -112,39 +112,39 @@ class PersistentStateDao extends DatabaseAccessor<MainDatabase>
 
   @override
   Future<int?> get currentIndex async {
-    return (select(keyValueEntries)..where((tbl) => tbl.key.equals(PERSISTENT_INDEX)))
+    return await (select(keyValueEntries)..where((tbl) => tbl.key.equals(PERSISTENT_INDEX)))
         .getSingle()
         .then((event) => event.value != null.toString() ? int.parse(event.value) : null);
   }
 
   @override
   Future<void> setCurrentIndex(int? index) async {
-    (update(keyValueEntries)..where((tbl) => tbl.key.equals(PERSISTENT_INDEX)))
+    await (update(keyValueEntries)..where((tbl) => tbl.key.equals(PERSISTENT_INDEX)))
         .write(KeyValueEntriesCompanion(value: Value(index.toString())));
   }
 
   @override
   Future<LoopMode> get loopMode async {
-    return (select(keyValueEntries)..where((tbl) => tbl.key.equals(PERSISTENT_LOOPMODE)))
+    return await (select(keyValueEntries)..where((tbl) => tbl.key.equals(PERSISTENT_LOOPMODE)))
         .getSingle()
         .then((event) => int.parse(event.value).toLoopMode());
   }
 
   @override
   Future<void> setLoopMode(LoopMode loopMode) async {
-    (update(keyValueEntries)..where((tbl) => tbl.key.equals(PERSISTENT_LOOPMODE)))
+    await (update(keyValueEntries)..where((tbl) => tbl.key.equals(PERSISTENT_LOOPMODE)))
         .write(KeyValueEntriesCompanion(value: Value(loopMode.toInt().toString())));
   }
 
   @override
   Future<void> setShuffleMode(ShuffleMode shuffleMode) async {
-    (update(keyValueEntries)..where((tbl) => tbl.key.equals(PERSISTENT_SHUFFLEMODE)))
+    await (update(keyValueEntries)..where((tbl) => tbl.key.equals(PERSISTENT_SHUFFLEMODE)))
         .write(KeyValueEntriesCompanion(value: Value(shuffleMode.toInt().toString())));
   }
 
   @override
-  Future<ShuffleMode> get shuffleMode {
-    return (select(keyValueEntries)..where((tbl) => tbl.key.equals(PERSISTENT_SHUFFLEMODE)))
+  Future<ShuffleMode> get shuffleMode async {
+    return await (select(keyValueEntries)..where((tbl) => tbl.key.equals(PERSISTENT_SHUFFLEMODE)))
         .getSingle()
         .then((event) => int.parse(event.value).toShuffleMode());
   }
@@ -239,5 +239,17 @@ class PersistentStateDao extends DatabaseAccessor<MainDatabase>
 
     (update(keyValueEntries)..where((tbl) => tbl.key.equals(PERSISTENT_PLAYABLE)))
         .write(KeyValueEntriesCompanion(value: Value(jsonEncode(data))));
+  }
+
+  @override
+  Future<bool> get isInitialized async =>
+      await (select(keyValueEntries)..where((tbl) => tbl.key.equals(INITIALIZED)))
+          .getSingle()
+          .then((event) => event.value == 'true');
+
+  @override
+  Future<void> setInitialized() async {
+    await (update(keyValueEntries)..where((tbl) => tbl.key.equals(INITIALIZED)))
+        .write(const KeyValueEntriesCompanion(value: Value('true')));
   }
 }

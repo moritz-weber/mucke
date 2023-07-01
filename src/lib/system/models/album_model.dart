@@ -81,6 +81,11 @@ class AlbumModel extends Album {
         color: Value(color?.value),
         year: Value(pubYear),
       );
+
+  Map<String, dynamic> toExportMap() => {
+    'title': title,
+    'artist': artist,
+  };
 }
 
 class AlbumOfDay {

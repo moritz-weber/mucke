@@ -221,7 +221,7 @@ class MainDatabase extends _$MainDatabase {
   MainDatabase.withQueryExecutor(QueryExecutor e) : super(e);
 
   @override
-  int get schemaVersion => 17;
+  int get schemaVersion => 18;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -307,6 +307,12 @@ class MainDatabase extends _$MainDatabase {
               const KeyValueEntriesCompanion(
                 key: Value(LISTENED_PERCENTAGE),
                 value: Value('95'),
+              ),
+            );
+            await into(keyValueEntries).insert(
+              const KeyValueEntriesCompanion(
+                key: Value(INITIALIZED),
+                value: Value('false'),
               ),
             );
           }
@@ -425,6 +431,14 @@ class MainDatabase extends _$MainDatabase {
               ),
             );
           }
+          if (from < 18) {
+            await into(keyValueEntries).insert(
+              const KeyValueEntriesCompanion(
+                key: Value(INITIALIZED),
+                value: Value('true'),
+              ),
+            );
+          }
         },
       );
 }
@@ -436,6 +450,6 @@ LazyDatabase _openConnection() {
     // for your app.
     final Directory dbFolder = await getApplicationDocumentsDirectory();
     final File file = File(p.join(dbFolder.path, 'db.sqlite'));
-    return NativeDatabase(file);
+    return NativeDatabase.createInBackground(file);
   });
 }

@@ -36,4 +36,11 @@ abstract class PlaylistDataSource {
   Future<void> removeSmartList(SmartListModel smartListModel);
   Stream<List<SongModel>> getSmartListSongStream(SmartListModel smartList);
   Future<List<SmartListModel>> searchSmartLists(String searchText, {int? limit});
+
+  Future<List<SmartListModel>> getSmartlists();
+  Future<List<PlaylistModel>> getPlaylists();
+  Future<List<SongModel>> getPlaylistSongs(PlaylistModel playlist);
+
+  Future<void> importPlaylist(Map<String, dynamic> playlistData, Map<String, Map> songData);
+  Future<void> importSmartlist(Map<String, dynamic> smartlistData, Map<String, Map> artistData);
 }

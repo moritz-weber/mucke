@@ -456,6 +456,74 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
     return _musicDataSource.getAlbumId(title, artist, year);
   }
 
+  @override
+  Stream<List<CustomList>> getCustomListsStream({
+    HomePlaylistsOrder orderCriterion = HomePlaylistsOrder.name,
+    OrderDirection orderDirection = OrderDirection.ascending,
+    HomePlaylistsFilter filter = HomePlaylistsFilter.both,
+    int? limit,
+  }) {
+    final List<Stream<List<CustomList>>> streams = [];
+    if ([HomePlaylistsFilter.both, HomePlaylistsFilter.smartlists].contains(filter)) {
+      streams.add(_playlistDataSource.smartListsStream);
+    }
+    if ([HomePlaylistsFilter.both, HomePlaylistsFilter.playlists].contains(filter)) {
+      streams.add(_playlistDataSource.playlistsStream);
+    }
+
+    return Rx.combineLatest(streams, (List<List<CustomList>> lists) {
+      List<CustomList> combined = lists.expand((element) => element).toList();
+
+      switch (orderCriterion) {
+        case HomePlaylistsOrder.name:
+          combined.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+          break;
+        case HomePlaylistsOrder.creationDate:
+          combined.sort((a, b) => a.timeCreated.compareTo(b.timeCreated));
+          break;
+        case HomePlaylistsOrder.changeDate:
+          combined.sort((a, b) => a.timeChanged.compareTo(b.timeChanged));
+          break;
+        case HomePlaylistsOrder.history:
+          combined.sort((a, b) => a.timeLastPlayed.compareTo(b.timeLastPlayed));
+          break;
+      }
+
+      if (orderDirection == OrderDirection.descending) {
+        combined = combined.reversed.toList();
+      }
+
+      if (limit != null && limit > 0) {
+        combined = combined.take(limit).toList();
+      }
+
+      return combined;
+    });
+  }
+
+  @override
+  Future<void> addBlockedFiles(List<String> paths, bool delete) async {
+    if (delete) {
+      _songRemovalSubject.add(paths);
+      await _playlistDataSource.removeBlockedSongs(paths);
+    }
+    await _musicDataSource.addBlockedFiles(paths, delete);
+    _updateHighlightStreams();
+  }
+
+  @override
+  Future<void> removeBlockedFiles(List<String> paths) async {
+    await _musicDataSource.removeBlockedFiles(paths);
+  }
+
+  @override
+  Future<List<bool>> isSongFirstLast(Song song) async {
+    final songs =
+        await _musicDataSource.getSongsFromSameAlbum(song as SongModel).then(_sortAlbumSongs);
+
+    return [songs.indexOf(song) == 0, songs.indexOf(song) == songs.length - 1];
+  }
+
   Future<void> _updateHighlightStreams() async {
     _getAlbumOfDay().then((value) {
       if (value != null) {
@@ -503,70 +571,5 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
 
   DateTime _day(DateTime dateTime) {
     return DateTime(dateTime.year, dateTime.month, dateTime.day);
-  }
-
-  @override
-  Stream<List<CustomList>> getCustomListsStream({
-    HomePlaylistsOrder orderCriterion = HomePlaylistsOrder.name,
-    OrderDirection orderDirection = OrderDirection.ascending,
-    HomePlaylistsFilter filter = HomePlaylistsFilter.both,
-    int? limit,
-  }) {
-    final List<Stream<List<CustomList>>> streams = [];
-    if ([HomePlaylistsFilter.both, HomePlaylistsFilter.smartlists].contains(filter)) {
-      streams.add(_playlistDataSource.smartListsStream);
-    }
-    if ([HomePlaylistsFilter.both, HomePlaylistsFilter.playlists].contains(filter)) {
-      streams.add(_playlistDataSource.playlistsStream);
-    }
-
-    return Rx.combineLatest(streams, (List<List<CustomList>> lists) {
-      List<CustomList> combined = lists.expand((element) => element).toList();
-
-      switch (orderCriterion) {
-        case HomePlaylistsOrder.name:
-          combined.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
-          break;
-        case HomePlaylistsOrder.creationDate:
-          combined.sort((a, b) => a.timeCreated.compareTo(b.timeCreated));
-          break;
-        case HomePlaylistsOrder.changeDate:
-          combined.sort((a, b) => a.timeChanged.compareTo(b.timeChanged));
-          break;
-        case HomePlaylistsOrder.history:
-          combined.sort((a, b) => a.timeLastPlayed.compareTo(b.timeLastPlayed));
-          break;
-      }
-
-      if (orderDirection == OrderDirection.descending) {
-        combined = combined.reversed.toList();
-      }
-
-      if (limit != null && limit > 0) {
-        combined = combined.take(limit).toList();
-      }
-
-      return combined;
-    });
-  }
-
-  @override
-  Future<void> addBlockedFiles(List<String> paths) async {
-    _songRemovalSubject.add(paths);
-    await _playlistDataSource.removeBlockedSongs(paths);
-    await _musicDataSource.addBlockedFiles(paths);
-    _updateHighlightStreams();
-  }
-
-  @override
-  Future<void> removeBlockedFiles(List<String> paths) async {
-    await _musicDataSource.removeBlockedFiles(paths);
-  }
-  
-  @override
-  Future<List<bool>> isSongFirstLast(Song song) async {
-    final songs = await _musicDataSource.getSongsFromSameAlbum(song as SongModel).then(_sortAlbumSongs);
-
-    return [songs.indexOf(song) == 0, songs.indexOf(song) == songs.length - 1];
   }
 }

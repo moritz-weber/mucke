@@ -638,6 +638,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
+  package_info_plus:
+    dependency: "direct main"
+    description:
+      name: package_info_plus
+      sha256: "28386bbe89ab5a7919a47cea99cdd1128e5a6e0bbd7eaafe20440ead84a15de3"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.1"
+  package_info_plus_platform_interface:
+    dependency: transitive
+    description:
+      name: package_info_plus_platform_interface
+      sha256: "9bc8ba46813a4cc42c66ab781470711781940780fd8beddd0c3da62506d3a6c6"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
+  page_indicator_plus:
+    dependency: "direct main"
+    description:
+      name: page_indicator_plus
+      sha256: c30dba0b9b028c315648c1cf72f99803a7354249c00e93fb05af37d0f14903cd
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.3"
   palette_generator:
     dependency: "direct main"
     description:

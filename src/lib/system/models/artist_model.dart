@@ -23,6 +23,10 @@ class ArtistModel extends Artist {
         id: Value(id),
         name: Value(name),
       );
+
+  Map<String, dynamic> toExportMap() => {
+        'name': name,
+      };
 }
 
 class ArtistOfDay {

@@ -193,25 +193,39 @@ class SongModel extends Song {
       );
 
   MediaItem toMediaItem() => MediaItem(
-          id: path,
-          title: title,
-          album: album,
-          artist: artist,
-          duration: duration,
-          artUri: Uri.file('$albumArtPath'),
-          extras: {
-            'albumId': albumId,
-            'blockLevel': blockLevel,
-            'discNumber': discNumber,
-            'trackNumber': trackNumber,
-            'year': year,
-            'next': next,
-            'previous': previous,
-            'likeCount': likeCount,
-            'playCount': playCount,
-            'timeAdded': timeAdded.millisecondsSinceEpoch,
-            'color': color?.value,
-          });
+        id: path,
+        title: title,
+        album: album,
+        artist: artist,
+        duration: duration,
+        artUri: Uri.file('$albumArtPath'),
+        extras: {
+          'albumId': albumId,
+          'blockLevel': blockLevel,
+          'discNumber': discNumber,
+          'trackNumber': trackNumber,
+          'year': year,
+          'next': next,
+          'previous': previous,
+          'likeCount': likeCount,
+          'playCount': playCount,
+          'timeAdded': timeAdded.millisecondsSinceEpoch,
+          'color': color?.value,
+        },
+      );
+
+  Map<String, dynamic> toExportMap() => {
+        'title': title,
+        'album': album,
+        'artist': artist,
+        'albumId': albumId,
+        'blockLevel': blockLevel,
+        'next': next,
+        'previous': previous,
+        'likeCount': likeCount,
+        'playCount': playCount,
+        'timeAdded': timeAdded.millisecondsSinceEpoch,
+      };
 }
 
 // TODO: maybe move to another file

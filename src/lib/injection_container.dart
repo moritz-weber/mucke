@@ -20,6 +20,7 @@ import 'domain/modules/dynamic_queue.dart';
 import 'domain/repositories/audio_player_repository.dart';
 import 'domain/repositories/history_repository.dart';
 import 'domain/repositories/home_widget_repository.dart';
+import 'domain/repositories/import_export_repository.dart';
 import 'domain/repositories/music_data_repository.dart';
 import 'domain/repositories/persistent_state_repository.dart';
 import 'domain/repositories/platform_integration_repository.dart';
@@ -37,12 +38,14 @@ import 'domain/usecases/shuffle_all.dart';
 import 'presentation/state/album_page_store.dart';
 import 'presentation/state/artist_page_store.dart';
 import 'presentation/state/audio_store.dart';
+import 'presentation/state/export_store.dart';
 import 'presentation/state/history_store.dart';
 import 'presentation/state/home_page_store.dart';
 import 'presentation/state/home_widget_forms/artistofday_form_store.dart';
 import 'presentation/state/home_widget_forms/history_form_store.dart';
 import 'presentation/state/home_widget_forms/playlists_form_store.dart';
 import 'presentation/state/home_widget_forms/shuffleall_form_store.dart';
+import 'presentation/state/import_store.dart';
 import 'presentation/state/music_data_store.dart';
 import 'presentation/state/navigation_store.dart';
 import 'presentation/state/play_list_page_store.dart';
@@ -69,6 +72,7 @@ import 'system/datasources/settings_data_source.dart';
 import 'system/repositories/audio_player_repository_impl.dart';
 import 'system/repositories/history_repository_impl.dart';
 import 'system/repositories/home_widget_repository_impl.dart';
+import 'system/repositories/import_export_repository_impl.dart';
 import 'system/repositories/music_data_repository_impl.dart';
 import 'system/repositories/persistent_state_repository_impl.dart';
 import 'system/repositories/platform_integration_repository_impl.dart';
@@ -179,6 +183,17 @@ Future<void> setupGetIt() async {
     (HomeHistory history, _) => HistoryFormStore(
       homeWidgetRepository: getIt(),
       homeHistory: history,
+    ),
+  );
+  getIt.registerFactoryParam<ImportStore, String?, void>(
+    (String? importPath, _) => ImportStore(
+      importExportRepository: getIt(),
+      inputPath: importPath,
+    ),
+  );
+  getIt.registerFactory<ExportStore>(
+    () => ExportStore(
+      importExportRepository: getIt(),
     ),
   );
 
@@ -315,9 +330,17 @@ Future<void> setupGetIt() async {
       getIt(),
     ),
   );
+  getIt.registerLazySingleton<ImportExportRepository>(
+    () => ImportExportRepositoryImpl(
+      getIt(),
+      getIt(),
+      getIt(),
+    ),
+  );
 
   // data sources
   final MainDatabase driftDatabase = MainDatabase();
+  getIt.registerLazySingleton<MainDatabase>(() => driftDatabase);
   getIt.registerLazySingleton<MusicDataSource>(() => driftDatabase.musicDataDao);
   getIt.registerLazySingleton<PersistentStateDataSource>(() => driftDatabase.persistentStateDao);
   getIt.registerLazySingleton<SettingsDataSource>(() => driftDatabase.settingsDao);
