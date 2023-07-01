@@ -14,4 +14,5 @@ abstract class SettingsDataSource {
 
   Future<Map<String, String>> getKeyValueSettings();
   Future<void> loadKeyValueSettings(Map<String, String> settings);
+  Future<List<String>> getLibraryFolders();
 }

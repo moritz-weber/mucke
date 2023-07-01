@@ -54,4 +54,12 @@ class PersistentStateRepositoryImpl implements PersistentStateRepository {
   void setPlayable(Playable playable) {
     _persistentStateDataSource.setPlayable(playable);
   }
+
+  @override
+  Future<bool> get isInitialized async => await _persistentStateDataSource.isInitialized;
+
+  @override
+  Future<void> setInitialized() async {
+    await _persistentStateDataSource.setInitialized();
+  }
 }

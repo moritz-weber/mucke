@@ -82,12 +82,17 @@ class SettingsDao extends DatabaseAccessor<MainDatabase>
 
     return result;
   }
-  
+
   @override
   Future<void> loadKeyValueSettings(Map<String, String> settings) async {
     for (final kv in settings.entries) {
       await (update(keyValueEntries)..where((tbl) => tbl.key.equals(kv.key)))
-        .write(KeyValueEntriesCompanion(value: Value(kv.value)));
+          .write(KeyValueEntriesCompanion(value: Value(kv.value)));
     }
+  }
+
+  @override
+  Future<List<String>> getLibraryFolders() async {
+    return select(libraryFolders).get().then((value) => value.map((e) => e.path).toList());
   }
 }

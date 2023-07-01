@@ -1,6 +1,7 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
@@ -30,11 +31,10 @@ class _ExportPageState extends State<ExportPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Export Data',
+          L10n.of(context)!.exportData,
           style: TEXT_HEADER,
         ),
         leading: IconButton(
@@ -52,7 +52,7 @@ class _ExportPageState extends State<ExportPage> {
       body: ListView(
         children: [
           Card(
-            margin: EdgeInsets.fromLTRB(HORIZONTAL_PADDING, 16.0, HORIZONTAL_PADDING, 0),
+            margin: const EdgeInsets.fromLTRB(HORIZONTAL_PADDING, 16.0, HORIZONTAL_PADDING, 0),
             child: Padding(
               padding: const EdgeInsets.all(12.0),
               child: Row(
@@ -61,70 +61,58 @@ class _ExportPageState extends State<ExportPage> {
                   SizedBox(width: 12.0),
                   Expanded(
                     child: Text(
-                      'Select the data you want to export. By default, everything is exported. When exporting, you can select a folder for the file to be stored.',
+                      L10n.of(context)!.exportDescription,
                     ),
                   ),
                 ],
               ),
             ),
           ),
-          SettingsSection(text: 'Library'),
-          CheckboxListTile(
-            title: Text('Songs, Albums, and Artists'),
-            value: true,
-            onChanged: (value) => {},
-          ),
+          SettingsSection(text: L10n.of(context)!.library),
+          Observer(builder: (context) {
+            return CheckboxListTile(
+              title: Text(L10n.of(context)!.songsAlbumsArtists),
+              value: _exportStore.selection.songsAlbumsArtists,
+              onChanged: (value) => _exportStore.setSongsAlbumsArtists(value ?? false),
+            );
+          }),
           const Divider(),
-          CheckboxListTile(
-            title: Text('Smartlists'),
-            value: true,
-            onChanged: (value) => {},
-          ),
+          Observer(builder: (context) {
+            return CheckboxListTile(
+              title: Text(L10n.of(context)!.smartlists),
+              value: _exportStore.selection.smartlists,
+              onChanged: (value) => _exportStore.setSmartlists(value ?? false),
+            );
+          }),
           const Divider(),
-          CheckboxListTile(
-            title: Text('Playlists'),
-            value: true,
-            onChanged: (value) => {},
-          ),
-          const Divider(),
-          CheckboxListTile(
-            title: Text('History'),
-            value: true,
-            onChanged: (value) => {},
-          ),
-          SettingsSection(text: 'Library Settings'),
-          CheckboxListTile(
-            title: Text('Library folders'),
-            value: true,
-            onChanged: (value) => {},
-          ),
-          const Divider(),
-          CheckboxListTile(
-            title: Text('Allowed extensions'),
-            value: true,
-            onChanged: (value) => {},
-          ),
-          const Divider(),
-          CheckboxListTile(
-            title: Text('Blocked songs'),
-            value: true,
-            onChanged: (value) => {},
-          ),
-          SettingsSection(text: 'General Settings'),
-          CheckboxListTile(
-            title: Text('Home page settings'),
-            value: true,
-            onChanged: (value) => {},
-          ),
-          const Divider(),
+          Observer(builder: (context) {
+            return CheckboxListTile(
+              title: Text(L10n.of(context)!.playlists),
+              value: _exportStore.selection.playlists,
+              onChanged: (value) => _exportStore.setPlaylists(value ?? false),
+            );
+          }),
+          SettingsSection(text: L10n.of(context)!.librarySettings),
           Observer(
             builder: (context) {
               return CheckboxListTile(
-                title: Text('Other settings'),
-                value: _exportStore.generalSettings,
-                onChanged: (value) => _exportStore.setGeneralSettings(value ?? false),
+                title: Text(L10n.of(context)!.libraryFolders),
+                value: _exportStore.selection.libraryFolders,
+              onChanged: (value) => _exportStore.setLibraryFolders(value ?? false),
               );
             }
+          ),
+          const Divider(),
+          CheckboxListTile(
+            title: Text(L10n.of(context)!.allowedFileExtensions),
+            value: true,
+            onChanged: (value) => {},
+          ),
+          const Divider(),
+          CheckboxListTile(
+            title: Text(L10n.of(context)!.blockedFiles),
+            value: true,
+            onChanged: (value) => {},
           ),
           const SizedBox(height: HORIZONTAL_PADDING),
         ],
@@ -142,8 +130,8 @@ class _ExportPageState extends State<ExportPage> {
               if (path != null) const Icon(Icons.check_circle_rounded, color: GREEN),
               if (path == null) const Icon(Icons.warning_rounded, color: RED),
               const SizedBox(width: 16.0),
-              if (path != null) Expanded(child: Text('Data exported to:\n$path')),
-              if (path == null) const Expanded(child: Text('Data export failed!')),
+              if (path != null) Expanded(child: Text(L10n.of(context)!.dataExportedTo(path))),
+              if (path == null) Expanded(child: Text(L10n.of(context)!.dataExportFailed)),
             ],
           ),
           duration: const Duration(seconds: 10),

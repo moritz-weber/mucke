@@ -40,6 +40,17 @@ ThemeData theme() => ThemeData(
           foregroundColor: Colors.white,
         ),
       ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: Colors.white,
+          side: BorderSide(width: 1, color: LIGHT1.withOpacity(0.5)),
+        ),
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          foregroundColor: Colors.white,
+        )
+      ),
       progressIndicatorTheme: const ProgressIndicatorThemeData(color: LIGHT2),
       sliderTheme: const SliderThemeData(
         activeTrackColor: LIGHT1,

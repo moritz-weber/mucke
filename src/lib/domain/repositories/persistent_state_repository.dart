@@ -18,4 +18,7 @@ abstract class PersistentStateRepository {
   void setAvailableSongs(List<QueueItem> songs);
   void setPlayable(Playable playable);
   void setCurrentIndex(int? index);
+
+  Future<bool> get isInitialized;
+  Future<void> setInitialized();
 }

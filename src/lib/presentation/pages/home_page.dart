@@ -17,9 +17,11 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final NavigationStore navStore = GetIt.I<NavigationStore>();
+    final GlobalKey<NavigatorState> homeNavKey = GlobalKey<NavigatorState>();
+    navStore.homeNavKey = homeNavKey;
 
     return Navigator(
-      key: navStore.homeNavKey,
+      key: homeNavKey,
       initialRoute: 'home',
       onGenerateRoute: (RouteSettings settings) {
         WidgetBuilder builder;
@@ -45,7 +47,6 @@ class _HomePageInner extends StatelessWidget {
     final NavigationStore navStore = GetIt.I<NavigationStore>();
     final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
 
-    print('HomePage.build');
     return Scaffold(
       appBar: AppBar(
         title: Text(L10n.of(context)!.home),

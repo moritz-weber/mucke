@@ -25,49 +25,145 @@ mixin _$ImportStore on _ImportStore, Store {
     });
   }
 
-  late final _$generalSettingsAtom =
-      Atom(name: '_ImportStore.generalSettings', context: context);
+  late final _$scannedAtom =
+      Atom(name: '_ImportStore.scanned', context: context);
 
   @override
-  bool get generalSettings {
-    _$generalSettingsAtom.reportRead();
-    return super.generalSettings;
+  bool get scanned {
+    _$scannedAtom.reportRead();
+    return super.scanned;
   }
 
   @override
-  set generalSettings(bool value) {
-    _$generalSettingsAtom.reportWrite(value, super.generalSettings, () {
-      super.generalSettings = value;
+  set scanned(bool value) {
+    _$scannedAtom.reportWrite(value, super.scanned, () {
+      super.scanned = value;
     });
   }
 
-  late final _$_readDataFileAsyncAction =
-      AsyncAction('_ImportStore._readDataFile', context: context);
+  late final _$addedLibraryFoldersAtom =
+      Atom(name: '_ImportStore.addedLibraryFolders', context: context);
 
   @override
-  Future<void> _readDataFile(String path) {
-    return _$_readDataFileAsyncAction.run(() => super._readDataFile(path));
+  ObservableList<String> get addedLibraryFolders {
+    _$addedLibraryFoldersAtom.reportRead();
+    return super.addedLibraryFolders;
   }
 
-  late final _$_ImportStoreActionController =
-      ActionController(name: '_ImportStore', context: context);
+  @override
+  set addedLibraryFolders(ObservableList<String> value) {
+    _$addedLibraryFoldersAtom.reportWrite(value, super.addedLibraryFolders, () {
+      super.addedLibraryFolders = value;
+    });
+  }
+
+  late final _$importingAtom =
+      Atom(name: '_ImportStore.importing', context: context);
 
   @override
-  void setGeneralSettings(bool selected) {
-    final _$actionInfo = _$_ImportStoreActionController.startAction(
-        name: '_ImportStore.setGeneralSettings');
-    try {
-      return super.setGeneralSettings(selected);
-    } finally {
-      _$_ImportStoreActionController.endAction(_$actionInfo);
-    }
+  bool get importing {
+    _$importingAtom.reportRead();
+    return super.importing;
+  }
+
+  @override
+  set importing(bool value) {
+    _$importingAtom.reportWrite(value, super.importing, () {
+      super.importing = value;
+    });
+  }
+
+  late final _$importedMetadataAtom =
+      Atom(name: '_ImportStore.importedMetadata', context: context);
+
+  @override
+  bool get importedMetadata {
+    _$importedMetadataAtom.reportRead();
+    return super.importedMetadata;
+  }
+
+  @override
+  set importedMetadata(bool value) {
+    _$importedMetadataAtom.reportWrite(value, super.importedMetadata, () {
+      super.importedMetadata = value;
+    });
+  }
+
+  late final _$importedPlaylistsAtom =
+      Atom(name: '_ImportStore.importedPlaylists', context: context);
+
+  @override
+  ObservableList<bool> get importedPlaylists {
+    _$importedPlaylistsAtom.reportRead();
+    return super.importedPlaylists;
+  }
+
+  @override
+  set importedPlaylists(ObservableList<bool> value) {
+    _$importedPlaylistsAtom.reportWrite(value, super.importedPlaylists, () {
+      super.importedPlaylists = value;
+    });
+  }
+
+  late final _$importedSmartlistsAtom =
+      Atom(name: '_ImportStore.importedSmartlists', context: context);
+
+  @override
+  ObservableList<bool> get importedSmartlists {
+    _$importedSmartlistsAtom.reportRead();
+    return super.importedSmartlists;
+  }
+
+  @override
+  set importedSmartlists(ObservableList<bool> value) {
+    _$importedSmartlistsAtom.reportWrite(value, super.importedSmartlists, () {
+      super.importedSmartlists = value;
+    });
+  }
+
+  late final _$readDataFileAsyncAction =
+      AsyncAction('_ImportStore.readDataFile', context: context);
+
+  @override
+  Future<void> readDataFile(String path) {
+    return _$readDataFileAsyncAction.run(() => super.readDataFile(path));
+  }
+
+  late final _$importSongMetadataAsyncAction =
+      AsyncAction('_ImportStore.importSongMetadata', context: context);
+
+  @override
+  Future<void> importSongMetadata() {
+    return _$importSongMetadataAsyncAction
+        .run(() => super.importSongMetadata());
+  }
+
+  late final _$importPlaylistAsyncAction =
+      AsyncAction('_ImportStore.importPlaylist', context: context);
+
+  @override
+  Future<void> importPlaylist(int i) {
+    return _$importPlaylistAsyncAction.run(() => super.importPlaylist(i));
+  }
+
+  late final _$importSmartlistAsyncAction =
+      AsyncAction('_ImportStore.importSmartlist', context: context);
+
+  @override
+  Future<void> importSmartlist(int i) {
+    return _$importSmartlistAsyncAction.run(() => super.importSmartlist(i));
   }
 
   @override
   String toString() {
     return '''
 appData: ${appData},
-generalSettings: ${generalSettings}
+scanned: ${scanned},
+addedLibraryFolders: ${addedLibraryFolders},
+importing: ${importing},
+importedMetadata: ${importedMetadata},
+importedPlaylists: ${importedPlaylists},
+importedSmartlists: ${importedSmartlists}
     ''';
   }
 }

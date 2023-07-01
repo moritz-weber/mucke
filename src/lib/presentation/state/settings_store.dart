@@ -58,8 +58,8 @@ abstract class _SettingsStore with Store {
     if (extensions != null) await _settingsRepository.setFileExtension(extensions);
   }
 
-  Future<void> addBlockedFiles(List<String> paths) async {
-    await _musicDataRepository.addBlockedFiles(paths);
+  Future<void> addBlockedFiles(List<String> paths, {bool delete = true}) async {
+    await _musicDataRepository.addBlockedFiles(paths, delete);
   }
 
   Future<void> removeBlockedFiles(List<String> paths) async {

@@ -97,12 +97,12 @@ class MusicDataDao extends DatabaseAccessor<MainDatabase>
 
   @override
   Future<void> deleteAllArtists() async {
-    delete(artists).go();
+    await delete(artists).go();
   }
 
   @override
   Future<void> deleteAllAlbums() async {
-    delete(albums).go();
+    await delete(albums).go();
   }
 
   @override
@@ -353,14 +353,16 @@ class MusicDataDao extends DatabaseAccessor<MainDatabase>
   }
 
   @override
-  Future<void> addBlockedFiles(List<String> paths) async {
+  Future<void> addBlockedFiles(List<String> paths, bool delete) async {
     final Set<String> artistSet = {};
     final Set<int> albumSet = {};
 
-    for (final path in paths) {
-      final song = await getSongByPath(path);
-      artistSet.add(song!.artist);
-      albumSet.add(song.albumId);
+    if (delete) {
+      for (final path in paths) {
+        final song = await getSongByPath(path);
+        artistSet.add(song!.artist);
+        albumSet.add(song.albumId);
+      }
     }
 
     await batch((batch) {
@@ -370,14 +372,16 @@ class MusicDataDao extends DatabaseAccessor<MainDatabase>
       );
 
       // delete songs
-      batch.deleteWhere<$SongsTable, dynamic>(songs, (tbl) => tbl.path.isIn(paths));
+      if (delete) batch.deleteWhere<$SongsTable, dynamic>(songs, (tbl) => tbl.path.isIn(paths));
     });
 
-    // delete empty albums
-    albumSet.forEach(_deleteAlbumIfEmpty);
+    if (delete) {
+      // delete empty albums
+      albumSet.forEach(_deleteAlbumIfEmpty);
 
-    // delete artists without albums
-    artistSet.forEach(_deleteArtistIfEmpty);
+      // delete artists without albums
+      artistSet.forEach(_deleteArtistIfEmpty);
+    }
   }
 
   // Delete empty albums and all their database appearances.
@@ -466,5 +470,54 @@ class MusicDataDao extends DatabaseAccessor<MainDatabase>
     return (select(songs)..where((tbl) => tbl.albumId.equals(song.albumId)))
         .get()
         .then((driftSongs) => driftSongs.map(SongModel.fromDrift).toList());
+  }
+
+  @override
+  Future<List<String>> getBlockedFiles() {
+    return select(blockedFiles).get().then((value) => value.map((e) => e.path).toSet().toList());
+  }
+
+  @override
+  Future<List<AlbumModel>> getAlbums() {
+    return (select(albums)..orderBy([(t) => OrderingTerm(expression: t.title)])).get().then(
+        (driftAlbumList) =>
+            driftAlbumList.map((driftAlbum) => AlbumModel.fromDrift(driftAlbum)).toList());
+  }
+
+  @override
+  Future<List<ArtistModel>> getArtists() {
+    return (select(artists)..orderBy([(t) => OrderingTerm(expression: t.name)])).get().then(
+        (driftArtistList) =>
+            driftArtistList.map((driftArtist) => ArtistModel.fromDrift(driftArtist)).toList());
+  }
+
+  @override
+  Future<List<SongModel>> getSongs() {
+    return (select(songs)..orderBy([(t) => OrderingTerm(expression: t.title)])).get().then(
+        (driftSongList) =>
+            driftSongList.map((driftSong) => SongModel.fromDrift(driftSong)).toList());
+  }
+
+  @override
+  Future<void> importSongMetadata(Map<String, Map> data) async {
+    await transaction(() async {
+      for (final e in data.entries) {
+        await (update(songs)
+              ..where((tbl) =>
+                  tbl.title.equals(e.value['title'] as String) &
+                  tbl.albumTitle.equals(e.value['album'] as String) &
+                  tbl.artist.equals(e.value['artist'] as String)))
+            .write(
+          SongsCompanion(
+            blockLevel: Value(e.value['blockLevel'] as int),
+            next: Value(e.value['next'] as bool),
+            previous: Value(e.value['previous'] as bool),
+            likeCount: Value(e.value['likeCount'] as int),
+            playCount: Value(e.value['playCount'] as int),
+            timeAdded: Value(DateTime.fromMicrosecondsSinceEpoch(e.value['timeAdded'] as int)),
+          ),
+        );
+      }
+    });
   }
 }

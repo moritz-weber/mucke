@@ -38,8 +38,17 @@ abstract class MusicDataSource {
   Future<int?> getAlbumId(String? title, String? artist, int? year);
 
   Stream<Set<String>> get blockedFilesStream;
-  Future<void> addBlockedFiles(List<String> paths);
+
+  /// Add the given [paths] to the list of blocked files. Optionally [delete] existing db entries.
+  Future<void> addBlockedFiles(List<String> paths, bool delete);
   Future<void> removeBlockedFiles(List<String> paths);
 
   Future<void> cleanupDatabase();
+
+  Future<List<SongModel>> getSongs();
+  Future<List<AlbumModel>> getAlbums();
+  Future<List<ArtistModel>> getArtists();
+  Future<List<String>> getBlockedFiles();
+
+  Future<void> importSongMetadata(Map<String, Map> data);
 }

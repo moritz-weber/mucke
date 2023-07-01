@@ -1,8 +1,6 @@
 import 'dart:async';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
@@ -15,7 +13,6 @@ import '../theming.dart';
 import '../widgets/settings_section.dart';
 import 'blocked_files_page.dart';
 import 'export_page.dart';
-import 'import_page.dart';
 import 'library_folders_page.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -127,6 +124,7 @@ class SettingsPage extends StatelessWidget {
                         _textController.text = ALLOWED_FILE_EXTENSIONS;
                         settingsStore.setFileExtensions(ALLOWED_FILE_EXTENSIONS);
                       },
+                      tooltip: L10n.of(context)!.reset,
                     ),
                   ],
                 );
@@ -166,9 +164,9 @@ class SettingsPage extends StatelessWidget {
           ),
           const Divider(),
           PercentageSlider(settingsStore),
-          SettingsSection(text: 'Data Migration'),
+          SettingsSection(text: L10n.of(context)!.miscellaneous),
           ListTile(
-            title: Text('Export data'),
+            title: Text(L10n.of(context)!.exportData),
             trailing: const Icon(Icons.chevron_right_rounded),
             onTap: () => navStore.push(
               context,
@@ -177,38 +175,10 @@ class SettingsPage extends StatelessWidget {
               ),
             ),
           ),
-          const Divider(),
-          ListTile(
-            title: Text('Import data'),
-            trailing: const Icon(Icons.chevron_right_rounded),
-            onTap: () => _importData(context, navStore),
-          ),
           const SizedBox(height: 8.0),
         ],
       ),
     );
-  }
-
-  Future<void> _importData(BuildContext context, NavigationStore navStore) async {
-    try {
-      final pickResult = await FilePicker.platform.pickFiles(
-        allowedExtensions: ['json'],
-        type: FileType.custom,
-      );
-      if (pickResult != null) {
-        final importPath = pickResult.paths.first!;
-        navStore.push(
-          context,
-          MaterialPageRoute(
-            builder: (BuildContext context) => ImportPage(importPath: importPath),
-          ),
-        );
-      }
-    } on PlatformException catch (e) {
-      print('Unsupported operation' + e.toString());
-    } catch (ex) {
-      print(ex);
-    }
   }
 }
 

@@ -185,13 +185,13 @@ Future<void> setupGetIt() async {
       homeHistory: history,
     ),
   );
-  getIt.registerFactoryParam<ImportStore, String, void>(
-    (String importPath, _) => ImportStore(
+  getIt.registerFactoryParam<ImportStore, String?, void>(
+    (String? importPath, _) => ImportStore(
       importExportRepository: getIt(),
       inputPath: importPath,
     ),
   );
-    getIt.registerFactory<ExportStore>(
+  getIt.registerFactory<ExportStore>(
     () => ExportStore(
       importExportRepository: getIt(),
     ),
@@ -332,6 +332,8 @@ Future<void> setupGetIt() async {
   );
   getIt.registerLazySingleton<ImportExportRepository>(
     () => ImportExportRepositoryImpl(
+      getIt(),
+      getIt(),
       getIt(),
     ),
   );

@@ -18,17 +18,42 @@ abstract class _ExportStore with Store {
 
   final ImportExportRepository _importExportRepository;
 
-  @observable
-  bool generalSettings = true;
+  @readonly
+  DataSelection _selection = DataSelection.all();
+
+  @action
+  void setSongsAlbumsArtists(bool selected) {
+    _selection.songsAlbumsArtists = selected;
+    _selection = _selection.copy();
+  }
+
+  @action
+  void setSmartlists(bool selected) {
+    _selection.smartlists = selected;
+    _selection = _selection.copy();
+  }
+
+  @action
+  void setPlaylists(bool selected) {
+    _selection.playlists = selected;
+    _selection = _selection.copy();
+  }
+
+  @action
+  void setLibraryFolders(bool selected) {
+    _selection.libraryFolders = selected;
+    _selection = _selection.copy();
+  }
+
   @action
   void setGeneralSettings(bool selected) {
-    generalSettings = selected;
+    _selection.generalSettings = selected;
+    _selection = _selection.copy();
   }
 
   Future<String?> exportData(String? path) async {
     if (path != null) {
-      final selection = DataSelection(generalSettings: generalSettings);
-      return await _importExportRepository.exportData(path, selection);
+      return await _importExportRepository.exportData(path, _selection);
     }
     return null;
   }
