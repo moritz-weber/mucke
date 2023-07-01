@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:drift/drift.dart';
-import 'package:on_audio_query/on_audio_query.dart' as aq;
+import 'package:metadata_god/metadata_god.dart';
 
 import '../../domain/entities/album.dart';
 import '../datasources/drift_database.dart';
@@ -32,23 +32,22 @@ class AlbumModel extends Album {
     );
   }
 
-  factory AlbumModel.fromOnAudioQuery({
-    required aq.SongModel songModel,
+  factory AlbumModel.fromMetadata({
+    required Metadata songData,
     required int albumId,
     String? albumArtPath,
     Color? color,
   }) {
-    final data = songModel.getMap;
-    final albumArtist = data['album_artist'] as String? ?? '';
-    final artist = albumArtist != '' ? albumArtist : songModel.artist;
+    final albumArtist = songData.albumArtist ?? '';
+    final artist = albumArtist != '' ? albumArtist : songData.artist;
 
     return AlbumModel(
       id: albumId,
-      title: songModel.album ?? DEF_ALBUM,
+      title: songData.album ?? DEF_ALBUM,
       artist: artist ?? DEF_ARTIST,
       albumArtPath: albumArtPath,
       color: color,
-      pubYear: data['year'] == null ? null : parseYear(data['year'] as String?),
+      pubYear: songData.year,
     );
   }
 

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:metadata_god/metadata_god.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'domain/actors/persistence_actor.dart';
@@ -24,8 +25,8 @@ Future<void> main() async {
   Fimber.plantTree(TimedRollingFileTree(
     filenamePrefix: '${dir?.path}/logs/',
   ));
-  // Fimber.plantTree(DebugTree());
 
+  MetadataGod.initialize();
   await setupGetIt();
 
   final session = await AudioSession.instance;

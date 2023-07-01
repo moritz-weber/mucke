@@ -3,8 +3,12 @@ import 'dart:io';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
+import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
+import 'package:metadata_god/metadata_god.dart';
 import 'package:on_audio_query/on_audio_query.dart' as aq;
+import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../models/album_model.dart';
 import '../models/artist_model.dart';
@@ -35,18 +39,28 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     final allowedExtensions = getExtensionSet(extString);
     final blockedPaths = await _musicDataSource.blockedFilesStream.first;
 
-    final List<aq.SongModel> aqSongs = [];
 
-    final permissions = await _onAudioQuery.permissionsStatus(); 
-    if (!permissions) {
-      await _onAudioQuery.permissionsRequest();
+
+    final hasStorageAccess = await Permission.storage.isGranted;
+    if(!hasStorageAccess) {
+      await Permission.storage.request();
+      if (!await Permission.storage.isGranted) {
+        return {};
+      }
     }
+
+
+    final List<File> songFiles = [];
 
     for (final libDir in libDirs) {
-      await _onAudioQuery.scanMedia(libDir.path);
-      aqSongs.addAll(await _onAudioQuery.querySongs(path: libDir.path));
+      final List<File> files = await Directory(libDir.path)
+                          .list(recursive: true, followLinks: false)
+                          .where((item) => FileSystemEntity.isFileSync(item.path))
+                          .asyncMap((item) => File(item.path)).toList();
+      songFiles.addAll(files);
     }
-    _log.d('Found ${aqSongs.length} songs');
+
+    _log.d('Found ${songFiles.length} songs');
 
     final List<SongModel> songs = [];
     final List<AlbumModel> albums = [];
@@ -69,18 +83,18 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
 
     final Directory dir = await getApplicationSupportDirectory();
 
-    for (final aqSong in aqSongs.toSet()) {
-      if (!allowedExtensions.contains(aqSong.fileExtension.toLowerCase())) continue;
-      if (blockedPaths.contains(aqSong.data)) continue;
-      _log.d('Checking song: ${aqSong.data}');
+    for (final songFile in songFiles.toSet()) {
+      final String extension = p.extension(songFile.path).toLowerCase().substring(1);
+      if (!allowedExtensions.contains(extension)) continue;
+      if (blockedPaths.contains(songFile.path)) continue;
+      _log.d('Checking song: ${songFile.path}');
 
-      final data = aqSong.getMap;
       // changed includes the creation time
       // => also update, when the file was created later (and wasn't really changed)
       // this is used as a workaround because android
       // doesn't seem to return the correct modification time
-      final lastModified = DateTime.fromMillisecondsSinceEpoch((aqSong.dateModified ?? 0) * 1000);
-      final song = await _musicDataSource.getSongByPath(aqSong.data);
+      final lastModified = await songFile.lastModified();
+      final song = await _musicDataSource.getSongByPath(songFile.path);
 
       int? albumId;
       String albumString;
@@ -127,42 +141,46 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
           albumId = song.albumId;
         }
       }
+
+      final Metadata songData;
+      try {
+        songData = await MetadataGod.readMetadata(file: songFile.path);
+      } on FfiException {
+        continue;
+      }
+
       // completely new song -> new album ids should start after existing ones
       // this is new information
       // is the album ID still correct or do we find another album with the same properties?
-      final String albumArtist = data['album_artist'] as String? ?? '';
-      final String year = data['year'] as String? ?? '';
-      albumString = '${aqSong.album}___${albumArtist}__$year';
+      final String albumArtist = songData.albumArtist ?? '';
+      albumString = '${songData.album}___${albumArtist}__${songData.year}';
 
       String? albumArtPath;
       if (!albumIdMap.containsKey(albumString)) {
         // we haven't seen an album with these properties in the files yet, but there might be an entry in the database
         // in this case, we should use the corresponding ID
         albumId ??= await _musicDataSource.getAlbumId(
-              aqSong.album,
+              songData.album,
               albumArtist,
-              int.tryParse(year),
+              songData.year,
             ) ??
             newAlbumId++;
         albumIdMap[albumString] = albumId;
 
-        final albumArt = await _onAudioQuery.queryArtwork(
-          aqSong.albumId ?? -1,
-          aq.ArtworkType.ALBUM,
-          size: 600,
-        );
+        final albumArt = songData.picture;
+        _log.d('has picture: ${albumArt != null}');
 
-        if (albumArt != null && albumArt.isNotEmpty) {
+        if (albumArt != null) {
           albumArtPath = '${dir.path}/$albumId';
           final file = File(albumArtPath);
-          file.writeAsBytesSync(albumArt);
+          file.writeAsBytesSync(albumArt.data);
           albumArtMap[albumId] = albumArtPath;
 
           color = await getBackgroundColor(FileImage(file));
           colorMap[albumId] = color;
         }
 
-        final String songArtist = aqSong.artist ?? '';
+        final String songArtist = songData.artist ?? '';
         final String artistName =
             albumArtist != '' ? albumArtist : (songArtist != '' ? songArtist : DEF_ARTIST);
 
@@ -175,9 +193,9 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
         }
 
         albums.add(
-          AlbumModel.fromOnAudioQuery(
+          AlbumModel.fromMetadata(
             albumId: albumId,
-            songModel: aqSong,
+            songData: songData,
             albumArtPath: albumArtPath,
             color: color,
           ),
@@ -191,9 +209,9 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
       }
 
       songs.add(
-        SongModel.fromOnAudioQuery(
-          path: aqSong.data,
-          songModel: aqSong,
+        SongModel.fromMetadata(
+          path: songFile.path,
+          songData: songData,
           albumId: albumId,
           albumArtPath: albumArtPath,
           color: color,
@@ -214,5 +232,18 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     extensions = extensions.map((e) => e.trim()).toList();
     extensions = extensions.whereNot((element) => element.isEmpty).toList();
     return Set<String>.from(extensions);
+  }
+
+  Future<List<File>> getAllFilesRecursively(String path) async {
+    final List<File> files = [];
+    if (await FileSystemEntity.isDirectory(path)) {
+      final dir = Directory(path);
+      await for (var entity in dir.list(recursive: true, followLinks: false)) {
+        files.addAll(await getAllFilesRecursively(entity.path));
+      }
+    } else if (await FileSystemEntity.isFile(path)) {
+      files.add(File(path));
+    }
+    return files;
   }
 }
