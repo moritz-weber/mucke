@@ -82,9 +82,8 @@ class _SmartListFormPageState extends State<SmartListFormPage> {
             IconButton(
               icon: const Icon(Icons.delete_rounded),
               onPressed: () async {
-                // TODO: this works, but may only pop back to the smartlist page...
-                // can I use pop 2x here?
                 await musicDataStore.removeSmartList(widget.smartList!);
+                navStore.pop(context);
                 navStore.pop(context);
               },
             ),
