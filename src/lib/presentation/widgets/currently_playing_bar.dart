@@ -91,11 +91,28 @@ class CurrentlyPlayingBar extends StatelessWidget {
     );
   }
 
-  Future<void> _onTap(BuildContext context) async {
+Future<void> _onTap(BuildContext context) async {
     Navigator.push(
       context,
-      MaterialPageRoute<Widget>(
-        builder: (BuildContext context) => const CurrentlyPlayingPage(),
+      PageRouteBuilder(
+        pageBuilder: (BuildContext context, animation, secondaryAnimation) =>
+            const CurrentlyPlayingPage(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(0.0, 1.0);
+          const end = Offset.zero;
+          const curve = Curves.easeInOutCubic;
+
+          final tween = Tween(begin: begin, end: end);
+          final curvedAnimation = CurvedAnimation(
+            parent: animation,
+            curve: curve,
+          );
+
+          return SlideTransition(
+            position: tween.animate(curvedAnimation),
+            child: child,
+          );
+        },
       ),
     );
   }
