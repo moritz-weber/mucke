@@ -93,6 +93,6 @@ abstract class MusicDataRepository extends MusicDataInfoRepository {
   Future<void> updateSmartList(SmartList smartList);
   Future<void> removeSmartList(SmartList smartList);
 
-  Future<void> addBlockedFiles(List<String> paths);
+  Future<void> addBlockedFiles(List<String> paths, bool delete);
   Future<void> removeBlockedFiles(List<String> paths);
 }

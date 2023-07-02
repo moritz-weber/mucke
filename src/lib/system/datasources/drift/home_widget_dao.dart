@@ -27,13 +27,13 @@ class HomeWidgetDao extends DatabaseAccessor<MainDatabase>
 
   @override
   Future<void> insertHomeWidget(HomeWidgetModel homeWidget) async {
-    into(homeWidgets).insert(homeWidget.toDrift());
+    await into(homeWidgets).insertOnConflictUpdate(homeWidget.toDrift());
   }
 
   @override
   Future<void> moveHomeWidget(int oldPosition, int newPosition) async {
     if (oldPosition != newPosition) {
-      transaction(() async {
+      await transaction(() async {
         await (update(homeWidgets)..where((tbl) => tbl.position.equals(oldPosition)))
             .write(const HomeWidgetsCompanion(position: Value(-1)));
         if (oldPosition < newPosition) {
@@ -58,7 +58,7 @@ class HomeWidgetDao extends DatabaseAccessor<MainDatabase>
     final entries = await select(homeWidgets).get();
     final count = entries.length;
 
-    transaction(() async {
+    await transaction(() async {
       await (delete(homeWidgets)..where((tbl) => tbl.position.equals(homeWidget.position))).go();
       for (int i = homeWidget.position + 1; i < count; i++) {
         await (update(homeWidgets)..where((tbl) => tbl.position.equals(i)))

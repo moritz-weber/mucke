@@ -1,3 +1,14 @@
+## Unreleased
+
+- Implemented an onboarding workflow.
+- Implemented data export and import (#89)
+- Moved database to separate isolate for non-blocking operation
+- Fixed bug with broken notification after calls (#68). Note: Existing users need to disable battery optimization for mucke.
+- Added localization for playlists widget on home page (#90). Note: Existing users can rename the title in the home page settings.
+- Fixed issue with unresponsive media buttons (#75).
+- Added animations to currently playing page and queue page.
+- Added initialization of two smartlists.
+
 ## 1.3.1
 
 - Fixed bug with translation priorities (#79)

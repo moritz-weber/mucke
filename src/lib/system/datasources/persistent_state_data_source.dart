@@ -4,6 +4,9 @@ import '../../domain/entities/shuffle_mode.dart';
 import '../models/queue_item_model.dart';
 
 abstract class PersistentStateDataSource {
+  Future<bool> get isInitialized;
+  Future<void> setInitialized();
+
   Future<void> setQueueItems(List<QueueItemModel> queueItems);
   Future<List<QueueItemModel>> get queueItems;
 

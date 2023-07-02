@@ -9,8 +9,10 @@ import 'package:metadata_god/metadata_god.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'domain/actors/persistence_actor.dart';
+import 'domain/repositories/init_repository.dart';
 import 'injection_container.dart';
 import 'presentation/pages/home_page.dart';
+import 'presentation/pages/init/init_page.dart';
 import 'presentation/pages/library_page.dart';
 import 'presentation/pages/search_page.dart';
 import 'presentation/state/navigation_store.dart';
@@ -23,6 +25,7 @@ Future<void> main() async {
   Fimber.plantTree(TimedRollingFileTree(
     filenamePrefix: '${dir?.path}/logs/',
   ));
+  // Fimber.plantTree(DebugTree());
 
   MetadataGod.initialize();
   await setupGetIt();
@@ -54,13 +57,15 @@ class MyApp extends StatelessWidget {
       theme: theme(),
       initialRoute: '/',
       routes: {
-        '/': (context) => AnnotatedRegion<SystemUiOverlayStyle>(
-              child: const RootPage(),
-              value: SystemUiOverlayStyle.dark.copyWith(
-                systemNavigationBarColor: DARK1,
-                statusBarIconBrightness: Brightness.light,
-              ),
+        '/': (context) {
+          return AnnotatedRegion<SystemUiOverlayStyle>(
+            child: const RootPage(),
+            value: SystemUiOverlayStyle.dark.copyWith(
+              systemNavigationBarColor: DARK1,
+              statusBarIconBrightness: Brightness.light,
             ),
+          );
+        },
       },
       localizationsDelegates: L10n.localizationsDelegates,
       supportedLocales: L10n.supportedLocales,
@@ -94,8 +99,26 @@ class _RootPageState extends State<RootPage> {
   @override
   Widget build(BuildContext context) {
     final NavigationStore navStore = GetIt.I<NavigationStore>();
+    // TODO: this does not conform to the design that UI should only call stores, but this would seem overkill
+    final initRepository = GetIt.I<InitRepository>();
 
-    print('RootPage.build');
+    initRepository.isInitialized.then((value) {
+      if (!value) {
+        navStore.push(
+          context,
+          MaterialPageRoute<Widget>(
+            builder: (BuildContext context) => WillPopScope(
+              onWillPop: () async => false,
+              child: const InitPage(),
+            ),
+          ),
+        );
+
+        initRepository.initHomePage(context);
+        initRepository.initSmartlists(context);
+      }
+    });
+
     return WillPopScope(
       child: Observer(
         builder: (BuildContext context) => Scaffold(

@@ -1,16 +1,20 @@
 import 'dart:async';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:optimization_battery/optimization_battery.dart';
 
 import '../../defaults.dart';
 import '../state/music_data_store.dart';
 import '../state/navigation_store.dart';
 import '../state/settings_store.dart';
 import '../theming.dart';
+import '../widgets/settings_section.dart';
 import 'blocked_files_page.dart';
+import 'export_page.dart';
 import 'library_folders_page.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -60,9 +64,7 @@ class SettingsPage extends StatelessWidget {
               );
             }),
           ),
-          const Divider(
-            height: 4.0,
-          ),
+          const Divider(),
           ListTile(
             title: Text(L10n.of(context)!.manageLibraryFolders),
             trailing: const Icon(Icons.chevron_right_rounded),
@@ -73,9 +75,7 @@ class SettingsPage extends StatelessWidget {
               ),
             ),
           ),
-          const Divider(
-            height: 4.0,
-          ),
+          const Divider(),
           ListTile(
             title: Text(L10n.of(context)!.allowedFileExtensions),
             subtitle: Text(
@@ -126,15 +126,14 @@ class SettingsPage extends StatelessWidget {
                         _textController.text = ALLOWED_FILE_EXTENSIONS;
                         settingsStore.setFileExtensions(ALLOWED_FILE_EXTENSIONS);
                       },
+                      tooltip: L10n.of(context)!.reset,
                     ),
                   ],
                 );
               },
             ),
           ),
-          const Divider(
-            height: 4.0,
-          ),
+          const Divider(),
           Observer(
             builder: (_) {
               final blockedFiles = settingsStore.numBlockedFiles;
@@ -165,38 +164,49 @@ class SettingsPage extends StatelessWidget {
               isThreeLine: true,
             ),
           ),
-          const Divider(
-            height: 4.0,
-          ),
+          const Divider(),
           PercentageSlider(settingsStore),
+          SettingsSection(text: L10n.of(context)!.miscellaneous),
+          ListTile(
+            title: Text(L10n.of(context)!.exportData),
+            trailing: const Icon(Icons.chevron_right_rounded),
+            onTap: () => navStore.push(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => const ExportPage(),
+              ),
+            ),
+          ),
+          FutureBuilder(
+            future: DeviceInfoPlugin().androidInfo,
+            builder: (context, AsyncSnapshot<AndroidDeviceInfo> snapshot) {
+              if (snapshot.hasData && snapshot.data!.version.sdkInt > 30)
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Divider(),
+                    BatteryOptimizationsObserver(builder: (context, isIgnore) {
+                      return ListTile(
+                        title: Text(L10n.of(context)!.openBattery),
+                        subtitle: Text(
+                          (isIgnore != null && !isIgnore)
+                              ? L10n.of(context)!.disableBattery
+                              : L10n.of(context)!.disabledBattery,
+                          style: TEXT_SMALL_SUBTITLE,
+                        ),
+                        trailing: const Icon(Icons.chevron_right_rounded),
+                        onTap: () {
+                          OptimizationBattery.openBatteryOptimizationSettings();
+                        },
+                      );
+                    }),
+                  ],
+                );
+              return Container();
+            },
+          ),
+          const SizedBox(height: 8.0),
         ],
-      ),
-    );
-  }
-}
-
-class SettingsSection extends StatelessWidget {
-  const SettingsSection({Key? key, required this.text}) : super(key: key);
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(
-        left: 16.0,
-        right: 16.0,
-        top: 24.0,
-        bottom: 4.0,
-      ),
-      child: Text(
-        text,
-        style: TEXT_HEADER.underlined(
-          textColor: Colors.white,
-          underlineColor: LIGHT1,
-          thickness: 4,
-          distance: 8,
-        ),
       ),
     );
   }
@@ -248,19 +258,27 @@ class _PercentageSliderState extends State<PercentageSlider> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4.0),
-          child: Slider(
-            value: _value,
-            onChanged: (value) {
-              setState(() {
-                _value = value;
-              });
-            },
-            onChangeEnd: (value) {
-              widget.settingsStore.setListenedPercentage(value.round());
-            },
-            min: 1,
-            max: 99,
+          padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: HORIZONTAL_PADDING),
+          child: Row(
+            children: [
+              const Text('1%'),
+              Expanded(
+                child: Slider(
+                  value: _value,
+                  onChanged: (value) {
+                    setState(() {
+                      _value = value;
+                    });
+                  },
+                  onChangeEnd: (value) {
+                    widget.settingsStore.setListenedPercentage(value.round());
+                  },
+                  min: 1,
+                  max: 99,
+                ),
+              ),
+              const Text('99%'),
+            ],
           ),
         ),
       ],

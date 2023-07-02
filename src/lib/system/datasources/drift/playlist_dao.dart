@@ -317,8 +317,8 @@ class PlaylistDao extends DatabaseAccessor<MainDatabase>
 
     query = query..orderBy(orderingTerms);
 
-    return query.watch().map(
-        (driftSongList) => driftSongList.map((driftSong) => SongModel.fromDrift(driftSong)).toList());
+    return query.watch().map((driftSongList) =>
+        driftSongList.map((driftSong) => SongModel.fromDrift(driftSong)).toList());
   }
 
   @override
@@ -350,8 +350,8 @@ class PlaylistDao extends DatabaseAccessor<MainDatabase>
         .then(
       (driftList) {
         return driftList.map((driftSmartList) {
-          final driftArtists = (slArtists.where(
-                  (element) => element.readTable(smartListArtists).smartListId == driftSmartList.id))
+          final driftArtists = (slArtists.where((element) =>
+                  element.readTable(smartListArtists).smartListId == driftSmartList.id))
               .map((e) => e.readTable(artists))
               .toList();
           return SmartListModel.fromDrift(driftSmartList, driftArtists);
@@ -413,6 +413,139 @@ class PlaylistDao extends DatabaseAccessor<MainDatabase>
               .write(PlaylistsCompanion(timeChanged: Value(DateTime.now())));
         }
       });
+    }
+  }
+
+  @override
+  Future<List<SongModel>> getPlaylistSongs(PlaylistModel playlist) async {
+    return await ((select(playlistEntries)
+          ..where((tbl) => tbl.playlistId.equals(playlist.id))
+          ..orderBy([(t) => OrderingTerm.asc(t.position)]))
+        .join(
+      [innerJoin(songs, songs.path.equalsExp(playlistEntries.songPath))],
+    )).get().then((driftSongList) =>
+        driftSongList.map((driftSong) => SongModel.fromDrift(driftSong.readTable(songs))).toList());
+  }
+
+  @override
+  Future<List<PlaylistModel>> getPlaylists() async {
+    return await select(playlists).get().then(
+          (driftPlaylists) => driftPlaylists.map((e) => PlaylistModel.fromDrift(e)).toList(),
+        );
+  }
+
+  @override
+  Future<List<SmartListModel>> getSmartlists() async {
+    final sls = await select(smartLists).get();
+
+    final slArtists = await (select(smartListArtists).join(
+      [innerJoin(artists, artists.name.equalsExp(smartListArtists.artistName))],
+    )).get();
+
+    return sls.map((sl) {
+      final driftArtists =
+          (slArtists.where((element) => element.readTable(smartListArtists).smartListId == sl.id))
+              .map((e) => e.readTable(artists))
+              .toList();
+      return SmartListModel.fromDrift(sl, driftArtists);
+    }).toList();
+  }
+
+  @override
+  Future<void> importPlaylist(Map<String, dynamic> playlistData, Map<String, Map> songData) async {
+    final playlistId = await into(playlists).insert(
+      PlaylistsCompanion(
+        name: Value(playlistData['name'] as String),
+        icon: Value(playlistData['iconString'] as String),
+        gradient: Value(playlistData['gradientString'] as String),
+        shuffleMode: Value(playlistData['shuffleMode']?.toString()),
+        timeChanged: Value(DateTime.fromMillisecondsSinceEpoch(playlistData['timeChanged'] as int)),
+        timeCreated: Value(DateTime.fromMillisecondsSinceEpoch(playlistData['timeCreated'] as int)),
+        timeLastPlayed:
+            Value(DateTime.fromMillisecondsSinceEpoch(playlistData['timeLastPlayed'] as int)),
+      ),
+    );
+
+    final paths = <String>[];
+    for (final String importPath in playlistData['SONGS']) {
+      final metadata = songData[importPath];
+
+      if (metadata == null) continue;
+
+      final foundSongs = await (select(songs)
+            ..where((tbl) =>
+                tbl.title.equals(metadata['title'] as String) &
+                tbl.albumTitle.equals(metadata['album'] as String) &
+                tbl.artist.equals(metadata['artist'] as String)))
+          .get();
+
+      if (foundSongs.isEmpty) continue;
+
+      paths.add(foundSongs.first.path);
+    }
+
+    final entries = <PlaylistEntriesCompanion>[];
+
+    int i = 0;
+    for (final p in paths) {
+      entries.add(PlaylistEntriesCompanion(
+        playlistId: Value(playlistId),
+        songPath: Value(p),
+        position: Value(i),
+      ));
+      i++;
+    }
+
+    await (update(playlists)..where((tbl) => tbl.id.equals(playlistId)))
+        .write(PlaylistsCompanion(timeChanged: Value(DateTime.now())));
+
+    await batch((batch) {
+      batch.insertAll(playlistEntries, entries);
+    });
+  }
+
+  @override
+  Future<void> importSmartlist(
+      Map<String, dynamic> smartlistData, Map<String, Map> artistData) async {
+    // artistData: ID -> name
+    final artistIDs = smartlistData['filter']['artists'] as List;
+    final artistList = <String>[];
+
+    // add artists that are found in the db to the list
+    for (final artistID in artistIDs) {
+      final name = artistData[artistID.toString()]!['name'] as String;
+      (select(artists)..where((tbl) => tbl.name.equals(name))).getSingleOrNull().then((value) {
+        if (value != null) artistList.add(name);
+      });
+    }
+
+    final orderCriteria = (smartlistData['orderBy']['orderCriteria'] as List).join(',');
+    final orderDirections = (smartlistData['orderBy']['orderDirections'] as List).join(',');
+
+    final id = await into(smartLists).insert(
+      SmartListsCompanion(
+        name: Value(smartlistData['name'] as String),
+        shuffleMode: Value(smartlistData['shuffleMode'] as String?),
+        excludeArtists: Value(smartlistData['filter']['excludeArtists'] as bool),
+        minPlayCount: Value(smartlistData['filter']['minPlayCount'] as int?),
+        maxPlayCount: Value(smartlistData['filter']['maxPlayCount'] as int?),
+        minLikeCount: Value(smartlistData['filter']['minLikeCount'] as int),
+        maxLikeCount: Value(smartlistData['filter']['maxLikeCount'] as int),
+        minYear: Value(smartlistData['filter']['minYear'] as int?),
+        maxYear: Value(smartlistData['filter']['maxYear'] as int?),
+        blockLevel: Value(smartlistData['filter']['blockLevel'] as int),
+        limit: Value(smartlistData['filter']['limit'] as int?),
+        orderCriteria: Value(orderCriteria),
+        orderDirections: Value(orderDirections),
+        icon: Value(smartlistData['iconString'] as String),
+        gradient: Value(smartlistData['gradientString'] as String),
+      ),
+    );
+    // filter.artists has to be set when inserting
+    for (final a in artistList) {
+      await into(smartListArtists).insert(
+        SmartListArtistsCompanion(smartListId: Value(id), artistName: Value(a)),
+      );
     }
   }
 }

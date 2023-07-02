@@ -25,7 +25,7 @@
     },
     "manageLibraryFolders": "Manage library folders",
     "allowedFileExtensions": "Allowed file extensions",
-    "allowedFileExtensionsDescription": "Comma-separated list. Lower- or uppercase does not matter.",
+    "allowedFileExtensionsDescription": "A comma-separated list of allowed file extensions. Lower- or uppercase does not matter. If you are unsure about this, just use the default.",
     "manageBlockedFiles": "Manage blocked files",
     "numberOfBlockedFiles": "Number of currently blocked files: {blockedFiles}",
     "@numberOfBlockedFiles": {
@@ -203,5 +203,57 @@
     "dontExcludeSong": "Don't exclude this song.",
     "excludeShuffleAllSong": "Exclude when shuffling all songs.",
     "excludeShuffleSong": "Exclude when shuffling.",
-    "alwaysExcludeSong": "Always exclude this song."
+    "alwaysExcludeSong": "Always exclude this song.",
+    "welcomeToMucke": "Welcome to mucke!",
+    "setupLibrary": "Setup library",
+    "setupLibraryDescription": "Select folders, included file extensions etc.",
+    "importData": "Import data",
+    "importDataDescription": "Import your data from a previous mucke installation.",
+    "setupLibrary": "Setup Library",
+    "yourLibrary": "Your Library:",
+    "scan": "Scan",
+    "noFoldersSelected": "No folders selected so far.",
+    "addFolder": "Add folder",
+    "availableFromImport": "Available from imported data:",
+    "use": "Use",
+    "reset": "Reset",
+    "blockedFilesDescription": "Blocked files from the imported data. Only exact matches will be excluded from the library scan. Additional files can be blocked later in the app.",
+    "importLibData": "Import Library Data",
+    "songMetaData": "Song Metadata",
+    "metaDataAvailable": "Metadata for {num} songs available",
+    "@metaDataAvailable": {
+        "placeholders": {
+            "num": {
+                "type": "int"
+            }
+        }
+    },
+    "metaDataDescription": "Import likes, blocks etc.",
+    "imported": "Imported",
+    "importVerb": "Import",
+    "@importVerb": {
+        "description": "This means the verb of importing something - not the noun."
+    },
+    "miscellaneous": "Miscellaneous",
+    "exportData": "Export data",
+    "exportDescription": "Select the data you want to export. By default, everything is exported. When exporting, you can select a folder for the file to be stored.",
+    "songsAlbumsArtists": "Songs, Albums, and Artists",
+    "librarySettings": "Library Settings",
+    "dataExportedTo": "Data exported to:\n{path}",
+    "@dataExportedTo": {
+        "placeholders": {
+            "path": {
+                "type": "String"
+            }
+        }
+    },
+    "dataExportFailed": "Data export failed!",
+    "yourPlaylists": "Your Playlists",
+    "batteryOptimization": "Battery Optimization",
+    "batteryExplanation": "Starting with Android 12, the battery optimization causes an error with the notification after losing the audio focus, for example when receiving a call. Disabling the optimization for mucke solves this issue.",
+    "openBattery": "Open battery settings",
+    "disableBattery": "Disable optimization for mucke to solve notification issues.",
+    "disabledBattery": "Battery optimization is disabled.",
+    "favorites": "Favorites",
+    "newlyAdded": "Newly added"
 }

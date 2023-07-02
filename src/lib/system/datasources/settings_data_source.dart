@@ -11,4 +11,8 @@ abstract class SettingsDataSource {
 
   Stream<int> get listenedPercentageStream;
   Future<void> setListenedPercentage(int percentage);
+
+  Future<Map<String, String>> getKeyValueSettings();
+  Future<void> loadKeyValueSettings(Map<String, String> settings);
+  Future<List<String>> getLibraryFolders();
 }

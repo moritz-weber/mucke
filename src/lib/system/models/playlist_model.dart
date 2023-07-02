@@ -61,4 +61,15 @@ class PlaylistModel extends Playlist {
         timeCreated: m.Value(timeCreated),
         timeLastPlayed: m.Value(timeLastPlayed),
       );
+
+  Map<String, dynamic> toExportMap() => {
+        'id': id,
+        'name': name,
+        'iconString': iconString,
+        'gradientString': gradientString,
+        'timeCreated': timeCreated.millisecondsSinceEpoch,
+        'timeChanged': timeChanged.millisecondsSinceEpoch,
+        'timeLastPlayed': timeLastPlayed.millisecondsSinceEpoch,
+        'shuffleMode': shuffleMode?.toString(),
+      };
 }

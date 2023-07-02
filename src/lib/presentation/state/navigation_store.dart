@@ -11,8 +11,8 @@ class NavigationStore extends _NavigationStore with _$NavigationStore {
 abstract class _NavigationStore with Store {
   _NavigationStore();
 
-  final libraryNavKey = GlobalKey<NavigatorState>();
-  final homeNavKey = GlobalKey<NavigatorState>();
+  GlobalKey<NavigatorState>? libraryNavKey;
+  GlobalKey<NavigatorState>? homeNavKey;
 
   static final _log = FimberLog('NavigationStore');
 
@@ -100,7 +100,7 @@ abstract class _NavigationStore with Store {
     );
     final _navIndex = navIndex;
 
-    libraryNavKey.currentState?.push(route);
+    libraryNavKey!.currentState?.push(route);
     final indexChanged = setNavIndex(1, updateTypeHistory: false);
     if (indexChanged) {
       _navTypeHistory.add(_NavState(_NavType.both, _navIndex, navIndex));
@@ -123,7 +123,7 @@ abstract class _NavigationStore with Store {
     if (navState.type == _NavType.both) {
       bool result = false;
       if (navIndex == 1) {
-        result = !await libraryNavKey.currentState!.maybePop();
+        result = !await libraryNavKey!.currentState!.maybePop();
       }
       popNavIndex();
       return Future.value(result);
@@ -132,10 +132,10 @@ abstract class _NavigationStore with Store {
       return Future.value(false);
     } else {
       if (navIndex == 1) {
-        final result = !await libraryNavKey.currentState!.maybePop();
+        final result = !await libraryNavKey!.currentState!.maybePop();
         return result;
       } else if (navIndex == 0) {
-        final result = !await homeNavKey.currentState!.maybePop();
+        final result = !await homeNavKey!.currentState!.maybePop();
         return result;
       }
     }

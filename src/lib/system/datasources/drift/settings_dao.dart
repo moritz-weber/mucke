@@ -6,6 +6,12 @@ import '../settings_data_source.dart';
 
 part 'settings_dao.g.dart';
 
+const SETTINGS_KEYS = [
+  LISTENED_PERCENTAGE,
+  SETTING_ALLOWED_EXTENSIONS,
+  SETTING_PLAY_ALBUMS_IN_ORDER,
+];
+
 @DriftAccessor(tables: [LibraryFolders, KeyValueEntries, BlockedFiles])
 class SettingsDao extends DatabaseAccessor<MainDatabase>
     with _$SettingsDaoMixin
@@ -61,5 +67,32 @@ class SettingsDao extends DatabaseAccessor<MainDatabase>
   Future<void> setListenedPercentage(int percentage) async {
     await (update(keyValueEntries)..where((tbl) => tbl.key.equals(LISTENED_PERCENTAGE)))
         .write(KeyValueEntriesCompanion(value: Value(percentage.toString())));
+  }
+
+  @override
+  Future<Map<String, String>> getKeyValueSettings() async {
+    final keyValEntries = await select(keyValueEntries).get();
+
+    final result = <String, String>{};
+    for (final kv in keyValEntries) {
+      if (SETTINGS_KEYS.contains(kv.key)) {
+        result[kv.key] = kv.value;
+      }
+    }
+
+    return result;
+  }
+
+  @override
+  Future<void> loadKeyValueSettings(Map<String, String> settings) async {
+    for (final kv in settings.entries) {
+      await (update(keyValueEntries)..where((tbl) => tbl.key.equals(kv.key)))
+          .write(KeyValueEntriesCompanion(value: Value(kv.value)));
+    }
+  }
+
+  @override
+  Future<List<String>> getLibraryFolders() async {
+    return select(libraryFolders).get().then((value) => value.map((e) => e.path).toList());
   }
 }

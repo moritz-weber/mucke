@@ -10,6 +10,7 @@ const Color LIGHT1 = Color(0xff913af1);
 const Color LIGHT2 = Color(0xffac5bfb);
 
 const Color RED = Colors.red;
+const Color GREEN = Color.fromARGB(255, 61, 161, 65);
 
 const double HORIZONTAL_PADDING = 16.0;
 
@@ -39,9 +40,20 @@ ThemeData theme() => ThemeData(
           foregroundColor: Colors.white,
         ),
       ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: Colors.white,
+          side: BorderSide(width: 1, color: LIGHT1.withOpacity(0.5)),
+        ),
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          foregroundColor: Colors.white,
+        )
+      ),
       progressIndicatorTheme: const ProgressIndicatorThemeData(color: LIGHT2),
       sliderTheme: const SliderThemeData(
-        activeTrackColor: LIGHT2,
+        activeTrackColor: LIGHT1,
         thumbColor: DARK35,
         inactiveTrackColor: DARK4,
       ),
@@ -141,15 +153,33 @@ ThemeData theme() => ThemeData(
       listTileTheme: const ListTileThemeData(
         iconColor: Colors.white,
       ),
-      radioTheme: RadioThemeData(
-          fillColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
-        if (states.contains(MaterialState.disabled)) {
-          return Colors.white30;
-        } else if (states.contains(MaterialState.selected)) {
-          return LIGHT1;
-        }
-        return Colors.white;
-      })),
+      radioTheme: RadioThemeData(fillColor: MaterialStateProperty.resolveWith<Color>(
+        (Set<MaterialState> states) {
+          if (states.contains(MaterialState.disabled)) {
+            return Colors.white30;
+          } else if (states.contains(MaterialState.selected)) {
+            return LIGHT1;
+          }
+          return Colors.white;
+        },
+      )),
+      snackBarTheme: const SnackBarThemeData(
+        backgroundColor: DARK3,
+        contentTextStyle: TextStyle(color: Colors.white70),
+        closeIconColor: Colors.white,
+      ),
+      checkboxTheme: CheckboxThemeData(
+        fillColor: MaterialStateProperty.resolveWith<Color>(
+          (Set<MaterialState> states) {
+            if (states.contains(MaterialState.disabled)) {
+              return Colors.white30;
+            } else if (states.contains(MaterialState.selected)) {
+              return Colors.white10;
+            }
+            return Colors.white;
+          },
+        ),
+      ),
     );
 
 const TextStyle TEXT_HEADER = TextStyle(

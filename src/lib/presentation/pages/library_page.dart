@@ -9,11 +9,12 @@ class LibraryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('LibraryPage.build');
     final NavigationStore navStore = GetIt.I<NavigationStore>();
+    final GlobalKey<NavigatorState> libNavKey = GlobalKey<NavigatorState>();
+    navStore.libraryNavKey = libNavKey;
 
     return Navigator(
-      key: navStore.libraryNavKey,
+      key: libNavKey,
       initialRoute: 'library',
       onGenerateRoute: (RouteSettings settings) {
         WidgetBuilder builder;

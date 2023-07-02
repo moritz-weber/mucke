@@ -1,5 +1,4 @@
 import 'package:audio_service/audio_service.dart';
-import 'package:audio_session/audio_session.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -105,23 +104,14 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
 
   @override
   Future<void> click([MediaButton button = MediaButton.media]) async {
-    _log.i(button.toString());
-    final session = await AudioSession.instance;
+    _log.d(button.toString());
 
     switch (button) {
       case MediaButton.media:
         if (!playbackState.value.playing) {
           await play();
         } else {
-          // When connecting to certain Bluetooth devices via NFC, this button gets "clicked".
-          // In order to keep the music playing when connecting, we ignore this
-          // if there is no device connected that could trigger this button press.
-          // Listening to device changes would be nicer, but we get them only after this click (up to 1s delay).
-          final devices = _filterAudioDevices(await session.getDevices(includeInputs: false));
-
-          if (devices.isNotEmpty) {
-            await pause();
-          }
+          await pause();
         }
         break;
       case MediaButton.next:
@@ -202,20 +192,4 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
       ));
     }
   }
-}
-
-Set<AudioDevice> _filterAudioDevices(Set<AudioDevice> devices) {
-  // remove builtin outputs from list
-  final result = <AudioDevice>{};
-
-  for (final d in devices) {
-    if (d.type != AudioDeviceType.builtInEarpiece &&
-        d.type != AudioDeviceType.builtInSpeaker &&
-        d.type != AudioDeviceType.builtInSpeakerSafe &&
-        d.type != AudioDeviceType.telephony) {
-      result.add(d);
-    }
-  }
-
-  return result;
 }

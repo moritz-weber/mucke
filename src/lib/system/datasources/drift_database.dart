@@ -221,7 +221,7 @@ class MainDatabase extends _$MainDatabase {
   MainDatabase.withQueryExecutor(QueryExecutor e) : super(e);
 
   @override
-  int get schemaVersion => 17;
+  int get schemaVersion => 18;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -256,57 +256,16 @@ class MainDatabase extends _$MainDatabase {
                 value: Value(jsonEncode(initialPlayable)),
               ),
             );
-            await into(homeWidgets).insert(
-              const HomeWidgetsCompanion(
-                position: Value(0),
-                type: Value('HomeWidgetType.album_of_day'),
-                data: Value('{}'),
-              ),
-            );
-            await into(homeWidgets).insert(
-              const HomeWidgetsCompanion(
-                position: Value(1),
-                type: Value('HomeWidgetType.artist_of_day'),
-                data: Value('{"shuffleMode": "ShuffleMode.plus"}'),
-              ),
-            );
-            await into(homeWidgets).insert(
-              const HomeWidgetsCompanion(
-                position: Value(2),
-                type: Value('HomeWidgetType.shuffle_all'),
-                data: Value('{"shuffleMode": "ShuffleMode.plus"}'),
-              ),
-            );
-            await into(homeWidgets).insert(
-              HomeWidgetsCompanion(
-                position: const Value(3),
-                type: const Value('HomeWidgetType.playlists'),
-                data: Value(
-                  json.encode({
-                    'title': 'Your Playlists',
-                    'maxEntries': 3,
-                    'orderCriterion': 'HomePlaylistsOrder.name',
-                    'orderDirection': 'OrderDirection.ascending',
-                    'filter': 'HomePlaylistsFilter.both',
-                  }),
-                ),
-              ),
-            );
-            await into(homeWidgets).insert(
-              HomeWidgetsCompanion(
-                position: const Value(4),
-                type: const Value('HomeWidgetType.history'),
-                data: Value(
-                  json.encode({
-                    'maxEntries': 3,
-                  }),
-                ),
-              ),
-            );
             await into(keyValueEntries).insert(
               const KeyValueEntriesCompanion(
                 key: Value(LISTENED_PERCENTAGE),
                 value: Value('95'),
+              ),
+            );
+            await into(keyValueEntries).insert(
+              const KeyValueEntriesCompanion(
+                key: Value(INITIALIZED),
+                value: Value('false'),
               ),
             );
           }
@@ -425,6 +384,14 @@ class MainDatabase extends _$MainDatabase {
               ),
             );
           }
+          if (from < 18) {
+            await into(keyValueEntries).insert(
+              const KeyValueEntriesCompanion(
+                key: Value(INITIALIZED),
+                value: Value('true'),
+              ),
+            );
+          }
         },
       );
 }
@@ -436,6 +403,6 @@ LazyDatabase _openConnection() {
     // for your app.
     final Directory dbFolder = await getApplicationDocumentsDirectory();
     final File file = File(p.join(dbFolder.path, 'db.sqlite'));
-    return NativeDatabase(file);
+    return NativeDatabase.createInBackground(file);
   });
 }
