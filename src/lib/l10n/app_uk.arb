@@ -9,7 +9,7 @@
   "@manageLibraryFolders": {},
   "allowedFileExtensions": "Допустимі розширення файлів",
   "@allowedFileExtensions": {},
-  "allowedFileExtensionsDescription": "Список через кому. Малі чи великі літери не мають значення.",
+  "allowedFileExtensionsDescription": "Список дозволених розширень файлів через кому. Малі чи великі літери не мають значення. Якщо ви не впевнені в цьому, просто використовуйте значення за замовчуванням.",
   "@allowedFileExtensionsDescription": {},
   "numberOfBlockedFiles": "Кількість заблокованих на даний момент файлів: {blockedFiles}",
   "@numberOfBlockedFiles": {
@@ -30,7 +30,7 @@
       }
     }
   },
-  "libraryFolders": "Папки бібліотеки",
+  "libraryFolders": "Теки бібліотеки",
   "@libraryFolders": {},
   "homeCustomization": "Налаштування Головної сторінки",
   "@homeCustomization": {},
@@ -189,7 +189,7 @@
   "@customizeHomePage": {},
   "playback": "Відтворення",
   "@playback": {},
-  "noSongsYet": "Схоже, у вашій бібліотеці немає жодної пісні: Перейдіть до налаштувань, додайте папки з музикою та оновіть бібліотеку.",
+  "noSongsYet": "Схоже, у вашій бібліотеці немає жодної пісні: Перейдіть до налаштувань, додайте теки з музикою та оновіть бібліотеку.",
   "@noSongsYet": {},
   "updateLibrary": "Оновити бібліотеку",
   "@updateLibrary": {},
@@ -307,5 +307,71 @@
   "excludeShuffleAllSong": "Виключити під час перемішування всіх пісень.",
   "@excludeShuffleAllSong": {},
   "alwaysExcludeSong": "Завжди виключати цю пісню.",
-  "@alwaysExcludeSong": {}
+  "@alwaysExcludeSong": {},
+  "welcomeToMucke": "Ласкаво просимо до mucke!",
+  "@welcomeToMucke": {},
+  "setupLibraryDescription": "Виберіть теки, розширення включених файлів тощо.",
+  "@setupLibraryDescription": {},
+  "importData": "Імпорт даних",
+  "@importData": {},
+  "importDataDescription": "Імпортуйте дані з попереднього встановлення mucke.",
+  "@importDataDescription": {},
+  "setupLibrary": "",
+  "@setupLibrary": {},
+  "scan": "Сканувати",
+  "@scan": {},
+  "addFolder": "Додати теку",
+  "@addFolder": {},
+  "availableFromImport": "Доступно з імпортованих даних:",
+  "@availableFromImport": {},
+  "use": "Використовувати",
+  "@use": {},
+  "reset": "Скинути",
+  "@reset": {},
+  "blockedFilesDescription": "Заблоковані файли з імпортованих даних. Тільки точні збіги будуть виключені зі сканування бібліотеки. Додаткові файли можна заблокувати пізніше в застосунку.",
+  "@blockedFilesDescription": {},
+  "songMetaData": "Метадані пісні",
+  "@songMetaData": {},
+  "metaDataAvailable": "Доступні метадані для {num} пісень",
+  "@metaDataAvailable": {
+    "placeholders": {
+      "num": {
+        "type": "int"
+      }
+    }
+  },
+  "metaDataDescription": "Імпорт лайків, блоків і т.д.",
+  "@metaDataDescription": {},
+  "songsAlbumsArtists": "Пісні, альбоми та виконавці",
+  "@songsAlbumsArtists": {},
+  "librarySettings": "Налаштування бібліотеки",
+  "@librarySettings": {},
+  "dataExportedTo": "Дані експортовано в:\n{path}",
+  "@dataExportedTo": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "yourLibrary": "Ваша бібліотека:",
+  "@yourLibrary": {},
+  "noFoldersSelected": "Поки що не вибрано жодної теки.",
+  "@noFoldersSelected": {},
+  "importLibData": "Імпорт даних бібліотеки",
+  "@importLibData": {},
+  "imported": "Імпортовано",
+  "@imported": {},
+  "importVerb": "Імпортувати",
+  "@importVerb": {
+    "description": "This means the verb of importing something - not the noun."
+  },
+  "miscellaneous": "Різне",
+  "@miscellaneous": {},
+  "exportData": "Експорт даних",
+  "@exportData": {},
+  "exportDescription": "Виберіть дані, які ви хочете експортувати. За замовчуванням експортується все. Під час експорту ви можете вибрати теку для збереження файлу.",
+  "@exportDescription": {},
+  "dataExportFailed": "Не вдалося експортувати дані!",
+  "@dataExportFailed": {}
 }

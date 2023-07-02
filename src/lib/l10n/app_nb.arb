@@ -160,5 +160,23 @@
   "descending": "Synkende",
   "@descending": {},
   "displaySettings": "Visningsinnstillinger",
-  "@displaySettings": {}
+  "@displaySettings": {},
+  "imported": "Importert",
+  "@imported": {},
+  "librarySettings": "Biblioteksinnstillinger",
+  "@librarySettings": {},
+  "importVerb": "Importer",
+  "@importVerb": {
+    "description": "This means the verb of importing something - not the noun."
+  },
+  "importLibData": "Importer biblioteksdata",
+  "@importLibData": {},
+  "songMetaData": "Spor-metadata",
+  "@songMetaData": {},
+  "miscellaneous": "Ymse",
+  "@miscellaneous": {},
+  "exportData": "Eksporter data",
+  "@exportData": {},
+  "yourPlaylists": "Dine spillelister",
+  "@yourPlaylists": {}
 }
