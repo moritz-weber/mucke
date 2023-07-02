@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:page_indicator_plus/page_indicator_plus.dart';
 
-import '../../../domain/repositories/persistent_state_repository.dart';
+import '../../../domain/repositories/init_repository.dart';
 import '../../state/import_store.dart';
 import '../../theming.dart';
 import 'init_lib_page.dart';
@@ -51,8 +51,8 @@ class _InitWorkflowState extends State<InitWorkflow> {
   @override
   Widget build(BuildContext context) {
     // TODO: this does not conform to the design that UI should only call stores, but this would seem overkill
-    final persistenceRepo = GetIt.I<PersistentStateRepository>();
-    
+    final initRepository = GetIt.I<InitRepository>();
+
     return Scaffold(
       bottomNavigationBar: Container(
         color: DARK1,
@@ -118,7 +118,7 @@ class _InitWorkflowState extends State<InitWorkflow> {
                           ),
                           onPressed: () {
                             if (index == pageCount - 1) {
-                              persistenceRepo.setInitialized();
+                              initRepository.setInitialized();
                               Navigator.of(context).pop();
                               Navigator.of(context).pop();
                             } else {

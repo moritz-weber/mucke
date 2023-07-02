@@ -21,6 +21,7 @@ import 'domain/repositories/audio_player_repository.dart';
 import 'domain/repositories/history_repository.dart';
 import 'domain/repositories/home_widget_repository.dart';
 import 'domain/repositories/import_export_repository.dart';
+import 'domain/repositories/init_repository.dart';
 import 'domain/repositories/music_data_repository.dart';
 import 'domain/repositories/persistent_state_repository.dart';
 import 'domain/repositories/platform_integration_repository.dart';
@@ -73,6 +74,7 @@ import 'system/repositories/audio_player_repository_impl.dart';
 import 'system/repositories/history_repository_impl.dart';
 import 'system/repositories/home_widget_repository_impl.dart';
 import 'system/repositories/import_export_repository_impl.dart';
+import 'system/repositories/init_repository_impl.dart';
 import 'system/repositories/music_data_repository_impl.dart';
 import 'system/repositories/persistent_state_repository_impl.dart';
 import 'system/repositories/platform_integration_repository_impl.dart';
@@ -333,6 +335,12 @@ Future<void> setupGetIt() async {
   getIt.registerLazySingleton<ImportExportRepository>(
     () => ImportExportRepositoryImpl(
       getIt(),
+      getIt(),
+      getIt(),
+    ),
+  );
+    getIt.registerLazySingleton<InitRepository>(
+    () => InitRepositoryImpl(
       getIt(),
       getIt(),
     ),

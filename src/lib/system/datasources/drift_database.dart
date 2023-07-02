@@ -256,53 +256,6 @@ class MainDatabase extends _$MainDatabase {
                 value: Value(jsonEncode(initialPlayable)),
               ),
             );
-            await into(homeWidgets).insert(
-              const HomeWidgetsCompanion(
-                position: Value(0),
-                type: Value('HomeWidgetType.album_of_day'),
-                data: Value('{}'),
-              ),
-            );
-            await into(homeWidgets).insert(
-              const HomeWidgetsCompanion(
-                position: Value(1),
-                type: Value('HomeWidgetType.artist_of_day'),
-                data: Value('{"shuffleMode": "ShuffleMode.plus"}'),
-              ),
-            );
-            await into(homeWidgets).insert(
-              const HomeWidgetsCompanion(
-                position: Value(2),
-                type: Value('HomeWidgetType.shuffle_all'),
-                data: Value('{"shuffleMode": "ShuffleMode.plus"}'),
-              ),
-            );
-            await into(homeWidgets).insert(
-              HomeWidgetsCompanion(
-                position: const Value(3),
-                type: const Value('HomeWidgetType.playlists'),
-                data: Value(
-                  json.encode({
-                    'title': 'Your Playlists',
-                    'maxEntries': 3,
-                    'orderCriterion': 'HomePlaylistsOrder.name',
-                    'orderDirection': 'OrderDirection.ascending',
-                    'filter': 'HomePlaylistsFilter.both',
-                  }),
-                ),
-              ),
-            );
-            await into(homeWidgets).insert(
-              HomeWidgetsCompanion(
-                position: const Value(4),
-                type: const Value('HomeWidgetType.history'),
-                data: Value(
-                  json.encode({
-                    'maxEntries': 3,
-                  }),
-                ),
-              ),
-            );
             await into(keyValueEntries).insert(
               const KeyValueEntriesCompanion(
                 key: Value(LISTENED_PERCENTAGE),

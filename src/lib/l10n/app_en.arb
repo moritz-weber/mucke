@@ -247,5 +247,6 @@
             }
         }
     },
-    "dataExportFailed": "Data export failed!"
+    "dataExportFailed": "Data export failed!",
+    "yourPlaylists": "Your Playlists"
 }
