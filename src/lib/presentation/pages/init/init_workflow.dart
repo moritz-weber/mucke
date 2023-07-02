@@ -1,3 +1,4 @@
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:page_indicator_plus/page_indicator_plus.dart';
@@ -5,6 +6,7 @@ import 'package:page_indicator_plus/page_indicator_plus.dart';
 import '../../../domain/repositories/init_repository.dart';
 import '../../state/import_store.dart';
 import '../../theming.dart';
+import 'init_battery_page.dart';
 import 'init_lib_page.dart';
 import 'init_meta_page.dart';
 
@@ -18,15 +20,13 @@ class InitWorkflow extends StatefulWidget {
 }
 
 class _InitWorkflowState extends State<InitWorkflow> {
-  final PageController pageController = PageController();
+  PageController pageController = PageController();
   int index = 0;
 
   late final ImportStore importStore;
   late final List<Widget> pages = [
     InitLibPage(importStore: importStore),
-    InitMetaPage(importStore: importStore)
   ];
-  int pageCount = 1;
 
   final curve = Curves.easeInOut;
   final duration = const Duration(milliseconds: 400);
@@ -34,10 +34,21 @@ class _InitWorkflowState extends State<InitWorkflow> {
   @override
   void initState() {
     importStore = GetIt.I<ImportStore>(param1: widget.importPath);
-    if (widget.importPath != null)
-      importStore.readDataFile(widget.importPath!).then((value) {
-        if (importStore.songs?.isNotEmpty ?? false) setState(() => pageCount++);
+    if (widget.importPath != null) {
+      importStore.readDataFile(widget.importPath!).then((_) {
+        if (importStore.songs?.isNotEmpty ?? false)
+          setState(() => pages.add(InitMetaPage(importStore: importStore)));
+        DeviceInfoPlugin().androidInfo.then((info) {
+          if (info.version.sdkInt > 30)
+            setState(() => pages.add(InitBatteryPage(importStore: importStore)));
+        });
       });
+    } else {
+      DeviceInfoPlugin().androidInfo.then((info) {
+        if (info.version.sdkInt > 30)
+          setState(() => pages.add(InitBatteryPage(importStore: importStore)));
+      });
+    }
 
     super.initState();
   }
@@ -94,7 +105,7 @@ class _InitWorkflowState extends State<InitWorkflow> {
                   ),
                   PageIndicator(
                     controller: pageController,
-                    count: pageCount,
+                    count: pages.length,
                     size: 8,
                     layout: PageIndicatorLayout.WARM,
                     color: Colors.white10,
@@ -111,13 +122,13 @@ class _InitWorkflowState extends State<InitWorkflow> {
                             children: [
                               const SizedBox(width: 10),
                               Text(
-                                index == pageCount - 1 ? 'Finish' : 'Next',
+                                index == pages.length - 1 ? 'Finish' : 'Next',
                               ),
                               const Icon(Icons.chevron_right_rounded),
                             ],
                           ),
                           onPressed: () {
-                            if (index == pageCount - 1) {
+                            if (index == pages.length - 1) {
                               initRepository.setInitialized();
                               Navigator.of(context).pop();
                               Navigator.of(context).pop();
@@ -142,7 +153,7 @@ class _InitWorkflowState extends State<InitWorkflow> {
       body: PageView.builder(
         controller: pageController,
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: pageCount,
+        itemCount: pages.length,
         itemBuilder: (context, i) => pages[i],
       ),
     );

@@ -248,5 +248,10 @@
         }
     },
     "dataExportFailed": "Data export failed!",
-    "yourPlaylists": "Your Playlists"
+    "yourPlaylists": "Your Playlists",
+    "batteryOptimization": "Battery Optimization",
+    "batteryExplanation": "Starting with Android 12, the battery optimization causes an error with the notification after losing the audio focus, for example when receiving a call. Disabling the optimization for mucke solves this issue.",
+    "openBattery": "Open battery settings",
+    "disableBattery": "Disable optimization for mucke to solve notification issues.",
+    "disabledBattery": "Battery optimization is disabled."
 }

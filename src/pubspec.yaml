@@ -12,6 +12,7 @@ dependencies:
   audio_service: ^0.18.7  # MIT
   audio_session: ^0.1.5  # MIT
   collection: ^1.17.0  # BSD 3
+  device_info_plus: ^9.0.2  # BSD 3
   drift: ^2.5.0  # MIT
   equatable: ^2.0.3  # MIT
   file_picker: ^5.2.5  # MIT
@@ -35,6 +36,7 @@ dependencies:
   mobx: 2.1.3  # MIT
   on_audio_query: 2.6.1  # BSD 3
   on_audio_query_platform_interface: 1.4.0
+  optimization_battery: ^0.0.7  # MIT
   package_info_plus: ^4.0.1
   page_indicator_plus: ^1.0.3  # MIT
   palette_generator: ^0.3.3+2  # BSD 3
