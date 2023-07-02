@@ -115,6 +115,7 @@ class _RootPageState extends State<RootPage> {
         );
 
         initRepository.initHomePage(context);
+        initRepository.initSmartlists(context);
       }
     });
 

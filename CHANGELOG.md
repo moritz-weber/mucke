@@ -7,6 +7,7 @@
 - Added localization for playlists widget on home page (#90). Note: Existing users can rename the title in the home page settings.
 - Fixed issue with unresponsive media buttons (#75).
 - Added animations to currently playing page and queue page.
+- Added initialization of two smartlists.
 
 ## 1.3.1
 

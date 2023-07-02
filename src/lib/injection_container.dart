@@ -343,6 +343,7 @@ Future<void> setupGetIt() async {
     () => InitRepositoryImpl(
       getIt(),
       getIt(),
+      getIt(),
     ),
   );
 

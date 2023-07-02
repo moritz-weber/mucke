@@ -5,4 +5,5 @@ abstract class InitRepository {
   Future<void> setInitialized();
 
   Future<void> initHomePage(BuildContext context);
+  Future<void> initSmartlists(BuildContext context);
 }
