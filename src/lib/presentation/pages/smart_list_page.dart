@@ -3,11 +3,9 @@ import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/entities/smart_list.dart';
 import '../../domain/entities/song.dart';
 import '../l10n_utils.dart';
-import '../mucke_icons.dart';
 import '../state/audio_store.dart';
 import '../state/music_data_store.dart';
 import '../state/navigation_store.dart';
@@ -62,20 +60,6 @@ class _SmartListPageState extends State<SmartListPage> {
             const Duration(milliseconds: 0),
             (Duration d, s) => d + s.duration,
           );
-
-          IconData playIcon = Icons.play_arrow_rounded;
-          switch (smartList.shuffleMode) {
-            case ShuffleMode.standard:
-              playIcon = Icons.shuffle_rounded;
-              break;
-            case ShuffleMode.plus:
-              playIcon = MuckeIcons.shuffle_heart;
-              break;
-            case ShuffleMode.none:
-              playIcon = MuckeIcons.shuffle_none;
-              break;
-            default:
-          }
 
           return Scrollbar(
             child: CustomScrollView(

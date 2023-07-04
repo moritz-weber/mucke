@@ -5,7 +5,6 @@ import 'package:metadata_god/metadata_god.dart';
 
 import '../../domain/entities/album.dart';
 import '../datasources/drift_database.dart';
-import '../utils.dart';
 import 'default_values.dart';
 
 class AlbumModel extends Album {

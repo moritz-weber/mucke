@@ -91,7 +91,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
       // => also update, when the file was created later (and wasn't really changed)
       // this is used as a workaround because android
       // doesn't seem to return the correct modification time
-      final lastModified = await songFile.lastModified();
+      final lastModified = songFile.lastModifiedSync();
       final song = await _musicDataSource.getSongByPath(songFile.path);
 
       int? albumId;
@@ -233,12 +233,12 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
 
   Future<List<File>> getAllFilesRecursively(String path) async {
     final List<File> files = [];
-    if (await FileSystemEntity.isDirectory(path)) {
+    if (FileSystemEntity.isDirectorySync(path)) {
       final dir = Directory(path);
-      await for (var entity in dir.list(recursive: true, followLinks: false)) {
+      await for (final entity in dir.list(recursive: true, followLinks: false)) {
         files.addAll(await getAllFilesRecursively(entity.path));
       }
-    } else if (await FileSystemEntity.isFile(path)) {
+    } else if (FileSystemEntity.isFileSync(path)) {
       files.add(File(path));
     }
     return files;

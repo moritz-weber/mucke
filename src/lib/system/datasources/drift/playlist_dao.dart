@@ -89,12 +89,12 @@ class PlaylistDao extends DatabaseAccessor<MainDatabase>
 
   @override
   Stream<List<SongModel>> getPlaylistSongStream(PlaylistModel playlist) {
-    return ((select(playlistEntries)
+    return (select(playlistEntries)
           ..where((tbl) => tbl.playlistId.equals(playlist.id))
           ..orderBy([(t) => OrderingTerm.asc(t.position)]))
         .join(
       [innerJoin(songs, songs.path.equalsExp(playlistEntries.songPath))],
-    )).watch().map((driftSongList) =>
+    ).watch().map((driftSongList) =>
         driftSongList.map((driftSong) => SongModel.fromDrift(driftSong.readTable(songs))).toList());
   }
 
@@ -221,9 +221,9 @@ class PlaylistDao extends DatabaseAccessor<MainDatabase>
   Stream<List<SmartListModel>> get smartListsStream {
     final slStream = select(smartLists).watch();
 
-    final slArtistStream = (select(smartListArtists).join(
+    final slArtistStream = select(smartListArtists).join(
       [innerJoin(artists, artists.name.equalsExp(smartListArtists.artistName))],
-    )).watch();
+    ).watch();
 
     return Rx.combineLatest2<List<DriftSmartList>, List<TypedResult>, List<SmartListModel>>(
       slStream,
@@ -231,7 +231,7 @@ class PlaylistDao extends DatabaseAccessor<MainDatabase>
       (a, b) {
         return a.map((sl) {
           final driftArtists =
-              (b.where((element) => element.readTable(smartListArtists).smartListId == sl.id))
+              b.where((element) => element.readTable(smartListArtists).smartListId == sl.id)
                   .map((e) => e.readTable(artists))
                   .toList();
           return SmartListModel.fromDrift(sl, driftArtists);
@@ -340,9 +340,9 @@ class PlaylistDao extends DatabaseAccessor<MainDatabase>
 
   @override
   Future<List<SmartListModel>> searchSmartLists(String searchText, {int? limit}) async {
-    final slArtists = await (select(smartListArtists).join(
+    final slArtists = await select(smartListArtists).join(
       [innerJoin(artists, artists.name.equalsExp(smartListArtists.artistName))],
-    )).get();
+    ).get();
 
     final List<SmartListModel> result = await (select(smartLists)
           ..where((tbl) => tbl.name.regexp(searchText, dotAll: true, caseSensitive: false)))
@@ -350,8 +350,8 @@ class PlaylistDao extends DatabaseAccessor<MainDatabase>
         .then(
       (driftList) {
         return driftList.map((driftSmartList) {
-          final driftArtists = (slArtists.where((element) =>
-                  element.readTable(smartListArtists).smartListId == driftSmartList.id))
+          final driftArtists = slArtists.where((element) =>
+                  element.readTable(smartListArtists).smartListId == driftSmartList.id)
               .map((e) => e.readTable(artists))
               .toList();
           return SmartListModel.fromDrift(driftSmartList, driftArtists);
@@ -418,12 +418,12 @@ class PlaylistDao extends DatabaseAccessor<MainDatabase>
 
   @override
   Future<List<SongModel>> getPlaylistSongs(PlaylistModel playlist) async {
-    return await ((select(playlistEntries)
+    return await (select(playlistEntries)
           ..where((tbl) => tbl.playlistId.equals(playlist.id))
           ..orderBy([(t) => OrderingTerm.asc(t.position)]))
         .join(
       [innerJoin(songs, songs.path.equalsExp(playlistEntries.songPath))],
-    )).get().then((driftSongList) =>
+    ).get().then((driftSongList) =>
         driftSongList.map((driftSong) => SongModel.fromDrift(driftSong.readTable(songs))).toList());
   }
 
@@ -438,13 +438,13 @@ class PlaylistDao extends DatabaseAccessor<MainDatabase>
   Future<List<SmartListModel>> getSmartlists() async {
     final sls = await select(smartLists).get();
 
-    final slArtists = await (select(smartListArtists).join(
+    final slArtists = await select(smartListArtists).join(
       [innerJoin(artists, artists.name.equalsExp(smartListArtists.artistName))],
-    )).get();
+    ).get();
 
     return sls.map((sl) {
       final driftArtists =
-          (slArtists.where((element) => element.readTable(smartListArtists).smartListId == sl.id))
+          slArtists.where((element) => element.readTable(smartListArtists).smartListId == sl.id)
               .map((e) => e.readTable(artists))
               .toList();
       return SmartListModel.fromDrift(sl, driftArtists);

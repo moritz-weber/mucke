@@ -5,10 +5,8 @@ import 'package:get_it/get_it.dart';
 import 'package:reorderables/reorderables.dart';
 
 import '../../domain/entities/playlist.dart';
-import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/entities/song.dart';
 import '../l10n_utils.dart';
-import '../mucke_icons.dart';
 import '../state/audio_store.dart';
 import '../state/music_data_store.dart';
 import '../state/navigation_store.dart';
@@ -66,20 +64,6 @@ class _PlaylistPageState extends State<PlaylistPage> {
             const Duration(milliseconds: 0),
             (Duration d, s) => d + s.duration,
           );
-
-          IconData playIcon = Icons.play_arrow_rounded;
-          switch (playlist.shuffleMode) {
-            case ShuffleMode.standard:
-              playIcon = Icons.shuffle_rounded;
-              break;
-            case ShuffleMode.plus:
-              playIcon = MuckeIcons.shuffle_heart;
-              break;
-            case ShuffleMode.none:
-              playIcon = MuckeIcons.shuffle_none;
-              break;
-            default:
-          }
 
           return Scrollbar(
             child: CustomScrollView(
@@ -207,13 +191,13 @@ class _PlaylistPageState extends State<PlaylistPage> {
                             background: Container(
                               width: double.infinity,
                               color: RED,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
+                              child: const Padding(
+                                padding: EdgeInsets.symmetric(
                                   horizontal: HORIZONTAL_PADDING,
                                 ),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: const [
+                                  children: [
                                     Icon(
                                       Icons.playlist_remove_rounded,
                                       color: Colors.white,

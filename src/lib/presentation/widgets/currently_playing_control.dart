@@ -9,8 +9,8 @@ class CurrentlyPlayingControl extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: const [
+    return const Column(
+      children: [
         SizedBox(height: 10.0),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 12.0 + 2.0),
