@@ -179,11 +179,11 @@ class QueuePage extends StatelessWidget {
                         background: Container(
                           width: double.infinity,
                           color: RED,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: const [
+                              children: [
                                 Icon(
                                   Icons.playlist_remove_rounded,
                                   color: Colors.white,

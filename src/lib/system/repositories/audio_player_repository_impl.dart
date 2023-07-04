@@ -92,7 +92,6 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
     _queueSubject.add(_dynamicQueue.queue);
   }
 
-  @override
   Future<void> dispose() async {
     _audioPlayerDataSource.dispose();
   }

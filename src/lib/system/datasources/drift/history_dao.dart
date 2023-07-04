@@ -55,9 +55,9 @@ class HistoryDao extends DatabaseAccessor<MainDatabase>
     }
 
     final historyStream = query.watch();
-    final slArtistStream = (select(smartListArtists).join(
+    final slArtistStream = select(smartListArtists).join(
       [innerJoin(artists, artists.name.equalsExp(smartListArtists.artistName))],
-    )).watch();
+    ).watch();
 
     return Rx.combineLatest2<List<TypedResult>, List<TypedResult>, List<HistoryEntryModel>>(
       historyStream,
@@ -80,9 +80,9 @@ class HistoryDao extends DatabaseAccessor<MainDatabase>
               playable = PlaylistModel.fromDrift(e.readTable(playlists));
               break;
             case PlayableType.smartlist:
-              final driftArtists = (slArtists.where((element) =>
+              final driftArtists = slArtists.where((element) =>
                   element.readTable(smartListArtists).smartListId ==
-                  int.parse(entry.identifier))).map((e) => e.readTable(artists)).toList();
+                  int.parse(entry.identifier)).map((e) => e.readTable(artists)).toList();
               playable = SmartListModel.fromDrift(e.readTable(smartLists), driftArtists);
               break;
             case PlayableType.search:

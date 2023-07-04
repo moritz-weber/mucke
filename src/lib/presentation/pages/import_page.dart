@@ -2,14 +2,10 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
-import '../state/import_store.dart';
 import '../state/navigation_store.dart';
 import '../theming.dart';
-import '../widgets/settings_section.dart';
 
 class ImportPage extends StatefulWidget {
   const ImportPage({Key? key, required this.importPath}) : super(key: key);
@@ -21,12 +17,10 @@ class ImportPage extends StatefulWidget {
 }
 
 class _ImportPageState extends State<ImportPage> {
-  late final ImportStore _importStore;
   late final NavigationStore _navStore;
 
   @override
   void initState() {
-    _importStore = GetIt.I<ImportStore>(param1: widget.importPath);
     _navStore = GetIt.I<NavigationStore>();
 
     super.initState();
@@ -36,7 +30,7 @@ class _ImportPageState extends State<ImportPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Import Data',
           style: TEXT_HEADER,
         ),
@@ -53,7 +47,7 @@ class _ImportPageState extends State<ImportPage> {
         centerTitle: true,
       ),
       body: ListView(
-        children: [
+        children: const [
           // Observer(builder: (context) {
           //   final dataInfo = _importStore.appData;
           //   if (dataInfo == null) {

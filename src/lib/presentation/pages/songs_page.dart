@@ -61,9 +61,9 @@ class _SongsPageState extends State<SongsPage> with AutomaticKeepAliveClientMixi
           );
         case StreamStatus.waiting:
         case StreamStatus.done:
-          return Column(
+          return const Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const <Widget>[
+            children: <Widget>[
               CircularProgressIndicator(),
               Text('Loading items...'),
             ],

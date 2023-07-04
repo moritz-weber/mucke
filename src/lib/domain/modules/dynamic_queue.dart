@@ -193,7 +193,7 @@ class DynamicQueue implements ManagedQueueInfo {
   void removeQueueIndices(List<int> indices, bool permanent) {
     _log.d('removeQueueIndices');
 
-    for (final index in indices..sort(((a, b) => -a.compareTo(b)))) {
+    for (final index in indices..sort((a, b) => -a.compareTo(b))) {
       final queueItem = _queue[index];
 
       if (permanent) {
@@ -316,9 +316,9 @@ class DynamicQueue implements ManagedQueueInfo {
             newSongs = await _shufflePlusQueue(filteredAvailableSongs, songsToQueue);
         }
 
-        newSongs.forEach((qi) {
+        for (final qi in newSongs) {
           qi.isAvailable = false;
-        });
+        }
         _queue.addAll(newSongs);
         _queueSubject.add(_queue);
         _availableSongsSubject.add(_availableSongs);
@@ -475,9 +475,9 @@ class DynamicQueue implements ManagedQueueInfo {
     }
 
     // these qi are the same objects as in _availableSongs -> marks them to not be queued (again)
-    queue.forEach((qi) {
+    for (final qi in queue) {
       qi.isAvailable = false;
-    });
+    }
     _queue = queue.cast();
     _queueSubject.add(_queue);
     return 0;
@@ -494,7 +494,9 @@ class DynamicQueue implements ManagedQueueInfo {
       final linkedSong = await getQueueItemWithLinks(locallyAvailableSongs[index], queueItems);
       queue.addAll(linkedSong);
       if (linkedSong.length > 1) {
-        linkedSong.forEach((q) => locallyAvailableSongs.removeWhere((e) => e.song == q.song));
+        for (final q in linkedSong) {
+          locallyAvailableSongs.removeWhere((e) => e.song == q.song);
+        }
       } else {
         locallyAvailableSongs.removeAt(index);
       }
