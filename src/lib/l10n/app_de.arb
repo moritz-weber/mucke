@@ -228,5 +228,87 @@
   "excludeShuffleSong": "Im Zufallsmodus ausschließen.",
   "@excludeShuffleSong": {},
   "alwaysExcludeSong": "Immer ausschließen.",
-  "@alwaysExcludeSong": {}
+  "@alwaysExcludeSong": {},
+  "setupLibrary": "Bibliothek einrichten",
+  "@setupLibrary": {},
+  "importData": "Daten importieren",
+  "@importData": {},
+  "importDataDescription": "Importiere Daten einer vorherigen Installation von mucke.",
+  "@importDataDescription": {},
+  "yourLibrary": "Deine Bibliothek:",
+  "@yourLibrary": {},
+  "scan": "Scannen",
+  "@scan": {},
+  "use": "Benutzen",
+  "@use": {},
+  "reset": "Zurücksetzen",
+  "@reset": {},
+  "blockedFilesDescription": "Blockierte Dateien aus importierten Daten. Nur exakte Übereinstimmungen werden vom Scan ausgeschlossen. Zusätzliche Dateien können später in der App blockiert werden.",
+  "@blockedFilesDescription": {},
+  "songMetaData": "Lieder-Metadaten",
+  "@songMetaData": {},
+  "metaDataDescription": "Importiere Likes, Blockierungen usw.",
+  "@metaDataDescription": {},
+  "imported": "Importiert",
+  "@imported": {},
+  "importVerb": "Importieren",
+  "@importVerb": {
+    "description": "This means the verb of importing something - not the noun."
+  },
+  "miscellaneous": "Verschiedenes",
+  "@miscellaneous": {},
+  "exportData": "Daten exportieren",
+  "@exportData": {},
+  "songsAlbumsArtists": "Lieder, Alben und Künstler",
+  "@songsAlbumsArtists": {},
+  "librarySettings": "Bibliothekseinstellungen",
+  "@librarySettings": {},
+  "dataExportedTo": "Daten exportiert nach:\n{path}",
+  "@dataExportedTo": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "dataExportFailed": "Datenexport fehlgeschlagen!",
+  "@dataExportFailed": {},
+  "yourPlaylists": "Deine Playlists",
+  "@yourPlaylists": {},
+  "batteryOptimization": "Akku-Optimierung",
+  "@batteryOptimization": {},
+  "openBattery": "Akku-Einstellungen öffnen",
+  "@openBattery": {},
+  "disableBattery": "Deaktiviere die Optimierung für mucke, um die Probleme mit der Benachrichtigung zu beheben.",
+  "@disableBattery": {},
+  "disabledBattery": "Die Akku-Optimierung ist deaktiviert.",
+  "@disabledBattery": {},
+  "availableFromImport": "Verfügbar von importierten Daten:",
+  "@availableFromImport": {},
+  "importLibData": "Bibliotheksdaten importieren",
+  "@importLibData": {},
+  "welcomeToMucke": "Willkommen bei mucke!",
+  "@welcomeToMucke": {},
+  "setupLibraryDescription": "Ordner, berücksichtigte Dateiendungen usw. auswählen",
+  "@setupLibraryDescription": {},
+  "noFoldersSelected": "Bisher keine Ordner ausgewählt.",
+  "@noFoldersSelected": {},
+  "addFolder": "Ordner hinzufügen",
+  "@addFolder": {},
+  "metaDataAvailable": "Metadaten für {num} Lieder verfügbar",
+  "@metaDataAvailable": {
+    "placeholders": {
+      "num": {
+        "type": "int"
+      }
+    }
+  },
+  "exportDescription": "Wähle die Daten, die du exportieren möchtest. Standardmäßig wird alles exportiert. Beim Exportieren kannst du einen Zielordner zum Speichern auswählen.",
+  "@exportDescription": {},
+  "batteryExplanation": "Ab Android 12 verursacht die Akku-Optimierung Probleme mit der Benachrichtigung, nachdem der Audiofokus verloren wurde, bspw. bei einem Anruf. Das Deaktivieren der Optimierung für mucke behebt dieses Problem.",
+  "@batteryExplanation": {},
+  "newlyAdded": "Neu hinzugefügt",
+  "@newlyAdded": {},
+  "favorites": "Favoriten",
+  "@favorites": {}
 }
