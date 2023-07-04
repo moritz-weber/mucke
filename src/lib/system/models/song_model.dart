@@ -3,12 +3,10 @@ import 'dart:ui';
 import 'package:audio_service/audio_service.dart';
 import 'package:drift/drift.dart';
 import 'package:metadata_god/metadata_god.dart';
-import 'package:on_audio_query/on_audio_query.dart' as aq;
 import 'package:path/path.dart' as p;
 
 import '../../domain/entities/song.dart';
 import '../datasources/drift_database.dart';
-import '../utils.dart';
 import 'default_values.dart';
 
 class SongModel extends Song {
