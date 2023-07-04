@@ -32,18 +32,6 @@ class LoopButton extends StatelessWidget {
               },
               splashRadius: iconSize / 2 + 6.0,
             );
-          case LoopMode.one:
-            return IconButton(
-              icon: const Icon(
-                Icons.repeat_one_rounded,
-                color: Colors.white,
-              ),
-              iconSize: iconSize,
-              onPressed: () {
-                audioStore.setLoopMode(LoopMode.off);
-              },
-              splashRadius: iconSize / 2 + 6.0,
-            );
           case LoopMode.all:
             return IconButton(
               icon: const Icon(
@@ -53,6 +41,30 @@ class LoopButton extends StatelessWidget {
               iconSize: iconSize,
               onPressed: () {
                 audioStore.setLoopMode(LoopMode.one);
+              },
+              splashRadius: iconSize / 2 + 6.0,
+            );
+          case LoopMode.one:
+            return IconButton(
+              icon: const Icon(
+                Icons.repeat_one_rounded,
+                color: Colors.white,
+              ),
+              iconSize: iconSize,
+              onPressed: () {
+                audioStore.setLoopMode(LoopMode.stop);
+              },
+              splashRadius: iconSize / 2 + 6.0,
+            );
+          case LoopMode.stop:
+            return IconButton(
+              icon: const Icon(
+                Icons.arrow_right_alt,
+                color: Colors.white,
+              ),
+              iconSize: iconSize,
+              onPressed: () {
+                audioStore.setLoopMode(LoopMode.off);
               },
               splashRadius: iconSize / 2 + 6.0,
             );

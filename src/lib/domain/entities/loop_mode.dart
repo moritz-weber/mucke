@@ -1,5 +1,6 @@
 enum LoopMode {
   off,
   one,
-  all
+  all,
+  stop
 }
