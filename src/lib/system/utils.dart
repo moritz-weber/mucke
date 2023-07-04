@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:palette_generator/palette_generator.dart';
 
@@ -25,9 +26,8 @@ Future<Color?> getBackgroundColor(ImageProvider image) async {
     paletteGenerator.mutedColor?.color,
     paletteGenerator.darkVibrantColor?.color,
     paletteGenerator.lightMutedColor?.color,
-    paletteGenerator.dominantColor?.color,
-    Colors.black,
+    paletteGenerator.dominantColor?.color
   ];
 
-  return colors.firstWhere((c) => c != null);
+  return colors.firstWhereOrNull((c) => c != null);
 }
