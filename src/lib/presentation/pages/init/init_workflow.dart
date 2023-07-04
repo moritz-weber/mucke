@@ -81,9 +81,9 @@ class _InitWorkflowState extends State<InitWorkflow> {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: FilledButton(
-                        child: const Row(
+                        child: Row(
                           mainAxisSize: MainAxisSize.min,
-                          children: [
+                          children: const [
                             Icon(Icons.chevron_left_rounded),
                             Text('Back'),
                             SizedBox(width: 10),

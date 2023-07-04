@@ -11,8 +11,8 @@ class PlaybackControl extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
-      children: [
+    return Row(
+      children: const [
         LoopButton(iconSize: 24.0),
         PreviousButton(iconSize: 48.0),
         PlayPauseButton(

@@ -86,11 +86,11 @@ class HomeSettingsPage extends StatelessWidget {
                         background: Container(
                           width: double.infinity,
                           color: RED,
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
+                              children: const [
                                 Icon(
                                   Icons.delete_forever_rounded,
                                   color: Colors.white,
