@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
 import 'package:metadata_god/metadata_god.dart';
-import 'package:on_audio_query/on_audio_query.dart' as aq;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -20,11 +19,10 @@ import 'music_data_source_contract.dart';
 import 'settings_data_source.dart';
 
 class LocalMusicFetcherImpl implements LocalMusicFetcher {
-  LocalMusicFetcherImpl(this._settingsDataSource, this._musicDataSource, this._onAudioQuery);
+  LocalMusicFetcherImpl(this._settingsDataSource, this._musicDataSource);
 
   static final _log = FimberLog('LocalMusicFetcher');
 
-  final aq.OnAudioQuery _onAudioQuery;
   final SettingsDataSource _settingsDataSource;
   final MusicDataSource _musicDataSource;
 
