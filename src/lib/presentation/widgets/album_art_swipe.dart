@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -10,8 +9,6 @@ import 'album_art.dart';
 
 class AlbumArtSwipe extends StatefulWidget {
   const AlbumArtSwipe({Key? key}) : super(key: key);
-
-  static final _log = FimberLog('AlbumArtSwipe');
 
   @override
   State<AlbumArtSwipe> createState() => _AlbumArtSwipeState();

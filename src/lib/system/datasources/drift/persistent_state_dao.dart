@@ -192,9 +192,9 @@ class PersistentStateDao extends DatabaseAccessor<MainDatabase>
           result = null;
         else {
           final slArtists =
-              await ((select(smartListArtists)..where((tbl) => tbl.smartListId.equals(slId))).join(
+              await (select(smartListArtists)..where((tbl) => tbl.smartListId.equals(slId))).join(
             [innerJoin(artists, artists.name.equalsExp(smartListArtists.artistName))],
-          )).map((p0) => p0.readTable(artists)).get();
+          ).map((p0) => p0.readTable(artists)).get();
 
           result = SmartListModel.fromDrift(sl, slArtists);
         }
