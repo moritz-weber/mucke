@@ -26,6 +26,7 @@ Future<Color?> getBackgroundColor(ImageProvider image) async {
     paletteGenerator.darkVibrantColor?.color,
     paletteGenerator.lightMutedColor?.color,
     paletteGenerator.dominantColor?.color,
+    Colors.black,
   ];
 
   return colors.firstWhere((c) => c != null);
