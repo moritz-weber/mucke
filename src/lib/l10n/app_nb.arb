@@ -178,5 +178,222 @@
   "exportData": "Eksporter data",
   "@exportData": {},
   "yourPlaylists": "Dine spillelister",
-  "@yourPlaylists": {}
+  "@yourPlaylists": {},
+  "setupLibraryDescription": "Velg mapper, inkluderte filutvidelser, osv.",
+  "@setupLibraryDescription": {},
+  "welcomeToMucke": "Velkommen til mucke.",
+  "@welcomeToMucke": {},
+  "setupLibrary": "Sett opp bibliotek",
+  "@setupLibrary": {},
+  "importData": "Importer data",
+  "@importData": {},
+  "importDataDescription": "Importer dine data fra en tidligere mucke-installasjon.",
+  "@importDataDescription": {},
+  "noFoldersSelected": "Ingen mapper valgt så langt.",
+  "@noFoldersSelected": {},
+  "addFolder": "Legg til mappe",
+  "@addFolder": {},
+  "availableFromImport": "Tilgjengelig fra importert data:",
+  "@availableFromImport": {},
+  "metaDataAvailable": "Metadata for {num} spor tilgjengelig",
+  "@metaDataAvailable": {
+    "placeholders": {
+      "num": {
+        "type": "int"
+      }
+    }
+  },
+  "metaDataDescription": "Importer hva som er likt, blokkert, osv.",
+  "@metaDataDescription": {},
+  "dataExportedTo": "Data eksportert til:\n{path}",
+  "@dataExportedTo": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "dataExportFailed": "Kunne ikke eksportere data.",
+  "@dataExportFailed": {},
+  "batteryOptimization": "Batterioptimalisering",
+  "@batteryOptimization": {},
+  "disabledBattery": "Batterioptimalisering er avskrudd.",
+  "@disabledBattery": {},
+  "playAlbumsInOrderDescription": "Når du klikker et spor i et album vil sporene spilles i rekkefølge, istedenfor å beholde forrige avspillingsmodus.",
+  "@playAlbumsInOrderDescription": {},
+  "countSongsPlayed": "Tell spor som avspilt etter. {percentage}%",
+  "@countSongsPlayed": {
+    "placeholders": {
+      "percentage": {
+        "type": "int"
+      }
+    }
+  },
+  "homeCustomization": "Hjemmetilpasning",
+  "@homeCustomization": {},
+  "lastPlayed": "Sist spilt",
+  "@lastPlayed": {},
+  "shuffleAll": "Omstokk alt",
+  "@shuffleAll": {},
+  "nSongs": "{count, plural, =0{ingen spor} =1{ett spor} other{{count} spor}}",
+  "@nSongs": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "noHistoryYet": "Ingenting her enda. Spill noe.",
+  "@noHistoryYet": {},
+  "noShuffle": "Ingen (behold aktivt omstokkingsmodus)",
+  "@noShuffle": {},
+  "favShuffleMode": "Favorittomstokkingsmodus",
+  "@favShuffleMode": {},
+  "sortingFilterSettings": "Sortering- og filtreringsinnstillinger",
+  "@sortingFilterSettings": {},
+  "lastTimePlayed": "Siste gang spilt",
+  "@lastTimePlayed": {},
+  "excludeAllSongs": "Utelat spor markert for utelatelse.",
+  "@excludeAllSongs": {},
+  "dontExclude": "Ikke utelat noen spor.",
+  "@dontExclude": {},
+  "excludeAlways": "Utelat kun spor markert som «Alltid utelat».",
+  "@excludeAlways": {},
+  "filterSettings": "Filtreringsinnstillinger",
+  "@filterSettings": {},
+  "filterLikes": "Liker mellom {min} og {max}",
+  "@filterLikes": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "minPlayCount": "Min. avspillingsantall",
+  "@minPlayCount": {},
+  "maxPlayCount": "Max. avspillingsantall",
+  "@maxPlayCount": {},
+  "minYear": "Min. år",
+  "@minYear": {},
+  "maxYear": "Maks. år",
+  "@maxYear": {},
+  "includeAllArtists": "Inkluder alle artister hvis ingen er valgt.",
+  "@includeAllArtists": {},
+  "excludeArtists": "Utelat valgte artister",
+  "@excludeArtists": {},
+  "orderSettings": "Sorteringsinnstillinger",
+  "@orderSettings": {},
+  "orderSettingsDescription": "Rekkefølgealternativer for endring av prioritet.",
+  "@orderSettingsDescription": {},
+  "limitSongs": "Begrens antallet spor",
+  "@limitSongs": {},
+  "addToQueue": "Legg til i kø",
+  "@addToQueue": {},
+  "shuffle": "Omstokking",
+  "@shuffle": {},
+  "nSongsSelected": "{count, plural, =0{ingen spor valgt} =1{ett spor valgt} other{{count} spor valgt}}",
+  "@nSongsSelected": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "appendToQueued": "Legg til for manuelt kølagte spor",
+  "@appendToQueued": {},
+  "highlights": "Høydepunkter",
+  "@highlights": {},
+  "timeAdded": "Tid tillagt",
+  "@timeAdded": {},
+  "likeCount": "Antall ganger likt",
+  "@likeCount": {},
+  "nextUp": "Spilles etterpå",
+  "@nextUp": {},
+  "playedNTimes": "{count, plural, =0{ikke spilt endat} =1{spilt én gang} other{spilt {count} ganger}}",
+  "@playedNTimes": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "alwaysPlayPrevious": "Alltid spill forrige spor før",
+  "@alwaysPlayPrevious": {},
+  "alwaysPlayNext": "Alltid spill neste spor etter",
+  "@alwaysPlayNext": {},
+  "dontExcludeSong": "Ikke utelat dette sporet.",
+  "@dontExcludeSong": {},
+  "excludeShuffleAllSong": "Utelat ved omstokking av alle spor.",
+  "@excludeShuffleAllSong": {},
+  "alwaysExcludeSong": "Alltid utelat dette sporet.",
+  "@alwaysExcludeSong": {},
+  "excludeShuffleSong": "Utelat ved omstokking.",
+  "@excludeShuffleSong": {},
+  "favorites": "Favoritter",
+  "@favorites": {},
+  "newlyAdded": "Nylig tillagt",
+  "@newlyAdded": {},
+  "back": "Tilbake",
+  "@back": {},
+  "next": "Neste",
+  "@next": {},
+  "finish": "Fullfør",
+  "@finish": {},
+  "excludeInShuffle": "Utelat spor markert for utelatelse i omstokkingsmodus.",
+  "@excludeInShuffle": {},
+  "scan": "Skann",
+  "@scan": {},
+  "use": "Bruk",
+  "@use": {},
+  "yourLibrary": "Ditt bibliotek:",
+  "@yourLibrary": {},
+  "reset": "Tilbakestill",
+  "@reset": {},
+  "moreAvailable": "{num} flere tilgjengelig",
+  "@moreAvailable": {
+    "placeholders": {
+      "num": {
+        "type": "int"
+      }
+    }
+  },
+  "disableBattery": "sKRU AV Batterioptimalisering for mucke for å løse merknadsproblemer.",
+  "@disableBattery": {},
+  "openBattery": "Åpne batteri-innstillinger",
+  "@openBattery": {},
+  "selectArtistsExclude": "Velg artister å utelate: {num} valgt.",
+  "@selectArtistsExclude": {
+    "placeholders": {
+      "num": {
+        "type": "int"
+      }
+    }
+  },
+  "selectArtistsInclude": "Velg artister å inkludere: {num} valgt.",
+  "@selectArtistsInclude": {
+    "placeholders": {
+      "num": {
+        "type": "int"
+      }
+    }
+  },
+  "songsAlbumsArtists": "Spor, album, og artister",
+  "@songsAlbumsArtists": {},
+  "nSongsInQueue": "{count, plural, =0{ingen spor} =1{ett spor} other{{count} spor}} i kø",
+  "@nSongsInQueue": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "blockedFilesDescription": "Blokker filer fra importert data. Kun eksakte treff vil bli utelatt fra biblioteksskanning. Ytterligere filer kan blokkeres senere i programmet.",
+  "@blockedFilesDescription": {},
+  "exportDescription": "Velg data å eksportere. Som forvalg eksporteres alt. Når du eksporterer kan du velge en mappe filen lagres i.",
+  "@exportDescription": {},
+  "batteryExplanation": "Fra Android 12 forårsaker batterioptimalisering en feil med merknaden etter at den mister lydfokus, for eksempel ved innkommende anrop. Å skru av batterioptimalisering for mucke løser dette problemet.",
+  "@batteryExplanation": {}
 }

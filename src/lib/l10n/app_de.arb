@@ -310,5 +310,11 @@
   "newlyAdded": "Neu hinzugefügt",
   "@newlyAdded": {},
   "favorites": "Favoriten",
-  "@favorites": {}
+  "@favorites": {},
+  "back": "Zurück",
+  "@back": {},
+  "next": "Weiter",
+  "@next": {},
+  "finish": "Fertig",
+  "@finish": {}
 }

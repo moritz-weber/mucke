@@ -1,262 +1,399 @@
 {
-    "home": "Home",
-    "customizeHomePage": "Customize Home Page",
-    "settings": "Settings",
-    "noSongsYet": "Looks like you don't have any songs in your library: Go to settings, add your music folders, and update your library.",
-    "library": "Library",
-    "search": "Search",
-    "updateLibrary": "Update library",
-    "artistsAlbumsSongs": "{artistCount} artists, {albumCount} albums, {songCount} songs",
-    "@artistsAlbumsSongs": {
-        "placeholders": {
-            "artistCount": {
-                "type": "int",
-                "example": "3"
-            },
-            "albumCount": {
-                "type": "int",
-                "example": "6"
-            },
-            "songCount": {
-                "type": "int",
-                "example": "60"
-            }
-        }
-    },
-    "manageLibraryFolders": "Manage library folders",
-    "allowedFileExtensions": "Allowed file extensions",
-    "allowedFileExtensionsDescription": "A comma-separated list of allowed file extensions. Lower- or uppercase does not matter. If you are unsure about this, just use the default.",
-    "manageBlockedFiles": "Manage blocked files",
-    "numberOfBlockedFiles": "Number of currently blocked files: {blockedFiles}",
-    "@numberOfBlockedFiles": {
-        "placeholders": {
-            "blockedFiles": {
-                "type": "int",
-                "example": "3"
-            }
-        }
-    },
-    "playback": "Playback",
-    "playAlbumsInOrder": "Play albums in order",
-    "playAlbumsInOrderDescription": "When you click a song in an album the songs will be played in order instead of keeping the previous play mode.",
-    "countSongsPlayed": "Count songs as played after: {percentage}%",
-    "@countSongsPlayed": {
-        "placeholders": {
-            "percentage": {
-                "type": "int"
-            }
-        }
-    },
-    "libraryFolders": "Library Folders",
-    "blockedFiles": "Blocked Files",
-    "homeCustomization": "Home Customization",
-    "albumOfTheDay": "Album of the Day",
-    "artistOfTheDay": "Artist of the Day",
-    "shuffleAll": "Shuffle All",
-    "history": "History",
-    "addWidgetToHome": "Add a Widget to Your Home Page",
-    "noPlaylistsYet": "No playlists yet. You can add them in the library.",
-    "lastPlayed": "Last played",
-    "noHistoryYet": "Nothing to see here yet. Play something.",
-    "allSongs": "All Songs",
-    "song": "Song",
-    "songs": "Songs",
-    "nSongs": "{count, plural, =0{no songs} =1{one song} other{{count} songs}}",
-    "@nSongs": {
-        "placeholders": {
-            "count": {
-                "type": "num"
-            }
-        }
-    },
-    "album": "Album",
-    "albums": "Albums",
-    "artist": "Artist",
-    "artists": "Artists",
-    "playlist": "Playlist",
-    "playlists": "Playlists",
-    "smartlist": "Smartlist",
-    "smartlists": "Smartlists",
-    "noShuffle": "None (keep currently active shuffle mode)",
-    "normalMode": "Normal Mode",
-    "shuffleMode": "Shuffle Mode",
-    "favShuffleMode": "Favorite Shuffle Mode",
-    "name": "Name",
-    "sortingFilterSettings": "Sorting and Filter Settings",
-    "maxNumberEntries": "Maximum number of entries",
-    "creationDate": "Creation Date",
-    "changeDate": "Change Date",
-    "lastTimePlayed": "Last Time Played",
-    "ascending": "Ascending",
-    "descending": "Descending",
-    "both": "Both",
-    "playlistsOnly": "Playlists Only",
-    "smartlistsOnly": "Smartlists Only",
-    "displaySettings": "Display Settings",
-    "addSmartlist": "Add Smartlist",
-    "addPlaylist": "Add Playlist",
-    "createPlaylist": "Create Playlist",
-    "editPlaylist": "Edit Playlist",
-    "customizeCover": "Customize Cover",
-    "playbackMode": "Playback Mode",
-    "excludeAllSongs": "Exclude all songs marked for exclusion.",
-    "excludeInShuffle": "Exclude songs marked for exclusion in shuffle mode.",
-    "excludeAlways": "Exclude only songs marked as always exclude.",
-    "dontExclude": "Don't exclude any songs.",
-    "filterSettings": "Filter Settings",
-    "filterLikes": "Likes between {min} and {max}",
-    "@filterLikes": {
-        "placeholders": {
-            "min": {
-                "type": "int"
-            },
-            "max": {
-                "type": "int"
-            }
-        }
-    },
-    "minPlayCount": "Minimum play count",
-    "maxPlayCount": "Maximum play count",
-    "minYear": "Minimum Year",
-    "maxYear": "Maximum Year",
-    "selectArtistsExclude": "Select artists to exclude: {num} selected.",
-    "@selectArtistsExclude": {
-        "placeholders": {
-            "num": {
-                "type": "int"
-            }
-        }
-    },
-    "selectArtistsInclude": "Select artists to include: {num} selected.",
-    "@selectArtistsInclude": {
-        "placeholders": {
-            "num": {
-                "type": "int"
-            }
-        }
-    },
-    "includeAllArtists": "Include all artists if none are selected.",
-    "excludeArtists": "Exclude selected artists",
-    "limitSongs": "Limit number of songs",
-    "orderSettings": "Order Settings",
-    "orderSettingsDescription": "Reorder options to change priorities.",
-    "createSmartlist": "Create Smartlist",
-    "editSmartlist": "Edit Smartlist",
-    "play": "Play",
-    "nSongsSelected": "{count, plural, =0{no songs selected} =1{one song selected} other{{count} songs selected}}",
-    "@nSongsSelected": {
-        "placeholders": {
-            "count": {
-                "type": "num"
-            }
-        }
-    },
-    "playNext": "Play next",
-    "appendToQueued": "Append to manually queued songs",
-    "addToQueue": "Add to queue",
-    "disc": "Disc",
-    "blockFromLibrary": "Remove and block from library",
-    "highlights": "Highlights",
-    "shuffle": "Shuffle",
-    "selectArtists": "Select Artists",
-    "removeFromQueue": "Remove from queue",
-    "currentlyPlaying": "Currently playing",
-    "nSongsInQueue": "{count, plural, =0{no songs} =1{one song} other{{count} songs}} in queue",
-    "@nSongsInQueue": {
-        "placeholders": {
-            "count": {
-                "type": "num"
-            }
-        }
-    },
-    "moreAvailable": "{num} more available",
-    "@moreAvailable": {
-        "placeholders": {
-            "num": {
-                "type": "int"
-            }
-        }
-    },
-    "nameMustNotBeEmpty": "The name must not be empty.",
-    "artistName": "Artist name",
-    "likeCount": "Like count",
-    "playCount": "Play count",
-    "songTitle": "Song title",
-    "year": "Year",
-    "timeAdded": "Time added",
-    "addToPlaylist": "Add to playlist",
-    "removeFromPlaylist": "Remove from playlist",
-    "cancel": "Cancel",
-    "nextUp": "Next up",
-    "previousSong": "previous",
-    "nextSong": "next",
-    "playedNTimes": "{count, plural, =0{not played yet} =1{played one time} other{played {count} times}}",
-    "@playedNTimes": {
-        "placeholders": {
-            "count": {
-                "type": "num"
-            }
-        }
-    },
-    "alwaysPlayPrevious": "Always play previous song before",
-    "alwaysPlayNext": "Always play next song after",
-    "dontExcludeSong": "Don't exclude this song.",
-    "excludeShuffleAllSong": "Exclude when shuffling all songs.",
-    "excludeShuffleSong": "Exclude when shuffling.",
-    "alwaysExcludeSong": "Always exclude this song.",
-    "welcomeToMucke": "Welcome to mucke!",
-    "setupLibrary": "Setup library",
-    "setupLibraryDescription": "Select folders, included file extensions etc.",
-    "importData": "Import data",
-    "importDataDescription": "Import your data from a previous mucke installation.",
-    "setupLibrary": "Setup Library",
-    "yourLibrary": "Your Library:",
-    "scan": "Scan",
-    "noFoldersSelected": "No folders selected so far.",
-    "addFolder": "Add folder",
-    "availableFromImport": "Available from imported data:",
-    "use": "Use",
-    "reset": "Reset",
-    "blockedFilesDescription": "Blocked files from the imported data. Only exact matches will be excluded from the library scan. Additional files can be blocked later in the app.",
-    "importLibData": "Import Library Data",
-    "songMetaData": "Song Metadata",
-    "metaDataAvailable": "Metadata for {num} songs available",
-    "@metaDataAvailable": {
-        "placeholders": {
-            "num": {
-                "type": "int"
-            }
-        }
-    },
-    "metaDataDescription": "Import likes, blocks etc.",
-    "imported": "Imported",
-    "importVerb": "Import",
-    "@importVerb": {
-        "description": "This means the verb of importing something - not the noun."
-    },
-    "miscellaneous": "Miscellaneous",
-    "exportData": "Export data",
-    "exportDescription": "Select the data you want to export. By default, everything is exported. When exporting, you can select a folder for the file to be stored.",
-    "songsAlbumsArtists": "Songs, Albums, and Artists",
-    "librarySettings": "Library Settings",
-    "dataExportedTo": "Data exported to:\n{path}",
-    "@dataExportedTo": {
-        "placeholders": {
-            "path": {
-                "type": "String"
-            }
-        }
-    },
-    "dataExportFailed": "Data export failed!",
-    "yourPlaylists": "Your Playlists",
-    "batteryOptimization": "Battery Optimization",
-    "batteryExplanation": "Starting with Android 12, the battery optimization causes an error with the notification after losing the audio focus, for example when receiving a call. Disabling the optimization for mucke solves this issue.",
-    "openBattery": "Open battery settings",
-    "disableBattery": "Disable optimization for mucke to solve notification issues.",
-    "disabledBattery": "Battery optimization is disabled.",
-    "favorites": "Favorites",
-    "newlyAdded": "Newly added",
-    "back": "Back",
-    "next": "Next",
-    "finish": "Finish"
+  "home": "Home",
+  "@home": {},
+  "customizeHomePage": "Customize Home Page",
+  "@customizeHomePage": {},
+  "settings": "Settings",
+  "@settings": {},
+  "noSongsYet": "Looks like you don't have any songs in your library: Go to settings, add your music folders, and update your library.",
+  "@noSongsYet": {},
+  "library": "Library",
+  "@library": {},
+  "search": "Search",
+  "@search": {},
+  "updateLibrary": "Update library",
+  "@updateLibrary": {},
+  "artistsAlbumsSongs": "{artistCount} artists, {albumCount} albums, {songCount} songs",
+  "@artistsAlbumsSongs": {
+    "placeholders": {
+      "artistCount": {
+        "type": "int",
+        "example": "3"
+      },
+      "albumCount": {
+        "type": "int",
+        "example": "6"
+      },
+      "songCount": {
+        "type": "int",
+        "example": "60"
+      }
+    }
+  },
+  "manageLibraryFolders": "Manage library folders",
+  "@manageLibraryFolders": {},
+  "allowedFileExtensions": "Allowed file extensions",
+  "@allowedFileExtensions": {},
+  "allowedFileExtensionsDescription": "A comma-separated list of allowed file extensions. Lower- or uppercase does not matter. If you are unsure about this, just use the default.",
+  "@allowedFileExtensionsDescription": {},
+  "manageBlockedFiles": "Manage blocked files",
+  "@manageBlockedFiles": {},
+  "numberOfBlockedFiles": "Number of currently blocked files: {blockedFiles}",
+  "@numberOfBlockedFiles": {
+    "placeholders": {
+      "blockedFiles": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "playback": "Playback",
+  "@playback": {},
+  "playAlbumsInOrder": "Play albums in order",
+  "@playAlbumsInOrder": {},
+  "playAlbumsInOrderDescription": "When you click a song in an album the songs will be played in order instead of keeping the previous play mode.",
+  "@playAlbumsInOrderDescription": {},
+  "countSongsPlayed": "Count songs as played after: {percentage}%",
+  "@countSongsPlayed": {
+    "placeholders": {
+      "percentage": {
+        "type": "int"
+      }
+    }
+  },
+  "libraryFolders": "Library Folders",
+  "@libraryFolders": {},
+  "blockedFiles": "Blocked Files",
+  "@blockedFiles": {},
+  "homeCustomization": "Home Customization",
+  "@homeCustomization": {},
+  "albumOfTheDay": "Album of the Day",
+  "@albumOfTheDay": {},
+  "artistOfTheDay": "Artist of the Day",
+  "@artistOfTheDay": {},
+  "shuffleAll": "Shuffle All",
+  "@shuffleAll": {},
+  "history": "History",
+  "@history": {},
+  "addWidgetToHome": "Add a Widget to Your Home Page",
+  "@addWidgetToHome": {},
+  "noPlaylistsYet": "No playlists yet. You can add them in the library.",
+  "@noPlaylistsYet": {},
+  "lastPlayed": "Last played",
+  "@lastPlayed": {},
+  "noHistoryYet": "Nothing to see here yet. Play something.",
+  "@noHistoryYet": {},
+  "allSongs": "All Songs",
+  "@allSongs": {},
+  "song": "Song",
+  "@song": {},
+  "songs": "Songs",
+  "@songs": {},
+  "nSongs": "{count, plural, =0{no songs} =1{one song} other{{count} songs}}",
+  "@nSongs": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "album": "Album",
+  "@album": {},
+  "albums": "Albums",
+  "@albums": {},
+  "artist": "Artist",
+  "@artist": {},
+  "artists": "Artists",
+  "@artists": {},
+  "playlist": "Playlist",
+  "@playlist": {},
+  "playlists": "Playlists",
+  "@playlists": {},
+  "smartlist": "Smartlist",
+  "@smartlist": {},
+  "smartlists": "Smartlists",
+  "@smartlists": {},
+  "noShuffle": "None (keep currently active shuffle mode)",
+  "@noShuffle": {},
+  "normalMode": "Normal Mode",
+  "@normalMode": {},
+  "shuffleMode": "Shuffle Mode",
+  "@shuffleMode": {},
+  "favShuffleMode": "Favorite Shuffle Mode",
+  "@favShuffleMode": {},
+  "name": "Name",
+  "@name": {},
+  "sortingFilterSettings": "Sorting and Filter Settings",
+  "@sortingFilterSettings": {},
+  "maxNumberEntries": "Maximum number of entries",
+  "@maxNumberEntries": {},
+  "creationDate": "Creation Date",
+  "@creationDate": {},
+  "changeDate": "Change Date",
+  "@changeDate": {},
+  "lastTimePlayed": "Last Time Played",
+  "@lastTimePlayed": {},
+  "ascending": "Ascending",
+  "@ascending": {},
+  "descending": "Descending",
+  "@descending": {},
+  "both": "Both",
+  "@both": {},
+  "playlistsOnly": "Playlists Only",
+  "@playlistsOnly": {},
+  "smartlistsOnly": "Smartlists Only",
+  "@smartlistsOnly": {},
+  "displaySettings": "Display Settings",
+  "@displaySettings": {},
+  "addSmartlist": "Add Smartlist",
+  "@addSmartlist": {},
+  "addPlaylist": "Add Playlist",
+  "@addPlaylist": {},
+  "createPlaylist": "Create Playlist",
+  "@createPlaylist": {},
+  "editPlaylist": "Edit Playlist",
+  "@editPlaylist": {},
+  "customizeCover": "Customize Cover",
+  "@customizeCover": {},
+  "playbackMode": "Playback Mode",
+  "@playbackMode": {},
+  "excludeAllSongs": "Exclude all songs marked for exclusion.",
+  "@excludeAllSongs": {},
+  "excludeInShuffle": "Exclude songs marked for exclusion in shuffle mode.",
+  "@excludeInShuffle": {},
+  "excludeAlways": "Exclude only songs marked as always exclude.",
+  "@excludeAlways": {},
+  "dontExclude": "Don't exclude any songs.",
+  "@dontExclude": {},
+  "filterSettings": "Filter Settings",
+  "@filterSettings": {},
+  "filterLikes": "Likes between {min} and {max}",
+  "@filterLikes": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "minPlayCount": "Minimum play count",
+  "@minPlayCount": {},
+  "maxPlayCount": "Maximum play count",
+  "@maxPlayCount": {},
+  "minYear": "Minimum Year",
+  "@minYear": {},
+  "maxYear": "Maximum Year",
+  "@maxYear": {},
+  "selectArtistsExclude": "Select artists to exclude: {num} selected.",
+  "@selectArtistsExclude": {
+    "placeholders": {
+      "num": {
+        "type": "int"
+      }
+    }
+  },
+  "selectArtistsInclude": "Select artists to include: {num} selected.",
+  "@selectArtistsInclude": {
+    "placeholders": {
+      "num": {
+        "type": "int"
+      }
+    }
+  },
+  "includeAllArtists": "Include all artists if none are selected.",
+  "@includeAllArtists": {},
+  "excludeArtists": "Exclude selected artists",
+  "@excludeArtists": {},
+  "limitSongs": "Limit number of songs",
+  "@limitSongs": {},
+  "orderSettings": "Order Settings",
+  "@orderSettings": {},
+  "orderSettingsDescription": "Reorder options to change priorities.",
+  "@orderSettingsDescription": {},
+  "createSmartlist": "Create Smartlist",
+  "@createSmartlist": {},
+  "editSmartlist": "Edit Smartlist",
+  "@editSmartlist": {},
+  "play": "Play",
+  "@play": {},
+  "nSongsSelected": "{count, plural, =0{no songs selected} =1{one song selected} other{{count} songs selected}}",
+  "@nSongsSelected": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "playNext": "Play next",
+  "@playNext": {},
+  "appendToQueued": "Append to manually queued songs",
+  "@appendToQueued": {},
+  "addToQueue": "Add to queue",
+  "@addToQueue": {},
+  "disc": "Disc",
+  "@disc": {},
+  "blockFromLibrary": "Remove and block from library",
+  "@blockFromLibrary": {},
+  "highlights": "Highlights",
+  "@highlights": {},
+  "shuffle": "Shuffle",
+  "@shuffle": {},
+  "selectArtists": "Select Artists",
+  "@selectArtists": {},
+  "removeFromQueue": "Remove from queue",
+  "@removeFromQueue": {},
+  "currentlyPlaying": "Currently playing",
+  "@currentlyPlaying": {},
+  "nSongsInQueue": "{count, plural, =0{no songs} =1{one song} other{{count} songs}} in queue",
+  "@nSongsInQueue": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "moreAvailable": "{num} more available",
+  "@moreAvailable": {
+    "placeholders": {
+      "num": {
+        "type": "int"
+      }
+    }
+  },
+  "nameMustNotBeEmpty": "The name must not be empty.",
+  "@nameMustNotBeEmpty": {},
+  "artistName": "Artist name",
+  "@artistName": {},
+  "likeCount": "Like count",
+  "@likeCount": {},
+  "playCount": "Play count",
+  "@playCount": {},
+  "songTitle": "Song title",
+  "@songTitle": {},
+  "year": "Year",
+  "@year": {},
+  "timeAdded": "Time added",
+  "@timeAdded": {},
+  "addToPlaylist": "Add to playlist",
+  "@addToPlaylist": {},
+  "removeFromPlaylist": "Remove from playlist",
+  "@removeFromPlaylist": {},
+  "cancel": "Cancel",
+  "@cancel": {},
+  "nextUp": "Next up",
+  "@nextUp": {},
+  "previousSong": "previous",
+  "@previousSong": {},
+  "nextSong": "next",
+  "@nextSong": {},
+  "playedNTimes": "{count, plural, =0{not played yet} =1{played one time} other{played {count} times}}",
+  "@playedNTimes": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "alwaysPlayPrevious": "Always play previous song before",
+  "@alwaysPlayPrevious": {},
+  "alwaysPlayNext": "Always play next song after",
+  "@alwaysPlayNext": {},
+  "dontExcludeSong": "Don't exclude this song.",
+  "@dontExcludeSong": {},
+  "excludeShuffleAllSong": "Exclude when shuffling all songs.",
+  "@excludeShuffleAllSong": {},
+  "excludeShuffleSong": "Exclude when shuffling.",
+  "@excludeShuffleSong": {},
+  "alwaysExcludeSong": "Always exclude this song.",
+  "@alwaysExcludeSong": {},
+  "welcomeToMucke": "Welcome to mucke!",
+  "@welcomeToMucke": {},
+  "setupLibrary": "Set up Library",
+  "@setupLibrary": {},
+  "setupLibraryDescription": "Select folders, included file extensions, etc.",
+  "@setupLibraryDescription": {},
+  "importData": "Import data",
+  "@importData": {},
+  "importDataDescription": "Import your data from a previous mucke installation.",
+  "@importDataDescription": {},
+  "yourLibrary": "Your Library:",
+  "@yourLibrary": {},
+  "scan": "Scan",
+  "@scan": {},
+  "noFoldersSelected": "No folders selected so far.",
+  "@noFoldersSelected": {},
+  "addFolder": "Add folder",
+  "@addFolder": {},
+  "availableFromImport": "Available from imported data:",
+  "@availableFromImport": {},
+  "use": "Use",
+  "@use": {},
+  "reset": "Reset",
+  "@reset": {},
+  "blockedFilesDescription": "Blocked files from the imported data. Only exact matches will be excluded from the library scan. Additional files can be blocked later in the app.",
+  "@blockedFilesDescription": {},
+  "importLibData": "Import Library Data",
+  "@importLibData": {},
+  "songMetaData": "Song Metadata",
+  "@songMetaData": {},
+  "metaDataAvailable": "Metadata for {num} songs available",
+  "@metaDataAvailable": {
+    "placeholders": {
+      "num": {
+        "type": "int"
+      }
+    }
+  },
+  "metaDataDescription": "Import likes, blocks etc.",
+  "@metaDataDescription": {},
+  "imported": "Imported",
+  "@imported": {},
+  "importVerb": "Import",
+  "@importVerb": {
+    "description": "This means the verb of importing something - not the noun."
+  },
+  "miscellaneous": "Miscellaneous",
+  "@miscellaneous": {},
+  "exportData": "Export data",
+  "@exportData": {},
+  "exportDescription": "Select the data you want to export. By default, everything is exported. When exporting, you can select a folder for the file to be stored.",
+  "@exportDescription": {},
+  "songsAlbumsArtists": "Songs, Albums, and Artists",
+  "@songsAlbumsArtists": {},
+  "librarySettings": "Library Settings",
+  "@librarySettings": {},
+  "dataExportedTo": "Data exported to:\n{path}",
+  "@dataExportedTo": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "dataExportFailed": "Data export failed!",
+  "@dataExportFailed": {},
+  "yourPlaylists": "Your Playlists",
+  "@yourPlaylists": {},
+  "batteryOptimization": "Battery Optimization",
+  "@batteryOptimization": {},
+  "batteryExplanation": "Starting with Android 12, the battery optimization causes an error with the notification after losing the audio focus, for example when receiving a call. Disabling the optimization for mucke solves this issue.",
+  "@batteryExplanation": {},
+  "openBattery": "Open battery settings",
+  "@openBattery": {},
+  "disableBattery": "Disable optimization for mucke to solve notification issues.",
+  "@disableBattery": {},
+  "disabledBattery": "Battery optimization is disabled.",
+  "@disabledBattery": {},
+  "favorites": "Favorites",
+  "@favorites": {},
+  "newlyAdded": "Newly added",
+  "@newlyAdded": {},
+  "back": "Back",
+  "@back": {},
+  "next": "Next",
+  "@next": {},
+  "finish": "Finish",
+  "@finish": {}
 }
