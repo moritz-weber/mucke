@@ -30,7 +30,7 @@ jobs:
     - run: echo $KEY_PROPERTIES_GITHUB | base64 -d > android/key.properties
     - uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.7.3'
+        flutter-version: '3.10.5'
     - run: flutter pub get
     - run: flutter build apk --flavor github
     - name: Upload a Build Artifact
