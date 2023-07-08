@@ -238,7 +238,7 @@ class InitLibPage extends StatelessWidget {
                   final importBlockedFiles = importStore.blockedFiles;
                   final blockedFiles = settingsStore.blockedFilesStream.value;
 
-                  if (importBlockedFiles == null || blockedFiles == null) return Container();
+                  if (importBlockedFiles == null || blockedFiles == null || importBlockedFiles.isEmpty) return Container();
 
                   return Column(
                     mainAxisSize: MainAxisSize.min,

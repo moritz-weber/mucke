@@ -467,7 +467,7 @@ class PlaylistDao extends DatabaseAccessor<MainDatabase>
     );
 
     final paths = <String>[];
-    for (final String importPath in playlistData['SONGS']) {
+    for (final String importPath in (playlistData['SONGS'] as List).map((e) => e as String)) {
       final metadata = songData[importPath];
 
       if (metadata == null) continue;

@@ -255,5 +255,8 @@
     "disableBattery": "Disable optimization for mucke to solve notification issues.",
     "disabledBattery": "Battery optimization is disabled.",
     "favorites": "Favorites",
-    "newlyAdded": "Newly added"
+    "newlyAdded": "Newly added",
+    "back": "Back",
+    "next": "Next",
+    "finish": "Finish"
 }

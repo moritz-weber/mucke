@@ -1,5 +1,6 @@
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:page_indicator_plus/page_indicator_plus.dart';
 
@@ -83,10 +84,10 @@ class _InitWorkflowState extends State<InitWorkflow> {
                       child: FilledButton(
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
-                          children: const [
-                            Icon(Icons.chevron_left_rounded),
-                            Text('Back'),
-                            SizedBox(width: 10),
+                          children: [
+                            const Icon(Icons.chevron_left_rounded),
+                            Text(L10n.of(context)!.back),
+                            const SizedBox(width: 10),
                           ],
                         ),
                         onPressed: () {
@@ -122,7 +123,7 @@ class _InitWorkflowState extends State<InitWorkflow> {
                             children: [
                               const SizedBox(width: 10),
                               Text(
-                                index == pages.length - 1 ? 'Finish' : 'Next',
+                                index == pages.length - 1 ? L10n.of(context)!.finish : L10n.of(context)!.next,
                               ),
                               const Icon(Icons.chevron_right_rounded),
                             ],
