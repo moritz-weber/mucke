@@ -68,7 +68,15 @@ class MyApp extends StatelessWidget {
         },
       },
       localizationsDelegates: L10n.localizationsDelegates,
-      supportedLocales: L10n.supportedLocales,
+      supportedLocales: const <Locale>[
+        Locale('en'),
+        Locale('de'),
+        Locale('ca'),
+        Locale('nb'),
+        Locale('es'),
+        Locale('ru'),
+        Locale('uk')
+      ],
     );
   }
 }
