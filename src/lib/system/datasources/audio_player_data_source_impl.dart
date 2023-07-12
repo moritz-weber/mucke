@@ -35,6 +35,8 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
       }
     });
 
+    _audioPlayer.durationStream.listen((event) => _durationSubject.add(event));
+
     _playbackEventModelStream = Rx.combineLatest2<ja.PlaybackEvent, bool, PlaybackEventModel>(
       _audioPlayer.playbackEventStream,
       _audioPlayer.playingStream,
@@ -60,6 +62,7 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
   final BehaviorSubject<PlaybackEventModel> _playbackEventSubject = BehaviorSubject();
   final BehaviorSubject<bool> _playingSubject = BehaviorSubject();
   final BehaviorSubject<Duration> _positionSubject = BehaviorSubject();
+  final BehaviorSubject<Duration?> _durationSubject = BehaviorSubject();
 
   late Stream<PlaybackEventModel> _playbackEventModelStream;
 
@@ -74,6 +77,9 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
 
   @override
   ValueStream<bool> get playingStream => _playingSubject.stream;
+
+  @override
+  ValueStream<Duration?> get durationStream => _durationSubject.stream;
 
   @override
   Future<void> dispose() async {
