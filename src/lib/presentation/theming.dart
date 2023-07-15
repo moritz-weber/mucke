@@ -152,6 +152,7 @@ ThemeData theme() => ThemeData(
       ),
       listTileTheme: const ListTileThemeData(
         iconColor: Colors.white,
+        contentPadding: EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING),
       ),
       radioTheme: RadioThemeData(fillColor: MaterialStateProperty.resolveWith<Color>(
         (Set<MaterialState> states) {
