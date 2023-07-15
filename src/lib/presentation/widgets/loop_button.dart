@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../domain/entities/loop_mode.dart';
+import '../mucke_icons.dart';
 import '../state/audio_store.dart';
 
 class LoopButton extends StatelessWidget {
@@ -59,7 +60,7 @@ class LoopButton extends StatelessWidget {
           case LoopMode.stop:
             return IconButton(
               icon: const Icon(
-                Icons.arrow_right_alt,
+                MuckeIcons.loopmode_stop,
                 color: Colors.white,
               ),
               iconSize: iconSize,

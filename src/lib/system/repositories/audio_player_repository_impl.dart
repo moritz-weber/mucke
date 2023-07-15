@@ -39,15 +39,15 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
       }
     });
     positionStream.listen((position) async {
-      final durationMs = _audioPlayerDataSource.durationStream.value?.inMilliseconds;
+      final durationMs = _audioPlayerDataSource.durationStream.valueOrNull?.inMilliseconds;
       final positionMs = position.inMilliseconds;
-      
-      if (
-        loopModeStream.value == LoopMode.stop &&
-        durationMs != null && 
-        positionMs.compareTo(durationMs - 250) > 0 && // less than 250 milliseconds in the song remaining
-        _audioPlayerDataSource.playingStream.value // don't skip to next if we aren't playing
-      ) {
+
+      if (loopModeStream.value == LoopMode.stop &&
+          durationMs != null &&
+          // less than 101 milliseconds in the song remaining
+          positionMs > durationMs - 101 &&
+          // don't skip to next if we aren't playing
+          _audioPlayerDataSource.playingStream.value) {
         await pause();
         await seekToNext();
       }

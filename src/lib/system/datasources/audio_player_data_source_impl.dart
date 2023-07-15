@@ -26,7 +26,13 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
 
     _audioPlayer.playingStream.listen((event) => _playingSubject.add(event));
 
-    _audioPlayer.positionStream.listen((event) => _positionSubject.add(event));
+    _audioPlayer
+        .createPositionStream(
+          steps: 800,
+          minPeriod: const Duration(milliseconds: 16),
+          maxPeriod: const Duration(milliseconds: 100),
+        )
+        .listen((event) => _positionSubject.add(event));
 
     _audioPlayer.playbackEventStream.listen((event) {
       if (event.processingState == ja.ProcessingState.completed && _audioPlayer.playing) {
@@ -497,7 +503,7 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
       await _audioPlayer.seek(duration * position);
     }
   }
-  
+
   @override
   int calcNewCurrentIndexOnMove(int currentIndex, int oldIndex, int newIndex) {
     int newCurrentIndex = currentIndex;
