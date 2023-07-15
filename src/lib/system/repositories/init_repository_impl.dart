@@ -53,7 +53,7 @@ class InitRepositoryImpl extends InitRepository {
   }
 
   @override
-  Future<void> initSmartlists(BuildContext context) async {
+  Future<void> createFavoritesSmartlist(BuildContext context) async {
     await _playlistDataSource.insertSmartList(
       L10n.of(context)!.favorites,
       const Filter(
@@ -79,6 +79,10 @@ class InitRepositoryImpl extends InitRepository {
       'sanguine',
       ShuffleMode.plus,
     );
+  }
+
+  @override
+  Future<void> createNewlyAddedSmartlist(BuildContext context) async {
     await _playlistDataSource.insertSmartList(
       L10n.of(context)!.newlyAdded,
       const Filter(

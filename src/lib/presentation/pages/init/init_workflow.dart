@@ -10,11 +10,12 @@ import '../../theming.dart';
 import 'init_battery_page.dart';
 import 'init_lib_page.dart';
 import 'init_meta_page.dart';
+import 'init_smartlists.dart';
 
 class InitWorkflow extends StatefulWidget {
-  const InitWorkflow({super.key, this.importPath});
+  const InitWorkflow({super.key, required this.importStore});
 
-  final String? importPath;
+  final ImportStore importStore;
 
   @override
   State<InitWorkflow> createState() => _InitWorkflowState();
@@ -24,9 +25,8 @@ class _InitWorkflowState extends State<InitWorkflow> {
   PageController pageController = PageController();
   int index = 0;
 
-  late final ImportStore importStore;
   late final List<Widget> pages = [
-    InitLibPage(importStore: importStore),
+    InitLibPage(importStore: widget.importStore),
   ];
 
   final curve = Curves.easeInOut;
@@ -34,22 +34,13 @@ class _InitWorkflowState extends State<InitWorkflow> {
 
   @override
   void initState() {
-    importStore = GetIt.I<ImportStore>(param1: widget.importPath);
-    if (widget.importPath != null) {
-      importStore.readDataFile(widget.importPath!).then((_) {
-        if (importStore.songs?.isNotEmpty ?? false)
-          setState(() => pages.add(InitMetaPage(importStore: importStore)));
-        DeviceInfoPlugin().androidInfo.then((info) {
-          if (info.version.sdkInt > 30)
-            setState(() => pages.add(InitBatteryPage(importStore: importStore)));
-        });
-      });
-    } else {
-      DeviceInfoPlugin().androidInfo.then((info) {
-        if (info.version.sdkInt > 30)
-          setState(() => pages.add(InitBatteryPage(importStore: importStore)));
-      });
-    }
+    if (widget.importStore.songs?.isNotEmpty ?? false)
+      setState(() => pages.add(InitMetaPage(importStore: widget.importStore)));
+    setState(() => pages.add(InitSmartlistsPage(importStore: widget.importStore)));
+    DeviceInfoPlugin().androidInfo.then((info) {
+      if (info.version.sdkInt > 30)
+        setState(() => pages.add(InitBatteryPage(importStore: widget.importStore)));
+    });
 
     super.initState();
   }
@@ -123,7 +114,9 @@ class _InitWorkflowState extends State<InitWorkflow> {
                             children: [
                               const SizedBox(width: 10),
                               Text(
-                                index == pages.length - 1 ? L10n.of(context)!.finish : L10n.of(context)!.next,
+                                index == pages.length - 1
+                                    ? L10n.of(context)!.finish
+                                    : L10n.of(context)!.next,
                               ),
                               const Icon(Icons.chevron_right_rounded),
                             ],

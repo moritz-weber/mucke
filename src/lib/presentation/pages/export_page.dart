@@ -49,6 +49,15 @@ class _ExportPageState extends State<ExportPage> {
           ),
         ],
         centerTitle: true,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(4.0),
+          child: Observer(builder: (_) {
+            if (_exportStore.isExporting) {
+              return const LinearProgressIndicator();
+            }
+            return Container();
+          }),
+        ),
       ),
       body: ListView(
         children: [
@@ -110,22 +119,22 @@ class _ExportPageState extends State<ExportPage> {
 
   Future<void> _exportData(BuildContext context) async {
     try {
-      final path = await _exportStore.exportData(await FilePicker.platform.getDirectoryPath());
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Row(
-            children: [
-              if (path != null) const Icon(Icons.check_circle_rounded, color: GREEN),
-              if (path == null) const Icon(Icons.warning_rounded, color: RED),
-              const SizedBox(width: 16.0),
-              if (path != null) Expanded(child: Text(L10n.of(context)!.dataExportedTo(path))),
-              if (path == null) Expanded(child: Text(L10n.of(context)!.dataExportFailed)),
-            ],
-          ),
-          duration: const Duration(seconds: 10),
-          showCloseIcon: true,
-        ),
-      );
+      final dir = await FilePicker.platform.getDirectoryPath();
+      _exportStore.exportData(dir).then((path) => ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Row(
+                children: [
+                  if (path != null) const Icon(Icons.check_circle_rounded, color: GREEN),
+                  if (path == null) const Icon(Icons.warning_rounded, color: RED),
+                  const SizedBox(width: 16.0),
+                  if (path != null) Expanded(child: Text(L10n.of(context)!.dataExportedTo(path))),
+                  if (path == null) Expanded(child: Text(L10n.of(context)!.dataExportFailed)),
+                ],
+              ),
+              duration: const Duration(seconds: 10),
+              showCloseIcon: true,
+            ),
+          ));
     } on PlatformException catch (e) {
       print('Unsupported operation' + e.toString());
     } catch (ex) {

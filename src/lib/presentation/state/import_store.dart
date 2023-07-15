@@ -1,27 +1,27 @@
+import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../domain/entities/app_data.dart';
 import '../../domain/repositories/import_export_repository.dart';
+import '../../domain/repositories/init_repository.dart';
 
 part 'import_store.g.dart';
 
 class ImportStore extends _ImportStore with _$ImportStore {
   ImportStore({
     required ImportExportRepository importExportRepository,
-    String? inputPath,
-  }) : super(importExportRepository, inputPath);
+    required InitRepository initRepository,
+  }) : super(importExportRepository, initRepository);
 }
 
 abstract class _ImportStore with Store {
   _ImportStore(
     this._importExportRepository,
-    this.inputPath,
+    this._initRepository,
   );
 
   final ImportExportRepository _importExportRepository;
-
-  /// The path of the file to import data from.
-  String? inputPath;
+  final InitRepository _initRepository;
 
   /// The raw available data.
   Map<String, dynamic>? data;
@@ -29,6 +29,9 @@ abstract class _ImportStore with Store {
   /// The available data to import.
   @observable
   AppData? appData;
+
+  @observable
+  bool error = false;
 
   String? get allowedExtensions => appData?.allowedExtensions;
   List<String>? get blockedFiles => appData?.blockedFiles;
@@ -52,9 +55,19 @@ abstract class _ImportStore with Store {
   @observable
   ObservableList<bool> importedSmartlists = <bool>[].asObservable();
 
+  @observable
+  bool createdFavorites = false;
+  @observable
+  bool createdNewlyAdded = false;
+
   @action
   Future<void> readDataFile(String path) async {
-    final _data = await _importExportRepository.readDataFile(path);
+    Map<String, dynamic>? _data;
+    try {
+      _data = await _importExportRepository.readDataFile(path);
+    } on FormatException {
+      error = true;
+    }
 
     if (_data != null) {
       data = _data;
@@ -93,6 +106,16 @@ abstract class _ImportStore with Store {
       importing = false;
       importedSmartlists[i] = true;
     }
+  }
+
+  @action
+  Future<void> createFavorites(BuildContext context) async {
+    _initRepository.createFavoritesSmartlist(context).then((_) => createdFavorites = true);
+  }
+
+  @action
+  Future<void> createNewlyAdded(BuildContext context) async {
+    _initRepository.createNewlyAddedSmartlist(context).then((_) => createdNewlyAdded = true);
   }
 
   void dispose() {}

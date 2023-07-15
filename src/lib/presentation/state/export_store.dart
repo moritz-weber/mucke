@@ -21,6 +21,9 @@ abstract class _ExportStore with Store {
   @readonly
   DataSelection _selection = DataSelection.all();
 
+  @observable
+  bool isExporting = false;
+
   @action
   void setSongsAlbumsArtists(bool selected) {
     _selection.songsAlbumsArtists = selected;
@@ -53,7 +56,10 @@ abstract class _ExportStore with Store {
 
   Future<String?> exportData(String? path) async {
     if (path != null) {
-      return await _importExportRepository.exportData(path, _selection);
+      isExporting = true;
+      final exportPath = await _importExportRepository.exportData(path, _selection);
+      isExporting = false;
+      return exportPath;
     }
     return null;
   }

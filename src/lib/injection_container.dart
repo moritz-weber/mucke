@@ -186,10 +186,10 @@ Future<void> setupGetIt() async {
       homeHistory: history,
     ),
   );
-  getIt.registerFactoryParam<ImportStore, String?, void>(
-    (String? importPath, _) => ImportStore(
+  getIt.registerFactory<ImportStore>(
+    () => ImportStore(
       importExportRepository: getIt(),
-      inputPath: importPath,
+      initRepository: getIt(),
     ),
   );
   getIt.registerFactory<ExportStore>(

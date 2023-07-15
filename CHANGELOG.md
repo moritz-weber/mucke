@@ -1,3 +1,9 @@
+## Unreleased
+
+- Implemented loop mode to stop after every song (#102).
+- Implemented share button for songs.
+- Refined init workflow.
+
 ## 1.4
 
 - Implemented an onboarding workflow.

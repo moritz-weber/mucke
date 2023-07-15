@@ -27,6 +27,22 @@ mixin _$ExportStore on _ExportStore, Store {
     });
   }
 
+  late final _$isExportingAtom =
+      Atom(name: '_ExportStore.isExporting', context: context);
+
+  @override
+  bool get isExporting {
+    _$isExportingAtom.reportRead();
+    return super.isExporting;
+  }
+
+  @override
+  set isExporting(bool value) {
+    _$isExportingAtom.reportWrite(value, super.isExporting, () {
+      super.isExporting = value;
+    });
+  }
+
   late final _$_ExportStoreActionController =
       ActionController(name: '_ExportStore', context: context);
 
@@ -88,7 +104,7 @@ mixin _$ExportStore on _ExportStore, Store {
   @override
   String toString() {
     return '''
-
+isExporting: ${isExporting}
     ''';
   }
 }

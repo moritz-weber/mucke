@@ -25,6 +25,21 @@ mixin _$ImportStore on _ImportStore, Store {
     });
   }
 
+  late final _$errorAtom = Atom(name: '_ImportStore.error', context: context);
+
+  @override
+  bool get error {
+    _$errorAtom.reportRead();
+    return super.error;
+  }
+
+  @override
+  set error(bool value) {
+    _$errorAtom.reportWrite(value, super.error, () {
+      super.error = value;
+    });
+  }
+
   late final _$scannedAtom =
       Atom(name: '_ImportStore.scanned', context: context);
 
@@ -121,6 +136,38 @@ mixin _$ImportStore on _ImportStore, Store {
     });
   }
 
+  late final _$createdFavoritesAtom =
+      Atom(name: '_ImportStore.createdFavorites', context: context);
+
+  @override
+  bool get createdFavorites {
+    _$createdFavoritesAtom.reportRead();
+    return super.createdFavorites;
+  }
+
+  @override
+  set createdFavorites(bool value) {
+    _$createdFavoritesAtom.reportWrite(value, super.createdFavorites, () {
+      super.createdFavorites = value;
+    });
+  }
+
+  late final _$createdNewlyAddedAtom =
+      Atom(name: '_ImportStore.createdNewlyAdded', context: context);
+
+  @override
+  bool get createdNewlyAdded {
+    _$createdNewlyAddedAtom.reportRead();
+    return super.createdNewlyAdded;
+  }
+
+  @override
+  set createdNewlyAdded(bool value) {
+    _$createdNewlyAddedAtom.reportWrite(value, super.createdNewlyAdded, () {
+      super.createdNewlyAdded = value;
+    });
+  }
+
   late final _$readDataFileAsyncAction =
       AsyncAction('_ImportStore.readDataFile', context: context);
 
@@ -154,16 +201,37 @@ mixin _$ImportStore on _ImportStore, Store {
     return _$importSmartlistAsyncAction.run(() => super.importSmartlist(i));
   }
 
+  late final _$createFavoritesAsyncAction =
+      AsyncAction('_ImportStore.createFavorites', context: context);
+
+  @override
+  Future<void> createFavorites(BuildContext context) {
+    return _$createFavoritesAsyncAction
+        .run(() => super.createFavorites(context));
+  }
+
+  late final _$createNewlyAddedAsyncAction =
+      AsyncAction('_ImportStore.createNewlyAdded', context: context);
+
+  @override
+  Future<void> createNewlyAdded(BuildContext context) {
+    return _$createNewlyAddedAsyncAction
+        .run(() => super.createNewlyAdded(context));
+  }
+
   @override
   String toString() {
     return '''
 appData: ${appData},
+error: ${error},
 scanned: ${scanned},
 addedLibraryFolders: ${addedLibraryFolders},
 importing: ${importing},
 importedMetadata: ${importedMetadata},
 importedPlaylists: ${importedPlaylists},
-importedSmartlists: ${importedSmartlists}
+importedSmartlists: ${importedSmartlists},
+createdFavorites: ${createdFavorites},
+createdNewlyAdded: ${createdNewlyAdded}
     ''';
   }
 }

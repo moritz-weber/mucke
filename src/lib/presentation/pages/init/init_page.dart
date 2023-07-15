@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../state/import_store.dart';
 import '../../state/navigation_store.dart';
 import '../../theming.dart';
 import 'init_workflow.dart';
@@ -57,7 +58,9 @@ class InitPage extends StatelessWidget {
                   trailing: const Icon(Icons.chevron_right_rounded),
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (BuildContext context) => const InitWorkflow(),
+                      builder: (BuildContext context) => InitWorkflow(
+                        importStore: GetIt.I<ImportStore>(param1: null),
+                      ),
                     ),
                   ),
                 ),
@@ -89,11 +92,30 @@ class InitPage extends StatelessWidget {
       if (pickResult != null) {
         final importPath = pickResult.paths.first!;
 
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (BuildContext context) => InitWorkflow(importPath: importPath),
-          ),
-        );
+        final importStore = GetIt.I<ImportStore>(param1: importPath);
+        importStore.readDataFile(importPath).then((_) {
+          if (importStore.error) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Row(
+                  children: [
+                    const Icon(Icons.warning_rounded, color: RED),
+                    const SizedBox(width: 16.0),
+                    Expanded(child: Text(L10n.of(context)!.errorReadData)),
+                  ],
+                ),
+                duration: const Duration(seconds: 5),
+                showCloseIcon: true,
+              ),
+            );
+          } else {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (BuildContext context) => InitWorkflow(importStore: importStore),
+              ),
+            );
+          }
+        });
       }
     } on PlatformException catch (e) {
       print('Unsupported operation' + e.toString());
