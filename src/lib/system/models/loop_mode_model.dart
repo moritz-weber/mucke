@@ -35,6 +35,8 @@ extension LoopModeToInt on LoopMode {
         return 1;
       case LoopMode.all:
         return 2;
+      case LoopMode.stop:
+        return 3;
       default:
         return 0;
     }
@@ -48,6 +50,8 @@ extension IntToLoopMode on int {
         return LoopMode.one;
       case 2:
         return LoopMode.all;
+      case 3:
+        return LoopMode.stop;
       default:
         return LoopMode.off;
     }

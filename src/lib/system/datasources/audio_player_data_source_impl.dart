@@ -26,7 +26,13 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
 
     _audioPlayer.playingStream.listen((event) => _playingSubject.add(event));
 
-    _audioPlayer.positionStream.listen((event) => _positionSubject.add(event));
+    _audioPlayer
+        .createPositionStream(
+          steps: 800,
+          minPeriod: const Duration(milliseconds: 16),
+          maxPeriod: const Duration(milliseconds: 100),
+        )
+        .listen((event) => _positionSubject.add(event));
 
     _audioPlayer.playbackEventStream.listen((event) {
       if (event.processingState == ja.ProcessingState.completed && _audioPlayer.playing) {
@@ -34,6 +40,8 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
         Future.delayed(const Duration(milliseconds: 100)).then((_) => pause());
       }
     });
+
+    _audioPlayer.durationStream.listen((event) => _durationSubject.add(event));
 
     _playbackEventModelStream = Rx.combineLatest2<ja.PlaybackEvent, bool, PlaybackEventModel>(
       _audioPlayer.playbackEventStream,
@@ -60,6 +68,7 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
   final BehaviorSubject<PlaybackEventModel> _playbackEventSubject = BehaviorSubject();
   final BehaviorSubject<bool> _playingSubject = BehaviorSubject();
   final BehaviorSubject<Duration> _positionSubject = BehaviorSubject();
+  final BehaviorSubject<Duration?> _durationSubject = BehaviorSubject();
 
   late Stream<PlaybackEventModel> _playbackEventModelStream;
 
@@ -74,6 +83,9 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
 
   @override
   ValueStream<bool> get playingStream => _playingSubject.stream;
+
+  @override
+  ValueStream<Duration?> get durationStream => _durationSubject.stream;
 
   @override
   Future<void> dispose() async {
@@ -491,7 +503,7 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
       await _audioPlayer.seek(duration * position);
     }
   }
-  
+
   @override
   int calcNewCurrentIndexOnMove(int currentIndex, int oldIndex, int newIndex) {
     int newCurrentIndex = currentIndex;

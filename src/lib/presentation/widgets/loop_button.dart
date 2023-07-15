@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../domain/entities/loop_mode.dart';
+import '../mucke_icons.dart';
 import '../state/audio_store.dart';
 
 class LoopButton extends StatelessWidget {
@@ -32,18 +33,6 @@ class LoopButton extends StatelessWidget {
               },
               splashRadius: iconSize / 2 + 6.0,
             );
-          case LoopMode.one:
-            return IconButton(
-              icon: const Icon(
-                Icons.repeat_one_rounded,
-                color: Colors.white,
-              ),
-              iconSize: iconSize,
-              onPressed: () {
-                audioStore.setLoopMode(LoopMode.off);
-              },
-              splashRadius: iconSize / 2 + 6.0,
-            );
           case LoopMode.all:
             return IconButton(
               icon: const Icon(
@@ -53,6 +42,30 @@ class LoopButton extends StatelessWidget {
               iconSize: iconSize,
               onPressed: () {
                 audioStore.setLoopMode(LoopMode.one);
+              },
+              splashRadius: iconSize / 2 + 6.0,
+            );
+          case LoopMode.one:
+            return IconButton(
+              icon: const Icon(
+                Icons.repeat_one_rounded,
+                color: Colors.white,
+              ),
+              iconSize: iconSize,
+              onPressed: () {
+                audioStore.setLoopMode(LoopMode.stop);
+              },
+              splashRadius: iconSize / 2 + 6.0,
+            );
+          case LoopMode.stop:
+            return IconButton(
+              icon: const Icon(
+                MuckeIcons.loopmode_stop,
+                color: Colors.white,
+              ),
+              iconSize: iconSize,
+              onPressed: () {
+                audioStore.setLoopMode(LoopMode.off);
               },
               splashRadius: iconSize / 2 + 6.0,
             );

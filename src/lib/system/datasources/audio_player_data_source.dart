@@ -9,6 +9,7 @@ abstract class AudioPlayerDataSource {
   Stream<PlaybackEventModel> get playbackEventStream;
   ValueStream<bool> get playingStream;
   ValueStream<Duration> get positionStream;
+  ValueStream<Duration?> get durationStream;
 
   Future<void> play();
   Future<void> pause();

@@ -38,6 +38,20 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
         _updateCurrentSong(queue, currentIndexStream.value);
       }
     });
+    positionStream.listen((position) async {
+      final durationMs = _audioPlayerDataSource.durationStream.valueOrNull?.inMilliseconds;
+      final positionMs = position.inMilliseconds;
+
+      if (loopModeStream.value == LoopMode.stop &&
+          durationMs != null &&
+          // less than 101 milliseconds in the song remaining
+          positionMs > durationMs - 101 &&
+          // don't skip to next if we aren't playing
+          _audioPlayerDataSource.playingStream.value) {
+        await pause();
+        await seekToNext();
+      }
+    });
   }
 
   static final _log = FimberLog('AudioPlayerRepositoryImpl');
