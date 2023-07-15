@@ -145,7 +145,7 @@ class _SongBottomSheetState extends State<SongBottomSheet> {
                       onPressed: () {
                         Share.share('${song.artist} - ${song.title}');
                       },
-                      icon: const Icon(Icons.share),
+                      icon: const Icon(Icons.share_rounded),
                     )
                   ),
                 ),
