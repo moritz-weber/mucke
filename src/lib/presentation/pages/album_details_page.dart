@@ -9,6 +9,7 @@ import '../l10n_utils.dart';
 import '../state/album_page_store.dart';
 import '../state/audio_store.dart';
 import '../state/music_data_store.dart';
+import '../state/navigation_store.dart';
 import '../state/settings_store.dart';
 import '../theming.dart';
 import '../utils.dart' as utils;
@@ -19,6 +20,7 @@ import '../widgets/exclude_level_options.dart';
 import '../widgets/like_count_options.dart';
 import '../widgets/song_bottom_sheet.dart';
 import '../widgets/song_list_tile_numbered.dart';
+import 'artist_details_page.dart';
 
 class AlbumDetailsPage extends StatefulWidget {
   const AlbumDetailsPage({Key? key, required this.album}) : super(key: key);
@@ -48,6 +50,8 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
   @override
   Widget build(BuildContext context) {
     final AudioStore audioStore = GetIt.I<AudioStore>();
+    final NavigationStore navStore = GetIt.I<NavigationStore>();
+
 
     return Scaffold(
       body: Material(
@@ -123,6 +127,10 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
                       image: utils.getAlbumImage(album.albumArtPath),
                       fit: BoxFit.cover,
                     ),
+                    onTapTitle: () async {
+                      // TODO: If there are multiple artists open a modal sheet allowing the user
+                      // to select which artist to go to else open the artist
+                    },
                     backgroundColor: utils.bgColor(album.color),
                     button: SizedBox(
                       width: 48,

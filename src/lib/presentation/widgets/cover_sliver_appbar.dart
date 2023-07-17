@@ -1,4 +1,5 @@
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -15,6 +16,7 @@ class CoverSliverAppBar extends StatefulWidget {
     required this.cover,
     required this.backgroundColor,
     this.button,
+    this.onTapTitle,
   }) : super(key: key);
 
   final String title;
@@ -24,6 +26,7 @@ class CoverSliverAppBar extends StatefulWidget {
   final Widget cover;
   final Color backgroundColor;
   final Widget? button;
+  final AsyncCallback? onTapTitle;
 
   @override
   State<CoverSliverAppBar> createState() => _CoverSliverAppBarState();
@@ -77,6 +80,7 @@ class Header extends StatelessWidget {
     required this.cover,
     required this.backgroundColor,
     this.button,
+    this.onTapTitle,
   }) : super(key: key);
 
   final String title;
@@ -87,6 +91,7 @@ class Header extends StatelessWidget {
   final double maxHeight;
   final double minHeight;
   final Widget? button;
+  final AsyncCallback? onTapTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -110,6 +115,7 @@ class Header extends StatelessWidget {
               title: title,
               subtitle: subtitle,
               subtitle2: subtitle2,
+              onTapTitle: onTapTitle,
             ),
           ],
         );
@@ -142,6 +148,7 @@ class Header extends StatelessWidget {
     required String title,
     String? subtitle,
     String? subtitle2,
+    AsyncCallback? onTapTitle,
   }) {
     // TODO: padding right for enabled multi select
     return Align(
@@ -159,52 +166,58 @@ class Header extends StatelessWidget {
           right: Tween<double>(begin: 56, end: 16).evaluate(animation),
           bottom: Tween<double>(begin: 0, end: 16).evaluate(animation),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              title,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: Tween<double>(begin: 16, end: 24).evaluate(animation),
-                color: Colors.white,
-                fontWeight: FontWeight.lerp(
-                  FontWeight.w400,
-                  FontWeight.w600,
-                  Tween<double>(begin: 0, end: 1).evaluate(animation),
-                ),
-                height: 1.1,
-              ),
-            ),
-            Container(
-              height: Tween<double>(begin: 0, end: 8).evaluate(animation),
-              width: 10.0,
-            ),
-            if (subtitle != null)
+        child: GestureDetector(
+          onTap: () => {
+            if (onTapTitle != null) 
+              onTapTitle.call()
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
               Text(
-                subtitle,
-                maxLines: 1,
-                overflow: TextOverflow.fade,
+                title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontSize: Tween<double>(begin: 0, end: 16).evaluate(animation),
-                  color: Colors.white
-                      .withOpacity(Tween<double>(begin: 0, end: 1).evaluate(animation2)),
-                  fontWeight: FontWeight.w500,
+                  fontSize: Tween<double>(begin: 16, end: 24).evaluate(animation),
+                  color: Colors.white,
+                  fontWeight: FontWeight.lerp(
+                    FontWeight.w400,
+                    FontWeight.w600,
+                    Tween<double>(begin: 0, end: 1).evaluate(animation),
+                  ),
+                  height: 1.1,
                 ),
               ),
-            if (subtitle2 != null)
-              Text(
-                subtitle2,
-                style: TextStyle(
-                  fontSize: Tween<double>(begin: 0, end: 13).evaluate(animation),
-                  color: Colors.white
-                      .withOpacity(Tween<double>(begin: 0, end: 1).evaluate(animation2)),
-                  fontWeight: FontWeight.w300,
-                ),
+              Container(
+                height: Tween<double>(begin: 0, end: 8).evaluate(animation),
+                width: 10.0,
               ),
-          ],
+              if (subtitle != null)
+                Text(
+                  subtitle,
+                  maxLines: 1,
+                  overflow: TextOverflow.fade,
+                  style: TextStyle(
+                    fontSize: Tween<double>(begin: 0, end: 16).evaluate(animation),
+                    color: Colors.white
+                        .withOpacity(Tween<double>(begin: 0, end: 1).evaluate(animation2)),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              if (subtitle2 != null)
+                Text(
+                  subtitle2,
+                  style: TextStyle(
+                    fontSize: Tween<double>(begin: 0, end: 13).evaluate(animation),
+                    color: Colors.white
+                        .withOpacity(Tween<double>(begin: 0, end: 1).evaluate(animation2)),
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );
