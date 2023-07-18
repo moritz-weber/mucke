@@ -167,48 +167,42 @@ class Header extends StatelessWidget {
           right: Tween<double>(begin: 56, end: 16).evaluate(animation),
           bottom: Tween<double>(begin: 0, end: 16).evaluate(animation),
         ),
-        child: GestureDetector(
-          onTap: () => {
-            if (onTapSubtitle != null) 
-              onTapSubtitle.call()
-          },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              title,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: Tween<double>(begin: 16, end: 24).evaluate(animation),
+                color: Colors.white,
+                fontWeight: FontWeight.lerp(
+                  FontWeight.w400,
+                  FontWeight.w600,
+                  Tween<double>(begin: 0, end: 1).evaluate(animation),
+                ),
+                height: 1.1,
+              ),
+            ),
+            Container(
+              height: Tween<double>(begin: 0, end: 8).evaluate(animation),
+              width: 10.0,
+            ),
+            if (subtitle != null)
+              _buildSubtitle(context, subtitle, animation, animation2, onTapSubtitle),
+            if (subtitle2 != null)
               Text(
-                title,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+                subtitle2,
                 style: TextStyle(
-                  fontSize: Tween<double>(begin: 16, end: 24).evaluate(animation),
-                  color: Colors.white,
-                  fontWeight: FontWeight.lerp(
-                    FontWeight.w400,
-                    FontWeight.w600,
-                    Tween<double>(begin: 0, end: 1).evaluate(animation),
-                  ),
-                  height: 1.1,
+                  fontSize: Tween<double>(begin: 0, end: 13).evaluate(animation),
+                  color: Colors.white
+                      .withOpacity(Tween<double>(begin: 0, end: 1).evaluate(animation2)),
+                  fontWeight: FontWeight.w300,
                 ),
               ),
-              Container(
-                height: Tween<double>(begin: 0, end: 8).evaluate(animation),
-                width: 10.0,
-              ),
-              if (subtitle != null)
-                _buildSubtitle(context, subtitle, animation, animation2, onTapSubtitle),
-              if (subtitle2 != null)
-                Text(
-                  subtitle2,
-                  style: TextStyle(
-                    fontSize: Tween<double>(begin: 0, end: 13).evaluate(animation),
-                    color: Colors.white
-                        .withOpacity(Tween<double>(begin: 0, end: 1).evaluate(animation2)),
-                    fontWeight: FontWeight.w300,
-                  ),
-                ),
-            ],
-          ),
+          ],
         ),
       ),
     );
