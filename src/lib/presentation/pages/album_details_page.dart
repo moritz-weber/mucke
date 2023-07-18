@@ -133,7 +133,7 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
                       image: utils.getAlbumImage(album.albumArtPath),
                       fit: BoxFit.cover,
                     ),
-                    onTapTitle: () async {
+                    onTapSubtitle: () async {
                       if (albumArtist != null)
                         navStore.pushOnLibrary(
                           MaterialPageRoute<Widget>(
