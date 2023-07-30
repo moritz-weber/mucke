@@ -572,4 +572,10 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   DateTime _day(DateTime dateTime) {
     return DateTime(dateTime.year, dateTime.month, dateTime.day);
   }
+  
+  @override
+  ValueStream<int?> get numFileStream => _localMusicFetcher.fileNumStream;
+  
+  @override
+  ValueStream<int?> get progressStream => _localMusicFetcher.progressStream;
 }

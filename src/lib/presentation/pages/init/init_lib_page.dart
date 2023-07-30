@@ -10,6 +10,7 @@ import '../../state/import_store.dart';
 import '../../state/music_data_store.dart';
 import '../../state/settings_store.dart';
 import '../../theming.dart';
+import '../../utils.dart';
 import '../../widgets/settings_section.dart';
 
 class InitLibPage extends StatelessWidget {
@@ -39,20 +40,22 @@ class InitLibPage extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Observer(builder: (_) {
-              if (musicDataStore.isUpdatingDatabase) {
-                return const LinearProgressIndicator();
-              }
-              return Container();
-            }),
-            Observer(builder: (_) {
               final int artistCount = musicDataStore.artistStream.value?.length ?? 0;
               final int albumCount = musicDataStore.albumStream.value?.length ?? 0;
               final int songCount = musicDataStore.songStream.value?.length ?? 0;
               return ListTile(
                 title: Text(L10n.of(context)!.yourLibrary),
-                subtitle: Text(
-                  L10n.of(context)!.artistsAlbumsSongs(artistCount, albumCount, songCount),
-                ),
+                subtitle: musicDataStore.isUpdatingDatabase
+                    ? LinearProgressIndicator(
+                        value: getProgressOrNull(
+                          musicDataStore.progressStream.value,
+                          musicDataStore.numFileStream.value,
+                        ),
+                        backgroundColor: Colors.white10,
+                      )
+                    : Text(
+                        L10n.of(context)!.artistsAlbumsSongs(artistCount, albumCount, songCount),
+                      ),
                 trailing: Observer(
                   builder: (context) {
                     final folders = settingsStore.libraryFoldersStream.value;
@@ -60,7 +63,7 @@ class InitLibPage extends StatelessWidget {
                     if (!importStore.scanned)
                       return ElevatedButton(
                         child: Text(L10n.of(context)!.scan),
-                        onPressed: isNotActive
+                        onPressed: isNotActive || musicDataStore.isUpdatingDatabase
                             ? null
                             : () => musicDataStore
                                 .updateDatabase()
@@ -68,7 +71,9 @@ class InitLibPage extends StatelessWidget {
                       );
                     return OutlinedButton(
                       child: Text(L10n.of(context)!.scan),
-                      onPressed: isNotActive ? null : () => musicDataStore.updateDatabase(),
+                      onPressed: isNotActive || musicDataStore.isUpdatingDatabase
+                          ? null
+                          : () => musicDataStore.updateDatabase(),
                     );
                   },
                 ),
@@ -238,7 +243,9 @@ class InitLibPage extends StatelessWidget {
                   final importBlockedFiles = importStore.blockedFiles;
                   final blockedFiles = settingsStore.blockedFilesStream.value;
 
-                  if (importBlockedFiles == null || blockedFiles == null || importBlockedFiles.isEmpty) return Container();
+                  if (importBlockedFiles == null ||
+                      blockedFiles == null ||
+                      importBlockedFiles.isEmpty) return Container();
 
                   return Column(
                     mainAxisSize: MainAxisSize.min,
