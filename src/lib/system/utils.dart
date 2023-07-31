@@ -15,6 +15,8 @@ int? parseYear(String? yearString) {
 }
 
 Future<Color?> getBackgroundColor(ImageProvider image) async {
+  return const Color(0xff141216);
+
   final paletteGenerator = await PaletteGenerator.fromImageProvider(
     image,
     targets: PaletteTarget.baseTargets,
