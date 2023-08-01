@@ -40,7 +40,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
 
     final start = DateTime.now();
     final Set<File> songFiles = await _getSongFiles();
-    // _log.d('Found ${songFiles.length} song files');
+    _log.d('Found ${songFiles.length} song files');
     _fileNumSubject.add(songFiles.length);
 
     final List<SongModel> songs = [];
@@ -59,7 +59,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     final albumsInDb = (await _musicDataSource.albumStream.first)
       ..sort((a, b) => a.id.compareTo(b.id));
     int newAlbumId = albumsInDb.isNotEmpty ? albumsInDb.last.id + 1 : 0;
-    // _log.d('New albums start with id: $newAlbumId');
+    _log.d('New albums start with id: $newAlbumId');
 
     final Map<String, int> albumsInDbIdMap = {};
     for (final a in albumsInDb) {
@@ -69,13 +69,13 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     final artistsInDb = (await _musicDataSource.artistStream.first)
       ..sort((a, b) => a.id.compareTo(b.id));
     int newArtistId = artistsInDb.isNotEmpty ? artistsInDb.last.id + 1 : 0;
-    // _log.d('New artists start with id: $newArtistId');
+    _log.d('New artists start with id: $newArtistId');
 
     final Directory dir = await getApplicationSupportDirectory();
 
     int count = 0;
     for (final songFile in songFiles) {
-      // _log.d('Checking song: ${songFile.path}');
+      _log.d('${songFile.path}');
       _progressSubject.add(++count);
 
       // changed includes the creation time
@@ -90,14 +90,17 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
       Color? color;
       if (song != null) {
         // the song is already known to the database
+        _log.d('song exists');
         if (!lastModified.isAfter(song.lastModified)) {
           // file hasn't changed -> use existing songmodel
+          _log.d('file not changed');
           await _handleUnchangedSong(song, albumsInDb, albumIdMap, albumArtMap, colorMap,
               artistsInDb, songs, albums, artistSet);
           continue;
         } else {
           // file has changed -> read new info but keep albumId
           albumId = song.albumId;
+          _log.d('file changed');
         }
       }
 
@@ -107,6 +110,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
       } on FfiException {
         continue;
       }
+      _log.d('read metadata');
 
       // completely new song -> new album ids should start after existing ones
       // this is new information
@@ -116,6 +120,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
 
       String? albumArtPath;
       if (!albumIdMap.containsKey(albumString)) {
+        _log.d('new album');
         // we haven't seen an album with these properties in the files yet, but there might be an entry in the database
         // in this case, we should use the corresponding ID
         // use case for getAlbumId: song file was renamed -> not recognized, but album is still in db
@@ -126,6 +131,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
         Uint8List? albumArt = songData.picture?.data;
         if (albumArt == null) {
           // get directory of song and look for image files
+          _log.d('search image file');
           final images = await songFile.parent
               .list(recursive: false, followLinks: false)
               .where((item) =>
@@ -136,6 +142,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
           if (images.isNotEmpty) albumArt = images.first.readAsBytesSync();
         }
         if (albumArt != null) {
+          _log.d('process album art');
           albumArtPath = '${dir.path}/$albumId';
           final file = File(albumArtPath);
           file.writeAsBytesSync(albumArt);
@@ -145,6 +152,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
           colorMap[albumId] = color;
         }
 
+        _log.d('process artist');
         final String songArtist = songData.artist ?? '';
         final String artistName =
             albumArtist != '' ? albumArtist : (songArtist != '' ? songArtist : DEF_ARTIST);
@@ -157,6 +165,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
           artistSet.add(ArtistModel(name: artistName, id: newArtistId++));
         }
 
+        _log.d('add album');
         albums.add(
           AlbumModel.fromMetadata(
             albumId: albumId,
@@ -168,11 +177,13 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
       } else {
         // an album with the same properties is already stored in the list
         // use it's ID regardless of the old one stored in the songModel
+        _log.d('album not new');
         albumId = albumIdMap[albumString]!;
         albumArtPath = albumArtMap[albumId];
         color = colorMap[albumId];
       }
 
+      _log.d('add song');
       songs.add(
         SongModel.fromMetadata(
           path: songFile.path,
@@ -185,7 +196,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
       );
     }
 
-    print(DateTime.now().difference(start));
+    _log.d('${DateTime.now().difference(start)}');
 
     return {
       'SONGS': songs,

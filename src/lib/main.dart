@@ -25,7 +25,7 @@ Future<void> main() async {
   Fimber.plantTree(TimedRollingFileTree(
     filenamePrefix: '${dir?.path}/logs/',
   ));
-  // Fimber.plantTree(DebugTree());
+  Fimber.plantTree(DebugTree());
 
   MetadataGod.initialize();
   await setupGetIt();
