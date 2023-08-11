@@ -54,6 +54,11 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
       final List<File> files = await Directory(libDir.path)
                           .list(recursive: true, followLinks: false)
                           .where((item) => FileSystemEntity.isFileSync(item.path))
+                          .where((item) => !blockedPaths.contains(item.path))
+                          .where((item) {
+                            final extension = p.extension(item.path).toLowerCase().substring(1);
+                            return allowedExtensions.contains(extension);
+                          })
                           .asyncMap((item) => File(item.path)).toList();
       songFiles.addAll(files);
     }
@@ -82,9 +87,6 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     final Directory dir = await getApplicationSupportDirectory();
 
     for (final songFile in songFiles.toSet()) {
-      final String extension = p.extension(songFile.path).toLowerCase().substring(1);
-      if (!allowedExtensions.contains(extension)) continue;
-      if (blockedPaths.contains(songFile.path)) continue;
       _log.d('Checking song: ${songFile.path}');
 
       // changed includes the creation time
