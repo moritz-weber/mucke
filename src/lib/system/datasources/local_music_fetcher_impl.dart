@@ -98,7 +98,6 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
       final lastModified = songFile.lastModifiedSync();
       final song = await _musicDataSource.getSongByPath(songFile.path);
 
-      int? albumId;
       String albumString;
       Color? color;
       if (song != null) {
@@ -140,7 +139,6 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
           continue;
         } else {
           // read new info but keep albumId
-          albumId = song.albumId;
           songFilesToCheck.add(songFile);
         }
       } else {
