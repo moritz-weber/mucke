@@ -86,6 +86,8 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
 
     final Directory dir = await getApplicationSupportDirectory();
 
+    final List<File> songFilesToCheck = [];
+
     for (final songFile in songFiles.toSet()) {
       _log.d('Checking song: ${songFile.path}');
 
@@ -139,16 +141,30 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
         } else {
           // read new info but keep albumId
           albumId = song.albumId;
+          songFilesToCheck.add(songFile);
         }
+      } else {
+        songFilesToCheck.add(songFile);
       }
+    }
 
-      final Metadata songData;
+    final List<(File, Metadata)> songsToCheck = [];
+
+    for (final songFile in songFilesToCheck) {
       try {
-        songData = await MetadataGod.readMetadata(file: songFile.path);
+        songsToCheck.add((songFile, await MetadataGod.readMetadata(file: songFile.path)));
       } on FfiException {
         continue;
       }
+    }
 
+    for (final (songFile, songData) in songsToCheck) {
+      final lastModified = songFile.lastModifiedSync();
+
+
+      int? albumId;
+      String albumString;
+      Color? color;
       // completely new song -> new album ids should start after existing ones
       // this is new information
       // is the album ID still correct or do we find another album with the same properties?
