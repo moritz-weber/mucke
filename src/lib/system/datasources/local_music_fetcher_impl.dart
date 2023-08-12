@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:collection/collection.dart';
@@ -146,15 +147,46 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
       }
     }
 
+    _log.d('${songFilesToCheck.length}');
+
     final List<(File, Metadata)> songsToCheck = [];
 
-    for (final songFile in songFilesToCheck) {
-      try {
-        songsToCheck.add((songFile, await MetadataGod.readMetadata(file: songFile.path)));
-      } on FfiException {
-        continue;
-      }
+    final List<(ReceivePort, SendPort, Isolate)> isolates = [];
+
+    for (var i = 0; i < Platform.numberOfProcessors - 1; i++) {
+      final ReceivePort receivePort = ReceivePort();
+      final ReceivePort sendPortReceivePort = ReceivePort();
+      final isolate = await Isolate.spawn(loadMetadataFromFile, [sendPortReceivePort.sendPort, receivePort.sendPort]);
+      final SendPort sendPort = await sendPortReceivePort.first as SendPort;
+      isolates.add((receivePort, sendPort, isolate));
     }
+
+    var i = 0;
+    for (final songFile in songFilesToCheck) {
+      isolates[i].$2.send(songFile);
+      i++;
+      i = i % isolates.length;
+    }
+
+    List<StreamSubscription<dynamic>> isolateSubscriptions = [];
+
+    for (final (receivePort, _, isolate) in isolates) {
+      _log.d('listening to $receivePort');
+      final subscription = receivePort.listen((message) {
+        if (message != null)
+          songsToCheck.add(message as (File, Metadata));
+      });
+      
+      isolateSubscriptions.add(subscription);
+
+      isolate.kill(priority: Isolate.immediate);
+    }
+
+    // Remove all isolate subscriptions when they are no longer needed
+    for (var subscription in isolateSubscriptions) {
+      subscription.cancel();
+    }
+
 
     for (final (songFile, songData) in songsToCheck) {
       final lastModified = songFile.lastModifiedSync();
@@ -238,6 +270,22 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
       'ALBUMS': albums,
       'ARTISTS': artistSet.toList(),
     };
+  }
+
+  static void loadMetadataFromFile(List<dynamic> arguments) {
+    MetadataGod.initialize();
+    final SendPort receivePortSendPort = arguments[0] as SendPort;
+    final SendPort sendPort = arguments[1] as SendPort;
+    final ReceivePort receivePort = ReceivePort();
+    receivePortSendPort.send(receivePort.sendPort);
+    receivePort.listen((file) async {
+        try {
+          final metadata = await MetadataGod.readMetadata(file: (file as File).path);
+          sendPort.send((file, metadata));
+        } on FfiException {
+          sendPort.send(null);
+        }
+    });
   }
 
   Set<String> getExtensionSet(String extString) {
