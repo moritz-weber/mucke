@@ -1,15 +1,19 @@
 import 'dart:async';
+import 'dart:ffi';
 import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
+import 'package:image/image.dart' as img;
 
 import 'package:async_task/async_task.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:metadata_god/metadata_god.dart';
-import 'package:mucke/system/datasources/drift_database.dart';
 import 'package:mucke/system/models/default_values.dart';
 import 'package:mucke/system/utils.dart';
+import 'package:palette_generator/palette_generator.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -72,13 +76,12 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
 
     final existingSongFiles = songFiles.where((element) => !songFilesToCheck.contains(element)).toList();
     final structs = await mapSongsAlreadyScanned(existingSongFiles, albumsInDb, artistsInDb);
-    final songs = structs['songs'] as List<SongModel>;
+    var songs = structs['songs'] as List<SongModel>;
     final albums = structs['albums'] as List<AlbumModel>;
     final artists = structs['artists'] as Set<ArtistModel>;
 
     final albumIdMap = structs['albumIdMap'] as Map<String, int>;
     final albumArtMap = structs['albumArtMap'] as Map<int, String>;
-    final colorMap = structs['colorMap'] as Map<int, Color?>;
 
     final songsToCheck = await getMetadataForFiles(songFilesToCheck);
 
@@ -102,7 +105,6 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
             songData: songData,
             albumId: albumId,
             albumArtPath: albumArtMap[albumId],
-            color: colorMap[albumId],
             lastModified: lastModified,
           ),
         );
@@ -116,9 +118,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
       final albumArt = songData.picture;
 
       if (albumArt != null) {
-        final (path, color) = await cacheAlbumArt(albumArt, albumId);
-        albumArtMap[albumId] = path;
-        colorMap[albumId] = color;
+        albumArtMap[albumId] = await cacheAlbumArt(albumArt, albumId);
       }
 
       final String? songArtist = songData.artist;
@@ -138,7 +138,6 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
           songData: songData,
           albumId: albumId, 
           albumArtPath: albumArtMap[albumId], 
-          color: colorMap[albumId]
         )
       );
       songs.add(
@@ -148,11 +147,47 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
           albumId: albumId,
           lastModified: lastModified,
           albumArtPath: albumArtMap[albumId],
-          color: colorMap[albumId],
         )
       );
 
     }
+
+    final albumAccentTasks = albums
+        .where((element) => element.color == null && element.albumArtPath != null)
+        .map((e) => AccentGenerator(e.id, File(e.albumArtPath!)));
+
+    final asyncExecutor = AsyncExecutor(
+      sequential: false,
+      parallelism: max(Platform.numberOfProcessors - 1, 1),
+      taskTypeRegister: accentGeneratorTypeRegister,
+    );
+
+    asyncExecutor.logger.enabled = true;
+
+    final executions = asyncExecutor.executeAll(albumAccentTasks);
+
+    await Future.wait(executions);
+
+    for (final execution in executions) {
+      final (albumId, color) = await execution;
+      if (color == null) {
+        _log.w('failed getting color for albumId $albumId');
+        continue;
+      }
+
+      final i = albums.indexWhere((element) => element.id == albumId);
+      albums[i] = albums[i].copyWith(color: color);
+
+
+      songs = songs.map((song) {
+        if (song.albumId == albumId)
+          return song.copyWith(color: color);
+        return song;
+      })
+      .toList();
+    }
+
+    asyncExecutor.close();
 
 
     return {
@@ -209,14 +244,13 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     return await _musicDataSource.getAlbumId(album, albumArtist, year) ?? newAlbumId++;
   }
 
-  Future<(String, Color?)> cacheAlbumArt(Picture albumArt, int albumId) async {
+  Future<String> cacheAlbumArt(Picture albumArt, int albumId) async {
     final Directory dir = await getApplicationSupportDirectory();
     final albumArtPath = '${dir.path}/$albumId';
     final file = File(albumArtPath);
     file.writeAsBytesSync(albumArt.data);
 
-    final color = await getBackgroundColor(FileImage(file));
-    return (albumArtPath, color);
+    return albumArtPath;
   }
 
   // Maps all the songs that where scanned previously, and their Albums and Artists to the new data structures
@@ -256,14 +290,8 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
 
         if (album.albumArtPath != null) {
           albumArtMap[album.id] = album.albumArtPath!;
-          if (album.color == null) {
-            // we have an album cover, but no color -> try to get one
-            color = await getBackgroundColor(FileImage(File(album.albumArtPath!)));
-            colorMap[album.id] = color;
-          } 
-          else 
+          if (album.color != null)
             colorMap[album.id] = album.color;
-          
         }
         albums.add(album.copyWith(color: color));
         final artist = artistsInDb.singleWhere((a) => a.name == album.artist);
@@ -277,8 +305,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
       'albums': albums, 
       'artists': artists,
       'albumIdMap': albumIdMap, 
-      'albumArtMap': albumArtMap, 
-      'colorMap': colorMap
+      'albumArtMap': albumArtMap
     };
   }
 
@@ -292,7 +319,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     final asyncExecutor = AsyncExecutor(
       sequential: false,
       parallelism: max(Platform.numberOfProcessors - 1, 1),
-      taskTypeRegister: _taskTypeRegister,
+      taskTypeRegister: metadataLoaderTypeRegister,
     );
 
     asyncExecutor.logger.enabled = true;
@@ -302,8 +329,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     await Future.wait(executions);
 
     for (final execution in executions) {
-      final result = await execution;
-      songsMetadata.add(result);
+      songsMetadata.add(await execution);
     }
 
     asyncExecutor.close();
@@ -333,7 +359,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
   }
 }
 
-List<AsyncTask> _taskTypeRegister() => [MetadataLoader(File(''))];
+List<AsyncTask> metadataLoaderTypeRegister() => [MetadataLoader(File(''))];
 
 class MetadataLoader extends AsyncTask<File, (File, Metadata)> {
   MetadataLoader(this.file);
@@ -355,5 +381,48 @@ class MetadataLoader extends AsyncTask<File, (File, Metadata)> {
   @override
   FutureOr<(File, Metadata)> run() async {
     return (file, await MetadataGod.readMetadata(file: file.path));
+  }
+}
+
+List<AsyncTask> accentGeneratorTypeRegister() => [AccentGenerator(0, File(''))];
+
+class AccentGenerator extends AsyncTask<(int, File), (int, Color?)> {
+
+  AccentGenerator(this.albumId, this.pictureFile);
+
+  final File pictureFile;
+  final int albumId;
+  
+  @override
+  AsyncTask<(int, File), (int, Color?)> instantiate((int, File) parameters, [Map<String, SharedData>? sharedData]) {
+    return AccentGenerator(parameters.$1, parameters.$2);
+  }
+  
+  @override
+  (int, File) parameters() {
+    return (albumId, pictureFile);
+  }
+
+  @override
+  FutureOr<(int, Color?)> run() async {
+    final image = await _loadImage(pictureFile);
+    if (image == null)
+      return (albumId, null);
+    return (albumId, getBackgroundColor(image));
+  }
+
+  Future<Uint8List?> _loadImage(File file) async {
+    final data = await file.readAsBytes();
+    img.Image? image;
+    try {
+      image = img.decodeImage(data);
+    } catch(e) {
+      return null;
+    }
+    
+    if (image == null)
+      return null;
+    image = image.convert(format: img.Format.uint8, numChannels: 4);
+    return image.getBytes(order: img.ChannelOrder.rgba);
   }
 }

@@ -27,6 +27,7 @@ dependencies:
   flutter_mobx: ^2.0.0  # MIT
   flutter_speed_dial: ^7.0.0  # MIT
   get_it: ^7.1.3  # MIT
+  image: ^4.0.17
   intl: any
   just_audio: ^0.9.18  # MIT
   metadata_god:

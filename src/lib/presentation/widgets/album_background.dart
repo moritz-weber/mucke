@@ -57,7 +57,7 @@ class _AlbumBackgroundState extends State<AlbumBackground> {
   Future<void> _setBackgroundWidget(Song? song) async {
     if (song == null) return;
     final Color color =
-        song.color ?? await getBackgroundColor(getAlbumImage(song.albumArtPath)) ?? DARK3;
+        song.color ?? DARK3;
 
     setState(() {
       _backgroundWidget = Container(
