@@ -9,6 +9,7 @@ environment:
   flutter: ">=3.7.0"
 
 dependencies:
+  async_task: ^1.0.20
   audio_service: ^0.18.7  # MIT
   audio_session: ^0.1.5  # MIT
   collection: ^1.17.1  # BSD 3

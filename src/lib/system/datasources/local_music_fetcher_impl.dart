@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
+import 'package:async_task/async_task.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
@@ -147,46 +149,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
       }
     }
 
-    _log.d('${songFilesToCheck.length}');
-
-    final List<(File, Metadata)> songsToCheck = [];
-
-    final List<(ReceivePort, SendPort, Isolate)> isolates = [];
-
-    for (var i = 0; i < Platform.numberOfProcessors - 1; i++) {
-      final ReceivePort receivePort = ReceivePort();
-      final ReceivePort sendPortReceivePort = ReceivePort();
-      final isolate = await Isolate.spawn(loadMetadataFromFile, [sendPortReceivePort.sendPort, receivePort.sendPort]);
-      final SendPort sendPort = await sendPortReceivePort.first as SendPort;
-      isolates.add((receivePort, sendPort, isolate));
-    }
-
-    var i = 0;
-    for (final songFile in songFilesToCheck) {
-      isolates[i].$2.send(songFile);
-      i++;
-      i = i % isolates.length;
-    }
-
-    List<StreamSubscription<dynamic>> isolateSubscriptions = [];
-
-    for (final (receivePort, _, isolate) in isolates) {
-      _log.d('listening to $receivePort');
-      final subscription = receivePort.listen((message) {
-        if (message != null)
-          songsToCheck.add(message as (File, Metadata));
-      });
-      
-      isolateSubscriptions.add(subscription);
-
-      isolate.kill(priority: Isolate.immediate);
-    }
-
-    // Remove all isolate subscriptions when they are no longer needed
-    for (var subscription in isolateSubscriptions) {
-      subscription.cancel();
-    }
-
+    final songsToCheck = await getMetadataForFiles(songFilesToCheck);
 
     for (final (songFile, songData) in songsToCheck) {
       final lastModified = songFile.lastModifiedSync();
@@ -272,20 +235,29 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     };
   }
 
-  static void loadMetadataFromFile(List<dynamic> arguments) {
-    MetadataGod.initialize();
-    final SendPort receivePortSendPort = arguments[0] as SendPort;
-    final SendPort sendPort = arguments[1] as SendPort;
-    final ReceivePort receivePort = ReceivePort();
-    receivePortSendPort.send(receivePort.sendPort);
-    receivePort.listen((file) async {
-        try {
-          final metadata = await MetadataGod.readMetadata(file: (file as File).path);
-          sendPort.send((file, metadata));
-        } on FfiException {
-          sendPort.send(null);
-        }
-    });
+  Future<List<(File, Metadata)>> getMetadataForFiles(List<File> filesToCheck) async {
+    final List<(File, Metadata)> songsMetadata = [];
+
+    final tasks = filesToCheck.map((e) => MetadataLoader(e));
+
+    final asyncExecutor = AsyncExecutor(
+      sequential: false,
+      parallelism: max(Platform.numberOfProcessors - 1, 1),
+      taskTypeRegister: _taskTypeRegister,
+    );
+
+    asyncExecutor.logger.enabled = true;
+
+    final executions = asyncExecutor.executeAll(tasks);
+
+    await Future.wait(executions);
+
+    for (final execution in executions) {
+      final result = await execution;
+      songsMetadata.add(result);
+    }
+    
+    return songsMetadata;
   }
 
   Set<String> getExtensionSet(String extString) {
@@ -307,4 +279,30 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     }
     return files;
   }
+}
+
+List<AsyncTask> _taskTypeRegister() => [MetadataLoader(File(''))];
+
+class MetadataLoader extends AsyncTask<File,(File, Metadata)> {
+
+  MetadataLoader(this.file);
+
+  final File file;
+
+  @override
+  AsyncTask<File, (File, Metadata)> instantiate(File parameters, [Map<String, SharedData>? sharedData]) {
+    MetadataGod.initialize();
+    return MetadataLoader(parameters);
+  }
+
+  @override
+  File parameters() {
+    return file;
+  }
+
+  @override
+  FutureOr<(File, Metadata)> run() async {
+    return (file, await MetadataGod.readMetadata(file: file.path));
+  }
+
 }

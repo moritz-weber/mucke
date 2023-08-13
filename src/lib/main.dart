@@ -29,6 +29,7 @@ Future<void> main() async {
 
   await setupGetIt();
 
+  MetadataGod.initialize();
   final session = await AudioSession.instance;
   await session.configure(const AudioSessionConfiguration.music());
 
