@@ -1,19 +1,15 @@
 import 'dart:async';
-import 'dart:ffi';
 import 'dart:io';
 import 'dart:math';
-import 'dart:typed_data';
-import 'dart:ui' as ui;
-import 'package:image/image.dart' as img;
 
 import 'package:async_task/async_task.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
+import 'package:image/image.dart' as img;
 import 'package:metadata_god/metadata_god.dart';
 import 'package:mucke/system/models/default_values.dart';
 import 'package:mucke/system/utils.dart';
-import 'package:palette_generator/palette_generator.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';

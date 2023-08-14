@@ -1,11 +1,8 @@
 import 'dart:collection';
 import 'dart:math';
-import 'dart:ui' as ui;
-import 'package:image/image.dart' as img;
 
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:palette_generator/palette_generator.dart';
+import 'package:image/image.dart' as img;
 
 int? parseYear(String? yearString) {
   if (yearString == null || yearString == '') {
@@ -48,23 +45,4 @@ Color getBackgroundColor(img.Image image) {
 num colorWeight(Color color, int count) {
   final hslColor = HSLColor.fromColor(color);
   return count * pow(hslColor.saturation, 2) * (0.55 - (hslColor.lightness - 0.55).abs());
-}
-
-
-Future<Color?> _getBackgroundColor(ui.Image image) async {
-  final paletteGenerator = await PaletteGenerator.fromImage(
-    image,
-    targets: PaletteTarget.baseTargets,
-  );
-  
-  final colors = <Color?>[
-    paletteGenerator.vibrantColor?.color,
-    paletteGenerator.lightVibrantColor?.color,
-    paletteGenerator.mutedColor?.color,
-    paletteGenerator.darkVibrantColor?.color,
-    paletteGenerator.lightMutedColor?.color,
-    paletteGenerator.dominantColor?.color
-  ];
-
-  return colors.firstWhereOrNull((c) => c != null);
 }
