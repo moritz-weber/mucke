@@ -248,19 +248,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     final Directory dir = await getApplicationSupportDirectory();
     final albumArtPath = '${dir.path}/$albumId';
     final file = File(albumArtPath);
-    img.Image? image;
-    try {
-      image = img.decodeImage(albumArt.data);
-    } catch(e) {
-      file.writeAsBytesSync(albumArt.data);
-      return albumArtPath;
-    }
-    if (image == null) {
-      file.writeAsBytesSync(albumArt.data);
-      return albumArtPath;
-    }
-    image = img.quantize(image, numberOfColors: 8, method: img.QuantizeMethod.octree);
-    file.writeAsBytesSync(img.encodePng(image));
+    file.writeAsBytesSync(albumArt.data);
 
     return albumArtPath;
   }
