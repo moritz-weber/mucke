@@ -248,7 +248,19 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     final Directory dir = await getApplicationSupportDirectory();
     final albumArtPath = '${dir.path}/$albumId';
     final file = File(albumArtPath);
-    file.writeAsBytesSync(albumArt.data);
+    img.Image? image;
+    try {
+      image = img.decodeImage(albumArt.data);
+    } catch(e) {
+      file.writeAsBytesSync(albumArt.data);
+      return albumArtPath;
+    }
+    if (image == null) {
+      file.writeAsBytesSync(albumArt.data);
+      return albumArtPath;
+    }
+    image = img.quantize(image, numberOfColors: 8, method: img.QuantizeMethod.octree);
+    file.writeAsBytesSync(img.encodePng(image));
 
     return albumArtPath;
   }
@@ -411,7 +423,7 @@ class AccentGenerator extends AsyncTask<(int, File), (int, Color?)> {
     return (albumId, getBackgroundColor(image));
   }
 
-  Future<Uint8List?> _loadImage(File file) async {
+  Future<img.Image?> _loadImage(File file) async {
     final data = await file.readAsBytes();
     img.Image? image;
     try {
@@ -420,9 +432,6 @@ class AccentGenerator extends AsyncTask<(int, File), (int, Color?)> {
       return null;
     }
     
-    if (image == null)
-      return null;
-    image = image.convert(format: img.Format.uint8, numChannels: 4);
-    return image.getBytes(order: img.ChannelOrder.rgba);
+    return image;
   }
 }
