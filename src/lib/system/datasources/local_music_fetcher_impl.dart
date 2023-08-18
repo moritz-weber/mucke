@@ -86,7 +86,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
 
       final lastModified = songFile.lastModifiedSync();
 
-      final albumArtist = songData.albumArtist;
+      final albumArtist = songData.albumArtist ?? songData.artist;
       final albumString = '${songData.album}___${albumArtist}___${songData.year}';
 
       if (albumIdMap.containsKey(albumString)) {
@@ -280,8 +280,9 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
               color: colorMap[albumIdMap[albumString]],
             ),
           );
+        else 
+          songs.add(song.copyWith(color: colorMap[album.id]));
       } else {
-        Color? color;
         albumIdMap[albumString] = album.id;
 
         if (album.albumArtPath != null) {
@@ -289,7 +290,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
           if (album.color != null)
             colorMap[album.id] = album.color;
         }
-        albums.add(album.copyWith(color: color));
+        albums.add(album);
         final artist = artistsInDb.singleWhere((a) => a.name == album.artist);
         artists.add(artist);
 
