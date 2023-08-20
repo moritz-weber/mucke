@@ -143,3 +143,8 @@ Widget createPlayableCover(Playable playable, double size) {
       );
   }
 }
+
+double? getProgressOrNull(int? numerator, int? denominator) {
+  if (numerator == null || denominator == null) return null;
+  return numerator / denominator;
+}

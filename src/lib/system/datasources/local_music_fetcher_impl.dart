@@ -13,6 +13,7 @@ import 'package:mucke/system/utils.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../models/album_model.dart';
 import '../models/artist_model.dart';
@@ -20,6 +21,7 @@ import '../models/song_model.dart';
 import 'local_music_fetcher.dart';
 import 'music_data_source_contract.dart';
 import 'settings_data_source.dart';
+
 
 class LocalMusicFetcherImpl implements LocalMusicFetcher {
   LocalMusicFetcherImpl(this._settingsDataSource, this._musicDataSource);
@@ -30,8 +32,19 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
   final MusicDataSource _musicDataSource;
 
   @override
+  ValueStream<int?> get fileNumStream => _fileNumSubject.stream;
+  @override
+  ValueStream<int?> get progressStream => _progressSubject.stream;
+
+  final BehaviorSubject<int?> _fileNumSubject = BehaviorSubject<int?>();
+  final BehaviorSubject<int?> _progressSubject = BehaviorSubject<int?>();
+
+  @override
   Future<Map<String, List>> getLocalMusic() async {
     // FIXME: it seems that songs currently loaded in queue are not updated
+    _fileNumSubject.add(null);
+    _progressSubject.add(null);
+    int scanCount = 0;
 
     final musicDirectories =
         await _settingsDataSource.libraryFoldersStream.first;
@@ -50,14 +63,12 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     }
 
     final List<File> songFiles = [];
-
     for (final libDir in libDirs) {
       final List<File> files = await getSongFilesInDirectory(libDir.path, allowedExtensions, blockedPaths);
       songFiles.addAll(files);
     }
 
     _log.d('Found ${songFiles.length} songs');
-
 
     final albumsInDb = await getSortedAlbums();
     int newAlbumId = albumsInDb.isNotEmpty ? albumsInDb.last.id + 1 : 0;
@@ -69,6 +80,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
 
 
     final List<File> songFilesToCheck = await getSongFilesToCheck(songFiles);
+    _fileNumSubject.add(songFilesToCheck.length);
 
     final existingSongFiles = songFiles.where((element) => !songFilesToCheck.contains(element)).toList();
     final structs = await mapSongsAlreadyScanned(existingSongFiles, albumsInDb, artistsInDb);
@@ -83,6 +95,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
 
     for (final (songFile, songData) in songsToCheck) {
       _log.i('Scanning Song ${songFile.path}');
+      _progressSubject.add(++scanCount);
 
       final lastModified = songFile.lastModifiedSync();
 
@@ -162,9 +175,11 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
 
     final executions = asyncExecutor.executeAll(albumAccentTasks);
 
-    await Future.wait(executions);
+    _fileNumSubject.add(executions.length);
+    scanCount = 0;
 
     for (final execution in executions) {
+      _progressSubject.add(++scanCount);
       final (albumId, color) = await execution;
       if (color == null) {
         _log.w('failed getting color for albumId $albumId');
@@ -354,6 +369,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     }
     return files;
   }
+  
 }
 
 List<AsyncTask> metadataLoaderTypeRegister() => [MetadataLoader(File(''))];
