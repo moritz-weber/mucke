@@ -49,6 +49,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
+  async_extension:
+    dependency: transitive
+    description:
+      name: async_extension
+      sha256: "016034c2245ea4903ba0b5bdf8649330d7f8cdfa2f2a7e65ae613b5a6f6757df"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.0"
+  async_task:
+    dependency: "direct main"
+    description:
+      name: async_task
+      sha256: "4c3b1b4f4ccce1555d10d31a74136e099e7db7a0c1c4852fc53116cb00970508"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.20"
   audio_service:
     dependency: "direct main"
     description:
@@ -485,6 +501,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
+  image:
+    dependency: "direct main"
+    description:
+      name: image
+      sha256: a72242c9a0ffb65d03de1b7113bc4e189686fc07c7147b8b41811d0dd0e0d9bf
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.17"
   intl:
     dependency: "direct main"
     description:
@@ -662,14 +686,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.3"
-  palette_generator:
-    dependency: "direct main"
-    description:
-      name: palette_generator
-      sha256: "0e3cd6974e10b1434dcf4cf779efddb80e2696585e273a2dbede6af52f94568d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.3+2"
   path:
     dependency: "direct main"
     description:
@@ -1211,6 +1227,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
+  xml:
+    dependency: transitive
+    description:
+      name: xml
+      sha256: "979ee37d622dec6365e2efa4d906c37470995871fe9ae080d967e192d88286b5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.2.2"
   yaml:
     dependency: transitive
     description:

@@ -27,9 +27,9 @@ Future<void> main() async {
   ));
   // Fimber.plantTree(DebugTree());
 
-  MetadataGod.initialize();
   await setupGetIt();
 
+  MetadataGod.initialize();
   final session = await AudioSession.instance;
   await session.configure(const AudioSessionConfiguration.music());
 

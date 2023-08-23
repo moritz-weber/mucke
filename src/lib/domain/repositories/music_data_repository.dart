@@ -11,6 +11,8 @@ import '../entities/smart_list.dart';
 import '../entities/song.dart';
 
 abstract class MusicDataInfoRepository {
+  ValueStream<int?> get numFileStream;
+  ValueStream<int?> get progressStream;
   Stream<Map<String, Song>> get songUpdateStream;
   Stream<List<String>> get songRemovalStream;
 

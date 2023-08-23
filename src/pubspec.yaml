@@ -9,6 +9,7 @@ environment:
   flutter: ">=3.7.0"
 
 dependencies:
+  async_task: ^1.0.20
   audio_service: ^0.18.7  # MIT
   audio_session: ^0.1.5  # MIT
   collection: ^1.17.1  # BSD 3
@@ -26,6 +27,7 @@ dependencies:
   flutter_mobx: ^2.0.0  # MIT
   flutter_speed_dial: ^7.0.0  # MIT
   get_it: ^7.1.3  # MIT
+  image: ^4.0.17
   intl: any
   just_audio: ^0.9.18  # MIT
   metadata_god:
@@ -37,7 +39,6 @@ dependencies:
   optimization_battery: ^0.0.7  # MIT
   package_info_plus: ^4.0.1
   page_indicator_plus: ^1.0.3  # MIT
-  palette_generator: ^0.3.3+2  # BSD 3
   path: ^1.8.0  # BSD 3
   path_provider: ^2.0.2  # BSD 3
   permission_handler: ^10.2.0  # MIT

@@ -58,6 +58,14 @@ abstract class _MusicDataStore with Store {
   bool isUpdatingDatabase = false;
 
   @observable
+  late ObservableStream<int?> numFileStream =
+      _musicDataRepository.numFileStream.asObservable(initialValue: null);
+
+  @observable
+  late ObservableStream<int?> progressStream =
+      _musicDataRepository.progressStream.asObservable(initialValue: null);
+
+  @observable
   late ObservableStream<Album?> albumOfDay = _musicDataRepository.albumOfDayStream.asObservable();
 
   @observable

@@ -12,6 +12,7 @@ import '../state/music_data_store.dart';
 import '../state/navigation_store.dart';
 import '../state/settings_store.dart';
 import '../theming.dart';
+import '../utils.dart';
 import '../widgets/settings_section.dart';
 import 'blocked_files_page.dart';
 import 'export_page.dart';
@@ -46,6 +47,14 @@ class SettingsPage extends StatelessWidget {
           ListTile(
             title: Text(L10n.of(context)!.updateLibrary),
             subtitle: Observer(builder: (_) {
+              if (musicDataStore.isUpdatingDatabase) {
+                return LinearProgressIndicator(
+                  value: getProgressOrNull(
+                    musicDataStore.progressStream.value,
+                    musicDataStore.numFileStream.value,
+                  ),
+                );
+              }
               final int artistCount = musicDataStore.artistStream.value?.length ?? 0;
               final int albumCount = musicDataStore.albumStream.value?.length ?? 0;
               final int songCount = musicDataStore.songStream.value?.length ?? 0;
@@ -54,15 +63,6 @@ class SettingsPage extends StatelessWidget {
               );
             }),
             onTap: () => musicDataStore.updateDatabase(),
-            trailing: Observer(builder: (_) {
-              if (musicDataStore.isUpdatingDatabase) {
-                return const CircularProgressIndicator();
-              }
-              return Container(
-                height: 0,
-                width: 0,
-              );
-            }),
           ),
           const Divider(),
           ListTile(
