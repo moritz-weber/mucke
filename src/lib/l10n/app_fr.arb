@@ -32,7 +32,7 @@
   },
   "manageLibraryFolders": "Gérer les dossiers de la bibliothèque",
   "@manageLibraryFolders": {},
-  "allowedFileExtensionsDescription": "Liste séparée par des virgules. Les minuscules et les majuscules n'ont pas d'importance.",
+  "allowedFileExtensionsDescription": "Liste d'extensions de fichier autorisées, séparées par des virgules. La casse (majuscules/minuscules) n'a pas d'importance. Si vous n'êtes pas sûr, utilisez la valeur par défaut.",
   "@allowedFileExtensionsDescription": {},
   "manageBlockedFiles": "Gérer les fichiers bloqués",
   "@manageBlockedFiles": {},
@@ -54,5 +54,358 @@
   "playAlbumsInOrderDescription": "Lorsque vous cliquez sur une chanson dans un album, les chansons sont lues dans l'ordre au lieu de conserver le mode de lecture précédent.",
   "@playAlbumsInOrderDescription": {},
   "libraryFolders": "Dossiers de bibliothèque",
-  "@libraryFolders": {}
+  "@libraryFolders": {},
+  "countSongsPlayed": "Considérer les chansons comme lues après : {percentage}%",
+  "@countSongsPlayed": {
+    "placeholders": {
+      "percentage": {
+        "type": "int"
+      }
+    }
+  },
+  "blockedFiles": "Fichiers bloqués",
+  "@blockedFiles": {},
+  "homeCustomization": "Personnalisation de l'accueil",
+  "@homeCustomization": {},
+  "albumOfTheDay": "Album du jour",
+  "@albumOfTheDay": {},
+  "artistOfTheDay": "Artiste du jour",
+  "@artistOfTheDay": {},
+  "shuffleAll": "Lecture aléatoire",
+  "@shuffleAll": {},
+  "history": "Historique",
+  "@history": {},
+  "addWidgetToHome": "Ajouter un widget à votre page d'accueil",
+  "@addWidgetToHome": {},
+  "noPlaylistsYet": "Aucune liste de lecture pour le moment. Vous pouvez en ajouter dans la bibliothèque.",
+  "@noPlaylistsYet": {},
+  "song": "Chanson",
+  "@song": {},
+  "songs": "Chansons",
+  "@songs": {},
+  "nSongs": "{count, plural, =0{aucune chanson} =1{une chanson} other{{count} chansons}}",
+  "@nSongs": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "album": "Album",
+  "@album": {},
+  "albums": "Albums",
+  "@albums": {},
+  "artist": "Artiste",
+  "@artist": {},
+  "artists": "Artistes",
+  "@artists": {},
+  "playlist": "Liste de lecture",
+  "@playlist": {},
+  "playlists": "Listes de lecture",
+  "@playlists": {},
+  "smartlist": "Liste intelligente",
+  "@smartlist": {},
+  "smartlists": "Listes intelligentes",
+  "@smartlists": {},
+  "normalMode": "Mode normal",
+  "@normalMode": {},
+  "shuffleMode": "Mode aléatoire",
+  "@shuffleMode": {},
+  "name": "Nom",
+  "@name": {},
+  "sortingFilterSettings": "Paramètres de tri et de filtrage",
+  "@sortingFilterSettings": {},
+  "maxNumberEntries": "Nombre maximum d'entrées",
+  "@maxNumberEntries": {},
+  "creationDate": "Date de création",
+  "@creationDate": {},
+  "changeDate": "Date de modification",
+  "@changeDate": {},
+  "lastTimePlayed": "Date de dernière lecture",
+  "@lastTimePlayed": {},
+  "displaySettings": "Paramètres d'affichage",
+  "@displaySettings": {},
+  "createPlaylist": "Créer une liste de lecture",
+  "@createPlaylist": {},
+  "editPlaylist": "Modifier la liste de lecture",
+  "@editPlaylist": {},
+  "customizeCover": "Personnaliser la pochette",
+  "@customizeCover": {},
+  "playbackMode": "Mode de lecture",
+  "@playbackMode": {},
+  "dontExclude": "N'exclure aucune chanson.",
+  "@dontExclude": {},
+  "filterSettings": "Paramètres de filtrage",
+  "@filterSettings": {},
+  "minPlayCount": "Nombre minimum de lecture",
+  "@minPlayCount": {},
+  "maxPlayCount": "Nombre maximum de lecture",
+  "@maxPlayCount": {},
+  "minYear": "Année minimum",
+  "@minYear": {},
+  "maxYear": "Année maximum",
+  "@maxYear": {},
+  "noHistoryYet": "Il n'y a rien à voir ici. Écoutez quelque chose.",
+  "@noHistoryYet": {},
+  "lastPlayed": "Dernière lecture",
+  "@lastPlayed": {},
+  "allSongs": "Toutes les chansons",
+  "@allSongs": {},
+  "noShuffle": "Aucun (conserver le mode aléatoire actuel)",
+  "@noShuffle": {},
+  "favShuffleMode": "Mode aléatoire favori",
+  "@favShuffleMode": {},
+  "ascending": "Croissant",
+  "@ascending": {},
+  "descending": "Décroissant",
+  "@descending": {},
+  "both": "Les deux",
+  "@both": {},
+  "playlistsOnly": "Listes de lecture uniquement",
+  "@playlistsOnly": {},
+  "welcomeToMucke": "Bienvenue sur mucke !",
+  "@welcomeToMucke": {},
+  "setupLibrary": "Configurer la bibliothèque",
+  "@setupLibrary": {},
+  "setupLibraryDescription": "Sélectionner des dossiers, les extensions de fichiers incluses, etc.",
+  "@setupLibraryDescription": {},
+  "yourLibrary": "Votre bibliothèque :",
+  "@yourLibrary": {},
+  "scan": "Scanner",
+  "@scan": {},
+  "blockedFilesDescription": "Fichiers bloqués à partir des données importées. Seules les correspondances exactes seront exclues du scan de la bibliothèque. Des fichiers supplémentaires peuvent être bloqués ultérieurement dans l'application.",
+  "@blockedFilesDescription": {},
+  "importLibData": "Importer les données de la bibliothèque",
+  "@importLibData": {},
+  "importVerb": "Importer",
+  "@importVerb": {
+    "description": "This means the verb of importing something - not the noun."
+  },
+  "miscellaneous": "Divers",
+  "@miscellaneous": {},
+  "exportData": "Exporter les données",
+  "@exportData": {},
+  "songsAlbumsArtists": "Chansons, Albums et Artistes",
+  "@songsAlbumsArtists": {},
+  "librarySettings": "Paramètres de la bibliothèque",
+  "@librarySettings": {},
+  "dataExportedTo": "Données exportées vers :\n{path}",
+  "@dataExportedTo": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "dataExportFailed": "Échec de l'exportation des données !",
+  "@dataExportFailed": {},
+  "openBattery": "Ouvrir les paramètres de la batterie",
+  "@openBattery": {},
+  "smartlistsOnly": "Listes intelligentes uniquement",
+  "@smartlistsOnly": {},
+  "addSmartlist": "Ajouter une liste intelligente",
+  "@addSmartlist": {},
+  "addPlaylist": "Ajouter une liste de lecture",
+  "@addPlaylist": {},
+  "excludeInShuffle": "Exclure les chansons marquées pour exclusion en mode aléatoire.",
+  "@excludeInShuffle": {},
+  "excludeAlways": "Exclure uniquement les chansons marquées comme toujours exclues.",
+  "@excludeAlways": {},
+  "excludeAllSongs": "Exclure toutes les chansons marquées pour exclusion.",
+  "@excludeAllSongs": {},
+  "selectArtistsExclude": "Sélectionnez les artistes à exclure : {num} sélectionnés.",
+  "@selectArtistsExclude": {
+    "placeholders": {
+      "num": {
+        "type": "int"
+      }
+    }
+  },
+  "selectArtistsInclude": "Sélectionnez les artistes à inclure : {num} sélectionnés.",
+  "@selectArtistsInclude": {
+    "placeholders": {
+      "num": {
+        "type": "int"
+      }
+    }
+  },
+  "filterLikes": "\"J'aime\" entre {min} et {max}",
+  "@filterLikes": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "excludeArtists": "Exclure les artistes sélectionnés",
+  "@excludeArtists": {},
+  "limitSongs": "Limitez le nombre de chansons",
+  "@limitSongs": {},
+  "orderSettings": "Paramètres d'ordre",
+  "@orderSettings": {},
+  "orderSettingsDescription": "Réorganisez les options pour changer les priorités.",
+  "@orderSettingsDescription": {},
+  "nSongsSelected": "{count, plural, =0{Aucune chanson sélectionnée} =1{Une chanson sélectionnée} other{{count} chansons sélectionnées}}",
+  "@nSongsSelected": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "playNext": "Lire ensuite",
+  "@playNext": {},
+  "disc": "Disque",
+  "@disc": {},
+  "blockFromLibrary": "Retirer et bloquer de la bibliothèque",
+  "@blockFromLibrary": {},
+  "highlights": "En vedette",
+  "@highlights": {},
+  "playCount": "Nombre de lectures",
+  "@playCount": {},
+  "songTitle": "Titre de la chanson",
+  "@songTitle": {},
+  "year": "Année",
+  "@year": {},
+  "timeAdded": "Date d'ajout",
+  "@timeAdded": {},
+  "addToPlaylist": "Ajouter à la liste de lecture",
+  "@addToPlaylist": {},
+  "removeFromPlaylist": "Retirer de la liste de lecture",
+  "@removeFromPlaylist": {},
+  "cancel": "Annuler",
+  "@cancel": {},
+  "nextUp": "À suivre",
+  "@nextUp": {},
+  "previousSong": "précédent",
+  "@previousSong": {},
+  "nextSong": "suivant",
+  "@nextSong": {},
+  "playedNTimes": "{count, plural, =0{pas encore jouée} =1{jouée une fois} other{jouée {count} fois}}",
+  "@playedNTimes": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "alwaysPlayPrevious": "Toujours jouer la chanson précédente avant",
+  "@alwaysPlayPrevious": {},
+  "alwaysPlayNext": "Toujours jouer la chanson suivante après",
+  "@alwaysPlayNext": {},
+  "dontExcludeSong": "Ne pas exclure cette chanson.",
+  "@dontExcludeSong": {},
+  "excludeShuffleSong": "Exclure lors de la lecture aléatoire.",
+  "@excludeShuffleSong": {},
+  "excludeShuffleAllSong": "Exclure lors de la lecture aléatoire de toutes les chansons.",
+  "@excludeShuffleAllSong": {},
+  "alwaysExcludeSong": "Toujours exclure cette chanson.",
+  "@alwaysExcludeSong": {},
+  "newlyAdded": "Nouvellement ajoutées",
+  "@newlyAdded": {},
+  "batteryExplanation": "À partir d'Android 12, l'optimisation de la batterie provoque une erreur avec la notification après avoir perdu le focus audio, par exemple lors de la réception d'un appel. Désactiver l'optimisation pour mucke résout ce problème.",
+  "@batteryExplanation": {},
+  "favorites": "Favoris",
+  "@favorites": {},
+  "createSmartlists": "Créer des listes intelligentes",
+  "@createSmartlists": {},
+  "createSmartlistsDesc": "Créez les listes intelligentes suggérées pour améliorer votre expérience d'écoute. Vous pouvez personnaliser ces listes ultérieurement.",
+  "@createSmartlistsDesc": {},
+  "create": "Créez",
+  "@create": {},
+  "created": "Créé",
+  "@created": {},
+  "back": "Retour",
+  "@back": {},
+  "next": "Suivant",
+  "@next": {},
+  "finish": "Terminer",
+  "@finish": {},
+  "includeAllArtists": "Inclure tous les artistes si aucun n'est sélectionné.",
+  "@includeAllArtists": {},
+  "createSmartlist": "Créer une liste intelligente",
+  "@createSmartlist": {},
+  "editSmartlist": "Modifier la liste intelligente",
+  "@editSmartlist": {},
+  "play": "Lire",
+  "@play": {},
+  "appendToQueued": "Ajouter aux chansons en file d'attente manuelle",
+  "@appendToQueued": {},
+  "addToQueue": "Ajouter à la file d'attente",
+  "@addToQueue": {},
+  "shuffle": "Aléatoire",
+  "@shuffle": {},
+  "selectArtists": "Sélectionner des artistes",
+  "@selectArtists": {},
+  "removeFromQueue": "Retirer de la file d'attente",
+  "@removeFromQueue": {},
+  "currentlyPlaying": "En cours de lecture",
+  "@currentlyPlaying": {},
+  "nSongsInQueue": "{count, plural, =0{aucune chanson} =1{une chanson} other{{count} chansons}} en file d'attente",
+  "@nSongsInQueue": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "moreAvailable": "{num} de plus disponibles",
+  "@moreAvailable": {
+    "placeholders": {
+      "num": {
+        "type": "int"
+      }
+    }
+  },
+  "nameMustNotBeEmpty": "Le nom ne doit pas être vide.",
+  "@nameMustNotBeEmpty": {},
+  "artistName": "Nom de l'artiste",
+  "@artistName": {},
+  "likeCount": "Nombre de \"J'aime\"",
+  "@likeCount": {},
+  "importData": "Importer des données",
+  "@importData": {},
+  "importDataDescription": "Importer les données d'une précédente installation de mucke.",
+  "@importDataDescription": {},
+  "metaDataAvailable": "Métadonnées disponibles pour {num} chansons",
+  "@metaDataAvailable": {
+    "placeholders": {
+      "num": {
+        "type": "int"
+      }
+    }
+  },
+  "exportDescription": "Sélectionnez les données que vous souhaitez exporter. Par défaut, tout est exporté. Lors de l'exportation, vous pouvez choisir le dossier où stocker le fichier.",
+  "@exportDescription": {},
+  "newlyAddedDesc": "Contient les 100 chansons ajoutées en dernier.",
+  "@newlyAddedDesc": {},
+  "noFoldersSelected": "Aucun dossier sélectionné pour le moment.",
+  "@noFoldersSelected": {},
+  "metaDataDescription": "Importer les \"J'aime\", les blocages, etc.",
+  "@metaDataDescription": {},
+  "yourPlaylists": "Vos listes de lecture",
+  "@yourPlaylists": {},
+  "disableBattery": "Désactivez l'optimisation pour mucke afin de résoudre les problèmes de notification.",
+  "@disableBattery": {},
+  "favoritesDesc": "Contient toutes les chansons que vous aimez.",
+  "@favoritesDesc": {},
+  "addFolder": "Ajouter un dossier",
+  "@addFolder": {},
+  "imported": "Importé",
+  "@imported": {},
+  "disabledBattery": "L'optimisation de la batterie est désactivée.",
+  "@disabledBattery": {},
+  "availableFromImport": "Disponible à partir des données importées :",
+  "@availableFromImport": {},
+  "use": "Utiliser",
+  "@use": {},
+  "reset": "Réinitialiser",
+  "@reset": {},
+  "songMetaData": "Métadonnées de la chanson",
+  "@songMetaData": {},
+  "errorReadData": "Erreur de lecture du fichier de données.",
+  "@errorReadData": {}
 }

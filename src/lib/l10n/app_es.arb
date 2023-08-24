@@ -1,7 +1,7 @@
 {
-  "home": "Inicio",
+  "home": "Página de inicio",
   "@home": {},
-  "customizeHomePage": "Personalizar la página de inicio",
+  "customizeHomePage": "Customizar la página de inicio",
   "@customizeHomePage": {},
   "settings": "Ajustes",
   "@settings": {},
@@ -307,5 +307,21 @@
         "type": "num"
       }
     }
-  }
+  },
+  "welcomeToMucke": "¡Bienvenido a Mucke!",
+  "@welcomeToMucke": {},
+  "yourLibrary": "Tu Colección:",
+  "@yourLibrary": {},
+  "setupLibrary": "Organizar tu Colección",
+  "@setupLibrary": {},
+  "importData": "Importar tu datos",
+  "@importData": {},
+  "scan": "Escanear",
+  "@scan": {},
+  "addFolder": "Añadir una carpeta",
+  "@addFolder": {},
+  "use": "Usar",
+  "@use": {},
+  "reset": "Reiniciar",
+  "@reset": {}
 }
