@@ -1,4 +1,5 @@
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -15,6 +16,7 @@ class CoverSliverAppBar extends StatefulWidget {
     required this.cover,
     required this.backgroundColor,
     this.button,
+    this.onTapSubtitle,
   }) : super(key: key);
 
   final String title;
@@ -24,6 +26,7 @@ class CoverSliverAppBar extends StatefulWidget {
   final Widget cover;
   final Color backgroundColor;
   final Widget? button;
+  final AsyncCallback? onTapSubtitle;
 
   @override
   State<CoverSliverAppBar> createState() => _CoverSliverAppBarState();
@@ -54,6 +57,7 @@ class _CoverSliverAppBarState extends State<CoverSliverAppBar> {
         subtitle: widget.subtitle,
         subtitle2: widget.subtitle2,
         button: widget.button,
+        onTapSubtitle: widget.onTapSubtitle,
       ),
       leading: IconButton(
         icon: const Icon(Icons.chevron_left_rounded),
@@ -77,6 +81,7 @@ class Header extends StatelessWidget {
     required this.cover,
     required this.backgroundColor,
     this.button,
+    this.onTapSubtitle,
   }) : super(key: key);
 
   final String title;
@@ -87,6 +92,7 @@ class Header extends StatelessWidget {
   final double maxHeight;
   final double minHeight;
   final Widget? button;
+  final AsyncCallback? onTapSubtitle;
 
   @override
   Widget build(BuildContext context) {
@@ -110,6 +116,7 @@ class Header extends StatelessWidget {
               title: title,
               subtitle: subtitle,
               subtitle2: subtitle2,
+              onTapSubtitle: onTapSubtitle,
             ),
           ],
         );
@@ -142,6 +149,7 @@ class Header extends StatelessWidget {
     required String title,
     String? subtitle,
     String? subtitle2,
+    AsyncCallback? onTapSubtitle,
   }) {
     // TODO: padding right for enabled multi select
     return Align(
@@ -183,17 +191,7 @@ class Header extends StatelessWidget {
               width: 10.0,
             ),
             if (subtitle != null)
-              Text(
-                subtitle,
-                maxLines: 1,
-                overflow: TextOverflow.fade,
-                style: TextStyle(
-                  fontSize: Tween<double>(begin: 0, end: 16).evaluate(animation),
-                  color: Colors.white
-                      .withOpacity(Tween<double>(begin: 0, end: 1).evaluate(animation2)),
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
+              _buildSubtitle(context, subtitle, animation, animation2, onTapSubtitle),
             if (subtitle2 != null)
               Text(
                 subtitle2,
@@ -208,6 +206,48 @@ class Header extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildSubtitle(
+      BuildContext context,
+      String subtitle,
+      Animation<double> animation,
+      Animation<double> animation2,
+      AsyncCallback? onTapSubtitle) {
+    if (onTapSubtitle == null)
+      return Text(
+        subtitle,
+        maxLines: 1,
+        overflow: TextOverflow.fade,
+        style: TextStyle(
+          fontSize: Tween<double>(begin: 0, end: 16).evaluate(animation),
+          color: Colors.white.withOpacity(
+              Tween<double>(begin: 0, end: 1).evaluate(animation2)),
+          fontWeight: FontWeight.w500,
+        ),
+      );
+    return TextButton(
+        onPressed: onTapSubtitle,
+        style: TextButton.styleFrom(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            minimumSize: Size.zero,
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            backgroundColor: Colors.white24,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(4),
+              side: const BorderSide(color: Colors.white24),
+            )),
+        child: Text(
+          subtitle,
+          maxLines: 1,
+          overflow: TextOverflow.fade,
+          style: TextStyle(
+            fontSize: Tween<double>(begin: 0, end: 16).evaluate(animation),
+            color: Colors.white.withOpacity(
+                Tween<double>(begin: 0, end: 1).evaluate(animation2)),
+            fontWeight: FontWeight.w500,
+          ),
+        ));
   }
 
   Widget _buildButton(Animation<double> animation, BuildContext context) {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mucke/domain/entities/artist.dart';
 
 import '../../domain/entities/album.dart';
 import '../../domain/entities/song.dart';
@@ -9,6 +10,7 @@ import '../l10n_utils.dart';
 import '../state/album_page_store.dart';
 import '../state/audio_store.dart';
 import '../state/music_data_store.dart';
+import '../state/navigation_store.dart';
 import '../state/settings_store.dart';
 import '../theming.dart';
 import '../utils.dart' as utils;
@@ -19,6 +21,7 @@ import '../widgets/exclude_level_options.dart';
 import '../widgets/like_count_options.dart';
 import '../widgets/song_bottom_sheet.dart';
 import '../widgets/song_list_tile_numbered.dart';
+import 'artist_details_page.dart';
 
 class AlbumDetailsPage extends StatefulWidget {
   const AlbumDetailsPage({Key? key, required this.album}) : super(key: key);
@@ -48,6 +51,9 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
   @override
   Widget build(BuildContext context) {
     final AudioStore audioStore = GetIt.I<AudioStore>();
+    final NavigationStore navStore = GetIt.I<NavigationStore>();
+    final MusicDataStore musicDataStore = GetIt.I<MusicDataStore>();
+
 
     return Scaffold(
       body: Material(
@@ -55,6 +61,7 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
           builder: (BuildContext context) {
             final album = widget.album;
             final songs = store.albumSongStream.value ?? [];
+            final artists = musicDataStore.artistStream.value ?? [];
             final totalDuration =
                 songs.fold(const Duration(milliseconds: 0), (Duration d, s) => d + s.duration);
             final songsByDisc = _songsByDisc(store.albumSongStream.value ?? []);
@@ -62,6 +69,9 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
             for (int i = 0; i < songsByDisc.length - 1; i++) {
               discSongNums.add(songsByDisc[i].length + discSongNums[i]);
             }
+            Artist? albumArtist;
+            if (artists.isNotEmpty)
+              albumArtist = artists.singleWhere((a) => a.name == album.artist);
 
             return Scrollbar(
               child: CustomScrollView(
@@ -123,6 +133,17 @@ class _AlbumDetailsPageState extends State<AlbumDetailsPage> {
                       image: utils.getAlbumImage(album.albumArtPath),
                       fit: BoxFit.cover,
                     ),
+                    onTapSubtitle: () async {
+                      if (albumArtist != null)
+                        navStore.pushOnLibrary(
+                          MaterialPageRoute<Widget>(
+                            builder: (BuildContext context) =>
+                                ArtistDetailsPage(
+                              artist: albumArtist!,
+                            ),
+                          ),
+                        );
+                    },
                     backgroundColor: utils.bgColor(album.color),
                     button: SizedBox(
                       width: 48,
