@@ -1,1 +1,64 @@
-{}
+{
+  "numberOfBlockedFiles": "被禁用的文件数量: {blockedFiles}",
+  "@numberOfBlockedFiles": {
+    "placeholders": {
+      "blockedFiles": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "playback": "回放",
+  "@playback": {},
+  "playAlbumsInOrder": "按列表播放专辑",
+  "@playAlbumsInOrder": {},
+  "countSongsPlayed": "在播放进度达: {percentage}%之后计算歌曲",
+  "@countSongsPlayed": {
+    "placeholders": {
+      "percentage": {
+        "type": "int"
+      }
+    }
+  },
+  "customizeHomePage": "自定义主页",
+  "@customizeHomePage": {},
+  "settings": "设置",
+  "@settings": {},
+  "home": "主页",
+  "@home": {},
+  "noSongsYet": "当前无歌曲, 请到设置中添加你的音乐文件夹",
+  "@noSongsYet": {},
+  "library": "歌曲库",
+  "@library": {},
+  "search": "搜索",
+  "@search": {},
+  "updateLibrary": "更新歌曲库",
+  "@updateLibrary": {},
+  "artistsAlbumsSongs": "{artistCount} 歌手, {albumCount} 专辑, {songCount} 歌曲",
+  "@artistsAlbumsSongs": {
+    "placeholders": {
+      "artistCount": {
+        "type": "int",
+        "example": "3"
+      },
+      "albumCount": {
+        "type": "int",
+        "example": "6"
+      },
+      "songCount": {
+        "type": "int",
+        "example": "60"
+      }
+    }
+  },
+  "manageLibraryFolders": "管理歌曲文件夹",
+  "@manageLibraryFolders": {},
+  "manageBlockedFiles": "禁用的文件夹",
+  "@manageBlockedFiles": {},
+  "playAlbumsInOrderDescription": "当点击专辑中的一首歌时，其他歌曲将按列表播放，而不是按其他顺序",
+  "@playAlbumsInOrderDescription": {},
+  "libraryFolders": "歌曲文件夹",
+  "@libraryFolders": {},
+  "blockedFiles": "禁用的文件夹",
+  "@blockedFiles": {}
+}
