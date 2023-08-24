@@ -1,0 +1,71 @@
+{
+  "noSongsYet": "Parece que você não tem nenhuma música em sua biblioteca: Vá para as configurações, adicione suas pastas de música e atualize sua biblioteca.",
+  "@noSongsYet": {},
+  "library": "Biblioteca",
+  "@library": {},
+  "manageLibraryFolders": " ",
+  "@manageLibraryFolders": {},
+  "home": "Início",
+  "@home": {},
+  "settings": "Opções",
+  "@settings": {},
+  "customizeHomePage": "Personalizar página inicial",
+  "@customizeHomePage": {},
+  "updateLibrary": "Atualizar biblioteca",
+  "@updateLibrary": {},
+  "search": "Procurar",
+  "@search": {},
+  "allowedFileExtensions": "Extensões de arquivo permitida",
+  "@allowedFileExtensions": {},
+  "albumOfTheDay": "Álbum do dia",
+  "@albumOfTheDay": {},
+  "artistOfTheDay": "Artista do dia",
+  "@artistOfTheDay": {},
+  "history": "Histórico",
+  "@history": {},
+  "addWidgetToHome": "Adicionar um widget à sua página inicial",
+  "@addWidgetToHome": {},
+  "lastPlayed": "Último reproduzido",
+  "@lastPlayed": {},
+  "allSongs": "Todas as músicas",
+  "@allSongs": {},
+  "song": "Música",
+  "@song": {},
+  "songs": "Músicas",
+  "@songs": {},
+  "artistsAlbumsSongs": "{artistCount} artistas, {albumCount} albums, {songCount} músicas",
+  "@artistsAlbumsSongs": {
+    "placeholders": {
+      "artistCount": {
+        "type": "int",
+        "example": "3"
+      },
+      "albumCount": {
+        "type": "int",
+        "example": "6"
+      },
+      "songCount": {
+        "type": "int",
+        "example": "60"
+      }
+    }
+  },
+  "allowedFileExtensionsDescription": "Uma lista separada por vírgulas das extensões de arquivo permitidas. Não importa se em letras maiúsculas ou minúsculas. Se você não tiver certeza sobre isso, use o padrão.",
+  "@allowedFileExtensionsDescription": {},
+  "playAlbumsInOrder": "Reproduzir os álbuns em ordem",
+  "@playAlbumsInOrder": {},
+  "playAlbumsInOrderDescription": "Ao clicar em uma música de um álbum, as músicas serão reproduzidas na ordem, em vez de manter o modo de reprodução anterior.",
+  "@playAlbumsInOrderDescription": {},
+  "countSongsPlayed": "Contar as músicas reproduzidas após: {percentage}%",
+  "@countSongsPlayed": {
+    "placeholders": {
+      "percentage": {
+        "type": "int"
+      }
+    }
+  },
+  "noPlaylistsYet": "Sem playlists ainda. Você pode adicionar na biblioteca.",
+  "@noPlaylistsYet": {},
+  "noHistoryYet": "Nada para ver aqui. Jogue alguma coisa.",
+  "@noHistoryYet": {}
+}

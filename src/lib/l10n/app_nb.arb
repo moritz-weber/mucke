@@ -215,8 +215,6 @@
   },
   "dataExportFailed": "Kunne ikke eksportere data.",
   "@dataExportFailed": {},
-  "batteryOptimization": "Batterioptimalisering",
-  "@batteryOptimization": {},
   "disabledBattery": "Batterioptimalisering er avskrudd.",
   "@disabledBattery": {},
   "playAlbumsInOrderDescription": "Når du klikker et spor i et album vil sporene spilles i rekkefølge, istedenfor å beholde forrige avspillingsmodus.",
