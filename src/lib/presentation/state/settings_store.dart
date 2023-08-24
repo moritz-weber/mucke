@@ -46,6 +46,12 @@ abstract class _SettingsStore with Store {
     initialValue: false,
   );
 
+    @observable
+  late ObservableStream<bool> manageExternalStorageGranted =
+      _settingsRepository.manageExternalStorageGranted.asObservable(
+    initialValue: _settingsRepository.manageExternalStorageGranted.valueOrNull ?? false,
+  );
+
   Future<void> addLibraryFolder(String? path) async {
     await _settingsRepository.addLibraryFolder(path);
   }
@@ -72,6 +78,10 @@ abstract class _SettingsStore with Store {
 
   Future<void> setListenedPercentage(int percentage) async {
     await _settingsRepository.setListenedPercentage(percentage);
+  }
+
+  Future<void> setManageExternalStorageGranted(bool granted) async {
+    await _settingsRepository.setManageExternalStorageGranted(granted);
   }
 
   void dispose() {}

@@ -18,22 +18,29 @@ int? parseYear(String? yearString) {
 
 /// Try to find an appropriate background color for the image
 Color getBackgroundColor(img.Image image) {
-  image = img.quantize(image,
-      numberOfColors: 16, method: img.QuantizeMethod.octree);
-  image = image.convert(format: img.Format.uint8, numChannels: 4);
-  final data = image.getBytes(order: img.ChannelOrder.rgba);
+  image = img.quantize(
+    img.copyResize(image, width: 64),
+    numberOfColors: 16,
+    method: img.QuantizeMethod.octree,
+  );
+  image = image.convert(format: img.Format.uint8, numChannels: 3);
+  final data = image.getBytes(order: img.ChannelOrder.rgb);
   final counts = HashMap<Color, int>();
-  for (var i = 0; i < data.length; i += 4) {
-    final argb = Color.fromARGB(data[i + 3], data[i], data[i+1], data[i+2]);
+  for (var i = 0; i < data.length; i += 3) {
+    final argb = Color.fromARGB(255, data[i], data[i + 1], data[i + 2]);
     counts[argb] = (counts[argb] ?? 0) + 1;
   }
 
-  final sortedColors = counts.keys.toList()..sort(
-    (a, b) => 
-      colorWeight(b, counts[b]!)
-        .compareTo(colorWeight(a, counts[a]!))
-  );
-  return sortedColors.first;
+  num maxWeight = -1;
+  Color maxColor = counts.keys.first;
+  for (final e in counts.entries) {
+    final weight = colorWeight(e.key, e.value);
+    if (weight > maxWeight) {
+      maxWeight = weight;
+      maxColor = e.key;
+    }
+  }
+  return maxColor;
 }
 
 /// This function weighs colors and gives them a rating.

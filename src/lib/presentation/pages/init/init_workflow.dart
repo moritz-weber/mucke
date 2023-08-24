@@ -7,10 +7,10 @@ import 'package:page_indicator_plus/page_indicator_plus.dart';
 import '../../../domain/repositories/init_repository.dart';
 import '../../state/import_store.dart';
 import '../../theming.dart';
-import 'init_battery_page.dart';
 import 'init_lib_page.dart';
 import 'init_meta_page.dart';
 import 'init_smartlists.dart';
+import 'init_system_page.dart';
 
 class InitWorkflow extends StatefulWidget {
   const InitWorkflow({super.key, required this.importStore});
@@ -39,7 +39,7 @@ class _InitWorkflowState extends State<InitWorkflow> {
     setState(() => pages.add(InitSmartlistsPage(importStore: widget.importStore)));
     DeviceInfoPlugin().androidInfo.then((info) {
       if (info.version.sdkInt > 30)
-        setState(() => pages.add(InitBatteryPage(importStore: widget.importStore)));
+        setState(() => pages.insert(0, InitSystemPage(importStore: widget.importStore)));
     });
 
     super.initState();

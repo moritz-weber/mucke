@@ -113,6 +113,38 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
     });
   }
 
+  late final _$numFileStreamAtom =
+      Atom(name: '_MusicDataStore.numFileStream', context: context);
+
+  @override
+  ObservableStream<int?> get numFileStream {
+    _$numFileStreamAtom.reportRead();
+    return super.numFileStream;
+  }
+
+  @override
+  set numFileStream(ObservableStream<int?> value) {
+    _$numFileStreamAtom.reportWrite(value, super.numFileStream, () {
+      super.numFileStream = value;
+    });
+  }
+
+  late final _$progressStreamAtom =
+      Atom(name: '_MusicDataStore.progressStream', context: context);
+
+  @override
+  ObservableStream<int?> get progressStream {
+    _$progressStreamAtom.reportRead();
+    return super.progressStream;
+  }
+
+  @override
+  set progressStream(ObservableStream<int?> value) {
+    _$progressStreamAtom.reportWrite(value, super.progressStream, () {
+      super.progressStream = value;
+    });
+  }
+
   late final _$albumOfDayAtom =
       Atom(name: '_MusicDataStore.albumOfDay', context: context);
 
@@ -162,6 +194,8 @@ artistStream: ${artistStream},
 playlistsStream: ${playlistsStream},
 smartListsStream: ${smartListsStream},
 isUpdatingDatabase: ${isUpdatingDatabase},
+numFileStream: ${numFileStream},
+progressStream: ${progressStream},
 albumOfDay: ${albumOfDay},
 artistOfDay: ${artistOfDay},
 songListIsEmpty: ${songListIsEmpty}

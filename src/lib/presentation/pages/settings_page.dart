@@ -205,6 +205,20 @@ class SettingsPage extends StatelessWidget {
               return Container();
             },
           ),
+          const Divider(
+            height: 4.0,
+          ),
+          Observer(
+            builder: (context) => SwitchListTile(
+              value: settingsStore.manageExternalStorageGranted.value ?? false,
+              onChanged: settingsStore.setManageExternalStorageGranted,
+              title: Text(L10n.of(context)!.grantManagePermission),
+              subtitle: Text(
+                L10n.of(context)!.managePermissionSubtitle,
+                style: TEXT_SMALL_SUBTITLE,
+              ),
+            ),
+          ),
           const SizedBox(height: 8.0),
         ],
       ),

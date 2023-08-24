@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:async_task/async_task.dart';
 import 'package:collection/collection.dart';
@@ -8,8 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:image/image.dart' as img;
 import 'package:metadata_god/metadata_god.dart';
-import 'package:mucke/system/models/default_values.dart';
-import 'package:mucke/system/utils.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -17,14 +16,20 @@ import 'package:rxdart/rxdart.dart';
 
 import '../models/album_model.dart';
 import '../models/artist_model.dart';
+import '../models/default_values.dart';
 import '../models/song_model.dart';
+import '../utils.dart';
 import 'local_music_fetcher.dart';
 import 'music_data_source_contract.dart';
 import 'settings_data_source.dart';
 
+const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png'];
 
 class LocalMusicFetcherImpl implements LocalMusicFetcher {
-  LocalMusicFetcherImpl(this._settingsDataSource, this._musicDataSource);
+  LocalMusicFetcherImpl(
+    this._settingsDataSource,
+    this._musicDataSource,
+  );
 
   static final _log = FimberLog('LocalMusicFetcher');
 
@@ -46,8 +51,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     _progressSubject.add(null);
     int scanCount = 0;
 
-    final musicDirectories =
-        await _settingsDataSource.libraryFoldersStream.first;
+    final musicDirectories = await _settingsDataSource.libraryFoldersStream.first;
     final libDirs = musicDirectories.map((e) => Directory(e));
 
     final extString = await _settingsDataSource.fileExtensionsStream.first;
@@ -64,7 +68,8 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
 
     final List<File> songFiles = [];
     for (final libDir in libDirs) {
-      final List<File> files = await getSongFilesInDirectory(libDir.path, allowedExtensions, blockedPaths);
+      final List<File> files =
+          await getSongFilesInDirectory(libDir.path, allowedExtensions, blockedPaths);
       songFiles.addAll(files);
     }
 
@@ -78,11 +83,11 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     int newArtistId = artistsInDb.isNotEmpty ? artistsInDb.last.id + 1 : 0;
     _log.d('New artists start with id: $newArtistId');
 
-
     final List<File> songFilesToCheck = await getSongFilesToCheck(songFiles);
     _fileNumSubject.add(songFilesToCheck.length);
 
-    final existingSongFiles = songFiles.where((element) => !songFilesToCheck.contains(element)).toList();
+    final existingSongFiles =
+        songFiles.where((element) => !songFilesToCheck.contains(element)).toList();
     final structs = await mapSongsAlreadyScanned(existingSongFiles, albumsInDb, artistsInDb);
     var songs = structs['songs'] as List<SongModel>;
     final albums = structs['albums'] as List<AlbumModel>;
@@ -120,45 +125,58 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
         continue;
       }
 
-      final albumId = await getAlbumId(newAlbumId, songData.album, albumArtist, songData.year);
+      final albumId = await getAlbumId(
+        newAlbumId,
+        songData.album,
+        albumArtist,
+        songData.year,
+      );
       albumIdMap[albumString] = albumId;
       newAlbumId = max(newAlbumId, albumId + 1);
 
-      final albumArt = songData.picture;
+      final Uint8List? albumArt = songData.picture?.data;
+
+      // fallback to get albumArt
+      // TODO: enable when everything else works as expected
+      // if (albumArt == null) {
+      //   // get directory of song and look for image files
+      //   final images = await songFile.parent
+      //       .list(recursive: false, followLinks: false)
+      //       .where((item) =>
+      //           FileSystemEntity.isFileSync(item.path) &&
+      //           IMAGE_EXTENSIONS.contains(
+      //               p.extension(item.path).toLowerCase().substring(1)))
+      //       .asyncMap((item) => File(item.path))
+      //       .toList();
+      //   if (images.isNotEmpty) albumArt = images.first.readAsBytesSync();
+      // }
 
       if (albumArt != null) {
         albumArtMap[albumId] = await cacheAlbumArt(albumArt, albumId);
       }
 
       final String? songArtist = songData.artist;
-      final String artistName =
-          albumArtist ?? (songArtist ?? DEF_ARTIST);
+      final String artistName = albumArtist ?? (songArtist ?? DEF_ARTIST);
 
       final artist = artistsInDb.firstWhereOrNull((a) => a.name == artistName);
-      if (artist != null) 
-        artists.add(artist);
+      if (artist != null) artists.add(artist);
       if (artists.none((a) => a.name == artistName)) {
         // artist is also not in the set already
         artists.add(ArtistModel(name: artistName, id: newArtistId++));
       }
 
-      albums.add(
-        AlbumModel.fromMetadata(
-          songData: songData,
-          albumId: albumId, 
-          albumArtPath: albumArtMap[albumId], 
-        )
-      );
-      songs.add(
-        SongModel.fromMetadata(
-          path: songFile.path,
-          songData: songData,
-          albumId: albumId,
-          lastModified: lastModified,
-          albumArtPath: albumArtMap[albumId],
-        )
-      );
-
+      albums.add(AlbumModel.fromMetadata(
+        songData: songData,
+        albumId: albumId,
+        albumArtPath: albumArtMap[albumId],
+      ));
+      songs.add(SongModel.fromMetadata(
+        path: songFile.path,
+        songData: songData,
+        albumId: albumId,
+        lastModified: lastModified,
+        albumArtPath: albumArtMap[albumId],
+      ));
     }
 
     final albumAccentTasks = albums
@@ -189,17 +207,13 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
       final i = albums.indexWhere((element) => element.id == albumId);
       albums[i] = albums[i].copyWith(color: color);
 
-
       songs = songs.map((song) {
-        if (song.albumId == albumId)
-          return song.copyWith(color: color);
+        if (song.albumId == albumId) return song.copyWith(color: color);
         return song;
-      })
-      .toList();
+      }).toList();
     }
 
     asyncExecutor.close();
-
 
     return {
       'SONGS': songs,
@@ -209,17 +223,18 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
   }
 
   Future<List<File>> getSongFilesInDirectory(
-      String path,
-      Set<String> allowedExtensions,
-      Set<String> blockedPaths
-    ) async {
+      String path, Set<String> allowedExtensions, Set<String> blockedPaths) async {
     return Directory(path)
         .list(recursive: true, followLinks: false)
         .where((item) => FileSystemEntity.isFileSync(item.path))
         .where((item) => !blockedPaths.contains(item.path))
         .where((item) {
-          final extension = p.extension(item.path).toLowerCase().substring(1);
-          return allowedExtensions.contains(extension);
+          try {
+            final extension = p.extension(item.path).toLowerCase().substring(1);
+            return allowedExtensions.contains(extension);
+          } on RangeError {
+            return false;
+          }
         })
         .asyncMap((item) => File(item.path))
         .toList();
@@ -233,49 +248,43 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
       final lastModified = songFile.lastModifiedSync();
       final song = await _musicDataSource.getSongByPath(songFile.path);
 
-      if (song == null || lastModified.isAfter(song.lastModified))
-        songFilesToCheck.add(songFile);
+      if (song == null || lastModified.isAfter(song.lastModified)) songFilesToCheck.add(songFile);
     }
 
     return songFilesToCheck;
   }
 
-
   Future<List<ArtistModel>> getSortedArtists() async {
-    return (await _musicDataSource.artistStream.first)
-      ..sort((a, b) => a.id.compareTo(b.id));
+    return (await _musicDataSource.artistStream.first)..sort((a, b) => a.id.compareTo(b.id));
   }
 
   Future<List<AlbumModel>> getSortedAlbums() async {
-    return (await _musicDataSource.albumStream.first)
-      ..sort((a, b) => a.id.compareTo(b.id));
+    return (await _musicDataSource.albumStream.first)..sort((a, b) => a.id.compareTo(b.id));
   }
 
   Future<int> getAlbumId(int newAlbumId, String? album, String? albumArtist, int? year) async {
     return await _musicDataSource.getAlbumId(album, albumArtist, year) ?? newAlbumId++;
   }
 
-  Future<String> cacheAlbumArt(Picture albumArt, int albumId) async {
+  Future<String> cacheAlbumArt(Uint8List albumArt, int albumId) async {
     final Directory dir = await getApplicationSupportDirectory();
     final albumArtPath = '${dir.path}/$albumId';
     final file = File(albumArtPath);
-    file.writeAsBytesSync(albumArt.data);
+    file.writeAsBytesSync(albumArt);
 
     return albumArtPath;
   }
 
   // Maps all the songs that where scanned previously, and their Albums and Artists to the new data structures
   Future<Map<String, dynamic>> mapSongsAlreadyScanned(
-    List<File> songFiles, 
-    List<AlbumModel> albumsInDb, 
-    List<ArtistModel> artistsInDb
-  ) async {
+      List<File> songFiles, List<AlbumModel> albumsInDb, List<ArtistModel> artistsInDb) async {
     final List<SongModel> songs = [];
     final List<AlbumModel> albums = [];
     final Set<ArtistModel> artists = {};
 
     final Map<String, int> albumIdMap = {};
     final Map<int, String> albumArtMap = {};
+
     /// album id, background color
     final Map<int, Color?> colorMap = {};
 
@@ -288,22 +297,21 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
       if (albumIdMap.containsKey(albumString)) {
         // we already encountered the album (at least by albumString)
         // make sure the id is consistent
-        if (album.id != albumIdMap[albumString]) 
+        if (album.id != albumIdMap[albumString])
           songs.add(
             song.copyWith(
               albumId: albumIdMap[albumString],
               color: colorMap[albumIdMap[albumString]],
             ),
           );
-        else 
+        else
           songs.add(song.copyWith(color: colorMap[album.id]));
       } else {
         albumIdMap[albumString] = album.id;
 
         if (album.albumArtPath != null) {
           albumArtMap[album.id] = album.albumArtPath!;
-          if (album.color != null)
-            colorMap[album.id] = album.color;
+          if (album.color != null) colorMap[album.id] = album.color;
         }
         albums.add(album);
         final artist = artistsInDb.singleWhere((a) => a.name == album.artist);
@@ -313,17 +321,15 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
       }
     }
     return {
-      'songs': songs, 
-      'albums': albums, 
+      'songs': songs,
+      'albums': albums,
       'artists': artists,
-      'albumIdMap': albumIdMap, 
+      'albumIdMap': albumIdMap,
       'albumArtMap': albumArtMap
     };
   }
 
-
-  Future<List<(File, Metadata)>> getMetadataForFiles(
-      List<File> filesToCheck) async {
+  Future<List<(File, Metadata)>> getMetadataForFiles(List<File> filesToCheck) async {
     final List<(File, Metadata)> songsMetadata = [];
 
     final tasks = filesToCheck.map((e) => MetadataLoader(e));
@@ -360,8 +366,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     final List<File> files = [];
     if (FileSystemEntity.isDirectorySync(path)) {
       final dir = Directory(path);
-      await for (final entity
-          in dir.list(recursive: true, followLinks: false)) {
+      await for (final entity in dir.list(recursive: true, followLinks: false)) {
         files.addAll(await getAllFilesRecursively(entity.path));
       }
     } else if (FileSystemEntity.isFileSync(path)) {
@@ -369,7 +374,6 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     }
     return files;
   }
-  
 }
 
 List<AsyncTask> metadataLoaderTypeRegister() => [MetadataLoader(File(''))];
@@ -400,17 +404,17 @@ class MetadataLoader extends AsyncTask<File, (File, Metadata)> {
 List<AsyncTask> accentGeneratorTypeRegister() => [AccentGenerator(0, File(''))];
 
 class AccentGenerator extends AsyncTask<(int, File), (int, Color?)> {
-
   AccentGenerator(this.albumId, this.pictureFile);
 
   final File pictureFile;
   final int albumId;
-  
+
   @override
-  AsyncTask<(int, File), (int, Color?)> instantiate((int, File) parameters, [Map<String, SharedData>? sharedData]) {
+  AsyncTask<(int, File), (int, Color?)> instantiate((int, File) parameters,
+      [Map<String, SharedData>? sharedData]) {
     return AccentGenerator(parameters.$1, parameters.$2);
   }
-  
+
   @override
   (int, File) parameters() {
     return (albumId, pictureFile);
@@ -419,8 +423,7 @@ class AccentGenerator extends AsyncTask<(int, File), (int, Color?)> {
   @override
   FutureOr<(int, Color?)> run() async {
     final image = await _loadImage(pictureFile);
-    if (image == null)
-      return (albumId, null);
+    if (image == null) return (albumId, null);
     return (albumId, getBackgroundColor(image));
   }
 
@@ -429,10 +432,10 @@ class AccentGenerator extends AsyncTask<(int, File), (int, Color?)> {
     img.Image? image;
     try {
       image = img.decodeImage(data);
-    } catch(e) {
+    } catch (e) {
       return null;
     }
-    
+
     return image;
   }
 }

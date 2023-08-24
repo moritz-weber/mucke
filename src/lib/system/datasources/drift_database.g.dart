@@ -663,15 +663,12 @@ class $QueueEntriesTable extends QueueEntries
   static const VerificationMeta _isAvailableMeta =
       const VerificationMeta('isAvailable');
   @override
-  late final GeneratedColumn<bool> isAvailable =
-      GeneratedColumn<bool>('is_available', aliasedName, false,
-          type: DriftSqlType.bool,
-          requiredDuringInsert: true,
-          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
-            SqlDialect.sqlite: 'CHECK ("is_available" IN (0, 1))',
-            SqlDialect.mysql: '',
-            SqlDialect.postgres: '',
-          }));
+  late final GeneratedColumn<bool> isAvailable = GeneratedColumn<bool>(
+      'is_available', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("is_available" IN (0, 1))'));
   @override
   List<GeneratedColumn> get $columns =>
       [index, path, originalIndex, type, isAvailable];
@@ -957,15 +954,12 @@ class $AvailableSongEntriesTable extends AvailableSongEntries
   static const VerificationMeta _isAvailableMeta =
       const VerificationMeta('isAvailable');
   @override
-  late final GeneratedColumn<bool> isAvailable =
-      GeneratedColumn<bool>('is_available', aliasedName, false,
-          type: DriftSqlType.bool,
-          requiredDuringInsert: true,
-          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
-            SqlDialect.sqlite: 'CHECK ("is_available" IN (0, 1))',
-            SqlDialect.mysql: '',
-            SqlDialect.postgres: '',
-          }));
+  late final GeneratedColumn<bool> isAvailable = GeneratedColumn<bool>(
+      'is_available', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("is_available" IN (0, 1))'));
   @override
   List<GeneratedColumn> get $columns =>
       [index, path, originalIndex, type, isAvailable];
@@ -1324,16 +1318,13 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, DriftSong> {
   static const VerificationMeta _presentMeta =
       const VerificationMeta('present');
   @override
-  late final GeneratedColumn<bool> present =
-      GeneratedColumn<bool>('present', aliasedName, false,
-          type: DriftSqlType.bool,
-          requiredDuringInsert: false,
-          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
-            SqlDialect.sqlite: 'CHECK ("present" IN (0, 1))',
-            SqlDialect.mysql: '',
-            SqlDialect.postgres: '',
-          }),
-          defaultValue: const Constant(true));
+  late final GeneratedColumn<bool> present = GeneratedColumn<bool>(
+      'present', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("present" IN (0, 1))'),
+      defaultValue: const Constant(true));
   static const VerificationMeta _timeAddedMeta =
       const VerificationMeta('timeAdded');
   @override
@@ -1351,28 +1342,22 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, DriftSong> {
   static const VerificationMeta _previousMeta =
       const VerificationMeta('previous');
   @override
-  late final GeneratedColumn<bool> previous =
-      GeneratedColumn<bool>('previous', aliasedName, false,
-          type: DriftSqlType.bool,
-          requiredDuringInsert: false,
-          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
-            SqlDialect.sqlite: 'CHECK ("previous" IN (0, 1))',
-            SqlDialect.mysql: '',
-            SqlDialect.postgres: '',
-          }),
-          defaultValue: const Constant(false));
+  late final GeneratedColumn<bool> previous = GeneratedColumn<bool>(
+      'previous', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("previous" IN (0, 1))'),
+      defaultValue: const Constant(false));
   static const VerificationMeta _nextMeta = const VerificationMeta('next');
   @override
-  late final GeneratedColumn<bool> next =
-      GeneratedColumn<bool>('next', aliasedName, false,
-          type: DriftSqlType.bool,
-          requiredDuringInsert: false,
-          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
-            SqlDialect.sqlite: 'CHECK ("next" IN (0, 1))',
-            SqlDialect.mysql: '',
-            SqlDialect.postgres: '',
-          }),
-          defaultValue: const Constant(false));
+  late final GeneratedColumn<bool> next = GeneratedColumn<bool>(
+      'next', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("next" IN (0, 1))'),
+      defaultValue: const Constant(false));
   @override
   List<GeneratedColumn> get $columns => [
         title,
@@ -2184,16 +2169,13 @@ class $SmartListsTable extends SmartLists
   static const VerificationMeta _excludeArtistsMeta =
       const VerificationMeta('excludeArtists');
   @override
-  late final GeneratedColumn<bool> excludeArtists =
-      GeneratedColumn<bool>('exclude_artists', aliasedName, false,
-          type: DriftSqlType.bool,
-          requiredDuringInsert: false,
-          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
-            SqlDialect.sqlite: 'CHECK ("exclude_artists" IN (0, 1))',
-            SqlDialect.mysql: '',
-            SqlDialect.postgres: '',
-          }),
-          defaultValue: const Constant(false));
+  late final GeneratedColumn<bool> excludeArtists = GeneratedColumn<bool>(
+      'exclude_artists', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("exclude_artists" IN (0, 1))'),
+      defaultValue: const Constant(false));
   static const VerificationMeta _blockLevelMeta =
       const VerificationMeta('blockLevel');
   @override

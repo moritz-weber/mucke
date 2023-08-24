@@ -5,6 +5,7 @@ abstract class SettingsInfoRepository {
   ValueStream<String> get fileExtensionsStream;
   ValueStream<bool> get playAlbumsInOrderStream;
   ValueStream<int> get listenedPercentageStream;
+  ValueStream<bool> get manageExternalStorageGranted;
 }
 
 abstract class SettingsRepository extends SettingsInfoRepository {
@@ -13,4 +14,5 @@ abstract class SettingsRepository extends SettingsInfoRepository {
   Future<void> setFileExtension(String extensions);
   Future<void> setPlayAlbumsInOrder(bool playInOrder);
   Future<void> setListenedPercentage(int percentage);
+  Future<void> setManageExternalStorageGranted(bool granted);
 }
