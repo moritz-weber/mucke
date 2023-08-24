@@ -407,5 +407,13 @@
   "createSmartlistsDesc": "Crea smartlist consigliate per migliorare la tua esperienza di ascolto. Puoi personalizzare queste liste più tardi.",
   "@createSmartlistsDesc": {},
   "noShuffle": "Nessuna (mantieni la modalità casuale corrente)",
-  "@noShuffle": {}
+  "@noShuffle": {},
+  "systemSettings": "Impostazioni di Sistema",
+  "@systemSettings": {},
+  "manageExternalExplanation": "Garantire questo permesso può migliorare significativamente la velocità della libreria. Non cambia il comportamento dell'app in altri modi.",
+  "@manageExternalExplanation": {},
+  "grantManagePermission": "Dai permesso di gestire tutti i file.",
+  "@grantManagePermission": {},
+  "managePermissionSubtitle": "Revocare il permesso risulterà in un riavvio dell'app.",
+  "@managePermissionSubtitle": {}
 }
