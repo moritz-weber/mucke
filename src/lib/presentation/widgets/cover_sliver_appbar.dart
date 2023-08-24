@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -125,14 +124,16 @@ class Header extends StatelessWidget {
   }
 
   double _calculateExpandRatio(BoxConstraints constraints) {
-    var expandRatio = (constraints.maxHeight - minHeight) / (maxHeight - minHeight);
+    var expandRatio =
+        (constraints.maxHeight - minHeight) / (maxHeight - minHeight);
     if (expandRatio > 1.0) expandRatio = 1.0;
     if (expandRatio < 0.0) expandRatio = 0.0;
     return expandRatio;
   }
 
   double _calculateExpandRatio2(BoxConstraints constraints) {
-    var expandRatio = (constraints.maxHeight - minHeight) / (maxHeight - minHeight);
+    var expandRatio =
+        (constraints.maxHeight - minHeight) / (maxHeight - minHeight);
     if (expandRatio > 1.0)
       expandRatio = 1.0;
     else if (expandRatio < 0.8)
@@ -191,14 +192,22 @@ class Header extends StatelessWidget {
               width: 10.0,
             ),
             if (subtitle != null)
-              _buildSubtitle(context, subtitle, animation, animation2, onTapSubtitle),
+              _buildSubtitle(
+                context,
+                subtitle,
+                animation,
+                animation2,
+                onTapSubtitle,
+              ),
             if (subtitle2 != null)
               Text(
                 subtitle2,
                 style: TextStyle(
-                  fontSize: Tween<double>(begin: 0, end: 13).evaluate(animation),
-                  color: Colors.white
-                      .withOpacity(Tween<double>(begin: 0, end: 1).evaluate(animation2)),
+                  fontSize:
+                      Tween<double>(begin: 0, end: 13).evaluate(animation),
+                  color: Colors.white.withOpacity(
+                    Tween<double>(begin: 0, end: 1).evaluate(animation2),
+                  ),
                   fontWeight: FontWeight.w300,
                 ),
               ),
@@ -219,6 +228,7 @@ class Header extends StatelessWidget {
         subtitle,
         maxLines: 1,
         overflow: TextOverflow.fade,
+        softWrap: false,
         style: TextStyle(
           fontSize: Tween<double>(begin: 0, end: 16).evaluate(animation),
           color: Colors.white.withOpacity(
@@ -226,26 +236,21 @@ class Header extends StatelessWidget {
           fontWeight: FontWeight.w500,
         ),
       );
-    return TextButton(
-        onPressed: onTapSubtitle,
-        style: TextButton.styleFrom(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            minimumSize: Size.zero,
-            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            backgroundColor: Colors.white24,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(4),
-              side: const BorderSide(color: Colors.white24),
-            )),
-        child: Text(
-          subtitle,
-          maxLines: 1,
-          overflow: TextOverflow.fade,
-          style: TextStyle(
-            fontSize: Tween<double>(begin: 0, end: 16).evaluate(animation),
-            color: Colors.white.withOpacity(
-                Tween<double>(begin: 0, end: 1).evaluate(animation2)),
-            fontWeight: FontWeight.w500,
+    return GestureDetector(
+        onTap: onTapSubtitle,
+        child: Container(
+          color: Colors.transparent,
+          child: Text(
+            subtitle,
+            maxLines: 1,
+            overflow: TextOverflow.fade,
+            softWrap: false,
+            style: TextStyle(
+              fontSize: Tween<double>(begin: 0, end: 16).evaluate(animation),
+              color: Colors.white.withOpacity(
+                  Tween<double>(begin: 0, end: 1).evaluate(animation2)),
+              fontWeight: FontWeight.w500,
+            ).underlined(),
           ),
         ));
   }
@@ -278,7 +283,11 @@ class Header extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(4.0),
           boxShadow: const [
-            BoxShadow(color: Colors.black54, blurRadius: 8, offset: Offset(0, 2)),
+            BoxShadow(
+              color: Colors.black54,
+              blurRadius: 8,
+              offset: Offset(0, 2),
+            ),
           ],
         ),
       ),

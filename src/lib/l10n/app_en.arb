@@ -360,7 +360,6 @@
   "@exportData": {},
   "exportDescription": "Select the data you want to export. By default, everything is exported. When exporting, you can select a folder for the file to be stored.",
   "@exportDescription": {},
-  "exportingData": "Exporting data",
   "songsAlbumsArtists": "Songs, Albums, and Artists",
   "@songsAlbumsArtists": {},
   "librarySettings": "Library Settings",
