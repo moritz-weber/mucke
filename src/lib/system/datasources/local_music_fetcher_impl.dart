@@ -66,12 +66,12 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
       }
     }
 
-    final List<File> songFiles = [];
+    final Set<String> songFilePaths = {};
     for (final libDir in libDirs) {
-      final List<File> files =
-          await getSongFilesInDirectory(libDir.path, allowedExtensions, blockedPaths);
-      songFiles.addAll(files);
+      _log.d('Checking folder: ${libDir.path}');
+      songFilePaths.addAll(await getSongFilesInDirectory(libDir.path, allowedExtensions, blockedPaths));
     }
+    final List<File> songFiles = songFilePaths.map((e) => File(e)).toList();
 
     _log.d('Found ${songFiles.length} songs');
 
@@ -89,7 +89,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     final existingSongFiles =
         songFiles.where((element) => !songFilesToCheck.contains(element)).toList();
     final structs = await mapSongsAlreadyScanned(existingSongFiles, albumsInDb, artistsInDb);
-    var songs = structs['songs'] as List<SongModel>;
+    final songs = structs['songs'] as List<SongModel>;
     final albums = structs['albums'] as List<AlbumModel>;
     final artists = structs['artists'] as Set<ArtistModel>;
 
@@ -97,6 +97,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     final albumArtMap = structs['albumArtMap'] as Map<int, String>;
 
     final songsToCheck = await getMetadataForFiles(songFilesToCheck);
+    _log.d('Songs to check: ${songsToCheck.length}');
 
     for (final (songFile, songData) in songsToCheck) {
       _log.i('Scanning Song ${songFile.path}');
@@ -105,7 +106,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
       final lastModified = songFile.lastModifiedSync();
 
       final albumArtist = songData.albumArtist ?? songData.artist;
-      final albumString = '${songData.album}___${albumArtist}___${songData.year}';
+      final albumString = '${songData.album}___${albumArtist}__${songData.year}';
 
       if (albumIdMap.containsKey(albumString)) {
         final albumId = albumIdMap[albumString]!;
@@ -179,6 +180,8 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
       ));
     }
 
+    _log.d('Songs in list: ${songs.length}');
+
     final albumAccentTasks = albums
         .where((element) => element.color == null && element.albumArtPath != null)
         .map((e) => AccentGenerator(e.id, File(e.albumArtPath!)));
@@ -196,6 +199,8 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     _fileNumSubject.add(executions.length);
     scanCount = 0;
 
+    final albumColorMap = <int, Color>{};
+
     for (final execution in executions) {
       _progressSubject.add(++scanCount);
       final (albumId, color) = await execution;
@@ -204,16 +209,20 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
         continue;
       }
 
-      final i = albums.indexWhere((element) => element.id == albumId);
-      albums[i] = albums[i].copyWith(color: color);
-
-      songs = songs.map((song) {
-        if (song.albumId == albumId) return song.copyWith(color: color);
-        return song;
-      }).toList();
+      albumColorMap[albumId] = color;
     }
 
     asyncExecutor.close();
+
+    for (int i = 0; i < albums.length; i++) {
+      final Color? color = albumColorMap[albums[i].id];
+      if (color != null) albums[i] = albums[i].copyWith(color: color);
+    }
+
+    for (int i = 0; i < songs.length; i++) {
+      final Color? color = albumColorMap[songs[i].albumId];
+      if (color != null) songs[i] = songs[i].copyWith(color: color);
+    }
 
     return {
       'SONGS': songs,
@@ -222,7 +231,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     };
   }
 
-  Future<List<File>> getSongFilesInDirectory(
+  Future<Set<String>> getSongFilesInDirectory(
       String path, Set<String> allowedExtensions, Set<String> blockedPaths) async {
     return Directory(path)
         .list(recursive: true, followLinks: false)
@@ -236,8 +245,8 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
             return false;
           }
         })
-        .asyncMap((item) => File(item.path))
-        .toList();
+        .asyncMap((item) => item.path)
+        .toSet();
   }
 
   // Returns a list of all new song files and files that have changed since they where last imported
@@ -277,7 +286,10 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
 
   // Maps all the songs that where scanned previously, and their Albums and Artists to the new data structures
   Future<Map<String, dynamic>> mapSongsAlreadyScanned(
-      List<File> songFiles, List<AlbumModel> albumsInDb, List<ArtistModel> artistsInDb) async {
+    List<File> songFiles,
+    List<AlbumModel> albumsInDb,
+    List<ArtistModel> artistsInDb,
+  ) async {
     final List<SongModel> songs = [];
     final List<AlbumModel> albums = [];
     final Set<ArtistModel> artists = {};
