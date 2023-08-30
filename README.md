@@ -1,4 +1,6 @@
 ![Build](https://github.com/moritz-weber/mucke/workflows/Build/badge.svg)
+[![Test](https://github.com/moritz-weber/mucke/actions/workflows/test.yml/badge.svg)](https://github.com/moritz-weber/mucke/actions/workflows/test.yml)
+[![Coverage Status](https://coveralls.io/repos/github/moritz-weber/mucke/badge.svg?branch=master)](https://coveralls.io/github/moritz-weber/mucke?branch=master)
 [![Translation status](https://hosted.weblate.org/widgets/mucke/-/app/svg-badge.svg)](https://hosted.weblate.org/engage/mucke/)
 
 # mucke
