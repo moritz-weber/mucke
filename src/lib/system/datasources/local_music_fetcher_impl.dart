@@ -69,7 +69,9 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     final Set<String> songFilePaths = {};
     for (final libDir in libDirs) {
       _log.d('Checking folder: ${libDir.path}');
-      songFilePaths.addAll(await getSongFilesInDirectory(libDir.path, allowedExtensions, blockedPaths));
+      songFilePaths.addAll(
+        await getSongFilesInDirectory(libDir.path, allowedExtensions, blockedPaths),
+      );
     }
     final List<File> songFiles = songFilePaths.map((e) => File(e)).toList();
 
@@ -166,18 +168,22 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
         artists.add(ArtistModel(name: artistName, id: newArtistId++));
       }
 
-      albums.add(AlbumModel.fromMetadata(
-        songData: songData,
-        albumId: albumId,
-        albumArtPath: albumArtMap[albumId],
-      ));
-      songs.add(SongModel.fromMetadata(
-        path: songFile.path,
-        songData: songData,
-        albumId: albumId,
-        lastModified: lastModified,
-        albumArtPath: albumArtMap[albumId],
-      ));
+      albums.add(
+        AlbumModel.fromMetadata(
+          songData: songData,
+          albumId: albumId,
+          albumArtPath: albumArtMap[albumId],
+        ),
+      );
+      songs.add(
+        SongModel.fromMetadata(
+          path: songFile.path,
+          songData: songData,
+          albumId: albumId,
+          lastModified: lastModified,
+          albumArtPath: albumArtMap[albumId],
+        ),
+      );
     }
 
     _log.d('Songs in list: ${songs.length}');

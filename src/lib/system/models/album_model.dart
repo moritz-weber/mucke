@@ -37,8 +37,7 @@ class AlbumModel extends Album {
     String? albumArtPath,
     Color? color,
   }) {
-    final albumArtist = songData.albumArtist ?? '';
-    final artist = albumArtist != '' ? albumArtist : songData.artist;
+    final artist = songData.albumArtist ?? songData.artist;
 
     return AlbumModel(
       id: albumId,

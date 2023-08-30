@@ -37,7 +37,7 @@ class InitRepositoryImpl extends InitRepository {
         3,
         L10n.of(context)!.yourPlaylists,
         HomePlaylistsOrder.history,
-        OrderDirection.ascending,
+        OrderDirection.descending,
         HomePlaylistsFilter.both,
       ),
     );
