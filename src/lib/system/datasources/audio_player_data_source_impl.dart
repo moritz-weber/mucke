@@ -221,15 +221,21 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
     _queue.insertAll(min(index, _queue.length), songs);
 
     final sourceIndex = _calcSourceIndex(index);
-    final isIndexLoaded = _isQueueIndexInLoadInterval(index);
+    // the songs should get loaded immediately if
+    // 1) they start in the already loaded interval
+    // 2) they start in the interval that should always be loaded 
+    //    (but is currently not, because the queue is smaller than the interval)
+    final shouldIndexGetLoaded = _isQueueIndexInLoadInterval(index) ||
+        (_currentIndexSubject.value - index).abs() < LOAD_INTERVAL;
+    
     if (index < _loadStartIndex) {
       _loadStartIndex = _loadStartIndex + songs.length;
     }
-    if (index < _loadEndIndex) {
+    if (index < _loadEndIndex || shouldIndexGetLoaded) {
       _loadEndIndex = _loadEndIndex + songs.length;
     }
 
-    if (isIndexLoaded) {
+    if (shouldIndexGetLoaded) {
       await _audioSource.insertAll(min(_audioSource.length, sourceIndex),
           songs.map((e) => ja.AudioSource.uri(Uri.file(e.path))).toList());
     } else {
