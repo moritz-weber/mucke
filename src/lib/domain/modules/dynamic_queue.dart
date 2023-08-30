@@ -26,9 +26,14 @@ class DynamicQueue implements ManagedQueueInfo {
 
   final MusicDataRepository _musicDataRepository;
 
+  /// The queue as a list of Songs instead of QueueItems.
   List<Song> get queue => _queue.map((e) => e.song).toList();
+
+  /// The list of Songs still available for queue generation.
+  ///
+  /// This excludes songs that have already been queued.
   List<Song> get availableSongs =>
-      (_availableSongs..where((element) => element.isAvailable)).map((e) => e.song).toList();
+      _availableSongs.where((element) => element.isAvailable).map((e) => e.song).toList();
 
   /// The queue generated so far from the [_availableSongs].
   List<QueueItem> _queue = [];
@@ -431,10 +436,10 @@ class DynamicQueue implements ManagedQueueInfo {
   }
 
   int getNextNormalIndex(int index) {
-    if (index >= queue.length) return queue.length;
+    if (index >= _queue.length) return _queue.length;
 
     int i = index;
-    while (i < queue.length && _queue[i].source == QueueItemSource.added) {
+    while (i < _queue.length && _queue[i].source == QueueItemSource.added) {
       i++;
     }
 
