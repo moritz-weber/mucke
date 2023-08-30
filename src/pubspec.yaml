@@ -55,6 +55,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   mobx_codegen: ^2.0.1+3  # MIT
+  mockito: ^5.4.2
   test: ^1.24.1
 
 

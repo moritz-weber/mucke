@@ -30,7 +30,7 @@ class DynamicQueue implements ManagedQueueInfo {
   List<Song> get availableSongs =>
       (_availableSongs..where((element) => element.isAvailable)).map((e) => e.song).toList();
 
-  /// The queue generated so far from the _availableSongs.
+  /// The queue generated so far from the [_availableSongs].
   List<QueueItem> _queue = [];
   final BehaviorSubject<List<QueueItem>> _queueSubject = BehaviorSubject.seeded([]);
 
@@ -39,7 +39,6 @@ class DynamicQueue implements ManagedQueueInfo {
   final BehaviorSubject<List<QueueItem>> _availableSongsSubject = BehaviorSubject.seeded([]);
 
   final BehaviorSubject<Playable> _playableSubject = BehaviorSubject();
-  ShuffleMode _shuffleMode = ShuffleMode.none;
 
   @override
   ValueStream<List<QueueItem>> get availableSongsStream => _availableSongsSubject.stream;
@@ -50,29 +49,30 @@ class DynamicQueue implements ManagedQueueInfo {
   @override
   ValueStream<Playable> get playableStream => _playableSubject.stream;
 
+  /// Initializes the DynamicQueue with a [queue], [availableSongs] and [playable] from a previous run of the app.
   void init(
     List<QueueItem> queue,
     List<QueueItem> availableSongs,
     Playable playable,
-    ShuffleMode shuffleMode,
   ) {
     _log.d('init');
-    _shuffleMode = shuffleMode;
-    _playableSubject.add(playable);
-    _log.d(availableSongs.length.toString());
 
     _availableSongs = availableSongs;
-    _availableSongsSubject.add(_availableSongs);
     // for every item in queue, take the corresponding object from availableSongs
     _queue = queue
-        .map((qi) => availableSongs.firstWhere(
-              (e) => e == qi,
-              orElse: () {
-                _log.d(qi.toString());
-                return qi as QueueItemModel;
-              },
-            ))
+        .map(
+          (qi) => availableSongs.firstWhere(
+            (e) => e == qi,
+            orElse: () {
+              _log.d('Not found in available songs: $qi');
+              return qi as QueueItemModel;
+            },
+          ),
+        )
         .toList();
+
+    _playableSubject.add(playable);
+    _availableSongsSubject.add(_availableSongs);
     _queueSubject.add(_queue);
   }
 
@@ -84,7 +84,6 @@ class DynamicQueue implements ManagedQueueInfo {
     bool keepIndex = false,
   }) async {
     _log.d('generateQueue');
-    _shuffleMode = shuffleMode;
     _playableSubject.add(playable);
 
     _availableSongs = List.generate(
@@ -98,7 +97,7 @@ class DynamicQueue implements ManagedQueueInfo {
       _availableSongs,
       indeces: [startIndex],
       keepIndex: keepIndex,
-      blockLevel: calcBlockLevel(_shuffleMode, _playableSubject.value),
+      blockLevel: calcBlockLevel(shuffleMode, _playableSubject.value),
     );
     if (filteredAvailableSongs.isEmpty) filteredAvailableSongs = _availableSongs;
 
@@ -126,7 +125,7 @@ class DynamicQueue implements ManagedQueueInfo {
     }
 
     int returnIndex = -1;
-    switch (_shuffleMode) {
+    switch (shuffleMode) {
       case ShuffleMode.none:
         returnIndex = await _generateNormalQueue(filteredAvailableSongs, newStartIndex);
         break;
@@ -216,7 +215,6 @@ class DynamicQueue implements ManagedQueueInfo {
 
   Future<int> reshuffleQueue(ShuffleMode shuffleMode, int currentIndex) async {
     _log.d('reshuffleQueue');
-    _shuffleMode = shuffleMode;
     QueueItem currentQueueItem = _queue[currentIndex];
 
     const validSources = [QueueItemSource.original, QueueItemSource.added];
@@ -269,7 +267,7 @@ class DynamicQueue implements ManagedQueueInfo {
       _availableSongs,
       keepIndex: true,
       indeces: indecesToKeep,
-      blockLevel: calcBlockLevel(_shuffleMode, _playableSubject.value),
+      blockLevel: calcBlockLevel(shuffleMode, _playableSubject.value),
     );
     int newStartIndex = -1;
     if (anchorIndex >= 0) {
@@ -278,7 +276,7 @@ class DynamicQueue implements ManagedQueueInfo {
       newStartIndex = filteredAvailableSongs.indexOf(currentQueueItem);
     }
 
-    switch (_shuffleMode) {
+    switch (shuffleMode) {
       case ShuffleMode.none:
         await _generateNormalQueue(filteredAvailableSongs, newStartIndex);
         break;
@@ -292,28 +290,29 @@ class DynamicQueue implements ManagedQueueInfo {
     return _queue.indexOf(currentQueueItem);
   }
 
-  Future<List<Song>> updateCurrentIndex(int currentIndex) async {
-    _log.d('updateCurrentIndex');
-    final int songsAhead = _queue.length - currentIndex - 1;
-    int songsToQueue = QUEUE_AHEAD - songsAhead;
+  /// Reacts to updates of [currentIndex] and returns a list of newly queued songs.
+  Future<List<Song>> onCurrentIndexUpdated(int currentIndex, ShuffleMode shuffleMode) async {
+    _log.d('onCurrentIndexUpdated');
+    final int numSongsAhead = _queue.length - currentIndex - 1;
+    int numSongsToQueue = QUEUE_AHEAD - numSongsAhead;
 
-    if (songsToQueue > 0) {
+    if (numSongsToQueue > 0) {
       final filteredAvailableSongs = filterAvailableSongs(
         _availableSongs,
-        blockLevel: calcBlockLevel(_shuffleMode, _playableSubject.value),
+        blockLevel: calcBlockLevel(shuffleMode, _playableSubject.value),
       );
-      songsToQueue = min(songsToQueue, filteredAvailableSongs.length);
+      numSongsToQueue = min(numSongsToQueue, filteredAvailableSongs.length);
       if (filteredAvailableSongs.isNotEmpty) {
         List<QueueItem> newSongs = [];
-        switch (_shuffleMode) {
+        switch (shuffleMode) {
           case ShuffleMode.none:
-            newSongs = filteredAvailableSongs.sublist(0, songsToQueue);
+            newSongs = filteredAvailableSongs.sublist(0, numSongsToQueue);
             break;
           case ShuffleMode.standard:
-            newSongs = await _shuffleQueue(filteredAvailableSongs, songsToQueue);
+            newSongs = await _shuffleQueue(filteredAvailableSongs, numSongsToQueue);
             break;
           case ShuffleMode.plus:
-            newSongs = await _shufflePlusQueue(filteredAvailableSongs, songsToQueue);
+            newSongs = await _shufflePlusQueue(filteredAvailableSongs, numSongsToQueue);
         }
 
         for (final qi in newSongs) {
