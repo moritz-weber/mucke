@@ -25,12 +25,14 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
         if (!_blockIndexUpdate) {
           _updateCurrentSong(queueStream.value, index);
         }
-        _dynamicQueue.updateCurrentIndex(index).then((songs) {
-          if (songs.isNotEmpty) {
-            _audioPlayerDataSource.addToQueue(songs.map((e) => e as SongModel).toList());
-            _queueSubject.add(_dynamicQueue.queue);
-          }
-        });
+        _dynamicQueue.onCurrentIndexUpdated(index, shuffleModeStream.value).then(
+          (songs) {
+            if (songs.isNotEmpty) {
+              _audioPlayerDataSource.addToQueue(songs.map((e) => e as SongModel).toList());
+              _queueSubject.add(_dynamicQueue.queue);
+            }
+          },
+        );
       },
     );
     _queueSubject.listen((queue) {
@@ -125,7 +127,6 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
         queueItems,
         availableSongs,
         playable,
-        shuffleModeStream.value,
       );
       _queueSubject.add(_dynamicQueue.queue);
 
@@ -224,7 +225,10 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
       if (_dynamicQueue.availableSongs.isEmpty) {
         _audioPlayerDataSource.stop();
       } else {
-        final newSongs = await _dynamicQueue.updateCurrentIndex(newCurrentIndex);
+        final newSongs = await _dynamicQueue.onCurrentIndexUpdated(
+          newCurrentIndex,
+          shuffleModeStream.value,
+        );
         if (newSongs.isNotEmpty) {
           await _audioPlayerDataSource.addToQueue(newSongs.map((e) => e as SongModel).toList());
           _queueSubject.add(_dynamicQueue.queue);
