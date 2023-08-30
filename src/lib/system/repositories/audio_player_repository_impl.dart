@@ -128,11 +128,12 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
         availableSongs,
         playable,
       );
-      _queueSubject.add(_dynamicQueue.queue);
+      final queue = _dynamicQueue.queue;
+      _queueSubject.add(queue);
 
       await _audioPlayerDataSource.loadQueue(
         initialIndex: index,
-        queue: _dynamicQueue.queue.map((e) => e as SongModel).toList(),
+        queue: queue.map((e) => e as SongModel).toList(),
       );
     }
   }
@@ -154,11 +155,12 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
       keepIndex: keepInitialIndex,
     );
 
-    _queueSubject.add(_dynamicQueue.queue);
+    final queue = _dynamicQueue.queue;
+    _queueSubject.add(queue);
 
     await _audioPlayerDataSource.loadQueue(
       initialIndex: _initialIndex,
-      queue: _dynamicQueue.queue.map((e) => e as SongModel).toList(),
+      queue: queue.map((e) => e as SongModel).toList(),
     );
   }
 
@@ -270,15 +272,14 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
       final splitIndex = await _dynamicQueue.reshuffleQueue(shuffleMode, currentIndex);
       _blockIndexUpdate = true;
 
+      final queue = _dynamicQueue.queue;
       _audioPlayerDataSource
           .replaceQueueAroundIndex(
-        index: currentIndex,
-        before: _dynamicQueue.queue.sublist(0, splitIndex).map((e) => e as SongModel).toList(),
-        after: _dynamicQueue.queue.sublist(splitIndex + 1).map((e) => e as SongModel).toList(),
-      )
-          .then((_) {
-        _queueSubject.add(_dynamicQueue.queue);
-      });
+            index: currentIndex,
+            before: queue.sublist(0, splitIndex).map((e) => e as SongModel).toList(),
+            after: queue.sublist(splitIndex + 1).map((e) => e as SongModel).toList(),
+          )
+          .then((_) => _queueSubject.add(_dynamicQueue.queue));
     }
   }
 
@@ -300,16 +301,16 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
       final blockLevel = calcBlockLevel(shuffleModeStream.value, playableStream.value);
       final queue = _dynamicQueue.queue;
 
-      final indecesToRemove = <int>[];
+      final indicesToRemove = <int>[];
       for (int i = 0; i < queue.length; i++) {
         final song = queue[i];
         if (song.blockLevel > blockLevel) {
           if (oldQueue.firstWhere((e) => e.path == song.path).blockLevel != song.blockLevel) {
-            indecesToRemove.add(i);
+            indicesToRemove.add(i);
           }
         }
       }
-      if (indecesToRemove.isNotEmpty) _removeQueueIndices(indecesToRemove, false);
+      if (indicesToRemove.isNotEmpty) _removeQueueIndices(indicesToRemove, false);
 
       _queueSubject.add(_dynamicQueue.queue);
     }
