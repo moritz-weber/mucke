@@ -328,5 +328,11 @@
   "create": "Erzeugen",
   "@create": {},
   "created": "Erzeugt",
-  "@created": {}
+  "@created": {},
+  "manageExternalExplanation": "Das Erteilen dieser Berechtigung kann das Scannen der Bibliothek deutlich beschleunigen. Ansonsten ändert sich nichts am Verhalten der App.",
+  "@manageExternalExplanation": {},
+  "grantManagePermission": "Berechtigung zum Verwalten aller Dateien erteilen.",
+  "@grantManagePermission": {},
+  "systemSettings": "Systemeinstellungen",
+  "@systemSettings": {}
 }
