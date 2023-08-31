@@ -407,5 +407,13 @@
   "create": "Створити",
   "@create": {},
   "created": "Створено",
-  "@created": {}
+  "@created": {},
+  "systemSettings": "Системні налаштування",
+  "@systemSettings": {},
+  "manageExternalExplanation": "Надання цього дозволу може значно покращити швидкість сканування бібліотеки. Це не змінює поведінку застосунку.",
+  "@manageExternalExplanation": {},
+  "grantManagePermission": "Надати дозвіл на управління всіма файлами.",
+  "@grantManagePermission": {},
+  "managePermissionSubtitle": "Скасування дозволу призведе до перезавантаження застосунку.",
+  "@managePermissionSubtitle": {}
 }

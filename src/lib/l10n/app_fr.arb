@@ -407,5 +407,7 @@
   "songMetaData": "Métadonnées de la chanson",
   "@songMetaData": {},
   "errorReadData": "Erreur de lecture du fichier de données.",
-  "@errorReadData": {}
+  "@errorReadData": {},
+  "systemSettings": "Paramètres système",
+  "@systemSettings": {}
 }
