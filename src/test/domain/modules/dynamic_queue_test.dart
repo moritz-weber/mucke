@@ -87,5 +87,54 @@ void main() {
         expect(sut.availableSongs, [song1, song2]);
       },
     );
+
+    test(
+      'QueueItems missing in availableSongs get filtered out',
+      () async {
+        // arrange
+        final tQueue = <QueueItem>[
+          QueueItem(song1, originalIndex: 0, isAvailable: true),
+          QueueItem(song2, originalIndex: 4, isAvailable: true),
+        ];
+        final tAvailableSongs = <QueueItem>[
+          QueueItem(song1, originalIndex: 0, isAvailable: true),
+          QueueItem(song2, originalIndex: 1, isAvailable: true),
+          QueueItem(song3, originalIndex: 2, isAvailable: false)
+        ];
+
+        final tPlayable = MockPlayable();
+
+        // act
+        sut.init(tQueue, tAvailableSongs, tPlayable);
+
+        // assert
+        expect(sut.queueItemsStream.value, [QueueItem(song1, originalIndex: 0, isAvailable: true)]);
+        expect(sut.queue, [song1]);
+      },
+    );
   });
+
+  // group('moveQueueItem', () {
+  //   test('basic', () {
+  //     // arrange
+  //     final tQueue = <QueueItem>[
+  //       QueueItem(song1, originalIndex: 0, isAvailable: true),
+  //       QueueItem(song2, originalIndex: 4, isAvailable: true),
+  //     ];
+  //     final tAvailableSongs = <QueueItem>[
+  //       QueueItem(song1, originalIndex: 0, isAvailable: true),
+  //       QueueItem(song2, originalIndex: 1, isAvailable: true),
+  //       QueueItem(song3, originalIndex: 2, isAvailable: false)
+  //     ];
+
+  //     final tPlayable = MockPlayable();
+
+  //     // act
+  //     sut.init(tQueue, tAvailableSongs, tPlayable);
+
+  //     // assert
+  //     expect(sut.queueItemsStream.value, [QueueItem(song1, originalIndex: 0, isAvailable: true)]);
+  //     expect(sut.queue, [song1]);
+  //   });
+  // });
 }
