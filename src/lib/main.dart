@@ -70,14 +70,16 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: L10n.localizationsDelegates,
       supportedLocales: const <Locale>[
         Locale('en'),
-        Locale('de'),
         Locale('ca'),
-        Locale('nb'),
-        Locale('es'),
-        Locale('ru'),
-        Locale('uk'),
+        Locale('zh'),
+        Locale('fi'),
         Locale('fr'),
-        Locale('zh')
+        Locale('de'),
+        Locale('it'),
+        Locale('nb'),
+        Locale('ru'),
+        Locale('es'),
+        Locale('uk'),
       ],
     );
   }
