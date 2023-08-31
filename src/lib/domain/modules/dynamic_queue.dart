@@ -30,21 +30,9 @@ class DynamicQueue implements ManagedQueueInfo {
   /// The queue as a list of Songs instead of QueueItems.
   List<Song> get queue => _queue.map((e) => e.song).toList();
 
-  /// The list of Songs still available for queue generation.
-  ///
-  /// This excludes songs that have already been queued.
+  /// The list of Songs still available for queue generation, excluding songs that have already been queued.
   List<Song> get availableSongs =>
       _availableSongs.where((element) => element.isAvailable).map((e) => e.song).toList();
-
-  /// The queue generated so far from the [_availableSongs].
-  List<QueueItem> _queue = [];
-  final BehaviorSubject<List<QueueItem>> _queueSubject = BehaviorSubject.seeded([]);
-
-  /// The list of songs available for queue generation with some extra information.
-  List<QueueItem> _availableSongs = [];
-  final BehaviorSubject<List<QueueItem>> _availableSongsSubject = BehaviorSubject.seeded([]);
-
-  final BehaviorSubject<Playable> _playableSubject = BehaviorSubject();
 
   @override
   ValueStream<List<QueueItem>> get availableSongsStream => _availableSongsSubject.stream;
@@ -55,6 +43,21 @@ class DynamicQueue implements ManagedQueueInfo {
   @override
   ValueStream<Playable> get playableStream => _playableSubject.stream;
 
+  /// The queue generated so far from the [_availableSongs].
+  List<QueueItem> _queue = [];
+
+  /// This is used to communicate changes to [_queue] to the rest of the system.
+  final BehaviorSubject<List<QueueItem>> _queueSubject = BehaviorSubject.seeded([]);
+
+  /// The list of songs available for queue generation with some extra information.
+  List<QueueItem> _availableSongs = [];
+
+  /// This is used to communicate changes to [_availableSongs] to the rest of the system.
+  final BehaviorSubject<List<QueueItem>> _availableSongsSubject = BehaviorSubject.seeded([]);
+
+  /// This holds the current Playable as value and communicates it with the rest of the system.
+  final BehaviorSubject<Playable> _playableSubject = BehaviorSubject();
+
   /// Initializes the DynamicQueue with a [queue], [availableSongs] and [playable] from a previous run of the app.
   void init(
     List<QueueItem> queue,
@@ -64,23 +67,25 @@ class DynamicQueue implements ManagedQueueInfo {
     _log.d('init');
 
     // for every item in queue, take the corresponding object from availableSongs
-    // discard elements from queue that are not in availableSongs (thi should not happen)
+    // discard elements from queue that are not in availableSongs (this should not happen)
     final List<QueueItem> tmpQueue = [];
     for (final qi in queue) {
       final avSong = availableSongs.firstWhereOrNull((e) => e == qi);
-      if (avSong != null) tmpQueue.add(avSong);
-      else _log.w('Item not found in availableSongs: $qi');
+      if (avSong != null)
+        tmpQueue.add(avSong);
+      else
+        _log.w('Item not found in availableSongs: $qi');
     }
     _availableSongs = availableSongs;
     _queue = tmpQueue;
 
     _playableSubject.add(playable);
-    _availableSongsSubject.add(_availableSongs);
+    _availableSongsSubject.add(availableSongs);
     _queueSubject.add(_queue);
   }
 
   /// Generates a queue from the given [songs], depending the containing [playable] and [shuffleMode].
-  /// 
+  ///
   /// Returns the index of the starting song.
   Future<int> generateQueue(
     List<Song> songs,
@@ -149,20 +154,22 @@ class DynamicQueue implements ManagedQueueInfo {
     return returnIndex;
   }
 
+  /// Adds a list of [songs] to the queue and to the list of available songs.
   void addToQueue(List<Song> songs) {
     _log.d('addToQueue');
     final queueItems = <QueueItem>[];
     int i = 0;
     for (final song in songs) {
-      queueItems.add(QueueItemModel(
-        song as SongModel,
-        originalIndex: _availableSongs.length + i, // interference with predecessors/successors?
-        source: QueueItemSource.added,
-        isAvailable: false,
-      ));
+      queueItems.add(
+        QueueItemModel(
+          song as SongModel,
+          originalIndex: _availableSongs.length + i, // interference with predecessors/successors?
+          source: QueueItemSource.added,
+          isAvailable: false,
+        ),
+      );
       i++;
     }
-
     _availableSongs.addAll(queueItems);
     _availableSongsSubject.add(_availableSongs);
     _queue.addAll(queueItems);
@@ -189,6 +196,7 @@ class DynamicQueue implements ManagedQueueInfo {
     _queueSubject.add(_queue);
   }
 
+  /// Move the QueueItem at index [oldIndex] to [newIndex].
   void moveQueueItem(int oldIndex, int newIndex) {
     _log.d('moveQueueItem');
     _queue.insert(newIndex, _queue.removeAt(oldIndex));
@@ -334,7 +342,7 @@ class DynamicQueue implements ManagedQueueInfo {
   }
 
   /// Update songs contained in queue. Return true if any song was changed.
-  bool updateSongs(Map<String, Song> songs) {
+  bool onSongsUpdated(Map<String, Song> songs) {
     _log.d('updateSongs');
     bool queueChanged = false;
     bool availableSongsChanged = false;

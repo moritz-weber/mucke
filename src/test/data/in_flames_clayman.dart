@@ -1,11 +1,11 @@
 import 'dart:ui';
 
 import 'package:mucke/domain/entities/album.dart';
-import 'package:mucke/domain/entities/song.dart';
+import 'package:mucke/system/models/song_model.dart';
 
 const clayman = Album(id: 253, title: 'Clayman', artist: 'In Flames');
 
-final clayman1 = Song(
+final clayman1 = SongModel(
   album: 'Clayman',
   albumId: 253,
   artist: 'In Flames',
@@ -23,9 +23,10 @@ final clayman1 = Song(
   albumArtPath: '/data/user/0/rocks.mucke.dev/files/253',
   color: const Color(0xffcd6815),
   year: 2000,
+  lastModified: DateTime(2020),
 );
 
-final clayman2 = Song(
+final clayman2 = SongModel(
   album: 'Clayman',
   albumId: 253,
   artist: 'In Flames',
@@ -43,9 +44,10 @@ final clayman2 = Song(
   albumArtPath: '/data/user/0/rocks.mucke.dev/files/253',
   color: const Color(0xffcd6815),
   year: 2000,
+  lastModified: DateTime(2020),
 );
 
-final clayman3 = Song(
+final clayman3 = SongModel(
   album: 'Clayman',
   albumId: 253,
   artist: 'In Flames',
@@ -63,9 +65,10 @@ final clayman3 = Song(
   albumArtPath: '/data/user/0/rocks.mucke.dev/files/253',
   color: const Color(0xffcd6815),
   year: 2000,
+  lastModified: DateTime(2020),
 );
 
-final clayman4 = Song(
+final clayman4 = SongModel(
   album: 'Clayman',
   albumId: 253,
   artist: 'In Flames',
@@ -83,9 +86,10 @@ final clayman4 = Song(
   albumArtPath: '/data/user/0/rocks.mucke.dev/files/253',
   color: const Color(0xffcd6815),
   year: 2000,
+  lastModified: DateTime(2020),
 );
 
-final clayman5 = Song(
+final clayman5 = SongModel(
   album: 'Clayman',
   albumId: 253,
   artist: 'In Flames',
@@ -103,9 +107,10 @@ final clayman5 = Song(
   albumArtPath: '/data/user/0/rocks.mucke.dev/files/253',
   color: const Color(0xffcd6815),
   year: 2000,
+  lastModified: DateTime(2020),
 );
 
-final clayman6 = Song(
+final clayman6 = SongModel(
   album: 'Clayman',
   albumId: 253,
   artist: 'In Flames',
@@ -123,9 +128,10 @@ final clayman6 = Song(
   albumArtPath: '/data/user/0/rocks.mucke.dev/files/253',
   color: const Color(0xffcd6815),
   year: 2000,
+  lastModified: DateTime(2020),
 );
 
-final clayman7 = Song(
+final clayman7 = SongModel(
   album: 'Clayman',
   albumId: 253,
   artist: 'In Flames',
@@ -143,9 +149,10 @@ final clayman7 = Song(
   albumArtPath: '/data/user/0/rocks.mucke.dev/files/253',
   color: const Color(0xffcd6815),
   year: 2000,
+  lastModified: DateTime(2020),
 );
 
-final clayman8 = Song(
+final clayman8 = SongModel(
   album: 'Clayman',
   albumId: 253,
   artist: 'In Flames',
@@ -163,9 +170,10 @@ final clayman8 = Song(
   albumArtPath: '/data/user/0/rocks.mucke.dev/files/253',
   color: const Color(0xffcd6815),
   year: 2000,
+  lastModified: DateTime(2020),
 );
 
-final clayman9 = Song(
+final clayman9 = SongModel(
   album: 'Clayman',
   albumId: 253,
   artist: 'In Flames',
@@ -183,9 +191,10 @@ final clayman9 = Song(
   albumArtPath: '/data/user/0/rocks.mucke.dev/files/253',
   color: const Color(0xffcd6815),
   year: 2000,
+  lastModified: DateTime(2020),
 );
 
-final clayman10 = Song(
+final clayman10 = SongModel(
   album: 'Clayman',
   albumId: 253,
   artist: 'In Flames',
@@ -203,9 +212,10 @@ final clayman10 = Song(
   albumArtPath: '/data/user/0/rocks.mucke.dev/files/253',
   color: const Color(0xffcd6815),
   year: 2000,
+  lastModified: DateTime(2020),
 );
 
-final clayman11 = Song(
+final clayman11 = SongModel(
   album: 'Clayman',
   albumId: 253,
   artist: 'In Flames',
@@ -223,9 +233,10 @@ final clayman11 = Song(
   albumArtPath: '/data/user/0/rocks.mucke.dev/files/253',
   color: const Color(0xffcd6815),
   year: 2000,
+  lastModified: DateTime(2020),
 );
 
-final clayman12 = Song(
+final clayman12 = SongModel(
   album: 'Clayman',
   albumId: 253,
   artist: 'In Flames',
@@ -243,9 +254,10 @@ final clayman12 = Song(
   albumArtPath: '/data/user/0/rocks.mucke.dev/files/253',
   color: const Color(0xffcd6815),
   year: 2000,
+  lastModified: DateTime(2020),
 );
 
-final clayman13 = Song(
+final clayman13 = SongModel(
   album: 'Clayman',
   albumId: 253,
   artist: 'In Flames',
@@ -263,9 +275,10 @@ final clayman13 = Song(
   albumArtPath: '/data/user/0/rocks.mucke.dev/files/253',
   color: const Color(0xffcd6815),
   year: 2000,
+  lastModified: DateTime(2020),
 );
 
-final clayman14 = Song(
+final clayman14 = SongModel(
   album: 'Clayman',
   albumId: 253,
   artist: 'In Flames',
@@ -283,9 +296,10 @@ final clayman14 = Song(
   albumArtPath: '/data/user/0/rocks.mucke.dev/files/253',
   color: const Color(0xffcd6815),
   year: 2000,
+  lastModified: DateTime(2020),
 );
 
-final clayman15 = Song(
+final clayman15 = SongModel(
   album: 'Clayman',
   albumId: 253,
   artist: 'In Flames',
@@ -303,6 +317,7 @@ final clayman15 = Song(
   albumArtPath: '/data/user/0/rocks.mucke.dev/files/253',
   color: const Color(0xffcd6815),
   year: 2000,
+  lastModified: DateTime(2020),
 );
 
 final claymanSongs = [

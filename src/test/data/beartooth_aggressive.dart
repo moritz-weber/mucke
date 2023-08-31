@@ -1,11 +1,11 @@
 import 'dart:ui';
 
 import 'package:mucke/domain/entities/album.dart';
-import 'package:mucke/domain/entities/song.dart';
+import 'package:mucke/system/models/song_model.dart';
 
 const aggressive = Album(id: 187, title: 'Aggressive', artist: 'Beartooth');
 
-final aggressive1 = Song(
+final aggressive1 = SongModel(
   album: 'Aggressive',
   albumId: 187,
   artist: 'Beartooth',
@@ -23,9 +23,10 @@ final aggressive1 = Song(
   albumArtPath: '/data/user/0/rocks.mucke.dev/files/187',
   color: const Color(0xfff3f4f4),
   year: 2016,
+  lastModified: DateTime(2021),
 );
 
-final aggressive2 = Song(
+final aggressive2 = SongModel(
   album: 'Aggressive',
   albumId: 187,
   artist: 'Beartooth',
@@ -43,9 +44,10 @@ final aggressive2 = Song(
   albumArtPath: '/data/user/0/rocks.mucke.dev/files/187',
   color: const Color(0xfff3f4f4),
   year: 2016,
+  lastModified: DateTime(2021),
 );
 
-final aggressive3 = Song(
+final aggressive3 = SongModel(
   album: 'Aggressive',
   albumId: 187,
   artist: 'Beartooth',
@@ -63,9 +65,10 @@ final aggressive3 = Song(
   albumArtPath: '/data/user/0/rocks.mucke.dev/files/187',
   color: const Color(0xfff3f4f4),
   year: 2016,
+  lastModified: DateTime(2021),
 );
 
-final aggressive4 = Song(
+final aggressive4 = SongModel(
   album: 'Aggressive',
   albumId: 187,
   artist: 'Beartooth',
@@ -83,9 +86,10 @@ final aggressive4 = Song(
   albumArtPath: '/data/user/0/rocks.mucke.dev/files/187',
   color: const Color(0xfff3f4f4),
   year: 2016,
+  lastModified: DateTime(2021),
 );
 
-final aggressive5 = Song(
+final aggressive5 = SongModel(
   album: 'Aggressive',
   albumId: 187,
   artist: 'Beartooth',
@@ -103,9 +107,10 @@ final aggressive5 = Song(
   albumArtPath: '/data/user/0/rocks.mucke.dev/files/187',
   color: const Color(0xfff3f4f4),
   year: 2016,
+  lastModified: DateTime(2021),
 );
 
-final aggressive6 = Song(
+final aggressive6 = SongModel(
   album: 'Aggressive',
   albumId: 187,
   artist: 'Beartooth',
@@ -123,9 +128,10 @@ final aggressive6 = Song(
   albumArtPath: '/data/user/0/rocks.mucke.dev/files/187',
   color: const Color(0xfff3f4f4),
   year: 2016,
+  lastModified: DateTime(2021),
 );
 
-final aggressive7 = Song(
+final aggressive7 = SongModel(
   album: 'Aggressive',
   albumId: 187,
   artist: 'Beartooth',
@@ -143,9 +149,10 @@ final aggressive7 = Song(
   albumArtPath: '/data/user/0/rocks.mucke.dev/files/187',
   color: const Color(0xfff3f4f4),
   year: 2016,
+  lastModified: DateTime(2021),
 );
 
-final aggressive8 = Song(
+final aggressive8 = SongModel(
   album: 'Aggressive',
   albumId: 187,
   artist: 'Beartooth',
@@ -163,9 +170,10 @@ final aggressive8 = Song(
   albumArtPath: '/data/user/0/rocks.mucke.dev/files/187',
   color: const Color(0xfff3f4f4),
   year: 2016,
+  lastModified: DateTime(2021),
 );
 
-final aggressive9 = Song(
+final aggressive9 = SongModel(
   album: 'Aggressive',
   albumId: 187,
   artist: 'Beartooth',
@@ -183,9 +191,10 @@ final aggressive9 = Song(
   albumArtPath: '/data/user/0/rocks.mucke.dev/files/187',
   color: const Color(0xfff3f4f4),
   year: 2016,
+  lastModified: DateTime(2021),
 );
 
-final aggressive10 = Song(
+final aggressive10 = SongModel(
   album: 'Aggressive',
   albumId: 187,
   artist: 'Beartooth',
@@ -203,9 +212,10 @@ final aggressive10 = Song(
   albumArtPath: '/data/user/0/rocks.mucke.dev/files/187',
   color: const Color(0xfff3f4f4),
   year: 2016,
+  lastModified: DateTime(2021),
 );
 
-final aggressive11 = Song(
+final aggressive11 = SongModel(
   album: 'Aggressive',
   albumId: 187,
   artist: 'Beartooth',
@@ -223,9 +233,10 @@ final aggressive11 = Song(
   albumArtPath: '/data/user/0/rocks.mucke.dev/files/187',
   color: const Color(0xfff3f4f4),
   year: 2016,
+  lastModified: DateTime(2021),
 );
 
-final aggressive12 = Song(
+final aggressive12 = SongModel(
   album: 'Aggressive',
   albumId: 187,
   artist: 'Beartooth',
@@ -243,6 +254,7 @@ final aggressive12 = Song(
   albumArtPath: '/data/user/0/rocks.mucke.dev/files/187',
   color: const Color(0xfff3f4f4),
   year: 2016,
+  lastModified: DateTime(2021),
 );
 
 final aggressiveSongs = [
