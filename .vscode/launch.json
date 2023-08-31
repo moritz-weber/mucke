@@ -23,6 +23,7 @@
             "args": [
                 "--flavor",
                 "dev",
+                "--coverage",
             ],
         },
         {

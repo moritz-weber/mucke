@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -62,25 +63,25 @@ class DynamicQueue implements ManagedQueueInfo {
   ) {
     _log.d('init');
 
-    _availableSongs = availableSongs;
     // for every item in queue, take the corresponding object from availableSongs
-    _queue = queue
-        .map(
-          (qi) => availableSongs.firstWhere(
-            (e) => e == qi,
-            orElse: () {
-              _log.d('Not found in available songs: $qi');
-              return qi as QueueItemModel;
-            },
-          ),
-        )
-        .toList();
+    // discard elements from queue that are not in availableSongs (thi should not happen)
+    final List<QueueItem> tmpQueue = [];
+    for (final qi in queue) {
+      final avSong = availableSongs.firstWhereOrNull((e) => e == qi);
+      if (avSong != null) tmpQueue.add(avSong);
+      else _log.w('Item not found in availableSongs: $qi');
+    }
+    _availableSongs = availableSongs;
+    _queue = tmpQueue;
 
     _playableSubject.add(playable);
     _availableSongsSubject.add(_availableSongs);
     _queueSubject.add(_queue);
   }
 
+  /// Generates a queue from the given [songs], depending the containing [playable] and [shuffleMode].
+  /// 
+  /// Returns the index of the starting song.
   Future<int> generateQueue(
     List<Song> songs,
     Playable playable,
