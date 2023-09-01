@@ -297,4 +297,110 @@ void main() {
       );
     });
   });
+
+  group('determineNewStartIndex', () {
+    test('choose next song', () {
+      // arrange
+      const tOldStartIndex = 0;
+      final tAllAvailableSongs = List<QueueItem>.generate(
+        claymanSongs.length,
+        (i) => QueueItem(
+          claymanSongs[i],
+          originalIndex: i,
+          isAvailable: false,
+        ),
+      );
+
+      final tFilteredAvailableSongs = tAllAvailableSongs.sublist(1);
+
+      // act
+      final newStartIndex = sut.determineNewStartIndex(
+        tOldStartIndex,
+        tAllAvailableSongs,
+        tFilteredAvailableSongs,
+      );
+
+      // assert
+      expect(newStartIndex, 0);
+      expect(tFilteredAvailableSongs[newStartIndex], tAllAvailableSongs[1]);
+    });
+
+    test('choose previous song', () {
+      // arrange
+      const tOldStartIndex = 1;
+      final tAllAvailableSongs = List<QueueItem>.generate(
+        claymanSongs.length,
+        (i) => QueueItem(
+          claymanSongs[i],
+          originalIndex: i,
+          isAvailable: false,
+        ),
+      );
+
+      final tFilteredAvailableSongs = [tAllAvailableSongs[0]] + tAllAvailableSongs.sublist(3);
+
+      // act
+      final newStartIndex = sut.determineNewStartIndex(
+        tOldStartIndex,
+        tAllAvailableSongs,
+        tFilteredAvailableSongs,
+      );
+
+      // assert
+      expect(newStartIndex, 0);
+      expect(tFilteredAvailableSongs[newStartIndex], tAllAvailableSongs[0]);
+    });
+
+    test('choose last song', () {
+      // arrange
+      const tOldStartIndex = 0;
+      final tAllAvailableSongs = List<QueueItem>.generate(
+        claymanSongs.length,
+        (i) => QueueItem(
+          claymanSongs[i],
+          originalIndex: i,
+          isAvailable: false,
+        ),
+      );
+
+      final tFilteredAvailableSongs = [tAllAvailableSongs.last];
+
+      // act
+      final newStartIndex = sut.determineNewStartIndex(
+        tOldStartIndex,
+        tAllAvailableSongs,
+        tFilteredAvailableSongs,
+      );
+
+      // assert
+      expect(newStartIndex, 0);
+      expect(tFilteredAvailableSongs[newStartIndex], tAllAvailableSongs.last);
+    });
+
+    test('choose first song', () {
+      // arrange
+      final tAllAvailableSongs = List<QueueItem>.generate(
+        claymanSongs.length,
+        (i) => QueueItem(
+          claymanSongs[i],
+          originalIndex: i,
+          isAvailable: false,
+        ),
+      );
+      final tOldStartIndex = tAllAvailableSongs.length - 1;
+
+      final tFilteredAvailableSongs = [tAllAvailableSongs.first];
+
+      // act
+      final newStartIndex = sut.determineNewStartIndex(
+        tOldStartIndex,
+        tAllAvailableSongs,
+        tFilteredAvailableSongs,
+      );
+
+      // assert
+      expect(newStartIndex, 0);
+      expect(tFilteredAvailableSongs[newStartIndex], tAllAvailableSongs.first);
+    });
+  });
 }

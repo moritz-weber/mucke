@@ -6,15 +6,15 @@ import 'entities/smart_list.dart';
 List<QueueItem> filterAvailableSongs(
   List<QueueItem> availableSongs, {
   bool keepIndex = false,
-  List<int> indeces = const [],
+  List<int> indices = const [],
   required int blockLevel,
 }) {
   final List<QueueItem> result = [];
 
-  final kIndeces = keepIndex ? indeces : <int>[];
+  final kIndices = keepIndex ? indices : <int>[];
   for (int i = 0; i < availableSongs.length; i++) {
     final qi = availableSongs[i];
-    if (kIndeces.contains(i) || (qi.song.blockLevel <= blockLevel && qi.isAvailable)) {
+    if (kIndices.contains(i) || (qi.song.blockLevel <= blockLevel && qi.isAvailable)) {
       result.add(qi);
     }
   }

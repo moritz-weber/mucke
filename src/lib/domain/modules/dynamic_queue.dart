@@ -64,8 +64,6 @@ class DynamicQueue implements ManagedQueueInfo {
     List<QueueItem> availableSongs,
     Playable playable,
   ) {
-    _log.d('init');
-
     // for every item in queue, take the corresponding object from availableSongs
     // discard elements from queue that are not in availableSongs (this should not happen)
     final List<QueueItem> tmpQueue = [];
@@ -87,6 +85,8 @@ class DynamicQueue implements ManagedQueueInfo {
   /// Generates a queue from the given [songs], depending the containing [playable] and [shuffleMode].
   ///
   /// Returns the index of the starting song.
+  /// [startIndex] determines the song that is set to be played first.
+  /// If [keepIndex] is true, the starting song will stay in the resulting queue, even if it would normally get filtered out.
   Future<int> generateQueue(
     List<Song> songs,
     Playable playable,
@@ -94,42 +94,29 @@ class DynamicQueue implements ManagedQueueInfo {
     ShuffleMode shuffleMode, {
     bool keepIndex = false,
   }) async {
-    _log.d('generateQueue');
-    _playableSubject.add(playable);
-
+    // create corresponing QueueItems for the given songs
     _availableSongs = List.generate(
       songs.length,
       (i) => QueueItemModel(songs[i] as SongModel, originalIndex: i),
     );
-
     final initialQueueItem = _availableSongs[startIndex];
 
+    // filter the created QueueItems based on the calculated block level
     List<QueueItem> filteredAvailableSongs = filterAvailableSongs(
       _availableSongs,
-      indeces: [startIndex],
+      indices: [startIndex],
       keepIndex: keepIndex,
       blockLevel: calcBlockLevel(shuffleMode, _playableSubject.value),
     );
+    // if all songs would be filtered out, we just don't apply the filter
     if (filteredAvailableSongs.isEmpty) filteredAvailableSongs = _availableSongs;
 
+    // determine the corresponding starting index in the filtered songs
     int newStartIndex = filteredAvailableSongs.indexOf(initialQueueItem);
-
     // if the starting song is filtered out, select another one
     if (newStartIndex < 0) {
       if (shuffleMode == ShuffleMode.none) {
-        // select new starting song near the original one
-        int i = 1;
-        while (true) {
-          if (startIndex + i < _availableSongs.length) {
-            newStartIndex = filteredAvailableSongs.indexOf(_availableSongs[startIndex + i]);
-            if (newStartIndex >= 0) break;
-          }
-          if (startIndex - i >= 0) {
-            newStartIndex = filteredAvailableSongs.indexOf(_availableSongs[startIndex - i]);
-            if (newStartIndex >= 0) break;
-          }
-          i++;
-        }
+        newStartIndex = determineNewStartIndex(startIndex, _availableSongs, filteredAvailableSongs);
       } else {
         newStartIndex = Random().nextInt(filteredAvailableSongs.length);
       }
@@ -148,7 +135,8 @@ class DynamicQueue implements ManagedQueueInfo {
             await _generateShuffleQueue(filteredAvailableSongs, newStartIndex, weighted: true);
     }
 
-    // it's important to do this here because the entries in _available songs are changed by
+    _playableSubject.add(playable);
+    // it's important to do this here because the entries in _availableSongs are changed by
     // the queue generation methods
     _availableSongsSubject.add(_availableSongs);
     return returnIndex;
@@ -156,7 +144,6 @@ class DynamicQueue implements ManagedQueueInfo {
 
   /// Adds a list of [songs] to the queue and to the list of available songs.
   void addToQueue(List<Song> songs) {
-    _log.d('addToQueue');
     final queueItems = <QueueItem>[];
     int i = 0;
     for (final song in songs) {
@@ -198,7 +185,6 @@ class DynamicQueue implements ManagedQueueInfo {
 
   /// Move the QueueItem at index [oldIndex] to [newIndex].
   void moveQueueItem(int oldIndex, int newIndex) {
-    _log.d('moveQueueItem');
     _queue.insert(newIndex, _queue.removeAt(oldIndex));
     _queueSubject.add(_queue);
   }
@@ -272,15 +258,15 @@ class DynamicQueue implements ManagedQueueInfo {
       }
     }
 
-    final indecesToKeep = [index];
+    final indicesToKeep = [index];
     if (anchorIndex >= 0) {
-      indecesToKeep.add(anchorIndex);
+      indicesToKeep.add(anchorIndex);
     }
 
     final filteredAvailableSongs = filterAvailableSongs(
       _availableSongs,
       keepIndex: true,
-      indeces: indecesToKeep,
+      indices: indicesToKeep,
       blockLevel: calcBlockLevel(shuffleMode, _playableSubject.value),
     );
     int newStartIndex = -1;
@@ -365,8 +351,9 @@ class DynamicQueue implements ManagedQueueInfo {
       }
     }
 
-    // TODO: check if db is fine with that (when frequently changing songs)
-    // FIXME: nope, too many changes when skipping through the queue
+    // WARNING: When the app was keeping a skip counter for every song,
+    // this was called too often while quickly skipping through a queue.
+    // In general, this is fine though.
     if (availableSongsChanged) _availableSongsSubject.add(_availableSongs);
     if (queueChanged) _queueSubject.add(_queue);
 
@@ -411,7 +398,46 @@ class DynamicQueue implements ManagedQueueInfo {
     return queueChanged;
   }
 
-  Future<List<QueueItem>> getQueueItemWithLinks(QueueItem queueItem, List<QueueItem> pool) async {
+  int getNextNormalIndex(int index) {
+    if (index >= _queue.length) return _queue.length;
+
+    int i = index;
+    while (i < _queue.length && _queue[i].source == QueueItemSource.added) {
+      i++;
+    }
+
+    return i;
+  }
+
+  /// Determines a new starting song close to the original one.
+  /// 
+  /// [allAvailableSongs] contains the original starting song at [oldStartIndex].
+  /// Searches through the neighborhood of the original starting song around [oldStartIndex]
+  /// until it find a song that is also present in [filteredAvailableSongs].
+  int determineNewStartIndex(
+    int oldStartIndex,
+    List<QueueItem> allAvailableSongs,
+    List<QueueItem> filteredAvailableSongs,
+  ) {
+    int newStartIndex = -1;
+
+    int i = 1;
+    while (true) {
+      if (oldStartIndex + i < allAvailableSongs.length) {
+        newStartIndex = filteredAvailableSongs.indexOf(allAvailableSongs[oldStartIndex + i]);
+        if (newStartIndex >= 0) break;
+      }
+      if (oldStartIndex - i >= 0) {
+        newStartIndex = filteredAvailableSongs.indexOf(allAvailableSongs[oldStartIndex - i]);
+        if (newStartIndex >= 0) break;
+      }
+      i++;
+    }
+
+    return newStartIndex;
+  }
+
+  Future<List<QueueItem>> _getQueueItemWithLinks(QueueItem queueItem, List<QueueItem> pool) async {
     final List<QueueItem> queueItems = [];
 
     final predecessors = await _musicDataRepository.getPredecessors(queueItem.song);
@@ -444,17 +470,6 @@ class DynamicQueue implements ManagedQueueInfo {
     return queueItems;
   }
 
-  int getNextNormalIndex(int index) {
-    if (index >= _queue.length) return _queue.length;
-
-    int i = index;
-    while (i < _queue.length && _queue[i].source == QueueItemSource.added) {
-      i++;
-    }
-
-    return i;
-  }
-
   Future<int> _generateNormalQueue(List<QueueItem> queueItems, int startIndex) async {
     final queueLength = min(max(startIndex + QUEUE_AHEAD, INITIAL_QUEUE_LENGTH), queueItems.length);
 
@@ -474,7 +489,7 @@ class DynamicQueue implements ManagedQueueInfo {
     final locallyAvailableSongs = List<QueueItem>.from(queueItems);
 
     final List<QueueItem> queue = [];
-    final linkedItems = await getQueueItemWithLinks(queueItems[startIndex], queueItems);
+    final linkedItems = await _getQueueItemWithLinks(queueItems[startIndex], queueItems);
     queue.addAll(linkedItems);
     // don't want to select these songs twice
     linkedItems.forEach(locallyAvailableSongs.remove);
@@ -504,7 +519,7 @@ class DynamicQueue implements ManagedQueueInfo {
     while (queue.length < length && locallyAvailableSongs.isNotEmpty) {
       final index = rnd.nextInt(locallyAvailableSongs.length);
 
-      final linkedSong = await getQueueItemWithLinks(locallyAvailableSongs[index], queueItems);
+      final linkedSong = await _getQueueItemWithLinks(locallyAvailableSongs[index], queueItems);
       queue.addAll(linkedSong);
       if (linkedSong.length > 1) {
         for (final q in linkedSong) {
@@ -533,7 +548,7 @@ class DynamicQueue implements ManagedQueueInfo {
 
       final index = rnd.nextInt(bucket.length);
 
-      final linkedSong = await getQueueItemWithLinks(bucket[index], queueItems);
+      final linkedSong = await _getQueueItemWithLinks(bucket[index], queueItems);
       queue.addAll(linkedSong);
       if (linkedSong.length > 1) {
         for (final q in linkedSong) {
