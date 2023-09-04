@@ -334,5 +334,7 @@
   "grantManagePermission": "Berechtigung zum Verwalten aller Dateien erteilen.",
   "@grantManagePermission": {},
   "systemSettings": "Systemeinstellungen",
-  "@systemSettings": {}
+  "@systemSettings": {},
+  "managePermissionSubtitle": "Die Rücknahme der Berechtigung führt zu einem Neustart der App.",
+  "@managePermissionSubtitle": {}
 }
