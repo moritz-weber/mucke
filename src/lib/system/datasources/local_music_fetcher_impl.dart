@@ -75,7 +75,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     }
     final List<File> songFiles = songFilePaths.map((e) => File(e)).toList();
 
-    _log.d('Found ${songFiles.length} songs');
+    _log.d('Found songs: ${songFiles.length}');
 
     final albumsInDb = await getSortedAlbums();
     int newAlbumId = albumsInDb.isNotEmpty ? albumsInDb.last.id + 1 : 0;
@@ -87,22 +87,25 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
 
     final List<File> songFilesToCheck = await getSongFilesToCheck(songFiles);
     _fileNumSubject.add(songFilesToCheck.length);
+    _log.d('Song files to check: ${songFilesToCheck.length}');
 
     final existingSongFiles =
         songFiles.where((element) => !songFilesToCheck.contains(element)).toList();
+    _log.d('Existing songs: ${existingSongFiles.length}');
+
     final structs = await mapSongsAlreadyScanned(existingSongFiles, albumsInDb, artistsInDb);
+
     final songs = structs['songs'] as List<SongModel>;
     final albums = structs['albums'] as List<AlbumModel>;
     final artists = structs['artists'] as Set<ArtistModel>;
-
     final albumIdMap = structs['albumIdMap'] as Map<String, int>;
     final albumArtMap = structs['albumArtMap'] as Map<int, String>;
 
     final songsToCheck = await getMetadataForFiles(songFilesToCheck);
-    _log.d('Songs to check: ${songsToCheck.length}');
+    _log.d('Songs to process: ${songsToCheck.length}');
 
     for (final (songFile, songData) in songsToCheck) {
-      _log.i('Scanning Song ${songFile.path}');
+      _log.i('Processing Song ${songFile.path}');
       _progressSubject.add(++scanCount);
 
       final lastModified = songFile.lastModifiedSync();
@@ -258,10 +261,14 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
   // Returns a list of all new song files and files that have changed since they where last imported
   Future<List<File>> getSongFilesToCheck(List<File> songFiles) async {
     final List<File> songFilesToCheck = [];
+    final songsInDb = Map<String, SongModel>.fromIterable(
+      await _musicDataSource.songStream.first,
+      key: (s) => (s as SongModel).path,
+    );
 
     for (final songFile in songFiles) {
       final lastModified = songFile.lastModifiedSync();
-      final song = await _musicDataSource.getSongByPath(songFile.path);
+      final song = songsInDb[songFile.path];
 
       if (song == null || lastModified.isAfter(song.lastModified)) songFilesToCheck.add(songFile);
     }
@@ -290,12 +297,13 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     return albumArtPath;
   }
 
-  // Maps all the songs that where scanned previously, and their Albums and Artists to the new data structures
+  /// Maps all the songs that where scanned previously, and their Albums and Artists to the new data structures
   Future<Map<String, dynamic>> mapSongsAlreadyScanned(
     List<File> songFiles,
     List<AlbumModel> albumsInDb,
     List<ArtistModel> artistsInDb,
   ) async {
+    _log.d('Mapping already scanned songs: START');
     final List<SongModel> songs = [];
     final List<AlbumModel> albums = [];
     final Set<ArtistModel> artists = {};
@@ -307,6 +315,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     final Map<int, Color?> colorMap = {};
 
     for (final songFile in songFiles) {
+      _log.d('${songFile.path}');
       final song = (await _musicDataSource.getSongByPath(songFile.path))!;
 
       final album = albumsInDb.singleWhere((a) => a.id == song.albumId);
@@ -338,6 +347,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
         songs.add(song.copyWith(color: colorMap[album.id]));
       }
     }
+    _log.d('Mapping already scanned songs: DONE');
     return {
       'songs': songs,
       'albums': albums,
@@ -348,6 +358,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
   }
 
   Future<List<(File, Metadata)>> getMetadataForFiles(List<File> filesToCheck) async {
+    _log.d('Getting meta data for songs: START');
     final List<(File, Metadata)> songsMetadata = [];
 
     final tasks = filesToCheck.map((e) => MetadataLoader(e));
@@ -365,11 +376,13 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     await Future.wait(executions);
 
     for (final execution in executions) {
-      songsMetadata.add(await execution);
+      final result = await execution;
+      if (result != null) songsMetadata.add(result);
     }
 
     asyncExecutor.close();
 
+    _log.d('Getting meta data for songs: DONE');
     return songsMetadata;
   }
 
@@ -396,14 +409,16 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
 
 List<AsyncTask> metadataLoaderTypeRegister() => [MetadataLoader(File(''))];
 
-class MetadataLoader extends AsyncTask<File, (File, Metadata)> {
+class MetadataLoader extends AsyncTask<File, (File, Metadata)?> {
   MetadataLoader(this.file);
 
   final File file;
 
   @override
-  AsyncTask<File, (File, Metadata)> instantiate(File parameters,
-      [Map<String, SharedData>? sharedData]) {
+  AsyncTask<File, (File, Metadata)?> instantiate(
+    File parameters, [
+    Map<String, SharedData>? sharedData,
+  ]) {
     MetadataGod.initialize();
     return MetadataLoader(parameters);
   }
@@ -414,8 +429,12 @@ class MetadataLoader extends AsyncTask<File, (File, Metadata)> {
   }
 
   @override
-  FutureOr<(File, Metadata)> run() async {
-    return (file, await MetadataGod.readMetadata(file: file.path));
+  FutureOr<(File, Metadata)?> run() async {
+    try {
+      return (file, await MetadataGod.readMetadata(file: file.path));
+    } catch (e) {
+      return null;
+    }
   }
 }
 
