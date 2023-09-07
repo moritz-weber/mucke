@@ -2,7 +2,7 @@ name: mucke
 description: music player
 publish_to: none
 
-version: 1.4.0+10
+version: 1.5.0+11
 
 environment:
   sdk: ">=3.0.0 <4.0.0"

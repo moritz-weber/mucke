@@ -1,8 +1,11 @@
-## Unreleased
+## 1.5
 
 - Implemented loop mode to stop after every song (#102).
 - Implemented share button for songs.
 - Refined init workflow.
+- Speed-up and fixes for library scanning (#124).
+- Fix bug in queueing (#128).
+- Added translations (French, Chinese, Finnish, Italian).
 
 ## 1.4
 

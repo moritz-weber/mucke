@@ -1,0 +1,6 @@
+- Implemented loop mode to stop after every song.
+- Implemented share button for songs.
+- Refined init workflow.
+- Speed-up and fixes for library scanning.
+- Fix bug in queueing.
+- Added translations: French, Chinese, Finnish, Italian.
