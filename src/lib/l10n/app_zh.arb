@@ -1,5 +1,5 @@
 {
-  "numberOfBlockedFiles": "被禁用的文件数量： {blockedFiles}",
+  "numberOfBlockedFiles": "被禁用的音乐数量： {blockedFiles}",
   "@numberOfBlockedFiles": {
     "placeholders": {
       "blockedFiles": {
@@ -8,11 +8,11 @@
       }
     }
   },
-  "playback": "回放",
+  "playback": "播放",
   "@playback": {},
-  "playAlbumsInOrder": "按列表播放专辑",
+  "playAlbumsInOrder": "按专辑列表音乐顺序播放",
   "@playAlbumsInOrder": {},
-  "countSongsPlayed": "在播放进度达: {percentage}%之后计算歌曲",
+  "countSongsPlayed": "在播放达 {percentage}% 后计入歌曲播放量",
   "@countSongsPlayed": {
     "placeholders": {
       "percentage": {
@@ -20,7 +20,7 @@
       }
     }
   },
-  "customizeHomePage": "自定义主页",
+  "customizeHomePage": "个性化主页",
   "@customizeHomePage": {},
   "settings": "设置",
   "@settings": {},
@@ -53,9 +53,9 @@
   },
   "manageLibraryFolders": "管理歌曲文件夹",
   "@manageLibraryFolders": {},
-  "manageBlockedFiles": "管理文件黑名单",
+  "manageBlockedFiles": "管理音乐黑名单",
   "@manageBlockedFiles": {},
-  "playAlbumsInOrderDescription": "当点击专辑中的一首歌时，其他歌曲将按列表播放，而不是按其他顺序",
+  "playAlbumsInOrderDescription": "当点击专辑某首歌时将按列表顺序播放其他歌曲，而不是按其他顺序",
   "@playAlbumsInOrderDescription": {},
   "libraryFolders": "歌曲文件夹",
   "@libraryFolders": {},
@@ -75,7 +75,7 @@
   "@disabledBattery": {},
   "favoritesDesc": "包含您喜欢的所有歌曲。",
   "@favoritesDesc": {},
-  "favorites": "收藏夹",
+  "favorites": "我的收藏",
   "@favorites": {},
   "newlyAddedDesc": "包含最早添加的100首歌曲。",
   "@newlyAddedDesc": {},
@@ -87,7 +87,7 @@
   "@create": {},
   "created": "已创建",
   "@created": {},
-  "noPlaylistsYet": "播放列表为空，您可从曲库中添加。",
+  "noPlaylistsYet": "歌单空空如也，从曲库中添加点吧。",
   "@noPlaylistsYet": {},
   "noHistoryYet": "没有更多了，随便听听吧",
   "@noHistoryYet": {},
@@ -105,11 +105,11 @@
   "@shuffleMode": {},
   "albums": "专辑",
   "@albums": {},
-  "playlist": "播放列表",
+  "playlist": "歌单",
   "@playlist": {},
-  "playlists": "播放列表",
+  "playlists": "歌单",
   "@playlists": {},
-  "favShuffleMode": "收藏夹随机播放模式",
+  "favShuffleMode": "随机播放收藏夹模式",
   "@favShuffleMode": {},
   "noShuffle": "无（保持当前随机模式）",
   "@noShuffle": {},
@@ -121,11 +121,11 @@
   "@ascending": {},
   "descending": "降序",
   "@descending": {},
-  "playlistsOnly": "仅播放列表",
+  "playlistsOnly": "仅自建歌单",
   "@playlistsOnly": {},
-  "smartlistsOnly": "仅智能列表",
+  "smartlistsOnly": "仅智能歌单",
   "@smartlistsOnly": {},
-  "orderSettingsDescription": "重排选项以更改优先级。",
+  "orderSettingsDescription": "重排选项以更改排序优先级。",
   "@orderSettingsDescription": {},
   "disc": "唱片",
   "@disc": {},
@@ -181,41 +181,41 @@
   "@finish": {},
   "allowedFileExtensionsDescription": "需要扫描的媒体文件扩展名列表，多个以英文逗号分隔，不区分大小写。如果您不清楚做什么，保持默认值即可。",
   "@allowedFileExtensionsDescription": {},
-  "allowedFileExtensions": "允许扫描的文件扩展名",
+  "allowedFileExtensions": "允许扫描的歌曲扩展名",
   "@allowedFileExtensions": {},
   "shuffleAll": "无序播放全部",
   "@shuffleAll": {},
   "history": "历史",
   "@history": {},
-  "addWidgetToHome": "将小工具添加到主页",
+  "addWidgetToHome": "添加快捷方式至主屏",
   "@addWidgetToHome": {},
   "lastPlayed": "上次播放",
   "@lastPlayed": {},
-  "song": "歌曲",
+  "song": "首歌曲",
   "@song": {},
-  "songs": "歌曲",
+  "songs": "首歌曲",
   "@songs": {},
   "name": "名称",
   "@name": {},
-  "smartlists": "智能列表",
+  "smartlists": "智能歌单",
   "@smartlists": {},
-  "smartlist": "智能列表",
+  "smartlist": "智能歌单",
   "@smartlist": {},
   "sortingFilterSettings": "排序与筛选设置",
   "@sortingFilterSettings": {},
-  "maxNumberEntries": "最大条目",
+  "maxNumberEntries": "最大音乐数",
   "@maxNumberEntries": {},
   "creationDate": "创建日期",
   "@creationDate": {},
   "displaySettings": "显示设置",
   "@displaySettings": {},
-  "addSmartlist": "添加智能列表",
+  "addSmartlist": "添加智能歌单",
   "@addSmartlist": {},
-  "addPlaylist": "添加播放列表",
+  "addPlaylist": "添加自建歌单",
   "@addPlaylist": {},
-  "createPlaylist": "创建播放列表",
+  "createPlaylist": "创建歌单",
   "@createPlaylist": {},
-  "editPlaylist": "编辑播放列表",
+  "editPlaylist": "编辑歌单",
   "@editPlaylist": {},
   "customizeCover": "自定义封面",
   "@customizeCover": {},
@@ -231,7 +231,7 @@
   "@dontExclude": {},
   "filterSettings": "过滤器设置",
   "@filterSettings": {},
-  "filterLikes": "喜欢介于 {min} 和 {max} 之间",
+  "filterLikes": "点赞介于 {min} 和 {max} 之间",
   "@filterLikes": {
     "placeholders": {
       "min": {
@@ -242,9 +242,9 @@
       }
     }
   },
-  "minPlayCount": "最小播放次数",
+  "minPlayCount": "最小播放量",
   "@minPlayCount": {},
-  "maxPlayCount": "最大播放次数",
+  "maxPlayCount": "最大播放量",
   "@maxPlayCount": {},
   "selectArtistsExclude": "选择要排除的艺人：已选择 {num} 项",
   "@selectArtistsExclude": {
@@ -266,9 +266,9 @@
   "@includeAllArtists": {},
   "excludeArtists": "排除选定的艺人",
   "@excludeArtists": {},
-  "createSmartlist": "创建智能列表",
+  "createSmartlist": "创建智能歌单",
   "@createSmartlist": {},
-  "editSmartlist": "编辑智能列表",
+  "editSmartlist": "编辑智能歌单",
   "@editSmartlist": {},
   "play": "播放",
   "@play": {},
@@ -296,9 +296,9 @@
   "@year": {},
   "timeAdded": "添加时间",
   "@timeAdded": {},
-  "addToPlaylist": "加入播放列表",
+  "addToPlaylist": "加入歌单",
   "@addToPlaylist": {},
-  "removeFromPlaylist": "从播放列表移除",
+  "removeFromPlaylist": "从歌单移除",
   "@removeFromPlaylist": {},
   "cancel": "取消",
   "@cancel": {},
@@ -350,7 +350,7 @@
       }
     }
   },
-  "metaDataDescription": "导入喜欢、黑名单等。",
+  "metaDataDescription": "导入点赞量、黑名单等。",
   "@metaDataDescription": {},
   "moreAvailable": "超过 {num} 项可用",
   "@moreAvailable": {
@@ -361,5 +361,53 @@
     }
   },
   "librarySettings": "曲库设置",
-  "@librarySettings": {}
+  "@librarySettings": {},
+  "homeCustomization": "个性化主页",
+  "@homeCustomization": {},
+  "albumOfTheDay": "今日特辑",
+  "@albumOfTheDay": {},
+  "artistOfTheDay": "今日大咖",
+  "@artistOfTheDay": {},
+  "nSongs": "{count, plural, =0{无歌曲} =1{1 首} other{{count} 首}}",
+  "@nSongs": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "both": "二者皆可",
+  "@both": {},
+  "orderSettings": "排序设置",
+  "@orderSettings": {},
+  "nSongsSelected": "{count, plural, =0{未选中任何歌} =1{选中 1 首歌} other{选中 {count} 首歌}}",
+  "@nSongsSelected": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "appendToQueued": "附加至手动排列歌曲后",
+  "@appendToQueued": {},
+  "nSongsInQueue": "队列 {count, plural, =0{无歌曲} =1{含 1 首歌} other{含 {count} 首歌}}",
+  "@nSongsInQueue": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "nextUp": "播放队列",
+  "@nextUp": {},
+  "playedNTimes": "{count, plural, =0{从未播放} =1{已播放 1 次} other{已播放 {count} 次}}",
+  "@playedNTimes": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "miscellaneous": "杂七杂八",
+  "@miscellaneous": {}
 }
