@@ -1,3 +1,8 @@
+## 1.5.1
+- Security updates.
+- Fix in queue generation.
+- Translation updates.
+
 ## 1.5
 
 - Implemented loop mode to stop after every song (#102).
