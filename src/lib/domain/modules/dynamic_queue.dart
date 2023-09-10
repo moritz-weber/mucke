@@ -106,7 +106,7 @@ class DynamicQueue implements ManagedQueueInfo {
       _availableSongs,
       indices: [startIndex],
       keepIndex: keepIndex,
-      blockLevel: calcBlockLevel(shuffleMode, _playableSubject.value),
+      blockLevel: calcBlockLevel(shuffleMode, playable),
     );
     // if all songs would be filtered out, we just don't apply the filter
     if (filteredAvailableSongs.isEmpty) filteredAvailableSongs = _availableSongs;

@@ -3,6 +3,7 @@ import 'package:mockito/annotations.dart';
 
 import 'package:mucke/domain/entities/playable.dart';
 import 'package:mucke/domain/entities/queue_item.dart';
+import 'package:mucke/domain/entities/shuffle_mode.dart';
 import 'package:mucke/domain/modules/dynamic_queue.dart';
 import 'package:mucke/domain/repositories/music_data_repository.dart';
 import 'package:mucke/system/models/queue_item_model.dart';
@@ -401,6 +402,20 @@ void main() {
       // assert
       expect(newStartIndex, 0);
       expect(tFilteredAvailableSongs[newStartIndex], tAllAvailableSongs.first);
+    });
+  });
+
+  group('generateQueue: ShuffleMode.none', () {
+    test('play album from start', () async {
+      // arrange
+      final tAlbumSongs = claymanSongs;
+    
+      // act
+      await sut.generateQueue(tAlbumSongs, clayman, 0, ShuffleMode.none);
+    
+      // assert
+      expect(sut.queue.length, tAlbumSongs.length);
+      expect(sut.queue, tAlbumSongs);
     });
   });
 }
