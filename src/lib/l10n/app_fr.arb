@@ -282,8 +282,6 @@
   "@nextUp": {},
   "previousSong": "précédent",
   "@previousSong": {},
-  "nextSong": "suivant",
-  "@nextSong": {},
   "playedNTimes": "{count, plural, =0{pas encore jouée} =1{jouée une fois} other{jouée {count} fois}}",
   "@playedNTimes": {
     "placeholders": {
@@ -409,5 +407,11 @@
   "errorReadData": "Erreur de lecture du fichier de données.",
   "@errorReadData": {},
   "systemSettings": "Paramètres système",
-  "@systemSettings": {}
+  "@systemSettings": {},
+  "manageExternalExplanation": "Accorder cette permission peut améliorer considérablement la vitesse des analyses de la bibliothèque. Cela ne modifie pas le comportement de l'application autrement.",
+  "@manageExternalExplanation": {},
+  "grantManagePermission": "Accorder la permission pour gérer tous les fichiers.",
+  "@grantManagePermission": {},
+  "managePermissionSubtitle": "La révocation de la permission entraînera le redémarrage de l'application.",
+  "@managePermissionSubtitle": {}
 }

@@ -199,8 +199,6 @@
   "@nextUp": {},
   "previousSong": "Anterior",
   "@previousSong": {},
-  "nextSong": "Siguiente",
-  "@nextSong": {},
   "alwaysPlayPrevious": "Siempre reproducir la canción anterior antes",
   "@alwaysPlayPrevious": {},
   "playedNTimes": "{count, plural, =0{not played yet} =1{played one time} other{played {count} times}}",
