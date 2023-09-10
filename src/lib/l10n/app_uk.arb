@@ -167,8 +167,6 @@
   "@addToPlaylist": {},
   "previousSong": "попередня",
   "@previousSong": {},
-  "nextSong": "наступна",
-  "@nextSong": {},
   "playedNTimes": "{count, plural, =0{ще не грали} =1{грали один раз} other{грали {count} разів}}",
   "@playedNTimes": {
     "placeholders": {

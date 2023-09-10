@@ -286,9 +286,7 @@
   "@nextUp": {},
   "previousSong": "previous",
   "@previousSong": {},
-  "nextSong": "next",
-  "@nextSong": {},
-  "playedNTimes": "{count, plural, =0{not played yet} =1{played one time} other{played {count} times}}",
+  "playedNTimes": "{count, plural, =0{not played yet} =1{played once} other{played {count} times}}",
   "@playedNTimes": {
     "placeholders": {
       "count": {
@@ -387,14 +385,19 @@
   "disabledBattery": "Battery optimization is disabled.",
   "@disabledBattery": {},
   "manageExternalExplanation": "Granting this permission can improve the speed of library scans significantly. It does not change the behavior of the app otherwise.",
+  "@manageExternalExplanation": {},
   "grantManagePermission": "Grant permission to manage all files.",
+  "@grantManagePermission": {},
   "managePermissionSubtitle": "Revoking the permission will result in a restart of the app.",
+  "@managePermissionSubtitle": {},
   "favorites": "Favorites",
-  "favoritesDesc": "Contains all the songs that you like.",
   "@favorites": {},
+  "favoritesDesc": "Contains all the songs that you like.",
+  "@favoritesDesc": {},
   "newlyAdded": "Newly added",
-  "newlyAddedDesc": "Contains the 100 songs that were added last.",
   "@newlyAdded": {},
+  "newlyAddedDesc": "Contains the 100 songs that were added last.",
+  "@newlyAddedDesc": {},
   "back": "Back",
   "@back": {},
   "next": "Next",
@@ -402,8 +405,13 @@
   "finish": "Finish",
   "@finish": {},
   "errorReadData": "Error reading data file.",
+  "@errorReadData": {},
   "createSmartlists": "Create Smartlists",
+  "@createSmartlists": {},
   "createSmartlistsDesc": "Create suggested smartlists to enhance your listening experience. You can customize these lists later.",
+  "@createSmartlistsDesc": {},
   "create": "Create",
-  "created": "Created"
+  "@create": {},
+  "created": "Created",
+  "@created": {}
 }

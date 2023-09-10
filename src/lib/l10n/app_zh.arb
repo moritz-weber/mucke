@@ -302,8 +302,6 @@
   "@removeFromPlaylist": {},
   "cancel": "取消",
   "@cancel": {},
-  "nextSong": "下一首",
-  "@nextSong": {},
   "previousSong": "上一首",
   "@previousSong": {},
   "alwaysPlayPrevious": "总是播放前一首歌",
@@ -409,5 +407,11 @@
     }
   },
   "miscellaneous": "杂七杂八",
-  "@miscellaneous": {}
+  "@miscellaneous": {},
+  "minYear": "最早年份",
+  "@minYear": {},
+  "highlights": "高亮",
+  "@highlights": {},
+  "maxYear": "最晚年份",
+  "@maxYear": {}
 }

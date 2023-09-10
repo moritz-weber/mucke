@@ -336,8 +336,6 @@
   "@removeFromPlaylist": {},
   "previousSong": "precendente",
   "@previousSong": {},
-  "nextSong": "seguente",
-  "@nextSong": {},
   "cancel": "Annulla",
   "@cancel": {},
   "playedNTimes": "{count, plural, =0{non ancora riprodotta} =1{riprodotta una volta} other{riprodotta {count} volte}}",

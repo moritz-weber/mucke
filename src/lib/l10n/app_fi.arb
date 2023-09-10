@@ -148,8 +148,6 @@
   "@cancel": {},
   "previousSong": "edellinen",
   "@previousSong": {},
-  "nextSong": "seuraava",
-  "@nextSong": {},
   "welcomeToMucke": "Tervetuloa käyttämään muckea!",
   "@welcomeToMucke": {},
   "setupLibrary": "Määritä kirjasto",
