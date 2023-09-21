@@ -39,6 +39,19 @@ mucke uses [Weblate](https://hosted.weblate.org/engage/mucke/) for community tra
 
 [![Translation status](https://hosted.weblate.org/widgets/mucke/-/multi-auto.svg)](https://hosted.weblate.org/engage/mucke/)
 
+## Donating
+
+mucke is a hobby project. Its development progress is largely limited by time and mood 😉
+Money won't change that, so there is no option to donate to mucke.
+
+However, if you enjoy mucke and want to support the project monetarily, you could donate to the projects that mucke depends on.
+This is a short list of developers, you could support instead:
+
+- [ryanheise](https://github.com/sponsors/ryanheise)
+- [simolus3](https://github.com/sponsors/simolus3)
+- [Baseflow](https://github.com/sponsors/Baseflow)
+
+
 ## Thanks
 
 Thanks to [@maxxs.arts](https://www.instagram.com/maxxs.arts/) for designing the logo 🤘
