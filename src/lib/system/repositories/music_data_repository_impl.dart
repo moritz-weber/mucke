@@ -152,7 +152,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
     final changedSongs = songs.where((e) => e.blockLevel != blockLevel);
     final newSongs =
         changedSongs.map((e) => (e as SongModel).copyWith(blockLevel: blockLevel)).toList();
-    _songUpdateSubject.add({for (var s in newSongs) s.path: s});
+    _songUpdateSubject.add({for (final s in newSongs) s.path: s});
     await _musicDataSource.updateSongs(newSongs);
   }
 
@@ -171,7 +171,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
       final newSongs =
           changedSongs.map((e) => (e as SongModel).copyWith(likeCount: count)).toList();
 
-      _songUpdateSubject.add({for (var s in newSongs) s.path: s});
+      _songUpdateSubject.add({for (final s in newSongs) s.path: s});
       await _musicDataSource.updateSongs(newSongs);
     }
   }

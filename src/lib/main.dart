@@ -119,9 +119,9 @@ class _RootPageState extends State<RootPage> {
         navStore.push(
           context,
           MaterialPageRoute<Widget>(
-            builder: (BuildContext context) => WillPopScope(
-              onWillPop: () async => false,
-              child: const InitPage(),
+            builder: (BuildContext context) => const PopScope(
+              canPop: false,
+              child: InitPage(),
             ),
           ),
         );
@@ -130,7 +130,10 @@ class _RootPageState extends State<RootPage> {
       }
     });
 
-    return WillPopScope(
+    return PopScope(
+      onPopInvoked: (bool didPop) {
+        navStore.onWillPop();
+      },
       child: Observer(
         builder: (BuildContext context) => Scaffold(
           body: IndexedStack(
@@ -143,7 +146,7 @@ class _RootPageState extends State<RootPage> {
           ),
         ),
       ),
-      onWillPop: () => navStore.onWillPop(),
+      
     );
   }
 }

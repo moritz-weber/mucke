@@ -6,7 +6,7 @@ version: 1.5.1+12
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
-  flutter: ">=3.7.0"
+  flutter: ">=3.19.0"
 
 dependencies:
   async_task: ^1.0.20

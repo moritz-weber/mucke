@@ -308,7 +308,7 @@ class _SearchPageState extends State<SearchPage> {
                           ),
                         ),
                       ),
-                      for (int i in songs.asMap().keys)
+                      for (final int i in songs.asMap().keys)
                         SongListTile(
                           song: songs[i],
                           onTap: () => audioStore.playSong(
@@ -347,7 +347,7 @@ class _SearchPageState extends State<SearchPage> {
                           ),
                         ),
                       ),
-                      for (int i in smartlists.asMap().keys)
+                      for (final int i in smartlists.asMap().keys)
                         ListTile(
                           title: Text(smartlists[i].name),
                           leading: PlaylistCover(
@@ -387,7 +387,7 @@ class _SearchPageState extends State<SearchPage> {
                           ),
                         ),
                       ),
-                      for (int i in playlists.asMap().keys)
+                      for (final int i in playlists.asMap().keys)
                         ListTile(
                           title: Text(playlists[i].name),
                           leading: PlaylistCover(
