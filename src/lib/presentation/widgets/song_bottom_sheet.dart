@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/localizations.dart';
+import 'package:mucke/l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:share_plus/share_plus.dart';
@@ -221,7 +221,7 @@ class _SongBottomSheetState extends State<SongBottomSheet> {
                               MuckeIcons.link_prev,
                               color: song.previous
                                   ? utils.linkColor(true, false)
-                                  : utils.linkColor(true, false).withOpacity(0.5),
+                                  : utils.linkColor(true, false).withValues(alpha: 0.5),
                             ),
                             value: song.previous,
                             onChanged: snapshot.data![0]
@@ -244,7 +244,7 @@ class _SongBottomSheetState extends State<SongBottomSheet> {
                               MuckeIcons.link_next,
                               color: song.next
                                   ? utils.linkColor(false, true)
-                                  : utils.linkColor(false, true).withOpacity(0.5),
+                                  : utils.linkColor(false, true).withValues(alpha: 0.5),
                             ),
                             value: song.next,
                             onChanged: snapshot.data![1]

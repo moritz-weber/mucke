@@ -1,5 +1,5 @@
 import 'package:audio_service/audio_service.dart';
-import 'package:flutter_fimber/flutter_fimber.dart';
+import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../domain/entities/playback_event.dart';
@@ -56,7 +56,7 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
     implements PlatformIntegrationDataSource {
   PlatformIntegrationDataSourceImpl();
 
-  static final _log = FimberLog('PlatformIntegrationDataSourceImpl');
+  static final _log = Logger('PlatformIntegrationDataSourceImpl');
 
   final BehaviorSubject<PlatformIntegrationEvent> _eventSubject = BehaviorSubject();
 
@@ -64,31 +64,31 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
 
   @override
   Future<void> play() async {
-    _log.d('play');
+    _log.fine('play');
     _eventSubject.add(PlatformIntegrationEvent(type: PlatformIntegrationEventType.play));
   }
 
   @override
   Future<void> pause() async {
-    _log.d('pause');
+    _log.fine('pause');
     _eventSubject.add(PlatformIntegrationEvent(type: PlatformIntegrationEventType.pause));
   }
 
   @override
   Future<void> skipToNext() async {
-    _log.d('skipToNext');
+    _log.fine('skipToNext');
     _eventSubject.add(PlatformIntegrationEvent(type: PlatformIntegrationEventType.skipNext));
   }
 
   @override
   Future<void> skipToPrevious() async {
-    _log.d('skipToPrevious');
+    _log.fine('skipToPrevious');
     _eventSubject.add(PlatformIntegrationEvent(type: PlatformIntegrationEventType.skipPrevious));
   }
 
   @override
   Future<void> seek(Duration position) async {
-    _log.d('skipToPrevious');
+    _log.fine('skipToPrevious');
     _eventSubject.add(PlatformIntegrationEvent(
       type: PlatformIntegrationEventType.seek,
       payload: {'position': position},
@@ -97,14 +97,14 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
 
   @override
   Future<void> rewind() async {
-    _log.d('rewind -> like');
+    _log.fine('rewind -> like');
     _eventSubject.add(PlatformIntegrationEvent(
         type: PlatformIntegrationEventType.like, payload: {'path': mediaItem.value?.id}));
   }
 
   @override
   Future<void> click([MediaButton button = MediaButton.media]) async {
-    _log.d(button.toString());
+    _log.fine(button.toString());
 
     switch (button) {
       case MediaButton.media:
@@ -173,7 +173,7 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
     } else if (pe.processingState == ProcessingState.none) {
       stop();
     } else {
-      _log.d(pe.processingState.toString());
+      _log.fine(pe.processingState.toString());
     }
   }
 

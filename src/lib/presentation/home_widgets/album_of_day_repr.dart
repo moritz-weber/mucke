@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/localizations.dart';
 
+import 'package:mucke/l10n/localizations.dart';
 import '../../domain/entities/home_widgets/album_of_day.dart';
 import 'home_widget_repr.dart';
 import 'widgets/album_of_day_widget.dart';

@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:collection/collection.dart';
-import 'package:fimber/fimber.dart';
+import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:string_similarity/string_similarity.dart';
 
@@ -50,7 +50,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
   final BehaviorSubject<Artist?> _artistOfDaySubject = BehaviorSubject();
   final BehaviorSubject<Set<String>> _blockedFilesSubject = BehaviorSubject();
 
-  static final _log = FimberLog('MusicDataRepositoryImpl');
+  static final _log = Logger('MusicDataRepositoryImpl');
 
   @override
   Stream<Map<String, Song>> get songUpdateStream => _songUpdateSubject.stream;
@@ -114,7 +114,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
 
   @override
   Future<void> updateDatabase() async {
-    _log.d('updateDatabase called');
+    _log.fine('updateDatabase called');
 
     final localMusic = await _localMusicFetcher.getLocalMusic();
 
@@ -122,9 +122,9 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
     final albums = localMusic['ALBUMS'] as List<AlbumModel>;
     final songs = localMusic['SONGS'] as List<SongModel>;
 
-    _log.d('Artists found: ${artists.length}');
-    _log.d('Albums found: ${albums.length}');
-    _log.d('Songs found: ${songs.length}');
+    _log.fine('Artists found: ${artists.length}');
+    _log.fine('Albums found: ${albums.length}');
+    _log.fine('Songs found: ${songs.length}');
 
     await _updateArtists(artists);
     await _updateAlbums(albums);
@@ -132,7 +132,7 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
 
     await _musicDataSource.cleanupDatabase();
 
-    _log.d('updateDatabase finished');
+    _log.fine('updateDatabase finished');
 
     _updateHighlightStreams();
   }

@@ -64,7 +64,7 @@ class SongListTileNumbered extends StatelessWidget {
                 child: Icon(
                   linkIcon(song.previous, song.next),
                   size: 13.0,
-                  color: linkColor(song.previous, song.next).withOpacity(0.7),
+                  color: linkColor(song.previous, song.next).withValues(alpha: 0.7),
                 ),
               ),
           Expanded(

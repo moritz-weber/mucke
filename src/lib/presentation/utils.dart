@@ -76,7 +76,7 @@ IconData likeCountIcon(int likeCount) {
 }
 
 Color likeCountColor(int likeCount) {
-  return likeCount == 3 ? LIGHT1 : Colors.white.withOpacity(0.24 + 0.18 * likeCount);
+  return likeCount == 3 ? LIGHT1 : Colors.white.withValues(alpha: 0.24 + 0.18 * likeCount);
 }
 
 IconData linkIcon(bool prev, bool next) {

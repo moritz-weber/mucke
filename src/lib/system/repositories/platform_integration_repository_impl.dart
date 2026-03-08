@@ -1,4 +1,4 @@
-import 'package:flutter_fimber/flutter_fimber.dart';
+import 'package:logging/logging.dart';
 
 import '../../domain/entities/playback_event.dart';
 import '../../domain/entities/song.dart';
@@ -10,7 +10,7 @@ import '../models/song_model.dart';
 class PlatformIntegrationRepositoryImpl implements PlatformIntegrationRepository {
   PlatformIntegrationRepositoryImpl(this._platformIntegrationDataSource);
 
-  static final _log = FimberLog('PlatformIntegrationRepositoryImpl');
+  static final _log = Logger('PlatformIntegrationRepositoryImpl');
 
   final PlatformIntegrationDataSource _platformIntegrationDataSource;
 
@@ -24,7 +24,7 @@ class PlatformIntegrationRepositoryImpl implements PlatformIntegrationRepository
 
   @override
   void setCurrentSong(Song? song) {
-    _log.d('setCurrentSong');
+    _log.fine('setCurrentSong');
     _platformIntegrationDataSource.setCurrentSong(song != null ? song as SongModel : null);
   }
 }

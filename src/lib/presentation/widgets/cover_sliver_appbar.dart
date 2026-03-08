@@ -205,7 +205,7 @@ class Header extends StatelessWidget {
                 style: TextStyle(
                   fontSize:
                       Tween<double>(begin: 0, end: 13).evaluate(animation),
-                  color: Colors.white.withOpacity(
+                  color: Colors.white.withValues(alpha: 
                     Tween<double>(begin: 0, end: 1).evaluate(animation2),
                   ),
                   fontWeight: FontWeight.w300,
@@ -231,7 +231,7 @@ class Header extends StatelessWidget {
         softWrap: false,
         style: TextStyle(
           fontSize: Tween<double>(begin: 0, end: 16).evaluate(animation),
-          color: Colors.white.withOpacity(
+          color: Colors.white.withValues(alpha: 
               Tween<double>(begin: 0, end: 1).evaluate(animation2)),
           fontWeight: FontWeight.w500,
         ),
@@ -247,7 +247,7 @@ class Header extends StatelessWidget {
             softWrap: false,
             style: TextStyle(
               fontSize: Tween<double>(begin: 0, end: 16).evaluate(animation),
-              color: Colors.white.withOpacity(
+              color: Colors.white.withValues(alpha: 
                   Tween<double>(begin: 0, end: 1).evaluate(animation2)),
               fontWeight: FontWeight.w500,
             ).underlined(),

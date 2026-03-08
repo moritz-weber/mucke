@@ -1,8 +1,8 @@
+import 'package:disable_battery_optimization/disable_battery_optimization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:optimization_battery/optimization_battery.dart';
+import 'package:mucke/l10n/localizations.dart';
 
 import '../../state/import_store.dart';
 import '../../state/settings_store.dart';
@@ -36,21 +36,25 @@ class InitSystemPage extends StatelessWidget {
             InfoCard(
               text: L10n.of(context)!.batteryExplanation,
             ),
-            BatteryOptimizationsObserver(builder: (context, isIgnore) {
-              return SwitchListTile(
-                title: Text(L10n.of(context)!.openBattery),
-                subtitle: Text(
-                  (isIgnore != null && !isIgnore)
-                      ? L10n.of(context)!.disableBattery
-                      : L10n.of(context)!.disabledBattery,
-                  style: TEXT_SMALL_SUBTITLE,
-                ),
-                value: isIgnore != null && isIgnore,
-                onChanged: (_) {
-                  OptimizationBattery.openBatteryOptimizationSettings();
-                },
-              );
-            }),
+            FutureBuilder<bool?>(
+              future: DisableBatteryOptimization.isBatteryOptimizationDisabled,
+              builder: (context, AsyncSnapshot<bool?> snap) {
+                final bool? isDisabled = snap.data;
+                return SwitchListTile(
+                  title: Text(L10n.of(context)!.openBattery),
+                  subtitle: Text(
+                    (isDisabled != null && !isDisabled)
+                        ? L10n.of(context)!.disableBattery
+                        : L10n.of(context)!.disabledBattery,
+                    style: TEXT_SMALL_SUBTITLE,
+                  ),
+                  value: isDisabled != null && isDisabled,
+                  onChanged: (_) {
+                    DisableBatteryOptimization.showDisableBatteryOptimizationSettings();
+                  },
+                );
+              },
+            ),
             const Divider(
               height: 16.0,
             ),

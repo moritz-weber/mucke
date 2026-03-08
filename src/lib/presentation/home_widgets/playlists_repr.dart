@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/localizations.dart';
+import 'package:mucke/l10n/localizations.dart';
 
 import '../../domain/entities/home_widgets/playlists.dart';
 import 'forms/playlists_form_page.dart';

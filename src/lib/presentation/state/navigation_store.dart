@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_fimber/flutter_fimber.dart';
+import 'package:logging/logging.dart';
 import 'package:mobx/mobx.dart';
 
 part 'navigation_store.g.dart';
@@ -14,7 +14,7 @@ abstract class _NavigationStore with Store {
   GlobalKey<NavigatorState>? libraryNavKey;
   GlobalKey<NavigatorState>? homeNavKey;
 
-  static final _log = FimberLog('NavigationStore');
+  static final _log = Logger('NavigationStore');
 
   @observable
   ObservableList<int> navIndexHistory = [0].asObservable();
@@ -26,8 +26,8 @@ abstract class _NavigationStore with Store {
 
   @action
   bool setNavIndex(int i, {bool updateTypeHistory = true}) {
-    _log.d('setNavIndex');
-    _log.d(
+    _log.fine('setNavIndex');
+    _log.fine(
         'history: ${_navTypeHistory.length} (${_navTypeHistory.isEmpty ? "-" : _navTypeHistory.last})');
     if (i != navIndex) {
       if (updateTypeHistory) _navTypeHistory.add(_NavState(_NavType.tab, navIndex, i));
@@ -43,22 +43,22 @@ abstract class _NavigationStore with Store {
   }
 
   Future<T?> push<T extends Object?>(BuildContext context, Route<T> route) {
-    _log.d('push');
-    _log.d(
+    _log.fine('push');
+    _log.fine(
         'history: ${_navTypeHistory.length} (${_navTypeHistory.isEmpty ? "-" : _navTypeHistory.last})');
     _navTypeHistory.add(_NavState(_NavType.route, navIndex, navIndex));
     return Navigator.of(context).push(route);
   }
 
   void pop<T extends Object?>(BuildContext context) {
-    _log.d('pop');
-    _log.d(
+    _log.fine('pop');
+    _log.fine(
       'history: ${_navTypeHistory.length} (${_navTypeHistory.isEmpty ? "-" : _navTypeHistory.last})',
     );
 
     switch (_navTypeHistory.last.type) {
       case _NavType.tab:
-        _log.d('deviate from history!');
+        _log.fine('deviate from history!');
         // back button should now go down the stack of the active tab
         // only when this stack is empty, go back to previous tab
         // => move all route actions from this tab to the end of the history
@@ -83,7 +83,7 @@ abstract class _NavigationStore with Store {
         _navTypeHistory.removeLast();
         break;
       case _NavType.both:
-        _log.d('change both to tab!');
+        _log.fine('change both to tab!');
         // change last action to tab (not too late to get on the right track)
         final last = _navTypeHistory.removeLast();
         _navTypeHistory.add(_NavState(_NavType.tab, last.origin, last.target));
@@ -94,8 +94,8 @@ abstract class _NavigationStore with Store {
   }
 
   void pushOnLibrary(Route route) {
-    _log.d('pushOnLibrary');
-    _log.d(
+    _log.fine('pushOnLibrary');
+    _log.fine(
       'history: ${_navTypeHistory.length} (${_navTypeHistory.isEmpty ? "-" : _navTypeHistory.last})',
     );
     final _navIndex = navIndex;
@@ -111,8 +111,8 @@ abstract class _NavigationStore with Store {
 
   /// This function is triggered when pressing the Android back button.
   Future<bool> onWillPop() async {
-    _log.d('onWillPop');
-    _log.d(
+    _log.fine('onWillPop');
+    _log.fine(
       'history: ${_navTypeHistory.length} (${_navTypeHistory.isEmpty ? "-" : _navTypeHistory.last})',
     );
     if (_navTypeHistory.isEmpty) {

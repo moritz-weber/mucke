@@ -1,6 +1,6 @@
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/localizations.dart';
+import 'package:mucke/l10n/localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:page_indicator_plus/page_indicator_plus.dart';
 

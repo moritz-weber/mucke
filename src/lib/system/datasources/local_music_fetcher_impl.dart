@@ -6,8 +6,8 @@ import 'dart:typed_data';
 import 'package:async_task/async_task.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:image/image.dart' as img;
+import 'package:logging/logging.dart';
 import 'package:metadata_god/metadata_god.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -31,7 +31,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     this._musicDataSource,
   );
 
-  static final _log = FimberLog('LocalMusicFetcher');
+  static final _log = Logger('LocalMusicFetcher');
 
   final SettingsDataSource _settingsDataSource;
   final MusicDataSource _musicDataSource;
@@ -68,30 +68,30 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
 
     final Set<String> songFilePaths = {};
     for (final libDir in libDirs) {
-      _log.d('Checking folder: ${libDir.path}');
+      _log.fine('Checking folder: ${libDir.path}');
       songFilePaths.addAll(
         await getSongFilesInDirectory(libDir.path, allowedExtensions, blockedPaths),
       );
     }
     final List<File> songFiles = songFilePaths.map((e) => File(e)).toList();
 
-    _log.d('Found songs: ${songFiles.length}');
+    _log.fine('Found songs: ${songFiles.length}');
 
     final albumsInDb = await getSortedAlbums();
     int newAlbumId = albumsInDb.isNotEmpty ? albumsInDb.last.id + 1 : 0;
-    _log.d('New albums start with id: $newAlbumId');
+    _log.fine('New albums start with id: $newAlbumId');
 
     final artistsInDb = await getSortedArtists();
     int newArtistId = artistsInDb.isNotEmpty ? artistsInDb.last.id + 1 : 0;
-    _log.d('New artists start with id: $newArtistId');
+    _log.fine('New artists start with id: $newArtistId');
 
     final List<File> songFilesToCheck = await getSongFilesToCheck(songFiles);
     _fileNumSubject.add(songFilesToCheck.length);
-    _log.d('Song files to check: ${songFilesToCheck.length}');
+    _log.fine('Song files to check: ${songFilesToCheck.length}');
 
     final existingSongFiles =
         songFiles.where((element) => !songFilesToCheck.contains(element)).toList();
-    _log.d('Existing songs: ${existingSongFiles.length}');
+    _log.fine('Existing songs: ${existingSongFiles.length}');
 
     final structs = await mapSongsAlreadyScanned(existingSongFiles, albumsInDb, artistsInDb);
 
@@ -102,10 +102,10 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     final albumArtMap = structs['albumArtMap'] as Map<int, String>;
 
     final songsToCheck = await getMetadataForFiles(songFilesToCheck);
-    _log.d('Songs to process: ${songsToCheck.length}');
+    _log.fine('Songs to process: ${songsToCheck.length}');
 
     for (final (songFile, songData) in songsToCheck) {
-      _log.i('Processing Song ${songFile.path}');
+      _log.info('Processing Song ${songFile.path}');
       _progressSubject.add(++scanCount);
 
       final lastModified = songFile.lastModifiedSync();
@@ -157,7 +157,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
             albumArt = image.readAsBytesSync();
             break;
           } catch (e) {
-            _log.e('Could not read image file: ${image.path}');
+            _log.severe('Could not read image file: ${image.path}');
           }
         }
       }
@@ -194,7 +194,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
       );
     }
 
-    _log.d('Songs in list: ${songs.length}');
+    _log.fine('Songs in list: ${songs.length}');
 
     final albumAccentTasks = albums
         .where((element) => element.color == null && element.albumArtPath != null)
@@ -219,7 +219,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
       _progressSubject.add(++scanCount);
       final (albumId, color) = await execution;
       if (color == null) {
-        _log.w('failed getting color for albumId $albumId');
+        _log.warning('failed getting color for albumId $albumId');
         continue;
       }
 
@@ -308,7 +308,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     List<AlbumModel> albumsInDb,
     List<ArtistModel> artistsInDb,
   ) async {
-    _log.d('Mapping already scanned songs: START');
+    _log.fine('Mapping already scanned songs: START');
     final List<SongModel> songs = [];
     final List<AlbumModel> albums = [];
     final Set<ArtistModel> artists = {};
@@ -320,7 +320,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     final Map<int, Color?> colorMap = {};
 
     for (final songFile in songFiles) {
-      _log.d('${songFile.path}');
+      _log.fine('${songFile.path}');
       final song = (await _musicDataSource.getSongByPath(songFile.path))!;
 
       final album = albumsInDb.singleWhere((a) => a.id == song.albumId);
@@ -352,7 +352,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
         songs.add(song.copyWith(color: colorMap[album.id]));
       }
     }
-    _log.d('Mapping already scanned songs: DONE');
+    _log.fine('Mapping already scanned songs: DONE');
     return {
       'songs': songs,
       'albums': albums,
@@ -363,7 +363,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
   }
 
   Future<List<(File, Metadata)>> getMetadataForFiles(List<File> filesToCheck) async {
-    _log.d('Getting meta data for songs: START');
+    _log.fine('Getting meta data for songs: START');
     final List<(File, Metadata)> songsMetadata = [];
 
     final tasks = filesToCheck.map((e) => MetadataLoader(e));
@@ -387,7 +387,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
 
     asyncExecutor.close();
 
-    _log.d('Getting meta data for songs: DONE');
+    _log.fine('Getting meta data for songs: DONE');
     return songsMetadata;
   }
 

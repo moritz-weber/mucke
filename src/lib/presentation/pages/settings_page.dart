@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:disable_battery_optimization/disable_battery_optimization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:optimization_battery/optimization_battery.dart';
+import 'package:mucke/l10n/localizations.dart';
 
 import '../../defaults.dart';
 import '../state/music_data_store.dart';
@@ -185,21 +185,25 @@ class SettingsPage extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const Divider(),
-                    BatteryOptimizationsObserver(builder: (context, isIgnore) {
-                      return ListTile(
-                        title: Text(L10n.of(context)!.openBattery),
-                        subtitle: Text(
-                          (isIgnore != null && !isIgnore)
-                              ? L10n.of(context)!.disableBattery
-                              : L10n.of(context)!.disabledBattery,
-                          style: TEXT_SMALL_SUBTITLE,
-                        ),
-                        trailing: const Icon(Icons.chevron_right_rounded),
-                        onTap: () {
-                          OptimizationBattery.openBatteryOptimizationSettings();
-                        },
-                      );
-                    }),
+                    FutureBuilder<bool?>(
+                      future: DisableBatteryOptimization.isBatteryOptimizationDisabled,
+                      builder: (context, AsyncSnapshot<bool?> snap) {
+                        final bool? isDisabled = snap.data;
+                        return ListTile(
+                          title: Text(L10n.of(context)!.openBattery),
+                          subtitle: Text(
+                            (isDisabled != null && !isDisabled)
+                                ? L10n.of(context)!.disableBattery
+                                : L10n.of(context)!.disabledBattery,
+                            style: TEXT_SMALL_SUBTITLE,
+                          ),
+                          trailing: const Icon(Icons.chevron_right_rounded),
+                          onTap: () {
+                            DisableBatteryOptimization.showDisableBatteryOptimizationSettings();
+                          },
+                        );
+                      },
+                    ),
                   ],
                 );
               return Container();

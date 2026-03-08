@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/localizations.dart';
+import 'package:mucke/l10n/localizations.dart';
 
 import '../pages/cover_customization_page.dart';
 import '../state/cover_customization_store.dart';

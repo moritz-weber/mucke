@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:collection/collection.dart';
-import 'package:flutter_fimber/flutter_fimber.dart';
+import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../constants.dart';
@@ -23,7 +23,7 @@ class DynamicQueue implements ManagedQueueInfo {
     this._musicDataRepository,
   );
 
-  static final _log = FimberLog('DynamicQueue');
+  static final _log = Logger('DynamicQueue');
 
   final MusicDataRepository _musicDataRepository;
 
@@ -72,7 +72,7 @@ class DynamicQueue implements ManagedQueueInfo {
       if (avSong != null)
         tmpQueue.add(avSong);
       else
-        _log.w('Item not found in availableSongs: $qi');
+        _log.warning('Item not found in availableSongs: $qi');
     }
     _availableSongs = availableSongs;
     _queue = tmpQueue;
@@ -164,7 +164,7 @@ class DynamicQueue implements ManagedQueueInfo {
   }
 
   void insertIntoQueue(List<Song> songs, int index) {
-    _log.d('insertIntoQueue');
+    _log.fine('insertIntoQueue');
     final queueItems = <QueueItemModel>[];
     int i = 0;
     for (final song in songs) {
@@ -190,7 +190,7 @@ class DynamicQueue implements ManagedQueueInfo {
   }
 
   void removeQueueIndices(List<int> indices, bool permanent) {
-    _log.d('removeQueueIndices');
+    _log.fine('removeQueueIndices');
 
     for (final index in indices..sort((a, b) => -a.compareTo(b))) {
       final queueItem = _queue[index];
@@ -214,7 +214,7 @@ class DynamicQueue implements ManagedQueueInfo {
   }
 
   Future<int> reshuffleQueue(ShuffleMode shuffleMode, int currentIndex) async {
-    _log.d('reshuffleQueue');
+    _log.fine('reshuffleQueue');
     QueueItem currentQueueItem = _queue[currentIndex];
 
     const validSources = [QueueItemSource.original, QueueItemSource.added];
@@ -292,7 +292,7 @@ class DynamicQueue implements ManagedQueueInfo {
 
   /// Reacts to updates of [currentIndex] and returns a list of newly queued songs.
   Future<List<Song>> onCurrentIndexUpdated(int currentIndex, ShuffleMode shuffleMode) async {
-    _log.d('onCurrentIndexUpdated');
+    _log.fine('onCurrentIndexUpdated');
     final int numSongsAhead = _queue.length - currentIndex - 1;
     int numSongsToQueue = QUEUE_AHEAD - numSongsAhead;
 
@@ -329,7 +329,7 @@ class DynamicQueue implements ManagedQueueInfo {
 
   /// Update songs contained in queue. Return true if any song was changed.
   bool onSongsUpdated(Map<String, Song> songs) {
-    _log.d('updateSongs');
+    _log.fine('updateSongs');
     bool queueChanged = false;
     bool availableSongsChanged = false;
 
@@ -361,7 +361,7 @@ class DynamicQueue implements ManagedQueueInfo {
   }
 
   bool removeSongs(Set<String> paths) {
-    _log.d('removeSongs');
+    _log.fine('removeSongs');
     bool queueChanged = false;
     bool availableSongsChanged = false;
 

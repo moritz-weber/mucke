@@ -60,8 +60,8 @@ class SwitchTextListTile extends StatelessWidget {
               style: TextStyle(color: switchValue ? Colors.white : Colors.white24),
               decoration: InputDecoration(
                 filled: true,
-                fillColor: MaterialStateColor.resolveWith((states) {
-                  if (states.contains(MaterialState.disabled)) {
+                fillColor: WidgetStateColor.resolveWith((states) {
+                  if (states.contains(WidgetState.disabled)) {
                     return Colors.transparent;
                   }
                   return DARK35;

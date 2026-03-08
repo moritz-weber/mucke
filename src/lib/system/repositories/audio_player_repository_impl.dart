@@ -1,4 +1,4 @@
-import 'package:flutter_fimber/flutter_fimber.dart';
+import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../domain/entities/loop_mode.dart';
@@ -56,7 +56,7 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
     });
   }
 
-  static final _log = FimberLog('AudioPlayerRepositoryImpl');
+  static final _log = Logger('AudioPlayerRepositoryImpl');
 
   final AudioPlayerDataSource _audioPlayerDataSource;
   final DynamicQueue _dynamicQueue;
@@ -119,7 +119,7 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
     Playable playable,
     int? index,
   ) async {
-    _log.d('initQueue');
+    _log.fine('initQueue');
     _playableSubject.add(playable);
 
     if (index != null) {
@@ -333,7 +333,7 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
 
   void _updateCurrentSong(List<Song>? queue, int? index) {
     if (queue != null && index != null && index < queue.length) {
-      _log.d('Current song: ${queue[index]}');
+      _log.fine('Current song: ${queue[index]}');
       _currentSongSubject.add(queue[index]);
     } else {
       _currentSongSubject.add(null);

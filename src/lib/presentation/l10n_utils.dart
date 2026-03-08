@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/localizations.dart';
+import 'package:mucke/l10n/localizations.dart';
 
 import '../domain/entities/playable.dart';
 import '../domain/entities/shuffle_mode.dart';

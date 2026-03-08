@@ -1,7 +1,7 @@
-import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:logging/logging.dart';
 import 'package:text_scroll/text_scroll.dart';
 
 import '../../domain/entities/song.dart';
@@ -17,11 +17,11 @@ import 'queue_page.dart';
 class CurrentlyPlayingPage extends StatelessWidget {
   const CurrentlyPlayingPage({Key? key}) : super(key: key);
 
-  static final _log = FimberLog('CurrentlyPlayingPage');
+  static final _log = Logger('CurrentlyPlayingPage');
 
   @override
   Widget build(BuildContext context) {
-    _log.d('build started');
+    _log.fine('build started');
     final AudioStore audioStore = GetIt.I<AudioStore>();
 
     return Scaffold(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mucke/l10n/localizations.dart';
 
 import '../../../domain/entities/home_widgets/artist_of_day.dart';
 import '../../../domain/entities/shuffle_mode.dart';
