@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mucke/l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mucke/l10n/localizations.dart';
 
 import '../../state/import_store.dart';
 import '../../theming.dart';

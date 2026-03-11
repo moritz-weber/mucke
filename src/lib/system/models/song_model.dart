@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:drift/drift.dart';
-import 'package:metadata_god/metadata_god.dart';
+import 'package:audiotags/audiotags.dart';
 import 'package:path/path.dart' as p;
 
 import '../../domain/entities/song.dart';
@@ -77,7 +77,7 @@ class SongModel extends Song {
 
   factory SongModel.fromMetadata({
     required String path,
-    required Metadata songData,
+    required Tag songData,
     String? albumArtPath,
     Color? color,
     required int albumId,
@@ -85,11 +85,13 @@ class SongModel extends Song {
   }) {
     return SongModel(
       title: songData.title ?? p.basenameWithoutExtension(path),
-      artist: songData.artist ?? DEF_ARTIST,
+      artist: songData.trackArtist ?? DEF_ARTIST,
       album: songData.album ?? DEF_ALBUM,
       albumId: albumId,
       path: path,
-      duration: songData.duration ?? const Duration(milliseconds: DEF_DURATION),
+      duration: songData.duration != null
+          ? Duration(seconds: songData.duration!)
+          : const Duration(milliseconds: DEF_DURATION),
       blockLevel: 0,
       discNumber: songData.discNumber ?? 1,
       trackNumber: songData.trackNumber ?? 1,

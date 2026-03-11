@@ -377,8 +377,10 @@ Future<void> setupGetIt() async {
   final _audioHandler = await AudioService.init(
     builder: () => _platformIntegrationDataSource as AudioHandler,
     config: const AudioServiceConfig(
+      androidNotificationChannelId: 'rocks.mucke.channel.audio',
       androidNotificationChannelName: 'mucke',
       androidNotificationIcon: 'drawable/ic_stat',
+      androidNotificationOngoing: true,  // that's not the solution
     ),
   );
   getIt.registerLazySingleton<AudioHandler>(() => _audioHandler);

@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:drift/drift.dart';
-import 'package:metadata_god/metadata_god.dart';
+import 'package:audiotags/audiotags.dart';
 
 import '../../domain/entities/album.dart';
 import '../datasources/drift_database.dart';
@@ -32,12 +32,12 @@ class AlbumModel extends Album {
   }
 
   factory AlbumModel.fromMetadata({
-    required Metadata songData,
+    required Tag songData,
     required int albumId,
     String? albumArtPath,
     Color? color,
   }) {
-    final artist = songData.albumArtist ?? songData.artist;
+    final artist = songData.albumArtist ?? songData.trackArtist;
 
     return AlbumModel(
       id: albumId,

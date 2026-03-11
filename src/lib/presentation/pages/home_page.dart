@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mucke/l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mucke/l10n/localizations.dart';
 
 import '../home_widgets/home_widget_repr.dart';
 import '../state/home_page_store.dart';

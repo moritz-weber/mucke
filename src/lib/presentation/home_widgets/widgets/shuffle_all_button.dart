@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mucke/l10n/localizations.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mucke/l10n/localizations.dart';
 
 import '../../../domain/entities/shuffle_mode.dart';
 import '../../mucke_icons.dart';

@@ -8,7 +8,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
 import 'package:logging/logging.dart';
-import 'package:metadata_god/metadata_god.dart';
+import 'package:audiotags/audiotags.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -110,7 +110,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
 
       final lastModified = songFile.lastModifiedSync();
 
-      final albumArtist = songData.albumArtist ?? songData.artist;
+      final albumArtist = songData.albumArtist ?? songData.trackArtist;
       final albumString = '${songData.album}___${albumArtist}__${songData.year}';
 
       if (albumIdMap.containsKey(albumString)) {
@@ -140,7 +140,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
       albumIdMap[albumString] = albumId;
       newAlbumId = max(newAlbumId, albumId + 1);
 
-      Uint8List? albumArt = songData.picture?.data;
+      Uint8List? albumArt = songData.pictures.firstOrNull?.bytes;
 
       // fallback to get albumArt
       if (albumArt == null) {
@@ -166,7 +166,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
         albumArtMap[albumId] = await cacheAlbumArt(albumArt, albumId);
       }
 
-      final String? songArtist = songData.artist;
+      final String? songArtist = songData.trackArtist;
       final String artistName = albumArtist ?? (songArtist ?? DEF_ARTIST);
 
       final artist = artistsInDb.firstWhereOrNull((a) => a.name == artistName);
@@ -362,9 +362,9 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     };
   }
 
-  Future<List<(File, Metadata)>> getMetadataForFiles(List<File> filesToCheck) async {
+  Future<List<(File, Tag)>> getMetadataForFiles(List<File> filesToCheck) async {
     _log.fine('Getting meta data for songs: START');
-    final List<(File, Metadata)> songsMetadata = [];
+    final List<(File, Tag)> songsMetadata = [];
 
     final tasks = filesToCheck.map((e) => MetadataLoader(e));
 
@@ -414,17 +414,16 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
 
 List<AsyncTask> metadataLoaderTypeRegister() => [MetadataLoader(File(''))];
 
-class MetadataLoader extends AsyncTask<File, (File, Metadata)?> {
+class MetadataLoader extends AsyncTask<File, (File, Tag)?> {
   MetadataLoader(this.file);
 
   final File file;
 
   @override
-  AsyncTask<File, (File, Metadata)?> instantiate(
+  AsyncTask<File, (File, Tag)?> instantiate(
     File parameters, [
     Map<String, SharedData>? sharedData,
   ]) {
-    MetadataGod.initialize();
     return MetadataLoader(parameters);
   }
 
@@ -434,9 +433,11 @@ class MetadataLoader extends AsyncTask<File, (File, Metadata)?> {
   }
 
   @override
-  FutureOr<(File, Metadata)?> run() async {
+  FutureOr<(File, Tag)?> run() async {
     try {
-      return (file, await MetadataGod.readMetadata(file: file.path));
+      final tag = await AudioTags.read(file.path);
+      if (tag == null) return null;
+      return (file, tag);
     } catch (e) {
       return null;
     }

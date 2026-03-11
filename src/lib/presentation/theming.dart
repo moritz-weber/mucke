@@ -108,7 +108,7 @@ ThemeData theme() => ThemeData(
         foregroundColor: Colors.white,
       )),
       appBarTheme: const AppBarTheme(
-        color: DARK1,
+        backgroundColor: DARK1,
         elevation: 0.0,
         titleTextStyle: TextStyle(
           fontWeight: FontWeight.w800,

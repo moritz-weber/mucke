@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mucke/l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mucke/l10n/localizations.dart';
 
 import '../gradients.dart';
 import '../icons.dart';

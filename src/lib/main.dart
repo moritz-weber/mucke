@@ -5,7 +5,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
-import 'package:metadata_god/metadata_god.dart';
 import 'package:mucke/system/logging.dart';
 
 import 'domain/actors/persistence_actor.dart';
@@ -26,17 +25,10 @@ Future<void> main() async {
 
   await setupGetIt();
 
-  MetadataGod.initialize();
   final session = await AudioSession.instance;
   await session.configure(const AudioSessionConfiguration.music());
 
   await GetIt.I<PersistenceActor>().init();
-
-  // mainContext.config = mainContext.config.clone(
-  //   isSpyEnabled: true,
-  // );
-
-  // mainContext.spy(print);
 
   runApp(MyApp());
 }

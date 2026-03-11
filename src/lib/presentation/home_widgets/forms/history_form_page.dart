@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mucke/l10n/localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mucke/l10n/localizations.dart';
 
 import '../../../domain/entities/home_widgets/history.dart';
 import '../../state/home_widget_forms/history_form_store.dart';

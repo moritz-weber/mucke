@@ -29,11 +29,7 @@ dependencies:
   intl: any
   just_audio: ^0.10.5  # MIT
   logging: ^1.0.2
-  metadata_god: ^1.1.0  # MIT
-    # git:
-    #   url: https://github.com/FriederHannenheim/metadata_god.git
-    #   rev: HEAD
-    #   path: packages/metadata_god
+  audiotags: ^1.4.5  # MIT
   mobx: 2.6.0  # MIT
   package_info_plus: ^4.0.1
   page_indicator_plus: ^1.0.3  # MIT
