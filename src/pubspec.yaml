@@ -12,6 +12,7 @@ dependencies:
   async_task: ^1.0.20
   audio_service: ^0.18.18  # MIT
   audio_session: ^0.2.2  # MIT
+  audiotags: ^1.4.5  # MIT
   collection: ^1.17.1  # BSD 3
   device_info_plus: ^9.0.2  # BSD 3
   disable_battery_optimization: ^1.1.2  # MIT
@@ -29,7 +30,6 @@ dependencies:
   intl: any
   just_audio: ^0.10.5  # MIT
   logging: ^1.0.2
-  audiotags: ^1.4.5  # MIT
   mobx: 2.6.0  # MIT
   package_info_plus: ^4.0.1
   page_indicator_plus: ^1.0.3  # MIT

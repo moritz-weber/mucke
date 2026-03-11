@@ -4,11 +4,11 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:async_task/async_task.dart';
+import 'package:audiotags/audiotags.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
 import 'package:logging/logging.dart';
-import 'package:audiotags/audiotags.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -58,10 +58,10 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     final allowedExtensions = getExtensionSet(extString);
     final blockedPaths = await _musicDataSource.blockedFilesStream.first;
 
-    final hasStorageAccess = await Permission.storage.isGranted;
+    final hasStorageAccess = await Permission.audio.isGranted;
     if (!hasStorageAccess) {
-      await Permission.storage.request();
-      if (!await Permission.storage.isGranted) {
+      await Permission.audio.request();
+      if (!await Permission.audio.isGranted) {
         return {};
       }
     }
