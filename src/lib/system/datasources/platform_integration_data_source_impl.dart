@@ -3,6 +3,7 @@ import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../domain/entities/playback_event.dart';
+import '../../domain/repositories/music_data_repository.dart';
 import '../../domain/repositories/platform_integration_repository.dart';
 import '../models/playback_event_model.dart';
 import '../models/song_model.dart';
@@ -54,7 +55,11 @@ const prevCtrl = MediaControl(
 
 class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
     implements PlatformIntegrationDataSource {
-  PlatformIntegrationDataSourceImpl();
+  PlatformIntegrationDataSourceImpl(this._musicDataInfoRepository);
+
+  static const String _allSongsMediaId = 'all_songs';
+
+  final MusicDataInfoRepository _musicDataInfoRepository;
 
   static final _log = Logger('PlatformIntegrationDataSourceImpl');
 
@@ -84,6 +89,50 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
   Future<void> skipToPrevious() async {
     _log.fine('skipToPrevious');
     _eventSubject.add(PlatformIntegrationEvent(type: PlatformIntegrationEventType.skipPrevious));
+  }
+
+  @override
+  Future<List<MediaItem>> getChildren(String parentMediaId, [Map<String, dynamic>? options]) async {
+    if (parentMediaId == _allSongsMediaId) {
+      final songs = await _musicDataInfoRepository.songsStream.first;
+      return songs.map((song) => (song as SongModel).toMediaItem()).toList();
+    }
+
+    return const [
+      MediaItem(
+        id: _allSongsMediaId,
+        title: 'All songs',
+        playable: false,
+      ),
+    ];
+  }
+
+  @override
+  Future<MediaItem?> getMediaItem(String mediaId) async {
+    if (mediaId == _allSongsMediaId) {
+      return const MediaItem(
+        id: _allSongsMediaId,
+        title: 'All songs',
+        playable: false,
+      );
+    }
+
+    try {
+      final song = await _musicDataInfoRepository.getSongByPath(mediaId);
+      return (song as SongModel).toMediaItem();
+    } catch (_) {
+      return null;
+    }
+  }
+
+  @override
+  Future<void> playFromMediaId(String mediaId, [Map<String, dynamic>? extras]) async {
+    if (mediaId == _allSongsMediaId) return;
+
+    _eventSubject.add(PlatformIntegrationEvent(
+      type: PlatformIntegrationEventType.playMediaId,
+      payload: {'mediaId': mediaId},
+    ));
   }
 
   @override

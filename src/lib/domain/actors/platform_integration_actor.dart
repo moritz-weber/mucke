@@ -1,6 +1,8 @@
+import '../entities/playable.dart';
 import '../repositories/audio_player_repository.dart';
 import '../repositories/music_data_repository.dart';
 import '../repositories/platform_integration_repository.dart';
+import '../usecases/play_songs.dart';
 import '../usecases/seek_to_next.dart';
 
 class PlatformIntegrationActor {
@@ -9,6 +11,7 @@ class PlatformIntegrationActor {
     this._seekToNext,
     this._audioPlayerRepository,
     this._musicDataRepository,
+    this._playSongs,
   ) {
     _platformIntegrationInfoRepository.eventStream
         .listen((event) => _handlePlatformIntegrationEvent(event));
@@ -17,6 +20,7 @@ class PlatformIntegrationActor {
   final AudioPlayerRepository _audioPlayerRepository;
   final MusicDataRepository _musicDataRepository;
   final PlatformIntegrationInfoRepository _platformIntegrationInfoRepository;
+  final PlaySongs _playSongs;
 
   final SeekToNext _seekToNext;
 
@@ -39,6 +43,12 @@ class PlatformIntegrationActor {
       case PlatformIntegrationEventType.seek:
         _seekToPosition(event.payload!['position'] as Duration);
         break;
+      case PlatformIntegrationEventType.playMediaId:
+        final mediaId = event.payload?['mediaId'] as String?;
+        if (mediaId != null) {
+          await _playFromMediaId(mediaId);
+        }
+        break;
       case PlatformIntegrationEventType.like:
         final path = event.payload?['path'];
         if (path != null) {
@@ -55,5 +65,18 @@ class PlatformIntegrationActor {
     if (song != null) {
       _audioPlayerRepository.seekToPosition(position.inMilliseconds / song.duration.inMilliseconds);
     }
+  }
+
+  Future<void> _playFromMediaId(String mediaId) async {
+    final songs = await _musicDataRepository.songsStream.first;
+    final index = songs.indexWhere((song) => song.path == mediaId);
+    if (index < 0) return;
+
+    await _playSongs(
+      songs: songs,
+      initialIndex: index,
+      playable: AllSongs(),
+      keepInitialIndex: true,
+    );
   }
 }

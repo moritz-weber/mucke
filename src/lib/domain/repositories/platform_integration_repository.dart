@@ -24,6 +24,7 @@ enum PlatformIntegrationEventType {
   stop,
   skipNext,
   skipPrevious,
+  playMediaId,
   seek,
   like,
 }

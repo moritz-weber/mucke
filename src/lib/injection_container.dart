@@ -368,7 +368,7 @@ Future<void> setupGetIt() async {
   getIt.registerLazySingleton<AudioPlayerDataSource>(() => audioPlayer);
 
   final PlatformIntegrationDataSource _platformIntegrationDataSource =
-      PlatformIntegrationDataSourceImpl();
+      PlatformIntegrationDataSourceImpl(getIt());
   getIt.registerLazySingleton<PlatformIntegrationDataSource>(
     () => _platformIntegrationDataSource,
   );
@@ -390,6 +390,7 @@ Future<void> setupGetIt() async {
   // actors
   getIt.registerSingleton<PlatformIntegrationActor>(
     PlatformIntegrationActor(
+      getIt(),
       getIt(),
       getIt(),
       getIt(),
