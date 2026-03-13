@@ -45,8 +45,9 @@ class PlatformIntegrationActor {
         break;
       case PlatformIntegrationEventType.playMediaId:
         final mediaId = event.payload?['mediaId'] as String?;
+        final playlistId = event.payload?['playlistId'] as int?;
         if (mediaId != null) {
-          await _playFromMediaId(mediaId);
+          await _playFromMediaId(mediaId, playlistId: playlistId);
         }
         break;
       case PlatformIntegrationEventType.like:
@@ -67,7 +68,22 @@ class PlatformIntegrationActor {
     }
   }
 
-  Future<void> _playFromMediaId(String mediaId) async {
+  Future<void> _playFromMediaId(String mediaId, {int? playlistId}) async {
+    if (playlistId != null) {
+      final playlist = await _musicDataRepository.getPlaylistStream(playlistId).first;
+      final songs = await _musicDataRepository.getPlaylistSongStream(playlist).first;
+      final index = songs.indexWhere((song) => song.path == mediaId);
+      if (index < 0) return;
+
+      await _playSongs(
+        songs: songs,
+        initialIndex: index,
+        playable: playlist,
+        keepInitialIndex: true,
+      );
+      return;
+    }
+
     final songs = await _musicDataRepository.songsStream.first;
     final index = songs.indexWhere((song) => song.path == mediaId);
     if (index < 0) return;

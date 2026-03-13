@@ -57,7 +57,11 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
     implements PlatformIntegrationDataSource {
   PlatformIntegrationDataSourceImpl(this._musicDataInfoRepository);
 
+  static const String _rootMediaId = 'root';
   static const String _allSongsMediaId = 'all_songs';
+  static const String _playlistsMediaId = 'playlists';
+  static const String _playlistPrefix = 'playlist:';
+  static const String _playlistSongPrefix = 'playlist_song:';
 
   final MusicDataInfoRepository _musicDataInfoRepository;
 
@@ -95,13 +99,50 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
   Future<List<MediaItem>> getChildren(String parentMediaId, [Map<String, dynamic>? options]) async {
     if (parentMediaId == _allSongsMediaId) {
       final songs = await _musicDataInfoRepository.songsStream.first;
-      return songs.map((song) => (song as SongModel).toMediaItem()).toList();
+      return songs
+          .take(10)
+          .map((song) => (song as SongModel).toMediaItem())
+          .toList();
+    }
+
+    if (parentMediaId == _playlistsMediaId) {
+      final playlists = await _musicDataInfoRepository.smartListsStream.first;
+      print('playlists: $playlists');
+      return playlists
+          .map(
+            (playlist) => MediaItem(
+              id: '$_playlistPrefix${playlist.id}',
+              title: playlist.name,
+              playable: false,
+            ),
+          )
+          .toList();
+    }
+
+    if (parentMediaId.startsWith(_playlistPrefix)) {
+      final playlistId = int.tryParse(parentMediaId.substring(_playlistPrefix.length));
+      if (playlistId == null) return const [];
+
+      final playlist = await _musicDataInfoRepository.getPlaylistStream(playlistId).first;
+      final songs = await _musicDataInfoRepository.getPlaylistSongStream(playlist).first;
+
+      return songs
+          .map((song) {
+            final songModel = song as SongModel;
+            return songModel.toMediaItem();
+          })
+          .toList();
     }
 
     return const [
       MediaItem(
         id: _allSongsMediaId,
         title: 'All songs',
+        playable: false,
+      ),
+      MediaItem(
+        id: _playlistsMediaId,
+        title: 'Playlists',
         playable: false,
       ),
     ];
@@ -117,6 +158,50 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
       );
     }
 
+    if (mediaId == _rootMediaId) {
+      return const MediaItem(
+        id: _rootMediaId,
+        title: 'mucke',
+        playable: false,
+      );
+    }
+
+    if (mediaId == _playlistsMediaId) {
+      return const MediaItem(
+        id: _playlistsMediaId,
+        title: 'Playlists',
+        playable: false,
+      );
+    }
+
+    if (mediaId.startsWith(_playlistPrefix)) {
+      final playlistId = int.tryParse(mediaId.substring(_playlistPrefix.length));
+      if (playlistId == null) return null;
+
+      try {
+        final playlist = await _musicDataInfoRepository.getPlaylistStream(playlistId).first;
+        return MediaItem(
+          id: mediaId,
+          title: playlist.name,
+          playable: false,
+        );
+      } catch (_) {
+        return null;
+      }
+    }
+
+    if (mediaId.startsWith(_playlistSongPrefix)) {
+      final metadata = _parsePlaylistSongMediaId(mediaId);
+      if (metadata == null) return null;
+
+      try {
+        final song = await _musicDataInfoRepository.getSongByPath(metadata.songPath);
+        return (song as SongModel).toMediaItem();
+      } catch (_) {
+        return null;
+      }
+    }
+
     try {
       final song = await _musicDataInfoRepository.getSongByPath(mediaId);
       return (song as SongModel).toMediaItem();
@@ -127,12 +212,45 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
 
   @override
   Future<void> playFromMediaId(String mediaId, [Map<String, dynamic>? extras]) async {
-    if (mediaId == _allSongsMediaId) return;
+    if (mediaId == _allSongsMediaId || mediaId == _playlistsMediaId || mediaId == _rootMediaId) {
+      return;
+    }
+
+    final playlistSongMetadata = _parsePlaylistSongMediaId(mediaId);
+    if (playlistSongMetadata != null) {
+      _eventSubject.add(PlatformIntegrationEvent(
+        type: PlatformIntegrationEventType.playMediaId,
+        payload: {
+          'mediaId': playlistSongMetadata.songPath,
+          'playlistId': playlistSongMetadata.playlistId,
+        },
+      ));
+      return;
+    }
 
     _eventSubject.add(PlatformIntegrationEvent(
       type: PlatformIntegrationEventType.playMediaId,
       payload: {'mediaId': mediaId},
     ));
+  }
+
+  _PlaylistSongMediaId? _parsePlaylistSongMediaId(String mediaId) {
+    if (!mediaId.startsWith(_playlistSongPrefix)) return null;
+
+    final idPayload = mediaId.substring(_playlistSongPrefix.length);
+    final separator = idPayload.indexOf(':');
+    if (separator <= 0) return null;
+
+    final playlistIdString = idPayload.substring(0, separator);
+    final encodedPath = idPayload.substring(separator + 1);
+
+    final playlistId = int.tryParse(playlistIdString);
+    if (playlistId == null || encodedPath.isEmpty) return null;
+
+    return _PlaylistSongMediaId(
+      playlistId: playlistId,
+      songPath: Uri.decodeComponent(encodedPath),
+    );
   }
 
   @override
@@ -228,7 +346,10 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
 
   @override
   Future<void> setCurrentSong(SongModel? songModel) async {
-    mediaItem.add(songModel?.toMediaItem());
+    final mediaItemValue = songModel == null
+        ? null
+        : songModel.toMediaItem();
+    mediaItem.add(mediaItemValue);
 
     if (songModel != null) {
       final state = playbackState.value;
@@ -241,4 +362,11 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
       ));
     }
   }
+}
+
+class _PlaylistSongMediaId {
+  const _PlaylistSongMediaId({required this.playlistId, required this.songPath});
+
+  final int playlistId;
+  final String songPath;
 }
