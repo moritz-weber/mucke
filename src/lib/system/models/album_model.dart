@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-import 'package:drift/drift.dart';
 import 'package:audiotags/audiotags.dart';
+import 'package:drift/drift.dart';
 
 import '../../domain/entities/album.dart';
 import '../datasources/drift_database.dart';

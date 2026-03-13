@@ -125,8 +125,13 @@ class _RootPageState extends State<RootPage> {
     });
 
     return PopScope(
-      onPopInvokedWithResult: (bool didPop, Object? result) {
-        navStore.onWillPop();
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, Object? result) async {
+        if (didPop) return;
+        final shouldPop = await navStore.onWillPop();
+        if (shouldPop && context.mounted) {
+          SystemNavigator.pop();
+        }
       },
       child: Observer(
         builder: (BuildContext context) => Scaffold(
