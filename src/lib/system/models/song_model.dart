@@ -1,8 +1,11 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:audiotags/audiotags.dart';
 import 'package:drift/drift.dart';
+import 'package:get_it/get_it.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as p;
 
 import '../../domain/entities/song.dart';
@@ -192,27 +195,46 @@ class SongModel extends Song {
         lastModified: Value(lastModified),
       );
 
-  MediaItem toMediaItem() => MediaItem(
-        id: path,
-        title: title,
-        album: album,
-        artist: artist,
-        duration: duration,
-        artUri: Uri.file('$albumArtPath'),
-        extras: {
-          'albumId': albumId,
-          'blockLevel': blockLevel,
-          'discNumber': discNumber,
-          'trackNumber': trackNumber,
-          'year': year,
-          'next': next,
-          'previous': previous,
-          'likeCount': likeCount,
-          'playCount': playCount,
-          'timeAdded': timeAdded.millisecondsSinceEpoch,
-          'color': color?.value,
-        },
-      );
+  MediaItem toMediaItem() {
+    Uri? _artUri;
+    if (albumArtPath != null) {
+      if (Platform.isAndroid) {
+        try {
+          final packageInfo = GetIt.I<PackageInfo>();
+          final formattedPath =
+              albumArtPath!.startsWith('/') ? albumArtPath! : '/$albumArtPath';
+          _artUri = Uri.parse(
+              'content://${packageInfo.packageName}.artprovider$formattedPath');
+        } catch (_) {
+          _artUri = Uri.file(albumArtPath!);
+        }
+      } else {
+        _artUri = Uri.file(albumArtPath!);
+      }
+    }
+
+    return MediaItem(
+      id: path,
+      title: title,
+      album: album,
+      artist: artist,
+      duration: duration,
+      artUri: _artUri,
+      extras: {
+        'albumId': albumId,
+        'blockLevel': blockLevel,
+        'discNumber': discNumber,
+        'trackNumber': trackNumber,
+        'year': year,
+        'next': next,
+        'previous': previous,
+        'likeCount': likeCount,
+        'playCount': playCount,
+        'timeAdded': timeAdded.millisecondsSinceEpoch,
+        'color': color?.value,
+      },
+    );
+  }
 
   Map<String, dynamic> toExportMap() => {
         'title': title,

@@ -113,7 +113,7 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
             (playlist) => MediaItem(
               id: '$_playlistPrefix${playlist.id}',
               title: playlist.name,
-              playable: false,
+              playable: true,
             ),
           )
           .toList();
@@ -123,8 +123,8 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
       final playlistId = int.tryParse(parentMediaId.substring(_playlistPrefix.length));
       if (playlistId == null) return const [];
 
-      final playlist = await _musicDataInfoRepository.getPlaylistStream(playlistId).first;
-      final songs = await _musicDataInfoRepository.getPlaylistSongStream(playlist).first;
+      final playlist = await _musicDataInfoRepository.getSmartListStream(playlistId).first;
+      final songs = await _musicDataInfoRepository.getSmartListSongStream(playlist).first;
 
       return songs
           .map((song) {
@@ -136,13 +136,13 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
 
     return const [
       MediaItem(
-        id: _allSongsMediaId,
-        title: 'All songs',
+        id: _playlistsMediaId,
+        title: 'Playlists',
         playable: false,
       ),
       MediaItem(
-        id: _playlistsMediaId,
-        title: 'Playlists',
+        id: _allSongsMediaId,
+        title: 'All songs',
         playable: false,
       ),
     ];

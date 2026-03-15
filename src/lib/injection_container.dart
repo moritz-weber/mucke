@@ -1,6 +1,7 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import 'domain/actors/audio_player_actor.dart';
 import 'domain/actors/music_data_actor.dart';
@@ -83,6 +84,9 @@ final GetIt getIt = GetIt.instance;
 
 Future<void> setupGetIt() async {
   print('setupGetIt');
+
+  final packageInfo = await PackageInfo.fromPlatform();
+  getIt.registerSingleton<PackageInfo>(packageInfo);
 
   // stores
   getIt.registerLazySingleton<MusicDataStore>(
@@ -338,7 +342,7 @@ Future<void> setupGetIt() async {
       getIt(),
     ),
   );
-    getIt.registerLazySingleton<InitRepository>(
+  getIt.registerLazySingleton<InitRepository>(
     () => InitRepositoryImpl(
       getIt(),
       getIt(),
@@ -380,7 +384,7 @@ Future<void> setupGetIt() async {
       androidNotificationChannelId: 'rocks.mucke.channel.audio',
       androidNotificationChannelName: 'mucke',
       androidNotificationIcon: 'drawable/ic_stat',
-      androidNotificationOngoing: true,  // that's not the solution
+      androidNotificationOngoing: true,
     ),
   );
   getIt.registerLazySingleton<AudioHandler>(() => _audioHandler);
