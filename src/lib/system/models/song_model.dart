@@ -4,10 +4,9 @@ import 'dart:ui';
 import 'package:audio_service/audio_service.dart';
 import 'package:audiotags/audiotags.dart';
 import 'package:drift/drift.dart';
-import 'package:get_it/get_it.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as p;
 
+import '../../constants.dart';
 import '../../domain/entities/song.dart';
 import '../datasources/drift_database.dart';
 import 'default_values.dart';
@@ -200,11 +199,10 @@ class SongModel extends Song {
     if (albumArtPath != null) {
       if (Platform.isAndroid) {
         try {
-          final packageInfo = GetIt.I<PackageInfo>();
           final formattedPath =
               albumArtPath!.startsWith('/') ? albumArtPath! : '/$albumArtPath';
-          _artUri = Uri.parse(
-              'content://${packageInfo.packageName}.artprovider$formattedPath');
+          _artUri =
+              Uri.parse('content://$PACKAGE_NAME.artprovider$formattedPath');
         } catch (_) {
           _artUri = Uri.file(albumArtPath!);
         }

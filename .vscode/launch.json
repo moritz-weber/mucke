@@ -13,6 +13,9 @@
                 "--flavor",
                 "dev",
             ],
+            "toolArgs": [
+                "--dart-define=PACKAGE_NAME=rocks.mucke.dev"
+            ]
         },
         {
             "name": "Test",
@@ -36,6 +39,9 @@
                 "--flavor",
                 "dev",
             ],
+            "toolArgs": [
+                "--dart-define=PACKAGE_NAME=rocks.mucke.dev"
+            ]
         },
         {
             "name": "Release",
@@ -47,6 +53,9 @@
                 "--flavor",
                 "dev",
             ],
+            "toolArgs": [
+                "--dart-define=PACKAGE_NAME=rocks.mucke.dev"
+            ]
         },
         {
             "name": "PRODUCTION",

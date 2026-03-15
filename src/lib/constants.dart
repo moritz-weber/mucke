@@ -14,3 +14,8 @@ const String ALBUM_OF_DAY = 'ALBUM_OF_DAY';
 const String ARTIST_OF_DAY = 'ARTIST_OF_DAY';
 
 const String LISTENED_PERCENTAGE = 'LISTENED_PERCENTAGE';
+
+const String PACKAGE_NAME = String.fromEnvironment(
+  'PACKAGE_NAME',
+  defaultValue: 'rocks.mucke',
+);
