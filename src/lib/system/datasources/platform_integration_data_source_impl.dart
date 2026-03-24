@@ -2,6 +2,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../domain/entities/playable.dart';
 import '../../domain/entities/playback_event.dart';
 import '../../domain/repositories/music_data_repository.dart';
 import '../../domain/repositories/platform_integration_repository.dart';
@@ -59,7 +60,9 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
 
   static const String _rootMediaId = 'root';
   static const String _allSongsMediaId = 'all_songs';
-  static const String _playlistsMediaId = 'playlists';
+  static const String _smartListsMediaId = 'smart_lists';
+  static const String _smartListPrefix = 'smart_list:';
+  static const String _smartListSongPrefix = 'smart_list_song:';
   static const String _playlistPrefix = 'playlist:';
   static const String _playlistSongPrefix = 'playlist_song:';
 
@@ -99,44 +102,67 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
   Future<List<MediaItem>> getChildren(String parentMediaId, [Map<String, dynamic>? options]) async {
     if (parentMediaId == _allSongsMediaId) {
       final songs = await _musicDataInfoRepository.songsStream.first;
-      return songs
-          .take(10)
-          .map((song) => (song as SongModel).toMediaItem())
-          .toList();
+      return songs.take(10).map((song) => (song as SongModel).toMediaItem()).toList();
     }
 
-    if (parentMediaId == _playlistsMediaId) {
-      final playlists = await _musicDataInfoRepository.smartListsStream.first;
-      print('playlists: $playlists');
-      return playlists
-          .map(
-            (playlist) => MediaItem(
-              id: '$_playlistPrefix${playlist.id}',
-              title: playlist.name,
-              playable: true,
-            ),
-          )
-          .toList();
+    if (parentMediaId == _smartListsMediaId) {
+      final smartLists = await _musicDataInfoRepository.smartListsStream.first;
+      final playlists = await _musicDataInfoRepository.playlistsStream.first;
+
+      final smartListItems = smartLists.map(
+        (smartList) => MediaItem(
+          id: '$_smartListPrefix${smartList.id}',
+          title: smartList.name,
+          playable: false,
+        ),
+      );
+
+      final playlistItems = playlists.map(
+        (playlist) => MediaItem(
+          id: '$_playlistPrefix${playlist.id}',
+          title: playlist.name,
+          playable: false,
+        ),
+      );
+
+      return [...smartListItems, ...playlistItems]..sort(
+        (a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()),
+       );
+    }
+
+    if (parentMediaId.startsWith(_smartListPrefix)) {
+      final smartListId = int.tryParse(parentMediaId.substring(_smartListPrefix.length));
+      if (smartListId == null) return const [];
+
+      final smartList = await _musicDataInfoRepository.getSmartListStream(smartListId).first;
+      final songs = await _musicDataInfoRepository.getSmartListSongStream(smartList).first;
+
+      return songs.map((song) {
+        final songModel = song as SongModel;
+        return songModel.toMediaItem().copyWith(
+              id: '$_smartListSongPrefix$smartListId:${Uri.encodeComponent(songModel.path)}',
+            );
+      }).toList();
     }
 
     if (parentMediaId.startsWith(_playlistPrefix)) {
       final playlistId = int.tryParse(parentMediaId.substring(_playlistPrefix.length));
       if (playlistId == null) return const [];
 
-      final playlist = await _musicDataInfoRepository.getSmartListStream(playlistId).first;
-      final songs = await _musicDataInfoRepository.getSmartListSongStream(playlist).first;
+      final playlist = await _musicDataInfoRepository.getPlaylistStream(playlistId).first;
+      final songs = await _musicDataInfoRepository.getPlaylistSongStream(playlist).first;
 
-      return songs
-          .map((song) {
-            final songModel = song as SongModel;
-            return songModel.toMediaItem();
-          })
-          .toList();
+      return songs.map((song) {
+        final songModel = song as SongModel;
+        return songModel.toMediaItem().copyWith(
+              id: '$_playlistSongPrefix$playlistId:${Uri.encodeComponent(songModel.path)}',
+            );
+      }).toList();
     }
 
     return const [
       MediaItem(
-        id: _playlistsMediaId,
+        id: _smartListsMediaId,
         title: 'Playlists',
         playable: false,
       ),
@@ -166,12 +192,28 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
       );
     }
 
-    if (mediaId == _playlistsMediaId) {
+    if (mediaId == _smartListsMediaId) {
       return const MediaItem(
-        id: _playlistsMediaId,
+        id: _smartListsMediaId,
         title: 'Playlists',
         playable: false,
       );
+    }
+
+    if (mediaId.startsWith(_smartListPrefix)) {
+      final smartListId = int.tryParse(mediaId.substring(_smartListPrefix.length));
+      if (smartListId == null) return null;
+
+      try {
+        final smartList = await _musicDataInfoRepository.getSmartListStream(smartListId).first;
+        return MediaItem(
+          id: mediaId,
+          title: smartList.name,
+          playable: false,
+        );
+      } catch (_) {
+        return null;
+      }
     }
 
     if (mediaId.startsWith(_playlistPrefix)) {
@@ -190,13 +232,25 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
       }
     }
 
+    if (mediaId.startsWith(_smartListSongPrefix)) {
+      final metadata = _parseSmartListSongMediaId(mediaId);
+      if (metadata == null) return null;
+
+      try {
+        final song = await _musicDataInfoRepository.getSongByPath(metadata.songPath);
+        return (song as SongModel).toMediaItem().copyWith(id: mediaId);
+      } catch (_) {
+        return null;
+      }
+    }
+
     if (mediaId.startsWith(_playlistSongPrefix)) {
       final metadata = _parsePlaylistSongMediaId(mediaId);
       if (metadata == null) return null;
 
       try {
         final song = await _musicDataInfoRepository.getSongByPath(metadata.songPath);
-        return (song as SongModel).toMediaItem();
+        return (song as SongModel).toMediaItem().copyWith(id: mediaId);
       } catch (_) {
         return null;
       }
@@ -212,7 +266,20 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
 
   @override
   Future<void> playFromMediaId(String mediaId, [Map<String, dynamic>? extras]) async {
-    if (mediaId == _allSongsMediaId || mediaId == _playlistsMediaId || mediaId == _rootMediaId) {
+    if (mediaId == _allSongsMediaId || mediaId == _smartListsMediaId || mediaId == _rootMediaId) {
+      return;
+    }
+
+    final smartListSongMetadata = _parseSmartListSongMediaId(mediaId);
+    if (smartListSongMetadata != null) {
+      _eventSubject.add(PlatformIntegrationEvent(
+        type: PlatformIntegrationEventType.playMediaId,
+        payload: {
+          'mediaId': smartListSongMetadata.songPath,
+          'playableId': smartListSongMetadata.smartListId,
+          'playableType': PlayableType.smartlist.toString(),
+        },
+      ));
       return;
     }
 
@@ -222,7 +289,8 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
         type: PlatformIntegrationEventType.playMediaId,
         payload: {
           'mediaId': playlistSongMetadata.songPath,
-          'playlistId': playlistSongMetadata.playlistId,
+          'playableId': playlistSongMetadata.playlistId,
+          'playableType': PlayableType.playlist.toString(),
         },
       ));
       return;
@@ -230,8 +298,27 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
 
     _eventSubject.add(PlatformIntegrationEvent(
       type: PlatformIntegrationEventType.playMediaId,
-      payload: {'mediaId': mediaId},
+      payload: {'mediaId': mediaId, 'playableType': PlayableType.all.toString()},
     ));
+  }
+
+  _SmartListSongMediaId? _parseSmartListSongMediaId(String mediaId) {
+    if (!mediaId.startsWith(_smartListSongPrefix)) return null;
+
+    final idPayload = mediaId.substring(_smartListSongPrefix.length);
+    final separator = idPayload.indexOf(':');
+    if (separator <= 0) return null;
+
+    final playlistIdString = idPayload.substring(0, separator);
+    final encodedPath = idPayload.substring(separator + 1);
+
+    final playlistId = int.tryParse(playlistIdString);
+    if (playlistId == null || encodedPath.isEmpty) return null;
+
+    return _SmartListSongMediaId(
+      smartListId: playlistId,
+      songPath: Uri.decodeComponent(encodedPath),
+    );
   }
 
   _PlaylistSongMediaId? _parsePlaylistSongMediaId(String mediaId) {
@@ -346,9 +433,7 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
 
   @override
   Future<void> setCurrentSong(SongModel? songModel) async {
-    final mediaItemValue = songModel == null
-        ? null
-        : songModel.toMediaItem();
+    final mediaItemValue = songModel == null ? null : songModel.toMediaItem();
     mediaItem.add(mediaItemValue);
 
     if (songModel != null) {
@@ -362,6 +447,13 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
       ));
     }
   }
+}
+
+class _SmartListSongMediaId {
+  const _SmartListSongMediaId({required this.smartListId, required this.songPath});
+
+  final int smartListId;
+  final String songPath;
 }
 
 class _PlaylistSongMediaId {

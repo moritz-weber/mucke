@@ -45,9 +45,11 @@ class PlatformIntegrationActor {
         break;
       case PlatformIntegrationEventType.playMediaId:
         final mediaId = event.payload?['mediaId'] as String?;
-        final playlistId = event.payload?['playlistId'] as int?;
+        final playableId = event.payload?['playableId'] as int?;
+        final playableType = event.payload?['playableType'] as String?;
         if (mediaId != null) {
-          await _playFromMediaId(mediaId, playlistId: playlistId);
+          await _playFromMediaId(mediaId,
+              playableId: playableId, playableType: playableType?.toPlayableType());
         }
         break;
       case PlatformIntegrationEventType.like:
@@ -68,31 +70,46 @@ class PlatformIntegrationActor {
     }
   }
 
-  Future<void> _playFromMediaId(String mediaId, {int? playlistId}) async {
-    if (playlistId != null) {
-      final playlist = await _musicDataRepository.getPlaylistStream(playlistId).first;
-      final songs = await _musicDataRepository.getPlaylistSongStream(playlist).first;
-      final index = songs.indexWhere((song) => song.path == mediaId);
-      if (index < 0) return;
+  Future<void> _playFromMediaId(String mediaId,
+      {int? playableId, PlayableType? playableType}) async {
+    if (playableId != null && playableType != null) {
+      if (playableType == PlayableType.playlist) {
+        final playlist = await _musicDataRepository.getPlaylistStream(playableId).first;
+        final songs = await _musicDataRepository.getPlaylistSongStream(playlist).first;
+        final index = songs.indexWhere((song) => song.path == mediaId);
+        if (index < 0) return;
 
-      await _playSongs(
-        songs: songs,
-        initialIndex: index,
-        playable: playlist,
-        keepInitialIndex: true,
-      );
-      return;
+        await _playSongs(
+          songs: songs,
+          initialIndex: index,
+          playable: playlist,
+          keepInitialIndex: true,
+        );
+      } else if (playableType == PlayableType.smartlist) {
+        final smartList = await _musicDataRepository.getSmartListStream(playableId!).first;
+        final songs = await _musicDataRepository.getSmartListSongStream(smartList).first;
+        final index = songs.indexWhere((song) => song.path == mediaId);
+        if (index < 0) return;
+
+        await _playSongs(
+          songs: songs,
+          initialIndex: index,
+          playable: smartList,
+          keepInitialIndex: true,
+        );
+      } else {
+        // If the playable type is unknown, we can still try to find the song and play it.
+        final songs = await _musicDataRepository.songsStream.first;
+        final index = songs.indexWhere((song) => song.path == mediaId);
+        if (index < 0) return;
+
+        await _playSongs(
+          songs: songs,
+          initialIndex: index,
+          playable: AllSongs(),
+          keepInitialIndex: true,
+        );
+      }
     }
-
-    final songs = await _musicDataRepository.songsStream.first;
-    final index = songs.indexWhere((song) => song.path == mediaId);
-    if (index < 0) return;
-
-    await _playSongs(
-      songs: songs,
-      initialIndex: index,
-      playable: AllSongs(),
-      keepInitialIndex: true,
-    );
   }
 }
