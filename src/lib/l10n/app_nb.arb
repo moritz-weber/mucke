@@ -1,395 +1,270 @@
 {
-  "customizeCover": "Tilpass omslag",
-  "@customizeCover": {},
-  "album": "Album",
-  "@album": {},
-  "customizeHomePage": "Tilpass hjemmesiden",
-  "@customizeHomePage": {},
-  "updateLibrary": "Oppdater bibliotek",
-  "@updateLibrary": {},
-  "allowedFileExtensions": "Tillatte filutvidelser",
-  "@allowedFileExtensions": {},
-  "manageBlockedFiles": "Håndter blokkerte filer",
-  "@manageBlockedFiles": {},
-  "allowedFileExtensionsDescription": "Kommainndelt liste. Små eller store bokstaver er det samme.",
-  "@allowedFileExtensionsDescription": {},
-  "playback": "Avspilling",
-  "@playback": {},
-  "playAlbumsInOrder": "Spill album i rekkefølge",
-  "@playAlbumsInOrder": {},
-  "libraryFolders": "Bibliotekmapper",
-  "@libraryFolders": {},
-  "blockedFiles": "Blokkerte filer",
-  "@blockedFiles": {},
-  "albumOfTheDay": "Dagens album",
-  "@albumOfTheDay": {},
-  "history": "Historikk",
-  "@history": {},
-  "artistOfTheDay": "Dagens artist",
-  "@artistOfTheDay": {},
-  "addWidgetToHome": "Legg til miniprogram på hjemmesiden din",
-  "@addWidgetToHome": {},
-  "albums": "Album",
-  "@albums": {},
-  "playlist": "Spilleliste",
-  "@playlist": {},
-  "playlists": "Spillelister",
-  "@playlists": {},
-  "smartlist": "Smartliste",
-  "@smartlist": {},
-  "normalMode": "Normal modus",
-  "@normalMode": {},
-  "shuffleMode": "Omstokkingsmodus",
-  "@shuffleMode": {},
-  "name": "Navn",
-  "@name": {},
-  "creationDate": "Opprettelsesdato",
-  "@creationDate": {},
-  "changeDate": "Endringsdato",
-  "@changeDate": {},
-  "playlistsOnly": "Kun spillelister",
-  "@playlistsOnly": {},
-  "smartlistsOnly": "Kun smartlister",
-  "@smartlistsOnly": {},
-  "addPlaylist": "Legg til spilleliste",
-  "@addPlaylist": {},
-  "maxNumberEntries": "Maks. antall oppføringer",
-  "@maxNumberEntries": {},
-  "ascending": "Stigende",
-  "@ascending": {},
-  "editPlaylist": "Rediger spilleliste",
-  "@editPlaylist": {},
-  "createSmartlist": "Opprett smartliste",
-  "@createSmartlist": {},
-  "editSmartlist": "Rediger smartliste",
-  "@editSmartlist": {},
-  "disc": "Disk",
-  "@disc": {},
-  "selectArtists": "Velg artister",
-  "@selectArtists": {},
-  "currentlyPlaying": "Spilles nå",
-  "@currentlyPlaying": {},
-  "artistName": "Artistnavn.",
-  "@artistName": {},
-  "nameMustNotBeEmpty": "Navn må angis.",
-  "@nameMustNotBeEmpty": {},
-  "year": "År",
-  "@year": {},
-  "addToPlaylist": "Legg til i spilleliste",
-  "@addToPlaylist": {},
-  "removeFromPlaylist": "Fjern fra spilleliste",
-  "@removeFromPlaylist": {},
-  "home": "Hjem",
-  "@home": {},
-  "library": "Bibliotek",
-  "@library": {},
-  "settings": "Innstillinger",
-  "@settings": {},
-  "search": "Søk",
-  "@search": {},
-  "manageLibraryFolders": "Håndter bibliotekmapper",
-  "@manageLibraryFolders": {},
-  "allSongs": "Alle spor",
-  "@allSongs": {},
-  "song": "Spor",
-  "@song": {},
-  "artist": "Artist",
-  "@artist": {},
-  "smartlists": "Smartlister",
-  "@smartlists": {},
-  "songs": "Spor",
-  "@songs": {},
-  "artists": "Artister",
-  "@artists": {},
-  "both": "Begge",
-  "@both": {},
-  "addSmartlist": "Legg til smartliste",
-  "@addSmartlist": {},
-  "createPlaylist": "Opprett spilleliste",
-  "@createPlaylist": {},
-  "playbackMode": "Avspillingsmodus",
-  "@playbackMode": {},
-  "play": "Spill av",
-  "@play": {},
-  "playNext": "Spill av neste",
-  "@playNext": {},
-  "blockFromLibrary": "Fjern og blokker fra bibliotek",
-  "@blockFromLibrary": {},
-  "removeFromQueue": "Fjern fra kø",
-  "@removeFromQueue": {},
-  "playCount": "Avspillinger",
-  "@playCount": {},
-  "previousSong": "forrige",
-  "@previousSong": {},
-  "songTitle": "Spornavn",
-  "@songTitle": {},
-  "cancel": "Av",
-  "@cancel": {},
-  "noSongsYet": "Gå til innsitllingene, legg til musikkmapper for å opprette et musikkbibliotek,",
-  "@noSongsYet": {},
-  "artistsAlbumsSongs": "{artistCount} artister, {albumCount} album, {songCount} spor",
-  "@artistsAlbumsSongs": {
-    "placeholders": {
-      "artistCount": {
-        "type": "int",
-        "example": "3"
-      },
-      "albumCount": {
-        "type": "int",
-        "example": "6"
-      },
-      "songCount": {
-        "type": "int",
-        "example": "60"
-      }
-    }
-  },
-  "numberOfBlockedFiles": "Antall blokkerte filer nå: {blockedFiles}",
-  "@numberOfBlockedFiles": {
-    "placeholders": {
-      "blockedFiles": {
-        "type": "int",
-        "example": "3"
-      }
-    }
-  },
-  "noPlaylistsYet": "Ingen spillelister enda. Du kan legge dem til i biblioteket.",
-  "@noPlaylistsYet": {},
-  "descending": "Synkende",
-  "@descending": {},
-  "displaySettings": "Visningsinnstillinger",
-  "@displaySettings": {},
-  "imported": "Importert",
-  "@imported": {},
-  "librarySettings": "Biblioteksinnstillinger",
-  "@librarySettings": {},
-  "importVerb": "Importer",
-  "@importVerb": {
-    "description": "This means the verb of importing something - not the noun."
-  },
-  "importLibData": "Importer biblioteksdata",
-  "@importLibData": {},
-  "songMetaData": "Spor-metadata",
-  "@songMetaData": {},
-  "miscellaneous": "Ymse",
-  "@miscellaneous": {},
-  "exportData": "Eksporter data",
-  "@exportData": {},
-  "yourPlaylists": "Dine spillelister",
-  "@yourPlaylists": {},
-  "setupLibraryDescription": "Velg mapper, inkluderte filutvidelser, osv.",
-  "@setupLibraryDescription": {},
-  "welcomeToMucke": "Velkommen til mucke.",
-  "@welcomeToMucke": {},
-  "setupLibrary": "Sett opp bibliotek",
-  "@setupLibrary": {},
-  "importData": "Importer data",
-  "@importData": {},
-  "importDataDescription": "Importer dine data fra en tidligere mucke-installasjon.",
-  "@importDataDescription": {},
-  "noFoldersSelected": "Ingen mapper valgt så langt.",
-  "@noFoldersSelected": {},
-  "addFolder": "Legg til mappe",
-  "@addFolder": {},
-  "availableFromImport": "Tilgjengelig fra importert data:",
-  "@availableFromImport": {},
-  "metaDataAvailable": "Metadata for {num} spor tilgjengelig",
-  "@metaDataAvailable": {
-    "placeholders": {
-      "num": {
-        "type": "int"
-      }
-    }
-  },
-  "metaDataDescription": "Importer hva som er likt, blokkert, osv.",
-  "@metaDataDescription": {},
-  "dataExportedTo": "Data eksportert til:\n{path}",
-  "@dataExportedTo": {
-    "placeholders": {
-      "path": {
-        "type": "String"
-      }
-    }
-  },
-  "dataExportFailed": "Kunne ikke eksportere data.",
-  "@dataExportFailed": {},
-  "disabledBattery": "Batterioptimalisering er avskrudd.",
-  "@disabledBattery": {},
-  "playAlbumsInOrderDescription": "Når du klikker et spor i et album vil sporene spilles i rekkefølge, istedenfor å beholde forrige avspillingsmodus.",
-  "@playAlbumsInOrderDescription": {},
-  "countSongsPlayed": "Tell spor som avspilt etter. {percentage}%",
-  "@countSongsPlayed": {
-    "placeholders": {
-      "percentage": {
-        "type": "int"
-      }
-    }
-  },
-  "homeCustomization": "Hjemmetilpasning",
-  "@homeCustomization": {},
-  "lastPlayed": "Sist spilt",
-  "@lastPlayed": {},
-  "shuffleAll": "Omstokk alt",
-  "@shuffleAll": {},
-  "nSongs": "{count, plural, =0{ingen spor} =1{ett spor} other{{count} spor}}",
-  "@nSongs": {
-    "placeholders": {
-      "count": {
-        "type": "num"
-      }
-    }
-  },
-  "noHistoryYet": "Ingenting her enda. Spill noe.",
-  "@noHistoryYet": {},
-  "noShuffle": "Ingen (behold aktivt omstokkingsmodus)",
-  "@noShuffle": {},
-  "favShuffleMode": "Favorittomstokkingsmodus",
-  "@favShuffleMode": {},
-  "sortingFilterSettings": "Sortering- og filtreringsinnstillinger",
-  "@sortingFilterSettings": {},
-  "lastTimePlayed": "Siste gang spilt",
-  "@lastTimePlayed": {},
-  "excludeAllSongs": "Utelat spor markert for utelatelse.",
-  "@excludeAllSongs": {},
-  "dontExclude": "Ikke utelat noen spor.",
-  "@dontExclude": {},
-  "excludeAlways": "Utelat kun spor markert som «Alltid utelat».",
-  "@excludeAlways": {},
-  "filterSettings": "Filtreringsinnstillinger",
-  "@filterSettings": {},
-  "filterLikes": "Liker mellom {min} og {max}",
-  "@filterLikes": {
-    "placeholders": {
-      "min": {
-        "type": "int"
-      },
-      "max": {
-        "type": "int"
-      }
-    }
-  },
-  "minPlayCount": "Min. avspillingsantall",
-  "@minPlayCount": {},
-  "maxPlayCount": "Max. avspillingsantall",
-  "@maxPlayCount": {},
-  "minYear": "Min. år",
-  "@minYear": {},
-  "maxYear": "Maks. år",
-  "@maxYear": {},
-  "includeAllArtists": "Inkluder alle artister hvis ingen er valgt.",
-  "@includeAllArtists": {},
-  "excludeArtists": "Utelat valgte artister",
-  "@excludeArtists": {},
-  "orderSettings": "Sorteringsinnstillinger",
-  "@orderSettings": {},
-  "orderSettingsDescription": "Rekkefølgealternativer for endring av prioritet.",
-  "@orderSettingsDescription": {},
-  "limitSongs": "Begrens antallet spor",
-  "@limitSongs": {},
-  "addToQueue": "Legg til i kø",
-  "@addToQueue": {},
-  "shuffle": "Omstokking",
-  "@shuffle": {},
-  "nSongsSelected": "{count, plural, =0{ingen spor valgt} =1{ett spor valgt} other{{count} spor valgt}}",
-  "@nSongsSelected": {
-    "placeholders": {
-      "count": {
-        "type": "num"
-      }
-    }
-  },
-  "appendToQueued": "Legg til for manuelt kølagte spor",
-  "@appendToQueued": {},
-  "highlights": "Høydepunkter",
-  "@highlights": {},
-  "timeAdded": "Tid tillagt",
-  "@timeAdded": {},
-  "likeCount": "Antall ganger likt",
-  "@likeCount": {},
-  "nextUp": "Spilles etterpå",
-  "@nextUp": {},
-  "playedNTimes": "{count, plural, =0{ikke spilt endat} =1{spilt én gang} other{spilt {count} ganger}}",
-  "@playedNTimes": {
-    "placeholders": {
-      "count": {
-        "type": "num"
-      }
-    }
-  },
-  "alwaysPlayPrevious": "Alltid spill forrige spor før",
-  "@alwaysPlayPrevious": {},
-  "alwaysPlayNext": "Alltid spill neste spor etter",
-  "@alwaysPlayNext": {},
-  "dontExcludeSong": "Ikke utelat dette sporet.",
-  "@dontExcludeSong": {},
-  "excludeShuffleAllSong": "Utelat ved omstokking av alle spor.",
-  "@excludeShuffleAllSong": {},
-  "alwaysExcludeSong": "Alltid utelat dette sporet.",
-  "@alwaysExcludeSong": {},
-  "excludeShuffleSong": "Utelat ved omstokking.",
-  "@excludeShuffleSong": {},
-  "favorites": "Favoritter",
-  "@favorites": {},
-  "newlyAdded": "Nylig tillagt",
-  "@newlyAdded": {},
-  "back": "Tilbake",
-  "@back": {},
-  "next": "Neste",
-  "@next": {},
-  "finish": "Fullfør",
-  "@finish": {},
-  "excludeInShuffle": "Utelat spor markert for utelatelse i omstokkingsmodus.",
-  "@excludeInShuffle": {},
-  "scan": "Skann",
-  "@scan": {},
-  "use": "Bruk",
-  "@use": {},
-  "yourLibrary": "Ditt bibliotek:",
-  "@yourLibrary": {},
-  "reset": "Tilbakestill",
-  "@reset": {},
-  "moreAvailable": "{num} flere tilgjengelig",
-  "@moreAvailable": {
-    "placeholders": {
-      "num": {
-        "type": "int"
-      }
-    }
-  },
-  "disableBattery": "sKRU AV Batterioptimalisering for mucke for å løse merknadsproblemer.",
-  "@disableBattery": {},
-  "openBattery": "Åpne batteri-innstillinger",
-  "@openBattery": {},
-  "selectArtistsExclude": "Velg artister å utelate: {num} valgt.",
-  "@selectArtistsExclude": {
-    "placeholders": {
-      "num": {
-        "type": "int"
-      }
-    }
-  },
-  "selectArtistsInclude": "Velg artister å inkludere: {num} valgt.",
-  "@selectArtistsInclude": {
-    "placeholders": {
-      "num": {
-        "type": "int"
-      }
-    }
-  },
-  "songsAlbumsArtists": "Spor, album, og artister",
-  "@songsAlbumsArtists": {},
-  "nSongsInQueue": "{count, plural, =0{ingen spor} =1{ett spor} other{{count} spor}} i kø",
-  "@nSongsInQueue": {
-    "placeholders": {
-      "count": {
-        "type": "num"
-      }
-    }
-  },
-  "blockedFilesDescription": "Blokker filer fra importert data. Kun eksakte treff vil bli utelatt fra biblioteksskanning. Ytterligere filer kan blokkeres senere i programmet.",
-  "@blockedFilesDescription": {},
-  "exportDescription": "Velg data å eksportere. Som forvalg eksporteres alt. Når du eksporterer kan du velge en mappe filen lagres i.",
-  "@exportDescription": {},
-  "batteryExplanation": "Fra Android 12 forårsaker batterioptimalisering en feil med merknaden etter at den mister lydfokus, for eksempel ved innkommende anrop. Å skru av batterioptimalisering for mucke løser dette problemet.",
-  "@batteryExplanation": {}
+    "customizeCover": "Tilpass omslag",
+    "album": "Album",
+    "customizeHomePage": "Tilpass hjemmesiden",
+    "updateLibrary": "Oppdater bibliotek",
+    "allowedFileExtensions": "Tillatte filutvidelser",
+    "manageBlockedFiles": "Håndter blokkerte filer",
+    "allowedFileExtensionsDescription": "En kommadelt liste over tillatte filtyper. Det har ingen betydning om du bruker små eller store bokstaver. Hvis du er usikker, bør du beholde standardinnstillingen.",
+    "playback": "Avspilling",
+    "playAlbumsInOrder": "Spill album i rekkefølge",
+    "libraryFolders": "Bibliotekmapper",
+    "blockedFiles": "Blokkerte filer",
+    "albumOfTheDay": "Dagens album",
+    "history": "Historikk",
+    "artistOfTheDay": "Dagens artist",
+    "addWidgetToHome": "Legg til miniprogram på hjemmesiden din",
+    "albums": "Album",
+    "playlist": "Spilleliste",
+    "playlists": "Spillelister",
+    "smartlist": "Smartliste",
+    "normalMode": "Normal modus",
+    "shuffleMode": "Omstokkingsmodus",
+    "name": "Navn",
+    "creationDate": "Opprettelsesdato",
+    "changeDate": "Endringsdato",
+    "playlistsOnly": "Kun spillelister",
+    "smartlistsOnly": "Kun smartlister",
+    "addPlaylist": "Legg til spilleliste",
+    "maxNumberEntries": "Maks. antall oppføringer",
+    "ascending": "Stigende",
+    "editPlaylist": "Rediger spilleliste",
+    "createSmartlist": "Opprett smartliste",
+    "editSmartlist": "Rediger smartliste",
+    "disc": "Disk",
+    "selectArtists": "Velg artister",
+    "currentlyPlaying": "Spilles nå",
+    "artistName": "Artistnavn",
+    "nameMustNotBeEmpty": "Navn må angis.",
+    "year": "År",
+    "addToPlaylist": "Legg til i spilleliste",
+    "removeFromPlaylist": "Fjern fra spilleliste",
+    "home": "Hjem",
+    "library": "Bibliotek",
+    "settings": "Innstillinger",
+    "search": "Søk",
+    "manageLibraryFolders": "Håndter bibliotekmapper",
+    "allSongs": "Alle spor",
+    "song": "Sang",
+    "artist": "Artist",
+    "smartlists": "Smartlister",
+    "songs": "Sanger",
+    "artists": "Artister",
+    "both": "Begge",
+    "addSmartlist": "Legg til smartliste",
+    "createPlaylist": "Opprett spilleliste",
+    "playbackMode": "Avspillingsmodus",
+    "play": "Spill av",
+    "playNext": "Spill av neste",
+    "blockFromLibrary": "Fjern og blokker fra bibliotek",
+    "removeFromQueue": "Fjern fra kø",
+    "playCount": "Avspillinger",
+    "previousSong": "forrige",
+    "songTitle": "Spornavn",
+    "cancel": "Av",
+    "noSongsYet": "Det ser ikke ut til at du har noen sanger i biblioteket ditt: Gå til innstillinger, legg til musikkmapper og oppdater biblioteket.",
+    "artistsAlbumsSongs": "{artistCount} artister, {albumCount} album, {songCount} spor",
+    "@artistsAlbumsSongs": {
+        "placeholders": {
+            "artistCount": {
+                "type": "int",
+                "example": "3"
+            },
+            "albumCount": {
+                "type": "int",
+                "example": "6"
+            },
+            "songCount": {
+                "type": "int",
+                "example": "60"
+            }
+        }
+    },
+    "numberOfBlockedFiles": "Antall blokkerte filer nå: {blockedFiles}",
+    "@numberOfBlockedFiles": {
+        "placeholders": {
+            "blockedFiles": {
+                "type": "int",
+                "example": "3"
+            }
+        }
+    },
+    "noPlaylistsYet": "Ingen spillelister enda. Du kan legge dem til i biblioteket.",
+    "descending": "Synkende",
+    "displaySettings": "Visningsinnstillinger",
+    "imported": "Importert",
+    "librarySettings": "Biblioteksinnstillinger",
+    "importVerb": "Importer",
+    "@importVerb": {
+        "description": "This means the verb of importing something - not the noun."
+    },
+    "importLibData": "Importer biblioteksdata",
+    "songMetaData": "Spor-metadata",
+    "miscellaneous": "Ymse",
+    "exportData": "Eksporter data",
+    "yourPlaylists": "Dine spillelister",
+    "setupLibraryDescription": "Velg mapper, inkluderte filutvidelser, osv.",
+    "welcomeToMucke": "Velkommen til mucke!",
+    "setupLibrary": "Sett opp bibliotek",
+    "importData": "Importer data",
+    "importDataDescription": "Importer dine data fra en tidligere mucke-installasjon.",
+    "noFoldersSelected": "Ingen mapper valgt så langt.",
+    "addFolder": "Legg til mappe",
+    "availableFromImport": "Tilgjengelig fra importert data:",
+    "metaDataAvailable": "Metadata for {num} spor tilgjengelig",
+    "@metaDataAvailable": {
+        "placeholders": {
+            "num": {
+                "type": "int"
+            }
+        }
+    },
+    "metaDataDescription": "Importer hva som er likt, blokkert, osv.",
+    "dataExportedTo": "Data eksportert til:\n{path}",
+    "@dataExportedTo": {
+        "placeholders": {
+            "path": {
+                "type": "String"
+            }
+        }
+    },
+    "dataExportFailed": "Eksportering av data mislyktes!",
+    "disabledBattery": "Batterioptimalisering er avskrudd.",
+    "playAlbumsInOrderDescription": "Når du klikker et spor i et album vil sporene spilles i rekkefølge, istedenfor å beholde forrige avspillingsmodus.",
+    "countSongsPlayed": "Tell spor som avspilt etter. {percentage}%",
+    "@countSongsPlayed": {
+        "placeholders": {
+            "percentage": {
+                "type": "int"
+            }
+        }
+    },
+    "homeCustomization": "Tilpassing av startskjermen",
+    "lastPlayed": "Sist spilt",
+    "shuffleAll": "Omstokk alt",
+    "nSongs": "{count, plural, =0{ingen spor} =1{ett spor} other{{count} spor}}",
+    "@nSongs": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            }
+        }
+    },
+    "noHistoryYet": "Ingenting her enda. Spill noe.",
+    "noShuffle": "Ingen (behold gjeldende tilfeldig rekkefølge)",
+    "favShuffleMode": "Favorittomstokkingsmodus",
+    "sortingFilterSettings": "Sorterings- og filtreringsinnstillinger",
+    "lastTimePlayed": "Siste gang spilt",
+    "excludeAllSongs": "Utelat spor markert for utelatelse.",
+    "dontExclude": "Ikke utelat noen spor.",
+    "excludeAlways": "Utelat kun spor markert som «Alltid utelat».",
+    "filterSettings": "Filtreringsinnstillinger",
+    "filterLikes": "Liker mellom {min} og {max}",
+    "@filterLikes": {
+        "placeholders": {
+            "min": {
+                "type": "int"
+            },
+            "max": {
+                "type": "int"
+            }
+        }
+    },
+    "minPlayCount": "Min. avspillingsantall",
+    "maxPlayCount": "Max. avspillingsantall",
+    "minYear": "Min. år",
+    "maxYear": "Maks. år",
+    "includeAllArtists": "Inkluder alle artister hvis ingen er valgt.",
+    "excludeArtists": "Utelat valgte artister",
+    "orderSettings": "Sorteringsinnstillinger",
+    "orderSettingsDescription": "Rekkefølgealternativer for endring av prioritet.",
+    "limitSongs": "Begrens antallet spor",
+    "addToQueue": "Legg til i kø",
+    "shuffle": "Omstokking",
+    "nSongsSelected": "{count, plural, =0{ingen spor valgt} =1{ett spor valgt} other{{count} spor valgt}}",
+    "@nSongsSelected": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            }
+        }
+    },
+    "appendToQueued": "Legg til for manuelt kølagte spor",
+    "highlights": "Høydepunkter",
+    "timeAdded": "Tid tillagt",
+    "likeCount": "Antall ganger likt",
+    "nextUp": "Spilles etterpå",
+    "playedNTimes": "{count, plural, =0{ikke spilt endat} =1{spilt én gang} other{spilt {count} ganger}}",
+    "@playedNTimes": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            }
+        }
+    },
+    "alwaysPlayPrevious": "Alltid spill forrige spor før",
+    "alwaysPlayNext": "Alltid spill neste spor etter",
+    "dontExcludeSong": "Ikke utelat dette sporet.",
+    "excludeShuffleAllSong": "Utelat ved omstokking av alle spor.",
+    "alwaysExcludeSong": "Alltid utelat dette sporet.",
+    "excludeShuffleSong": "Utelat ved omstokking.",
+    "favorites": "Favoritter",
+    "newlyAdded": "Nylig tillagt",
+    "back": "Tilbake",
+    "next": "Neste",
+    "finish": "Fullfør",
+    "excludeInShuffle": "Ikke spill av sanger som er markert for ekskludering i tilfeldig rekkefølge.",
+    "scan": "Skann",
+    "use": "Bruk",
+    "yourLibrary": "Ditt bibliotek:",
+    "reset": "Tilbakestill",
+    "moreAvailable": "{num} flere tilgjengelig",
+    "@moreAvailable": {
+        "placeholders": {
+            "num": {
+                "type": "int"
+            }
+        }
+    },
+    "disableBattery": "Deaktiver optimalisering for Mucke for å løse problemer med varslinger.",
+    "openBattery": "Åpne batteri-innstillinger",
+    "selectArtistsExclude": "Velg artister å utelate: {num} valgt.",
+    "@selectArtistsExclude": {
+        "placeholders": {
+            "num": {
+                "type": "int"
+            }
+        }
+    },
+    "selectArtistsInclude": "Velg artister å inkludere: {num} valgt.",
+    "@selectArtistsInclude": {
+        "placeholders": {
+            "num": {
+                "type": "int"
+            }
+        }
+    },
+    "songsAlbumsArtists": "Spor, album, og artister",
+    "nSongsInQueue": "{count, plural, =0{ingen spor} =1{ett spor} other{{count} spor}} i kø",
+    "@nSongsInQueue": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            }
+        }
+    },
+    "blockedFilesDescription": "Blokker filer fra importert data. Kun eksakte treff vil bli utelatt fra biblioteksskanning. Ytterligere filer kan blokkeres senere i programmet.",
+    "exportDescription": "Velg data å eksportere. Som forvalg eksporteres alt. Når du eksporterer kan du velge en mappe filen lagres i.",
+    "batteryExplanation": "Fra Android 12 forårsaker batterioptimalisering en feil med merknaden etter at den mister lydfokus, for eksempel ved innkommende anrop. Å skru av batterioptimalisering for mucke løser dette problemet.",
+    "newlyAddedDesc": "Inneholder de 100 sist tillagte sporene.",
+    "createSmartlists": "Opprett smartlister",
+    "systemSettings": "Systeminnstillinger",
+    "create": "Opprett",
+    "errorReadData": "Kunne ikke lese datafil.",
+    "createSmartlistsDesc": "Opprett foreslåtte smartlister for å forbedre lytteopplevelsen. Du kan tilpasse disse listene senere.",
+    "grantManagePermission": "Innvilg tilgang til håndtering av alle filer.",
+    "favoritesDesc": "Inneholder alle sporene du liker.",
+    "created": "Opprettet",
+    "manageExternalExplanation": "Å gi denne tilgangen kan øke hastigheten på bibliotekskanningen betraktelig. Det vil ikke endre hvordan appen fungerer ellers.",
+    "managePermissionSubtitle": "Hvis du trekker tilbake tilgangen, må appen starte på nytt."
 }

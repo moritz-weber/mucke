@@ -1,0 +1,162 @@
+{
+    "home": "Hejmo",
+    "@home": {},
+    "customizeHomePage": "Agordi Hejmpaĝon",
+    "@customizeHomePage": {},
+    "settings": "Muntumoj",
+    "@settings": {},
+    "noSongsYet": "Similn vi ne havas kantojn en via biblioteko: Ir al fiksaĵoj, aldon via muziko tekoj, kaj ĝisdatigo via biblioteko.",
+    "@noSongsYet": {},
+    "library": "Biblioteko",
+    "@library": {},
+    "search": "Serĉi",
+    "@search": {},
+    "updateLibrary": "Ĝisdatigo biblioteko",
+    "@updateLibrary": {},
+    "artistsAlbumsSongs": "{artistCount} artistoj, {albumCount} albumoj, {songCount} kantoj",
+    "@artistsAlbumsSongs": {
+        "placeholders": {
+            "artistCount": {
+                "type": "int",
+                "example": "3"
+            },
+            "albumCount": {
+                "type": "int",
+                "example": "6"
+            },
+            "songCount": {
+                "type": "int",
+                "example": "60"
+            }
+        }
+    },
+    "manageLibraryFolders": "Administri bibliotekon tekojn",
+    "@manageLibraryFolders": {},
+    "allowedFileExtensions": "Ebligita ke dosiero etendaĵoj",
+    "@allowedFileExtensions": {},
+    "allowedFileExtensionsDescription": "Komoapartig liston de ebligita ke dosiero etendaĵoj. Pli malalta - aŭ majuskla ne gravas. Se vi estas necerta pri ĉi tiu, juste uzi la nerepagon.",
+    "@allowedFileExtensionsDescription": {},
+    "manageBlockedFiles": "Administri blokitajn dosierojn",
+    "@manageBlockedFiles": {},
+    "numberOfBlockedFiles": "Nombro de aktuale blokitajn dosierojn: {blockedFiles}",
+    "@numberOfBlockedFiles": {
+        "placeholders": {
+            "blockedFiles": {
+                "type": "int",
+                "example": "3"
+            }
+        }
+    },
+    "playback": "Reludigo",
+    "@playback": {},
+    "playAlbumsInOrder": "Lud albumoj laŭvice",
+    "@playAlbumsInOrder": {},
+    "playAlbumsInOrderDescription": "Kiam vi klak kanto en albumo la kantoj estos ludita laŭvice anstataŭ ten la antaŭa lud maniero.",
+    "@playAlbumsInOrderDescription": {},
+    "countSongsPlayed": "Kalkulas kantojn dum ludita post: {percentage}%",
+    "@countSongsPlayed": {
+        "placeholders": {
+            "percentage": {
+                "type": "int"
+            }
+        }
+    },
+    "libraryFolders": "Biblioteko Dosierujoj",
+    "@libraryFolders": {},
+    "blockedFiles": "Blokitajn Dosierojn",
+    "@blockedFiles": {},
+    "homeCustomization": "Hejmo Personecigo",
+    "@homeCustomization": {},
+    "albumOfTheDay": "Albumo de la Tago",
+    "@albumOfTheDay": {},
+    "artistOfTheDay": "Artisto de la Tago",
+    "@artistOfTheDay": {},
+    "shuffleAll": "Rearanĝ Ĉiuj",
+    "@shuffleAll": {},
+    "history": "Historio",
+    "@history": {},
+    "addWidgetToHome": "Almeti Uzaĵon Vian Hejmpaĝon",
+    "@addWidgetToHome": {},
+    "noPlaylistsYet": "Neniuj ludlistoj ankoraŭ. Vi povas almeti ilin en la biblioteko.",
+    "@noPlaylistsYet": {},
+    "lastPlayed": "Fina ludita",
+    "@lastPlayed": {},
+    "noHistoryYet": "Nenio vidi tie ĉi ankoraŭ. Lud aĵo.",
+    "@noHistoryYet": {},
+    "allSongs": "Ĉiuj Kantoj",
+    "@allSongs": {},
+    "song": "Kanto",
+    "@song": {},
+    "songs": "Kantoj",
+    "@songs": {},
+    "nSongs": "{count, plural, =0{neniuk kantoj} =1{unu kanto} other{{count} kantoj}}",
+    "@nSongs": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            }
+        }
+    },
+    "album": "Albumo",
+    "@album": {},
+    "albums": "Albumoj",
+    "@albums": {},
+    "artist": "Artisto",
+    "@artist": {},
+    "artists": "Artistoj",
+    "@artists": {},
+    "playlist": "Ludlisto",
+    "@playlist": {},
+    "playlists": "Ludlistoj",
+    "@playlists": {},
+    "smartlist": "Inteligentanlisto",
+    "@smartlist": {},
+    "smartlists": "Inteligentanlistoj",
+    "@smartlists": {},
+    "noShuffle": "Neniu (ten la nuna rearanĝ maniero)",
+    "@noShuffle": {},
+    "normalMode": "Normala Maniero",
+    "@normalMode": {},
+    "shuffleMode": "Rearanĝ Maniero",
+    "@shuffleMode": {},
+    "favShuffleMode": "Favorata Rearanĝ Maniero",
+    "@favShuffleMode": {},
+    "name": "Nomo",
+    "@name": {},
+    "sortingFilterSettings": "Ordiganta kaj Filtrilo Fiksaĵoj",
+    "@sortingFilterSettings": {},
+    "maxNumberEntries": "Maksimuma nombro de eroj",
+    "@maxNumberEntries": {},
+    "creationDate": "Kreo Dato",
+    "@creationDate": {},
+    "changeDate": "Ŝanĝ Dato",
+    "@changeDate": {},
+    "lastTimePlayed": "La antaŭan okazon Ludis",
+    "@lastTimePlayed": {},
+    "ascending": "Supreniranta",
+    "@ascending": {},
+    "descending": "Malsupreniranta",
+    "@descending": {},
+    "both": "Ambaŭ",
+    "@both": {},
+    "playlistsOnly": "Ludlistoj Sole",
+    "@playlistsOnly": {},
+    "smartlistsOnly": "Inteligentanlistoj Sole",
+    "@smartlistsOnly": {},
+    "displaySettings": "Montriĝo Fiksaĵoj",
+    "@displaySettings": {},
+    "addSmartlist": "Almeti Inteligentanlistoj",
+    "@addSmartlist": {},
+    "addPlaylist": "Almeti Ludlistoj",
+    "@addPlaylist": {},
+    "createPlaylist": "Krei Ludlistoj",
+    "@createPlaylist": {},
+    "editPlaylist": "Redakti Ludlistoj",
+    "@editPlaylist": {},
+    "customizeCover": "Personecig Kovrilon",
+    "@customizeCover": {},
+    "playbackMode": "Reludigo Maniero",
+    "@playbackMode": {},
+    "excludeAllSongs": "Ekskludi ĉiuj kantoj markis por ekskludo.",
+    "@excludeAllSongs": {}
+}

@@ -185,7 +185,7 @@
   "@miscellaneous": {},
   "exportData": "Exporter les données",
   "@exportData": {},
-  "songsAlbumsArtists": "Chansons, Albums et Artistes",
+  "songsAlbumsArtists": "Chansons, albums et artistes",
   "@songsAlbumsArtists": {},
   "librarySettings": "Paramètres de la bibliothèque",
   "@librarySettings": {},
@@ -197,7 +197,7 @@
       }
     }
   },
-  "dataExportFailed": "Échec de l'exportation des données !",
+  "dataExportFailed": "Échec de l'exportation des données !",
   "@dataExportFailed": {},
   "openBattery": "Ouvrir les paramètres de la batterie",
   "@openBattery": {},
@@ -312,7 +312,7 @@
   "@createSmartlists": {},
   "createSmartlistsDesc": "Créez les listes intelligentes suggérées pour améliorer votre expérience d'écoute. Vous pouvez personnaliser ces listes ultérieurement.",
   "@createSmartlistsDesc": {},
-  "create": "Créez",
+  "create": "Créer",
   "@create": {},
   "created": "Créé",
   "@created": {},
