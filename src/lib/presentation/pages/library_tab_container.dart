@@ -34,6 +34,7 @@ class LibraryTabContainer extends StatelessWidget {
                   labelPadding: const EdgeInsets.fromLTRB(12.0, 0.0, 12.0, 3.0),
                   unselectedLabelColor: Colors.white30,
                   isScrollable: true,
+                  tabAlignment: TabAlignment.start,
                   dividerColor: Colors.transparent,
                   tabs: [
                     Tab(text: L10n.of(context)!.artists),

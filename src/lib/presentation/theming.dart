@@ -19,7 +19,7 @@ ThemeData theme() => ThemeData(
       colorScheme: const ColorScheme(
         primary: DARK2,
         secondary: LIGHT1,
-        surface: DARK3,
+        surface: DARK2,
         // background: DARK2,
         error: RED,
         onPrimary: Colors.white,
@@ -33,7 +33,9 @@ ThemeData theme() => ThemeData(
       primaryColorLight: DARK2,
       highlightColor: LIGHT1,
       scaffoldBackgroundColor: DARK2,
-      cardColor: DARK3,
+      cardTheme: const CardThemeData(
+        color: DARK3,
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: LIGHT1,
