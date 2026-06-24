@@ -1,0 +1,125 @@
+{
+    "batteryExplanation": "Android 12부터 Battery Optimization은 콜백을 수신 한 후에는 풋 오디오 오디오를 잃은 후에 알림으로 인한 오류를 일으키고 있습니다. 믹스에 대한 최적화를 사용하지 않으면이 문제를 해결합니다.",
+    "blockedFilesDescription": "가져온 데이터에서 차단 된 파일. 라이브러리 검사에서 제외 된 와트 젤 벨라 만 만 제출하십시오. 앱에서 앱을 추가로 막을 수 있습니다.",
+    "exportDescription": "수출하고 싶은 자료를 선택하십시오. 기본적으로, 모든 것이 수출됩니다. 수출 할 때, 당신은 저장 될 파일에 대한 폴더를 선택할 수 있습니다.",
+    "allowedFileExtensionsDescription": "허용 된 확장의 일부 컴파일 목록은 하부에 논픽되지 않습니다. 아무런 결과가 있으면이 기본값은 기본값을 불필요하게합니다.",
+    "playAlbumsInOrderDescription": "앨범에서 노래를 클릭하면 이전 재생 모드를 유지 대신 주문에서 재생됩니다.",
+    "noSongsYet": "Lightryy에 당신의 Syngs를 찾고 있습니다. 설정으로 이동하여 음악 폴더를 추가하고 라이브러리를 업데이트하십시오.",
+    "manageExternalExplanation": "이 권한을 부여하면 라이브러리 스캔 속도를 크게 향상시킬 수 있습니다. 그렇지 않으면 앱의 동작을 변경하지 않습니다.",
+    "createSmartlistsDesc": "청취 경험을 향상시키기 위해 제안 된 스마트리스트를 만듭니다. 이 목록을 나중에 사용자 정의 할 수 있습니다.",
+    "nSongsSelected": "{count, 복수, =0{no songs selected} =1{one song selected} 기타{{count} 곡 선택}}",
+    "@nSongsSelected": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            }
+        }
+    },
+    "managePermissionSubtitle": "권한을 취소하면 앱을 다시 시작할 수 있습니다.",
+    "noPlaylistsYet": "아직 재생 목록이 없습니다. 도서관에 추가할 수 있습니다.",
+    "nSongsInQueue": "{count, 복수, =0{no songs} =1{one song} 기타{{count} song}}",
+    "@nSongsInQueue": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            }
+        }
+    },
+    "playedNTimes": "{count, 복수, =0{not plays yet} =1{played once} other{played {count} times}}",
+    "@playedNTimes": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            }
+        }
+    },
+    "nSongs": "{count, 복수, =0{no songs} =1{one song} 다른 {{count} 노래",
+    "@nSongs": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            }
+        }
+    },
+    "excludeInShuffle": "셔플 패션에서 배제를 위해 표시된 노래를 제외하십시오.",
+    "importDataDescription": "이전 mucke 설치에서 데이터를 가져옵니다.",
+    "disableBattery": "통보 문제를 해결하기 위해 Mucke에 대한 최적화를 비활성화하십시오.",
+    "newlyAddedDesc": "마지막으로 추가 된 100 곡을 포함합니다.",
+    "addWidgetToHome": "홈 페이지에 위젯 추가",
+    "noHistoryYet": "아직 볼 수 없습니다. 뭔가를 재생합니다.",
+    "excludeAlways": "항상 제외로 노래 한 노래 만 제외하십시오.",
+    "includeAllArtists": "선택되지 않은 경우 모든 아티스트를 포함.",
+    "favoritesDesc": "당신이 좋아하는 모든 노래를 포함합니다.",
+    "artistsAlbumsSongs": "{artistCount} 아티스트, {albumCount} 앨범, {songCount} 곡",
+    "@artistsAlbumsSongs": {
+        "placeholders": {
+            "artistCount": {
+                "type": "int",
+                "example": "3"
+            },
+            "albumCount": {
+                "type": "int",
+                "example": "6"
+            },
+            "songCount": {
+                "type": "int",
+                "example": "60"
+            }
+        }
+    },
+    "numberOfBlockedFiles": "현재 차단된 파일의 수: {blockedFiles}",
+    "@numberOfBlockedFiles": {
+        "placeholders": {
+            "blockedFiles": {
+                "type": "int",
+                "example": "3"
+            }
+        }
+    },
+    "countSongsPlayed": "연주 후: {percentage}%",
+    "@countSongsPlayed": {
+        "placeholders": {
+            "percentage": {
+                "type": "int"
+            }
+        }
+    },
+    "noShuffle": "없음 (현재 shuffle 형태를 따르십시오)",
+    "excludeAllSongs": "제외된 모든 곡을 제외합니다.",
+    "selectArtistsExclude": "아티스트를 선택하세요: {num} 선택.",
+    "@selectArtistsExclude": {
+        "placeholders": {
+            "num": {
+                "type": "int"
+            }
+        }
+    },
+    "selectArtistsInclude": "아티스트 선택: {num} 선택.",
+    "@selectArtistsInclude": {
+        "placeholders": {
+            "num": {
+                "type": "int"
+            }
+        }
+    },
+    "nameMustNotBeEmpty": "이름은 비어 있어야합니다.",
+    "setupLibraryDescription": "폴더를 선택, 포함 파일 확장, 기타.",
+    "grantManagePermission": "모든 파일을 관리 할 수있는 권한을 부여합니다.",
+    "filterLikes": "{min}와 {max}와 같은",
+    "@filterLikes": {
+        "placeholders": {
+            "min": {
+                "type": "int"
+            },
+            "max": {
+                "type": "int"
+            }
+        }
+    },
+    "orderSettingsDescription": "사전을 변경하는 주문 옵션.",
+    "appendToQueued": "수동 퀴즈 곡에 대한 감사",
+    "blockFromLibrary": "도서관에서 제거 및 차단",
+    "alwaysPlayPrevious": "항상 이전 노래를 재생하기 전에",
+    "alwaysPlayNext": "항상 다음 노래를 재생하십시오.",
+    "excludeShuffleAllSong": "모든 노래를 shuffling 할 때 예외."
+}

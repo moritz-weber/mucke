@@ -1,0 +1,177 @@
+{
+    "home": "Avaleht",
+    "customizeHomePage": "Kohenda avalehte",
+    "settings": "Seadistused",
+    "albumOfTheDay": "Tänase päeva album",
+    "artistOfTheDay": "Tänase päeva esitaja",
+    "library": "Muusikakogu",
+    "search": "Otsi",
+    "updateLibrary": "Uuenda muusikakogu",
+    "artistsAlbumsSongs": "{artistCount} esitajat, {albumCount} albumit, {songCount} lugu",
+    "@artistsAlbumsSongs": {
+        "placeholders": {
+            "artistCount": {
+                "type": "int",
+                "example": "3"
+            },
+            "albumCount": {
+                "type": "int",
+                "example": "6"
+            },
+            "songCount": {
+                "type": "int",
+                "example": "60"
+            }
+        }
+    },
+    "manageLibraryFolders": "Halda muusikakogu kaustu",
+    "allowedFileExtensions": "Lubatud faililaiendid",
+    "allSongs": "Kõik lood",
+    "song": "Lugu",
+    "songs": "Lood",
+    "nSongs": "{count, plural, =0{lugusid pole} =1{üks lugu} other{{count} lugu}}",
+    "@nSongs": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            }
+        }
+    },
+    "album": "Album",
+    "albums": "Albumid",
+    "artist": "Esitaja",
+    "artists": "Esitajad",
+    "playlist": "Esitusloend",
+    "playlists": "Esitusloendid",
+    "smartlist": "Nutikas esitusloend",
+    "smartlists": "Nutikad esitusloendid",
+    "shuffleAll": "Sega kõik lood",
+    "history": "Ajalugu",
+    "addWidgetToHome": "Lisa vidin avalehele",
+    "noPlaylistsYet": "Esitusloendeid veel pole. Saad neid lisada muusikakogust.",
+    "lastPlayed": "Viimati esitatud",
+    "noHistoryYet": "Siin pole veel midagi huvitavat. Kuula mõnda lugu.",
+    "noShuffle": "Puudub (säilita senine segamisviis)",
+    "normalMode": "Tavaline viis",
+    "shuffleMode": "Segamisviis",
+    "favShuffleMode": "Lemmikupõhine segamisviis",
+    "name": "Nimi",
+    "sortingFilterSettings": "Järjestuse ja filtrite seadistused",
+    "maxNumberEntries": "Maksimaalne kirjete arv",
+    "creationDate": "Loomise kuupäev",
+    "changeDate": "Muuda kuupäeva",
+    "lastTimePlayed": "Viimase esitamise aeg",
+    "ascending": "Järjesta kasvavalt",
+    "descending": "Järjesta kahanevalt",
+    "both": "Mõlemad",
+    "playlistsOnly": "Vaid esitusloendid",
+    "smartlistsOnly": "Vaid nutikad esitusloendid",
+    "displaySettings": "Ekraani seadistused",
+    "addSmartlist": "Lisa nutikas esitusloend",
+    "addPlaylist": "Lisa esitusloend",
+    "createPlaylist": "Loo esitusloend",
+    "editPlaylist": "Muuda esitusloendit",
+    "customizeCover": "Kohenda kaanepilti",
+    "playbackMode": "Taasesituse režiim",
+    "playback": "Taasesitus",
+    "play": "Esita",
+    "disc": "Plaat",
+    "highlights": "Esiletõstetud",
+    "shuffle": "Sega lood",
+    "year": "Aasta",
+    "cancel": "Katkesta",
+    "previousSong": "eelmine",
+    "scan": "Skaneeri",
+    "use": "Kasuta",
+    "reset": "Lähtesta",
+    "imported": "Imporditud",
+    "importVerb": "Impordi",
+    "@importVerb": {
+        "description": "This means the verb of importing something - not the noun."
+    },
+    "miscellaneous": "Varia",
+    "favorites": "Lemmikud",
+    "back": "Tagasi",
+    "next": "Järgmine",
+    "finish": "Lõpeta",
+    "create": "Loo",
+    "created": "Loodud",
+    "libraryFolders": "Muusikakogu kaustad",
+    "blockedFiles": "Blokeeritud failid",
+    "homeCustomization": "Avalehe kohendamine",
+    "filterSettings": "Filtrite seadistused",
+    "minYear": "Väikseim aasta",
+    "maxYear": "Suurim aasta",
+    "orderSettings": "Järjestuse seadistused",
+    "createSmartlist": "Loo nutikas esitusloend",
+    "editSmartlist": "Muuda nutikat esitusloendit",
+    "playNext": "Esita järgmisena",
+    "selectArtists": "Vali esitajad",
+    "currentlyPlaying": "Hetkel kuulamisel",
+    "artistName": "Esitaja nimi",
+    "likeCount": "Meeldimisi",
+    "playCount": "Esituskordi",
+    "songTitle": "Loo pealkiri",
+    "timeAdded": "Lisamise aeg",
+    "nextUp": "Järgmiseks esitamisel",
+    "importData": "Impordi andmeid",
+    "yourLibrary": "Sinu muusikakogu:",
+    "addFolder": "Lisa kaust",
+    "songMetaData": "Lugude metateave",
+    "exportData": "Ekspordi andmed",
+    "librarySettings": "Muusikakogu seadistused",
+    "yourPlaylists": "Sinu esitusloendid",
+    "systemSettings": "Süsteemi seadistused",
+    "newlyAdded": "Äsjalisatud",
+    "createSmartlists": "Loo nutikaid esitusloendeid",
+    "manageBlockedFiles": "Halda blokeeritud faile",
+    "minPlayCount": "Minimaalne esitamiste arv",
+    "maxPlayCount": "Maksimaalne esitamiste arv",
+    "excludeArtists": "Välista valitud esitajad",
+    "addToQueue": "Lisa esitusjärjekorda",
+    "removeFromQueue": "Eemalda esitusjärjekorrast",
+    "moreAvailable": "veel {num} on saadaval",
+    "@moreAvailable": {
+        "placeholders": {
+            "num": {
+                "type": "int"
+            }
+        }
+    },
+    "addToPlaylist": "Lisa esitusloendisse",
+    "removeFromPlaylist": "Eemalda esitusloendist",
+    "excludeShuffleSong": "Välista segamisel.",
+    "welcomeToMucke": "Tere tulemast, see on mucke!",
+    "setupLibrary": "Seadista muusikakogu",
+    "importLibData": "Impordi muusikakogu andmed",
+    "dataExportFailed": "Andmete eksportimine ei õnnestunud!",
+    "openBattery": "Ava akukasutuse seadistused",
+    "errorReadData": "Viga andmefaili laadmisel.",
+    "newlyAddedDesc": "Sisaldab 100 viimatilisatud lugu.",
+    "favoritesDesc": "Sisaldab lugusid, mis sulle meeldivad.",
+    "managePermissionSubtitle": "Õiguste keelamisel see rakendus käivitub uuesti.",
+    "grantManagePermission": "Anna õigused kõikide failide haldamiseks.",
+    "disabledBattery": "Akukasutuse optimeerimine on lülitatud välja.",
+    "disableBattery": "Probleemide lahendamiseks lülita ta mucke jaoks välja.",
+    "batteryExplanation": "Alates Androidi 12-st versioonist akukasutuse optimeerimine tekitab helifookuse kaotamisel (näiteks kõne ajal) teavituste vea. Optimeerimise keelamine lahendab selle vea.",
+    "dataExportedTo": "Andmed on eksporditud kausta:\n{path}",
+    "@dataExportedTo": {
+        "placeholders": {
+            "path": {
+                "type": "String"
+            }
+        }
+    },
+    "songsAlbumsArtists": "Lood, albumid ja esitajad",
+    "metaDataDescription": "Impordi meeldimised, blokeerimised, jne.",
+    "exportDescription": "Vali andmed, mida tahad eksportida. Vaikimisi eksporditakse kõik. Lisaks saad valida kausta, kuhu ekspordifail salvestatakse.",
+    "metaDataAvailable": "Saadaval on {num} loo metateave",
+    "@metaDataAvailable": {
+        "placeholders": {
+            "num": {
+                "type": "int"
+            }
+        }
+    },
+    "manageExternalExplanation": "Selle õiguse lubamine parandab märgatakselt muusikakogu loomisel skaneerimise kiirust. Muus osas rakenduse toimimine ei muutu."
+}

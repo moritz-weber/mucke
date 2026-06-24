@@ -1,0 +1,417 @@
+{
+  "addFolder": "Tambah folder",
+  "@addFolder": {},
+  "numberOfBlockedFiles": "Jumlah file yang terblokir: {blockedFiles}",
+  "@numberOfBlockedFiles": {
+    "placeholders": {
+      "blockedFiles": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "openBattery": "Buka pengaturan baterai",
+  "@openBattery": {},
+  "artistOfTheDay": "Artis pada hari ini",
+  "@artistOfTheDay": {},
+  "shuffleMode": "Mode acak",
+  "@shuffleMode": {},
+  "importData": "Impor data",
+  "@importData": {},
+  "settings": "Pengaturan",
+  "@settings": {},
+  "home": "Beranda",
+  "@home": {},
+  "customizeHomePage": "Kustomisasi beranda",
+  "@customizeHomePage": {},
+  "library": "Library",
+  "@library": {},
+  "search": "Cari",
+  "@search": {},
+  "updateLibrary": "Perbarui library",
+  "@updateLibrary": {},
+  "allowedFileExtensions": "Ekstensi file yang diperbolehkan",
+  "@allowedFileExtensions": {},
+  "manageBlockedFiles": "Atur file yang diblokir",
+  "@manageBlockedFiles": {},
+  "playback": "Pemutaran",
+  "@playback": {},
+  "playAlbumsInOrder": "Putar album sesuai urutan",
+  "@playAlbumsInOrder": {},
+  "countSongsPlayed": "Tandai lagu sudah diputar setelah: {percentage}%",
+  "@countSongsPlayed": {
+    "placeholders": {
+      "percentage": {
+        "type": "int"
+      }
+    }
+  },
+  "homeCustomization": "Kustomisasi beranda",
+  "@homeCustomization": {},
+  "albumOfTheDay": "Album pada hari ini",
+  "@albumOfTheDay": {},
+  "history": "Riwayat",
+  "@history": {},
+  "addWidgetToHome": "Tambahkan widget pada beranda perangkat kamu",
+  "@addWidgetToHome": {},
+  "lastPlayed": "Terakhir diputar",
+  "@lastPlayed": {},
+  "noHistoryYet": "Tidak ada apapun. Coba putar lagu dahulu.",
+  "@noHistoryYet": {},
+  "song": "Lagu",
+  "@song": {},
+  "songs": "Lagu",
+  "@songs": {},
+  "album": "Album",
+  "@album": {},
+  "albums": "Album",
+  "@albums": {},
+  "artist": "Artis",
+  "@artist": {},
+  "playlists": "Playlist",
+  "@playlists": {},
+  "noShuffle": "Tidak ada (biarkan mode acak saat ini)",
+  "@noShuffle": {},
+  "normalMode": "Mode normal",
+  "@normalMode": {},
+  "smartlist": "Smartlist",
+  "@smartlist": {},
+  "smartlists": "Smartlist",
+  "@smartlists": {},
+  "favShuffleMode": "Mode acak favorit",
+  "@favShuffleMode": {},
+  "sortingFilterSettings": "Pengaturan sortir dan penyaringan",
+  "@sortingFilterSettings": {},
+  "maxNumberEntries": "Jumlah entri maksimal",
+  "@maxNumberEntries": {},
+  "creationDate": "Tanggal dibuat",
+  "@creationDate": {},
+  "lastTimePlayed": "Terakhir dimainkan pada",
+  "@lastTimePlayed": {},
+  "ascending": "Menanjak",
+  "@ascending": {},
+  "descending": "Menurun",
+  "@descending": {},
+  "playlistsOnly": "Hanya playlist",
+  "@playlistsOnly": {},
+  "smartlistsOnly": "Hanya smartlist",
+  "@smartlistsOnly": {},
+  "addPlaylist": "Tambah playlist",
+  "@addPlaylist": {},
+  "createPlaylist": "Buat playlist",
+  "@createPlaylist": {},
+  "editPlaylist": "Ubah playlist",
+  "@editPlaylist": {},
+  "customizeCover": "Kustom cover",
+  "@customizeCover": {},
+  "excludeAllSongs": "Mengecualikan semua lagu yang ditandai.",
+  "@excludeAllSongs": {},
+  "excludeInShuffle": "Mengecualikan lagu yang ditandai pada mode acak.",
+  "@excludeInShuffle": {},
+  "dontExclude": "Tidak ada lagu yang dikecualikan.",
+  "@dontExclude": {},
+  "filterSettings": "Pengaturan penyaringan",
+  "@filterSettings": {},
+  "minPlayCount": "Minimal jumlah pemutaran",
+  "@minPlayCount": {},
+  "maxPlayCount": "Maksimal jumlah pemutaran",
+  "@maxPlayCount": {},
+  "selectArtistsInclude": "Pilih artis untuk dimasukkan: {num} terpilih.",
+  "@selectArtistsInclude": {
+    "placeholders": {
+      "num": {
+        "type": "int"
+      }
+    }
+  },
+  "includeAllArtists": "Masukkan semua artis jika tidak ada yang terpilih.",
+  "@includeAllArtists": {},
+  "excludeArtists": "Kecualikan semua artis terpilih",
+  "@excludeArtists": {},
+  "limitSongs": "Batas jumlah lagu",
+  "@limitSongs": {},
+  "orderSettingsDescription": "Ubah pengaturan untuk mengganti prioritas.",
+  "@orderSettingsDescription": {},
+  "play": "Putar",
+  "@play": {},
+  "playNext": "Putar selanjutnya",
+  "@playNext": {},
+  "disc": "Kaset",
+  "@disc": {},
+  "blockFromLibrary": "Hapus dan blokir dari library",
+  "@blockFromLibrary": {},
+  "highlights": "Sorotan",
+  "@highlights": {},
+  "shuffle": "Acak",
+  "@shuffle": {},
+  "selectArtists": "Pilih artis",
+  "@selectArtists": {},
+  "removeFromQueue": "Hapus dari antrean",
+  "@removeFromQueue": {},
+  "moreAvailable": "{num} lebih tersedia",
+  "@moreAvailable": {
+    "placeholders": {
+      "num": {
+        "type": "int"
+      }
+    }
+  },
+  "nameMustNotBeEmpty": "Nama tidak boleh kosong.",
+  "@nameMustNotBeEmpty": {},
+  "artistName": "Nama artis",
+  "@artistName": {},
+  "likeCount": "Jumlah suka",
+  "@likeCount": {},
+  "playCount": "Jumlah putar",
+  "@playCount": {},
+  "songTitle": "Judul lagu",
+  "@songTitle": {},
+  "playedNTimes": "{count, plural, =0{belum pernah diputar} =1{diputar sekali} other{diputar {count} kali}}",
+  "@playedNTimes": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "alwaysPlayPrevious": "Selalu putar lagu sebelumnya",
+  "@alwaysPlayPrevious": {},
+  "alwaysPlayNext": "Selalu putar lagu selanjutnya",
+  "@alwaysPlayNext": {},
+  "dontExcludeSong": "Jangan kecualikan lagu ini.",
+  "@dontExcludeSong": {},
+  "excludeShuffleAllSong": "Kecualikan ketika mengacak semua lagu.",
+  "@excludeShuffleAllSong": {},
+  "welcomeToMucke": "Selamat datang di mucke!",
+  "@welcomeToMucke": {},
+  "setupLibrary": "Mempersiapkan library",
+  "@setupLibrary": {},
+  "setupLibraryDescription": "Pilih folder, masukkan semua ekstensi file, dll.",
+  "@setupLibraryDescription": {},
+  "yourLibrary": "Library kamu:",
+  "@yourLibrary": {},
+  "scan": "Pindai",
+  "@scan": {},
+  "noFoldersSelected": "Tidak ada folder terpilih saat ini.",
+  "@noFoldersSelected": {},
+  "reset": "Mulai ulang",
+  "@reset": {},
+  "importLibData": "Impor data library",
+  "@importLibData": {},
+  "metaDataDescription": "Impor suka, blokir, dll.",
+  "@metaDataDescription": {},
+  "imported": "Terimpor",
+  "@imported": {},
+  "importVerb": "Impor",
+  "@importVerb": {
+    "description": "This means the verb of importing something - not the noun."
+  },
+  "miscellaneous": "Lain-lain",
+  "@miscellaneous": {},
+  "dataExportedTo": "Data diekspor ke:\n{path}",
+  "@dataExportedTo": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "dataExportFailed": "Gagal mengekspor data!",
+  "@dataExportFailed": {},
+  "systemSettings": "Pengaturan sistem",
+  "@systemSettings": {},
+  "favorites": "Favorit",
+  "@favorites": {},
+  "newlyAdded": "Baru-baru ini ditambahkan",
+  "@newlyAdded": {},
+  "next": "Selanjutnya",
+  "@next": {},
+  "errorReadData": "Eror membaca data file .",
+  "@errorReadData": {},
+  "createSmartlistsDesc": "Buat saran smartlist untuk meningkatkan pengalaman mendengarkan. Kamu bisa mengubah list ini nanti.",
+  "@createSmartlistsDesc": {},
+  "created": "Dibuat",
+  "@created": {},
+  "allowedFileExtensionsDescription": "Daftar ekstensi file boleh dipisahkan dengan koma. Huruf kapital atau tidak bukanlah masalah. Jika ragu, jangan diubah.",
+  "@allowedFileExtensionsDescription": {},
+  "artistsAlbumsSongs": "{artistCount} artis, {albumCount} album, {songCount} lagu",
+  "@artistsAlbumsSongs": {
+    "placeholders": {
+      "artistCount": {
+        "type": "int",
+        "example": "3"
+      },
+      "albumCount": {
+        "type": "int",
+        "example": "6"
+      },
+      "songCount": {
+        "type": "int",
+        "example": "60"
+      }
+    }
+  },
+  "noSongsYet": "Sepertinya tidak ada lagu di library kamu; coba ke pengaturan, tambahkan folder musik, kemudian perbarui library.",
+  "@noSongsYet": {},
+  "libraryFolders": "Folder library",
+  "@libraryFolders": {},
+  "shuffleAll": "Acak semua",
+  "@shuffleAll": {},
+  "blockedFiles": "File terblokir",
+  "@blockedFiles": {},
+  "noPlaylistsYet": "Tidak ada playlist. Kamu bisa menambahkan playlist di library.",
+  "@noPlaylistsYet": {},
+  "nSongs": "{count, plural, =0{tidak ada lagu} =1{satu lagu} other{{count} lagu}}",
+  "@nSongs": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "artists": "Artis",
+  "@artists": {},
+  "changeDate": "Tanggal dirubah",
+  "@changeDate": {},
+  "playlist": "Playlist",
+  "@playlist": {},
+  "name": "Nama",
+  "@name": {},
+  "displaySettings": "Pengaturan display",
+  "@displaySettings": {},
+  "addSmartlist": "Tambah smartlist",
+  "@addSmartlist": {},
+  "manageLibraryFolders": "Atur folder library",
+  "@manageLibraryFolders": {},
+  "maxYear": "Maksimal tahun",
+  "@maxYear": {},
+  "filterLikes": "Suka berdasarkan {min} dan {max}",
+  "@filterLikes": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "removeFromPlaylist": "Hapus dari playlist",
+  "@removeFromPlaylist": {},
+  "editSmartlist": "Ubah smartlist",
+  "@editSmartlist": {},
+  "use": "Gunakan",
+  "@use": {},
+  "nSongsSelected": "{count, plural, =0{tidak ada lagu terpilih} =1{satu lagu terpilih} other{{count} lagu terpilih}}",
+  "@nSongsSelected": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "appendToQueued": "Tambahkan manual ke antrean lagu",
+  "@appendToQueued": {},
+  "currentlyPlaying": "Saat ini diputar",
+  "@currentlyPlaying": {},
+  "excludeShuffleSong": "Kecualikan ketika mengacak.",
+  "@excludeShuffleSong": {},
+  "importDataDescription": "Impor data kamu dari instalasi mucke sebelumnya.",
+  "@importDataDescription": {},
+  "finish": "Selesai",
+  "@finish": {},
+  "allSongs": "Semua lagu",
+  "@allSongs": {},
+  "blockedFilesDescription": "File terblokir dari data yang terimpor. Hanya file yang benar-benar sesuai yang akan dikecualikan. File yang lain bisa diblokir nanti di aplikasi.",
+  "@blockedFilesDescription": {},
+  "disabledBattery": "Optimasi baterai dimatikan.",
+  "@disabledBattery": {},
+  "playAlbumsInOrderDescription": "Ketika mengklik lagu pada sebuah album lagu tersebut akan dimainkan sesuai urutan dibanding mengikuti pemutaran sebelumnya.",
+  "@playAlbumsInOrderDescription": {},
+  "newlyAddedDesc": "Berisi 100 lagu terakhir yang ditambahkan.",
+  "@newlyAddedDesc": {},
+  "grantManagePermission": "Berikan ijin untuk mengatur seluruh file.",
+  "@grantManagePermission": {},
+  "createSmartlists": "Buat smartlist",
+  "@createSmartlists": {},
+  "both": "Keduanya",
+  "@both": {},
+  "excludeAlways": "Mengecualikan lagu yang ditandai sebagai selalu dikecualikan.",
+  "@excludeAlways": {},
+  "minYear": "Minimal tahun",
+  "@minYear": {},
+  "orderSettings": "Pengaturan urutan",
+  "@orderSettings": {},
+  "playbackMode": "Mode pemutaran",
+  "@playbackMode": {},
+  "selectArtistsExclude": "Pilih artis untuk dikecualikan: {num} terpilih.",
+  "@selectArtistsExclude": {
+    "placeholders": {
+      "num": {
+        "type": "int"
+      }
+    }
+  },
+  "timeAdded": "Waktu ditambahkan",
+  "@timeAdded": {},
+  "createSmartlist": "Buat smartlist",
+  "@createSmartlist": {},
+  "nSongsInQueue": "{count, plural, =0{tidak ada lagu} =1{satu lagu} other{{count} lagu}} di antrean",
+  "@nSongsInQueue": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "addToPlaylist": "Tambah ke playlist",
+  "@addToPlaylist": {},
+  "songMetaData": "Metadata lagu",
+  "@songMetaData": {},
+  "alwaysExcludeSong": "Selalu kecualikan lagu ini.",
+  "@alwaysExcludeSong": {},
+  "nextUp": "Selanjutnya",
+  "@nextUp": {},
+  "exportDescription": "Pilih data yang akan diekspor. Secara bawaan semuanya akan diekspor. Ketika mengekspor, kamu bisa memilih sebuah folder untuk file yang akan disortir.",
+  "@exportDescription": {},
+  "addToQueue": "Tambah ke antrean",
+  "@addToQueue": {},
+  "metaDataAvailable": "Metadata untuk {num} lagu tersedia",
+  "@metaDataAvailable": {
+    "placeholders": {
+      "num": {
+        "type": "int"
+      }
+    }
+  },
+  "year": "Tahun",
+  "@year": {},
+  "previousSong": "Sebelumnya",
+  "@previousSong": {},
+  "cancel": "Batal",
+  "@cancel": {},
+  "availableFromImport": "Tersedia dari data terimpor:",
+  "@availableFromImport": {},
+  "managePermissionSubtitle": "Mencabut ijin akan merestart aplikasi.",
+  "@managePermissionSubtitle": {},
+  "exportData": "Ekspor data",
+  "@exportData": {},
+  "disableBattery": "Matikan optimasi untuk mucke untuk memperbaiki masalah notifikasi.",
+  "@disableBattery": {},
+  "back": "Kembali",
+  "@back": {},
+  "favoritesDesc": "Berisi semua lagu yang kamu sukai.",
+  "@favoritesDesc": {},
+  "create": "Buat",
+  "@create": {},
+  "batteryExplanation": "Dari android 12 keatas, optimasi baterai akan mengakibatkan eror pada notifikasi setelah audio terganggu, contohnya ketika menerima telepon. Matikan optimasi untuk mucke akan memperbaiki masalah ini.",
+  "@batteryExplanation": {},
+  "songsAlbumsArtists": "Lagu, album, dan artis",
+  "@songsAlbumsArtists": {},
+  "yourPlaylists": "Playlist kamu",
+  "@yourPlaylists": {},
+  "librarySettings": "Pengaturan library",
+  "@librarySettings": {},
+  "manageExternalExplanation": "Memberi perijinan ini akan meningkatkan kecepatan pemindaian library. Dimatikanpun tidak berdampak apapun pada penggunaan aplikasi.",
+  "@manageExternalExplanation": {}
+}
