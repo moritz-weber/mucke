@@ -2,6 +2,7 @@ import '../entities/playable.dart';
 import '../repositories/audio_player_repository.dart';
 import '../repositories/music_data_repository.dart';
 import '../repositories/platform_integration_repository.dart';
+import '../usecases/play_smart_list.dart';
 import '../usecases/play_songs.dart';
 import '../usecases/seek_to_next.dart';
 
@@ -12,6 +13,7 @@ class PlatformIntegrationActor {
     this._audioPlayerRepository,
     this._musicDataRepository,
     this._playSongs,
+    this._playSmartList,
   ) {
     _platformIntegrationInfoRepository.eventStream
         .listen((event) => _handlePlatformIntegrationEvent(event));
@@ -21,6 +23,7 @@ class PlatformIntegrationActor {
   final MusicDataRepository _musicDataRepository;
   final PlatformIntegrationInfoRepository _platformIntegrationInfoRepository;
   final PlaySongs _playSongs;
+  final PlaySmartList _playSmartList;
 
   final SeekToNext _seekToNext;
 
@@ -59,7 +62,18 @@ class PlatformIntegrationActor {
           _musicDataRepository.incrementLikeCount(song);
         }
         break;
+      case PlatformIntegrationEventType.playSmartList:
+        final smartListId = event.payload?['smartListId'] as int?;
+        if (smartListId != null) {
+          await _playSmartListById(smartListId);
+        }
+        break;
     }
+  }
+
+  Future<void> _playSmartListById(int smartListId) async {
+    final smartList = await _musicDataRepository.getSmartListStream(smartListId).first;
+    _playSmartList(smartList);
   }
 
   Future<void> _seekToPosition(Duration position) async {

@@ -2,8 +2,10 @@ import 'package:audio_service/audio_service.dart';
 import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../constants.dart';
 import '../../domain/entities/playable.dart';
 import '../../domain/entities/playback_event.dart';
+import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/repositories/music_data_repository.dart';
 import '../../domain/repositories/platform_integration_repository.dart';
 import '../models/playback_event_model.dart';
@@ -63,6 +65,7 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
   static const String _smartListsMediaId = 'smart_lists';
   static const String _smartListPrefix = 'smart_list:';
   static const String _smartListSongPrefix = 'smart_list_song:';
+  static const String _smartListPlayPrefix = 'smart_list_play:';
   static const String _playlistPrefix = 'playlist:';
   static const String _playlistSongPrefix = 'playlist_song:';
 
@@ -71,6 +74,19 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
   static final _log = Logger('PlatformIntegrationDataSourceImpl');
 
   final BehaviorSubject<PlatformIntegrationEvent> _eventSubject = BehaviorSubject();
+
+  static Uri _shuffleModeArtUri(ShuffleMode? shuffleMode) {
+    switch (shuffleMode) {
+      case ShuffleMode.none:
+        return Uri.parse('android.resource://$PACKAGE_NAME/drawable/shuffle_none');
+      case ShuffleMode.plus:
+        return Uri.parse('android.resource://$PACKAGE_NAME/drawable/shuffle_heart');
+      case ShuffleMode.standard:
+        return Uri.parse('android.resource://$PACKAGE_NAME/drawable/shuffle');
+      default:
+        return Uri.parse('android.resource://$PACKAGE_NAME/drawable/play_arrow');
+    }
+  }
 
   // BaseAudioHandler interface
 
@@ -126,8 +142,8 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
       );
 
       return [...smartListItems, ...playlistItems]..sort(
-        (a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()),
-       );
+          (a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()),
+        );
     }
 
     if (parentMediaId.startsWith(_smartListPrefix)) {
@@ -137,12 +153,22 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
       final smartList = await _musicDataInfoRepository.getSmartListStream(smartListId).first;
       final songs = await _musicDataInfoRepository.getSmartListSongStream(smartList).first;
 
-      return songs.map((song) {
+      final playAction = MediaItem(
+        id: '$_smartListPlayPrefix$smartListId',
+        title: '${smartList.name} ▶',
+        playable: true,
+        duration: const Duration(milliseconds: 1),
+        artUri: _shuffleModeArtUri(smartList.shuffleMode),
+      );
+
+      final songItems = songs.map((song) {
         final songModel = song as SongModel;
         return songModel.toMediaItem().copyWith(
               id: '$_smartListSongPrefix$smartListId:${Uri.encodeComponent(songModel.path)}',
             );
       }).toList();
+
+      return [playAction, ...songItems];
     }
 
     if (parentMediaId.startsWith(_playlistPrefix)) {
@@ -198,6 +224,36 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
         title: 'Playlists',
         playable: false,
       );
+    }
+
+    if (mediaId.startsWith(_smartListPlayPrefix)) {
+      final smartListId = int.tryParse(mediaId.substring(_smartListPlayPrefix.length));
+      if (smartListId == null) return null;
+
+      try {
+        final smartList = await _musicDataInfoRepository.getSmartListStream(smartListId).first;
+        return MediaItem(
+          id: mediaId,
+          title: '${smartList.name} ▶',
+          duration: const Duration(milliseconds: 1),
+          playable: true,
+          artUri: _shuffleModeArtUri(smartList.shuffleMode),
+        );
+      } catch (_) {
+        return null;
+      }
+    }
+
+    if (mediaId.startsWith(_smartListSongPrefix)) {
+      final metadata = _parseSmartListSongMediaId(mediaId);
+      if (metadata == null) return null;
+
+      try {
+        final song = await _musicDataInfoRepository.getSongByPath(metadata.songPath);
+        return (song as SongModel).toMediaItem().copyWith(id: mediaId);
+      } catch (_) {
+        return null;
+      }
     }
 
     if (mediaId.startsWith(_smartListPrefix)) {
@@ -267,6 +323,17 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
   @override
   Future<void> playFromMediaId(String mediaId, [Map<String, dynamic>? extras]) async {
     if (mediaId == _allSongsMediaId || mediaId == _smartListsMediaId || mediaId == _rootMediaId) {
+      return;
+    }
+
+    if (mediaId.startsWith(_smartListPlayPrefix)) {
+      final smartListId = int.tryParse(mediaId.substring(_smartListPlayPrefix.length));
+      if (smartListId == null) return;
+
+      _eventSubject.add(PlatformIntegrationEvent(
+        type: PlatformIntegrationEventType.playSmartList,
+        payload: {'smartListId': smartListId},
+      ));
       return;
     }
 

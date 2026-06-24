@@ -399,6 +399,7 @@ Future<void> setupGetIt() async {
       getIt(),
       getIt(),
       getIt(),
+      getIt(),
     ),
   );
 

@@ -27,4 +27,5 @@ enum PlatformIntegrationEventType {
   playMediaId,
   seek,
   like,
+  playSmartList,
 }
