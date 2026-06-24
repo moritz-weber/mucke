@@ -17,12 +17,12 @@ const favs = [
     action: MediaAction.rewind,
   ),
   MediaControl(
-    androidIcon: 'drawable/favorite_1',
+    androidIcon: 'drawable/favorite_1_3',
     label: 'Like',
     action: MediaAction.rewind,
   ),
   MediaControl(
-    androidIcon: 'drawable/favorite_2',
+    androidIcon: 'drawable/favorite_2_3',
     label: 'Like',
     action: MediaAction.rewind,
   ),

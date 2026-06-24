@@ -86,7 +86,7 @@ class PlatformIntegrationActor {
           keepInitialIndex: true,
         );
       } else if (playableType == PlayableType.smartlist) {
-        final smartList = await _musicDataRepository.getSmartListStream(playableId!).first;
+        final smartList = await _musicDataRepository.getSmartListStream(playableId).first;
         final songs = await _musicDataRepository.getSmartListSongStream(smartList).first;
         final index = songs.indexWhere((song) => song.path == mediaId);
         if (index < 0) return;
