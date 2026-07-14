@@ -6,7 +6,7 @@ import 'enums.dart';
 import 'playable.dart';
 import 'shuffle_mode.dart';
 
-class SmartList extends CustomList with EquatableMixin implements Playable {
+class SmartList extends CustomList with Equatable implements Playable {
   const SmartList({
     required String name,
     required String iconString,

@@ -4,7 +4,7 @@ import 'custom_list.dart';
 import 'playable.dart';
 import 'shuffle_mode.dart';
 
-class Playlist extends CustomList with EquatableMixin implements Playable {
+class Playlist extends CustomList with Equatable implements Playable {
   const Playlist({
     required String name,
     required String iconString,
