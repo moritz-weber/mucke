@@ -54,7 +54,6 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
 
   final ja.AudioPlayer _audioPlayer;
 
-  late ja.ConcatenatingAudioSource _audioSource;
   late List<SongModel> _queue;
   // inclusive
   late int _loadStartIndex;
@@ -103,19 +102,20 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
     if (initialIndex >= queue.length) {
       // there is no queue or something is wrong -> initialize with sane defaults
       _queue = [];
-      _audioSource = ja.ConcatenatingAudioSource(children: []);
-      _audioPlayer.setAudioSource(_audioSource);
+      _audioPlayer.setAudioSources([]);
       _currentIndexSubject.add(0);
       _loadStartIndex = 0;
       _loadEndIndex = 0;
     } else {
       _queue = queue;
       final queueToLoad = _getQueueToLoad(queue, initialIndex);
-      // if this was not set to false, _updateLoadedQueue would try to manipulate the _audioSource
+      // if this was not set to false, _updateLoadedQueue would try to manipulate the audio sources
       // in some cases and _audioPlayer doesn't like that
       isQueueLoaded = false;
-      _audioSource = _songModelsToAudioSource(queueToLoad);
-      await _audioPlayer.setAudioSource(_audioSource, initialIndex: _calcSourceIndex(initialIndex));
+      await _audioPlayer.setAudioSources(
+        _songModelsToAudioSource(queueToLoad),
+        initialIndex: _calcSourceIndex(initialIndex),
+      );
       isQueueLoaded = true;
       _currentIndexSubject.add(initialIndex);
     }
@@ -172,12 +172,14 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
       if (_loadEndIndex == _queue.length - 1) {
         // queue is loaded until the end -> load this song too and adapt the index
         _loadEndIndex++;
-        await _audioSource.addAll(songs.map((e) => ja.AudioSource.uri(Uri.file(e.path))).toList());
+        await _audioPlayer
+            .addAudioSources(songs.map((e) => ja.AudioSource.uri(Uri.file(e.path))).toList());
       }
     } else {
       // note: when removing the whole queue and queueing new songs, this case will always be true
       // thus, from this point on, everything will be loaded immediately
-      await _audioSource.addAll(songs.map((e) => ja.AudioSource.uri(Uri.file(e.path))).toList());
+      await _audioPlayer
+          .addAudioSources(songs.map((e) => ja.AudioSource.uri(Uri.file(e.path))).toList());
     }
   }
 
@@ -212,7 +214,8 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
     if (index < _loadEndIndex) {
       _loadEndIndex = _loadEndIndex + songs.length;
     }
-    await _audioSource.insertAll(min(_audioSource.length, (_audioPlayer.currentIndex ?? 0) + 1),
+    await _audioPlayer.insertAudioSources(
+        min(_audioPlayer.audioSources.length, (_audioPlayer.currentIndex ?? 0) + 1),
         songs.map((e) => ja.AudioSource.uri(Uri.file(e.path))).toList());
   }
 
@@ -223,11 +226,11 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
     final sourceIndex = _calcSourceIndex(index);
     // the songs should get loaded immediately if
     // 1) they start in the already loaded interval
-    // 2) they start in the interval that should always be loaded 
+    // 2) they start in the interval that should always be loaded
     //    (but is currently not, because the queue is smaller than the interval)
     final shouldIndexGetLoaded = _isQueueIndexInLoadInterval(index) ||
         (_currentIndexSubject.value - index).abs() < LOAD_INTERVAL;
-    
+
     if (index < _loadStartIndex) {
       _loadStartIndex = _loadStartIndex + songs.length;
     }
@@ -236,7 +239,7 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
     }
 
     if (shouldIndexGetLoaded) {
-      await _audioSource.insertAll(min(_audioSource.length, sourceIndex),
+      await _audioPlayer.insertAudioSources(min(_audioPlayer.audioSources.length, sourceIndex),
           songs.map((e) => ja.AudioSource.uri(Uri.file(e.path))).toList());
     } else {
       _updateCurrentIndex(_audioPlayer.currentIndex);
@@ -270,7 +273,7 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
       if (isIndexLoaded) {
         _log.fine('index is loaded');
         isSomeIndexLoaded = true;
-        await _audioSource.removeAt(sourceIndex);
+        await _audioPlayer.removeAudioSourceAt(sourceIndex);
         if (sourceIndex >= currentSourceIndex) {
           needToLoadMore = true;
         }
@@ -305,11 +308,11 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
     );
 
     _lockUpdate = true;
-    await _audioSource.removeRange(0, oldSourceIndex);
-    await _audioSource.removeRange(1, _audioSource.length);
+    await _audioPlayer.removeAudioSourceRange(0, oldSourceIndex);
+    await _audioPlayer.removeAudioSourceRange(1, _audioPlayer.audioSources.length);
 
-    await _audioSource.insertAll(0, _before.children);
-    await _audioSource.addAll(_after.children);
+    await _audioPlayer.insertAudioSources(0, _before);
+    await _audioPlayer.addAudioSources(_after);
     _lockUpdate = false;
     _updateCurrentIndex(newSourceIndex);
   }
@@ -319,10 +322,8 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
     await _audioPlayer.setLoopMode(loopMode.toJA());
   }
 
-  ja.ConcatenatingAudioSource _songModelsToAudioSource(List<SongModel> songModels) {
-    return ja.ConcatenatingAudioSource(
-      children: songModels.map((SongModel m) => ja.AudioSource.uri(Uri.file(m.path))).toList(),
-    );
+  List<ja.AudioSource> _songModelsToAudioSource(List<SongModel> songModels) {
+    return songModels.map((SongModel m) => ja.AudioSource.uri(Uri.file(m.path))).toList();
   }
 
   /// Determine the songs to load and set loadStartIndex/loadEndIndex accordingly.
@@ -378,29 +379,31 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
         // load the song previous to the already loaded songs
         _log.fine('loadStartIndex--');
         _loadStartIndex--;
-        await _audioSource.insert(0, ja.AudioSource.uri(Uri.file(_queue[_loadStartIndex].path)));
+        await _audioPlayer.insertAudioSource(
+            0, ja.AudioSource.uri(Uri.file(_queue[_loadStartIndex].path)));
         return true;
       } else if (_loadEndIndex < _queue.length) {
         // load the last song, if it isn't already loaded
         _log.fine('loadStartIndex = ${_queue.length - 1}');
         _loadStartIndex = _queue.length - 1;
-        await _audioSource.add(ja.AudioSource.uri(Uri.file(_queue.last.path)));
+        await _audioPlayer.addAudioSource(ja.AudioSource.uri(Uri.file(_queue.last.path)));
         return false;
       }
-    } else if (newIndex > _audioSource.length - LOAD_INTERVAL - 1) {
+    } else if (newIndex > _audioPlayer.audioSources.length - LOAD_INTERVAL - 1) {
       // need to load next song
       if (_loadEndIndex < _queue.length) {
         // we ARE NOT at the end of the queue -> load next song
         _log.fine('loadEndIndex++');
         _loadEndIndex++;
-        await _audioSource.add(ja.AudioSource.uri(Uri.file(_queue[_loadEndIndex - 1].path)));
+        await _audioPlayer
+            .addAudioSource(ja.AudioSource.uri(Uri.file(_queue[_loadEndIndex - 1].path)));
         return false;
       } else if (_loadStartIndex > 0) {
         // we ARE at the end of the queue AND the first song has not been loaded yet
         // -> load first song
         _log.fine('loadEndIndex = 1');
         _loadEndIndex = 1;
-        await _audioSource.insert(0, ja.AudioSource.uri(Uri.file(_queue[0].path)));
+        await _audioPlayer.insertAudioSource(0, ja.AudioSource.uri(Uri.file(_queue[0].path)));
         return true;
       }
     }
@@ -414,12 +417,12 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
 
     int leftBorder = newIndex - LOAD_INTERVAL;
     if (newIndex < _loadEndIndex) {
-      leftBorder += _audioSource.length;
+      leftBorder += _audioPlayer.audioSources.length;
     }
 
     int rightBorder = newIndex + LOAD_INTERVAL;
     if (newIndex > _loadEndIndex) {
-      rightBorder -= _audioSource.length;
+      rightBorder -= _audioPlayer.audioSources.length;
     }
 
     if (leftBorder < _loadEndIndex) {
@@ -427,7 +430,7 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
       // load the song previous to the already loaded songs
       _log.fine('inv: loadStartIndex--');
       _loadStartIndex--;
-      await _audioSource.insert(
+      await _audioPlayer.insertAudioSource(
           _loadEndIndex, ja.AudioSource.uri(Uri.file(_queue[_loadStartIndex].path)));
       return rightOfLoadEnd;
     } else if (rightBorder >= _loadEndIndex) {
@@ -435,7 +438,7 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
       // we ARE NOT at the end of the queue -> load next song
       _log.fine('inv: loadEndIndex++');
       _loadEndIndex++;
-      await _audioSource.insert(
+      await _audioPlayer.insertAudioSource(
           _loadEndIndex - 1, ja.AudioSource.uri(Uri.file(_queue[_loadEndIndex - 1].path)));
       return rightOfLoadEnd;
     }
@@ -448,7 +451,7 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
     }
 
     int result;
-    if (_audioSource.length == _queue.length) {
+    if (_audioPlayer.audioSources.length == _queue.length) {
       _log.fine('EVERYTHING LOADED');
       result = apIndex;
     } else if (_loadStartIndex < _loadEndIndex) {
@@ -488,7 +491,7 @@ class AudioPlayerDataSourceImpl implements AudioPlayerDataSource {
   }
 
   bool _isQueueIndexInSaveInterval(int index) {
-    if (_audioSource.length == _queue.length) {
+    if (_audioPlayer.audioSources.length == _queue.length) {
       return index < _queue.length;
     }
 
