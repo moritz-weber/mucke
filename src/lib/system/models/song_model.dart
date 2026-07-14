@@ -166,7 +166,7 @@ class SongModel extends Song {
         path: Value(path),
         title: Value(title),
         albumArtPath: Value(albumArtPath),
-        color: Value(color?.value),
+        color: Value(color?.toARGB32()),
         discNumber: Value(discNumber),
         year: Value(year),
         next: Value(next),
@@ -186,7 +186,7 @@ class SongModel extends Song {
         path: Value(path),
         duration: Value(duration.inMilliseconds),
         albumArtPath: Value(albumArtPath),
-        color: Value(color?.value),
+        color: Value(color?.toARGB32()),
         discNumber: Value(discNumber),
         trackNumber: Value(trackNumber),
         year: Value(year),
@@ -229,7 +229,7 @@ class SongModel extends Song {
         'likeCount': likeCount,
         'playCount': playCount,
         'timeAdded': timeAdded.millisecondsSinceEpoch,
-        'color': color?.value,
+        'color': color?.toARGB32(),
       },
     );
   }

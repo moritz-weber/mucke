@@ -76,7 +76,7 @@ class AlbumModel extends Album {
         title: Value(title),
         artist: Value(artist),
         albumArtPath: Value(albumArtPath),
-        color: Value(color?.value),
+        color: Value(color?.toARGB32()),
         year: Value(pubYear),
       );
 
