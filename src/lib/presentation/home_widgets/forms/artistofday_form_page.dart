@@ -82,26 +82,28 @@ class _ArtistOfDayFormPageState extends State<ArtistOfDayFormPage> {
                         ),
                         child: Observer(
                           builder: (_) {
-                            return Column(
-                              children: <int>[0, 1, 2].map<RadioListTile<int>>(
-                                (int value) {
-                                  return RadioListTile<int>(
-                                    title: Text(
-                                      ShuffleMode.values[value].toText(context),
-                                      style: const TextStyle(
-                                        fontSize: 14.0,
+                            return RadioGroup<int>(
+                              groupValue: store.shuffleMode.index,
+                              onChanged: (int? newValue) {
+                                setState(() {
+                                  if (newValue != null) store.shuffleMode = ShuffleMode.values[newValue];
+                                });
+                              },
+                              child: Column(
+                                children: <int>[0, 1, 2].map<RadioListTile<int>>(
+                                  (int value) {
+                                    return RadioListTile<int>(
+                                      title: Text(
+                                        ShuffleMode.values[value].toText(context),
+                                        style: const TextStyle(
+                                          fontSize: 14.0,
+                                        ),
                                       ),
-                                    ),
-                                    value: value,
-                                    groupValue: store.shuffleMode.index,
-                                    onChanged: (int? newValue) {
-                                      setState(() {
-                                        if (newValue != null) store.shuffleMode = ShuffleMode.values[newValue];
-                                      });
-                                    },
-                                  );
-                                },
-                              ).toList(),
+                                      value: value,
+                                    );
+                                  },
+                                ).toList(),
+                              ),
                             );
                           },
                         ),

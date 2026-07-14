@@ -137,25 +137,27 @@ class _PlaylistFormPageState extends State<PlaylistFormPage> {
                         ),
                         child: Observer(
                           builder: (_) {
-                            return Column(
-                              children: <int>[0, 1, 2, 3].map<RadioListTile<int>>((int value) {
-                                return RadioListTile<int>(
-                                  title: Text(
-                                    playbackModeTexts[value],
-                                    style: const TextStyle(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.normal,
+                            return RadioGroup<int>(
+                              groupValue: store.shuffleModeIndex,
+                              onChanged: (int? newValue) {
+                                setState(() {
+                                  if (newValue != null) store.setShuffleModeIndex(newValue);
+                                });
+                              },
+                              child: Column(
+                                children: <int>[0, 1, 2, 3].map<RadioListTile<int>>((int value) {
+                                  return RadioListTile<int>(
+                                    title: Text(
+                                      playbackModeTexts[value],
+                                      style: const TextStyle(
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.normal,
+                                      ),
                                     ),
-                                  ),
-                                  value: value,
-                                  groupValue: store.shuffleModeIndex,
-                                  onChanged: (int? newValue) {
-                                    setState(() {
-                                      if (newValue != null) store.setShuffleModeIndex(newValue);
-                                    });
-                                  },
-                                );
-                              }).toList(),
+                                    value: value,
+                                  );
+                                }).toList(),
+                              ),
                             );
                           },
                         ),

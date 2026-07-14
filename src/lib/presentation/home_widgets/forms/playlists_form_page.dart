@@ -152,26 +152,27 @@ class _PlaylistsFormPageState extends State<PlaylistsFormPage> {
                         ),
                         child: Observer(
                           builder: (_) {
-                            return Column(
-                              children: <int>[0, 1, 2, 3].map<RadioListTile<int>>((int value) {
-                                return RadioListTile<int>(
-                                  title: Text(
-                                    orderCriterionTexts[value],
-                                    style: const TextStyle(
-                                      fontSize: 14.0,
+                            return RadioGroup<int>(
+                              groupValue: store.orderCriterion.index,
+                              onChanged: (int? newValue) {
+                                setState(() {
+                                  if (newValue != null)
+                                    store.orderCriterion = HomePlaylistsOrder.values[newValue];
+                                });
+                              },
+                              child: Column(
+                                children: <int>[0, 1, 2, 3].map<RadioListTile<int>>((int value) {
+                                  return RadioListTile<int>(
+                                    title: Text(
+                                      orderCriterionTexts[value],
+                                      style: const TextStyle(
+                                        fontSize: 14.0,
+                                      ),
                                     ),
-                                  ),
-                                  value: value,
-                                  groupValue: store.orderCriterion.index,
-                                  onChanged: (int? newValue) {
-                                    setState(() {
-                                      if (newValue != null)
-                                        store.orderCriterion =
-                                            HomePlaylistsOrder.values[newValue];
-                                    });
-                                  },
-                                );
-                              }).toList(),
+                                    value: value,
+                                  );
+                                }).toList(),
+                              ),
                             );
                           },
                         ),
@@ -184,25 +185,27 @@ class _PlaylistsFormPageState extends State<PlaylistsFormPage> {
                         ),
                         child: Observer(
                           builder: (_) {
-                            return Column(
-                              children: <int>[0, 1].map<RadioListTile<int>>((int value) {
-                                return RadioListTile<int>(
-                                  title: Text(
-                                    orderDirectionTexts[value],
-                                    style: const TextStyle(
-                                      fontSize: 14.0,
+                            return RadioGroup<int>(
+                              groupValue: store.orderDirection.index,
+                              onChanged: (int? newValue) {
+                                setState(() {
+                                  if (newValue != null)
+                                    store.orderDirection = OrderDirection.values[newValue];
+                                });
+                              },
+                              child: Column(
+                                children: <int>[0, 1].map<RadioListTile<int>>((int value) {
+                                  return RadioListTile<int>(
+                                    title: Text(
+                                      orderDirectionTexts[value],
+                                      style: const TextStyle(
+                                        fontSize: 14.0,
+                                      ),
                                     ),
-                                  ),
-                                  value: value,
-                                  groupValue: store.orderDirection.index,
-                                  onChanged: (int? newValue) {
-                                    setState(() {
-                                      if (newValue != null)
-                                        store.orderDirection = OrderDirection.values[newValue];
-                                    });
-                                  },
-                                );
-                              }).toList(),
+                                    value: value,
+                                  );
+                                }).toList(),
+                              ),
                             );
                           },
                         ),
@@ -215,25 +218,27 @@ class _PlaylistsFormPageState extends State<PlaylistsFormPage> {
                         ),
                         child: Observer(
                           builder: (_) {
-                            return Column(
-                              children: <int>[0, 1, 2].map<RadioListTile<int>>((int value) {
-                                return RadioListTile<int>(
-                                  title: Text(
-                                    filterTexts[value],
-                                    style: const TextStyle(
-                                      fontSize: 14.0,
+                            return RadioGroup<int>(
+                              groupValue: store.filter.index,
+                              onChanged: (int? newValue) {
+                                setState(() {
+                                  if (newValue != null)
+                                    store.filter = HomePlaylistsFilter.values[newValue];
+                                });
+                              },
+                              child: Column(
+                                children: <int>[0, 1, 2].map<RadioListTile<int>>((int value) {
+                                  return RadioListTile<int>(
+                                    title: Text(
+                                      filterTexts[value],
+                                      style: const TextStyle(
+                                        fontSize: 14.0,
+                                      ),
                                     ),
-                                  ),
-                                  value: value,
-                                  groupValue: store.filter.index,
-                                  onChanged: (int? newValue) {
-                                    setState(() {
-                                      if (newValue != null)
-                                        store.filter = HomePlaylistsFilter.values[newValue];
-                                    });
-                                  },
-                                );
-                              }).toList(),
+                                    value: value,
+                                  );
+                                }).toList(),
+                              ),
                             );
                           },
                         ),
