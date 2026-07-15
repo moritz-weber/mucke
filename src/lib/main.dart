@@ -23,6 +23,15 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   initLogging(level: Level.ALL);
 
+  await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarIconBrightness: Brightness.light,
+      systemNavigationBarContrastEnforced: false,
+    ),
+  );
+
   await setupGetIt();
 
   final session = await AudioSession.instance;
@@ -47,13 +56,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) {
-          return AnnotatedRegion<SystemUiOverlayStyle>(
-            child: const RootPage(),
-            value: SystemUiOverlayStyle.dark.copyWith(
-              systemNavigationBarColor: DARK1,
-              statusBarIconBrightness: Brightness.light,
-            ),
-          );
+          return const RootPage();
         },
       },
       localizationsDelegates: const [
@@ -145,7 +148,6 @@ class _RootPageState extends State<RootPage> {
           ),
         ),
       ),
-      
     );
   }
 }

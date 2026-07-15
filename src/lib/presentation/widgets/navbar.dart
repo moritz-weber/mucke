@@ -28,7 +28,7 @@ class _NavBarState extends State<NavBar> {
         children: <Widget>[
           const CurrentlyPlayingBar(),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+            padding: const EdgeInsets.only(top: 8.0),
             child: Container(
               clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
