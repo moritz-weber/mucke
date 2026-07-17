@@ -97,6 +97,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.5"
+  battery_optimization_helper:
+    dependency: "direct main"
+    description:
+      name: battery_optimization_helper
+      sha256: "4defadec8fd40911d35e9d4add6302e5101a1a2c833ab1fb62973c7657b32e5e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -297,14 +305,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.3"
-  disable_battery_optimization:
-    dependency: "direct main"
-    description:
-      name: disable_battery_optimization
-      sha256: "7fbda76cdd30d01d75e091db8869b8cf2fd4c7b7edef3abce0d7206569603051"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.2"
   drift:
     dependency: "direct main"
     description:

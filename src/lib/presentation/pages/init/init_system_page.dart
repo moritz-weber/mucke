@@ -1,4 +1,3 @@
-import 'package:disable_battery_optimization/disable_battery_optimization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
@@ -7,6 +6,7 @@ import 'package:mucke/l10n/localizations.dart';
 import '../../state/import_store.dart';
 import '../../state/settings_store.dart';
 import '../../theming.dart';
+import '../../widgets/battery_optimization_tile.dart';
 import '../../widgets/info_card.dart';
 
 class InitSystemPage extends StatelessWidget {
@@ -36,25 +36,7 @@ class InitSystemPage extends StatelessWidget {
             InfoCard(
               text: L10n.of(context)!.batteryExplanation,
             ),
-            FutureBuilder<bool?>(
-              future: DisableBatteryOptimization.isBatteryOptimizationDisabled,
-              builder: (context, AsyncSnapshot<bool?> snap) {
-                final bool? isDisabled = snap.data;
-                return SwitchListTile(
-                  title: Text(L10n.of(context)!.openBattery),
-                  subtitle: Text(
-                    (isDisabled != null && !isDisabled)
-                        ? L10n.of(context)!.disableBattery
-                        : L10n.of(context)!.disabledBattery,
-                    style: TEXT_SMALL_SUBTITLE,
-                  ),
-                  value: isDisabled != null && isDisabled,
-                  onChanged: (_) {
-                    DisableBatteryOptimization.showDisableBatteryOptimizationSettings();
-                  },
-                );
-              },
-            ),
+            const BatteryOptimizationTile(),
             const Divider(
               height: 16.0,
             ),

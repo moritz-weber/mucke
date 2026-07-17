@@ -501,6 +501,10 @@ class L10nZh extends L10n {
   String get disableBattery => '禁用针对 Mucke 的省电优化（改为无限制）以解决通知问题。';
 
   @override
+  String get disableBatteryDescription =>
+      'Disabling battery optimization can solve potential notification issues.';
+
+  @override
   String get disabledBattery => '针对 Mucke 的省电优化已禁用';
 
   @override

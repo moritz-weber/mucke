@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:disable_battery_optimization/disable_battery_optimization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
@@ -13,6 +11,7 @@ import '../state/navigation_store.dart';
 import '../state/settings_store.dart';
 import '../theming.dart';
 import '../utils.dart';
+import '../widgets/battery_optimization_tile.dart';
 import '../widgets/settings_section.dart';
 import 'blocked_files_page.dart';
 import 'export_page.dart';
@@ -177,38 +176,8 @@ class SettingsPage extends StatelessWidget {
               ),
             ),
           ),
-          FutureBuilder(
-            future: DeviceInfoPlugin().androidInfo,
-            builder: (context, AsyncSnapshot<AndroidDeviceInfo> snapshot) {
-              if (snapshot.hasData && snapshot.data!.version.sdkInt > 30)
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Divider(),
-                    FutureBuilder<bool?>(
-                      future: DisableBatteryOptimization.isBatteryOptimizationDisabled,
-                      builder: (context, AsyncSnapshot<bool?> snap) {
-                        final bool? isDisabled = snap.data;
-                        return ListTile(
-                          title: Text(L10n.of(context)!.openBattery),
-                          subtitle: Text(
-                            (isDisabled != null && !isDisabled)
-                                ? L10n.of(context)!.disableBattery
-                                : L10n.of(context)!.disabledBattery,
-                            style: TEXT_SMALL_SUBTITLE,
-                          ),
-                          trailing: const Icon(Icons.chevron_right_rounded),
-                          onTap: () {
-                            DisableBatteryOptimization.showDisableBatteryOptimizationSettings();
-                          },
-                        );
-                      },
-                    ),
-                  ],
-                );
-              return Container();
-            },
-          ),
+          const Divider(),
+          const BatteryOptimizationTile(),
           const Divider(
             height: 4.0,
           ),
@@ -303,3 +272,5 @@ class _PercentageSliderState extends State<PercentageSlider> {
     );
   }
 }
+
+

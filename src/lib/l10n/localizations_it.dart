@@ -516,6 +516,10 @@ class L10nIt extends L10n {
       'Disabilita l\'ottimizzazione per mucke per risolvere problemi di notifiche.';
 
   @override
+  String get disableBatteryDescription =>
+      'Disabling battery optimization can solve potential notification issues.';
+
+  @override
   String get disabledBattery => 'L\'ottimizzazione batteria è disabilitata.';
 
   @override

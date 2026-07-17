@@ -510,6 +510,10 @@ class L10nNb extends L10n {
       'sKRU AV Batterioptimalisering for mucke for å løse merknadsproblemer.';
 
   @override
+  String get disableBatteryDescription =>
+      'Disabling battery optimization can solve potential notification issues.';
+
+  @override
   String get disabledBattery => 'Batterioptimalisering er avskrudd.';
 
   @override

@@ -987,8 +987,14 @@ abstract class L10n {
   /// No description provided for @disableBattery.
   ///
   /// In en, this message translates to:
-  /// **'Disable optimization for mucke to solve notification issues.'**
+  /// **'Disable battery optimization for mucke.'**
   String get disableBattery;
+
+  /// No description provided for @disableBatteryDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Disabling battery optimization can solve potential notification issues.'**
+  String get disableBatteryDescription;
 
   /// No description provided for @disabledBattery.
   ///

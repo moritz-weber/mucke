@@ -13,9 +13,9 @@ dependencies:
   audio_service: ^0.18.18  # MIT
   audio_session: ^0.2.2  # MIT
   audiotags: ^1.4.5  # MIT
+  battery_optimization_helper: ^0.2.0
   collection: ^1.17.1  # BSD 3
   device_info_plus: ^12.4.0  # BSD 3; required to get SDK verion
-  disable_battery_optimization: ^1.1.2  # MIT
   drift: ^2.9.0  # MIT
   equatable: ^2.0.3  # MIT
   file_picker: ^11.0.2  # MIT

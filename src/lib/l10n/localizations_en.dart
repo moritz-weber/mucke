@@ -506,8 +506,11 @@ class L10nEn extends L10n {
   String get openBattery => 'Open battery settings';
 
   @override
-  String get disableBattery =>
-      'Disable optimization for mucke to solve notification issues.';
+  String get disableBattery => 'Disable battery optimization for mucke.';
+
+  @override
+  String get disableBatteryDescription =>
+      'Disabling battery optimization can solve potential notification issues.';
 
   @override
   String get disabledBattery => 'Battery optimization is disabled.';

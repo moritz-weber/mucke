@@ -511,8 +511,11 @@ class L10nDe extends L10n {
   String get openBattery => 'Akku-Einstellungen öffnen';
 
   @override
-  String get disableBattery =>
-      'Deaktiviere die Optimierung für mucke, um die Probleme mit der Benachrichtigung zu beheben.';
+  String get disableBattery => 'Deaktiviere die Akku-Optimierung für mucke.';
+
+  @override
+  String get disableBatteryDescription =>
+      'Dies kann Probleme mit der Benachrichtigung beheben.';
 
   @override
   String get disabledBattery => 'Die Akku-Optimierung ist deaktiviert.';
