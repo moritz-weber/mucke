@@ -14,32 +14,30 @@ dependencies:
   audio_session: ^0.2.2  # MIT
   audiotags: ^1.4.5  # MIT
   collection: ^1.17.1  # BSD 3
-  device_info_plus: ^9.0.2  # BSD 3
+  device_info_plus: ^12.4.0  # BSD 3; required to get SDK verion
   disable_battery_optimization: ^1.1.2  # MIT
   drift: ^2.9.0  # MIT
   equatable: ^2.0.3  # MIT
-  file_picker: ^10.3.10  # MIT
+  file_picker: ^11.0.2  # MIT
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
   flutter_mobx: ^2.0.0  # MIT
   flutter_speed_dial: ^7.0.0  # MIT
-  get_it: ^7.1.3  # MIT
-  image: ^4.0.17
+  get_it: ^9.2.1  # MIT
+  image: ^4.9.1
   intl: any
   just_audio: ^0.10.5  # MIT
   logging: ^1.0.2
   mobx: 2.6.0  # MIT
-  package_info_plus: ^4.0.1
+  package_info_plus: ^9.0.1  # BSD 3; required to get app version for data export
   page_indicator_plus: ^1.0.3  # MIT
   path: ^1.8.0  # BSD 3
   path_provider: ^2.0.2  # BSD 3
   permission_handler: ^12.0.1  # MIT
-  provider: ^6.0.2  # MIT
   reorderables: ^0.6.0  # MIT
-  share_plus: ^7.0.2
-  sqlite3_flutter_libs: ^0.5.0  # MIT
+  share_plus: ^12.0.2
   string_similarity: ^2.0.0  # MIT
   text_scroll: ^0.2.0  # MIT
 

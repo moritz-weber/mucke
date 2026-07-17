@@ -284,7 +284,7 @@ class InitLibPage extends StatelessWidget {
 
   Future<void> _openFilePicker(SettingsStore store) async {
     try {
-      store.addLibraryFolder(await FilePicker.platform.getDirectoryPath());
+      store.addLibraryFolder(await FilePicker.getDirectoryPath());
     } on PlatformException catch (e) {
       print('Unsupported operation' + e.toString());
     } catch (ex) {

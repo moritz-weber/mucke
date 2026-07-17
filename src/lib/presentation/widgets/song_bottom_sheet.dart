@@ -141,13 +141,12 @@ class _SongBottomSheetState extends State<SongBottomSheet> {
                 SizedBox(
                   height: 64.0,
                   child: Center(
-                    child: IconButton(
-                      onPressed: () {
-                        Share.share('${song.artist} - ${song.title}');
-                      },
-                      icon: const Icon(Icons.share_rounded),
-                    )
-                  ),
+                      child: IconButton(
+                    onPressed: () {
+                      SharePlus.instance.share(ShareParams(text: '${song.artist} - ${song.title}'));
+                    },
+                    icon: const Icon(Icons.share_rounded),
+                  )),
                 ),
                 SizedBox(
                   height: 64.0,

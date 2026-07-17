@@ -85,7 +85,7 @@ class InitPage extends StatelessWidget {
 
   Future<void> _importData(BuildContext context, NavigationStore navStore) async {
     try {
-      final pickResult = await FilePicker.platform.pickFiles(
+      final pickResult = await FilePicker.pickFiles(
         allowedExtensions: ['json'],
         type: FileType.custom,
       );

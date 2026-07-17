@@ -119,7 +119,7 @@ class _ExportPageState extends State<ExportPage> {
 
   Future<void> _exportData(BuildContext context) async {
     try {
-      final dir = await FilePicker.platform.getDirectoryPath();
+      final dir = await FilePicker.getDirectoryPath();
       _exportStore.exportData(dir).then((path) => ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Row(
