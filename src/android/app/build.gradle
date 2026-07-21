@@ -53,11 +53,14 @@ android {
 
     flavorDimensions "app"
     productFlavors {
+        // defining namespaces here seems to be required for Android Auto to work
         dev {
             applicationId = "rocks.mucke.dev"
+            namespace = "rocks.mucke.dev"
         }
         github {
             applicationId = "rocks.mucke.github"
+            namespace = "rocks.mucke.github"
         }
         prod {
             applicationId = "rocks.mucke"
