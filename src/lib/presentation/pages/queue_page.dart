@@ -211,7 +211,12 @@ class QueuePage extends StatelessWidget {
           );
         },
       ),
-      bottomNavigationBar: const QueueControlBar(),
+      bottomNavigationBar: const ColoredBox(
+        color: DARK1,
+        child: SafeArea(
+          child: QueueControlBar(),
+        ),
+      ),
     );
   }
 

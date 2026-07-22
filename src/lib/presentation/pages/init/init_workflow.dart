@@ -57,91 +57,97 @@ class _InitWorkflowState extends State<InitWorkflow> {
     final initRepository = GetIt.I<InitRepository>();
 
     return Scaffold(
-      bottomNavigationBar: Container(
+      bottomNavigationBar: ColoredBox(
         color: DARK1,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: HORIZONTAL_PADDING,
-                vertical: 8.0,
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: FilledButton(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.chevron_left_rounded),
-                            Text(L10n.of(context)!.back),
-                            const SizedBox(width: 10),
-                          ],
-                        ),
-                        onPressed: () {
-                          if (pageController.page?.round() == 0) {
-                            Navigator.of(context).pop();
-                          } else {
-                            pageController.previousPage(duration: duration, curve: curve).then((_) {
-                              setState(() {
-                                index = pageController.page?.round() ?? 0;
-                              });
-                            });
-                          }
-                        },
-                      ),
-                    ),
-                  ),
-                  PageIndicator(
-                    controller: pageController,
-                    count: pages.length,
-                    size: 8,
-                    layout: PageIndicatorLayout.WARM,
-                    color: Colors.white10,
-                    activeColor: LIGHT1,
-                    scale: 0.65,
-                    space: 10,
-                  ),
-                  Expanded(
-                    child: Align(
-                        alignment: Alignment.centerRight,
+        child: SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: HORIZONTAL_PADDING,
+                  vertical: 8.0,
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.centerLeft,
                         child: FilledButton(
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
+                              const Icon(Icons.chevron_left_rounded),
+                              Text(L10n.of(context)!.back),
                               const SizedBox(width: 10),
-                              Text(
-                                index == pages.length - 1
-                                    ? L10n.of(context)!.finish
-                                    : L10n.of(context)!.next,
-                              ),
-                              const Icon(Icons.chevron_right_rounded),
                             ],
                           ),
                           onPressed: () {
-                            if (index == pages.length - 1) {
-                              initRepository.setInitialized();
-                              Navigator.of(context).pop();
+                            if (pageController.page?.round() == 0) {
                               Navigator.of(context).pop();
                             } else {
-                              setState(() {
-                                pageController.nextPage(duration: duration, curve: curve).then((_) {
-                                  setState(() {
-                                    index = pageController.page?.round() ?? 0;
-                                  });
+                              pageController
+                                  .previousPage(duration: duration, curve: curve)
+                                  .then((_) {
+                                setState(() {
+                                  index = pageController.page?.round() ?? 0;
                                 });
                               });
                             }
                           },
-                        )),
-                  ),
-                ],
+                        ),
+                      ),
+                    ),
+                    PageIndicator(
+                      controller: pageController,
+                      count: pages.length,
+                      size: 8,
+                      layout: PageIndicatorLayout.WARM,
+                      color: Colors.white10,
+                      activeColor: LIGHT1,
+                      scale: 0.65,
+                      space: 10,
+                    ),
+                    Expanded(
+                      child: Align(
+                          alignment: Alignment.centerRight,
+                          child: FilledButton(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const SizedBox(width: 10),
+                                Text(
+                                  index == pages.length - 1
+                                      ? L10n.of(context)!.finish
+                                      : L10n.of(context)!.next,
+                                ),
+                                const Icon(Icons.chevron_right_rounded),
+                              ],
+                            ),
+                            onPressed: () {
+                              if (index == pages.length - 1) {
+                                initRepository.setInitialized();
+                                Navigator.of(context).pop();
+                                Navigator.of(context).pop();
+                              } else {
+                                setState(() {
+                                  pageController
+                                      .nextPage(duration: duration, curve: curve)
+                                      .then((_) {
+                                    setState(() {
+                                      index = pageController.page?.round() ?? 0;
+                                    });
+                                  });
+                                });
+                              }
+                            },
+                          )),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       body: PageView.builder(

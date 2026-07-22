@@ -34,6 +34,8 @@ class InitLibPage extends StatelessWidget {
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
+      // this is not a true navigation bar; it sits above the actual navigation bar
+      // thus no SafeArea is needed here
       bottomNavigationBar: Container(
         color: DARK3,
         child: Column(

@@ -142,9 +142,14 @@ class _RootPageState extends State<RootPage> {
             index: navStore.navIndex,
             children: _pages,
           ),
-          bottomNavigationBar: NavBar(
-            onTap: (int index) => navStore.setNavIndex(index),
-            currentIndex: navStore.navIndex,
+          bottomNavigationBar: ColoredBox(
+            color: DARK1,
+            child: SafeArea(
+              child: NavBar(
+                onTap: (int index) => navStore.setNavIndex(index),
+                currentIndex: navStore.navIndex,
+              ),
+            ),
           ),
         ),
       ),

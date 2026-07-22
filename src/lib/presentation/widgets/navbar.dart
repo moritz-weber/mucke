@@ -21,48 +21,45 @@ class NavBar extends StatefulWidget {
 class _NavBarState extends State<NavBar> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: DARK1,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          const CurrentlyPlayingBar(),
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Container(
-              clipBehavior: Clip.antiAlias,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.0),
-                color: DARK2,
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 0.0),
-                child: NavigationBar(
-                  backgroundColor: Colors.transparent,
-                  elevation: 0.0,
-                  height: 72.0,
-                  selectedIndex: widget.currentIndex,
-                  onDestinationSelected: widget.onTap,
-                  destinations: [
-                    NavigationDestination(
-                      icon: const Icon(Icons.home_rounded),
-                      label: L10n.of(context)!.home,
-                    ),
-                    NavigationDestination(
-                      icon: const Icon(Icons.library_music_rounded),
-                      label: L10n.of(context)!.library,
-                    ),
-                    NavigationDestination(
-                      icon: const Icon(Icons.search_rounded),
-                      label: L10n.of(context)!.search,
-                    ),
-                  ],
-                ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        const CurrentlyPlayingBar(),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8.0),
+              color: DARK2,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 0.0),
+              child: NavigationBar(
+                backgroundColor: Colors.transparent,
+                elevation: 0.0,
+                height: 72.0,
+                selectedIndex: widget.currentIndex,
+                onDestinationSelected: widget.onTap,
+                destinations: [
+                  NavigationDestination(
+                    icon: const Icon(Icons.home_rounded),
+                    label: L10n.of(context)!.home,
+                  ),
+                  NavigationDestination(
+                    icon: const Icon(Icons.library_music_rounded),
+                    label: L10n.of(context)!.library,
+                  ),
+                  NavigationDestination(
+                    icon: const Icon(Icons.search_rounded),
+                    label: L10n.of(context)!.search,
+                  ),
+                ],
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
