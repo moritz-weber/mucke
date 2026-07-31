@@ -161,7 +161,6 @@ class _RootPageState extends State<RootPage> {
             // Scaffold background underneath it as well; otherwise the system
             // navigation area reveals the default scaffold color.
             backgroundColor: DARK1,
-            extendBody: true,
             body: IndexedStack(
               index: navStore.navIndex,
               children: _pages,
