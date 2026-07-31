@@ -48,18 +48,22 @@ class PersistenceActor {
   final PersistentStateRepository _persistentStateRepository;
 
   Future<void> init() async {
-    _log.fine('init');
+    _log.fine('init: loading persisted queue state');
     final queueItems = await _persistentStateRepository.queueItems;
     final availableSongs = await _persistentStateRepository.availableSongs;
     final playable = await _persistentStateRepository.playable;
     final index = await _persistentStateRepository.currentIndex;
+    _log.fine('init: persisted queue state loaded');
 
     final shuffleMode = await _persistentStateRepository.shuffleMode;
     _audioPlayerRepository.setShuffleMode(shuffleMode, updateQueue: false);
+    _log.fine('init: shuffle mode restored: $shuffleMode');
 
     final loopMode = await _persistentStateRepository.loopMode;
     _audioPlayerRepository.setLoopMode(loopMode);
+    _log.fine('init: loop mode restored: $loopMode');
 
     _audioPlayerRepository.initQueue(queueItems, availableSongs, playable, index);
+    _log.fine('init: queue initialization requested');
   }
 }

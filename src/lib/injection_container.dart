@@ -1,6 +1,7 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import 'domain/actors/audio_player_actor.dart';
@@ -83,12 +84,14 @@ import 'system/repositories/platform_integration_repository_impl.dart';
 import 'system/repositories/settings_repository_impl.dart';
 
 final GetIt getIt = GetIt.instance;
+final _initializationLog = Logger('AudioServiceInitialization');
 
 Future<void> setupGetIt() async {
-  print('setupGetIt');
+  _initializationLog.info('setupGetIt: started');
 
   final packageInfo = await PackageInfo.fromPlatform();
   getIt.registerSingleton<PackageInfo>(packageInfo);
+  _initializationLog.info('setupGetIt: package info registered');
 
   // stores
   getIt.registerLazySingleton<MusicDataStore>(
@@ -357,6 +360,7 @@ Future<void> setupGetIt() async {
   // data sources
   final MainDatabase driftDatabase = MainDatabase();
   getIt.registerLazySingleton<MainDatabase>(() => driftDatabase);
+  _initializationLog.info('setupGetIt: database instance created and registered');
   getIt.registerLazySingleton<MusicDataSource>(() => driftDatabase.musicDataDao);
   getIt.registerLazySingleton<PersistentStateDataSource>(() => driftDatabase.persistentStateDao);
   getIt.registerLazySingleton<SettingsDataSource>(() => driftDatabase.settingsDao);
@@ -380,18 +384,31 @@ Future<void> setupGetIt() async {
   getIt.registerLazySingleton<PlatformIntegrationDataSource>(
     () => _platformIntegrationDataSource,
   );
+  _initializationLog.info('setupGetIt: platform integration handler constructed');
 
   // external
-  final _audioHandler = await AudioService.init(
-    builder: () => _platformIntegrationDataSource as AudioHandler,
-    config: const AudioServiceConfig(
-      androidNotificationChannelId: 'rocks.mucke.channel.audio',
-      androidNotificationChannelName: 'mucke',
-      androidNotificationIcon: 'drawable/ic_stat',
-      androidNotificationOngoing: true,
-    ),
-  );
+  _initializationLog.info('setupGetIt: AudioService.init entered');
+  late final AudioHandler _audioHandler;
+  try {
+    _audioHandler = await AudioService.init(
+      builder: () {
+        _initializationLog.info('AudioService.init: handler builder called');
+        return _platformIntegrationDataSource as AudioHandler;
+      },
+      config: const AudioServiceConfig(
+        androidNotificationChannelId: 'rocks.mucke.channel.audio',
+        androidNotificationChannelName: 'mucke',
+        androidNotificationIcon: 'drawable/ic_stat',
+        androidNotificationOngoing: true,
+      ),
+    );
+  } catch (error, stackTrace) {
+    _initializationLog.severe('setupGetIt: AudioService.init failed', error, stackTrace);
+    rethrow;
+  }
+  _initializationLog.info('setupGetIt: AudioService.init completed');
   getIt.registerLazySingleton<AudioHandler>(() => _audioHandler);
+  _initializationLog.info('setupGetIt: audio handler registered');
 
   getIt.registerFactory<AudioPlayer>(() => AudioPlayer());
 
@@ -429,4 +446,5 @@ Future<void> setupGetIt() async {
       getIt(),
     ),
   );
+  _initializationLog.info('setupGetIt: actors registered; completed');
 }

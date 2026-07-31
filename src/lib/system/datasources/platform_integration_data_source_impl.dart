@@ -59,7 +59,9 @@ const prevCtrl = MediaControl(
 
 class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
     implements PlatformIntegrationDataSource {
-  PlatformIntegrationDataSourceImpl(this._musicDataInfoRepository, this._localizationRepository);
+  PlatformIntegrationDataSourceImpl(this._musicDataInfoRepository, this._localizationRepository) {
+    _log.info('constructed');
+  }
 
   static const String _rootMediaId = 'root';
   static const String _allSongsMediaId = 'all_songs';

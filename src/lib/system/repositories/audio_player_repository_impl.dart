@@ -135,6 +135,9 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
         initialIndex: index,
         queue: queue.map((e) => e as SongModel).toList(),
       );
+      _log.fine('initQueue: audio queue loaded');
+    } else {
+      _log.fine('initQueue: no persisted index; audio queue load skipped');
     }
   }
 

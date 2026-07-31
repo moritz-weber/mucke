@@ -5,7 +5,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
-import 'package:mucke/system/logging.dart';
 
 import 'domain/actors/persistence_actor.dart';
 import 'domain/repositories/init_repository.dart';
@@ -19,26 +18,25 @@ import 'presentation/pages/search_page.dart';
 import 'presentation/state/navigation_store.dart';
 import 'presentation/theming.dart';
 import 'presentation/widgets/navbar.dart';
+import 'system/logging.dart';
+
+final _logger = Logger('Main');
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  initLogging(level: Level.ALL);
+  await initLogging(level: Level.ALL);
+  _logger.fine('main: logging initialized');
 
-  await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarIconBrightness: Brightness.light,
-      systemNavigationBarContrastEnforced: false,
-    ),
-  );
-
+  _logger.fine('main: entering dependency injection');
   await setupGetIt();
+  _logger.fine('main: dependency injection completed');
 
   final session = await AudioSession.instance;
   await session.configure(const AudioSessionConfiguration.music());
+  _logger.fine('main: audio session configured');
 
   await GetIt.I<PersistenceActor>().init();
+  _logger.fine('main: persistence actor initialized');
 
   runApp(MyApp());
 }
@@ -47,9 +45,15 @@ class MyApp extends StatelessWidget {
   // This widget is the root of the application.
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-    ]);
+    // Android Auto starts the audio service without an attached Flutter view.
+    // SystemChrome calls can wait indefinitely in that context, so only
+    // configure phone UI when this engine actually owns a view.
+    if (WidgetsBinding.instance.platformDispatcher.views.isNotEmpty) {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+      ]);
+    }
 
     final localizationRepository = getIt<LocalizationRepository>();
 
@@ -144,17 +148,32 @@ class _RootPageState extends State<RootPage> {
         }
       },
       child: Observer(
-        builder: (BuildContext context) => Scaffold(
-          body: IndexedStack(
-            index: navStore.navIndex,
-            children: _pages,
+        builder: (BuildContext context) => AnnotatedRegion<SystemUiOverlayStyle>(
+          value: const SystemUiOverlayStyle(
+            statusBarIconBrightness: Brightness.light,
+            systemNavigationBarColor: Colors.transparent,
+            systemNavigationBarDividerColor: Colors.transparent,
+            systemNavigationBarIconBrightness: Brightness.light,
+            systemNavigationBarContrastEnforced: false,
           ),
-          bottomNavigationBar: ColoredBox(
-            color: DARK1,
-            child: SafeArea(
-              child: NavBar(
-                onTap: (int index) => navStore.setNavIndex(index),
-                currentIndex: navStore.navIndex,
+          child: Scaffold(
+            // Android 15 makes the navigation bar transparent. Paint the
+            // Scaffold background underneath it as well; otherwise the system
+            // navigation area reveals the default scaffold color.
+            backgroundColor: DARK1,
+            extendBody: true,
+            body: IndexedStack(
+              index: navStore.navIndex,
+              children: _pages,
+            ),
+            bottomNavigationBar: ColoredBox(
+              color: DARK1,
+              child: SafeArea(
+                top: false,
+                child: NavBar(
+                  onTap: (int index) => navStore.setNavIndex(index),
+                  currentIndex: navStore.navIndex,
+                ),
               ),
             ),
           ),
