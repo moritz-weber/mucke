@@ -22,6 +22,7 @@ import 'domain/repositories/history_repository.dart';
 import 'domain/repositories/home_widget_repository.dart';
 import 'domain/repositories/import_export_repository.dart';
 import 'domain/repositories/init_repository.dart';
+import 'domain/repositories/localization_repository.dart';
 import 'domain/repositories/music_data_repository.dart';
 import 'domain/repositories/persistent_state_repository.dart';
 import 'domain/repositories/platform_integration_repository.dart';
@@ -75,6 +76,7 @@ import 'system/repositories/history_repository_impl.dart';
 import 'system/repositories/home_widget_repository_impl.dart';
 import 'system/repositories/import_export_repository_impl.dart';
 import 'system/repositories/init_repository_impl.dart';
+import 'system/repositories/localization_repository_impl.dart';
 import 'system/repositories/music_data_repository_impl.dart';
 import 'system/repositories/persistent_state_repository_impl.dart';
 import 'system/repositories/platform_integration_repository_impl.dart';
@@ -292,7 +294,9 @@ Future<void> setupGetIt() async {
   getIt.registerLazySingleton<AudioPlayerInfoRepository>(
     () => getIt<AudioPlayerRepository>(),
   );
-
+  getIt.registerLazySingleton<LocalizationRepository>(
+    () => LocalizationRepositoryImpl(),
+  );
   getIt.registerLazySingleton<MusicDataRepository>(
     () => MusicDataRepositoryImpl(
       getIt(),
@@ -372,7 +376,7 @@ Future<void> setupGetIt() async {
   getIt.registerLazySingleton<AudioPlayerDataSource>(() => audioPlayer);
 
   final PlatformIntegrationDataSource _platformIntegrationDataSource =
-      PlatformIntegrationDataSourceImpl(getIt());
+      PlatformIntegrationDataSourceImpl(getIt(), getIt());
   getIt.registerLazySingleton<PlatformIntegrationDataSource>(
     () => _platformIntegrationDataSource,
   );

@@ -9,6 +9,7 @@ import 'package:mucke/system/logging.dart';
 
 import 'domain/actors/persistence_actor.dart';
 import 'domain/repositories/init_repository.dart';
+import 'domain/repositories/localization_repository.dart';
 import 'injection_container.dart';
 import 'l10n/localizations.dart';
 import 'presentation/pages/home_page.dart';
@@ -50,6 +51,8 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
     ]);
 
+    final localizationRepository = getIt<LocalizationRepository>();
+
     return MaterialApp(
       title: 'mucke',
       theme: theme(),
@@ -78,6 +81,10 @@ class MyApp extends StatelessWidget {
         Locale('es'),
         Locale('uk'),
       ],
+      builder: (context, child) {
+        localizationRepository.locale = Localizations.localeOf(context);
+        return child!;
+      },
     );
   }
 }

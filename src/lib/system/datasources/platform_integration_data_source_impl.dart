@@ -6,6 +6,7 @@ import '../../constants.dart';
 import '../../domain/entities/playable.dart';
 import '../../domain/entities/playback_event.dart';
 import '../../domain/entities/shuffle_mode.dart';
+import '../../domain/repositories/localization_repository.dart';
 import '../../domain/repositories/music_data_repository.dart';
 import '../../domain/repositories/platform_integration_repository.dart';
 import '../models/playback_event_model.dart';
@@ -58,7 +59,7 @@ const prevCtrl = MediaControl(
 
 class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
     implements PlatformIntegrationDataSource {
-  PlatformIntegrationDataSourceImpl(this._musicDataInfoRepository);
+  PlatformIntegrationDataSourceImpl(this._musicDataInfoRepository, this._localizationRepository);
 
   static const String _rootMediaId = 'root';
   static const String _allSongsMediaId = 'all_songs';
@@ -69,6 +70,7 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
   static const String _playlistPrefix = 'playlist:';
   static const String _playlistSongPrefix = 'playlist_song:';
 
+  final LocalizationRepository _localizationRepository;
   final MusicDataInfoRepository _musicDataInfoRepository;
 
   static final _log = Logger('PlatformIntegrationDataSourceImpl');
@@ -155,7 +157,7 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
 
       final playAction = MediaItem(
         id: '$_smartListPlayPrefix$smartListId',
-        title: '${smartList.name} ▶',
+        title: _localizationRepository.current.shuffleMode,
         playable: true,
         duration: const Duration(milliseconds: 1),
         artUri: _shuffleModeArtUri(smartList.shuffleMode),
@@ -234,7 +236,7 @@ class PlatformIntegrationDataSourceImpl extends BaseAudioHandler
         final smartList = await _musicDataInfoRepository.getSmartListStream(smartListId).first;
         return MediaItem(
           id: mediaId,
-          title: '${smartList.name} ▶',
+          title: _localizationRepository.current.shuffleMode,
           duration: const Duration(milliseconds: 1),
           playable: true,
           artUri: _shuffleModeArtUri(smartList.shuffleMode),
