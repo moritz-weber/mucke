@@ -384,6 +384,24 @@ abstract class L10n {
   /// **'Favorite Shuffle Mode'**
   String get favShuffleMode;
 
+  /// No description provided for @playlistNormalMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Play from the top'**
+  String get playlistNormalMode;
+
+  /// No description provided for @playlistShuffleMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Start shuffle playback'**
+  String get playlistShuffleMode;
+
+  /// No description provided for @playlistFavShuffleMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Start favorite shuffle playback'**
+  String get playlistFavShuffleMode;
+
   /// No description provided for @name.
   ///
   /// In en, this message translates to:

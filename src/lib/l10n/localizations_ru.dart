@@ -161,6 +161,15 @@ class L10nRu extends L10n {
   String get favShuffleMode => 'Режим перемешивания по избранному';
 
   @override
+  String get playlistNormalMode => 'Play from the top';
+
+  @override
+  String get playlistShuffleMode => 'Start shuffle playback';
+
+  @override
+  String get playlistFavShuffleMode => 'Start favorite shuffle playback';
+
+  @override
   String get name => 'Имя';
 
   @override

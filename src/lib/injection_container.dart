@@ -147,13 +147,16 @@ Future<void> setupGetIt() async {
     (Song song, _) => SongStore(song: song, musicDataInfoRepository: getIt()),
   );
   getIt.registerFactoryParam<ArtistPageStore, Artist, void>(
-    (Artist artist, _) => ArtistPageStore(artist: artist, musicDataInfoRepository: getIt()),
+    (Artist artist, _) =>
+        ArtistPageStore(artist: artist, musicDataInfoRepository: getIt()),
   );
   getIt.registerFactoryParam<AlbumPageStore, Album, void>(
-    (Album album, _) => AlbumPageStore(album: album, musicDataInfoRepository: getIt()),
+    (Album album, _) =>
+        AlbumPageStore(album: album, musicDataInfoRepository: getIt()),
   );
   getIt.registerFactoryParam<PlaylistFormStore, Playlist?, void>(
-    (Playlist? playlist, _) => PlaylistFormStore(musicDataRepository: getIt(), playlist: playlist),
+    (Playlist? playlist, _) =>
+        PlaylistFormStore(musicDataRepository: getIt(), playlist: playlist),
   );
   getIt.registerFactoryParam<PlaylistPageStore, Playlist, void>(
     (Playlist? playlist, _) => PlaylistPageStore(
@@ -360,13 +363,20 @@ Future<void> setupGetIt() async {
   // data sources
   final MainDatabase driftDatabase = MainDatabase();
   getIt.registerLazySingleton<MainDatabase>(() => driftDatabase);
-  _initializationLog.info('setupGetIt: database instance created and registered');
-  getIt.registerLazySingleton<MusicDataSource>(() => driftDatabase.musicDataDao);
-  getIt.registerLazySingleton<PersistentStateDataSource>(() => driftDatabase.persistentStateDao);
-  getIt.registerLazySingleton<SettingsDataSource>(() => driftDatabase.settingsDao);
-  getIt.registerLazySingleton<PlaylistDataSource>(() => driftDatabase.playlistDao);
-  getIt.registerLazySingleton<HomeWidgetDataSource>(() => driftDatabase.homeWidgetDao);
-  getIt.registerLazySingleton<HistoryDataSource>(() => driftDatabase.historyDao);
+  _initializationLog
+      .info('setupGetIt: database instance created and registered');
+  getIt
+      .registerLazySingleton<MusicDataSource>(() => driftDatabase.musicDataDao);
+  getIt.registerLazySingleton<PersistentStateDataSource>(
+      () => driftDatabase.persistentStateDao);
+  getIt.registerLazySingleton<SettingsDataSource>(
+      () => driftDatabase.settingsDao);
+  getIt.registerLazySingleton<PlaylistDataSource>(
+      () => driftDatabase.playlistDao);
+  getIt.registerLazySingleton<HomeWidgetDataSource>(
+      () => driftDatabase.homeWidgetDao);
+  getIt
+      .registerLazySingleton<HistoryDataSource>(() => driftDatabase.historyDao);
   getIt.registerLazySingleton<LocalMusicFetcher>(
     () => LocalMusicFetcherImpl(
       getIt(),
@@ -384,7 +394,8 @@ Future<void> setupGetIt() async {
   getIt.registerLazySingleton<PlatformIntegrationDataSource>(
     () => _platformIntegrationDataSource,
   );
-  _initializationLog.info('setupGetIt: platform integration handler constructed');
+  _initializationLog
+      .info('setupGetIt: platform integration handler constructed');
 
   // external
   _initializationLog.info('setupGetIt: AudioService.init entered');
@@ -403,7 +414,8 @@ Future<void> setupGetIt() async {
       ),
     );
   } catch (error, stackTrace) {
-    _initializationLog.severe('setupGetIt: AudioService.init failed', error, stackTrace);
+    _initializationLog.severe(
+        'setupGetIt: AudioService.init failed', error, stackTrace);
     rethrow;
   }
   _initializationLog.info('setupGetIt: AudioService.init completed');
@@ -415,6 +427,8 @@ Future<void> setupGetIt() async {
   // actors
   getIt.registerSingleton<PlatformIntegrationActor>(
     PlatformIntegrationActor(
+      getIt(),
+      getIt(),
       getIt(),
       getIt(),
       getIt(),

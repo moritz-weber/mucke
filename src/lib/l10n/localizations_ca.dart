@@ -160,6 +160,15 @@ class L10nCa extends L10n {
   String get favShuffleMode => 'Mode aleatori preferit';
 
   @override
+  String get playlistNormalMode => 'Play from the top';
+
+  @override
+  String get playlistShuffleMode => 'Start shuffle playback';
+
+  @override
+  String get playlistFavShuffleMode => 'Start favorite shuffle playback';
+
+  @override
   String get name => 'Nom';
 
   @override

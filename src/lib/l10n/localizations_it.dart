@@ -160,6 +160,15 @@ class L10nIt extends L10n {
   String get favShuffleMode => 'Modalità Casuale Preferita';
 
   @override
+  String get playlistNormalMode => 'Play from the top';
+
+  @override
+  String get playlistShuffleMode => 'Start shuffle playback';
+
+  @override
+  String get playlistFavShuffleMode => 'Start favorite shuffle playback';
+
+  @override
   String get name => 'Nome';
 
   @override

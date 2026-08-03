@@ -161,6 +161,15 @@ class L10nDe extends L10n {
   String get favShuffleMode => 'Favoriten-Zufallswiedergabe';
 
   @override
+  String get playlistNormalMode => 'Von vorne abspielen';
+
+  @override
+  String get playlistShuffleMode => 'Zufallswiedergabe';
+
+  @override
+  String get playlistFavShuffleMode => 'Favoriten-Zufallswiedergabe';
+
+  @override
   String get name => 'Name';
 
   @override

@@ -157,6 +157,15 @@ class L10nZh extends L10n {
   String get favShuffleMode => '随机播放收藏夹模式';
 
   @override
+  String get playlistNormalMode => 'Play from the top';
+
+  @override
+  String get playlistShuffleMode => 'Start shuffle playback';
+
+  @override
+  String get playlistFavShuffleMode => 'Start favorite shuffle playback';
+
+  @override
   String get name => '名称';
 
   @override

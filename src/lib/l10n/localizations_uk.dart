@@ -161,6 +161,15 @@ class L10nUk extends L10n {
   String get favShuffleMode => 'Улюблений режим перемішування';
 
   @override
+  String get playlistNormalMode => 'Play from the top';
+
+  @override
+  String get playlistShuffleMode => 'Start shuffle playback';
+
+  @override
+  String get playlistFavShuffleMode => 'Start favorite shuffle playback';
+
+  @override
   String get name => 'Ім\'я';
 
   @override
