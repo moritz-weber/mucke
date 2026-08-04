@@ -263,6 +263,20 @@
   "@miscellaneous": {},
   "exportData": "Daten exportieren",
   "@exportData": {},
+  "saveLogFiles": "Log-Dateien speichern",
+  "@saveLogFiles": {},
+  "saveLogFilesDescription": "Erstellt einen Unterordner mit den Log-Dateien.",
+  "@saveLogFilesDescription": {},
+  "logFilesSavedTo": "Log-Dateien gespeichert unter:\n{path}",
+  "@logFilesSavedTo": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "logFilesSaveFailed": "Speichern der Log-Dateien fehlgeschlagen!",
+  "@logFilesSaveFailed": {},
   "songsAlbumsArtists": "Lieder, Alben und Künstler",
   "@songsAlbumsArtists": {},
   "librarySettings": "Bibliothekseinstellungen",

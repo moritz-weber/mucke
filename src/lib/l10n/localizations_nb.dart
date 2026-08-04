@@ -484,6 +484,21 @@ class L10nNb extends L10n {
   String get exportData => 'Eksporter data';
 
   @override
+  String get saveLogFiles => 'Save log files';
+
+  @override
+  String get saveLogFilesDescription =>
+      'This creates a subfolder with the log files in it.';
+
+  @override
+  String logFilesSavedTo(String path) {
+    return 'Log files saved to:\n$path';
+  }
+
+  @override
+  String get logFilesSaveFailed => 'Saving log files failed!';
+
+  @override
   String get exportDescription =>
       'Velg data å eksportere. Som forvalg eksporteres alt. Når du eksporterer kan du velge en mappe filen lagres i.';
 

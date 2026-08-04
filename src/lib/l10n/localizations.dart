@@ -948,6 +948,30 @@ abstract class L10n {
   /// **'Export data'**
   String get exportData;
 
+  /// No description provided for @saveLogFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Save log files'**
+  String get saveLogFiles;
+
+  /// No description provided for @saveLogFilesDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'This creates a subfolder with the log files in it.'**
+  String get saveLogFilesDescription;
+
+  /// No description provided for @logFilesSavedTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Log files saved to:\n{path}'**
+  String logFilesSavedTo(String path);
+
+  /// No description provided for @logFilesSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving log files failed!'**
+  String get logFilesSaveFailed;
+
   /// No description provided for @exportDescription.
   ///
   /// In en, this message translates to:

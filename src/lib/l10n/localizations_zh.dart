@@ -477,6 +477,21 @@ class L10nZh extends L10n {
   String get exportData => '导出备份数据';
 
   @override
+  String get saveLogFiles => 'Save log files';
+
+  @override
+  String get saveLogFilesDescription =>
+      'This creates a subfolder with the log files in it.';
+
+  @override
+  String logFilesSavedTo(String path) {
+    return 'Log files saved to:\n$path';
+  }
+
+  @override
+  String get logFilesSaveFailed => 'Saving log files failed!';
+
+  @override
   String get exportDescription => '选择要导出的内容，默认导出所有。导出时可选择保存位置。';
 
   @override

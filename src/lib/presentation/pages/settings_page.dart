@@ -1,9 +1,13 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mucke/l10n/localizations.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 
 import '../../defaults.dart';
 import '../state/music_data_store.dart';
@@ -177,6 +181,16 @@ class SettingsPage extends StatelessWidget {
             ),
           ),
           const Divider(),
+          ListTile(
+            title: Text(L10n.of(context)!.saveLogFiles),
+            subtitle: Text(
+              L10n.of(context)!.saveLogFilesDescription,
+              style: TEXT_SMALL_SUBTITLE,
+            ),
+            trailing: const Icon(Icons.chevron_right_rounded),
+            onTap: () => _copyLogFilesToFolder(context),
+          ),
+          const Divider(),
           const BatteryOptimizationTile(),
           const Divider(
             height: 4.0,
@@ -196,6 +210,66 @@ class SettingsPage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _copyLogFilesToFolder(BuildContext context) async {
+    try {
+      final appDir = await getApplicationDocumentsDirectory();
+      final logDir = Directory(p.join(appDir.path, 'logs'));
+      final selectedPath = await FilePicker.getDirectoryPath();
+
+      if (selectedPath == null || !await logDir.exists()) {
+        return;
+      }
+
+      var folderName = 'mucke_logs';
+      var targetDir = Directory(p.join(selectedPath, folderName));
+      var counter = 0;
+      while (await targetDir.exists()) {
+        counter++;
+        folderName = 'mucke_logs-$counter';
+        targetDir = Directory(p.join(selectedPath, folderName));
+      }
+      await targetDir.create();
+
+      await for (final entity in logDir.list()) {
+        if (entity is File) {
+          await entity.copy(p.join(targetDir.path, p.basename(entity.path)));
+        }
+      }
+
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                const Icon(Icons.check_circle_rounded, color: GREEN),
+                const SizedBox(width: 16.0),
+                Expanded(child: Text(L10n.of(context)!.logFilesSavedTo(targetDir.path))),
+              ],
+            ),
+            duration: const Duration(seconds: 10),
+            showCloseIcon: true,
+          ),
+        );
+      }
+    } catch (error) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                const Icon(Icons.warning_rounded, color: RED),
+                const SizedBox(width: 16.0),
+                Expanded(child: Text(L10n.of(context)!.logFilesSaveFailed)),
+              ],
+            ),
+            duration: const Duration(seconds: 10),
+            showCloseIcon: true,
+          ),
+        );
+      }
+    }
   }
 }
 
@@ -272,5 +346,3 @@ class _PercentageSliderState extends State<PercentageSlider> {
     );
   }
 }
-
-

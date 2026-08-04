@@ -362,6 +362,20 @@
   "@miscellaneous": {},
   "exportData": "Export data",
   "@exportData": {},
+  "saveLogFiles": "Save log files",
+  "@saveLogFiles": {},
+  "saveLogFilesDescription": "This creates a subfolder with the log files in it.",
+  "@saveLogFilesDescription": {},
+  "logFilesSavedTo": "Log files saved to:\n{path}",
+  "@logFilesSavedTo": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "logFilesSaveFailed": "Saving log files failed!",
+  "@logFilesSaveFailed": {},
   "exportDescription": "Select the data you want to export. By default, everything is exported. When exporting, you can select a folder for the file to be stored.",
   "@exportDescription": {},
   "songsAlbumsArtists": "Songs, Albums, and Artists",
