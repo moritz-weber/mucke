@@ -20,6 +20,18 @@ final List<logging.LogRecord> _history = <logging.LogRecord>[];
 /// The recent in-memory log records, newest last.
 List<logging.LogRecord> get logHistory => List.unmodifiable(_history);
 
+/// Returns the logging level configured for an application package.
+logging.Level loggingLevelForPackage(String packageName) {
+  switch (packageName) {
+    case 'rocks.mucke.dev':
+      return logging.Level.ALL;
+    case 'rocks.mucke.github':
+      return logging.Level.FINE;
+    default:
+      return logging.Level.INFO;
+  }
+}
+
 /// Initialises logging with console output and file logging.
 ///
 /// Logs are written to `{appDocDir}/logs/mucke.log` and rotated by size.

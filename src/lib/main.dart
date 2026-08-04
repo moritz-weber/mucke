@@ -5,6 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import 'domain/actors/persistence_actor.dart';
 import 'domain/repositories/init_repository.dart';
@@ -24,7 +25,11 @@ final _logger = Logger('Main');
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initLogging(level: Level.ALL);
+  print('main: Flutter binding initialized');
+  final packageInfo = await PackageInfo.fromPlatform();
+  print('main: package info: ${packageInfo.packageName} ${packageInfo.version} ${packageInfo.buildNumber}');
+  await initLogging(level: loggingLevelForPackage(packageInfo.packageName));
+  print('main: logging initialized');
   _logger.fine('main: logging initialized');
 
   _logger.fine('main: entering dependency injection');
@@ -38,6 +43,7 @@ Future<void> main() async {
   await GetIt.I<PersistenceActor>().init();
   _logger.fine('main: persistence actor initialized');
 
+  _logger.info('main: initialized');
   runApp(MyApp());
 }
 
