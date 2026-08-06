@@ -1,417 +1,270 @@
 {
-  "numberOfBlockedFiles": "被禁用的音乐数量： {blockedFiles}",
-  "@numberOfBlockedFiles": {
-    "placeholders": {
-      "blockedFiles": {
-        "type": "int",
-        "example": "3"
-      }
-    }
-  },
-  "playback": "播放",
-  "@playback": {},
-  "playAlbumsInOrder": "按专辑列表音乐顺序播放",
-  "@playAlbumsInOrder": {},
-  "countSongsPlayed": "在播放达 {percentage}% 后计入歌曲播放量",
-  "@countSongsPlayed": {
-    "placeholders": {
-      "percentage": {
-        "type": "int"
-      }
-    }
-  },
-  "customizeHomePage": "个性化主页",
-  "@customizeHomePage": {},
-  "settings": "设置",
-  "@settings": {},
-  "home": "主页",
-  "@home": {},
-  "noSongsYet": "当前无歌曲，请到设置中添加你的音乐文件夹",
-  "@noSongsYet": {},
-  "library": "歌曲库",
-  "@library": {},
-  "search": "搜索",
-  "@search": {},
-  "updateLibrary": "更新歌曲库",
-  "@updateLibrary": {},
-  "artistsAlbumsSongs": "{artistCount} 歌手, {albumCount} 专辑, {songCount} 歌曲",
-  "@artistsAlbumsSongs": {
-    "placeholders": {
-      "artistCount": {
-        "type": "int",
-        "example": "3"
-      },
-      "albumCount": {
-        "type": "int",
-        "example": "6"
-      },
-      "songCount": {
-        "type": "int",
-        "example": "60"
-      }
-    }
-  },
-  "manageLibraryFolders": "管理歌曲文件夹",
-  "@manageLibraryFolders": {},
-  "manageBlockedFiles": "管理音乐黑名单",
-  "@manageBlockedFiles": {},
-  "playAlbumsInOrderDescription": "当点击专辑某首歌时将按列表顺序播放其他歌曲，而不是按其他顺序",
-  "@playAlbumsInOrderDescription": {},
-  "libraryFolders": "歌曲文件夹",
-  "@libraryFolders": {},
-  "blockedFiles": "禁用的文件夹",
-  "@blockedFiles": {},
-  "dataExportedTo": "数据导出位置：\n{path}",
-  "@dataExportedTo": {
-    "placeholders": {
-      "path": {
-        "type": "String"
-      }
-    }
-  },
-  "openBattery": "打开省电设置",
-  "@openBattery": {},
-  "disabledBattery": "针对 Mucke 的省电优化已禁用",
-  "@disabledBattery": {},
-  "favoritesDesc": "包含您喜欢的所有歌曲。",
-  "@favoritesDesc": {},
-  "favorites": "我的收藏",
-  "@favorites": {},
-  "newlyAddedDesc": "包含最早添加的100首歌曲。",
-  "@newlyAddedDesc": {},
-  "newlyAdded": "近期新增",
-  "@newlyAdded": {},
-  "back": "返回",
-  "@back": {},
-  "create": "创建",
-  "@create": {},
-  "created": "已创建",
-  "@created": {},
-  "noPlaylistsYet": "歌单空空如也，从曲库中添加点吧。",
-  "@noPlaylistsYet": {},
-  "noHistoryYet": "没有更多了，随便听听吧",
-  "@noHistoryYet": {},
-  "allSongs": "所有歌曲",
-  "@allSongs": {},
-  "album": "专辑",
-  "@album": {},
-  "artist": "艺人",
-  "@artist": {},
-  "artists": "艺人",
-  "@artists": {},
-  "normalMode": "正常模式",
-  "@normalMode": {},
-  "shuffleMode": "随机模式",
-  "@shuffleMode": {},
-  "albums": "专辑",
-  "@albums": {},
-  "playlist": "歌单",
-  "@playlist": {},
-  "playlists": "歌单",
-  "@playlists": {},
-  "favShuffleMode": "随机播放收藏夹模式",
-  "@favShuffleMode": {},
-  "noShuffle": "无（保持当前随机模式）",
-  "@noShuffle": {},
-  "changeDate": "修改日期",
-  "@changeDate": {},
-  "lastTimePlayed": "上次播放时间",
-  "@lastTimePlayed": {},
-  "ascending": "升序",
-  "@ascending": {},
-  "descending": "降序",
-  "@descending": {},
-  "playlistsOnly": "仅自建歌单",
-  "@playlistsOnly": {},
-  "smartlistsOnly": "仅智能歌单",
-  "@smartlistsOnly": {},
-  "orderSettingsDescription": "重排选项以更改排序优先级。",
-  "@orderSettingsDescription": {},
-  "disc": "唱片",
-  "@disc": {},
-  "blockFromLibrary": "拉黑并移出曲库",
-  "@blockFromLibrary": {},
-  "shuffle": "随机",
-  "@shuffle": {},
-  "limitSongs": "限制歌曲数目",
-  "@limitSongs": {},
-  "alwaysPlayNext": "总是继续播放下一首歌",
-  "@alwaysPlayNext": {},
-  "setupLibraryDescription": "选择歌曲所在的文件夹",
-  "@setupLibraryDescription": {},
-  "imported": "已完成导入",
-  "@imported": {},
-  "importVerb": "导入",
-  "@importVerb": {
-    "description": "This means the verb of importing something - not the noun."
-  },
-  "exportData": "导出备份数据",
-  "@exportData": {},
-  "blockedFilesDescription": "只有与导入数据完全匹配的黑名单文件才会从扫描中排除，您可在稍后中拉黑排除其他文件。",
-  "@blockedFilesDescription": {},
-  "exportDescription": "选择要导出的内容，默认导出所有。导出时可选择保存位置。",
-  "@exportDescription": {},
-  "songsAlbumsArtists": "歌曲、专辑以及艺人",
-  "@songsAlbumsArtists": {},
-  "dataExportFailed": "导出数据失败！",
-  "@dataExportFailed": {},
-  "yourPlaylists": "你的播放列表",
-  "@yourPlaylists": {},
-  "systemSettings": "系统设置",
-  "@systemSettings": {},
-  "batteryExplanation": "从 Android 12(S) 开始，电池优化会导致失去音频焦点（例如收到来电时）后通知出错。禁用针对 Mucke 的省电优化（改为无限制）可解决该问题。",
-  "@batteryExplanation": {},
-  "disableBattery": "禁用针对 Mucke 的省电优化（改为无限制）以解决通知问题。",
-  "@disableBattery": {},
-  "errorReadData": "读取数据文件时出错。",
-  "@errorReadData": {},
-  "createSmartlists": "创建智能歌单",
-  "@createSmartlists": {},
-  "createSmartlistsDesc": "创建智能歌单以增强您的使用体验，您可以稍后自定义列表内容。",
-  "@createSmartlistsDesc": {},
-  "manageExternalExplanation": "授予该权限可增强扫描歌曲的速度。这不会影响应用的其他行为。",
-  "@manageExternalExplanation": {},
-  "grantManagePermission": "授予所有文件读写权限。",
-  "@grantManagePermission": {},
-  "managePermissionSubtitle": "撤销权限将导致应用程序重新启动。",
-  "@managePermissionSubtitle": {},
-  "next": "下一步",
-  "@next": {},
-  "finish": "完成",
-  "@finish": {},
-  "allowedFileExtensionsDescription": "需要扫描的媒体文件扩展名列表，多个以英文逗号分隔，不区分大小写。如果您不清楚做什么，保持默认值即可。",
-  "@allowedFileExtensionsDescription": {},
-  "allowedFileExtensions": "允许扫描的歌曲扩展名",
-  "@allowedFileExtensions": {},
-  "shuffleAll": "无序播放全部",
-  "@shuffleAll": {},
-  "history": "历史",
-  "@history": {},
-  "addWidgetToHome": "添加快捷方式至主屏",
-  "@addWidgetToHome": {},
-  "lastPlayed": "上次播放",
-  "@lastPlayed": {},
-  "song": "首歌曲",
-  "@song": {},
-  "songs": "首歌曲",
-  "@songs": {},
-  "name": "名称",
-  "@name": {},
-  "smartlists": "智能歌单",
-  "@smartlists": {},
-  "smartlist": "智能歌单",
-  "@smartlist": {},
-  "sortingFilterSettings": "排序与筛选设置",
-  "@sortingFilterSettings": {},
-  "maxNumberEntries": "最大音乐数",
-  "@maxNumberEntries": {},
-  "creationDate": "创建日期",
-  "@creationDate": {},
-  "displaySettings": "显示设置",
-  "@displaySettings": {},
-  "addSmartlist": "添加智能歌单",
-  "@addSmartlist": {},
-  "addPlaylist": "添加自建歌单",
-  "@addPlaylist": {},
-  "createPlaylist": "创建歌单",
-  "@createPlaylist": {},
-  "editPlaylist": "编辑歌单",
-  "@editPlaylist": {},
-  "customizeCover": "自定义封面",
-  "@customizeCover": {},
-  "playbackMode": "单曲循环模式",
-  "@playbackMode": {},
-  "excludeInShuffle": "在随机模式下排除已标记歌曲",
-  "@excludeInShuffle": {},
-  "excludeAllSongs": "排除所有已标记歌曲",
-  "@excludeAllSongs": {},
-  "excludeAlways": "仅排除标记为始终排除的歌曲",
-  "@excludeAlways": {},
-  "dontExclude": "不排除任何歌曲",
-  "@dontExclude": {},
-  "filterSettings": "过滤器设置",
-  "@filterSettings": {},
-  "filterLikes": "点赞介于 {min} 和 {max} 之间",
-  "@filterLikes": {
-    "placeholders": {
-      "min": {
-        "type": "int"
-      },
-      "max": {
-        "type": "int"
-      }
-    }
-  },
-  "minPlayCount": "最小播放量",
-  "@minPlayCount": {},
-  "maxPlayCount": "最大播放量",
-  "@maxPlayCount": {},
-  "selectArtistsExclude": "选择要排除的艺人：已选择 {num} 项",
-  "@selectArtistsExclude": {
-    "placeholders": {
-      "num": {
-        "type": "int"
-      }
-    }
-  },
-  "selectArtistsInclude": "选择要包含的艺人：已选择 {num} 项",
-  "@selectArtistsInclude": {
-    "placeholders": {
-      "num": {
-        "type": "int"
-      }
-    }
-  },
-  "includeAllArtists": "如果未选择任何艺人，则包括所有。",
-  "@includeAllArtists": {},
-  "excludeArtists": "排除选定的艺人",
-  "@excludeArtists": {},
-  "createSmartlist": "创建智能歌单",
-  "@createSmartlist": {},
-  "editSmartlist": "编辑智能歌单",
-  "@editSmartlist": {},
-  "play": "播放",
-  "@play": {},
-  "playNext": "播放下一首",
-  "@playNext": {},
-  "addToQueue": "添加到队列",
-  "@addToQueue": {},
-  "selectArtists": "选择艺人",
-  "@selectArtists": {},
-  "removeFromQueue": "从队列移除",
-  "@removeFromQueue": {},
-  "currentlyPlaying": "正在播放",
-  "@currentlyPlaying": {},
-  "nameMustNotBeEmpty": "名称不能为空",
-  "@nameMustNotBeEmpty": {},
-  "artistName": "艺人名称",
-  "@artistName": {},
-  "likeCount": "点赞数",
-  "@likeCount": {},
-  "playCount": "播放量",
-  "@playCount": {},
-  "songTitle": "歌曲标题",
-  "@songTitle": {},
-  "year": "年",
-  "@year": {},
-  "timeAdded": "添加时间",
-  "@timeAdded": {},
-  "addToPlaylist": "加入歌单",
-  "@addToPlaylist": {},
-  "removeFromPlaylist": "从歌单移除",
-  "@removeFromPlaylist": {},
-  "cancel": "取消",
-  "@cancel": {},
-  "previousSong": "上一首",
-  "@previousSong": {},
-  "alwaysPlayPrevious": "总是播放前一首歌",
-  "@alwaysPlayPrevious": {},
-  "dontExcludeSong": "不要排除这首歌",
-  "@dontExcludeSong": {},
-  "excludeShuffleAllSong": "随机播放所有歌曲时排除",
-  "@excludeShuffleAllSong": {},
-  "excludeShuffleSong": "随机播放时排除",
-  "@excludeShuffleSong": {},
-  "alwaysExcludeSong": "始终排除这首歌曲",
-  "@alwaysExcludeSong": {},
-  "welcomeToMucke": "欢迎使用 Mucke ！",
-  "@welcomeToMucke": {},
-  "setupLibrary": "设置曲库",
-  "@setupLibrary": {},
-  "importData": "导入数据",
-  "@importData": {},
-  "importDataDescription": "从旧版 Mucke 导入数据",
-  "@importDataDescription": {},
-  "yourLibrary": "你的曲库：",
-  "@yourLibrary": {},
-  "scan": "扫描",
-  "@scan": {},
-  "noFoldersSelected": "暂未选择任何文件夹。",
-  "@noFoldersSelected": {},
-  "addFolder": "添加文件夹",
-  "@addFolder": {},
-  "availableFromImport": "可导入的数据：",
-  "@availableFromImport": {},
-  "use": "使用",
-  "@use": {},
-  "reset": "重置",
-  "@reset": {},
-  "importLibData": "导入曲库数据",
-  "@importLibData": {},
-  "songMetaData": "歌曲元数据",
-  "@songMetaData": {},
-  "metaDataAvailable": "{num} 首歌曲的元数据有效",
-  "@metaDataAvailable": {
-    "placeholders": {
-      "num": {
-        "type": "int"
-      }
-    }
-  },
-  "metaDataDescription": "导入点赞量、黑名单等。",
-  "@metaDataDescription": {},
-  "moreAvailable": "超过 {num} 项可用",
-  "@moreAvailable": {
-    "placeholders": {
-      "num": {
-        "type": "int"
-      }
-    }
-  },
-  "librarySettings": "曲库设置",
-  "@librarySettings": {},
-  "homeCustomization": "个性化主页",
-  "@homeCustomization": {},
-  "albumOfTheDay": "今日特辑",
-  "@albumOfTheDay": {},
-  "artistOfTheDay": "今日大咖",
-  "@artistOfTheDay": {},
-  "nSongs": "{count, plural, =0{无歌曲} =1{1 首} other{{count} 首}}",
-  "@nSongs": {
-    "placeholders": {
-      "count": {
-        "type": "num"
-      }
-    }
-  },
-  "both": "二者皆可",
-  "@both": {},
-  "orderSettings": "排序设置",
-  "@orderSettings": {},
-  "nSongsSelected": "{count, plural, =0{未选中任何歌} =1{选中 1 首歌} other{选中 {count} 首歌}}",
-  "@nSongsSelected": {
-    "placeholders": {
-      "count": {
-        "type": "num"
-      }
-    }
-  },
-  "appendToQueued": "附加至手动排列歌曲后",
-  "@appendToQueued": {},
-  "nSongsInQueue": "队列 {count, plural, =0{无歌曲} =1{含 1 首歌} other{含 {count} 首歌}}",
-  "@nSongsInQueue": {
-    "placeholders": {
-      "count": {
-        "type": "num"
-      }
-    }
-  },
-  "nextUp": "播放队列",
-  "@nextUp": {},
-  "playedNTimes": "{count, plural, =0{从未播放} =1{已播放 1 次} other{已播放 {count} 次}}",
-  "@playedNTimes": {
-    "placeholders": {
-      "count": {
-        "type": "num"
-      }
-    }
-  },
-  "miscellaneous": "杂七杂八",
-  "@miscellaneous": {},
-  "minYear": "最早年份",
-  "@minYear": {},
-  "highlights": "高亮",
-  "@highlights": {},
-  "maxYear": "最晚年份",
-  "@maxYear": {}
+    "numberOfBlockedFiles": "被禁用的音乐数量： {blockedFiles}",
+    "@numberOfBlockedFiles": {
+        "placeholders": {
+            "blockedFiles": {
+                "type": "int",
+                "example": "3"
+            }
+        }
+    },
+    "playback": "播放",
+    "playAlbumsInOrder": "按专辑列表音乐顺序播放",
+    "countSongsPlayed": "在播放达 {percentage}% 后计入歌曲播放量",
+    "@countSongsPlayed": {
+        "placeholders": {
+            "percentage": {
+                "type": "int"
+            }
+        }
+    },
+    "customizeHomePage": "个性化主页",
+    "settings": "设置",
+    "home": "主页",
+    "noSongsYet": "当前无歌曲，请到设置中添加你的音乐文件夹",
+    "library": "歌曲库",
+    "search": "搜索",
+    "updateLibrary": "更新歌曲库",
+    "artistsAlbumsSongs": "{artistCount} 歌手, {albumCount} 专辑, {songCount} 歌曲",
+    "@artistsAlbumsSongs": {
+        "placeholders": {
+            "artistCount": {
+                "type": "int",
+                "example": "3"
+            },
+            "albumCount": {
+                "type": "int",
+                "example": "6"
+            },
+            "songCount": {
+                "type": "int",
+                "example": "60"
+            }
+        }
+    },
+    "manageLibraryFolders": "管理歌曲文件夹",
+    "manageBlockedFiles": "管理音乐黑名单",
+    "playAlbumsInOrderDescription": "当点击专辑某首歌时将按列表顺序播放其他歌曲，而不是按其他顺序",
+    "libraryFolders": "歌曲文件夹",
+    "blockedFiles": "禁用的文件夹",
+    "dataExportedTo": "数据导出位置：\n{path}",
+    "@dataExportedTo": {
+        "placeholders": {
+            "path": {
+                "type": "String"
+            }
+        }
+    },
+    "openBattery": "打开省电设置",
+    "disabledBattery": "针对 Mucke 的省电优化已禁用",
+    "favoritesDesc": "包含您喜欢的所有歌曲。",
+    "favorites": "我的收藏",
+    "newlyAddedDesc": "包含最早添加的100首歌曲。",
+    "newlyAdded": "近期新增",
+    "back": "返回",
+    "create": "创建",
+    "created": "已创建",
+    "noPlaylistsYet": "歌单空空如也，从曲库中添加点吧。",
+    "noHistoryYet": "没有更多了，随便听听吧",
+    "allSongs": "所有歌曲",
+    "album": "专辑",
+    "artist": "艺人",
+    "artists": "艺人",
+    "normalMode": "正常模式",
+    "shuffleMode": "随机模式",
+    "albums": "专辑",
+    "playlist": "歌单",
+    "playlists": "歌单",
+    "favShuffleMode": "随机播放收藏夹模式",
+    "noShuffle": "无（保持当前随机模式）",
+    "changeDate": "修改日期",
+    "lastTimePlayed": "上次播放时间",
+    "ascending": "升序",
+    "descending": "降序",
+    "playlistsOnly": "仅自建歌单",
+    "smartlistsOnly": "仅智能歌单",
+    "orderSettingsDescription": "重排选项以更改排序优先级。",
+    "disc": "唱片",
+    "blockFromLibrary": "拉黑并移出曲库",
+    "shuffle": "随机",
+    "limitSongs": "限制歌曲数目",
+    "alwaysPlayNext": "总是继续播放下一首歌",
+    "setupLibraryDescription": "选择歌曲所在的文件夹",
+    "imported": "已完成导入",
+    "importVerb": "导入",
+    "@importVerb": {
+        "description": "This means the verb of importing something - not the noun."
+    },
+    "exportData": "导出备份数据",
+    "blockedFilesDescription": "只有与导入数据完全匹配的黑名单文件才会从扫描中排除，您可在稍后中拉黑排除其他文件。",
+    "exportDescription": "选择要导出的内容，默认导出所有。导出时可选择保存位置。",
+    "songsAlbumsArtists": "歌曲、专辑以及艺人",
+    "dataExportFailed": "导出数据失败！",
+    "yourPlaylists": "你的播放列表",
+    "systemSettings": "系统设置",
+    "batteryExplanation": "从 Android 12(S) 开始，电池优化会导致失去音频焦点（例如收到来电时）后通知出错。禁用针对 Mucke 的省电优化（改为无限制）可解决该问题。",
+    "disableBattery": "禁用针对 Mucke 的省电优化（改为无限制）以解决通知问题。",
+    "errorReadData": "读取数据文件时出错。",
+    "createSmartlists": "创建智能歌单",
+    "createSmartlistsDesc": "创建智能歌单以增强您的使用体验，您可以稍后自定义列表内容。",
+    "manageExternalExplanation": "授予该权限可增强扫描歌曲的速度。这不会影响应用的其他行为。",
+    "grantManagePermission": "授予所有文件读写权限。",
+    "managePermissionSubtitle": "撤销权限将导致应用程序重新启动。",
+    "next": "下一步",
+    "finish": "完成",
+    "allowedFileExtensionsDescription": "需要扫描的媒体文件扩展名列表，多个以英文逗号分隔，不区分大小写。如果您不清楚做什么，保持默认值即可。",
+    "allowedFileExtensions": "允许扫描的歌曲扩展名",
+    "shuffleAll": "无序播放全部",
+    "history": "历史",
+    "addWidgetToHome": "添加快捷方式至主屏",
+    "lastPlayed": "上次播放",
+    "song": "首歌曲",
+    "songs": "首歌曲",
+    "name": "名称",
+    "smartlists": "智能歌单",
+    "smartlist": "智能歌单",
+    "sortingFilterSettings": "排序与筛选设置",
+    "maxNumberEntries": "最大音乐数",
+    "creationDate": "创建日期",
+    "displaySettings": "显示设置",
+    "addSmartlist": "添加智能歌单",
+    "addPlaylist": "添加自建歌单",
+    "createPlaylist": "创建歌单",
+    "editPlaylist": "编辑歌单",
+    "customizeCover": "自定义封面",
+    "playbackMode": "单曲循环模式",
+    "excludeInShuffle": "在随机模式下排除已标记歌曲",
+    "excludeAllSongs": "排除所有已标记歌曲",
+    "excludeAlways": "仅排除标记为始终排除的歌曲",
+    "dontExclude": "不排除任何歌曲",
+    "filterSettings": "过滤器设置",
+    "filterLikes": "点赞介于 {min} 和 {max} 之间",
+    "@filterLikes": {
+        "placeholders": {
+            "min": {
+                "type": "int"
+            },
+            "max": {
+                "type": "int"
+            }
+        }
+    },
+    "minPlayCount": "最小播放量",
+    "maxPlayCount": "最大播放量",
+    "selectArtistsExclude": "选择要排除的艺人：已选择 {num} 项",
+    "@selectArtistsExclude": {
+        "placeholders": {
+            "num": {
+                "type": "int"
+            }
+        }
+    },
+    "selectArtistsInclude": "选择要包含的艺人：已选择 {num} 项",
+    "@selectArtistsInclude": {
+        "placeholders": {
+            "num": {
+                "type": "int"
+            }
+        }
+    },
+    "includeAllArtists": "如果未选择任何艺人，则包括所有。",
+    "excludeArtists": "排除选定的艺人",
+    "createSmartlist": "创建智能歌单",
+    "editSmartlist": "编辑智能歌单",
+    "play": "播放",
+    "playNext": "播放下一首",
+    "addToQueue": "添加到队列",
+    "selectArtists": "选择艺人",
+    "removeFromQueue": "从队列移除",
+    "currentlyPlaying": "正在播放",
+    "nameMustNotBeEmpty": "名称不能为空",
+    "artistName": "艺人名称",
+    "likeCount": "点赞数",
+    "playCount": "播放量",
+    "songTitle": "歌曲标题",
+    "year": "年",
+    "timeAdded": "添加时间",
+    "addToPlaylist": "加入歌单",
+    "removeFromPlaylist": "从歌单移除",
+    "cancel": "取消",
+    "previousSong": "上一首",
+    "alwaysPlayPrevious": "总是播放前一首歌",
+    "dontExcludeSong": "不要排除这首歌",
+    "excludeShuffleAllSong": "随机播放所有歌曲时排除",
+    "excludeShuffleSong": "随机播放时排除",
+    "alwaysExcludeSong": "始终排除这首歌曲",
+    "welcomeToMucke": "欢迎使用 Mucke ！",
+    "setupLibrary": "设置曲库",
+    "importData": "导入数据",
+    "importDataDescription": "从旧版 Mucke 导入数据",
+    "yourLibrary": "你的曲库：",
+    "scan": "扫描",
+    "noFoldersSelected": "暂未选择任何文件夹。",
+    "addFolder": "添加文件夹",
+    "availableFromImport": "可导入的数据：",
+    "use": "使用",
+    "reset": "重置",
+    "importLibData": "导入曲库数据",
+    "songMetaData": "歌曲元数据",
+    "metaDataAvailable": "{num} 首歌曲的元数据有效",
+    "@metaDataAvailable": {
+        "placeholders": {
+            "num": {
+                "type": "int"
+            }
+        }
+    },
+    "metaDataDescription": "导入点赞量、黑名单等。",
+    "moreAvailable": "超过 {num} 项可用",
+    "@moreAvailable": {
+        "placeholders": {
+            "num": {
+                "type": "int"
+            }
+        }
+    },
+    "librarySettings": "曲库设置",
+    "homeCustomization": "个性化主页",
+    "albumOfTheDay": "今日特辑",
+    "artistOfTheDay": "今日大咖",
+    "nSongs": "{count, plural, =0{无歌曲} =1{1 首} other{{count} 首}}",
+    "@nSongs": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            }
+        }
+    },
+    "both": "二者皆可",
+    "orderSettings": "排序设置",
+    "nSongsSelected": "{count, plural, =0{未选中任何歌} =1{选中 1 首歌} other{选中 {count} 首歌}}",
+    "@nSongsSelected": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            }
+        }
+    },
+    "appendToQueued": "附加至手动排列歌曲后",
+    "nSongsInQueue": "队列 {count, plural, =0{无歌曲} =1{含 1 首歌} other{含 {count} 首歌}}",
+    "@nSongsInQueue": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            }
+        }
+    },
+    "nextUp": "播放队列",
+    "playedNTimes": "{count, plural, =0{从未播放} =1{已播放 1 次} other{已播放 {count} 次}}",
+    "@playedNTimes": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            }
+        }
+    },
+    "miscellaneous": "杂七杂八",
+    "minYear": "最早年份",
+    "highlights": "高亮",
+    "maxYear": "最晚年份"
 }

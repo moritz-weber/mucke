@@ -1,0 +1,270 @@
+{
+    "manageLibraryFolders": "Bibliotheek mappen beheren",
+    "updateLibrary": "Bibliotheek bijwerken",
+    "noSongsYet": "Het lijkt erop dat je geen liedjes in je bibliotheek hebt: Ga naar de instellingen, voeg jouw muziek mappen toe, en werk jouw bibliotheek bij.",
+    "library": "Bibliotheek",
+    "customizeHomePage": "Startpagina aanpassen",
+    "search": "Zoeken",
+    "settings": "Instellingen",
+    "allowedFileExtensions": "Toegestane bestandsextensies",
+    "artistsAlbumsSongs": "{artistCount} artiesten, {albumCount} albums, {songCount} liedjes",
+    "@artistsAlbumsSongs": {
+        "placeholders": {
+            "artistCount": {
+                "type": "int",
+                "example": "3"
+            },
+            "albumCount": {
+                "type": "int",
+                "example": "6"
+            },
+            "songCount": {
+                "type": "int",
+                "example": "60"
+            }
+        }
+    },
+    "normalMode": "Normale Modus",
+    "playAlbumsInOrder": "Albums in volgorde afspelen",
+    "favShuffleMode": "Favoriete Willekeurige Afspeel Modus",
+    "allSongs": "Alle Liedjes",
+    "noShuffle": "Geen (behoud de huidige willekeurige afspeel modus)",
+    "playAlbumsInOrderDescription": "Wanneer je een lied in een album aanklikt, worden de liedjes in volgorde afgespeeld, in plaats van de vorige afspeelmodus te behouden.",
+    "noHistoryYet": "Er is hier nog niets te zien. Speel iets af.",
+    "playlists": "Afspeellijsten",
+    "smartlists": "Smartlists",
+    "addWidgetToHome": "Voeg een Widget toe aan je Startpagina",
+    "albumOfTheDay": "Album van de Dag",
+    "countSongsPlayed": "Tel liedjes als afgespeeld na: {percentage}%",
+    "@countSongsPlayed": {
+        "placeholders": {
+            "percentage": {
+                "type": "int"
+            }
+        }
+    },
+    "name": "Naam",
+    "artistOfTheDay": "Artiest van de Dag",
+    "creationDate": "Aanmaak Datum",
+    "allowedFileExtensionsDescription": "Een kommagescheiden lijst van toegestane bestandsextensies. Hoofd- en kleine letters maken niet uit. Als je niet zeker ervan bent, gebruik gewoon de standaard instelling.",
+    "artists": "Artiesten",
+    "albums": "Albums",
+    "shuffleMode": "Willekeurige Afspeel Modus",
+    "homeCustomization": "Startpagina Aanpassingen",
+    "album": "Album",
+    "artist": "Artiest",
+    "manageBlockedFiles": "Geblokkeerde bestanden beheren",
+    "libraryFolders": "Bibliotheek mappen",
+    "playlist": "Afspeellijst",
+    "smartlist": "Smartlist",
+    "changeDate": "Wijzigingsdatum",
+    "numberOfBlockedFiles": "Aantal huidige geblokkeerde bestanden: {blockedFiles}",
+    "@numberOfBlockedFiles": {
+        "placeholders": {
+            "blockedFiles": {
+                "type": "int",
+                "example": "3"
+            }
+        }
+    },
+    "home": "Startpagina",
+    "history": "Geschiedenis",
+    "nSongs": "{count, plural, =0{geen liedjes} =1{een liedje} other{{count} liedjes}}",
+    "@nSongs": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            }
+        }
+    },
+    "lastTimePlayed": "Laatste Keer Afgespeeld",
+    "song": "Lied",
+    "songs": "Liedjes",
+    "shuffleAll": "Alles willekeurig afspelen",
+    "lastPlayed": "Recent afgespeeld",
+    "playback": "Afspelen",
+    "maxNumberEntries": "Maximum aantal vermeldingen",
+    "sortingFilterSettings": "Sorteer en Filter Instellingen",
+    "noPlaylistsYet": "Er zijn nog geen afspeellijsten. Je kunt deze in de bibliotheek toevoegen.",
+    "blockedFiles": "Geblokkeerde Bestanden",
+    "selectArtistsExclude": "Selecteer artiesten om uit te sluiten: {num} geselecteerd.",
+    "@selectArtistsExclude": {
+        "placeholders": {
+            "num": {
+                "type": "int"
+            }
+        }
+    },
+    "ascending": "Oplopend",
+    "smartlistsOnly": "Enkel Smartlists",
+    "both": "Beide",
+    "createPlaylist": "Afspeellijst aanmaken",
+    "excludeAlways": "Sluit liedjes uit, die gemarkeerd zijn om altijd uitgesloten te worden.",
+    "descending": "Aflopend",
+    "editPlaylist": "Afspeellijst bewerken",
+    "maxPlayCount": "Maximum aantal afgespeeld",
+    "addSmartlist": "Smartlist toevoegen",
+    "filterLikes": "Likes tussen {min} en {max}",
+    "@filterLikes": {
+        "placeholders": {
+            "min": {
+                "type": "int"
+            },
+            "max": {
+                "type": "int"
+            }
+        }
+    },
+    "excludeArtists": "Geselecteerde artiesten uitsluiten",
+    "minYear": "Minimum Jaar",
+    "filterSettings": "Filter Instellingen",
+    "maxYear": "Maximum Jaar",
+    "excludeInShuffle": "Sluit liedjes uit, die voor uitsluiting gemarkeerd zijn in de willekeurige modus.",
+    "playbackMode": "Afspeel Modus",
+    "excludeAllSongs": "Sluit alle nummers uit, die voor een uitsluiting gemarkeerd zijn.",
+    "playlistsOnly": "Enkel Afspeellijsten",
+    "customizeCover": "Cover aanpassen",
+    "selectArtistsInclude": "Selecteer artiesten om toe te voegen: {num} geselecteerd.",
+    "@selectArtistsInclude": {
+        "placeholders": {
+            "num": {
+                "type": "int"
+            }
+        }
+    },
+    "includeAllArtists": "Voeg alle artiesten toe, indien er geen zijn geselecteerd.",
+    "displaySettings": "Weergave Instellingen",
+    "minPlayCount": "Minimum aantal afgespeeld",
+    "addPlaylist": "Afspeellijst toevoegen",
+    "dontExclude": "Sluit geen liedjes uit.",
+    "welcomeToMucke": "Welkom bij mucke!",
+    "newlyAddedDesc": "Bevat de 100 meest recent toegevoegde liedjes.",
+    "createSmartlists": "Smartlisten Aanmaken",
+    "excludeShuffleAllSong": "Uitsluiten als alle liedjes willekeurig worden afgespeeld.",
+    "systemSettings": "Systeem Instellingen",
+    "reset": "Opnieuw instellen",
+    "noFoldersSelected": "Dusver geen mappen geselecteerd.",
+    "imported": "Geïmporteerd",
+    "moreAvailable": "{num} meer beschikbaar",
+    "@moreAvailable": {
+        "placeholders": {
+            "num": {
+                "type": "int"
+            }
+        }
+    },
+    "dataExportFailed": "Gegevens exporteren mislukt!",
+    "miscellaneous": "Diversen",
+    "setupLibraryDescription": "Selecteer mappen, inbegrepen bestandsextensies etc.",
+    "songTitle": "Titel van het liedje",
+    "yourPlaylists": "Jouw Afspeellijsten",
+    "alwaysExcludeSong": "Altijd dit liedje uitsluiten.",
+    "alwaysPlayPrevious": "Vorig liedje altijd vooraf afspelen",
+    "disc": "CD",
+    "exportData": "Gegevens exporteren",
+    "next": "Volgende",
+    "dontExcludeSong": "Dit liedje niet uitsluiten.",
+    "create": "Aanmaken",
+    "playCount": "Aantal keren afgespeeld",
+    "nameMustNotBeEmpty": "De naam mag niet leeg zijn.",
+    "disableBattery": "Optimalisaties voor mucke uitschakelen, om melding problemen op te lossen.",
+    "addToQueue": "Aan wachtrij toevoegen",
+    "blockFromLibrary": "Uit de bibliotheek verwijderen en blokkeren",
+    "appendToQueued": "Toevoegen aan handmatig in de wachtrij geplaatste liedjes",
+    "year": "Jaar",
+    "scan": "Scannen",
+    "songMetaData": "Liedjes Metadata",
+    "songsAlbumsArtists": "Liedjes, Albums en Artiesten",
+    "metaDataDescription": "Importeer likes, blokkades etc.",
+    "alwaysPlayNext": "Speel het volgende nummer altijd erna af",
+    "highlights": "Hoogtepunten",
+    "availableFromImport": "Beschikbaar vanuit geïmporteerde gegevens:",
+    "selectArtists": "Selecteer Artiesten",
+    "createSmartlist": "Smartlist aanmaken",
+    "disabledBattery": "Batterij optimalisatie is uitgeschakeld.",
+    "addFolder": "Map toevoegen",
+    "finish": "Voltooien",
+    "orderSettingsDescription": "Pas de volgorde van de opties aan, om de prioriteiten te wijzigen.",
+    "newlyAdded": "Recent toegevoegd",
+    "back": "Terug",
+    "batteryExplanation": "Vanaf Android 12 veroorzaakt de batterij optimalisatie een foutmelding met de meldingen, nadat de audio de focus verliest, bijvoorbeeld tijdens een binnenkomende oproep. Het deactiveren van de optimalisaties voor mucke, lost dit probleem op.",
+    "timeAdded": "Wanneer toegevoegd",
+    "openBattery": "Batterij instellingen openen",
+    "addToPlaylist": "Toevoegen aan afspeellijst",
+    "exportDescription": "Selecteer de gegevens die je wilt exporteren. Standaard wordt alles geëxporteerd. Tijdens het exporteren, kan er een map geselecteerd worden om het bestand in op te slaan.",
+    "importData": "Gegevens importeren",
+    "importVerb": "Importeren",
+    "@importVerb": {
+        "description": "This means the verb of importing something - not the noun."
+    },
+    "metaDataAvailable": "Metadata voor {num} liedjes beschikbaar",
+    "@metaDataAvailable": {
+        "placeholders": {
+            "num": {
+                "type": "int"
+            }
+        }
+    },
+    "artistName": "Artiestennaam",
+    "orderSettings": "Sorteer Instellingen",
+    "errorReadData": "Fout bij het lezen van het gegevensbestand.",
+    "librarySettings": "Bibliotheek Instellingen",
+    "dataExportedTo": "Gegevens zijn geëxporteerd naar:\n{path}",
+    "@dataExportedTo": {
+        "placeholders": {
+            "path": {
+                "type": "String"
+            }
+        }
+    },
+    "yourLibrary": "Jouw Bibliotheek:",
+    "likeCount": "Aantal likes",
+    "nSongsSelected": "{count, plural, =0{geen liedjes geselecteerd} =1{1 liedje geselecteerd} other{{count} liedjes geselecteerd}}",
+    "@nSongsSelected": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            }
+        }
+    },
+    "editSmartlist": "Smartlist wijzigen",
+    "nSongsInQueue": "{count, plural, =0{geen liedjes} =1{een liedje} other{{count} liedjes}} in de wachtrij",
+    "@nSongsInQueue": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            }
+        }
+    },
+    "use": "Gebruiken",
+    "manageExternalExplanation": "Deze toestemming verlenen, kan de scansnelheid van de bibliotheek behoorlijk verhogen. Het verandert verder niets aan het gedrag van de applicatie.",
+    "favorites": "Favorieten",
+    "cancel": "Annuleren",
+    "excludeShuffleSong": "Uitsluiten tijdens willekeurig afspelen modus.",
+    "shuffle": "Willekeurig afspelen",
+    "currentlyPlaying": "Op dit moment aan het afspelen",
+    "createSmartlistsDesc": "Voorgestelde smartlists aanmaken om uw luisterervaring te verbeteren. U kunt deze lijsten later aanpassen.",
+    "blockedFilesDescription": "Geblokkeerde bestanden vanuit de geïmporteerde gegevens. Enkel exacte overeenkomsten worden uitgesloten tijdens het scannen van de bibliotheek. Aanvullende bestanden kunnen later in de app geblokkeerd worden.",
+    "playNext": "Speel volgende af",
+    "grantManagePermission": "Toestemming verlenen om alle bestanden te beheren.",
+    "previousSong": "vorig",
+    "managePermissionSubtitle": "De toestemming intrekken, zal een herstart van de applicatie tot gevolg hebben.",
+    "limitSongs": "Aantal liedjes limiteren",
+    "play": "Afspelen",
+    "setupLibrary": "Bibliotheek instellen",
+    "removeFromPlaylist": "Verwijderen van afspeellijst",
+    "importLibData": "Bibliotheek gegevens importeren",
+    "favoritesDesc": "Bevat alle liedjes, die je leuk vindt.",
+    "created": "Aangemaakt",
+    "playedNTimes": "{count, plural, =0{nog niet afgespeeld} =1{eenmaal afgespeeld} other{{count} keren afgespeeld}}",
+    "@playedNTimes": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            }
+        }
+    },
+    "importDataDescription": "Importeer jouw gegevens vanuit een vorige installatie van mucke.",
+    "removeFromQueue": "Uit de wachtrij verwijderen",
+    "nextUp": "Eerstvolgende"
+}
