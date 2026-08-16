@@ -1,0 +1,270 @@
+{
+    "noSongsYet": "Wygląda na to, że nie masz żadnych utworów w bibliotece: Przejdź do Ustawień, dodaj foldery z muzyką i zaktualizuj bibliotekę.",
+    "allowedFileExtensionsDescription": "Lista dozwolonych formatów plików rozdzielona przecinkami. Małe i wielkie litery nie mają znaczenia. Jeśli nie jesteś pewien, jak to zmienić, pozostaw domyślną listę.",
+    "search": "Szukaj",
+    "manageBlockedFiles": "Zarządzaj zablokowanymi plikami",
+    "updateLibrary": "Aktualizuj bibliotekę",
+    "artistsAlbumsSongs": "{artistCount} wykonawców, {albumCount} albumów, {songCount} utworów",
+    "@artistsAlbumsSongs": {
+        "placeholders": {
+            "artistCount": {
+                "type": "int",
+                "example": "3"
+            },
+            "albumCount": {
+                "type": "int",
+                "example": "6"
+            },
+            "songCount": {
+                "type": "int",
+                "example": "60"
+            }
+        }
+    },
+    "playAlbumsInOrderDescription": "Kiedy wybierzesz utwór w albubie, zostaną one odtworzone w kolejności albumu bez zachowania poprzedniego trybu odtwarzania.",
+    "customizeHomePage": "Dostosuj stronę główną",
+    "settings": "Ustawienia",
+    "library": "Biblioteka",
+    "manageLibraryFolders": "Zarządzaj folderami z muzyką",
+    "allowedFileExtensions": "Dozwolone rozszerzenia plików",
+    "numberOfBlockedFiles": "Liczba zablokowanych plików: {blockedFiles}",
+    "@numberOfBlockedFiles": {
+        "placeholders": {
+            "blockedFiles": {
+                "type": "int",
+                "example": "3"
+            }
+        }
+    },
+    "playback": "Odtwarzanie",
+    "playAlbumsInOrder": "Odtwarzaj albumy w kolejności",
+    "albumOfTheDay": "Album dnia",
+    "artistOfTheDay": "Wykonawca dnia",
+    "shuffleAll": "Losuj wszystko",
+    "history": "Historia",
+    "addWidgetToHome": "Dodaj widżet do ekranu głównego",
+    "albums": "Albumy",
+    "artist": "Wykonawca",
+    "artists": "Wykonawcy",
+    "playlist": "Playlista",
+    "playlists": "Playlisty",
+    "smartlist": "Inteligentna lista",
+    "smartlists": "Inteligentne listy",
+    "noShuffle": "Brak (zachowaj obecną losowość)",
+    "normalMode": "Normalny",
+    "shuffleMode": "Tryb losowania",
+    "favShuffleMode": "Ulobiony tryb losowania",
+    "sortingFilterSettings": "Ustawienia sortowania i filtrowania",
+    "maxNumberEntries": "Maksymalna liczba pozycji",
+    "changeDate": "Data modyfikacji",
+    "lastTimePlayed": "Ostatnio odtwarzane",
+    "ascending": "Rosnąco",
+    "playlistsOnly": "Tylko playlisty",
+    "smartlistsOnly": "Tylko inteligentne listy",
+    "displaySettings": "Ustawienia wyświetlania",
+    "addSmartlist": "Dodaj inteligentną listę",
+    "createPlaylist": "Utwórz playlistę",
+    "editPlaylist": "Edytuj playlistę",
+    "customizeCover": "Dostosuj okładkę",
+    "excludeAllSongs": "Wyklucz wszystkie utwory oznaczone jako wykluczenia.",
+    "excludeInShuffle": "Wyklucz zaznaczone utwory z losowania.",
+    "filterSettings": "Ustawienia filtrowania",
+    "minPlayCount": "Minimalna liczba odtworzeń",
+    "maxPlayCount": "Maksymalna liczba odtworzeń",
+    "includeAllArtists": "Uwzględnij wszyskich wykonawców, gdy nie zaznaczono żadnego.",
+    "excludeArtists": "Wyklucz wybranych wykonawców",
+    "limitSongs": "Ogranicz liczbę utworów",
+    "orderSettings": "Ustawienia kolejności",
+    "orderSettingsDescription": "Opcje zmiany kolejności i priorytetu.",
+    "createSmartlist": "Utwórz inteligentną listę",
+    "editSmartlist": "Edytuj inteligentną listę",
+    "playNext": "Odtwórz następny",
+    "addToQueue": "Dodaj do kolejki",
+    "disc": "Płyta",
+    "highlights": "Wyróżnione",
+    "shuffle": "Losuj",
+    "removeFromQueue": "Usuń z kolejki",
+    "moreAvailable": "Dostępne {num} więcej",
+    "@moreAvailable": {
+        "placeholders": {
+            "num": {
+                "type": "int"
+            }
+        }
+    },
+    "nameMustNotBeEmpty": "Nazwa nie może być pusta.",
+    "artistName": "Nazwa wykonawcy",
+    "likeCount": "Liczba polubień",
+    "playCount": "Liczba odtworzeń",
+    "songTitle": "Tytuł utworu",
+    "nextUp": "Następne w kolejce",
+    "addToPlaylist": "Dodaj do playlisty",
+    "cancel": "Odrzuć",
+    "previousSong": "poprzedni",
+    "alwaysPlayPrevious": "Zawsze najpierw graj poprzedni utwór",
+    "dontExcludeSong": "Nie wykluczaj tego utworu.",
+    "alwaysExcludeSong": "Zawsze wykluczaj ten utwór.",
+    "welcomeToMucke": "Witaj w mucke!",
+    "setupLibrary": "Skonfiguruj bibliotekę",
+    "setupLibraryDescription": "Wybierz foldery, dozwolone typy plików itd.",
+    "noFoldersSelected": "Nie wybrano folderów.",
+    "addFolder": "Dodaj folder",
+    "use": "Użyj",
+    "reset": "Resetuj",
+    "blockedFilesDescription": "Zablokowane pliki z zaimportowanych danych. Tylko dokładne dopasowania zostaną wykluczone ze skanowania biblioteki. Pozostałe pliki możesz wykluczyć później w aplikacji.",
+    "importLibData": "Importuj dane biblioteki",
+    "metaDataDescription": "Importuj polubienia, wykluczenia itd.",
+    "imported": "Zaimportowane",
+    "exportData": "Eksportuj dane",
+    "exportDescription": "Wybierz dane, które chcesz wyeksportować. Domyślnie wszystko jest wyeksportowane. Eksportując, możesz wybrać folder, w którym zostanie zapisany plik eksportu.",
+    "songsAlbumsArtists": "Utwory, albumy i wykonawcy",
+    "librarySettings": "Ustawienia biblioteki",
+    "dataExportedTo": "Dane wyeksportowano do:\n{path}",
+    "@dataExportedTo": {
+        "placeholders": {
+            "path": {
+                "type": "String"
+            }
+        }
+    },
+    "dataExportFailed": "Eksport danych nie powiódł się!",
+    "yourPlaylists": "Twoje playlisty",
+    "openBattery": "Otwórz ustawienia baterii",
+    "disableBattery": "Wyłącz optymalizację baterii dla mucke, by rozwiązać problemy z powiadomieniem.",
+    "disabledBattery": "Optymalizacja baterii jest wyłączona.",
+    "manageExternalExplanation": "Przyznanie tego uprawnienia może znacznie poprawić szybkość skanowania biblioteki. Nie zmienia to jednak zachowania aplikacji.",
+    "grantManagePermission": "Przyznaj uprawnienie do zarządzania wszystkimi plikami.",
+    "newlyAdded": "Ostatnio dodane",
+    "newlyAddedDesc": "Zawiera 100 ostatnio dodanych utworów.",
+    "back": "Wróć",
+    "createSmartlists": "Utwórz inteligentne listy",
+    "home": "Strona główna",
+    "homeCustomization": "Dostosowywanie strony głównej",
+    "noPlaylistsYet": "Nie znaleziono playlist. Możesz dodać nową playlistę w bibliotece.",
+    "lastPlayed": "Ostatnio odtwarzane",
+    "noHistoryYet": "Nic tu nie ma. Zagraj coś.",
+    "song": "Utwór",
+    "songs": "Utwory",
+    "allSongs": "Wszystkie utwory",
+    "album": "Album",
+    "name": "Nazwa",
+    "creationDate": "Data utworzenia",
+    "descending": "Malejąco",
+    "both": "Oba",
+    "addPlaylist": "Dodaj playlistę",
+    "excludeAlways": "Wyklucz tylko utwory oznaczone jako zawsze do wykluczenia.",
+    "dontExclude": "Nie wykluczaj żadnego utworu.",
+    "playbackMode": "Tryb odtwarzania",
+    "filterLikes": "Polubienia między {min} i {max}",
+    "@filterLikes": {
+        "placeholders": {
+            "min": {
+                "type": "int"
+            },
+            "max": {
+                "type": "int"
+            }
+        }
+    },
+    "maxYear": "Maksymalny rok",
+    "minYear": "Minimalny rok",
+    "selectArtistsExclude": "Wybierz wykonawców do wykluczenia: wybrano {num}.",
+    "@selectArtistsExclude": {
+        "placeholders": {
+            "num": {
+                "type": "int"
+            }
+        }
+    },
+    "selectArtistsInclude": "Wybierz wykonawców do uwzględnienia: wybrano {num}.",
+    "@selectArtistsInclude": {
+        "placeholders": {
+            "num": {
+                "type": "int"
+            }
+        }
+    },
+    "currentlyPlaying": "Teraz odtwarzane",
+    "play": "Odtwórz",
+    "appendToQueued": "Dołącz do utworów ręcznie dodanych do kolejki",
+    "blockFromLibrary": "Usuń z biblioteki i zablokuj",
+    "selectArtists": "Wybierz wykonawców",
+    "importData": "Importuj dane",
+    "importDataDescription": "Zaimportuj swoje dane z poprzedniej instalacji mucke.",
+    "year": "Rok",
+    "playedNTimes": "{count, plural, =0{nie grano} =1{grano raz} other{grano {count} razy}}",
+    "@playedNTimes": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            }
+        }
+    },
+    "nSongsInQueue": "{count, plural, =0{brak utworów} =1{jeden utwór} other{{count} utwory(-ów)}} w kolejce",
+    "@nSongsInQueue": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            }
+        }
+    },
+    "timeAdded": "Czas dodania",
+    "alwaysPlayNext": "Zawsze graj potem następny utwór",
+    "yourLibrary": "Twoja biblioteka:",
+    "excludeShuffleAllSong": "Wyklucz przy losowaniu wszystkich utworów.",
+    "scan": "Skanuj",
+    "removeFromPlaylist": "Usuń z playlisty",
+    "excludeShuffleSong": "Wyklucz przy losowaniu.",
+    "availableFromImport": "Dostępne z zaimportowanych danych:",
+    "songMetaData": "Metadane utworu",
+    "metaDataAvailable": "Dostępne metadane dla {num} utworów",
+    "@metaDataAvailable": {
+        "placeholders": {
+            "num": {
+                "type": "int"
+            }
+        }
+    },
+    "miscellaneous": "Inne",
+    "importVerb": "Importuj",
+    "@importVerb": {
+        "description": "This means the verb of importing something - not the noun."
+    },
+    "countSongsPlayed": "Uznaj utwory za odtworzone po: {percentage}%",
+    "@countSongsPlayed": {
+        "placeholders": {
+            "percentage": {
+                "type": "int"
+            }
+        }
+    },
+    "libraryFolders": "Foldery biblioteki",
+    "blockedFiles": "Zablokowane pliki",
+    "systemSettings": "Ustawienia systemowe",
+    "batteryExplanation": "Od Androida 12 optymalizacja baterii powoduje błąd z powiadomieniem po utracie fokusu audio, na przykład podczas odbierania połączenia. Wyłączenie optymalizacji dla mucke rozwiązuje ten problem.",
+    "managePermissionSubtitle": "Odmówienie tego uprawnienia spowoduje restart aplikacji.",
+    "favoritesDesc": "Zawiera wszystkie utwory, które lubisz.",
+    "favorites": "Ulubione",
+    "finish": "Zakończ",
+    "next": "Następny",
+    "create": "Utwórz",
+    "errorReadData": "Błąd przy odczycie pliku.",
+    "createSmartlistsDesc": "Utwórz sugerowane inteligentne listy, aby poprawić wrażenia ze słuchania. Możesz dostosować te listy później.",
+    "created": "Utworzono",
+    "nSongs": "{count, plural, =0{brak utworów} =1{jeden utwór} few{{count} utwory} other{{count} utworów)}}",
+    "@nSongs": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            }
+        }
+    },
+    "nSongsSelected": "{count, plural, =0{nie wybrano utworów} =1{wybrano jeden utwór} few{wybrano {count} utwory} other{wybrano {count} utworów}}",
+    "@nSongsSelected": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            }
+        }
+    }
+}

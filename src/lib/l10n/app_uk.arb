@@ -1,417 +1,285 @@
 {
-  "home": "Головна",
-  "@home": {},
-  "settings": "Налаштування",
-  "@settings": {},
-  "library": "Бібліотека",
-  "@library": {},
-  "manageLibraryFolders": "Керування папками бібліотеки",
-  "@manageLibraryFolders": {},
-  "allowedFileExtensions": "Допустимі розширення файлів",
-  "@allowedFileExtensions": {},
-  "allowedFileExtensionsDescription": "Список дозволених розширень файлів через кому. Малі чи великі літери не мають значення. Якщо ви не впевнені в цьому, просто використовуйте значення за замовчуванням.",
-  "@allowedFileExtensionsDescription": {},
-  "numberOfBlockedFiles": "Кількість заблокованих на даний момент файлів: {blockedFiles}",
-  "@numberOfBlockedFiles": {
-    "placeholders": {
-      "blockedFiles": {
-        "type": "int",
-        "example": "3"
-      }
-    }
-  },
-  "playAlbumsInOrder": "Відтворювати альбоми по порядку",
-  "@playAlbumsInOrder": {},
-  "countSongsPlayed": "Порахуйте пісні, які були відтворені після: {percentage}%",
-  "@countSongsPlayed": {
-    "placeholders": {
-      "percentage": {
-        "type": "int"
-      }
-    }
-  },
-  "libraryFolders": "Теки бібліотеки",
-  "@libraryFolders": {},
-  "homeCustomization": "Налаштування Головної сторінки",
-  "@homeCustomization": {},
-  "albumOfTheDay": "Альбом дня",
-  "@albumOfTheDay": {},
-  "noPlaylistsYet": "Поки що немає плейлистів. Ви можете додати їх у бібліотеці.",
-  "@noPlaylistsYet": {},
-  "lastPlayed": "Останнє відтворення",
-  "@lastPlayed": {},
-  "allSongs": "Всі пісні",
-  "@allSongs": {},
-  "song": "Пісня",
-  "@song": {},
-  "songs": "Пісні",
-  "@songs": {},
-  "album": "Альбом",
-  "@album": {},
-  "albums": "Альбоми",
-  "@albums": {},
-  "artist": "Виконавець",
-  "@artist": {},
-  "artists": "Виконавці",
-  "@artists": {},
-  "playlist": "Список відтворення",
-  "@playlist": {},
-  "playlists": "Списки відтворення",
-  "@playlists": {},
-  "smartlist": "Розумний список",
-  "@smartlist": {},
-  "smartlists": "Розумні списки",
-  "@smartlists": {},
-  "noShuffle": "Ні (зберегти поточний режим перемішування)",
-  "@noShuffle": {},
-  "shuffleMode": "Режим перемішування",
-  "@shuffleMode": {},
-  "name": "Ім'я",
-  "@name": {},
-  "sortingFilterSettings": "Налаштування сортування та фільтрів",
-  "@sortingFilterSettings": {},
-  "changeDate": "Дата зміни",
-  "@changeDate": {},
-  "lastTimePlayed": "Востаннє відтворено",
-  "@lastTimePlayed": {},
-  "ascending": "За зростанням",
-  "@ascending": {},
-  "descending": "За спаданням",
-  "@descending": {},
-  "playlistsOnly": "Тільки списки відтворення",
-  "@playlistsOnly": {},
-  "smartlistsOnly": "Тільки розумні списки",
-  "@smartlistsOnly": {},
-  "addSmartlist": "Додати розумний список",
-  "@addSmartlist": {},
-  "addPlaylist": "Додати список відтворення",
-  "@addPlaylist": {},
-  "customizeCover": "Налаштувати обкладинку",
-  "@customizeCover": {},
-  "playbackMode": "Режим відтворення",
-  "@playbackMode": {},
-  "excludeAllSongs": "Виключіть всі пісні, позначені для виключення.",
-  "@excludeAllSongs": {},
-  "dontExclude": "Не виключати жодної пісні.",
-  "@dontExclude": {},
-  "filterSettings": "Налаштування фільтрів",
-  "@filterSettings": {},
-  "filterLikes": "Вподобання між {min} та {max}",
-  "@filterLikes": {
-    "placeholders": {
-      "min": {
-        "type": "int"
-      },
-      "max": {
-        "type": "int"
-      }
-    }
-  },
-  "minPlayCount": "Мінімальна кількість відтворення",
-  "@minPlayCount": {},
-  "minYear": "Мінімальний рік",
-  "@minYear": {},
-  "maxYear": "Максимальний рік",
-  "@maxYear": {},
-  "includeAllArtists": "Включити всіх виконавців, якщо жоден не був вибраний.",
-  "@includeAllArtists": {},
-  "limitSongs": "Обмеження на кількість пісень",
-  "@limitSongs": {},
-  "orderSettings": "Сортування",
-  "@orderSettings": {},
-  "orderSettingsDescription": "Перевпорядкуйте варіанти, щоб змінити пріоритети.",
-  "@orderSettingsDescription": {},
-  "editSmartlist": "Редагувати розумний список",
-  "@editSmartlist": {},
-  "play": "Грати",
-  "@play": {},
-  "playNext": "Грати далі",
-  "@playNext": {},
-  "appendToQueued": "Додати до пісні, поставлених у чергу вручну",
-  "@appendToQueued": {},
-  "addToQueue": "Додати в чергу",
-  "@addToQueue": {},
-  "disc": "Диск",
-  "@disc": {},
-  "highlights": "Основні моменти",
-  "@highlights": {},
-  "shuffle": "Перемішати",
-  "@shuffle": {},
-  "selectArtists": "Вибрати виконавців",
-  "@selectArtists": {},
-  "removeFromQueue": "Видалити з черги",
-  "@removeFromQueue": {},
-  "currentlyPlaying": "Зараз грає",
-  "@currentlyPlaying": {},
-  "moreAvailable": "Доступно ще {num}",
-  "@moreAvailable": {
-    "placeholders": {
-      "num": {
-        "type": "int"
-      }
-    }
-  },
-  "nameMustNotBeEmpty": "Ім'я не повинно бути порожнім.",
-  "@nameMustNotBeEmpty": {},
-  "artistName": "Ім'я виконавця",
-  "@artistName": {},
-  "likeCount": "Кількість вподобань",
-  "@likeCount": {},
-  "songTitle": "Назва пісні",
-  "@songTitle": {},
-  "year": "Рік",
-  "@year": {},
-  "timeAdded": "Час додавання",
-  "@timeAdded": {},
-  "addToPlaylist": "Додати до списку відтворення",
-  "@addToPlaylist": {},
-  "previousSong": "попередня",
-  "@previousSong": {},
-  "playedNTimes": "{count, plural, =0{ще не грали} =1{грали один раз} other{грали {count} разів}}",
-  "@playedNTimes": {
-    "placeholders": {
-      "count": {
-        "type": "num"
-      }
-    }
-  },
-  "alwaysPlayPrevious": "Завжди відтворювати попередню пісню",
-  "@alwaysPlayPrevious": {},
-  "alwaysPlayNext": "Завжди відтворювати наступну пісню",
-  "@alwaysPlayNext": {},
-  "dontExcludeSong": "Не виключати цю пісню.",
-  "@dontExcludeSong": {},
-  "excludeShuffleSong": "Виключити при перемішуванні.",
-  "@excludeShuffleSong": {},
-  "customizeHomePage": "Налаштувати Головну сторінку",
-  "@customizeHomePage": {},
-  "playback": "Відтворення",
-  "@playback": {},
-  "noSongsYet": "Схоже, у вашій бібліотеці немає жодної пісні: Перейдіть до налаштувань, додайте теки з музикою та оновіть бібліотеку.",
-  "@noSongsYet": {},
-  "updateLibrary": "Оновити бібліотеку",
-  "@updateLibrary": {},
-  "artistsAlbumsSongs": "{artistCount} виконавці, {albumCount} альбоми, {songCount} пісні",
-  "@artistsAlbumsSongs": {
-    "placeholders": {
-      "artistCount": {
-        "type": "int",
-        "example": "3"
-      },
-      "albumCount": {
-        "type": "int",
-        "example": "6"
-      },
-      "songCount": {
-        "type": "int",
-        "example": "60"
-      }
-    }
-  },
-  "search": "Пошук",
-  "@search": {},
-  "manageBlockedFiles": "Керування заблокованими файлами",
-  "@manageBlockedFiles": {},
-  "playAlbumsInOrderDescription": "Коли ви натискаєте на пісню в альбомі, пісні відтворюватимуться по порядку, замість того, щоб зберігати попередній режим відтворення.",
-  "@playAlbumsInOrderDescription": {},
-  "blockedFiles": "Заблоковані файли",
-  "@blockedFiles": {},
-  "history": "Історія",
-  "@history": {},
-  "createPlaylist": "Створити список відтворення",
-  "@createPlaylist": {},
-  "artistOfTheDay": "Виконавець дня",
-  "@artistOfTheDay": {},
-  "shuffleAll": "Перемішати все",
-  "@shuffleAll": {},
-  "noHistoryYet": "Поки що тут нема на що дивитися. Відтворіть що-небудь.",
-  "@noHistoryYet": {},
-  "addWidgetToHome": "Додати віджет на Головну сторінку",
-  "@addWidgetToHome": {},
-  "selectArtistsExclude": "Виберіть виконавців, яких потрібно виключити: {num} вибрано.",
-  "@selectArtistsExclude": {
-    "placeholders": {
-      "num": {
-        "type": "int"
-      }
-    }
-  },
-  "normalMode": "Звичайний режим",
-  "@normalMode": {},
-  "favShuffleMode": "Улюблений режим перемішування",
-  "@favShuffleMode": {},
-  "nSongs": "{count, plural, =0{немає пісень} =1{одна пісня} other{{count} пісні}}",
-  "@nSongs": {
-    "placeholders": {
-      "count": {
-        "type": "num"
-      }
-    }
-  },
-  "maxNumberEntries": "Максимальна кількість записів",
-  "@maxNumberEntries": {},
-  "displaySettings": "Налаштування дисплею",
-  "@displaySettings": {},
-  "creationDate": "Дата створення",
-  "@creationDate": {},
-  "both": "Обидва",
-  "@both": {},
-  "editPlaylist": "Редагувати список відтворення",
-  "@editPlaylist": {},
-  "excludeInShuffle": "Виключити пісні, позначені для виключення в режимі перемішування.",
-  "@excludeInShuffle": {},
-  "excludeAlways": "Виключати лише пісні, позначені як завжди виключати.",
-  "@excludeAlways": {},
-  "maxPlayCount": "Максимальна кількість відтворення",
-  "@maxPlayCount": {},
-  "selectArtistsInclude": "Виберіть виконавців, яких потрібно включити: {num} вибрано.",
-  "@selectArtistsInclude": {
-    "placeholders": {
-      "num": {
-        "type": "int"
-      }
-    }
-  },
-  "excludeArtists": "Виключити вибраних виконавців",
-  "@excludeArtists": {},
-  "nSongsSelected": "{count, plural, =0{пісні не вибрано} =1{вибрано одну пісню} other{вибрано {count} пісень}}",
-  "@nSongsSelected": {
-    "placeholders": {
-      "count": {
-        "type": "num"
-      }
-    }
-  },
-  "createSmartlist": "Створити розумний список",
-  "@createSmartlist": {},
-  "blockFromLibrary": "Видалити та заблокувати з бібліотеки",
-  "@blockFromLibrary": {},
-  "nSongsInQueue": "{count, plural, =0{немає пісень} =1{одна пісня} other{{count} пісні}}в черзі",
-  "@nSongsInQueue": {
-    "placeholders": {
-      "count": {
-        "type": "num"
-      }
-    }
-  },
-  "removeFromPlaylist": "Видалити зі списку відтворення",
-  "@removeFromPlaylist": {},
-  "playCount": "Кількість відтворень",
-  "@playCount": {},
-  "cancel": "Скасувати",
-  "@cancel": {},
-  "nextUp": "Далі",
-  "@nextUp": {},
-  "excludeShuffleAllSong": "Виключити під час перемішування всіх пісень.",
-  "@excludeShuffleAllSong": {},
-  "alwaysExcludeSong": "Завжди виключати цю пісню.",
-  "@alwaysExcludeSong": {},
-  "welcomeToMucke": "Ласкаво просимо до mucke!",
-  "@welcomeToMucke": {},
-  "setupLibraryDescription": "Виберіть теки, розширення включених файлів тощо.",
-  "@setupLibraryDescription": {},
-  "importData": "Імпорт даних",
-  "@importData": {},
-  "importDataDescription": "Імпортуйте дані з попереднього встановлення mucke.",
-  "@importDataDescription": {},
-  "setupLibrary": "Налаштувати бібліотеку",
-  "@setupLibrary": {},
-  "scan": "Сканувати",
-  "@scan": {},
-  "addFolder": "Додати теку",
-  "@addFolder": {},
-  "availableFromImport": "Доступно з імпортованих даних:",
-  "@availableFromImport": {},
-  "use": "Використовувати",
-  "@use": {},
-  "reset": "Скинути",
-  "@reset": {},
-  "blockedFilesDescription": "Заблоковані файли з імпортованих даних. Тільки точні збіги будуть виключені зі сканування бібліотеки. Додаткові файли можна заблокувати пізніше в застосунку.",
-  "@blockedFilesDescription": {},
-  "songMetaData": "Метадані пісні",
-  "@songMetaData": {},
-  "metaDataAvailable": "Доступні метадані для {num} пісень",
-  "@metaDataAvailable": {
-    "placeholders": {
-      "num": {
-        "type": "int"
-      }
-    }
-  },
-  "metaDataDescription": "Імпорт лайків, блоків і т.д.",
-  "@metaDataDescription": {},
-  "songsAlbumsArtists": "Пісні, альбоми та виконавці",
-  "@songsAlbumsArtists": {},
-  "librarySettings": "Налаштування бібліотеки",
-  "@librarySettings": {},
-  "dataExportedTo": "Дані експортовано в:\n{path}",
-  "@dataExportedTo": {
-    "placeholders": {
-      "path": {
-        "type": "String"
-      }
-    }
-  },
-  "yourLibrary": "Ваша бібліотека:",
-  "@yourLibrary": {},
-  "noFoldersSelected": "Поки що не вибрано жодної теки.",
-  "@noFoldersSelected": {},
-  "importLibData": "Імпорт даних бібліотеки",
-  "@importLibData": {},
-  "imported": "Імпортовано",
-  "@imported": {},
-  "importVerb": "Імпортувати",
-  "@importVerb": {
-    "description": "This means the verb of importing something - not the noun."
-  },
-  "miscellaneous": "Різне",
-  "@miscellaneous": {},
-  "exportData": "Експорт даних",
-  "@exportData": {},
-  "exportDescription": "Виберіть дані, які ви хочете експортувати. За замовчуванням експортується все. Під час експорту ви можете вибрати теку для збереження файлу.",
-  "@exportDescription": {},
-  "dataExportFailed": "Не вдалося експортувати дані!",
-  "@dataExportFailed": {},
-  "openBattery": "Відкрити налаштування батареї",
-  "@openBattery": {},
-  "disabledBattery": "Оптимізацію батареї вимкнено.",
-  "@disabledBattery": {},
-  "yourPlaylists": "Ваші списки відтворення",
-  "@yourPlaylists": {},
-  "batteryExplanation": "Починаючи з Android 12, оптимізація заряду акумулятора спричиняє помилку сповіщення після втрати фокусу звуку, наприклад, при отриманні дзвінка. Вимкнення оптимізації для mucke вирішує цю проблему.",
-  "@batteryExplanation": {},
-  "disableBattery": "Вимкніть оптимізацію для mucke, щоб вирішити проблеми зі сповіщеннями.",
-  "@disableBattery": {},
-  "favorites": "Улюблене",
-  "@favorites": {},
-  "newlyAdded": "Нещодавно додано",
-  "@newlyAdded": {},
-  "back": "Назад",
-  "@back": {},
-  "next": "Далі",
-  "@next": {},
-  "finish": "Кінець",
-  "@finish": {},
-  "favoritesDesc": "Містить усі пісні, які вам подобаються.",
-  "@favoritesDesc": {},
-  "errorReadData": "Помилка читання файлу даних.",
-  "@errorReadData": {},
-  "newlyAddedDesc": "Містить 100 пісень, доданих останніми.",
-  "@newlyAddedDesc": {},
-  "createSmartlists": "Створити розумні списки",
-  "@createSmartlists": {},
-  "createSmartlistsDesc": "Створюйте запропоновані розумні списки, щоб покращити свій досвід прослуховування. Ці списки можна налаштувати пізніше.",
-  "@createSmartlistsDesc": {},
-  "create": "Створити",
-  "@create": {},
-  "created": "Створено",
-  "@created": {},
-  "systemSettings": "Системні налаштування",
-  "@systemSettings": {},
-  "manageExternalExplanation": "Надання цього дозволу може значно покращити швидкість сканування бібліотеки. Це не змінює поведінку застосунку.",
-  "@manageExternalExplanation": {},
-  "grantManagePermission": "Надати дозвіл на управління всіма файлами.",
-  "@grantManagePermission": {},
-  "managePermissionSubtitle": "Скасування дозволу призведе до перезавантаження застосунку.",
-  "@managePermissionSubtitle": {}
+    "home": "Головна",
+    "settings": "Налаштування",
+    "library": "Бібліотека",
+    "manageLibraryFolders": "Керування папками бібліотеки",
+    "allowedFileExtensions": "Допустимі розширення файлів",
+    "allowedFileExtensionsDescription": "Список дозволених розширень файлів через кому. Малі чи великі літери не мають значення. Якщо ви не впевнені в цьому, просто використовуйте значення за замовчуванням.",
+    "numberOfBlockedFiles": "Кількість заблокованих на даний момент файлів: {blockedFiles}",
+    "@numberOfBlockedFiles": {
+        "placeholders": {
+            "blockedFiles": {
+                "type": "int",
+                "example": "3"
+            }
+        }
+    },
+    "playAlbumsInOrder": "Відтворювати альбоми по порядку",
+    "countSongsPlayed": "Порахуйте пісні, які були відтворені після: {percentage}%",
+    "@countSongsPlayed": {
+        "placeholders": {
+            "percentage": {
+                "type": "int"
+            }
+        }
+    },
+    "libraryFolders": "Теки бібліотеки",
+    "homeCustomization": "Налаштування Головної сторінки",
+    "albumOfTheDay": "Альбом дня",
+    "noPlaylistsYet": "Поки що немає плейлистів. Ви можете додати їх у бібліотеці.",
+    "lastPlayed": "Останнє відтворення",
+    "allSongs": "Всі пісні",
+    "song": "Пісня",
+    "songs": "Пісні",
+    "album": "Альбом",
+    "albums": "Альбоми",
+    "artist": "Виконавець",
+    "artists": "Виконавці",
+    "playlist": "Список відтворення",
+    "playlists": "Списки відтворення",
+    "smartlist": "Розумний список",
+    "smartlists": "Розумні списки",
+    "noShuffle": "Ні (зберегти поточний режим перемішування)",
+    "shuffleMode": "Режим перемішування",
+    "name": "Ім'я",
+    "sortingFilterSettings": "Налаштування сортування та фільтрів",
+    "changeDate": "Дата зміни",
+    "lastTimePlayed": "Востаннє відтворено",
+    "ascending": "За зростанням",
+    "descending": "За спаданням",
+    "playlistsOnly": "Тільки списки відтворення",
+    "smartlistsOnly": "Тільки розумні списки",
+    "addSmartlist": "Додати розумний список",
+    "addPlaylist": "Додати список відтворення",
+    "customizeCover": "Налаштувати обкладинку",
+    "playbackMode": "Режим відтворення",
+    "excludeAllSongs": "Виключіть всі пісні, позначені для виключення.",
+    "dontExclude": "Не виключати жодної пісні.",
+    "filterSettings": "Налаштування фільтрів",
+    "filterLikes": "Вподобання між {min} та {max}",
+    "@filterLikes": {
+        "placeholders": {
+            "min": {
+                "type": "int"
+            },
+            "max": {
+                "type": "int"
+            }
+        }
+    },
+    "minPlayCount": "Мінімальна кількість відтворення",
+    "minYear": "Мінімальний рік",
+    "maxYear": "Максимальний рік",
+    "includeAllArtists": "Включити всіх виконавців, якщо жоден не був вибраний.",
+    "limitSongs": "Обмеження на кількість пісень",
+    "orderSettings": "Сортування",
+    "orderSettingsDescription": "Перевпорядкуйте варіанти, щоб змінити пріоритети.",
+    "editSmartlist": "Редагувати розумний список",
+    "play": "Грати",
+    "playNext": "Грати далі",
+    "appendToQueued": "Додати до пісні, поставлених у чергу вручну",
+    "addToQueue": "Додати в чергу",
+    "disc": "Диск",
+    "highlights": "Основні моменти",
+    "shuffle": "Перемішати",
+    "selectArtists": "Вибрати виконавців",
+    "removeFromQueue": "Видалити з черги",
+    "currentlyPlaying": "Зараз грає",
+    "moreAvailable": "Доступно ще {num}",
+    "@moreAvailable": {
+        "placeholders": {
+            "num": {
+                "type": "int"
+            }
+        }
+    },
+    "nameMustNotBeEmpty": "Ім'я не повинно бути порожнім.",
+    "artistName": "Ім'я виконавця",
+    "likeCount": "Кількість вподобань",
+    "songTitle": "Назва пісні",
+    "year": "Рік",
+    "timeAdded": "Час додавання",
+    "addToPlaylist": "Додати до списку відтворення",
+    "previousSong": "попередня",
+    "playedNTimes": "{count, plural, =0{ще не відтворено} =1{відтворено один раз} other{відтворено {count} разів}}",
+    "@playedNTimes": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            }
+        }
+    },
+    "alwaysPlayPrevious": "Завжди відтворювати попередню пісню",
+    "alwaysPlayNext": "Завжди відтворювати наступну пісню",
+    "dontExcludeSong": "Не виключати цю пісню.",
+    "excludeShuffleSong": "Виключити при перемішуванні.",
+    "customizeHomePage": "Налаштувати Головну сторінку",
+    "playback": "Відтворення",
+    "noSongsYet": "Схоже, у вашій бібліотеці немає жодної пісні: Перейдіть до налаштувань, додайте теки з музикою та оновіть бібліотеку.",
+    "updateLibrary": "Оновити бібліотеку",
+    "artistsAlbumsSongs": "{artistCount} виконавці, {albumCount} альбоми, {songCount} пісні",
+    "@artistsAlbumsSongs": {
+        "placeholders": {
+            "artistCount": {
+                "type": "int",
+                "example": "3"
+            },
+            "albumCount": {
+                "type": "int",
+                "example": "6"
+            },
+            "songCount": {
+                "type": "int",
+                "example": "60"
+            }
+        }
+    },
+    "search": "Пошук",
+    "manageBlockedFiles": "Керування заблокованими файлами",
+    "playAlbumsInOrderDescription": "Коли ви натискаєте на пісню в альбомі, пісні відтворюватимуться по порядку, замість того, щоб зберігати попередній режим відтворення.",
+    "blockedFiles": "Заблоковані файли",
+    "history": "Історія",
+    "createPlaylist": "Створити список відтворення",
+    "artistOfTheDay": "Виконавець дня",
+    "shuffleAll": "Перемішати все",
+    "noHistoryYet": "Поки що тут нема на що дивитися. Відтворіть що-небудь.",
+    "addWidgetToHome": "Додати віджет на Головну сторінку",
+    "selectArtistsExclude": "Виберіть виконавців, яких потрібно виключити: {num} вибрано.",
+    "@selectArtistsExclude": {
+        "placeholders": {
+            "num": {
+                "type": "int"
+            }
+        }
+    },
+    "normalMode": "Звичайний режим",
+    "favShuffleMode": "Улюблений режим перемішування",
+    "nSongs": "{count, plural, =0{немає пісень} =1{одна пісня} other{{count} пісні}}",
+    "@nSongs": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            }
+        }
+    },
+    "maxNumberEntries": "Максимальна кількість записів",
+    "displaySettings": "Налаштування дисплею",
+    "creationDate": "Дата створення",
+    "both": "Обидва",
+    "editPlaylist": "Редагувати список відтворення",
+    "excludeInShuffle": "Виключити пісні, позначені для виключення в режимі перемішування.",
+    "excludeAlways": "Виключати лише пісні, позначені як завжди виключати.",
+    "maxPlayCount": "Максимальна кількість відтворення",
+    "selectArtistsInclude": "Виберіть виконавців, яких потрібно включити: {num} вибрано.",
+    "@selectArtistsInclude": {
+        "placeholders": {
+            "num": {
+                "type": "int"
+            }
+        }
+    },
+    "excludeArtists": "Виключити вибраних виконавців",
+    "nSongsSelected": "{count, plural, =0{пісні не вибрано} =1{вибрано одну пісню} other{вибрано {count} пісень}}",
+    "@nSongsSelected": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            }
+        }
+    },
+    "createSmartlist": "Створити розумний список",
+    "blockFromLibrary": "Видалити та заблокувати з бібліотеки",
+    "nSongsInQueue": "{count, plural, =0{немає пісень} =1{одна пісня} other{{count} пісні}}в черзі",
+    "@nSongsInQueue": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            }
+        }
+    },
+    "removeFromPlaylist": "Видалити зі списку відтворення",
+    "playCount": "Кількість відтворень",
+    "cancel": "Скасувати",
+    "nextUp": "Далі",
+    "excludeShuffleAllSong": "Виключити під час перемішування всіх пісень.",
+    "alwaysExcludeSong": "Завжди виключати цю пісню.",
+    "welcomeToMucke": "Ласкаво просимо до mucke!",
+    "setupLibraryDescription": "Виберіть теки, розширення включених файлів тощо.",
+    "importData": "Імпорт даних",
+    "importDataDescription": "Імпортуйте дані з попереднього встановлення mucke.",
+    "setupLibrary": "Налаштувати бібліотеку",
+    "scan": "Сканувати",
+    "addFolder": "Додати теку",
+    "availableFromImport": "Доступно з імпортованих даних:",
+    "use": "Використовувати",
+    "reset": "Скинути",
+    "blockedFilesDescription": "Заблоковані файли з імпортованих даних. Тільки точні збіги будуть виключені зі сканування бібліотеки. Додаткові файли можна заблокувати пізніше в застосунку.",
+    "songMetaData": "Метадані пісні",
+    "metaDataAvailable": "Доступні метадані для {num} пісень",
+    "@metaDataAvailable": {
+        "placeholders": {
+            "num": {
+                "type": "int"
+            }
+        }
+    },
+    "metaDataDescription": "Імпорт лайків, блоків і т.д.",
+    "songsAlbumsArtists": "Пісні, альбоми та виконавці",
+    "librarySettings": "Налаштування бібліотеки",
+    "dataExportedTo": "Дані експортовано в:\n{path}",
+    "@dataExportedTo": {
+        "placeholders": {
+            "path": {
+                "type": "String"
+            }
+        }
+    },
+    "yourLibrary": "Ваша бібліотека:",
+    "noFoldersSelected": "Поки що не вибрано жодної теки.",
+    "importLibData": "Імпорт даних бібліотеки",
+    "imported": "Імпортовано",
+    "importVerb": "Імпортувати",
+    "@importVerb": {
+        "description": "This means the verb of importing something - not the noun."
+    },
+    "miscellaneous": "Різне",
+    "exportData": "Експорт даних",
+    "exportDescription": "Виберіть дані, які ви хочете експортувати. За замовчуванням експортується все. Під час експорту ви можете вибрати теку для збереження файлу.",
+    "dataExportFailed": "Не вдалося експортувати дані!",
+    "openBattery": "Відкрити налаштування батареї",
+    "disabledBattery": "Оптимізацію батареї вимкнено.",
+    "yourPlaylists": "Ваші списки відтворення",
+    "batteryExplanation": "Починаючи з Android 12, оптимізація заряду акумулятора спричиняє помилку сповіщення після втрати фокусу звуку, наприклад, при отриманні дзвінка. Вимкнення оптимізації для mucke вирішує цю проблему.",
+    "disableBattery": "Вимкнути оптимізацію акумулятора для mucke.",
+    "favorites": "Улюблене",
+    "newlyAdded": "Нещодавно додано",
+    "back": "Назад",
+    "next": "Далі",
+    "finish": "Кінець",
+    "favoritesDesc": "Містить усі пісні, які вам подобаються.",
+    "errorReadData": "Помилка читання файлу даних.",
+    "newlyAddedDesc": "Містить 100 пісень, доданих останніми.",
+    "createSmartlists": "Створити розумні списки",
+    "createSmartlistsDesc": "Створюйте запропоновані розумні списки, щоб покращити свій досвід прослуховування. Ці списки можна налаштувати пізніше.",
+    "create": "Створити",
+    "created": "Створено",
+    "systemSettings": "Системні налаштування",
+    "manageExternalExplanation": "Надання цього дозволу може значно покращити швидкість сканування бібліотеки. Це не змінює поведінку застосунку.",
+    "grantManagePermission": "Надати дозвіл на управління всіма файлами.",
+    "managePermissionSubtitle": "Скасування дозволу призведе до перезавантаження застосунку.",
+    "disableBatteryDescription": "Вимкнення оптимізації акумулятора може вирішити потенційні проблеми зі сповіщеннями.",
+    "playlistNormalMode": "Грати спочатку",
+    "playlistShuffleMode": "Увімкнути перемішування",
+    "playlistFavShuffleMode": "Увімкнути перемішування улюбленого",
+    "saveLogFiles": "Зберегти файли журналів",
+    "saveLogFilesDescription": "Це створює підтеку з файлами журналів у ній.",
+    "logFilesSavedTo": "Файли журналів збережено в:\n{path}",
+    "@logFilesSavedTo": {
+        "placeholders": {
+            "path": {
+                "type": "String"
+            }
+        }
+    },
+    "logFilesSaveFailed": "Помилка збереження файлів журналу!"
 }
