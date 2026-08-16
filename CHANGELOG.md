@@ -1,3 +1,11 @@
+## 1.6.0
+
+- Added basic Android Auto support: play smartlists, playlists, and all songs.
+- Added image file scanning to the library.
+- Added new translations: Turkish, Dutch, Indonesian, Polish, Portuguese, and Tamil.
+- Updated Flutter, Gradle, Android, and other dependencies.
+- Fixed issues for Android 14+.
+
 ## 1.5.1
 - Security updates.
 - Fix in queue generation.

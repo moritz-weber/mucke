@@ -511,7 +511,7 @@ class L10nFr extends L10n {
       'Sélectionnez les données que vous souhaitez exporter. Par défaut, tout est exporté. Lors de l\'exportation, vous pouvez choisir le dossier où stocker le fichier.';
 
   @override
-  String get songsAlbumsArtists => 'Chansons, Albums et Artistes';
+  String get songsAlbumsArtists => 'Chansons, albums et artistes';
 
   @override
   String get librarySettings => 'Paramètres de la bibliothèque';
@@ -522,7 +522,7 @@ class L10nFr extends L10n {
   }
 
   @override
-  String get dataExportFailed => 'Échec de l\'exportation des données !';
+  String get dataExportFailed => 'Échec de l\'exportation des données !';
 
   @override
   String get yourPlaylists => 'Vos listes de lecture';
@@ -593,7 +593,7 @@ class L10nFr extends L10n {
       'Créez les listes intelligentes suggérées pour améliorer votre expérience d\'écoute. Vous pouvez personnaliser ces listes ultérieurement.';
 
   @override
-  String get create => 'Créez';
+  String get create => 'Créer';
 
   @override
   String get created => 'Créé';

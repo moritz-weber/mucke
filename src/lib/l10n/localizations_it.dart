@@ -142,22 +142,22 @@ class L10nIt extends L10n {
   String get playlists => 'Playlist';
 
   @override
-  String get smartlist => 'Smartlist';
+  String get smartlist => 'Lista intelligente';
 
   @override
-  String get smartlists => 'Smartlist';
+  String get smartlists => 'Liste intelligenti';
 
   @override
   String get noShuffle => 'Nessuna (mantieni la modalità casuale corrente)';
 
   @override
-  String get normalMode => 'Modalità Normale';
+  String get normalMode => 'Modalità normale';
 
   @override
-  String get shuffleMode => 'Modalità Casuale';
+  String get shuffleMode => 'Modalità casuale';
 
   @override
-  String get favShuffleMode => 'Modalità Casuale Preferita';
+  String get favShuffleMode => 'Modalità casuale preferiti';
 
   @override
   String get playlistNormalMode => 'Play from the top';
@@ -172,19 +172,19 @@ class L10nIt extends L10n {
   String get name => 'Nome';
 
   @override
-  String get sortingFilterSettings => 'Impostazioni Ordinamento e Filtri';
+  String get sortingFilterSettings => 'Impostazioni ordinamento e filtri';
 
   @override
   String get maxNumberEntries => 'Numero massimo di elementi';
 
   @override
-  String get creationDate => 'Data Creazione';
+  String get creationDate => 'Data di creazione';
 
   @override
-  String get changeDate => 'Data Modifica';
+  String get changeDate => 'Data di modifica';
 
   @override
-  String get lastTimePlayed => 'Riprodotto per l\'Ultima Volta';
+  String get lastTimePlayed => 'Data dell\'ultima riproduzione';
 
   @override
   String get ascending => 'Crescente';
@@ -196,31 +196,31 @@ class L10nIt extends L10n {
   String get both => 'Entrambe';
 
   @override
-  String get playlistsOnly => 'Solo Playlist';
+  String get playlistsOnly => 'Solo playlist';
 
   @override
-  String get smartlistsOnly => 'Solo Smartlist';
+  String get smartlistsOnly => 'Solo liste intelligenti';
 
   @override
-  String get displaySettings => 'Impostazioni Visualizzazione';
+  String get displaySettings => 'Impostazioni visualizzazione';
 
   @override
-  String get addSmartlist => 'Aggiungi Smartlist';
+  String get addSmartlist => 'Aggiungi una lista intelligente';
 
   @override
-  String get addPlaylist => 'Aggiungi Playlist';
+  String get addPlaylist => 'Aggiungi una playlist';
 
   @override
-  String get createPlaylist => 'Crea Playlist';
+  String get createPlaylist => 'Crea una playlist';
 
   @override
-  String get editPlaylist => 'Modifica Playlist';
+  String get editPlaylist => 'Modifica la playlist';
 
   @override
-  String get customizeCover => 'Personalizza Copertina';
+  String get customizeCover => 'Personalizza la copertina';
 
   @override
-  String get playbackMode => 'Modalità Riproduzione';
+  String get playbackMode => 'Modalità riproduzione';
 
   @override
   String get excludeAllSongs =>
@@ -252,10 +252,10 @@ class L10nIt extends L10n {
   String get maxPlayCount => 'Numero riproduzioni massimo';
 
   @override
-  String get minYear => 'Anno Minimo';
+  String get minYear => 'Anno minimo';
 
   @override
-  String get maxYear => 'Anno Massimo';
+  String get maxYear => 'Anno massimo';
 
   @override
   String selectArtistsExclude(int num) {
@@ -278,17 +278,17 @@ class L10nIt extends L10n {
   String get limitSongs => 'Limita numero di canzoni';
 
   @override
-  String get orderSettings => 'Impostazioni Ordinamento';
+  String get orderSettings => 'Impostazioni ordinamento';
 
   @override
   String get orderSettingsDescription =>
       'Riordina le opzioni per cambiare le priorità.';
 
   @override
-  String get createSmartlist => 'Crea Smartlist';
+  String get createSmartlist => 'Crea una lista intelligente';
 
   @override
-  String get editSmartlist => 'Modifica Smartlist';
+  String get editSmartlist => 'Modifica la lista intelligente';
 
   @override
   String get play => 'Riproduci';
@@ -328,7 +328,7 @@ class L10nIt extends L10n {
   String get shuffle => 'Casuale';
 
   @override
-  String get selectArtists => 'Seleziona Artisti';
+  String get selectArtists => 'Seleziona artisti';
 
   @override
   String get removeFromQueue => 'Rimuovi dalla coda';
@@ -583,11 +583,11 @@ class L10nIt extends L10n {
   String get errorReadData => 'Errore nella lettura del file di dati.';
 
   @override
-  String get createSmartlists => 'Crea Smartilist';
+  String get createSmartlists => 'Crea liste intelligenti';
 
   @override
   String get createSmartlistsDesc =>
-      'Crea smartlist consigliate per migliorare la tua esperienza di ascolto. Puoi personalizzare queste liste più tardi.';
+      'Crea liste intelligenti consigliate per migliorare la tua esperienza di ascolto. Puoi personalizzare queste liste più tardi.';
 
   @override
   String get create => 'Crea';

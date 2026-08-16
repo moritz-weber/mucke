@@ -5,17 +5,27 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
+import 'localizations_ar.dart';
 import 'localizations_ca.dart';
+import 'localizations_cs.dart';
 import 'localizations_de.dart';
 import 'localizations_en.dart';
+import 'localizations_eo.dart';
 import 'localizations_es.dart';
+import 'localizations_et.dart';
 import 'localizations_fi.dart';
 import 'localizations_fr.dart';
+import 'localizations_id.dart';
 import 'localizations_it.dart';
+import 'localizations_ko.dart';
 import 'localizations_ms.dart';
 import 'localizations_nb.dart';
+import 'localizations_nl.dart';
+import 'localizations_pl.dart';
 import 'localizations_pt.dart';
 import 'localizations_ru.dart';
+import 'localizations_ta.dart';
+import 'localizations_tr.dart';
 import 'localizations_uk.dart';
 import 'localizations_zh.dart';
 
@@ -105,17 +115,27 @@ abstract class L10n {
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
+    Locale('ar'),
     Locale('ca'),
+    Locale('cs'),
     Locale('de'),
+    Locale('eo'),
     Locale('es'),
+    Locale('et'),
     Locale('fi'),
     Locale('fr'),
+    Locale('id'),
     Locale('it'),
+    Locale('ko'),
     Locale('ms'),
     Locale('nb'),
+    Locale('nl'),
+    Locale('pl'),
     Locale('pt'),
     Locale('pt', 'BR'),
     Locale('ru'),
+    Locale('ta'),
+    Locale('tr'),
     Locale('uk'),
     Locale('zh')
   ];
@@ -1145,17 +1165,27 @@ class _L10nDelegate extends LocalizationsDelegate<L10n> {
 
   @override
   bool isSupported(Locale locale) => <String>[
+        'ar',
         'ca',
+        'cs',
         'de',
         'en',
+        'eo',
         'es',
+        'et',
         'fi',
         'fr',
+        'id',
         'it',
+        'ko',
         'ms',
         'nb',
+        'nl',
+        'pl',
         'pt',
         'ru',
+        'ta',
+        'tr',
         'uk',
         'zh'
       ].contains(locale.languageCode);
@@ -1179,28 +1209,48 @@ L10n lookupL10n(Locale locale) {
 
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
+    case 'ar':
+      return L10nAr();
     case 'ca':
       return L10nCa();
+    case 'cs':
+      return L10nCs();
     case 'de':
       return L10nDe();
     case 'en':
       return L10nEn();
+    case 'eo':
+      return L10nEo();
     case 'es':
       return L10nEs();
+    case 'et':
+      return L10nEt();
     case 'fi':
       return L10nFi();
     case 'fr':
       return L10nFr();
+    case 'id':
+      return L10nId();
     case 'it':
       return L10nIt();
+    case 'ko':
+      return L10nKo();
     case 'ms':
       return L10nMs();
     case 'nb':
       return L10nNb();
+    case 'nl':
+      return L10nNl();
+    case 'pl':
+      return L10nPl();
     case 'pt':
       return L10nPt();
     case 'ru':
       return L10nRu();
+    case 'ta':
+      return L10nTa();
+    case 'tr':
+      return L10nTr();
     case 'uk':
       return L10nUk();
     case 'zh':

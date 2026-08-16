@@ -9,17 +9,17 @@ class L10nEs extends L10n {
   L10nEs([String locale = 'es']) : super(locale);
 
   @override
-  String get home => 'Página de inicio';
+  String get home => 'Inicio';
 
   @override
-  String get customizeHomePage => 'Customizar la página de inicio';
+  String get customizeHomePage => 'Personalizar Página de Inicio';
 
   @override
   String get settings => 'Ajustes';
 
   @override
   String get noSongsYet =>
-      'Parece que no tienes canciones en tu biblioteca: ve a ajustes, añade carpetas de música y actualiza tu biblioteca.';
+      'Parece que no tienes canciones en tu biblioteca: Ve a ajustes, añade carpetas de música y actualiza tu biblioteca.';
 
   @override
   String get library => 'Biblioteca';
@@ -28,7 +28,7 @@ class L10nEs extends L10n {
   String get search => 'Buscar';
 
   @override
-  String get updateLibrary => 'Actualiza biblioteca';
+  String get updateLibrary => 'Actualizar biblioteca';
 
   @override
   String artistsAlbumsSongs(int artistCount, int albumCount, int songCount) {
@@ -43,7 +43,7 @@ class L10nEs extends L10n {
 
   @override
   String get allowedFileExtensionsDescription =>
-      'Lista separada por comas. Mayúsculas o minúsculas no importan.';
+      'Una lista separada por comas de extensiones de archivo permitidas. Mayúsculas o minúsculas no importan. Si no sabes qué poner, deja los valores por defecto.';
 
   @override
   String get manageBlockedFiles => 'Administrar archivos bloqueados';
@@ -69,28 +69,28 @@ class L10nEs extends L10n {
   }
 
   @override
-  String get libraryFolders => 'Biblioteca de carpetas';
+  String get libraryFolders => 'Carpetas de la Biblioteca';
 
   @override
-  String get blockedFiles => 'Archivos bloqueados';
+  String get blockedFiles => 'Archivos Bloqueados';
 
   @override
-  String get homeCustomization => 'Personalizar inicio';
+  String get homeCustomization => 'Personalización de Inicio';
 
   @override
-  String get albumOfTheDay => 'Álbum del día';
+  String get albumOfTheDay => 'Álbum del Día';
 
   @override
-  String get artistOfTheDay => 'Artista del día';
+  String get artistOfTheDay => 'Artista del Día';
 
   @override
-  String get shuffleAll => 'Todo en aleatorio';
+  String get shuffleAll => 'Todo Aleatorio';
 
   @override
   String get history => 'Historial';
 
   @override
-  String get addWidgetToHome => 'Añadir widget a la pantalla de inicio';
+  String get addWidgetToHome => 'Añadir Widget a la Pantalla de Inicio';
 
   @override
   String get noPlaylistsYet =>
@@ -103,7 +103,7 @@ class L10nEs extends L10n {
   String get noHistoryYet => 'Nada que ver aún. Reproduce algo.';
 
   @override
-  String get allSongs => 'Todas las canciones';
+  String get allSongs => 'Todas las Canciones';
 
   @override
   String get song => 'Canción';
@@ -116,9 +116,9 @@ class L10nEs extends L10n {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count songs',
-      one: 'one song',
-      zero: 'no songs',
+      other: '$count canciones',
+      one: 'una canción',
+      zero: 'sin canciones',
     );
     return '$_temp0';
   }
@@ -136,7 +136,7 @@ class L10nEs extends L10n {
   String get artists => 'Artistas';
 
   @override
-  String get playlist => 'LIsta de reproducción';
+  String get playlist => 'Lista de reproducción';
 
   @override
   String get playlists => 'Listas de reproducción';
@@ -151,13 +151,13 @@ class L10nEs extends L10n {
   String get noShuffle => 'Ninguno (mantener el modo aleatorio actual)';
 
   @override
-  String get normalMode => 'Modo normal';
+  String get normalMode => 'Modo Normal';
 
   @override
-  String get shuffleMode => 'Modo aleatorio';
+  String get shuffleMode => 'Modo Aleatorio';
 
   @override
-  String get favShuffleMode => 'Modo aleatorio favorito';
+  String get favShuffleMode => 'Modo Aleatorio de Favoritas';
 
   @override
   String get playlistNormalMode => 'Play from the top';
@@ -172,55 +172,55 @@ class L10nEs extends L10n {
   String get name => 'Nombre';
 
   @override
-  String get sortingFilterSettings => 'Ajustes de orden y filtro';
+  String get sortingFilterSettings => 'Ajustes de Orden y Filtro';
 
   @override
   String get maxNumberEntries => 'Número máximo de entradas';
 
   @override
-  String get creationDate => 'Fecha de creación';
+  String get creationDate => 'Fecha de Creación';
 
   @override
-  String get changeDate => 'Cambiar la fecha';
+  String get changeDate => 'Fecha de Modificación';
 
   @override
-  String get lastTimePlayed => 'Última vez reproducido';
+  String get lastTimePlayed => 'Última por Última Vez';
 
   @override
   String get ascending => 'Ascendente';
 
   @override
-  String get descending => 'Descendiendo';
+  String get descending => 'Descendiente';
 
   @override
   String get both => 'Ambos';
 
   @override
-  String get playlistsOnly => 'Sólo listas de reproducción';
+  String get playlistsOnly => 'Sólo Listas de Reproducción';
 
   @override
-  String get smartlistsOnly => 'Sólo listas de reproducción inteligentes';
+  String get smartlistsOnly => 'Sólo Listas de Reproducción Inteligentes';
 
   @override
-  String get displaySettings => 'Ajustes de visualización';
+  String get displaySettings => 'Ajustes de Visualización';
 
   @override
-  String get addSmartlist => 'Añadir lista inteligente';
+  String get addSmartlist => 'Añadir Lista Inteligente';
 
   @override
-  String get addPlaylist => 'Añadir lista de reproducción';
+  String get addPlaylist => 'Añadir Lista de Reproducción';
 
   @override
-  String get createPlaylist => 'Crear lista de reproducción';
+  String get createPlaylist => 'Crear Lista de Reproducción';
 
   @override
-  String get editPlaylist => 'Editar lista de reproducción';
+  String get editPlaylist => 'Editar Lista de Reproducción';
 
   @override
-  String get customizeCover => 'Personalizar portada';
+  String get customizeCover => 'Personalizar Portada';
 
   @override
-  String get playbackMode => 'Modo de reproducción';
+  String get playbackMode => 'Modo de Reproducción';
 
   @override
   String get excludeAllSongs =>
@@ -238,24 +238,24 @@ class L10nEs extends L10n {
   String get dontExclude => 'No excluir ninguna canción.';
 
   @override
-  String get filterSettings => 'Ajustes de filtro';
+  String get filterSettings => 'Ajustes de Filtro';
 
   @override
   String filterLikes(int min, int max) {
-    return 'Me gusta entre $min y $max';
+    return 'Favoritos entre $min y $max';
   }
 
   @override
-  String get minPlayCount => 'Conteo de reproducción mínimo';
+  String get minPlayCount => 'Número de reproducciones mínimas';
 
   @override
-  String get maxPlayCount => 'Conteo de reproducción máximo';
+  String get maxPlayCount => 'Número de reproducciones máximo';
 
   @override
-  String get minYear => 'Año mínimo';
+  String get minYear => 'Año Mínimo';
 
   @override
-  String get maxYear => 'Año máximo';
+  String get maxYear => 'Año Máximo';
 
   @override
   String selectArtistsExclude(int num) {
@@ -278,17 +278,17 @@ class L10nEs extends L10n {
   String get limitSongs => 'Limitar número de canciones';
 
   @override
-  String get orderSettings => 'Ajustes de orden';
+  String get orderSettings => 'Ajustes de Orden';
 
   @override
   String get orderSettingsDescription =>
       'Reordenar opciones para cambiar prioridades.';
 
   @override
-  String get createSmartlist => 'Crear lista inteligente';
+  String get createSmartlist => 'Crear Lista Inteligente';
 
   @override
-  String get editSmartlist => 'Editar lista inteligente';
+  String get editSmartlist => 'Editar Lista Inteligente';
 
   @override
   String get play => 'Reproducir';
@@ -298,9 +298,9 @@ class L10nEs extends L10n {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count songs selected',
-      one: 'one song selected',
-      zero: 'no songs selected',
+      other: '$count canciones seleccionadas',
+      one: 'una canción seleccionada',
+      zero: 'ninguna canción seleccionada',
     );
     return '$_temp0';
   }
@@ -310,16 +310,16 @@ class L10nEs extends L10n {
 
   @override
   String get appendToQueued =>
-      'Añadir al final las canciones puestas en fila manualmente';
+      'Añadir al final de las canciones manualmente encoladas';
 
   @override
-  String get addToQueue => 'Añadir a la fila';
+  String get addToQueue => 'Añadir a la cola';
 
   @override
   String get disc => 'Disco';
 
   @override
-  String get blockFromLibrary => 'Remover y bloquear de la biblioteca';
+  String get blockFromLibrary => 'Eliminar y bloquear de la biblioteca';
 
   @override
   String get highlights => 'Destacados';
@@ -328,10 +328,10 @@ class L10nEs extends L10n {
   String get shuffle => 'Aleatorio';
 
   @override
-  String get selectArtists => 'Seleccione artistas';
+  String get selectArtists => 'Seleccionar Artistas';
 
   @override
-  String get removeFromQueue => 'Remover de la fila';
+  String get removeFromQueue => 'Eliminar de la cola';
 
   @override
   String get currentlyPlaying => 'Reproduciendo actualmente';
@@ -341,11 +341,11 @@ class L10nEs extends L10n {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count songs',
-      one: 'one song',
-      zero: 'no songs',
+      other: '$count canciones',
+      one: 'una canción',
+      zero: 'ninguna canción',
     );
-    return '$_temp0 in queue';
+    return '$_temp0 en cola';
   }
 
   @override
@@ -360,10 +360,10 @@ class L10nEs extends L10n {
   String get artistName => 'Nombre del artista';
 
   @override
-  String get likeCount => 'Conteo de me gusta';
+  String get likeCount => 'Número de favoritos';
 
   @override
-  String get playCount => 'Conteo de reproducción';
+  String get playCount => 'Número de reproducciones';
 
   @override
   String get songTitle => 'Título de canción';
@@ -372,13 +372,13 @@ class L10nEs extends L10n {
   String get year => 'Año';
 
   @override
-  String get timeAdded => 'Tiempo añadido';
+  String get timeAdded => 'Fecha añadida';
 
   @override
   String get addToPlaylist => 'Añadir a la lista de reproducción';
 
   @override
-  String get removeFromPlaylist => 'Remover de la lista de reproducción';
+  String get removeFromPlaylist => 'Eliminar de la lista de reproducción';
 
   @override
   String get cancel => 'Cancelar';
@@ -387,27 +387,27 @@ class L10nEs extends L10n {
   String get nextUp => 'A continuación';
 
   @override
-  String get previousSong => 'Anterior';
+  String get previousSong => 'anterior';
 
   @override
   String playedNTimes(num count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'played $count times',
-      one: 'played one time',
-      zero: 'not played yet',
+      other: 'reproducida $count veces',
+      one: 'reproducida una vez',
+      zero: 'ninguna reproducción',
     );
     return '$_temp0';
   }
 
   @override
   String get alwaysPlayPrevious =>
-      'Siempre reproducir la canción anterior antes';
+      'Siempre reproducir previamente la canción anterior';
 
   @override
   String get alwaysPlayNext =>
-      'Siempre reproducir la siguiente canción después';
+      'Siempre reproducir a continuación la siguiente canción';
 
   @override
   String get dontExcludeSong => 'No excluir esta canción.';
@@ -426,33 +426,33 @@ class L10nEs extends L10n {
   String get welcomeToMucke => '¡Bienvenido a Mucke!';
 
   @override
-  String get setupLibrary => 'Organizar tu Colección';
+  String get setupLibrary => 'Configurar Biblioteca';
 
   @override
   String get setupLibraryDescription =>
-      'Select folders, included file extensions, etc.';
+      'Seleccionar carpetas, extensiones de archivos incluidas, etc.';
 
   @override
-  String get importData => 'Importar tu datos';
+  String get importData => 'Importar datos';
 
   @override
   String get importDataDescription =>
-      'Import your data from a previous mucke installation.';
+      'Importar datos de una instalación previa de mucke.';
 
   @override
-  String get yourLibrary => 'Tu Colección:';
+  String get yourLibrary => 'Tu Biblioteca:';
 
   @override
   String get scan => 'Escanear';
 
   @override
-  String get noFoldersSelected => 'No folders selected so far.';
+  String get noFoldersSelected => 'Ninguna carpeta seleccionada.';
 
   @override
   String get addFolder => 'Añadir una carpeta';
 
   @override
-  String get availableFromImport => 'Available from imported data:';
+  String get availableFromImport => 'Disponible de los datos importados:';
 
   @override
   String get use => 'Usar';
@@ -462,33 +462,33 @@ class L10nEs extends L10n {
 
   @override
   String get blockedFilesDescription =>
-      'Blocked files from the imported data. Only exact matches will be excluded from the library scan. Additional files can be blocked later in the app.';
+      'Archivos bloqueados de los datos importados. Sólo las coincidencias exactas serán excluidas del escaneo de la biblioteca. Se pueden bloquear archivos adicionales más adelante en la aplicación.';
 
   @override
-  String get importLibData => 'Import Library Data';
+  String get importLibData => 'Importar Datos de la Biblioteca';
 
   @override
-  String get songMetaData => 'Song Metadata';
+  String get songMetaData => 'Metadatos de Canciones';
 
   @override
   String metaDataAvailable(int num) {
-    return 'Metadata for $num songs available';
+    return 'Hay metadatos disponibles para $num canciones';
   }
 
   @override
-  String get metaDataDescription => 'Import likes, blocks etc.';
+  String get metaDataDescription => 'Importar favoritos, bloqueos, etc.';
 
   @override
-  String get imported => 'Imported';
+  String get imported => 'Importado';
 
   @override
-  String get importVerb => 'Import';
+  String get importVerb => 'Importar';
 
   @override
-  String get miscellaneous => 'Miscellaneous';
+  String get miscellaneous => 'Misceláneo';
 
   @override
-  String get exportData => 'Export data';
+  String get exportData => 'Exportar datos';
 
   @override
   String get saveLogFiles => 'Save log files';
@@ -507,90 +507,94 @@ class L10nEs extends L10n {
 
   @override
   String get exportDescription =>
-      'Select the data you want to export. By default, everything is exported. When exporting, you can select a folder for the file to be stored.';
+      'Selecciona los datos que deseas exportar. Por defecto, todo se exporta. Al exportar, puedes seleccionar una carpeta para almacenar el archivo.';
 
   @override
-  String get songsAlbumsArtists => 'Songs, Albums, and Artists';
+  String get songsAlbumsArtists => 'Canciones, Álbumes, y Artistas';
 
   @override
-  String get librarySettings => 'Library Settings';
+  String get librarySettings => 'Ajustes de la Biblioteca';
 
   @override
   String dataExportedTo(String path) {
-    return 'Data exported to:\n$path';
+    return 'Datos exportados a:\n$path';
   }
 
   @override
-  String get dataExportFailed => 'Data export failed!';
+  String get dataExportFailed => '¡Exportación de datos fallida!';
 
   @override
-  String get yourPlaylists => 'Your Playlists';
+  String get yourPlaylists => 'Tus Listas de Reproducción';
 
   @override
-  String get systemSettings => 'System Settings';
+  String get systemSettings => 'Ajustes del Sistema';
 
   @override
   String get batteryExplanation =>
-      'Starting with Android 12, the battery optimization causes an error with the notification after losing the audio focus, for example when receiving a call. Disabling the optimization for mucke solves this issue.';
+      'A partir de Android 12, la optimización de la batería provoca un error en la notificación tras perder el foco del audio, por ejemplo al recibir una llamada. Deshabilitar la optimización para mucke resuelve este problema.';
 
   @override
-  String get openBattery => 'Open battery settings';
+  String get openBattery => 'Abrir ajustes de batería';
 
   @override
-  String get disableBattery => 'Disable battery optimization for mucke.';
+  String get disableBattery =>
+      'Desactiva la optimización de batería para mucke.';
 
   @override
   String get disableBatteryDescription =>
-      'Disabling battery optimization can solve potential notification issues.';
+      'La optimización de la batería puede resolver posibles incidencias de notificación.';
 
   @override
-  String get disabledBattery => 'Battery optimization is disabled.';
+  String get disabledBattery =>
+      'La optimización de la batería está deshabilitada.';
 
   @override
   String get manageExternalExplanation =>
-      'Granting this permission can improve the speed of library scans significantly. It does not change the behavior of the app otherwise.';
+      'Conceder este permiso puede mejorar significativamente la velocidad de los análisis de la biblioteca. Más alla de eso, no cambia el comportamiento de la aplicación.';
 
   @override
-  String get grantManagePermission => 'Grant permission to manage all files.';
+  String get grantManagePermission =>
+      'Conceder permiso para gestionar todos los archivos.';
 
   @override
   String get managePermissionSubtitle =>
-      'Revoking the permission will result in a restart of the app.';
+      'Revocar el permiso resultará en un reinicio de la aplicación.';
 
   @override
-  String get favorites => 'Favorites';
+  String get favorites => 'Favoritas';
 
   @override
-  String get favoritesDesc => 'Contains all the songs that you like.';
+  String get favoritesDesc =>
+      'Contiene todas las canciones que te han gustado.';
 
   @override
-  String get newlyAdded => 'Newly added';
+  String get newlyAdded => 'Añadidas recientemente';
 
   @override
-  String get newlyAddedDesc => 'Contains the 100 songs that were added last.';
+  String get newlyAddedDesc => 'Contiene las última 100 canciones añadidas.';
 
   @override
-  String get back => 'Back';
+  String get back => 'Anterior';
 
   @override
-  String get next => 'Next';
+  String get next => 'Siguiente';
 
   @override
-  String get finish => 'Finish';
+  String get finish => 'Finalizar';
 
   @override
-  String get errorReadData => 'Error reading data file.';
+  String get errorReadData => 'Error al leer datos del fichero.';
 
   @override
-  String get createSmartlists => 'Create Smartlists';
+  String get createSmartlists => 'Crear Listas Inteligentes';
 
   @override
   String get createSmartlistsDesc =>
-      'Create suggested smartlists to enhance your listening experience. You can customize these lists later.';
+      'Crea listas inteligentes sugeridas para mejorar tu experiencia de reproducción. Puedes personalizar estas listas más adelante.';
 
   @override
-  String get create => 'Create';
+  String get create => 'Crear';
 
   @override
-  String get created => 'Created';
+  String get created => 'Creada';
 }

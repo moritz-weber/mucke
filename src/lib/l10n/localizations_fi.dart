@@ -61,7 +61,7 @@ class L10nFi extends L10n {
 
   @override
   String get playAlbumsInOrderDescription =>
-      'When you click a song in an album the songs will be played in order instead of keeping the previous play mode.';
+      'Kun napsautat albumissa olevaa kappaletta, kappaleet toistetaan järjestyksessä edellisen toistotilan sijaan.';
 
   @override
   String countSongsPlayed(int percentage) {
@@ -148,7 +148,7 @@ class L10nFi extends L10n {
   String get smartlists => 'Älylistat';
 
   @override
-  String get noShuffle => 'None (keep the current shuffle mode)';
+  String get noShuffle => 'Ei mitään (säilytä nykyinen sekoitustila)';
 
   @override
   String get normalMode => 'Normaali tila';
@@ -157,7 +157,7 @@ class L10nFi extends L10n {
   String get shuffleMode => 'Sekoitustila';
 
   @override
-  String get favShuffleMode => 'Favorite Shuffle Mode';
+  String get favShuffleMode => 'Suosikki sekoitustila';
 
   @override
   String get playlistNormalMode => 'Play from the top';
@@ -181,10 +181,10 @@ class L10nFi extends L10n {
   String get creationDate => 'Luontipäivä';
 
   @override
-  String get changeDate => 'Change Date';
+  String get changeDate => 'Muuta päivämäärää';
 
   @override
-  String get lastTimePlayed => 'Last Time Played';
+  String get lastTimePlayed => 'Viimeksi toistettu';
 
   @override
   String get ascending => 'Nouseva';
@@ -223,17 +223,19 @@ class L10nFi extends L10n {
   String get playbackMode => 'Toistotila';
 
   @override
-  String get excludeAllSongs => 'Exclude all songs marked for exclusion.';
+  String get excludeAllSongs =>
+      'Sulje pois kaikki poissuljettavaksi merkityt kappaleet.';
 
   @override
   String get excludeInShuffle =>
-      'Exclude songs marked for exclusion in shuffle mode.';
+      'Sulje pois poissuljettavaksi merkityt kappaleet sekoitustilassa.';
 
   @override
-  String get excludeAlways => 'Exclude only songs marked as always exclude.';
+  String get excludeAlways =>
+      'Sulje pois vain kappaleet, jotka on merkitty aina poissulkeviksi.';
 
   @override
-  String get dontExclude => 'Don\'t exclude any songs.';
+  String get dontExclude => 'Älä sulje pois mitään kappaleita.';
 
   @override
   String get filterSettings => 'Suodatusasetukset';
@@ -257,29 +259,30 @@ class L10nFi extends L10n {
 
   @override
   String selectArtistsExclude(int num) {
-    return 'Select artists to exclude: $num selected.';
+    return 'Valitse poissuljettavat artistit: $num valittu.';
   }
 
   @override
   String selectArtistsInclude(int num) {
-    return 'Select artists to include: $num selected.';
+    return 'Valitse sisällytettävät artistit: $num valittu.';
   }
 
   @override
-  String get includeAllArtists => 'Include all artists if none are selected.';
+  String get includeAllArtists =>
+      'Sisällytä kaikki artistit, jos ketään ei ole valittu.';
 
   @override
-  String get excludeArtists => 'Exclude selected artists';
+  String get excludeArtists => 'Sulje pois valitut artistit';
 
   @override
-  String get limitSongs => 'Limit number of songs';
+  String get limitSongs => 'Rajoita kappaleiden määrää';
 
   @override
   String get orderSettings => 'Järjestyksen asetukset';
 
   @override
   String get orderSettingsDescription =>
-      'Reorder options to change priorities.';
+      'Järjestä vaihtoehdot uudelleen prioriteettien muuttaamiseksi.';
 
   @override
   String get createSmartlist => 'Luo älylista';
@@ -306,7 +309,8 @@ class L10nFi extends L10n {
   String get playNext => 'Toista seuraava';
 
   @override
-  String get appendToQueued => 'Append to manually queued songs';
+  String get appendToQueued =>
+      'Liitä manuaalisesti jonoon asetettuihin kappaleisiin';
 
   @override
   String get addToQueue => 'Lisää jonoon';
@@ -341,7 +345,7 @@ class L10nFi extends L10n {
       one: 'one song',
       zero: 'no songs',
     );
-    return '$_temp0 in queue';
+    return '$_temp0 jonossa';
   }
 
   @override
@@ -356,10 +360,10 @@ class L10nFi extends L10n {
   String get artistName => 'Esittäjän nimi';
 
   @override
-  String get likeCount => 'Like count';
+  String get likeCount => 'Tykkäysmäärä';
 
   @override
-  String get playCount => 'Play count';
+  String get playCount => 'Toistomäärä';
 
   @override
   String get songTitle => 'Kappaleen nimi';
@@ -368,7 +372,7 @@ class L10nFi extends L10n {
   String get year => 'Vuosi';
 
   @override
-  String get timeAdded => 'Time added';
+  String get timeAdded => 'Lisäysaika';
 
   @override
   String get addToPlaylist => 'Lisää soittolistaan';
@@ -380,7 +384,7 @@ class L10nFi extends L10n {
   String get cancel => 'Peruuta';
 
   @override
-  String get nextUp => 'Next up';
+  String get nextUp => 'Seuraavaksi';
 
   @override
   String get previousSong => 'edellinen';
@@ -398,22 +402,23 @@ class L10nFi extends L10n {
   }
 
   @override
-  String get alwaysPlayPrevious => 'Always play previous song before';
+  String get alwaysPlayPrevious => 'Soita aina edellinen kappale ennen';
 
   @override
-  String get alwaysPlayNext => 'Always play next song after';
+  String get alwaysPlayNext => 'Soita aina seuraava kappale sen jälkeen';
 
   @override
-  String get dontExcludeSong => 'Don\'t exclude this song.';
+  String get dontExcludeSong => 'Älä sulje pois tätä kappaletta.';
 
   @override
-  String get excludeShuffleAllSong => 'Exclude when shuffling all songs.';
+  String get excludeShuffleAllSong =>
+      'Sulje pois, kun kaikki kappaleet sekoitetaan.';
 
   @override
-  String get excludeShuffleSong => 'Exclude when shuffling.';
+  String get excludeShuffleSong => 'Sulje pois, kun sekoitetaan.';
 
   @override
-  String get alwaysExcludeSong => 'Always exclude this song.';
+  String get alwaysExcludeSong => 'Jätä tämä kappale aina pois.';
 
   @override
   String get welcomeToMucke => 'Tervetuloa käyttämään muckea!';
@@ -455,7 +460,7 @@ class L10nFi extends L10n {
 
   @override
   String get blockedFilesDescription =>
-      'Blocked files from the imported data. Only exact matches will be excluded from the library scan. Additional files can be blocked later in the app.';
+      'Estetyt tiedostot tuoduista tiedoista. Vain tarkat vastaavuudet jätetään pois kirjaston skannauksesta. Lisää tiedostoja voidaan estää myöhemmin sovelluksessa.';
 
   @override
   String get importLibData => 'Tuo kirjastotiedot';
@@ -465,7 +470,7 @@ class L10nFi extends L10n {
 
   @override
   String metaDataAvailable(int num) {
-    return 'Metadata for $num songs available';
+    return '$num:n kappaleen metatiedot saatavilla';
   }
 
   @override
@@ -500,7 +505,7 @@ class L10nFi extends L10n {
 
   @override
   String get exportDescription =>
-      'Select the data you want to export. By default, everything is exported. When exporting, you can select a folder for the file to be stored.';
+      'Valitse tiedot, jotka haluat vietäviksi. Oletuksena kaikki viedään. Viedessäsi voit valita kansion tallennettavalle tiedostolle.';
 
   @override
   String get songsAlbumsArtists => 'Kappaleet, albumit ja esittäjät';
@@ -520,47 +525,48 @@ class L10nFi extends L10n {
   String get yourPlaylists => 'Soittolistasi';
 
   @override
-  String get systemSettings => 'System Settings';
+  String get systemSettings => 'Järjestelmän asetukset';
 
   @override
   String get batteryExplanation =>
-      'Starting with Android 12, the battery optimization causes an error with the notification after losing the audio focus, for example when receiving a call. Disabling the optimization for mucke solves this issue.';
+      'Android v. 12:sta alkaen akun optimointi aiheuttaa ilmoituksen virheen äänen tarkennuksen menettämisen jälkeen, esimerkiksi puhelun saapuessa. Mucken optimoinnin poistaminen käytöstä ratkaisee tämän ongelman.';
 
   @override
   String get openBattery => 'Avaa akkuasetukset';
 
   @override
-  String get disableBattery => 'Disable battery optimization for mucke.';
+  String get disableBattery =>
+      'Poista muckin optimointi käytöstä ilmoitusongelmien ratkaisemiseksi.';
 
   @override
   String get disableBatteryDescription =>
       'Disabling battery optimization can solve potential notification issues.';
 
   @override
-  String get disabledBattery => 'Battery optimization is disabled.';
+  String get disabledBattery => 'Akun optimointi on poistettu käytöstä.';
 
   @override
   String get manageExternalExplanation =>
-      'Granting this permission can improve the speed of library scans significantly. It does not change the behavior of the app otherwise.';
+      'Tämän luvan myöntäminen voi parantaa kirjaston tarkistuksia merkittävästi. Se ei muuta sovelluksen toimintaa muuten.';
 
   @override
-  String get grantManagePermission => 'Grant permission to manage all files.';
+  String get grantManagePermission => 'Myönnä lupa hallita kaikkia tiedostoja.';
 
   @override
   String get managePermissionSubtitle =>
-      'Revoking the permission will result in a restart of the app.';
+      'Luvan peruuttaminen johtaa sovelluksen uudelleenkäynnistykseen.';
 
   @override
   String get favorites => 'Suosikit';
 
   @override
-  String get favoritesDesc => 'Contains all the songs that you like.';
+  String get favoritesDesc => 'Sisältää kaikki kappaleet, joista pidät.';
 
   @override
   String get newlyAdded => 'Äskettäin lisätty';
 
   @override
-  String get newlyAddedDesc => 'Contains the 100 songs that were added last.';
+  String get newlyAddedDesc => 'Sisältää 100 viimeksi lisättyä kappaletta.';
 
   @override
   String get back => 'Takaisin';
@@ -572,18 +578,18 @@ class L10nFi extends L10n {
   String get finish => 'Valmis';
 
   @override
-  String get errorReadData => 'Error reading data file.';
+  String get errorReadData => 'Virhe tiedostojen lukemisessa.';
 
   @override
-  String get createSmartlists => 'Create Smartlists';
+  String get createSmartlists => 'Luo älykkäitä listoja';
 
   @override
   String get createSmartlistsDesc =>
-      'Create suggested smartlists to enhance your listening experience. You can customize these lists later.';
+      'Luo ehdotettuja älykkäitä listoja, jotka parantavat kuuntelukokemusta. Voit muokata näitä luetteloita myöhemmin.';
 
   @override
-  String get create => 'Create';
+  String get create => 'Luo';
 
   @override
-  String get created => 'Created';
+  String get created => 'Luotu';
 }

@@ -395,7 +395,7 @@ class L10nRu extends L10n {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'играло $count раз',
+      other: 'сыграно $count раз',
       one: 'играло один раз',
       zero: 'еще не играло',
     );
@@ -470,23 +470,23 @@ class L10nRu extends L10n {
 
   @override
   String metaDataAvailable(int num) {
-    return 'Metadata for $num songs available';
+    return 'Метаданные доступны для $num песен';
   }
 
   @override
   String get metaDataDescription => 'Импорт лайков, блоков и т.д.';
 
   @override
-  String get imported => 'Imported';
+  String get imported => 'Импортировано';
 
   @override
-  String get importVerb => 'Import';
+  String get importVerb => 'Импорт';
 
   @override
-  String get miscellaneous => 'Miscellaneous';
+  String get miscellaneous => 'Разное';
 
   @override
-  String get exportData => 'Export data';
+  String get exportData => 'Экспорт данных';
 
   @override
   String get saveLogFiles => 'Save log files';
@@ -505,13 +505,13 @@ class L10nRu extends L10n {
 
   @override
   String get exportDescription =>
-      'Select the data you want to export. By default, everything is exported. When exporting, you can select a folder for the file to be stored.';
+      'Выберите данные, которые вы хотите экспортировать. По умолчанию экспортируется всё. При экспорте вы можете выбрать папку в которой будут храниться файлы.';
 
   @override
   String get songsAlbumsArtists => 'Песни, альбомы и исполнители';
 
   @override
-  String get librarySettings => 'Library Settings';
+  String get librarySettings => 'Настройки Библиотеки';
 
   @override
   String dataExportedTo(String path) {
@@ -558,13 +558,13 @@ class L10nRu extends L10n {
       'Отзыв разрешения вызовет перезапуск приложения.';
 
   @override
-  String get favorites => 'Favorites';
+  String get favorites => 'Любимое';
 
   @override
-  String get favoritesDesc => 'Contains all the songs that you like.';
+  String get favoritesDesc => 'Содержит все песни, которые вам нравятся.';
 
   @override
-  String get newlyAdded => 'Newly added';
+  String get newlyAdded => 'Недавно добавлено';
 
   @override
   String get newlyAddedDesc => 'Содержит последние 100 добавленных композиций.';
@@ -576,7 +576,7 @@ class L10nRu extends L10n {
   String get next => 'Далее';
 
   @override
-  String get finish => 'Finish';
+  String get finish => 'Финиш';
 
   @override
   String get errorReadData => 'Ошибка чтения файла данных.';
@@ -586,11 +586,11 @@ class L10nRu extends L10n {
 
   @override
   String get createSmartlistsDesc =>
-      'Create suggested smartlists to enhance your listening experience. You can customize these lists later.';
+      'Создайте предлагаемые смарт-листы, чтобы улучшить ваш опыт прослушивания. Вы можете настроить эти списки позже.';
 
   @override
-  String get create => 'Create';
+  String get create => 'Создать';
 
   @override
-  String get created => 'Created';
+  String get created => 'Создано';
 }

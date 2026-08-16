@@ -19,7 +19,7 @@ class L10nNb extends L10n {
 
   @override
   String get noSongsYet =>
-      'Gå til innsitllingene, legg til musikkmapper for å opprette et musikkbibliotek,';
+      'Det ser ikke ut til at du har noen sanger i biblioteket ditt: Gå til innstillinger, legg til musikkmapper og oppdater biblioteket.';
 
   @override
   String get library => 'Bibliotek';
@@ -43,7 +43,7 @@ class L10nNb extends L10n {
 
   @override
   String get allowedFileExtensionsDescription =>
-      'Kommainndelt liste. Små eller store bokstaver er det samme.';
+      'En kommadelt liste over tillatte filtyper. Det har ingen betydning om du bruker små eller store bokstaver. Hvis du er usikker, bør du beholde standardinnstillingen.';
 
   @override
   String get manageBlockedFiles => 'Håndter blokkerte filer';
@@ -75,7 +75,7 @@ class L10nNb extends L10n {
   String get blockedFiles => 'Blokkerte filer';
 
   @override
-  String get homeCustomization => 'Hjemmetilpasning';
+  String get homeCustomization => 'Tilpassing av startskjermen';
 
   @override
   String get albumOfTheDay => 'Dagens album';
@@ -106,10 +106,10 @@ class L10nNb extends L10n {
   String get allSongs => 'Alle spor';
 
   @override
-  String get song => 'Spor';
+  String get song => 'Sang';
 
   @override
-  String get songs => 'Spor';
+  String get songs => 'Sanger';
 
   @override
   String nSongs(num count) {
@@ -148,7 +148,7 @@ class L10nNb extends L10n {
   String get smartlists => 'Smartlister';
 
   @override
-  String get noShuffle => 'Ingen (behold aktivt omstokkingsmodus)';
+  String get noShuffle => 'Ingen (behold gjeldende tilfeldig rekkefølge)';
 
   @override
   String get normalMode => 'Normal modus';
@@ -172,7 +172,7 @@ class L10nNb extends L10n {
   String get name => 'Navn';
 
   @override
-  String get sortingFilterSettings => 'Sortering- og filtreringsinnstillinger';
+  String get sortingFilterSettings => 'Sorterings- og filtreringsinnstillinger';
 
   @override
   String get maxNumberEntries => 'Maks. antall oppføringer';
@@ -227,7 +227,7 @@ class L10nNb extends L10n {
 
   @override
   String get excludeInShuffle =>
-      'Utelat spor markert for utelatelse i omstokkingsmodus.';
+      'Ikke spill av sanger som er markert for ekskludering i tilfeldig rekkefølge.';
 
   @override
   String get excludeAlways => 'Utelat kun spor markert som «Alltid utelat».';
@@ -353,7 +353,7 @@ class L10nNb extends L10n {
   String get nameMustNotBeEmpty => 'Navn må angis.';
 
   @override
-  String get artistName => 'Artistnavn.';
+  String get artistName => 'Artistnavn';
 
   @override
   String get likeCount => 'Antall ganger likt';
@@ -416,7 +416,7 @@ class L10nNb extends L10n {
   String get alwaysExcludeSong => 'Alltid utelat dette sporet.';
 
   @override
-  String get welcomeToMucke => 'Velkommen til mucke.';
+  String get welcomeToMucke => 'Velkommen til mucke!';
 
   @override
   String get setupLibrary => 'Sett opp bibliotek';
@@ -514,13 +514,13 @@ class L10nNb extends L10n {
   }
 
   @override
-  String get dataExportFailed => 'Kunne ikke eksportere data.';
+  String get dataExportFailed => 'Eksportering av data mislyktes!';
 
   @override
   String get yourPlaylists => 'Dine spillelister';
 
   @override
-  String get systemSettings => 'System Settings';
+  String get systemSettings => 'Systeminnstillinger';
 
   @override
   String get batteryExplanation =>
@@ -531,7 +531,7 @@ class L10nNb extends L10n {
 
   @override
   String get disableBattery =>
-      'sKRU AV Batterioptimalisering for mucke for å løse merknadsproblemer.';
+      'Deaktiver optimalisering for Mucke for å løse problemer med varslinger.';
 
   @override
   String get disableBatteryDescription =>
@@ -542,26 +542,27 @@ class L10nNb extends L10n {
 
   @override
   String get manageExternalExplanation =>
-      'Granting this permission can improve the speed of library scans significantly. It does not change the behavior of the app otherwise.';
+      'Å gi denne tilgangen kan øke hastigheten på bibliotekskanningen betraktelig. Det vil ikke endre hvordan appen fungerer ellers.';
 
   @override
-  String get grantManagePermission => 'Grant permission to manage all files.';
+  String get grantManagePermission =>
+      'Innvilg tilgang til håndtering av alle filer.';
 
   @override
   String get managePermissionSubtitle =>
-      'Revoking the permission will result in a restart of the app.';
+      'Hvis du trekker tilbake tilgangen, må appen starte på nytt.';
 
   @override
   String get favorites => 'Favoritter';
 
   @override
-  String get favoritesDesc => 'Contains all the songs that you like.';
+  String get favoritesDesc => 'Inneholder alle sporene du liker.';
 
   @override
   String get newlyAdded => 'Nylig tillagt';
 
   @override
-  String get newlyAddedDesc => 'Contains the 100 songs that were added last.';
+  String get newlyAddedDesc => 'Inneholder de 100 sist tillagte sporene.';
 
   @override
   String get back => 'Tilbake';
@@ -573,18 +574,18 @@ class L10nNb extends L10n {
   String get finish => 'Fullfør';
 
   @override
-  String get errorReadData => 'Error reading data file.';
+  String get errorReadData => 'Kunne ikke lese datafil.';
 
   @override
-  String get createSmartlists => 'Create Smartlists';
+  String get createSmartlists => 'Opprett smartlister';
 
   @override
   String get createSmartlistsDesc =>
-      'Create suggested smartlists to enhance your listening experience. You can customize these lists later.';
+      'Opprett foreslåtte smartlister for å forbedre lytteopplevelsen. Du kan tilpasse disse listene senere.';
 
   @override
-  String get create => 'Create';
+  String get create => 'Opprett';
 
   @override
-  String get created => 'Created';
+  String get created => 'Opprettet';
 }

@@ -161,13 +161,13 @@ class L10nUk extends L10n {
   String get favShuffleMode => 'Улюблений режим перемішування';
 
   @override
-  String get playlistNormalMode => 'Play from the top';
+  String get playlistNormalMode => 'Грати спочатку';
 
   @override
-  String get playlistShuffleMode => 'Start shuffle playback';
+  String get playlistShuffleMode => 'Увімкнути перемішування';
 
   @override
-  String get playlistFavShuffleMode => 'Start favorite shuffle playback';
+  String get playlistFavShuffleMode => 'Увімкнути перемішування улюбленого';
 
   @override
   String get name => 'Ім\'я';
@@ -394,9 +394,9 @@ class L10nUk extends L10n {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'грали $count разів',
-      one: 'грали один раз',
-      zero: 'ще не грали',
+      other: 'відтворено $count разів',
+      one: 'відтворено один раз',
+      zero: 'ще не відтворено',
     );
     return '$_temp0';
   }
@@ -489,19 +489,19 @@ class L10nUk extends L10n {
   String get exportData => 'Експорт даних';
 
   @override
-  String get saveLogFiles => 'Save log files';
+  String get saveLogFiles => 'Зберегти файли журналів';
 
   @override
   String get saveLogFilesDescription =>
-      'This creates a subfolder with the log files in it.';
+      'Це створює підтеку з файлами журналів у ній.';
 
   @override
   String logFilesSavedTo(String path) {
-    return 'Log files saved to:\n$path';
+    return 'Файли журналів збережено в:\n$path';
   }
 
   @override
-  String get logFilesSaveFailed => 'Saving log files failed!';
+  String get logFilesSaveFailed => 'Помилка збереження файлів журналу!';
 
   @override
   String get exportDescription =>
@@ -535,12 +535,11 @@ class L10nUk extends L10n {
   String get openBattery => 'Відкрити налаштування батареї';
 
   @override
-  String get disableBattery =>
-      'Вимкніть оптимізацію для mucke, щоб вирішити проблеми зі сповіщеннями.';
+  String get disableBattery => 'Вимкнути оптимізацію акумулятора для mucke.';
 
   @override
   String get disableBatteryDescription =>
-      'Disabling battery optimization can solve potential notification issues.';
+      'Вимкнення оптимізації акумулятора може вирішити потенційні проблеми зі сповіщеннями.';
 
   @override
   String get disabledBattery => 'Оптимізацію батареї вимкнено.';

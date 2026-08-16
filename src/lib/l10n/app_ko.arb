@@ -7,7 +7,7 @@
     "noSongsYet": "Lightryy에 당신의 Syngs를 찾고 있습니다. 설정으로 이동하여 음악 폴더를 추가하고 라이브러리를 업데이트하십시오.",
     "manageExternalExplanation": "이 권한을 부여하면 라이브러리 스캔 속도를 크게 향상시킬 수 있습니다. 그렇지 않으면 앱의 동작을 변경하지 않습니다.",
     "createSmartlistsDesc": "청취 경험을 향상시키기 위해 제안 된 스마트리스트를 만듭니다. 이 목록을 나중에 사용자 정의 할 수 있습니다.",
-    "nSongsSelected": "{count, 복수, =0{no songs selected} =1{one song selected} 기타{{count} 곡 선택}}",
+    "nSongsSelected": "{count, plural, =0{no songs selected} =1{one song selected} other{{count} 곡 선택}}",
     "@nSongsSelected": {
         "placeholders": {
             "count": {
@@ -17,7 +17,7 @@
     },
     "managePermissionSubtitle": "권한을 취소하면 앱을 다시 시작할 수 있습니다.",
     "noPlaylistsYet": "아직 재생 목록이 없습니다. 도서관에 추가할 수 있습니다.",
-    "nSongsInQueue": "{count, 복수, =0{no songs} =1{one song} 기타{{count} song}}",
+    "nSongsInQueue": "{count, plural, =0{no songs} =1{one song} other{{count} song}}",
     "@nSongsInQueue": {
         "placeholders": {
             "count": {
@@ -25,7 +25,7 @@
             }
         }
     },
-    "playedNTimes": "{count, 복수, =0{not plays yet} =1{played once} other{played {count} times}}",
+    "playedNTimes": "{count, plural, =0{not plays yet} =1{played once} other{played {count} times}}",
     "@playedNTimes": {
         "placeholders": {
             "count": {
@@ -33,7 +33,7 @@
             }
         }
     },
-    "nSongs": "{count, 복수, =0{no songs} =1{one song} 다른 {{count} 노래",
+    "nSongs": "{count, plural, =0{no songs} =1{one song} other{{count} 노래}}",
     "@nSongs": {
         "placeholders": {
             "count": {
