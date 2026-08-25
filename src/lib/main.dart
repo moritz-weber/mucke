@@ -97,6 +97,7 @@ class MyApp extends StatelessWidget {
         Locale('pt'),
         Locale('pt_BR'),
         Locale('ta'),
+        Locale('et'),
       ],
       builder: (context, child) {
         localizationRepository.locale = Localizations.localeOf(context);

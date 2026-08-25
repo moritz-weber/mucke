@@ -1,3 +1,7 @@
+## Unreleased
+
+- Added Estonian translation.
+
 ## 1.6.0
 
 - Added basic Android Auto support: play smartlists, playlists, and all songs.
