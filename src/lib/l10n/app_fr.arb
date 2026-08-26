@@ -253,7 +253,7 @@
     "noFoldersSelected": "Aucun dossier sélectionné pour le moment.",
     "metaDataDescription": "Importer les \"J'aime\", les blocages, etc.",
     "yourPlaylists": "Vos listes de lecture",
-    "disableBattery": "Désactivez l'optimisation pour mucke afin de résoudre les problèmes de notification.",
+    "disableBattery": "Désactiver l'optimisation de la batterie pour mucke.",
     "favoritesDesc": "Contient toutes les chansons que vous aimez.",
     "addFolder": "Ajouter un dossier",
     "imported": "Importé",
@@ -266,5 +266,20 @@
     "systemSettings": "Paramètres système",
     "manageExternalExplanation": "Accorder cette permission peut améliorer considérablement la vitesse des analyses de la bibliothèque. Cela ne modifie pas le comportement de l'application autrement.",
     "grantManagePermission": "Accorder la permission pour gérer tous les fichiers.",
-    "managePermissionSubtitle": "La révocation de la permission entraînera le redémarrage de l'application."
+    "managePermissionSubtitle": "La révocation de la permission entraînera le redémarrage de l'application.",
+    "playlistNormalMode": "Écouter depuis le début",
+    "playlistShuffleMode": "Lancer la lecture aléatoire",
+    "playlistFavShuffleMode": "Lancer la lecture aléatoire des favoris",
+    "saveLogFiles": "Enregistrer les fichiers journaux",
+    "saveLogFilesDescription": "Cela crée un sous-dossier contenant les fichiers journaux.",
+    "logFilesSavedTo": "Fichiers journaux enregistrés dans :\n{path}",
+    "@logFilesSavedTo": {
+        "placeholders": {
+            "path": {
+                "type": "String"
+            }
+        }
+    },
+    "logFilesSaveFailed": "Échec de l'enregistrement des fichiers journaux !",
+    "disableBatteryDescription": "La désactivation de l'optimisation de la batterie peut résoudre d'éventuels problèmes liés aux notifications."
 }
