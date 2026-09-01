@@ -27,9 +27,12 @@ A music player that gets the best out of your local collection.
 
 ## Download
 
-[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
-     alt="Get it on F-Droid"
-     height="80">](https://f-droid.org/packages/rocks.mucke/)
+[<img src="https://f-droid.org/badge/get-it-on.png"
+      alt="Get it on F-Droid"
+      height="80">](https://f-droid.org/packages/rocks.mucke/)
+[<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" 
+      alt="Get it on IzzyOnDroid"
+      height="80">](https://apt.izzysoft.de/packages/rocks.mucke.github)
 
 Or get the latest APK from the [Releases section](https://github.com/moritz-weber/mucke/releases/latest).
 
