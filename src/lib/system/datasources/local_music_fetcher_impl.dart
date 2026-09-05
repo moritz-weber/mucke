@@ -4,9 +4,9 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:async_task/async_task.dart';
-import 'package:audiotags/audiotags.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:haudiotagger/haudiotagger.dart';
 import 'package:image/image.dart' as img;
 import 'package:logging/logging.dart';
 import 'package:path/path.dart' as p;
@@ -435,7 +435,7 @@ class MetadataLoader extends AsyncTask<File, (File, Tag)?> {
   @override
   FutureOr<(File, Tag)?> run() async {
     try {
-      final tag = await AudioTags.read(file.path);
+      final tag = await Haudiotagger.read(file.path);
       if (tag == null) return null;
       return (file, tag);
     } catch (e) {
