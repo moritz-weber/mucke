@@ -18,10 +18,14 @@ mixin _$HistoryStore on _HistoryStore, Store {
     return super.historyStream;
   }
 
+  bool _historyStreamIsInitialized = false;
+
   @override
   set historyStream(ObservableStream<List<HistoryEntry>> value) {
-    _$historyStreamAtom.reportWrite(value, super.historyStream, () {
+    _$historyStreamAtom.reportWrite(
+        value, _historyStreamIsInitialized ? super.historyStream : null, () {
       super.historyStream = value;
+      _historyStreamIsInitialized = true;
     });
   }
 

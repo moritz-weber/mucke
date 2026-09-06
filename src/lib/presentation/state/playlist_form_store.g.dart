@@ -25,10 +25,13 @@ mixin _$PlaylistFormStore on _PlaylistStore, Store {
     return super.name;
   }
 
+  bool _nameIsInitialized = false;
+
   @override
   set name(String? value) {
-    _$nameAtom.reportWrite(value, super.name, () {
+    _$nameAtom.reportWrite(value, _nameIsInitialized ? super.name : null, () {
       super.name = value;
+      _nameIsInitialized = true;
     });
   }
 
@@ -41,10 +44,14 @@ mixin _$PlaylistFormStore on _PlaylistStore, Store {
     return super.shuffleMode;
   }
 
+  bool _shuffleModeIsInitialized = false;
+
   @override
   set shuffleMode(ShuffleMode? value) {
-    _$shuffleModeAtom.reportWrite(value, super.shuffleMode, () {
+    _$shuffleModeAtom.reportWrite(
+        value, _shuffleModeIsInitialized ? super.shuffleMode : null, () {
       super.shuffleMode = value;
+      _shuffleModeIsInitialized = true;
     });
   }
 

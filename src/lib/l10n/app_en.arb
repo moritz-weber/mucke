@@ -30,6 +30,41 @@
       }
     }
   },
+  "scanSuccessful": "Library scan completed.",
+  "@scanSuccessful": {},
+  "scanFailed": "{count, plural, =1{1 scan failure} other{{count} scan failures}}",
+  "@scanFailed": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "scanPermissionDenied": "Audio permission required to scan the library.",
+  "@scanPermissionDenied": {},
+  "scanErrorDetails": "Details",
+  "@scanErrorDetails": {},
+  "scanFailures": "Scan failures",
+  "@scanFailures": {},
+  "scanFailureStage": "Stage",
+  "@scanFailureStage": {},
+  "scanStageMetadata": "Metadata",
+  "@scanStageMetadata": {},
+  "scanStageAlbumArt": "Album art",
+  "@scanStageAlbumArt": {},
+  "scanStageAccentColor": "Accent color",
+  "@scanStageAccentColor": {},
+  "scanStagePermission": "Permission",
+  "@scanStagePermission": {},
+  "scanErrorMetadata": "Metadata could not be read.",
+  "@scanErrorMetadata": {},
+  "scanErrorAlbumArt": "Album art could not be read.",
+  "@scanErrorAlbumArt": {},
+  "scanErrorAccentColor": "Accent color could not be generated.",
+  "@scanErrorAccentColor": {},
+  "scanErrorPermission": "Audio permission was denied.",
+  "@scanErrorPermission": {},
   "manageLibraryFolders": "Manage library folders",
   "@manageLibraryFolders": {},
   "allowedFileExtensions": "Allowed file extensions",

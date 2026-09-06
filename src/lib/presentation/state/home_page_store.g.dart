@@ -18,10 +18,15 @@ mixin _$HomePageStore on _HomePageStore, Store {
     return super.homeWidgetsStream;
   }
 
+  bool _homeWidgetsStreamIsInitialized = false;
+
   @override
   set homeWidgetsStream(ObservableStream<List<HomeWidgetRepr>> value) {
-    _$homeWidgetsStreamAtom.reportWrite(value, super.homeWidgetsStream, () {
+    _$homeWidgetsStreamAtom.reportWrite(
+        value, _homeWidgetsStreamIsInitialized ? super.homeWidgetsStream : null,
+        () {
       super.homeWidgetsStream = value;
+      _homeWidgetsStreamIsInitialized = true;
     });
   }
 

@@ -25,10 +25,13 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     return super.name;
   }
 
+  bool _nameIsInitialized = false;
+
   @override
   set name(String? value) {
-    _$nameAtom.reportWrite(value, super.name, () {
+    _$nameAtom.reportWrite(value, _nameIsInitialized ? super.name : null, () {
       super.name = value;
+      _nameIsInitialized = true;
     });
   }
 
@@ -41,10 +44,14 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     return super.minLikeCount;
   }
 
+  bool _minLikeCountIsInitialized = false;
+
   @override
   set minLikeCount(int value) {
-    _$minLikeCountAtom.reportWrite(value, super.minLikeCount, () {
+    _$minLikeCountAtom.reportWrite(
+        value, _minLikeCountIsInitialized ? super.minLikeCount : null, () {
       super.minLikeCount = value;
+      _minLikeCountIsInitialized = true;
     });
   }
 
@@ -57,10 +64,14 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     return super.maxLikeCount;
   }
 
+  bool _maxLikeCountIsInitialized = false;
+
   @override
   set maxLikeCount(int value) {
-    _$maxLikeCountAtom.reportWrite(value, super.maxLikeCount, () {
+    _$maxLikeCountAtom.reportWrite(
+        value, _maxLikeCountIsInitialized ? super.maxLikeCount : null, () {
       super.maxLikeCount = value;
+      _maxLikeCountIsInitialized = true;
     });
   }
 
@@ -73,10 +84,15 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     return super.minPlayCountEnabled;
   }
 
+  bool _minPlayCountEnabledIsInitialized = false;
+
   @override
   set minPlayCountEnabled(bool value) {
-    _$minPlayCountEnabledAtom.reportWrite(value, super.minPlayCountEnabled, () {
+    _$minPlayCountEnabledAtom.reportWrite(value,
+        _minPlayCountEnabledIsInitialized ? super.minPlayCountEnabled : null,
+        () {
       super.minPlayCountEnabled = value;
+      _minPlayCountEnabledIsInitialized = true;
     });
   }
 
@@ -89,10 +105,14 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     return super.minPlayCount;
   }
 
+  bool _minPlayCountIsInitialized = false;
+
   @override
   set minPlayCount(String value) {
-    _$minPlayCountAtom.reportWrite(value, super.minPlayCount, () {
+    _$minPlayCountAtom.reportWrite(
+        value, _minPlayCountIsInitialized ? super.minPlayCount : null, () {
       super.minPlayCount = value;
+      _minPlayCountIsInitialized = true;
     });
   }
 
@@ -105,10 +125,15 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     return super.maxPlayCountEnabled;
   }
 
+  bool _maxPlayCountEnabledIsInitialized = false;
+
   @override
   set maxPlayCountEnabled(bool value) {
-    _$maxPlayCountEnabledAtom.reportWrite(value, super.maxPlayCountEnabled, () {
+    _$maxPlayCountEnabledAtom.reportWrite(value,
+        _maxPlayCountEnabledIsInitialized ? super.maxPlayCountEnabled : null,
+        () {
       super.maxPlayCountEnabled = value;
+      _maxPlayCountEnabledIsInitialized = true;
     });
   }
 
@@ -121,10 +146,14 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     return super.maxPlayCount;
   }
 
+  bool _maxPlayCountIsInitialized = false;
+
   @override
   set maxPlayCount(String value) {
-    _$maxPlayCountAtom.reportWrite(value, super.maxPlayCount, () {
+    _$maxPlayCountAtom.reportWrite(
+        value, _maxPlayCountIsInitialized ? super.maxPlayCount : null, () {
       super.maxPlayCount = value;
+      _maxPlayCountIsInitialized = true;
     });
   }
 
@@ -137,10 +166,14 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     return super.minYearEnabled;
   }
 
+  bool _minYearEnabledIsInitialized = false;
+
   @override
   set minYearEnabled(bool value) {
-    _$minYearEnabledAtom.reportWrite(value, super.minYearEnabled, () {
+    _$minYearEnabledAtom.reportWrite(
+        value, _minYearEnabledIsInitialized ? super.minYearEnabled : null, () {
       super.minYearEnabled = value;
+      _minYearEnabledIsInitialized = true;
     });
   }
 
@@ -153,10 +186,14 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     return super.minYear;
   }
 
+  bool _minYearIsInitialized = false;
+
   @override
   set minYear(String value) {
-    _$minYearAtom.reportWrite(value, super.minYear, () {
+    _$minYearAtom
+        .reportWrite(value, _minYearIsInitialized ? super.minYear : null, () {
       super.minYear = value;
+      _minYearIsInitialized = true;
     });
   }
 
@@ -169,10 +206,14 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     return super.maxYearEnabled;
   }
 
+  bool _maxYearEnabledIsInitialized = false;
+
   @override
   set maxYearEnabled(bool value) {
-    _$maxYearEnabledAtom.reportWrite(value, super.maxYearEnabled, () {
+    _$maxYearEnabledAtom.reportWrite(
+        value, _maxYearEnabledIsInitialized ? super.maxYearEnabled : null, () {
       super.maxYearEnabled = value;
+      _maxYearEnabledIsInitialized = true;
     });
   }
 
@@ -185,10 +226,14 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     return super.maxYear;
   }
 
+  bool _maxYearIsInitialized = false;
+
   @override
   set maxYear(String value) {
-    _$maxYearAtom.reportWrite(value, super.maxYear, () {
+    _$maxYearAtom
+        .reportWrite(value, _maxYearIsInitialized ? super.maxYear : null, () {
       super.maxYear = value;
+      _maxYearIsInitialized = true;
     });
   }
 
@@ -201,10 +246,14 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     return super.limitEnabled;
   }
 
+  bool _limitEnabledIsInitialized = false;
+
   @override
   set limitEnabled(bool value) {
-    _$limitEnabledAtom.reportWrite(value, super.limitEnabled, () {
+    _$limitEnabledAtom.reportWrite(
+        value, _limitEnabledIsInitialized ? super.limitEnabled : null, () {
       super.limitEnabled = value;
+      _limitEnabledIsInitialized = true;
     });
   }
 
@@ -217,10 +266,14 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     return super.limit;
   }
 
+  bool _limitIsInitialized = false;
+
   @override
   set limit(String value) {
-    _$limitAtom.reportWrite(value, super.limit, () {
+    _$limitAtom.reportWrite(value, _limitIsInitialized ? super.limit : null,
+        () {
       super.limit = value;
+      _limitIsInitialized = true;
     });
   }
 
@@ -233,10 +286,14 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     return super.blockLevel;
   }
 
+  bool _blockLevelIsInitialized = false;
+
   @override
   set blockLevel(int value) {
-    _$blockLevelAtom.reportWrite(value, super.blockLevel, () {
+    _$blockLevelAtom.reportWrite(
+        value, _blockLevelIsInitialized ? super.blockLevel : null, () {
       super.blockLevel = value;
+      _blockLevelIsInitialized = true;
     });
   }
 
@@ -249,10 +306,15 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     return super.selectedArtists;
   }
 
+  bool _selectedArtistsIsInitialized = false;
+
   @override
   set selectedArtists(ObservableSet<Artist> value) {
-    _$selectedArtistsAtom.reportWrite(value, super.selectedArtists, () {
+    _$selectedArtistsAtom.reportWrite(
+        value, _selectedArtistsIsInitialized ? super.selectedArtists : null,
+        () {
       super.selectedArtists = value;
+      _selectedArtistsIsInitialized = true;
     });
   }
 
@@ -265,10 +327,14 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     return super.excludeArtists;
   }
 
+  bool _excludeArtistsIsInitialized = false;
+
   @override
   set excludeArtists(bool value) {
-    _$excludeArtistsAtom.reportWrite(value, super.excludeArtists, () {
+    _$excludeArtistsAtom.reportWrite(
+        value, _excludeArtistsIsInitialized ? super.excludeArtists : null, () {
       super.excludeArtists = value;
+      _excludeArtistsIsInitialized = true;
     });
   }
 
@@ -281,10 +347,14 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     return super.orderState;
   }
 
+  bool _orderStateIsInitialized = false;
+
   @override
   set orderState(ObservableList<OrderEntry> value) {
-    _$orderStateAtom.reportWrite(value, super.orderState, () {
+    _$orderStateAtom.reportWrite(
+        value, _orderStateIsInitialized ? super.orderState : null, () {
       super.orderState = value;
+      _orderStateIsInitialized = true;
     });
   }
 
@@ -297,10 +367,14 @@ mixin _$SmartListFormStore on _SmartListStore, Store {
     return super.shuffleMode;
   }
 
+  bool _shuffleModeIsInitialized = false;
+
   @override
   set shuffleMode(ShuffleMode? value) {
-    _$shuffleModeAtom.reportWrite(value, super.shuffleMode, () {
+    _$shuffleModeAtom.reportWrite(
+        value, _shuffleModeIsInitialized ? super.shuffleMode : null, () {
       super.shuffleMode = value;
+      _shuffleModeIsInitialized = true;
     });
   }
 

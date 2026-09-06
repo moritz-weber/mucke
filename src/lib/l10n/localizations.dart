@@ -188,6 +188,90 @@ abstract class L10n {
   /// **'{artistCount} artists, {albumCount} albums, {songCount} songs'**
   String artistsAlbumsSongs(int artistCount, int albumCount, int songCount);
 
+  /// No description provided for @scanSuccessful.
+  ///
+  /// In en, this message translates to:
+  /// **'Library scan completed.'**
+  String get scanSuccessful;
+
+  /// No description provided for @scanFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 scan failure} other{{count} scan failures}}'**
+  String scanFailed(int count);
+
+  /// No description provided for @scanPermissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio permission required to scan the library.'**
+  String get scanPermissionDenied;
+
+  /// No description provided for @scanErrorDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get scanErrorDetails;
+
+  /// No description provided for @scanFailures.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan failures'**
+  String get scanFailures;
+
+  /// No description provided for @scanFailureStage.
+  ///
+  /// In en, this message translates to:
+  /// **'Stage'**
+  String get scanFailureStage;
+
+  /// No description provided for @scanStageMetadata.
+  ///
+  /// In en, this message translates to:
+  /// **'Metadata'**
+  String get scanStageMetadata;
+
+  /// No description provided for @scanStageAlbumArt.
+  ///
+  /// In en, this message translates to:
+  /// **'Album art'**
+  String get scanStageAlbumArt;
+
+  /// No description provided for @scanStageAccentColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Accent color'**
+  String get scanStageAccentColor;
+
+  /// No description provided for @scanStagePermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Permission'**
+  String get scanStagePermission;
+
+  /// No description provided for @scanErrorMetadata.
+  ///
+  /// In en, this message translates to:
+  /// **'Metadata could not be read.'**
+  String get scanErrorMetadata;
+
+  /// No description provided for @scanErrorAlbumArt.
+  ///
+  /// In en, this message translates to:
+  /// **'Album art could not be read.'**
+  String get scanErrorAlbumArt;
+
+  /// No description provided for @scanErrorAccentColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Accent color could not be generated.'**
+  String get scanErrorAccentColor;
+
+  /// No description provided for @scanErrorPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio permission was denied.'**
+  String get scanErrorPermission;
+
   /// No description provided for @manageLibraryFolders.
   ///
   /// In en, this message translates to:

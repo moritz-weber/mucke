@@ -12,6 +12,7 @@ import '../../domain/entities/custom_list.dart';
 import '../../domain/entities/enums.dart';
 import '../../domain/entities/home_widgets/playlists.dart';
 import '../../domain/entities/playlist.dart';
+import '../../domain/entities/scan_result.dart';
 import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/entities/smart_list.dart';
 import '../../domain/entities/song.dart';
@@ -113,28 +114,31 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
       _playlistDataSource.getSmartListSongStream(smartList as SmartListModel);
 
   @override
-  Future<void> updateDatabase() async {
+  Future<ScanResult> updateDatabase() async {
     _log.fine('updateDatabase called');
 
     final localMusic = await _localMusicFetcher.getLocalMusic();
 
-    final artists = localMusic['ARTISTS'] as List<ArtistModel>;
-    final albums = localMusic['ALBUMS'] as List<AlbumModel>;
-    final songs = localMusic['SONGS'] as List<SongModel>;
+    final artists = localMusic.artists;
+    final albums = localMusic.albums;
+    final songs = localMusic.songs;
 
     _log.fine('Artists found: ${artists.length}');
     _log.fine('Albums found: ${albums.length}');
     _log.fine('Songs found: ${songs.length}');
 
-    await _updateArtists(artists);
-    await _updateAlbums(albums);
-    await _musicDataSource.insertSongs(songs);
-
-    await _musicDataSource.cleanupDatabase();
+    if (artists.isNotEmpty || albums.isNotEmpty || songs.isNotEmpty) {
+      await _updateArtists(artists);
+      await _updateAlbums(albums);
+      await _musicDataSource.insertSongs(songs);
+      await _musicDataSource.cleanupDatabase();
+    }
 
     _log.fine('updateDatabase finished');
 
     _updateHighlightStreams();
+
+    return localMusic.toScanResult();
   }
 
   Future<void> _updateArtists(List<ArtistModel> artists) async {

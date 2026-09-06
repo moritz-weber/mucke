@@ -14,11 +14,13 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../domain/entities/scan_failure.dart';
 import '../models/album_model.dart';
 import '../models/artist_model.dart';
 import '../models/default_values.dart';
 import '../models/song_model.dart';
 import '../utils.dart';
+import 'library_scan_result.dart';
 import 'local_music_fetcher.dart';
 import 'music_data_source_contract.dart';
 import 'settings_data_source.dart';
@@ -45,7 +47,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
   final BehaviorSubject<int?> _progressSubject = BehaviorSubject<int?>();
 
   @override
-  Future<Map<String, List>> getLocalMusic() async {
+  Future<LibraryScanResult> getLocalMusic() async {
     // FIXME: it seems that songs currently loaded in queue are not updated
     _fileNumSubject.add(null);
     _progressSubject.add(null);
@@ -62,7 +64,9 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     if (!hasStorageAccess) {
       await Permission.audio.request();
       if (!await Permission.audio.isGranted) {
-        return {};
+        return const LibraryScanResult(
+          failures: [ScanFailure(type: ScanFailureType.permission)],
+        );
       }
     }
 
@@ -101,7 +105,9 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     final albumIdMap = structs['albumIdMap'] as Map<String, int>;
     final albumArtMap = structs['albumArtMap'] as Map<int, String>;
 
-    final songsToCheck = await getMetadataForFiles(songFilesToCheck);
+    final scans = await getMetadataForFiles(songFilesToCheck);
+    final songsToCheck = scans.metadata;
+    final failures = scans.failures;
     _log.fine('Songs to process: ${songsToCheck.length}');
 
     for (final (songFile, songData) in songsToCheck) {
@@ -158,6 +164,13 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
             break;
           } catch (e) {
             _log.severe('Could not read image file: ${image.path}');
+            failures.add(
+              ScanFailure(
+                path: image.path,
+                type: ScanFailureType.albumArt,
+                reason: e.toString(),
+              ),
+            );
           }
         }
       }
@@ -214,12 +227,19 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     scanCount = 0;
 
     final albumColorMap = <int, Color>{};
+    final albumTitleById = {for (final a in albums) a.id: a.title};
 
     for (final execution in executions) {
       _progressSubject.add(++scanCount);
-      final (albumId, color) = await execution;
+      final (albumId, albumArtPath, color) = await execution;
       if (color == null) {
         _log.warning('failed getting color for albumId $albumId');
+        failures.add(
+          ScanFailure(
+            path: albumTitleById[albumId],
+            type: ScanFailureType.accentColor,
+          ),
+        );
         continue;
       }
 
@@ -238,11 +258,12 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
       if (color != null) songs[i] = songs[i].copyWith(color: color);
     }
 
-    return {
-      'SONGS': songs,
-      'ALBUMS': albums,
-      'ARTISTS': artists.toList(),
-    };
+    return LibraryScanResult(
+      songs: songs,
+      albums: albums,
+      artists: artists.toList(),
+      failures: failures,
+    );
   }
 
   Future<Set<String>> getSongFilesInDirectory(
@@ -362,9 +383,10 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     };
   }
 
-  Future<List<(File, Tag)>> getMetadataForFiles(List<File> filesToCheck) async {
+  Future<MetadataScanResult> getMetadataForFiles(List<File> filesToCheck) async {
     _log.fine('Getting meta data for songs: START');
     final List<(File, Tag)> songsMetadata = [];
+    final List<ScanFailure> failures = [];
 
     final tasks = filesToCheck.map((e) => MetadataLoader(e));
 
@@ -381,14 +403,24 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     await Future.wait(executions);
 
     for (final execution in executions) {
-      final result = await execution;
-      if (result != null) songsMetadata.add(result);
+      final (file, tag, error) = await execution;
+      if (tag != null) {
+        songsMetadata.add((file, tag));
+      } else {
+        failures.add(
+          ScanFailure(
+            path: file.path,
+            type: ScanFailureType.metadataRead,
+            reason: error,
+          ),
+        );
+      }
     }
 
     asyncExecutor.close();
 
     _log.fine('Getting meta data for songs: DONE');
-    return songsMetadata;
+    return MetadataScanResult(metadata: songsMetadata, failures: failures);
   }
 
   Set<String> getExtensionSet(String extString) {
@@ -412,15 +444,26 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
   }
 }
 
+/// The parsed metadata for a batch of files, plus any that failed to read.
+class MetadataScanResult {
+  const MetadataScanResult({
+    required this.metadata,
+    required this.failures,
+  });
+
+  final List<(File, Tag)> metadata;
+  final List<ScanFailure> failures;
+}
+
 List<AsyncTask> metadataLoaderTypeRegister() => [MetadataLoader(File(''))];
 
-class MetadataLoader extends AsyncTask<File, (File, Tag)?> {
+class MetadataLoader extends AsyncTask<File, (File, Tag?, String?)> {
   MetadataLoader(this.file);
 
   final File file;
 
   @override
-  AsyncTask<File, (File, Tag)?> instantiate(
+  AsyncTask<File, (File, Tag?, String?)> instantiate(
     File parameters, [
     Map<String, SharedData>? sharedData,
   ]) {
@@ -433,27 +476,26 @@ class MetadataLoader extends AsyncTask<File, (File, Tag)?> {
   }
 
   @override
-  FutureOr<(File, Tag)?> run() async {
+  FutureOr<(File, Tag?, String?)> run() async {
     try {
       final tag = await Haudiotagger.read(file.path);
-      if (tag == null) return null;
-      return (file, tag);
+      return (file, tag, null);
     } catch (e) {
-      return null;
+      return (file, null, e.toString());
     }
   }
 }
 
 List<AsyncTask> accentGeneratorTypeRegister() => [AccentGenerator(0, File(''))];
 
-class AccentGenerator extends AsyncTask<(int, File), (int, Color?)> {
+class AccentGenerator extends AsyncTask<(int, File), (int, String, Color?)> {
   AccentGenerator(this.albumId, this.pictureFile);
 
   final File pictureFile;
   final int albumId;
 
   @override
-  AsyncTask<(int, File), (int, Color?)> instantiate((int, File) parameters,
+  AsyncTask<(int, File), (int, String, Color?)> instantiate((int, File) parameters,
       [Map<String, SharedData>? sharedData]) {
     return AccentGenerator(parameters.$1, parameters.$2);
   }
@@ -464,10 +506,10 @@ class AccentGenerator extends AsyncTask<(int, File), (int, Color?)> {
   }
 
   @override
-  FutureOr<(int, Color?)> run() async {
+  FutureOr<(int, String, Color?)> run() async {
     final image = await _loadImage(pictureFile);
-    if (image == null) return (albumId, null);
-    return (albumId, getBackgroundColor(image));
+    if (image == null) return (albumId, pictureFile.path, null);
+    return (albumId, pictureFile.path, getBackgroundColor(image));
   }
 
   Future<img.Image?> _loadImage(File file) async {

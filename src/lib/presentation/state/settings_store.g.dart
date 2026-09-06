@@ -26,11 +26,15 @@ mixin _$SettingsStore on _SettingsStore, Store {
     return super.libraryFoldersStream;
   }
 
+  bool _libraryFoldersStreamIsInitialized = false;
+
   @override
   set libraryFoldersStream(ObservableStream<List<String>> value) {
-    _$libraryFoldersStreamAtom.reportWrite(value, super.libraryFoldersStream,
+    _$libraryFoldersStreamAtom.reportWrite(value,
+        _libraryFoldersStreamIsInitialized ? super.libraryFoldersStream : null,
         () {
       super.libraryFoldersStream = value;
+      _libraryFoldersStreamIsInitialized = true;
     });
   }
 
@@ -43,11 +47,15 @@ mixin _$SettingsStore on _SettingsStore, Store {
     return super.fileExtensionsStream;
   }
 
+  bool _fileExtensionsStreamIsInitialized = false;
+
   @override
   set fileExtensionsStream(ObservableStream<String> value) {
-    _$fileExtensionsStreamAtom.reportWrite(value, super.fileExtensionsStream,
+    _$fileExtensionsStreamAtom.reportWrite(value,
+        _fileExtensionsStreamIsInitialized ? super.fileExtensionsStream : null,
         () {
       super.fileExtensionsStream = value;
+      _fileExtensionsStreamIsInitialized = true;
     });
   }
 
@@ -60,10 +68,14 @@ mixin _$SettingsStore on _SettingsStore, Store {
     return super.blockedFilesStream;
   }
 
+  bool _blockedFilesStreamIsInitialized = false;
+
   @override
   set blockedFilesStream(ObservableStream<Set<String>> value) {
-    _$blockedFilesStreamAtom.reportWrite(value, super.blockedFilesStream, () {
+    _$blockedFilesStreamAtom.reportWrite(value,
+        _blockedFilesStreamIsInitialized ? super.blockedFilesStream : null, () {
       super.blockedFilesStream = value;
+      _blockedFilesStreamIsInitialized = true;
     });
   }
 
@@ -76,11 +88,17 @@ mixin _$SettingsStore on _SettingsStore, Store {
     return super.listenedPercentageStream;
   }
 
+  bool _listenedPercentageStreamIsInitialized = false;
+
   @override
   set listenedPercentageStream(ObservableStream<int> value) {
-    _$listenedPercentageStreamAtom
-        .reportWrite(value, super.listenedPercentageStream, () {
+    _$listenedPercentageStreamAtom.reportWrite(
+        value,
+        _listenedPercentageStreamIsInitialized
+            ? super.listenedPercentageStream
+            : null, () {
       super.listenedPercentageStream = value;
+      _listenedPercentageStreamIsInitialized = true;
     });
   }
 
@@ -93,11 +111,17 @@ mixin _$SettingsStore on _SettingsStore, Store {
     return super.playAlbumsInOrderStream;
   }
 
+  bool _playAlbumsInOrderStreamIsInitialized = false;
+
   @override
   set playAlbumsInOrderStream(ObservableStream<bool> value) {
-    _$playAlbumsInOrderStreamAtom
-        .reportWrite(value, super.playAlbumsInOrderStream, () {
+    _$playAlbumsInOrderStreamAtom.reportWrite(
+        value,
+        _playAlbumsInOrderStreamIsInitialized
+            ? super.playAlbumsInOrderStream
+            : null, () {
       super.playAlbumsInOrderStream = value;
+      _playAlbumsInOrderStreamIsInitialized = true;
     });
   }
 
@@ -110,11 +134,17 @@ mixin _$SettingsStore on _SettingsStore, Store {
     return super.manageExternalStorageGranted;
   }
 
+  bool _manageExternalStorageGrantedIsInitialized = false;
+
   @override
   set manageExternalStorageGranted(ObservableStream<bool> value) {
-    _$manageExternalStorageGrantedAtom
-        .reportWrite(value, super.manageExternalStorageGranted, () {
+    _$manageExternalStorageGrantedAtom.reportWrite(
+        value,
+        _manageExternalStorageGrantedIsInitialized
+            ? super.manageExternalStorageGranted
+            : null, () {
       super.manageExternalStorageGranted = value;
+      _manageExternalStorageGrantedIsInitialized = true;
     });
   }
 

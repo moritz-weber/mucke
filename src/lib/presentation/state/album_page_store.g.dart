@@ -18,10 +18,15 @@ mixin _$AlbumPageStore on _AlbumPageStore, Store {
     return super.albumSongStream;
   }
 
+  bool _albumSongStreamIsInitialized = false;
+
   @override
   set albumSongStream(ObservableStream<List<Song>> value) {
-    _$albumSongStreamAtom.reportWrite(value, super.albumSongStream, () {
+    _$albumSongStreamAtom.reportWrite(
+        value, _albumSongStreamIsInitialized ? super.albumSongStream : null,
+        () {
       super.albumSongStream = value;
+      _albumSongStreamIsInitialized = true;
     });
   }
 

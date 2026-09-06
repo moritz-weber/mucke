@@ -6,6 +6,7 @@ import '../entities/custom_list.dart';
 import '../entities/enums.dart';
 import '../entities/home_widgets/playlists.dart';
 import '../entities/playlist.dart';
+import '../entities/scan_result.dart';
 import '../entities/shuffle_mode.dart';
 import '../entities/smart_list.dart';
 import '../entities/song.dart';
@@ -60,7 +61,7 @@ abstract class MusicDataInfoRepository {
 }
 
 abstract class MusicDataRepository extends MusicDataInfoRepository {
-  Future<void> updateDatabase();
+  Future<ScanResult> updateDatabase();
 
   Future<void> setSongsBlockLevel(List<Song> songs, int blockLevel);
 

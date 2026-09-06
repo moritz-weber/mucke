@@ -13,4 +13,29 @@ mixin _$PlaylistDaoMixin on DatabaseAccessor<MainDatabase> {
   $SmartListArtistsTable get smartListArtists =>
       attachedDatabase.smartListArtists;
   $HistoryEntriesTable get historyEntries => attachedDatabase.historyEntries;
+  PlaylistDaoManager get managers => PlaylistDaoManager(this);
+}
+
+class PlaylistDaoManager {
+  final _$PlaylistDaoMixin _db;
+  PlaylistDaoManager(this._db);
+  $$AlbumsTableTableManager get albums =>
+      $$AlbumsTableTableManager(_db.attachedDatabase, _db.albums);
+  $$ArtistsTableTableManager get artists =>
+      $$ArtistsTableTableManager(_db.attachedDatabase, _db.artists);
+  $$SongsTableTableManager get songs =>
+      $$SongsTableTableManager(_db.attachedDatabase, _db.songs);
+  $$PlaylistsTableTableManager get playlists =>
+      $$PlaylistsTableTableManager(_db.attachedDatabase, _db.playlists);
+  $$PlaylistEntriesTableTableManager get playlistEntries =>
+      $$PlaylistEntriesTableTableManager(
+          _db.attachedDatabase, _db.playlistEntries);
+  $$SmartListsTableTableManager get smartLists =>
+      $$SmartListsTableTableManager(_db.attachedDatabase, _db.smartLists);
+  $$SmartListArtistsTableTableManager get smartListArtists =>
+      $$SmartListArtistsTableTableManager(
+          _db.attachedDatabase, _db.smartListArtists);
+  $$HistoryEntriesTableTableManager get historyEntries =>
+      $$HistoryEntriesTableTableManager(
+          _db.attachedDatabase, _db.historyEntries);
 }

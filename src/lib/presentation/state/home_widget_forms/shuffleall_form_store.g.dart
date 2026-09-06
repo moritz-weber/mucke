@@ -18,10 +18,14 @@ mixin _$ShuffleAllFormStore on _ShuffleAllFormStore, Store {
     return super.shuffleMode;
   }
 
+  bool _shuffleModeIsInitialized = false;
+
   @override
   set shuffleMode(ShuffleMode value) {
-    _$shuffleModeAtom.reportWrite(value, super.shuffleMode, () {
+    _$shuffleModeAtom.reportWrite(
+        value, _shuffleModeIsInitialized ? super.shuffleMode : null, () {
       super.shuffleMode = value;
+      _shuffleModeIsInitialized = true;
     });
   }
 

@@ -26,10 +26,14 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
     return super.songStream;
   }
 
+  bool _songStreamIsInitialized = false;
+
   @override
   set songStream(ObservableStream<List<Song>> value) {
-    _$songStreamAtom.reportWrite(value, super.songStream, () {
+    _$songStreamAtom.reportWrite(
+        value, _songStreamIsInitialized ? super.songStream : null, () {
       super.songStream = value;
+      _songStreamIsInitialized = true;
     });
   }
 
@@ -42,10 +46,14 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
     return super.albumStream;
   }
 
+  bool _albumStreamIsInitialized = false;
+
   @override
   set albumStream(ObservableStream<List<Album>> value) {
-    _$albumStreamAtom.reportWrite(value, super.albumStream, () {
+    _$albumStreamAtom.reportWrite(
+        value, _albumStreamIsInitialized ? super.albumStream : null, () {
       super.albumStream = value;
+      _albumStreamIsInitialized = true;
     });
   }
 
@@ -58,10 +66,14 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
     return super.artistStream;
   }
 
+  bool _artistStreamIsInitialized = false;
+
   @override
   set artistStream(ObservableStream<List<Artist>> value) {
-    _$artistStreamAtom.reportWrite(value, super.artistStream, () {
+    _$artistStreamAtom.reportWrite(
+        value, _artistStreamIsInitialized ? super.artistStream : null, () {
       super.artistStream = value;
+      _artistStreamIsInitialized = true;
     });
   }
 
@@ -74,10 +86,15 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
     return super.playlistsStream;
   }
 
+  bool _playlistsStreamIsInitialized = false;
+
   @override
   set playlistsStream(ObservableStream<List<Playlist>> value) {
-    _$playlistsStreamAtom.reportWrite(value, super.playlistsStream, () {
+    _$playlistsStreamAtom.reportWrite(
+        value, _playlistsStreamIsInitialized ? super.playlistsStream : null,
+        () {
       super.playlistsStream = value;
+      _playlistsStreamIsInitialized = true;
     });
   }
 
@@ -90,10 +107,15 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
     return super.smartListsStream;
   }
 
+  bool _smartListsStreamIsInitialized = false;
+
   @override
   set smartListsStream(ObservableStream<List<SmartList>> value) {
-    _$smartListsStreamAtom.reportWrite(value, super.smartListsStream, () {
+    _$smartListsStreamAtom.reportWrite(
+        value, _smartListsStreamIsInitialized ? super.smartListsStream : null,
+        () {
       super.smartListsStream = value;
+      _smartListsStreamIsInitialized = true;
     });
   }
 
@@ -122,10 +144,14 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
     return super.numFileStream;
   }
 
+  bool _numFileStreamIsInitialized = false;
+
   @override
   set numFileStream(ObservableStream<int?> value) {
-    _$numFileStreamAtom.reportWrite(value, super.numFileStream, () {
+    _$numFileStreamAtom.reportWrite(
+        value, _numFileStreamIsInitialized ? super.numFileStream : null, () {
       super.numFileStream = value;
+      _numFileStreamIsInitialized = true;
     });
   }
 
@@ -138,10 +164,14 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
     return super.progressStream;
   }
 
+  bool _progressStreamIsInitialized = false;
+
   @override
   set progressStream(ObservableStream<int?> value) {
-    _$progressStreamAtom.reportWrite(value, super.progressStream, () {
+    _$progressStreamAtom.reportWrite(
+        value, _progressStreamIsInitialized ? super.progressStream : null, () {
       super.progressStream = value;
+      _progressStreamIsInitialized = true;
     });
   }
 
@@ -154,10 +184,14 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
     return super.albumOfDay;
   }
 
+  bool _albumOfDayIsInitialized = false;
+
   @override
   set albumOfDay(ObservableStream<Album?> value) {
-    _$albumOfDayAtom.reportWrite(value, super.albumOfDay, () {
+    _$albumOfDayAtom.reportWrite(
+        value, _albumOfDayIsInitialized ? super.albumOfDay : null, () {
       super.albumOfDay = value;
+      _albumOfDayIsInitialized = true;
     });
   }
 
@@ -170,10 +204,14 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
     return super.artistOfDay;
   }
 
+  bool _artistOfDayIsInitialized = false;
+
   @override
   set artistOfDay(ObservableStream<Artist?> value) {
-    _$artistOfDayAtom.reportWrite(value, super.artistOfDay, () {
+    _$artistOfDayAtom.reportWrite(
+        value, _artistOfDayIsInitialized ? super.artistOfDay : null, () {
       super.artistOfDay = value;
+      _artistOfDayIsInitialized = true;
     });
   }
 
@@ -181,7 +219,7 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
       AsyncAction('_MusicDataStore.updateDatabase', context: context);
 
   @override
-  Future<void> updateDatabase() {
+  Future<ScanResult> updateDatabase() {
     return _$updateDatabaseAsyncAction.run(() => super.updateDatabase());
   }
 

@@ -18,10 +18,15 @@ mixin _$SmartListPageStore on _SmartListPageStore, Store {
     return super.smartListStream;
   }
 
+  bool _smartListStreamIsInitialized = false;
+
   @override
   set smartListStream(ObservableStream<SmartList> value) {
-    _$smartListStreamAtom.reportWrite(value, super.smartListStream, () {
+    _$smartListStreamAtom.reportWrite(
+        value, _smartListStreamIsInitialized ? super.smartListStream : null,
+        () {
       super.smartListStream = value;
+      _smartListStreamIsInitialized = true;
     });
   }
 
@@ -34,10 +39,15 @@ mixin _$SmartListPageStore on _SmartListPageStore, Store {
     return super.smartListSongStream;
   }
 
+  bool _smartListSongStreamIsInitialized = false;
+
   @override
   set smartListSongStream(ObservableStream<List<Song>> value) {
-    _$smartListSongStreamAtom.reportWrite(value, super.smartListSongStream, () {
+    _$smartListSongStreamAtom.reportWrite(value,
+        _smartListSongStreamIsInitialized ? super.smartListSongStream : null,
+        () {
       super.smartListSongStream = value;
+      _smartListSongStreamIsInitialized = true;
     });
   }
 

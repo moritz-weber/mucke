@@ -43,9 +43,10 @@ class $AlbumsTable extends Albums with TableInfo<$AlbumsTable, DriftAlbum> {
   List<GeneratedColumn> get $columns =>
       [id, title, artist, albumArtPath, color, year];
   @override
-  String get aliasedName => _alias ?? 'albums';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'albums';
+  String get actualTableName => $name;
+  static const String $name = 'albums';
   @override
   VerificationContext validateIntegrity(Insertable<DriftAlbum> instance,
       {bool isInserting = false}) {
@@ -197,6 +198,19 @@ class DriftAlbum extends DataClass implements Insertable<DriftAlbum> {
         color: color.present ? color.value : this.color,
         year: year.present ? year.value : this.year,
       );
+  DriftAlbum copyWithCompanion(AlbumsCompanion data) {
+    return DriftAlbum(
+      id: data.id.present ? data.id.value : this.id,
+      title: data.title.present ? data.title.value : this.title,
+      artist: data.artist.present ? data.artist.value : this.artist,
+      albumArtPath: data.albumArtPath.present
+          ? data.albumArtPath.value
+          : this.albumArtPath,
+      color: data.color.present ? data.color.value : this.color,
+      year: data.year.present ? data.year.value : this.year,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('DriftAlbum(')
@@ -339,9 +353,10 @@ class $ArtistsTable extends Artists with TableInfo<$ArtistsTable, DriftArtist> {
   @override
   List<GeneratedColumn> get $columns => [name, id];
   @override
-  String get aliasedName => _alias ?? 'artists';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'artists';
+  String get actualTableName => $name;
+  static const String $name = 'artists';
   @override
   VerificationContext validateIntegrity(Insertable<DriftArtist> instance,
       {bool isInserting = false}) {
@@ -418,6 +433,13 @@ class DriftArtist extends DataClass implements Insertable<DriftArtist> {
         name: name ?? this.name,
         id: id ?? this.id,
       );
+  DriftArtist copyWithCompanion(ArtistsCompanion data) {
+    return DriftArtist(
+      name: data.name.present ? data.name.value : this.name,
+      id: data.id.present ? data.id.value : this.id,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('DriftArtist(')
@@ -499,9 +521,10 @@ class $LibraryFoldersTable extends LibraryFolders
   @override
   List<GeneratedColumn> get $columns => [path];
   @override
-  String get aliasedName => _alias ?? 'library_folders';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'library_folders';
+  String get actualTableName => $name;
+  static const String $name = 'library_folders';
   @override
   VerificationContext validateIntegrity(Insertable<LibraryFolder> instance,
       {bool isInserting = false}) {
@@ -567,6 +590,12 @@ class LibraryFolder extends DataClass implements Insertable<LibraryFolder> {
   LibraryFolder copyWith({String? path}) => LibraryFolder(
         path: path ?? this.path,
       );
+  LibraryFolder copyWithCompanion(LibraryFoldersCompanion data) {
+    return LibraryFolder(
+      path: data.path.present ? data.path.value : this.path,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('LibraryFolder(')
@@ -673,9 +702,10 @@ class $QueueEntriesTable extends QueueEntries
   List<GeneratedColumn> get $columns =>
       [index, path, originalIndex, type, isAvailable];
   @override
-  String get aliasedName => _alias ?? 'queue_entries';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'queue_entries';
+  String get actualTableName => $name;
+  static const String $name = 'queue_entries';
   @override
   VerificationContext validateIntegrity(Insertable<DriftQueueEntry> instance,
       {bool isInserting = false}) {
@@ -810,6 +840,19 @@ class DriftQueueEntry extends DataClass implements Insertable<DriftQueueEntry> {
         type: type ?? this.type,
         isAvailable: isAvailable ?? this.isAvailable,
       );
+  DriftQueueEntry copyWithCompanion(QueueEntriesCompanion data) {
+    return DriftQueueEntry(
+      index: data.index.present ? data.index.value : this.index,
+      path: data.path.present ? data.path.value : this.path,
+      originalIndex: data.originalIndex.present
+          ? data.originalIndex.value
+          : this.originalIndex,
+      type: data.type.present ? data.type.value : this.type,
+      isAvailable:
+          data.isAvailable.present ? data.isAvailable.value : this.isAvailable,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('DriftQueueEntry(')
@@ -964,9 +1007,10 @@ class $AvailableSongEntriesTable extends AvailableSongEntries
   List<GeneratedColumn> get $columns =>
       [index, path, originalIndex, type, isAvailable];
   @override
-  String get aliasedName => _alias ?? 'available_song_entries';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'available_song_entries';
+  String get actualTableName => $name;
+  static const String $name = 'available_song_entries';
   @override
   VerificationContext validateIntegrity(Insertable<AvailableSongEntry> instance,
       {bool isInserting = false}) {
@@ -1102,6 +1146,19 @@ class AvailableSongEntry extends DataClass
         type: type ?? this.type,
         isAvailable: isAvailable ?? this.isAvailable,
       );
+  AvailableSongEntry copyWithCompanion(AvailableSongEntriesCompanion data) {
+    return AvailableSongEntry(
+      index: data.index.present ? data.index.value : this.index,
+      path: data.path.present ? data.path.value : this.path,
+      originalIndex: data.originalIndex.present
+          ? data.originalIndex.value
+          : this.originalIndex,
+      type: data.type.present ? data.type.value : this.type,
+      isAvailable:
+          data.isAvailable.present ? data.isAvailable.value : this.isAvailable,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('AvailableSongEntry(')
@@ -1382,9 +1439,10 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, DriftSong> {
         next
       ];
   @override
-  String get aliasedName => _alias ?? 'songs';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'songs';
+  String get actualTableName => $name;
+  static const String $name = 'songs';
   @override
   VerificationContext validateIntegrity(Insertable<DriftSong> instance,
       {bool isInserting = false}) {
@@ -1757,6 +1815,39 @@ class DriftSong extends DataClass implements Insertable<DriftSong> {
         previous: previous ?? this.previous,
         next: next ?? this.next,
       );
+  DriftSong copyWithCompanion(SongsCompanion data) {
+    return DriftSong(
+      title: data.title.present ? data.title.value : this.title,
+      albumTitle:
+          data.albumTitle.present ? data.albumTitle.value : this.albumTitle,
+      albumId: data.albumId.present ? data.albumId.value : this.albumId,
+      artist: data.artist.present ? data.artist.value : this.artist,
+      path: data.path.present ? data.path.value : this.path,
+      duration: data.duration.present ? data.duration.value : this.duration,
+      albumArtPath: data.albumArtPath.present
+          ? data.albumArtPath.value
+          : this.albumArtPath,
+      color: data.color.present ? data.color.value : this.color,
+      discNumber:
+          data.discNumber.present ? data.discNumber.value : this.discNumber,
+      trackNumber:
+          data.trackNumber.present ? data.trackNumber.value : this.trackNumber,
+      year: data.year.present ? data.year.value : this.year,
+      blockLevel:
+          data.blockLevel.present ? data.blockLevel.value : this.blockLevel,
+      likeCount: data.likeCount.present ? data.likeCount.value : this.likeCount,
+      skipCount: data.skipCount.present ? data.skipCount.value : this.skipCount,
+      playCount: data.playCount.present ? data.playCount.value : this.playCount,
+      present: data.present.present ? data.present.value : this.present,
+      timeAdded: data.timeAdded.present ? data.timeAdded.value : this.timeAdded,
+      lastModified: data.lastModified.present
+          ? data.lastModified.value
+          : this.lastModified,
+      previous: data.previous.present ? data.previous.value : this.previous,
+      next: data.next.present ? data.next.value : this.next,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('DriftSong(')
@@ -2278,9 +2369,10 @@ class $SmartListsTable extends SmartLists
         orderDirections
       ];
   @override
-  String get aliasedName => _alias ?? 'smart_lists';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'smart_lists';
+  String get actualTableName => $name;
+  static const String $name = 'smart_lists';
   @override
   VerificationContext validateIntegrity(Insertable<DriftSmartList> instance,
       {bool isInserting = false}) {
@@ -2695,6 +2787,56 @@ class DriftSmartList extends DataClass implements Insertable<DriftSmartList> {
         orderCriteria: orderCriteria ?? this.orderCriteria,
         orderDirections: orderDirections ?? this.orderDirections,
       );
+  DriftSmartList copyWithCompanion(SmartListsCompanion data) {
+    return DriftSmartList(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      shuffleMode:
+          data.shuffleMode.present ? data.shuffleMode.value : this.shuffleMode,
+      icon: data.icon.present ? data.icon.value : this.icon,
+      gradient: data.gradient.present ? data.gradient.value : this.gradient,
+      timeCreated:
+          data.timeCreated.present ? data.timeCreated.value : this.timeCreated,
+      timeChanged:
+          data.timeChanged.present ? data.timeChanged.value : this.timeChanged,
+      timeLastPlayed: data.timeLastPlayed.present
+          ? data.timeLastPlayed.value
+          : this.timeLastPlayed,
+      excludeArtists: data.excludeArtists.present
+          ? data.excludeArtists.value
+          : this.excludeArtists,
+      blockLevel:
+          data.blockLevel.present ? data.blockLevel.value : this.blockLevel,
+      minLikeCount: data.minLikeCount.present
+          ? data.minLikeCount.value
+          : this.minLikeCount,
+      maxLikeCount: data.maxLikeCount.present
+          ? data.maxLikeCount.value
+          : this.maxLikeCount,
+      minPlayCount: data.minPlayCount.present
+          ? data.minPlayCount.value
+          : this.minPlayCount,
+      maxPlayCount: data.maxPlayCount.present
+          ? data.maxPlayCount.value
+          : this.maxPlayCount,
+      minSkipCount: data.minSkipCount.present
+          ? data.minSkipCount.value
+          : this.minSkipCount,
+      maxSkipCount: data.maxSkipCount.present
+          ? data.maxSkipCount.value
+          : this.maxSkipCount,
+      minYear: data.minYear.present ? data.minYear.value : this.minYear,
+      maxYear: data.maxYear.present ? data.maxYear.value : this.maxYear,
+      limit: data.limit.present ? data.limit.value : this.limit,
+      orderCriteria: data.orderCriteria.present
+          ? data.orderCriteria.value
+          : this.orderCriteria,
+      orderDirections: data.orderDirections.present
+          ? data.orderDirections.value
+          : this.orderDirections,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('DriftSmartList(')
@@ -3058,9 +3200,10 @@ class $SmartListArtistsTable extends SmartListArtists
   @override
   List<GeneratedColumn> get $columns => [smartListId, artistName];
   @override
-  String get aliasedName => _alias ?? 'smart_list_artists';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'smart_list_artists';
+  String get actualTableName => $name;
+  static const String $name = 'smart_list_artists';
   @override
   VerificationContext validateIntegrity(
       Insertable<DriftSmartListArtist> instance,
@@ -3148,6 +3291,15 @@ class DriftSmartListArtist extends DataClass
         smartListId: smartListId ?? this.smartListId,
         artistName: artistName ?? this.artistName,
       );
+  DriftSmartListArtist copyWithCompanion(SmartListArtistsCompanion data) {
+    return DriftSmartListArtist(
+      smartListId:
+          data.smartListId.present ? data.smartListId.value : this.smartListId,
+      artistName:
+          data.artistName.present ? data.artistName.value : this.artistName,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('DriftSmartListArtist(')
@@ -3306,9 +3458,10 @@ class $PlaylistsTable extends Playlists
         timeLastPlayed
       ];
   @override
-  String get aliasedName => _alias ?? 'playlists';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'playlists';
+  String get actualTableName => $name;
+  static const String $name = 'playlists';
   @override
   VerificationContext validateIntegrity(Insertable<DriftPlaylist> instance,
       {bool isInserting = false}) {
@@ -3486,6 +3639,24 @@ class DriftPlaylist extends DataClass implements Insertable<DriftPlaylist> {
         timeChanged: timeChanged ?? this.timeChanged,
         timeLastPlayed: timeLastPlayed ?? this.timeLastPlayed,
       );
+  DriftPlaylist copyWithCompanion(PlaylistsCompanion data) {
+    return DriftPlaylist(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      shuffleMode:
+          data.shuffleMode.present ? data.shuffleMode.value : this.shuffleMode,
+      icon: data.icon.present ? data.icon.value : this.icon,
+      gradient: data.gradient.present ? data.gradient.value : this.gradient,
+      timeCreated:
+          data.timeCreated.present ? data.timeCreated.value : this.timeCreated,
+      timeChanged:
+          data.timeChanged.present ? data.timeChanged.value : this.timeChanged,
+      timeLastPlayed: data.timeLastPlayed.present
+          ? data.timeLastPlayed.value
+          : this.timeLastPlayed,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('DriftPlaylist(')
@@ -3663,9 +3834,10 @@ class $PlaylistEntriesTable extends PlaylistEntries
   @override
   List<GeneratedColumn> get $columns => [playlistId, songPath, position];
   @override
-  String get aliasedName => _alias ?? 'playlist_entries';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'playlist_entries';
+  String get actualTableName => $name;
+  static const String $name = 'playlist_entries';
   @override
   VerificationContext validateIntegrity(Insertable<DriftPlaylistEntry> instance,
       {bool isInserting = false}) {
@@ -3767,6 +3939,15 @@ class DriftPlaylistEntry extends DataClass
         songPath: songPath ?? this.songPath,
         position: position ?? this.position,
       );
+  DriftPlaylistEntry copyWithCompanion(PlaylistEntriesCompanion data) {
+    return DriftPlaylistEntry(
+      playlistId:
+          data.playlistId.present ? data.playlistId.value : this.playlistId,
+      songPath: data.songPath.present ? data.songPath.value : this.songPath,
+      position: data.position.present ? data.position.value : this.position,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('DriftPlaylistEntry(')
@@ -3883,9 +4064,10 @@ class $KeyValueEntriesTable extends KeyValueEntries
   @override
   List<GeneratedColumn> get $columns => [key, value];
   @override
-  String get aliasedName => _alias ?? 'key_value_entries';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'key_value_entries';
+  String get actualTableName => $name;
+  static const String $name = 'key_value_entries';
   @override
   VerificationContext validateIntegrity(Insertable<KeyValueEntry> instance,
       {bool isInserting = false}) {
@@ -3965,6 +4147,13 @@ class KeyValueEntry extends DataClass implements Insertable<KeyValueEntry> {
         key: key ?? this.key,
         value: value ?? this.value,
       );
+  KeyValueEntry copyWithCompanion(KeyValueEntriesCompanion data) {
+    return KeyValueEntry(
+      key: data.key.present ? data.key.value : this.key,
+      value: data.value.present ? data.value.value : this.value,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('KeyValueEntry(')
@@ -4073,9 +4262,10 @@ class $HomeWidgetsTable extends HomeWidgets
   @override
   List<GeneratedColumn> get $columns => [position, type, data];
   @override
-  String get aliasedName => _alias ?? 'home_widgets';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'home_widgets';
+  String get actualTableName => $name;
+  static const String $name = 'home_widgets';
   @override
   VerificationContext validateIntegrity(Insertable<DriftHomeWidget> instance,
       {bool isInserting = false}) {
@@ -4167,6 +4357,14 @@ class DriftHomeWidget extends DataClass implements Insertable<DriftHomeWidget> {
         type: type ?? this.type,
         data: data ?? this.data,
       );
+  DriftHomeWidget copyWithCompanion(HomeWidgetsCompanion data) {
+    return DriftHomeWidget(
+      position: data.position.present ? data.position.value : this.position,
+      type: data.type.present ? data.type.value : this.type,
+      data: data.data.present ? data.data.value : this.data,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('DriftHomeWidget(')
@@ -4276,9 +4474,10 @@ class $HistoryEntriesTable extends HistoryEntries
   @override
   List<GeneratedColumn> get $columns => [time, type, identifier];
   @override
-  String get aliasedName => _alias ?? 'history_entries';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'history_entries';
+  String get actualTableName => $name;
+  static const String $name = 'history_entries';
   @override
   VerificationContext validateIntegrity(Insertable<DriftHistoryEntry> instance,
       {bool isInserting = false}) {
@@ -4376,6 +4575,15 @@ class DriftHistoryEntry extends DataClass
         type: type ?? this.type,
         identifier: identifier ?? this.identifier,
       );
+  DriftHistoryEntry copyWithCompanion(HistoryEntriesCompanion data) {
+    return DriftHistoryEntry(
+      time: data.time.present ? data.time.value : this.time,
+      type: data.type.present ? data.type.value : this.type,
+      identifier:
+          data.identifier.present ? data.identifier.value : this.identifier,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('DriftHistoryEntry(')
@@ -4486,9 +4694,10 @@ class $BlockedFilesTable extends BlockedFiles
   @override
   List<GeneratedColumn> get $columns => [path];
   @override
-  String get aliasedName => _alias ?? 'blocked_files';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'blocked_files';
+  String get actualTableName => $name;
+  static const String $name = 'blocked_files';
   @override
   VerificationContext validateIntegrity(Insertable<BlockedFile> instance,
       {bool isInserting = false}) {
@@ -4554,6 +4763,12 @@ class BlockedFile extends DataClass implements Insertable<BlockedFile> {
   BlockedFile copyWith({String? path}) => BlockedFile(
         path: path ?? this.path,
       );
+  BlockedFile copyWithCompanion(BlockedFilesCompanion data) {
+    return BlockedFile(
+      path: data.path.present ? data.path.value : this.path,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('BlockedFile(')
@@ -4622,6 +4837,7 @@ class BlockedFilesCompanion extends UpdateCompanion<BlockedFile> {
 
 abstract class _$MainDatabase extends GeneratedDatabase {
   _$MainDatabase(QueryExecutor e) : super(e);
+  $MainDatabaseManager get managers => $MainDatabaseManager(this);
   late final $AlbumsTable albums = $AlbumsTable(this);
   late final $ArtistsTable artists = $ArtistsTable(this);
   late final $LibraryFoldersTable libraryFolders = $LibraryFoldersTable(this);
@@ -4667,4 +4883,2602 @@ abstract class _$MainDatabase extends GeneratedDatabase {
         historyEntries,
         blockedFiles
       ];
+}
+
+typedef $$AlbumsTableCreateCompanionBuilder = AlbumsCompanion Function({
+  Value<int> id,
+  required String title,
+  required String artist,
+  Value<String?> albumArtPath,
+  Value<int?> color,
+  Value<int?> year,
+});
+typedef $$AlbumsTableUpdateCompanionBuilder = AlbumsCompanion Function({
+  Value<int> id,
+  Value<String> title,
+  Value<String> artist,
+  Value<String?> albumArtPath,
+  Value<int?> color,
+  Value<int?> year,
+});
+
+class $$AlbumsTableFilterComposer
+    extends Composer<_$MainDatabase, $AlbumsTable> {
+  $$AlbumsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get artist => $composableBuilder(
+      column: $table.artist, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get albumArtPath => $composableBuilder(
+      column: $table.albumArtPath, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get color => $composableBuilder(
+      column: $table.color, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get year => $composableBuilder(
+      column: $table.year, builder: (column) => ColumnFilters(column));
+}
+
+class $$AlbumsTableOrderingComposer
+    extends Composer<_$MainDatabase, $AlbumsTable> {
+  $$AlbumsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get artist => $composableBuilder(
+      column: $table.artist, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get albumArtPath => $composableBuilder(
+      column: $table.albumArtPath,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get color => $composableBuilder(
+      column: $table.color, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get year => $composableBuilder(
+      column: $table.year, builder: (column) => ColumnOrderings(column));
+}
+
+class $$AlbumsTableAnnotationComposer
+    extends Composer<_$MainDatabase, $AlbumsTable> {
+  $$AlbumsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<String> get artist =>
+      $composableBuilder(column: $table.artist, builder: (column) => column);
+
+  GeneratedColumn<String> get albumArtPath => $composableBuilder(
+      column: $table.albumArtPath, builder: (column) => column);
+
+  GeneratedColumn<int> get color =>
+      $composableBuilder(column: $table.color, builder: (column) => column);
+
+  GeneratedColumn<int> get year =>
+      $composableBuilder(column: $table.year, builder: (column) => column);
+}
+
+class $$AlbumsTableTableManager extends RootTableManager<
+    _$MainDatabase,
+    $AlbumsTable,
+    DriftAlbum,
+    $$AlbumsTableFilterComposer,
+    $$AlbumsTableOrderingComposer,
+    $$AlbumsTableAnnotationComposer,
+    $$AlbumsTableCreateCompanionBuilder,
+    $$AlbumsTableUpdateCompanionBuilder,
+    (DriftAlbum, BaseReferences<_$MainDatabase, $AlbumsTable, DriftAlbum>),
+    DriftAlbum,
+    PrefetchHooks Function()> {
+  $$AlbumsTableTableManager(_$MainDatabase db, $AlbumsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$AlbumsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$AlbumsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$AlbumsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> title = const Value.absent(),
+            Value<String> artist = const Value.absent(),
+            Value<String?> albumArtPath = const Value.absent(),
+            Value<int?> color = const Value.absent(),
+            Value<int?> year = const Value.absent(),
+          }) =>
+              AlbumsCompanion(
+            id: id,
+            title: title,
+            artist: artist,
+            albumArtPath: albumArtPath,
+            color: color,
+            year: year,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String title,
+            required String artist,
+            Value<String?> albumArtPath = const Value.absent(),
+            Value<int?> color = const Value.absent(),
+            Value<int?> year = const Value.absent(),
+          }) =>
+              AlbumsCompanion.insert(
+            id: id,
+            title: title,
+            artist: artist,
+            albumArtPath: albumArtPath,
+            color: color,
+            year: year,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$AlbumsTableProcessedTableManager = ProcessedTableManager<
+    _$MainDatabase,
+    $AlbumsTable,
+    DriftAlbum,
+    $$AlbumsTableFilterComposer,
+    $$AlbumsTableOrderingComposer,
+    $$AlbumsTableAnnotationComposer,
+    $$AlbumsTableCreateCompanionBuilder,
+    $$AlbumsTableUpdateCompanionBuilder,
+    (DriftAlbum, BaseReferences<_$MainDatabase, $AlbumsTable, DriftAlbum>),
+    DriftAlbum,
+    PrefetchHooks Function()>;
+typedef $$ArtistsTableCreateCompanionBuilder = ArtistsCompanion Function({
+  required String name,
+  Value<int> id,
+});
+typedef $$ArtistsTableUpdateCompanionBuilder = ArtistsCompanion Function({
+  Value<String> name,
+  Value<int> id,
+});
+
+class $$ArtistsTableFilterComposer
+    extends Composer<_$MainDatabase, $ArtistsTable> {
+  $$ArtistsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+}
+
+class $$ArtistsTableOrderingComposer
+    extends Composer<_$MainDatabase, $ArtistsTable> {
+  $$ArtistsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+}
+
+class $$ArtistsTableAnnotationComposer
+    extends Composer<_$MainDatabase, $ArtistsTable> {
+  $$ArtistsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+}
+
+class $$ArtistsTableTableManager extends RootTableManager<
+    _$MainDatabase,
+    $ArtistsTable,
+    DriftArtist,
+    $$ArtistsTableFilterComposer,
+    $$ArtistsTableOrderingComposer,
+    $$ArtistsTableAnnotationComposer,
+    $$ArtistsTableCreateCompanionBuilder,
+    $$ArtistsTableUpdateCompanionBuilder,
+    (DriftArtist, BaseReferences<_$MainDatabase, $ArtistsTable, DriftArtist>),
+    DriftArtist,
+    PrefetchHooks Function()> {
+  $$ArtistsTableTableManager(_$MainDatabase db, $ArtistsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ArtistsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ArtistsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ArtistsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> name = const Value.absent(),
+            Value<int> id = const Value.absent(),
+          }) =>
+              ArtistsCompanion(
+            name: name,
+            id: id,
+          ),
+          createCompanionCallback: ({
+            required String name,
+            Value<int> id = const Value.absent(),
+          }) =>
+              ArtistsCompanion.insert(
+            name: name,
+            id: id,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$ArtistsTableProcessedTableManager = ProcessedTableManager<
+    _$MainDatabase,
+    $ArtistsTable,
+    DriftArtist,
+    $$ArtistsTableFilterComposer,
+    $$ArtistsTableOrderingComposer,
+    $$ArtistsTableAnnotationComposer,
+    $$ArtistsTableCreateCompanionBuilder,
+    $$ArtistsTableUpdateCompanionBuilder,
+    (DriftArtist, BaseReferences<_$MainDatabase, $ArtistsTable, DriftArtist>),
+    DriftArtist,
+    PrefetchHooks Function()>;
+typedef $$LibraryFoldersTableCreateCompanionBuilder = LibraryFoldersCompanion
+    Function({
+  required String path,
+  Value<int> rowid,
+});
+typedef $$LibraryFoldersTableUpdateCompanionBuilder = LibraryFoldersCompanion
+    Function({
+  Value<String> path,
+  Value<int> rowid,
+});
+
+class $$LibraryFoldersTableFilterComposer
+    extends Composer<_$MainDatabase, $LibraryFoldersTable> {
+  $$LibraryFoldersTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get path => $composableBuilder(
+      column: $table.path, builder: (column) => ColumnFilters(column));
+}
+
+class $$LibraryFoldersTableOrderingComposer
+    extends Composer<_$MainDatabase, $LibraryFoldersTable> {
+  $$LibraryFoldersTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get path => $composableBuilder(
+      column: $table.path, builder: (column) => ColumnOrderings(column));
+}
+
+class $$LibraryFoldersTableAnnotationComposer
+    extends Composer<_$MainDatabase, $LibraryFoldersTable> {
+  $$LibraryFoldersTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get path =>
+      $composableBuilder(column: $table.path, builder: (column) => column);
+}
+
+class $$LibraryFoldersTableTableManager extends RootTableManager<
+    _$MainDatabase,
+    $LibraryFoldersTable,
+    LibraryFolder,
+    $$LibraryFoldersTableFilterComposer,
+    $$LibraryFoldersTableOrderingComposer,
+    $$LibraryFoldersTableAnnotationComposer,
+    $$LibraryFoldersTableCreateCompanionBuilder,
+    $$LibraryFoldersTableUpdateCompanionBuilder,
+    (
+      LibraryFolder,
+      BaseReferences<_$MainDatabase, $LibraryFoldersTable, LibraryFolder>
+    ),
+    LibraryFolder,
+    PrefetchHooks Function()> {
+  $$LibraryFoldersTableTableManager(
+      _$MainDatabase db, $LibraryFoldersTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$LibraryFoldersTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$LibraryFoldersTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$LibraryFoldersTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> path = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              LibraryFoldersCompanion(
+            path: path,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String path,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              LibraryFoldersCompanion.insert(
+            path: path,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$LibraryFoldersTableProcessedTableManager = ProcessedTableManager<
+    _$MainDatabase,
+    $LibraryFoldersTable,
+    LibraryFolder,
+    $$LibraryFoldersTableFilterComposer,
+    $$LibraryFoldersTableOrderingComposer,
+    $$LibraryFoldersTableAnnotationComposer,
+    $$LibraryFoldersTableCreateCompanionBuilder,
+    $$LibraryFoldersTableUpdateCompanionBuilder,
+    (
+      LibraryFolder,
+      BaseReferences<_$MainDatabase, $LibraryFoldersTable, LibraryFolder>
+    ),
+    LibraryFolder,
+    PrefetchHooks Function()>;
+typedef $$QueueEntriesTableCreateCompanionBuilder = QueueEntriesCompanion
+    Function({
+  Value<int> index,
+  required String path,
+  required int originalIndex,
+  required int type,
+  required bool isAvailable,
+});
+typedef $$QueueEntriesTableUpdateCompanionBuilder = QueueEntriesCompanion
+    Function({
+  Value<int> index,
+  Value<String> path,
+  Value<int> originalIndex,
+  Value<int> type,
+  Value<bool> isAvailable,
+});
+
+class $$QueueEntriesTableFilterComposer
+    extends Composer<_$MainDatabase, $QueueEntriesTable> {
+  $$QueueEntriesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get index => $composableBuilder(
+      column: $table.index, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get path => $composableBuilder(
+      column: $table.path, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get originalIndex => $composableBuilder(
+      column: $table.originalIndex, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get type => $composableBuilder(
+      column: $table.type, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isAvailable => $composableBuilder(
+      column: $table.isAvailable, builder: (column) => ColumnFilters(column));
+}
+
+class $$QueueEntriesTableOrderingComposer
+    extends Composer<_$MainDatabase, $QueueEntriesTable> {
+  $$QueueEntriesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get index => $composableBuilder(
+      column: $table.index, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get path => $composableBuilder(
+      column: $table.path, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get originalIndex => $composableBuilder(
+      column: $table.originalIndex,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get type => $composableBuilder(
+      column: $table.type, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isAvailable => $composableBuilder(
+      column: $table.isAvailable, builder: (column) => ColumnOrderings(column));
+}
+
+class $$QueueEntriesTableAnnotationComposer
+    extends Composer<_$MainDatabase, $QueueEntriesTable> {
+  $$QueueEntriesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get index =>
+      $composableBuilder(column: $table.index, builder: (column) => column);
+
+  GeneratedColumn<String> get path =>
+      $composableBuilder(column: $table.path, builder: (column) => column);
+
+  GeneratedColumn<int> get originalIndex => $composableBuilder(
+      column: $table.originalIndex, builder: (column) => column);
+
+  GeneratedColumn<int> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<bool> get isAvailable => $composableBuilder(
+      column: $table.isAvailable, builder: (column) => column);
+}
+
+class $$QueueEntriesTableTableManager extends RootTableManager<
+    _$MainDatabase,
+    $QueueEntriesTable,
+    DriftQueueEntry,
+    $$QueueEntriesTableFilterComposer,
+    $$QueueEntriesTableOrderingComposer,
+    $$QueueEntriesTableAnnotationComposer,
+    $$QueueEntriesTableCreateCompanionBuilder,
+    $$QueueEntriesTableUpdateCompanionBuilder,
+    (
+      DriftQueueEntry,
+      BaseReferences<_$MainDatabase, $QueueEntriesTable, DriftQueueEntry>
+    ),
+    DriftQueueEntry,
+    PrefetchHooks Function()> {
+  $$QueueEntriesTableTableManager(_$MainDatabase db, $QueueEntriesTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$QueueEntriesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$QueueEntriesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$QueueEntriesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> index = const Value.absent(),
+            Value<String> path = const Value.absent(),
+            Value<int> originalIndex = const Value.absent(),
+            Value<int> type = const Value.absent(),
+            Value<bool> isAvailable = const Value.absent(),
+          }) =>
+              QueueEntriesCompanion(
+            index: index,
+            path: path,
+            originalIndex: originalIndex,
+            type: type,
+            isAvailable: isAvailable,
+          ),
+          createCompanionCallback: ({
+            Value<int> index = const Value.absent(),
+            required String path,
+            required int originalIndex,
+            required int type,
+            required bool isAvailable,
+          }) =>
+              QueueEntriesCompanion.insert(
+            index: index,
+            path: path,
+            originalIndex: originalIndex,
+            type: type,
+            isAvailable: isAvailable,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$QueueEntriesTableProcessedTableManager = ProcessedTableManager<
+    _$MainDatabase,
+    $QueueEntriesTable,
+    DriftQueueEntry,
+    $$QueueEntriesTableFilterComposer,
+    $$QueueEntriesTableOrderingComposer,
+    $$QueueEntriesTableAnnotationComposer,
+    $$QueueEntriesTableCreateCompanionBuilder,
+    $$QueueEntriesTableUpdateCompanionBuilder,
+    (
+      DriftQueueEntry,
+      BaseReferences<_$MainDatabase, $QueueEntriesTable, DriftQueueEntry>
+    ),
+    DriftQueueEntry,
+    PrefetchHooks Function()>;
+typedef $$AvailableSongEntriesTableCreateCompanionBuilder
+    = AvailableSongEntriesCompanion Function({
+  Value<int> index,
+  required String path,
+  required int originalIndex,
+  required int type,
+  required bool isAvailable,
+});
+typedef $$AvailableSongEntriesTableUpdateCompanionBuilder
+    = AvailableSongEntriesCompanion Function({
+  Value<int> index,
+  Value<String> path,
+  Value<int> originalIndex,
+  Value<int> type,
+  Value<bool> isAvailable,
+});
+
+class $$AvailableSongEntriesTableFilterComposer
+    extends Composer<_$MainDatabase, $AvailableSongEntriesTable> {
+  $$AvailableSongEntriesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get index => $composableBuilder(
+      column: $table.index, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get path => $composableBuilder(
+      column: $table.path, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get originalIndex => $composableBuilder(
+      column: $table.originalIndex, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get type => $composableBuilder(
+      column: $table.type, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isAvailable => $composableBuilder(
+      column: $table.isAvailable, builder: (column) => ColumnFilters(column));
+}
+
+class $$AvailableSongEntriesTableOrderingComposer
+    extends Composer<_$MainDatabase, $AvailableSongEntriesTable> {
+  $$AvailableSongEntriesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get index => $composableBuilder(
+      column: $table.index, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get path => $composableBuilder(
+      column: $table.path, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get originalIndex => $composableBuilder(
+      column: $table.originalIndex,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get type => $composableBuilder(
+      column: $table.type, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isAvailable => $composableBuilder(
+      column: $table.isAvailable, builder: (column) => ColumnOrderings(column));
+}
+
+class $$AvailableSongEntriesTableAnnotationComposer
+    extends Composer<_$MainDatabase, $AvailableSongEntriesTable> {
+  $$AvailableSongEntriesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get index =>
+      $composableBuilder(column: $table.index, builder: (column) => column);
+
+  GeneratedColumn<String> get path =>
+      $composableBuilder(column: $table.path, builder: (column) => column);
+
+  GeneratedColumn<int> get originalIndex => $composableBuilder(
+      column: $table.originalIndex, builder: (column) => column);
+
+  GeneratedColumn<int> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<bool> get isAvailable => $composableBuilder(
+      column: $table.isAvailable, builder: (column) => column);
+}
+
+class $$AvailableSongEntriesTableTableManager extends RootTableManager<
+    _$MainDatabase,
+    $AvailableSongEntriesTable,
+    AvailableSongEntry,
+    $$AvailableSongEntriesTableFilterComposer,
+    $$AvailableSongEntriesTableOrderingComposer,
+    $$AvailableSongEntriesTableAnnotationComposer,
+    $$AvailableSongEntriesTableCreateCompanionBuilder,
+    $$AvailableSongEntriesTableUpdateCompanionBuilder,
+    (
+      AvailableSongEntry,
+      BaseReferences<_$MainDatabase, $AvailableSongEntriesTable,
+          AvailableSongEntry>
+    ),
+    AvailableSongEntry,
+    PrefetchHooks Function()> {
+  $$AvailableSongEntriesTableTableManager(
+      _$MainDatabase db, $AvailableSongEntriesTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$AvailableSongEntriesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$AvailableSongEntriesTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$AvailableSongEntriesTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> index = const Value.absent(),
+            Value<String> path = const Value.absent(),
+            Value<int> originalIndex = const Value.absent(),
+            Value<int> type = const Value.absent(),
+            Value<bool> isAvailable = const Value.absent(),
+          }) =>
+              AvailableSongEntriesCompanion(
+            index: index,
+            path: path,
+            originalIndex: originalIndex,
+            type: type,
+            isAvailable: isAvailable,
+          ),
+          createCompanionCallback: ({
+            Value<int> index = const Value.absent(),
+            required String path,
+            required int originalIndex,
+            required int type,
+            required bool isAvailable,
+          }) =>
+              AvailableSongEntriesCompanion.insert(
+            index: index,
+            path: path,
+            originalIndex: originalIndex,
+            type: type,
+            isAvailable: isAvailable,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$AvailableSongEntriesTableProcessedTableManager
+    = ProcessedTableManager<
+        _$MainDatabase,
+        $AvailableSongEntriesTable,
+        AvailableSongEntry,
+        $$AvailableSongEntriesTableFilterComposer,
+        $$AvailableSongEntriesTableOrderingComposer,
+        $$AvailableSongEntriesTableAnnotationComposer,
+        $$AvailableSongEntriesTableCreateCompanionBuilder,
+        $$AvailableSongEntriesTableUpdateCompanionBuilder,
+        (
+          AvailableSongEntry,
+          BaseReferences<_$MainDatabase, $AvailableSongEntriesTable,
+              AvailableSongEntry>
+        ),
+        AvailableSongEntry,
+        PrefetchHooks Function()>;
+typedef $$SongsTableCreateCompanionBuilder = SongsCompanion Function({
+  required String title,
+  required String albumTitle,
+  required int albumId,
+  required String artist,
+  required String path,
+  required int duration,
+  Value<String?> albumArtPath,
+  Value<int?> color,
+  required int discNumber,
+  required int trackNumber,
+  Value<int?> year,
+  Value<int> blockLevel,
+  Value<int> likeCount,
+  Value<int> skipCount,
+  Value<int> playCount,
+  Value<bool> present,
+  Value<DateTime> timeAdded,
+  required DateTime lastModified,
+  Value<bool> previous,
+  Value<bool> next,
+  Value<int> rowid,
+});
+typedef $$SongsTableUpdateCompanionBuilder = SongsCompanion Function({
+  Value<String> title,
+  Value<String> albumTitle,
+  Value<int> albumId,
+  Value<String> artist,
+  Value<String> path,
+  Value<int> duration,
+  Value<String?> albumArtPath,
+  Value<int?> color,
+  Value<int> discNumber,
+  Value<int> trackNumber,
+  Value<int?> year,
+  Value<int> blockLevel,
+  Value<int> likeCount,
+  Value<int> skipCount,
+  Value<int> playCount,
+  Value<bool> present,
+  Value<DateTime> timeAdded,
+  Value<DateTime> lastModified,
+  Value<bool> previous,
+  Value<bool> next,
+  Value<int> rowid,
+});
+
+class $$SongsTableFilterComposer extends Composer<_$MainDatabase, $SongsTable> {
+  $$SongsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get albumTitle => $composableBuilder(
+      column: $table.albumTitle, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get albumId => $composableBuilder(
+      column: $table.albumId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get artist => $composableBuilder(
+      column: $table.artist, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get path => $composableBuilder(
+      column: $table.path, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get duration => $composableBuilder(
+      column: $table.duration, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get albumArtPath => $composableBuilder(
+      column: $table.albumArtPath, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get color => $composableBuilder(
+      column: $table.color, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get discNumber => $composableBuilder(
+      column: $table.discNumber, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get trackNumber => $composableBuilder(
+      column: $table.trackNumber, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get year => $composableBuilder(
+      column: $table.year, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get blockLevel => $composableBuilder(
+      column: $table.blockLevel, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get likeCount => $composableBuilder(
+      column: $table.likeCount, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get skipCount => $composableBuilder(
+      column: $table.skipCount, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get playCount => $composableBuilder(
+      column: $table.playCount, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get present => $composableBuilder(
+      column: $table.present, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get timeAdded => $composableBuilder(
+      column: $table.timeAdded, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get lastModified => $composableBuilder(
+      column: $table.lastModified, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get previous => $composableBuilder(
+      column: $table.previous, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get next => $composableBuilder(
+      column: $table.next, builder: (column) => ColumnFilters(column));
+}
+
+class $$SongsTableOrderingComposer
+    extends Composer<_$MainDatabase, $SongsTable> {
+  $$SongsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get albumTitle => $composableBuilder(
+      column: $table.albumTitle, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get albumId => $composableBuilder(
+      column: $table.albumId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get artist => $composableBuilder(
+      column: $table.artist, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get path => $composableBuilder(
+      column: $table.path, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get duration => $composableBuilder(
+      column: $table.duration, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get albumArtPath => $composableBuilder(
+      column: $table.albumArtPath,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get color => $composableBuilder(
+      column: $table.color, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get discNumber => $composableBuilder(
+      column: $table.discNumber, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get trackNumber => $composableBuilder(
+      column: $table.trackNumber, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get year => $composableBuilder(
+      column: $table.year, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get blockLevel => $composableBuilder(
+      column: $table.blockLevel, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get likeCount => $composableBuilder(
+      column: $table.likeCount, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get skipCount => $composableBuilder(
+      column: $table.skipCount, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get playCount => $composableBuilder(
+      column: $table.playCount, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get present => $composableBuilder(
+      column: $table.present, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get timeAdded => $composableBuilder(
+      column: $table.timeAdded, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get lastModified => $composableBuilder(
+      column: $table.lastModified,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get previous => $composableBuilder(
+      column: $table.previous, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get next => $composableBuilder(
+      column: $table.next, builder: (column) => ColumnOrderings(column));
+}
+
+class $$SongsTableAnnotationComposer
+    extends Composer<_$MainDatabase, $SongsTable> {
+  $$SongsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<String> get albumTitle => $composableBuilder(
+      column: $table.albumTitle, builder: (column) => column);
+
+  GeneratedColumn<int> get albumId =>
+      $composableBuilder(column: $table.albumId, builder: (column) => column);
+
+  GeneratedColumn<String> get artist =>
+      $composableBuilder(column: $table.artist, builder: (column) => column);
+
+  GeneratedColumn<String> get path =>
+      $composableBuilder(column: $table.path, builder: (column) => column);
+
+  GeneratedColumn<int> get duration =>
+      $composableBuilder(column: $table.duration, builder: (column) => column);
+
+  GeneratedColumn<String> get albumArtPath => $composableBuilder(
+      column: $table.albumArtPath, builder: (column) => column);
+
+  GeneratedColumn<int> get color =>
+      $composableBuilder(column: $table.color, builder: (column) => column);
+
+  GeneratedColumn<int> get discNumber => $composableBuilder(
+      column: $table.discNumber, builder: (column) => column);
+
+  GeneratedColumn<int> get trackNumber => $composableBuilder(
+      column: $table.trackNumber, builder: (column) => column);
+
+  GeneratedColumn<int> get year =>
+      $composableBuilder(column: $table.year, builder: (column) => column);
+
+  GeneratedColumn<int> get blockLevel => $composableBuilder(
+      column: $table.blockLevel, builder: (column) => column);
+
+  GeneratedColumn<int> get likeCount =>
+      $composableBuilder(column: $table.likeCount, builder: (column) => column);
+
+  GeneratedColumn<int> get skipCount =>
+      $composableBuilder(column: $table.skipCount, builder: (column) => column);
+
+  GeneratedColumn<int> get playCount =>
+      $composableBuilder(column: $table.playCount, builder: (column) => column);
+
+  GeneratedColumn<bool> get present =>
+      $composableBuilder(column: $table.present, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get timeAdded =>
+      $composableBuilder(column: $table.timeAdded, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get lastModified => $composableBuilder(
+      column: $table.lastModified, builder: (column) => column);
+
+  GeneratedColumn<bool> get previous =>
+      $composableBuilder(column: $table.previous, builder: (column) => column);
+
+  GeneratedColumn<bool> get next =>
+      $composableBuilder(column: $table.next, builder: (column) => column);
+}
+
+class $$SongsTableTableManager extends RootTableManager<
+    _$MainDatabase,
+    $SongsTable,
+    DriftSong,
+    $$SongsTableFilterComposer,
+    $$SongsTableOrderingComposer,
+    $$SongsTableAnnotationComposer,
+    $$SongsTableCreateCompanionBuilder,
+    $$SongsTableUpdateCompanionBuilder,
+    (DriftSong, BaseReferences<_$MainDatabase, $SongsTable, DriftSong>),
+    DriftSong,
+    PrefetchHooks Function()> {
+  $$SongsTableTableManager(_$MainDatabase db, $SongsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$SongsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SongsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SongsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> title = const Value.absent(),
+            Value<String> albumTitle = const Value.absent(),
+            Value<int> albumId = const Value.absent(),
+            Value<String> artist = const Value.absent(),
+            Value<String> path = const Value.absent(),
+            Value<int> duration = const Value.absent(),
+            Value<String?> albumArtPath = const Value.absent(),
+            Value<int?> color = const Value.absent(),
+            Value<int> discNumber = const Value.absent(),
+            Value<int> trackNumber = const Value.absent(),
+            Value<int?> year = const Value.absent(),
+            Value<int> blockLevel = const Value.absent(),
+            Value<int> likeCount = const Value.absent(),
+            Value<int> skipCount = const Value.absent(),
+            Value<int> playCount = const Value.absent(),
+            Value<bool> present = const Value.absent(),
+            Value<DateTime> timeAdded = const Value.absent(),
+            Value<DateTime> lastModified = const Value.absent(),
+            Value<bool> previous = const Value.absent(),
+            Value<bool> next = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              SongsCompanion(
+            title: title,
+            albumTitle: albumTitle,
+            albumId: albumId,
+            artist: artist,
+            path: path,
+            duration: duration,
+            albumArtPath: albumArtPath,
+            color: color,
+            discNumber: discNumber,
+            trackNumber: trackNumber,
+            year: year,
+            blockLevel: blockLevel,
+            likeCount: likeCount,
+            skipCount: skipCount,
+            playCount: playCount,
+            present: present,
+            timeAdded: timeAdded,
+            lastModified: lastModified,
+            previous: previous,
+            next: next,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String title,
+            required String albumTitle,
+            required int albumId,
+            required String artist,
+            required String path,
+            required int duration,
+            Value<String?> albumArtPath = const Value.absent(),
+            Value<int?> color = const Value.absent(),
+            required int discNumber,
+            required int trackNumber,
+            Value<int?> year = const Value.absent(),
+            Value<int> blockLevel = const Value.absent(),
+            Value<int> likeCount = const Value.absent(),
+            Value<int> skipCount = const Value.absent(),
+            Value<int> playCount = const Value.absent(),
+            Value<bool> present = const Value.absent(),
+            Value<DateTime> timeAdded = const Value.absent(),
+            required DateTime lastModified,
+            Value<bool> previous = const Value.absent(),
+            Value<bool> next = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              SongsCompanion.insert(
+            title: title,
+            albumTitle: albumTitle,
+            albumId: albumId,
+            artist: artist,
+            path: path,
+            duration: duration,
+            albumArtPath: albumArtPath,
+            color: color,
+            discNumber: discNumber,
+            trackNumber: trackNumber,
+            year: year,
+            blockLevel: blockLevel,
+            likeCount: likeCount,
+            skipCount: skipCount,
+            playCount: playCount,
+            present: present,
+            timeAdded: timeAdded,
+            lastModified: lastModified,
+            previous: previous,
+            next: next,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$SongsTableProcessedTableManager = ProcessedTableManager<
+    _$MainDatabase,
+    $SongsTable,
+    DriftSong,
+    $$SongsTableFilterComposer,
+    $$SongsTableOrderingComposer,
+    $$SongsTableAnnotationComposer,
+    $$SongsTableCreateCompanionBuilder,
+    $$SongsTableUpdateCompanionBuilder,
+    (DriftSong, BaseReferences<_$MainDatabase, $SongsTable, DriftSong>),
+    DriftSong,
+    PrefetchHooks Function()>;
+typedef $$SmartListsTableCreateCompanionBuilder = SmartListsCompanion Function({
+  Value<int> id,
+  required String name,
+  Value<String?> shuffleMode,
+  Value<String> icon,
+  Value<String> gradient,
+  Value<DateTime> timeCreated,
+  Value<DateTime> timeChanged,
+  Value<DateTime> timeLastPlayed,
+  Value<bool> excludeArtists,
+  Value<int> blockLevel,
+  Value<int> minLikeCount,
+  Value<int> maxLikeCount,
+  Value<int?> minPlayCount,
+  Value<int?> maxPlayCount,
+  Value<int?> minSkipCount,
+  Value<int?> maxSkipCount,
+  Value<int?> minYear,
+  Value<int?> maxYear,
+  Value<int?> limit,
+  required String orderCriteria,
+  required String orderDirections,
+});
+typedef $$SmartListsTableUpdateCompanionBuilder = SmartListsCompanion Function({
+  Value<int> id,
+  Value<String> name,
+  Value<String?> shuffleMode,
+  Value<String> icon,
+  Value<String> gradient,
+  Value<DateTime> timeCreated,
+  Value<DateTime> timeChanged,
+  Value<DateTime> timeLastPlayed,
+  Value<bool> excludeArtists,
+  Value<int> blockLevel,
+  Value<int> minLikeCount,
+  Value<int> maxLikeCount,
+  Value<int?> minPlayCount,
+  Value<int?> maxPlayCount,
+  Value<int?> minSkipCount,
+  Value<int?> maxSkipCount,
+  Value<int?> minYear,
+  Value<int?> maxYear,
+  Value<int?> limit,
+  Value<String> orderCriteria,
+  Value<String> orderDirections,
+});
+
+class $$SmartListsTableFilterComposer
+    extends Composer<_$MainDatabase, $SmartListsTable> {
+  $$SmartListsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get shuffleMode => $composableBuilder(
+      column: $table.shuffleMode, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get icon => $composableBuilder(
+      column: $table.icon, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get gradient => $composableBuilder(
+      column: $table.gradient, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get timeCreated => $composableBuilder(
+      column: $table.timeCreated, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get timeChanged => $composableBuilder(
+      column: $table.timeChanged, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get timeLastPlayed => $composableBuilder(
+      column: $table.timeLastPlayed,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get excludeArtists => $composableBuilder(
+      column: $table.excludeArtists,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get blockLevel => $composableBuilder(
+      column: $table.blockLevel, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get minLikeCount => $composableBuilder(
+      column: $table.minLikeCount, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get maxLikeCount => $composableBuilder(
+      column: $table.maxLikeCount, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get minPlayCount => $composableBuilder(
+      column: $table.minPlayCount, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get maxPlayCount => $composableBuilder(
+      column: $table.maxPlayCount, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get minSkipCount => $composableBuilder(
+      column: $table.minSkipCount, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get maxSkipCount => $composableBuilder(
+      column: $table.maxSkipCount, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get minYear => $composableBuilder(
+      column: $table.minYear, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get maxYear => $composableBuilder(
+      column: $table.maxYear, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get limit => $composableBuilder(
+      column: $table.limit, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get orderCriteria => $composableBuilder(
+      column: $table.orderCriteria, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get orderDirections => $composableBuilder(
+      column: $table.orderDirections,
+      builder: (column) => ColumnFilters(column));
+}
+
+class $$SmartListsTableOrderingComposer
+    extends Composer<_$MainDatabase, $SmartListsTable> {
+  $$SmartListsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get shuffleMode => $composableBuilder(
+      column: $table.shuffleMode, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get icon => $composableBuilder(
+      column: $table.icon, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get gradient => $composableBuilder(
+      column: $table.gradient, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get timeCreated => $composableBuilder(
+      column: $table.timeCreated, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get timeChanged => $composableBuilder(
+      column: $table.timeChanged, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get timeLastPlayed => $composableBuilder(
+      column: $table.timeLastPlayed,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get excludeArtists => $composableBuilder(
+      column: $table.excludeArtists,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get blockLevel => $composableBuilder(
+      column: $table.blockLevel, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get minLikeCount => $composableBuilder(
+      column: $table.minLikeCount,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get maxLikeCount => $composableBuilder(
+      column: $table.maxLikeCount,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get minPlayCount => $composableBuilder(
+      column: $table.minPlayCount,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get maxPlayCount => $composableBuilder(
+      column: $table.maxPlayCount,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get minSkipCount => $composableBuilder(
+      column: $table.minSkipCount,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get maxSkipCount => $composableBuilder(
+      column: $table.maxSkipCount,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get minYear => $composableBuilder(
+      column: $table.minYear, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get maxYear => $composableBuilder(
+      column: $table.maxYear, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get limit => $composableBuilder(
+      column: $table.limit, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get orderCriteria => $composableBuilder(
+      column: $table.orderCriteria,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get orderDirections => $composableBuilder(
+      column: $table.orderDirections,
+      builder: (column) => ColumnOrderings(column));
+}
+
+class $$SmartListsTableAnnotationComposer
+    extends Composer<_$MainDatabase, $SmartListsTable> {
+  $$SmartListsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get shuffleMode => $composableBuilder(
+      column: $table.shuffleMode, builder: (column) => column);
+
+  GeneratedColumn<String> get icon =>
+      $composableBuilder(column: $table.icon, builder: (column) => column);
+
+  GeneratedColumn<String> get gradient =>
+      $composableBuilder(column: $table.gradient, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get timeCreated => $composableBuilder(
+      column: $table.timeCreated, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get timeChanged => $composableBuilder(
+      column: $table.timeChanged, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get timeLastPlayed => $composableBuilder(
+      column: $table.timeLastPlayed, builder: (column) => column);
+
+  GeneratedColumn<bool> get excludeArtists => $composableBuilder(
+      column: $table.excludeArtists, builder: (column) => column);
+
+  GeneratedColumn<int> get blockLevel => $composableBuilder(
+      column: $table.blockLevel, builder: (column) => column);
+
+  GeneratedColumn<int> get minLikeCount => $composableBuilder(
+      column: $table.minLikeCount, builder: (column) => column);
+
+  GeneratedColumn<int> get maxLikeCount => $composableBuilder(
+      column: $table.maxLikeCount, builder: (column) => column);
+
+  GeneratedColumn<int> get minPlayCount => $composableBuilder(
+      column: $table.minPlayCount, builder: (column) => column);
+
+  GeneratedColumn<int> get maxPlayCount => $composableBuilder(
+      column: $table.maxPlayCount, builder: (column) => column);
+
+  GeneratedColumn<int> get minSkipCount => $composableBuilder(
+      column: $table.minSkipCount, builder: (column) => column);
+
+  GeneratedColumn<int> get maxSkipCount => $composableBuilder(
+      column: $table.maxSkipCount, builder: (column) => column);
+
+  GeneratedColumn<int> get minYear =>
+      $composableBuilder(column: $table.minYear, builder: (column) => column);
+
+  GeneratedColumn<int> get maxYear =>
+      $composableBuilder(column: $table.maxYear, builder: (column) => column);
+
+  GeneratedColumn<int> get limit =>
+      $composableBuilder(column: $table.limit, builder: (column) => column);
+
+  GeneratedColumn<String> get orderCriteria => $composableBuilder(
+      column: $table.orderCriteria, builder: (column) => column);
+
+  GeneratedColumn<String> get orderDirections => $composableBuilder(
+      column: $table.orderDirections, builder: (column) => column);
+}
+
+class $$SmartListsTableTableManager extends RootTableManager<
+    _$MainDatabase,
+    $SmartListsTable,
+    DriftSmartList,
+    $$SmartListsTableFilterComposer,
+    $$SmartListsTableOrderingComposer,
+    $$SmartListsTableAnnotationComposer,
+    $$SmartListsTableCreateCompanionBuilder,
+    $$SmartListsTableUpdateCompanionBuilder,
+    (
+      DriftSmartList,
+      BaseReferences<_$MainDatabase, $SmartListsTable, DriftSmartList>
+    ),
+    DriftSmartList,
+    PrefetchHooks Function()> {
+  $$SmartListsTableTableManager(_$MainDatabase db, $SmartListsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$SmartListsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SmartListsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SmartListsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> name = const Value.absent(),
+            Value<String?> shuffleMode = const Value.absent(),
+            Value<String> icon = const Value.absent(),
+            Value<String> gradient = const Value.absent(),
+            Value<DateTime> timeCreated = const Value.absent(),
+            Value<DateTime> timeChanged = const Value.absent(),
+            Value<DateTime> timeLastPlayed = const Value.absent(),
+            Value<bool> excludeArtists = const Value.absent(),
+            Value<int> blockLevel = const Value.absent(),
+            Value<int> minLikeCount = const Value.absent(),
+            Value<int> maxLikeCount = const Value.absent(),
+            Value<int?> minPlayCount = const Value.absent(),
+            Value<int?> maxPlayCount = const Value.absent(),
+            Value<int?> minSkipCount = const Value.absent(),
+            Value<int?> maxSkipCount = const Value.absent(),
+            Value<int?> minYear = const Value.absent(),
+            Value<int?> maxYear = const Value.absent(),
+            Value<int?> limit = const Value.absent(),
+            Value<String> orderCriteria = const Value.absent(),
+            Value<String> orderDirections = const Value.absent(),
+          }) =>
+              SmartListsCompanion(
+            id: id,
+            name: name,
+            shuffleMode: shuffleMode,
+            icon: icon,
+            gradient: gradient,
+            timeCreated: timeCreated,
+            timeChanged: timeChanged,
+            timeLastPlayed: timeLastPlayed,
+            excludeArtists: excludeArtists,
+            blockLevel: blockLevel,
+            minLikeCount: minLikeCount,
+            maxLikeCount: maxLikeCount,
+            minPlayCount: minPlayCount,
+            maxPlayCount: maxPlayCount,
+            minSkipCount: minSkipCount,
+            maxSkipCount: maxSkipCount,
+            minYear: minYear,
+            maxYear: maxYear,
+            limit: limit,
+            orderCriteria: orderCriteria,
+            orderDirections: orderDirections,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String name,
+            Value<String?> shuffleMode = const Value.absent(),
+            Value<String> icon = const Value.absent(),
+            Value<String> gradient = const Value.absent(),
+            Value<DateTime> timeCreated = const Value.absent(),
+            Value<DateTime> timeChanged = const Value.absent(),
+            Value<DateTime> timeLastPlayed = const Value.absent(),
+            Value<bool> excludeArtists = const Value.absent(),
+            Value<int> blockLevel = const Value.absent(),
+            Value<int> minLikeCount = const Value.absent(),
+            Value<int> maxLikeCount = const Value.absent(),
+            Value<int?> minPlayCount = const Value.absent(),
+            Value<int?> maxPlayCount = const Value.absent(),
+            Value<int?> minSkipCount = const Value.absent(),
+            Value<int?> maxSkipCount = const Value.absent(),
+            Value<int?> minYear = const Value.absent(),
+            Value<int?> maxYear = const Value.absent(),
+            Value<int?> limit = const Value.absent(),
+            required String orderCriteria,
+            required String orderDirections,
+          }) =>
+              SmartListsCompanion.insert(
+            id: id,
+            name: name,
+            shuffleMode: shuffleMode,
+            icon: icon,
+            gradient: gradient,
+            timeCreated: timeCreated,
+            timeChanged: timeChanged,
+            timeLastPlayed: timeLastPlayed,
+            excludeArtists: excludeArtists,
+            blockLevel: blockLevel,
+            minLikeCount: minLikeCount,
+            maxLikeCount: maxLikeCount,
+            minPlayCount: minPlayCount,
+            maxPlayCount: maxPlayCount,
+            minSkipCount: minSkipCount,
+            maxSkipCount: maxSkipCount,
+            minYear: minYear,
+            maxYear: maxYear,
+            limit: limit,
+            orderCriteria: orderCriteria,
+            orderDirections: orderDirections,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$SmartListsTableProcessedTableManager = ProcessedTableManager<
+    _$MainDatabase,
+    $SmartListsTable,
+    DriftSmartList,
+    $$SmartListsTableFilterComposer,
+    $$SmartListsTableOrderingComposer,
+    $$SmartListsTableAnnotationComposer,
+    $$SmartListsTableCreateCompanionBuilder,
+    $$SmartListsTableUpdateCompanionBuilder,
+    (
+      DriftSmartList,
+      BaseReferences<_$MainDatabase, $SmartListsTable, DriftSmartList>
+    ),
+    DriftSmartList,
+    PrefetchHooks Function()>;
+typedef $$SmartListArtistsTableCreateCompanionBuilder
+    = SmartListArtistsCompanion Function({
+  required int smartListId,
+  required String artistName,
+  Value<int> rowid,
+});
+typedef $$SmartListArtistsTableUpdateCompanionBuilder
+    = SmartListArtistsCompanion Function({
+  Value<int> smartListId,
+  Value<String> artistName,
+  Value<int> rowid,
+});
+
+class $$SmartListArtistsTableFilterComposer
+    extends Composer<_$MainDatabase, $SmartListArtistsTable> {
+  $$SmartListArtistsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get smartListId => $composableBuilder(
+      column: $table.smartListId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get artistName => $composableBuilder(
+      column: $table.artistName, builder: (column) => ColumnFilters(column));
+}
+
+class $$SmartListArtistsTableOrderingComposer
+    extends Composer<_$MainDatabase, $SmartListArtistsTable> {
+  $$SmartListArtistsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get smartListId => $composableBuilder(
+      column: $table.smartListId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get artistName => $composableBuilder(
+      column: $table.artistName, builder: (column) => ColumnOrderings(column));
+}
+
+class $$SmartListArtistsTableAnnotationComposer
+    extends Composer<_$MainDatabase, $SmartListArtistsTable> {
+  $$SmartListArtistsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get smartListId => $composableBuilder(
+      column: $table.smartListId, builder: (column) => column);
+
+  GeneratedColumn<String> get artistName => $composableBuilder(
+      column: $table.artistName, builder: (column) => column);
+}
+
+class $$SmartListArtistsTableTableManager extends RootTableManager<
+    _$MainDatabase,
+    $SmartListArtistsTable,
+    DriftSmartListArtist,
+    $$SmartListArtistsTableFilterComposer,
+    $$SmartListArtistsTableOrderingComposer,
+    $$SmartListArtistsTableAnnotationComposer,
+    $$SmartListArtistsTableCreateCompanionBuilder,
+    $$SmartListArtistsTableUpdateCompanionBuilder,
+    (
+      DriftSmartListArtist,
+      BaseReferences<_$MainDatabase, $SmartListArtistsTable,
+          DriftSmartListArtist>
+    ),
+    DriftSmartListArtist,
+    PrefetchHooks Function()> {
+  $$SmartListArtistsTableTableManager(
+      _$MainDatabase db, $SmartListArtistsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$SmartListArtistsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SmartListArtistsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SmartListArtistsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> smartListId = const Value.absent(),
+            Value<String> artistName = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              SmartListArtistsCompanion(
+            smartListId: smartListId,
+            artistName: artistName,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required int smartListId,
+            required String artistName,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              SmartListArtistsCompanion.insert(
+            smartListId: smartListId,
+            artistName: artistName,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$SmartListArtistsTableProcessedTableManager = ProcessedTableManager<
+    _$MainDatabase,
+    $SmartListArtistsTable,
+    DriftSmartListArtist,
+    $$SmartListArtistsTableFilterComposer,
+    $$SmartListArtistsTableOrderingComposer,
+    $$SmartListArtistsTableAnnotationComposer,
+    $$SmartListArtistsTableCreateCompanionBuilder,
+    $$SmartListArtistsTableUpdateCompanionBuilder,
+    (
+      DriftSmartListArtist,
+      BaseReferences<_$MainDatabase, $SmartListArtistsTable,
+          DriftSmartListArtist>
+    ),
+    DriftSmartListArtist,
+    PrefetchHooks Function()>;
+typedef $$PlaylistsTableCreateCompanionBuilder = PlaylistsCompanion Function({
+  Value<int> id,
+  required String name,
+  Value<String?> shuffleMode,
+  Value<String> icon,
+  Value<String> gradient,
+  Value<DateTime> timeCreated,
+  Value<DateTime> timeChanged,
+  Value<DateTime> timeLastPlayed,
+});
+typedef $$PlaylistsTableUpdateCompanionBuilder = PlaylistsCompanion Function({
+  Value<int> id,
+  Value<String> name,
+  Value<String?> shuffleMode,
+  Value<String> icon,
+  Value<String> gradient,
+  Value<DateTime> timeCreated,
+  Value<DateTime> timeChanged,
+  Value<DateTime> timeLastPlayed,
+});
+
+class $$PlaylistsTableFilterComposer
+    extends Composer<_$MainDatabase, $PlaylistsTable> {
+  $$PlaylistsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get shuffleMode => $composableBuilder(
+      column: $table.shuffleMode, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get icon => $composableBuilder(
+      column: $table.icon, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get gradient => $composableBuilder(
+      column: $table.gradient, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get timeCreated => $composableBuilder(
+      column: $table.timeCreated, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get timeChanged => $composableBuilder(
+      column: $table.timeChanged, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get timeLastPlayed => $composableBuilder(
+      column: $table.timeLastPlayed,
+      builder: (column) => ColumnFilters(column));
+}
+
+class $$PlaylistsTableOrderingComposer
+    extends Composer<_$MainDatabase, $PlaylistsTable> {
+  $$PlaylistsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get shuffleMode => $composableBuilder(
+      column: $table.shuffleMode, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get icon => $composableBuilder(
+      column: $table.icon, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get gradient => $composableBuilder(
+      column: $table.gradient, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get timeCreated => $composableBuilder(
+      column: $table.timeCreated, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get timeChanged => $composableBuilder(
+      column: $table.timeChanged, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get timeLastPlayed => $composableBuilder(
+      column: $table.timeLastPlayed,
+      builder: (column) => ColumnOrderings(column));
+}
+
+class $$PlaylistsTableAnnotationComposer
+    extends Composer<_$MainDatabase, $PlaylistsTable> {
+  $$PlaylistsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get shuffleMode => $composableBuilder(
+      column: $table.shuffleMode, builder: (column) => column);
+
+  GeneratedColumn<String> get icon =>
+      $composableBuilder(column: $table.icon, builder: (column) => column);
+
+  GeneratedColumn<String> get gradient =>
+      $composableBuilder(column: $table.gradient, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get timeCreated => $composableBuilder(
+      column: $table.timeCreated, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get timeChanged => $composableBuilder(
+      column: $table.timeChanged, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get timeLastPlayed => $composableBuilder(
+      column: $table.timeLastPlayed, builder: (column) => column);
+}
+
+class $$PlaylistsTableTableManager extends RootTableManager<
+    _$MainDatabase,
+    $PlaylistsTable,
+    DriftPlaylist,
+    $$PlaylistsTableFilterComposer,
+    $$PlaylistsTableOrderingComposer,
+    $$PlaylistsTableAnnotationComposer,
+    $$PlaylistsTableCreateCompanionBuilder,
+    $$PlaylistsTableUpdateCompanionBuilder,
+    (
+      DriftPlaylist,
+      BaseReferences<_$MainDatabase, $PlaylistsTable, DriftPlaylist>
+    ),
+    DriftPlaylist,
+    PrefetchHooks Function()> {
+  $$PlaylistsTableTableManager(_$MainDatabase db, $PlaylistsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$PlaylistsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$PlaylistsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$PlaylistsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> name = const Value.absent(),
+            Value<String?> shuffleMode = const Value.absent(),
+            Value<String> icon = const Value.absent(),
+            Value<String> gradient = const Value.absent(),
+            Value<DateTime> timeCreated = const Value.absent(),
+            Value<DateTime> timeChanged = const Value.absent(),
+            Value<DateTime> timeLastPlayed = const Value.absent(),
+          }) =>
+              PlaylistsCompanion(
+            id: id,
+            name: name,
+            shuffleMode: shuffleMode,
+            icon: icon,
+            gradient: gradient,
+            timeCreated: timeCreated,
+            timeChanged: timeChanged,
+            timeLastPlayed: timeLastPlayed,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String name,
+            Value<String?> shuffleMode = const Value.absent(),
+            Value<String> icon = const Value.absent(),
+            Value<String> gradient = const Value.absent(),
+            Value<DateTime> timeCreated = const Value.absent(),
+            Value<DateTime> timeChanged = const Value.absent(),
+            Value<DateTime> timeLastPlayed = const Value.absent(),
+          }) =>
+              PlaylistsCompanion.insert(
+            id: id,
+            name: name,
+            shuffleMode: shuffleMode,
+            icon: icon,
+            gradient: gradient,
+            timeCreated: timeCreated,
+            timeChanged: timeChanged,
+            timeLastPlayed: timeLastPlayed,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$PlaylistsTableProcessedTableManager = ProcessedTableManager<
+    _$MainDatabase,
+    $PlaylistsTable,
+    DriftPlaylist,
+    $$PlaylistsTableFilterComposer,
+    $$PlaylistsTableOrderingComposer,
+    $$PlaylistsTableAnnotationComposer,
+    $$PlaylistsTableCreateCompanionBuilder,
+    $$PlaylistsTableUpdateCompanionBuilder,
+    (
+      DriftPlaylist,
+      BaseReferences<_$MainDatabase, $PlaylistsTable, DriftPlaylist>
+    ),
+    DriftPlaylist,
+    PrefetchHooks Function()>;
+typedef $$PlaylistEntriesTableCreateCompanionBuilder = PlaylistEntriesCompanion
+    Function({
+  required int playlistId,
+  required String songPath,
+  required int position,
+  Value<int> rowid,
+});
+typedef $$PlaylistEntriesTableUpdateCompanionBuilder = PlaylistEntriesCompanion
+    Function({
+  Value<int> playlistId,
+  Value<String> songPath,
+  Value<int> position,
+  Value<int> rowid,
+});
+
+class $$PlaylistEntriesTableFilterComposer
+    extends Composer<_$MainDatabase, $PlaylistEntriesTable> {
+  $$PlaylistEntriesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get playlistId => $composableBuilder(
+      column: $table.playlistId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get songPath => $composableBuilder(
+      column: $table.songPath, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get position => $composableBuilder(
+      column: $table.position, builder: (column) => ColumnFilters(column));
+}
+
+class $$PlaylistEntriesTableOrderingComposer
+    extends Composer<_$MainDatabase, $PlaylistEntriesTable> {
+  $$PlaylistEntriesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get playlistId => $composableBuilder(
+      column: $table.playlistId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get songPath => $composableBuilder(
+      column: $table.songPath, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get position => $composableBuilder(
+      column: $table.position, builder: (column) => ColumnOrderings(column));
+}
+
+class $$PlaylistEntriesTableAnnotationComposer
+    extends Composer<_$MainDatabase, $PlaylistEntriesTable> {
+  $$PlaylistEntriesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get playlistId => $composableBuilder(
+      column: $table.playlistId, builder: (column) => column);
+
+  GeneratedColumn<String> get songPath =>
+      $composableBuilder(column: $table.songPath, builder: (column) => column);
+
+  GeneratedColumn<int> get position =>
+      $composableBuilder(column: $table.position, builder: (column) => column);
+}
+
+class $$PlaylistEntriesTableTableManager extends RootTableManager<
+    _$MainDatabase,
+    $PlaylistEntriesTable,
+    DriftPlaylistEntry,
+    $$PlaylistEntriesTableFilterComposer,
+    $$PlaylistEntriesTableOrderingComposer,
+    $$PlaylistEntriesTableAnnotationComposer,
+    $$PlaylistEntriesTableCreateCompanionBuilder,
+    $$PlaylistEntriesTableUpdateCompanionBuilder,
+    (
+      DriftPlaylistEntry,
+      BaseReferences<_$MainDatabase, $PlaylistEntriesTable, DriftPlaylistEntry>
+    ),
+    DriftPlaylistEntry,
+    PrefetchHooks Function()> {
+  $$PlaylistEntriesTableTableManager(
+      _$MainDatabase db, $PlaylistEntriesTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$PlaylistEntriesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$PlaylistEntriesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$PlaylistEntriesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> playlistId = const Value.absent(),
+            Value<String> songPath = const Value.absent(),
+            Value<int> position = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              PlaylistEntriesCompanion(
+            playlistId: playlistId,
+            songPath: songPath,
+            position: position,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required int playlistId,
+            required String songPath,
+            required int position,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              PlaylistEntriesCompanion.insert(
+            playlistId: playlistId,
+            songPath: songPath,
+            position: position,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$PlaylistEntriesTableProcessedTableManager = ProcessedTableManager<
+    _$MainDatabase,
+    $PlaylistEntriesTable,
+    DriftPlaylistEntry,
+    $$PlaylistEntriesTableFilterComposer,
+    $$PlaylistEntriesTableOrderingComposer,
+    $$PlaylistEntriesTableAnnotationComposer,
+    $$PlaylistEntriesTableCreateCompanionBuilder,
+    $$PlaylistEntriesTableUpdateCompanionBuilder,
+    (
+      DriftPlaylistEntry,
+      BaseReferences<_$MainDatabase, $PlaylistEntriesTable, DriftPlaylistEntry>
+    ),
+    DriftPlaylistEntry,
+    PrefetchHooks Function()>;
+typedef $$KeyValueEntriesTableCreateCompanionBuilder = KeyValueEntriesCompanion
+    Function({
+  required String key,
+  required String value,
+  Value<int> rowid,
+});
+typedef $$KeyValueEntriesTableUpdateCompanionBuilder = KeyValueEntriesCompanion
+    Function({
+  Value<String> key,
+  Value<String> value,
+  Value<int> rowid,
+});
+
+class $$KeyValueEntriesTableFilterComposer
+    extends Composer<_$MainDatabase, $KeyValueEntriesTable> {
+  $$KeyValueEntriesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get key => $composableBuilder(
+      column: $table.key, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get value => $composableBuilder(
+      column: $table.value, builder: (column) => ColumnFilters(column));
+}
+
+class $$KeyValueEntriesTableOrderingComposer
+    extends Composer<_$MainDatabase, $KeyValueEntriesTable> {
+  $$KeyValueEntriesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get key => $composableBuilder(
+      column: $table.key, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get value => $composableBuilder(
+      column: $table.value, builder: (column) => ColumnOrderings(column));
+}
+
+class $$KeyValueEntriesTableAnnotationComposer
+    extends Composer<_$MainDatabase, $KeyValueEntriesTable> {
+  $$KeyValueEntriesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get key =>
+      $composableBuilder(column: $table.key, builder: (column) => column);
+
+  GeneratedColumn<String> get value =>
+      $composableBuilder(column: $table.value, builder: (column) => column);
+}
+
+class $$KeyValueEntriesTableTableManager extends RootTableManager<
+    _$MainDatabase,
+    $KeyValueEntriesTable,
+    KeyValueEntry,
+    $$KeyValueEntriesTableFilterComposer,
+    $$KeyValueEntriesTableOrderingComposer,
+    $$KeyValueEntriesTableAnnotationComposer,
+    $$KeyValueEntriesTableCreateCompanionBuilder,
+    $$KeyValueEntriesTableUpdateCompanionBuilder,
+    (
+      KeyValueEntry,
+      BaseReferences<_$MainDatabase, $KeyValueEntriesTable, KeyValueEntry>
+    ),
+    KeyValueEntry,
+    PrefetchHooks Function()> {
+  $$KeyValueEntriesTableTableManager(
+      _$MainDatabase db, $KeyValueEntriesTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$KeyValueEntriesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$KeyValueEntriesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$KeyValueEntriesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> key = const Value.absent(),
+            Value<String> value = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              KeyValueEntriesCompanion(
+            key: key,
+            value: value,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String key,
+            required String value,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              KeyValueEntriesCompanion.insert(
+            key: key,
+            value: value,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$KeyValueEntriesTableProcessedTableManager = ProcessedTableManager<
+    _$MainDatabase,
+    $KeyValueEntriesTable,
+    KeyValueEntry,
+    $$KeyValueEntriesTableFilterComposer,
+    $$KeyValueEntriesTableOrderingComposer,
+    $$KeyValueEntriesTableAnnotationComposer,
+    $$KeyValueEntriesTableCreateCompanionBuilder,
+    $$KeyValueEntriesTableUpdateCompanionBuilder,
+    (
+      KeyValueEntry,
+      BaseReferences<_$MainDatabase, $KeyValueEntriesTable, KeyValueEntry>
+    ),
+    KeyValueEntry,
+    PrefetchHooks Function()>;
+typedef $$HomeWidgetsTableCreateCompanionBuilder = HomeWidgetsCompanion
+    Function({
+  Value<int> position,
+  required String type,
+  Value<String> data,
+});
+typedef $$HomeWidgetsTableUpdateCompanionBuilder = HomeWidgetsCompanion
+    Function({
+  Value<int> position,
+  Value<String> type,
+  Value<String> data,
+});
+
+class $$HomeWidgetsTableFilterComposer
+    extends Composer<_$MainDatabase, $HomeWidgetsTable> {
+  $$HomeWidgetsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get position => $composableBuilder(
+      column: $table.position, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get type => $composableBuilder(
+      column: $table.type, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get data => $composableBuilder(
+      column: $table.data, builder: (column) => ColumnFilters(column));
+}
+
+class $$HomeWidgetsTableOrderingComposer
+    extends Composer<_$MainDatabase, $HomeWidgetsTable> {
+  $$HomeWidgetsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get position => $composableBuilder(
+      column: $table.position, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get type => $composableBuilder(
+      column: $table.type, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get data => $composableBuilder(
+      column: $table.data, builder: (column) => ColumnOrderings(column));
+}
+
+class $$HomeWidgetsTableAnnotationComposer
+    extends Composer<_$MainDatabase, $HomeWidgetsTable> {
+  $$HomeWidgetsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get position =>
+      $composableBuilder(column: $table.position, builder: (column) => column);
+
+  GeneratedColumn<String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<String> get data =>
+      $composableBuilder(column: $table.data, builder: (column) => column);
+}
+
+class $$HomeWidgetsTableTableManager extends RootTableManager<
+    _$MainDatabase,
+    $HomeWidgetsTable,
+    DriftHomeWidget,
+    $$HomeWidgetsTableFilterComposer,
+    $$HomeWidgetsTableOrderingComposer,
+    $$HomeWidgetsTableAnnotationComposer,
+    $$HomeWidgetsTableCreateCompanionBuilder,
+    $$HomeWidgetsTableUpdateCompanionBuilder,
+    (
+      DriftHomeWidget,
+      BaseReferences<_$MainDatabase, $HomeWidgetsTable, DriftHomeWidget>
+    ),
+    DriftHomeWidget,
+    PrefetchHooks Function()> {
+  $$HomeWidgetsTableTableManager(_$MainDatabase db, $HomeWidgetsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$HomeWidgetsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$HomeWidgetsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$HomeWidgetsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> position = const Value.absent(),
+            Value<String> type = const Value.absent(),
+            Value<String> data = const Value.absent(),
+          }) =>
+              HomeWidgetsCompanion(
+            position: position,
+            type: type,
+            data: data,
+          ),
+          createCompanionCallback: ({
+            Value<int> position = const Value.absent(),
+            required String type,
+            Value<String> data = const Value.absent(),
+          }) =>
+              HomeWidgetsCompanion.insert(
+            position: position,
+            type: type,
+            data: data,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$HomeWidgetsTableProcessedTableManager = ProcessedTableManager<
+    _$MainDatabase,
+    $HomeWidgetsTable,
+    DriftHomeWidget,
+    $$HomeWidgetsTableFilterComposer,
+    $$HomeWidgetsTableOrderingComposer,
+    $$HomeWidgetsTableAnnotationComposer,
+    $$HomeWidgetsTableCreateCompanionBuilder,
+    $$HomeWidgetsTableUpdateCompanionBuilder,
+    (
+      DriftHomeWidget,
+      BaseReferences<_$MainDatabase, $HomeWidgetsTable, DriftHomeWidget>
+    ),
+    DriftHomeWidget,
+    PrefetchHooks Function()>;
+typedef $$HistoryEntriesTableCreateCompanionBuilder = HistoryEntriesCompanion
+    Function({
+  Value<DateTime> time,
+  required String type,
+  required String identifier,
+  Value<int> rowid,
+});
+typedef $$HistoryEntriesTableUpdateCompanionBuilder = HistoryEntriesCompanion
+    Function({
+  Value<DateTime> time,
+  Value<String> type,
+  Value<String> identifier,
+  Value<int> rowid,
+});
+
+class $$HistoryEntriesTableFilterComposer
+    extends Composer<_$MainDatabase, $HistoryEntriesTable> {
+  $$HistoryEntriesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<DateTime> get time => $composableBuilder(
+      column: $table.time, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get type => $composableBuilder(
+      column: $table.type, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get identifier => $composableBuilder(
+      column: $table.identifier, builder: (column) => ColumnFilters(column));
+}
+
+class $$HistoryEntriesTableOrderingComposer
+    extends Composer<_$MainDatabase, $HistoryEntriesTable> {
+  $$HistoryEntriesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<DateTime> get time => $composableBuilder(
+      column: $table.time, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get type => $composableBuilder(
+      column: $table.type, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get identifier => $composableBuilder(
+      column: $table.identifier, builder: (column) => ColumnOrderings(column));
+}
+
+class $$HistoryEntriesTableAnnotationComposer
+    extends Composer<_$MainDatabase, $HistoryEntriesTable> {
+  $$HistoryEntriesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<DateTime> get time =>
+      $composableBuilder(column: $table.time, builder: (column) => column);
+
+  GeneratedColumn<String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<String> get identifier => $composableBuilder(
+      column: $table.identifier, builder: (column) => column);
+}
+
+class $$HistoryEntriesTableTableManager extends RootTableManager<
+    _$MainDatabase,
+    $HistoryEntriesTable,
+    DriftHistoryEntry,
+    $$HistoryEntriesTableFilterComposer,
+    $$HistoryEntriesTableOrderingComposer,
+    $$HistoryEntriesTableAnnotationComposer,
+    $$HistoryEntriesTableCreateCompanionBuilder,
+    $$HistoryEntriesTableUpdateCompanionBuilder,
+    (
+      DriftHistoryEntry,
+      BaseReferences<_$MainDatabase, $HistoryEntriesTable, DriftHistoryEntry>
+    ),
+    DriftHistoryEntry,
+    PrefetchHooks Function()> {
+  $$HistoryEntriesTableTableManager(
+      _$MainDatabase db, $HistoryEntriesTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$HistoryEntriesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$HistoryEntriesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$HistoryEntriesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<DateTime> time = const Value.absent(),
+            Value<String> type = const Value.absent(),
+            Value<String> identifier = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              HistoryEntriesCompanion(
+            time: time,
+            type: type,
+            identifier: identifier,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            Value<DateTime> time = const Value.absent(),
+            required String type,
+            required String identifier,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              HistoryEntriesCompanion.insert(
+            time: time,
+            type: type,
+            identifier: identifier,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$HistoryEntriesTableProcessedTableManager = ProcessedTableManager<
+    _$MainDatabase,
+    $HistoryEntriesTable,
+    DriftHistoryEntry,
+    $$HistoryEntriesTableFilterComposer,
+    $$HistoryEntriesTableOrderingComposer,
+    $$HistoryEntriesTableAnnotationComposer,
+    $$HistoryEntriesTableCreateCompanionBuilder,
+    $$HistoryEntriesTableUpdateCompanionBuilder,
+    (
+      DriftHistoryEntry,
+      BaseReferences<_$MainDatabase, $HistoryEntriesTable, DriftHistoryEntry>
+    ),
+    DriftHistoryEntry,
+    PrefetchHooks Function()>;
+typedef $$BlockedFilesTableCreateCompanionBuilder = BlockedFilesCompanion
+    Function({
+  required String path,
+  Value<int> rowid,
+});
+typedef $$BlockedFilesTableUpdateCompanionBuilder = BlockedFilesCompanion
+    Function({
+  Value<String> path,
+  Value<int> rowid,
+});
+
+class $$BlockedFilesTableFilterComposer
+    extends Composer<_$MainDatabase, $BlockedFilesTable> {
+  $$BlockedFilesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get path => $composableBuilder(
+      column: $table.path, builder: (column) => ColumnFilters(column));
+}
+
+class $$BlockedFilesTableOrderingComposer
+    extends Composer<_$MainDatabase, $BlockedFilesTable> {
+  $$BlockedFilesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get path => $composableBuilder(
+      column: $table.path, builder: (column) => ColumnOrderings(column));
+}
+
+class $$BlockedFilesTableAnnotationComposer
+    extends Composer<_$MainDatabase, $BlockedFilesTable> {
+  $$BlockedFilesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get path =>
+      $composableBuilder(column: $table.path, builder: (column) => column);
+}
+
+class $$BlockedFilesTableTableManager extends RootTableManager<
+    _$MainDatabase,
+    $BlockedFilesTable,
+    BlockedFile,
+    $$BlockedFilesTableFilterComposer,
+    $$BlockedFilesTableOrderingComposer,
+    $$BlockedFilesTableAnnotationComposer,
+    $$BlockedFilesTableCreateCompanionBuilder,
+    $$BlockedFilesTableUpdateCompanionBuilder,
+    (
+      BlockedFile,
+      BaseReferences<_$MainDatabase, $BlockedFilesTable, BlockedFile>
+    ),
+    BlockedFile,
+    PrefetchHooks Function()> {
+  $$BlockedFilesTableTableManager(_$MainDatabase db, $BlockedFilesTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$BlockedFilesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$BlockedFilesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$BlockedFilesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> path = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              BlockedFilesCompanion(
+            path: path,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String path,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              BlockedFilesCompanion.insert(
+            path: path,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$BlockedFilesTableProcessedTableManager = ProcessedTableManager<
+    _$MainDatabase,
+    $BlockedFilesTable,
+    BlockedFile,
+    $$BlockedFilesTableFilterComposer,
+    $$BlockedFilesTableOrderingComposer,
+    $$BlockedFilesTableAnnotationComposer,
+    $$BlockedFilesTableCreateCompanionBuilder,
+    $$BlockedFilesTableUpdateCompanionBuilder,
+    (
+      BlockedFile,
+      BaseReferences<_$MainDatabase, $BlockedFilesTable, BlockedFile>
+    ),
+    BlockedFile,
+    PrefetchHooks Function()>;
+
+class $MainDatabaseManager {
+  final _$MainDatabase _db;
+  $MainDatabaseManager(this._db);
+  $$AlbumsTableTableManager get albums =>
+      $$AlbumsTableTableManager(_db, _db.albums);
+  $$ArtistsTableTableManager get artists =>
+      $$ArtistsTableTableManager(_db, _db.artists);
+  $$LibraryFoldersTableTableManager get libraryFolders =>
+      $$LibraryFoldersTableTableManager(_db, _db.libraryFolders);
+  $$QueueEntriesTableTableManager get queueEntries =>
+      $$QueueEntriesTableTableManager(_db, _db.queueEntries);
+  $$AvailableSongEntriesTableTableManager get availableSongEntries =>
+      $$AvailableSongEntriesTableTableManager(_db, _db.availableSongEntries);
+  $$SongsTableTableManager get songs =>
+      $$SongsTableTableManager(_db, _db.songs);
+  $$SmartListsTableTableManager get smartLists =>
+      $$SmartListsTableTableManager(_db, _db.smartLists);
+  $$SmartListArtistsTableTableManager get smartListArtists =>
+      $$SmartListArtistsTableTableManager(_db, _db.smartListArtists);
+  $$PlaylistsTableTableManager get playlists =>
+      $$PlaylistsTableTableManager(_db, _db.playlists);
+  $$PlaylistEntriesTableTableManager get playlistEntries =>
+      $$PlaylistEntriesTableTableManager(_db, _db.playlistEntries);
+  $$KeyValueEntriesTableTableManager get keyValueEntries =>
+      $$KeyValueEntriesTableTableManager(_db, _db.keyValueEntries);
+  $$HomeWidgetsTableTableManager get homeWidgets =>
+      $$HomeWidgetsTableTableManager(_db, _db.homeWidgets);
+  $$HistoryEntriesTableTableManager get historyEntries =>
+      $$HistoryEntriesTableTableManager(_db, _db.historyEntries);
+  $$BlockedFilesTableTableManager get blockedFiles =>
+      $$BlockedFilesTableTableManager(_db, _db.blockedFiles);
 }

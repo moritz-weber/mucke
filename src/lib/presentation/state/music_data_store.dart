@@ -6,6 +6,7 @@ import '../../domain/entities/custom_list.dart';
 import '../../domain/entities/enums.dart';
 import '../../domain/entities/home_widgets/playlists.dart';
 import '../../domain/entities/playlist.dart';
+import '../../domain/entities/scan_result.dart';
 import '../../domain/entities/shuffle_mode.dart';
 import '../../domain/entities/smart_list.dart';
 import '../../domain/entities/song.dart';
@@ -92,10 +93,13 @@ abstract class _MusicDataStore with Store {
   }
 
   @action
-  Future<void> updateDatabase() async {
+  Future<ScanResult> updateDatabase() async {
     isUpdatingDatabase = true;
-    await _musicDataRepository.updateDatabase();
-    isUpdatingDatabase = false;
+    try {
+      return await _musicDataRepository.updateDatabase();
+    } finally {
+      isUpdatingDatabase = false;
+    }
   }
 
   Future<void> setSongsBlocked(List<Song> songs, int blockLevel) async {

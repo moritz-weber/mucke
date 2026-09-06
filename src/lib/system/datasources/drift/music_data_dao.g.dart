@@ -14,4 +14,32 @@ mixin _$MusicDataDaoMixin on DatabaseAccessor<MainDatabase> {
   $HistoryEntriesTable get historyEntries => attachedDatabase.historyEntries;
   $SmartListArtistsTable get smartListArtists =>
       attachedDatabase.smartListArtists;
+  MusicDataDaoManager get managers => MusicDataDaoManager(this);
+}
+
+class MusicDataDaoManager {
+  final _$MusicDataDaoMixin _db;
+  MusicDataDaoManager(this._db);
+  $$AlbumsTableTableManager get albums =>
+      $$AlbumsTableTableManager(_db.attachedDatabase, _db.albums);
+  $$ArtistsTableTableManager get artists =>
+      $$ArtistsTableTableManager(_db.attachedDatabase, _db.artists);
+  $$SongsTableTableManager get songs =>
+      $$SongsTableTableManager(_db.attachedDatabase, _db.songs);
+  $$PlaylistsTableTableManager get playlists =>
+      $$PlaylistsTableTableManager(_db.attachedDatabase, _db.playlists);
+  $$PlaylistEntriesTableTableManager get playlistEntries =>
+      $$PlaylistEntriesTableTableManager(
+          _db.attachedDatabase, _db.playlistEntries);
+  $$KeyValueEntriesTableTableManager get keyValueEntries =>
+      $$KeyValueEntriesTableTableManager(
+          _db.attachedDatabase, _db.keyValueEntries);
+  $$BlockedFilesTableTableManager get blockedFiles =>
+      $$BlockedFilesTableTableManager(_db.attachedDatabase, _db.blockedFiles);
+  $$HistoryEntriesTableTableManager get historyEntries =>
+      $$HistoryEntriesTableTableManager(
+          _db.attachedDatabase, _db.historyEntries);
+  $$SmartListArtistsTableTableManager get smartListArtists =>
+      $$SmartListArtistsTableTableManager(
+          _db.attachedDatabase, _db.smartListArtists);
 }
