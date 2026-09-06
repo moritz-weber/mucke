@@ -47,7 +47,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
   final BehaviorSubject<int?> _progressSubject = BehaviorSubject<int?>();
 
   @override
-  Future<LibraryScanResult> getLocalMusic() async {
+  Future<LibraryScanResult> getLocalMusic({bool force = false}) async {
     // FIXME: it seems that songs currently loaded in queue are not updated
     _fileNumSubject.add(null);
     _progressSubject.add(null);
@@ -89,7 +89,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     int newArtistId = artistsInDb.isNotEmpty ? artistsInDb.last.id + 1 : 0;
     _log.fine('New artists start with id: $newArtistId');
 
-    final List<File> songFilesToCheck = await getSongFilesToCheck(songFiles);
+    final List<File> songFilesToCheck = await getSongFilesToCheck(songFiles, force);
     _fileNumSubject.add(songFilesToCheck.length);
     _log.fine('Song files to check: ${songFilesToCheck.length}');
 
@@ -284,8 +284,11 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
         .toSet();
   }
 
-  // Returns a list of all new song files and files that have changed since they where last imported
-  Future<List<File>> getSongFilesToCheck(List<File> songFiles) async {
+  /// Returns a list of all new song files and files that have changed since they where last imported.
+  /// If [force] is true, all [songFiles] are returned so every file is rescanned.
+  Future<List<File>> getSongFilesToCheck(List<File> songFiles, [bool force = false]) async {
+    if (force) return songFiles;
+
     final List<File> songFilesToCheck = [];
     final songsInDb = Map<String, SongModel>.fromIterable(
       await _musicDataSource.songStream.first,

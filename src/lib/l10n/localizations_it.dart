@@ -31,6 +31,9 @@ class L10nIt extends L10n {
   String get updateLibrary => 'Aggiorna libreria';
 
   @override
+  String get rescanAll => 'Rescan all files (slow)';
+
+  @override
   String artistsAlbumsSongs(int artistCount, int albumCount, int songCount) {
     return '$artistCount artisti, $albumCount album, $songCount canzoni';
   }

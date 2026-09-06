@@ -93,10 +93,10 @@ abstract class _MusicDataStore with Store {
   }
 
   @action
-  Future<ScanResult> updateDatabase() async {
+  Future<ScanResult> updateDatabase({bool force = false}) async {
     isUpdatingDatabase = true;
     try {
-      return await _musicDataRepository.updateDatabase();
+      return await _musicDataRepository.updateDatabase(force: force);
     } finally {
       isUpdatingDatabase = false;
     }

@@ -13,6 +13,8 @@
   "@search": {},
   "updateLibrary": "Bibliothek aktualisieren",
   "@updateLibrary": {},
+  "rescanAll": "Alle Dateien neu einlesen (langsam)",
+  "@rescanAll": {},
   "artistsAlbumsSongs": "{artistCount} Künstler, {albumCount} Alben, {songCount} Lieder",
   "@artistsAlbumsSongs": {},
   "manageLibraryFolders": "Ordner der Bibliothek verwalten",

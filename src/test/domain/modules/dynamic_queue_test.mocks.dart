@@ -187,16 +187,19 @@ class MockMusicDataRepository extends _i1.Mock
       ) as _i2.ValueStream<Set<String>>);
 
   @override
-  _i6.Future<_i3.ScanResult> updateDatabase() => (super.noSuchMethod(
+  _i6.Future<_i3.ScanResult> updateDatabase({bool? force = false}) =>
+      (super.noSuchMethod(
         Invocation.method(
           #updateDatabase,
           [],
+          {#force: force},
         ),
         returnValue: _i6.Future<_i3.ScanResult>.value(_FakeScanResult_1(
           this,
           Invocation.method(
             #updateDatabase,
             [],
+            {#force: force},
           ),
         )),
         returnValueForMissingStub:
@@ -205,6 +208,7 @@ class MockMusicDataRepository extends _i1.Mock
           Invocation.method(
             #updateDatabase,
             [],
+            {#force: force},
           ),
         )),
       ) as _i6.Future<_i3.ScanResult>);

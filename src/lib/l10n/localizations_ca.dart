@@ -31,6 +31,9 @@ class L10nCa extends L10n {
   String get updateLibrary => 'Actualitza la llibreria';
 
   @override
+  String get rescanAll => 'Rescan all files (slow)';
+
+  @override
   String artistsAlbumsSongs(int artistCount, int albumCount, int songCount) {
     return '$artistCount artistes, $albumCount àlbums, $songCount cançons';
   }

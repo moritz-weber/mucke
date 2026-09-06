@@ -74,6 +74,13 @@ class SettingsPage extends StatelessWidget {
           ),
           const Divider(),
           ListTile(
+            title: Text(L10n.of(context)!.rescanAll),
+            onTap: () => musicDataStore.updateDatabase(force: true).then((result) {
+              if (context.mounted) _showScanResult(context, result);
+            }),
+          ),
+          const Divider(),
+          ListTile(
             title: Text(L10n.of(context)!.manageLibraryFolders),
             trailing: const Icon(Icons.chevron_right_rounded),
             onTap: () => navStore.push(

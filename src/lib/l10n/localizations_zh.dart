@@ -30,6 +30,9 @@ class L10nZh extends L10n {
   String get updateLibrary => '更新歌曲库';
 
   @override
+  String get rescanAll => 'Rescan all files (slow)';
+
+  @override
   String artistsAlbumsSongs(int artistCount, int albumCount, int songCount) {
     return '$artistCount 歌手, $albumCount 专辑, $songCount 歌曲';
   }

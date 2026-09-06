@@ -31,6 +31,9 @@ class L10nUk extends L10n {
   String get updateLibrary => 'Оновити бібліотеку';
 
   @override
+  String get rescanAll => 'Rescan all files (slow)';
+
+  @override
   String artistsAlbumsSongs(int artistCount, int albumCount, int songCount) {
     return '$artistCount виконавці, $albumCount альбоми, $songCount пісні';
   }

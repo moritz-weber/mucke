@@ -61,7 +61,7 @@ abstract class MusicDataInfoRepository {
 }
 
 abstract class MusicDataRepository extends MusicDataInfoRepository {
-  Future<ScanResult> updateDatabase();
+  Future<ScanResult> updateDatabase({bool force = false});
 
   Future<void> setSongsBlockLevel(List<Song> songs, int blockLevel);
 

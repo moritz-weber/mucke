@@ -182,6 +182,12 @@ abstract class L10n {
   /// **'Update library'**
   String get updateLibrary;
 
+  /// No description provided for @rescanAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Rescan all files (slow)'**
+  String get rescanAll;
+
   /// No description provided for @artistsAlbumsSongs.
   ///
   /// In en, this message translates to:

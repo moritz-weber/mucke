@@ -31,6 +31,9 @@ class L10nEt extends L10n {
   String get updateLibrary => 'Uuenda muusikakogu';
 
   @override
+  String get rescanAll => 'Rescan all files (slow)';
+
+  @override
   String artistsAlbumsSongs(int artistCount, int albumCount, int songCount) {
     return '$artistCount esitajat, $albumCount albumit, $songCount lugu';
   }

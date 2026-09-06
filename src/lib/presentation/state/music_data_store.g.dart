@@ -219,8 +219,9 @@ mixin _$MusicDataStore on _MusicDataStore, Store {
       AsyncAction('_MusicDataStore.updateDatabase', context: context);
 
   @override
-  Future<ScanResult> updateDatabase() {
-    return _$updateDatabaseAsyncAction.run(() => super.updateDatabase());
+  Future<ScanResult> updateDatabase({bool force = false}) {
+    return _$updateDatabaseAsyncAction
+        .run(() => super.updateDatabase(force: force));
   }
 
   @override

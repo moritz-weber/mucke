@@ -114,10 +114,10 @@ class MusicDataRepositoryImpl implements MusicDataRepository {
       _playlistDataSource.getSmartListSongStream(smartList as SmartListModel);
 
   @override
-  Future<ScanResult> updateDatabase() async {
+  Future<ScanResult> updateDatabase({bool force = false}) async {
     _log.fine('updateDatabase called');
 
-    final localMusic = await _localMusicFetcher.getLocalMusic();
+    final localMusic = await _localMusicFetcher.getLocalMusic(force: force);
 
     final artists = localMusic.artists;
     final albums = localMusic.albums;

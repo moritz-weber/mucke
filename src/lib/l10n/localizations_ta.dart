@@ -31,6 +31,9 @@ class L10nTa extends L10n {
   String get updateLibrary => 'நூலகத்தைப் புதுப்பிக்கவும்';
 
   @override
+  String get rescanAll => 'Rescan all files (slow)';
+
+  @override
   String artistsAlbumsSongs(int artistCount, int albumCount, int songCount) {
     return '$artistCount கலைஞர்கள், $albumCount ஆல்பங்கள், $songCount பாடல்கள்';
   }

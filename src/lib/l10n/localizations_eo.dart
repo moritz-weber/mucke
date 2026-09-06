@@ -31,6 +31,9 @@ class L10nEo extends L10n {
   String get updateLibrary => 'Ĝisdatigo biblioteko';
 
   @override
+  String get rescanAll => 'Rescan all files (slow)';
+
+  @override
   String artistsAlbumsSongs(int artistCount, int albumCount, int songCount) {
     return '$artistCount artistoj, $albumCount albumoj, $songCount kantoj';
   }

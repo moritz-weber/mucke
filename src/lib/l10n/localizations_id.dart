@@ -31,6 +31,9 @@ class L10nId extends L10n {
   String get updateLibrary => 'Perbarui library';
 
   @override
+  String get rescanAll => 'Rescan all files (slow)';
+
+  @override
   String artistsAlbumsSongs(int artistCount, int albumCount, int songCount) {
     return '$artistCount artis, $albumCount album, $songCount lagu';
   }

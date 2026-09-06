@@ -13,6 +13,8 @@
   "@search": {},
   "updateLibrary": "Update library",
   "@updateLibrary": {},
+  "rescanAll": "Rescan all files (slow)",
+  "@rescanAll": {},
   "artistsAlbumsSongs": "{artistCount} artists, {albumCount} albums, {songCount} songs",
   "@artistsAlbumsSongs": {
     "placeholders": {
