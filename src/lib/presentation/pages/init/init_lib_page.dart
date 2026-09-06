@@ -67,15 +67,18 @@ class InitLibPage extends StatelessWidget {
                         child: Text(L10n.of(context)!.scan),
                         onPressed: isNotActive || musicDataStore.isUpdatingDatabase
                             ? null
-                            : () => musicDataStore
-                                .updateDatabase()
-                                .then((_) => importStore.scanned = true),
+                            : () => musicDataStore.updateDatabase().then((result) {
+                                  importStore.scanned = true;
+                                  if (context.mounted) showScanResult(context, result);
+                                }),
                       );
                     return OutlinedButton(
                       child: Text(L10n.of(context)!.scan),
                       onPressed: isNotActive || musicDataStore.isUpdatingDatabase
                           ? null
-                          : () => musicDataStore.updateDatabase(),
+                          : () => musicDataStore.updateDatabase().then((result) {
+                                if (context.mounted) showScanResult(context, result);
+                              }),
                     );
                   },
                 ),

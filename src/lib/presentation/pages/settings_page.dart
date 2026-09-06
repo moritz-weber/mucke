@@ -10,8 +10,6 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 import '../../defaults.dart';
-import '../../domain/entities/scan_failure.dart';
-import '../../domain/entities/scan_result.dart';
 import '../state/music_data_store.dart';
 import '../state/navigation_store.dart';
 import '../state/settings_store.dart';
@@ -22,7 +20,6 @@ import '../widgets/settings_section.dart';
 import 'blocked_files_page.dart';
 import 'export_page.dart';
 import 'library_folders_page.dart';
-import 'scan_failures_page.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -69,14 +66,14 @@ class SettingsPage extends StatelessWidget {
               );
             }),
             onTap: () => musicDataStore.updateDatabase().then((result) {
-              if (context.mounted) _showScanResult(context, result);
+              if (context.mounted) showScanResult(context, result);
             }),
           ),
           const Divider(),
           ListTile(
             title: Text(L10n.of(context)!.rescanAll),
             onTap: () => musicDataStore.updateDatabase(force: true).then((result) {
-              if (context.mounted) _showScanResult(context, result);
+              if (context.mounted) showScanResult(context, result);
             }),
           ),
           const Divider(),
@@ -224,59 +221,6 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
-  void _showScanResult(BuildContext context, ScanResult result) {
-    final l10n = L10n.of(context)!;
-
-    if (result.permissionDenied) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Row(
-            children: [
-              const Icon(Icons.warning_rounded, color: RED),
-              const SizedBox(width: 16.0),
-              Expanded(child: Text(l10n.scanPermissionDenied)),
-            ],
-          ),
-          duration: const Duration(seconds: 10),
-          showCloseIcon: true,
-        ),
-      );
-      return;
-    }
-
-    final bool success = !result.hasFailures;
-    final List<ScanFailure> failures = result.failures;
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            if (success) const Icon(Icons.check_circle_rounded, color: GREEN),
-            if (!success) const Icon(Icons.warning_rounded, color: Colors.amber),
-            const SizedBox(width: 16.0),
-            Expanded(
-              child: Text(
-                success ? l10n.scanSuccessful : l10n.scanFailed(result.failureCount),
-              ),
-            ),
-          ],
-        ),
-        action: success
-            ? null
-            : SnackBarAction(
-                label: l10n.scanErrorDetails,
-                onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                    builder: (context) => ScanFailuresPage(failures: failures),
-                  ),
-                ),
-              ),
-        duration: const Duration(seconds: 10),
-        showCloseIcon: true,
-      ),
-    );
-  }
-
   Future<void> _copyLogFilesToFolder(BuildContext context) async {
     try {
       final appDir = await getApplicationDocumentsDirectory();
@@ -324,7 +268,7 @@ class SettingsPage extends StatelessWidget {
           SnackBar(
             content: Row(
               children: [
-                const Icon(Icons.warning_rounded, color: RED),
+                const Icon(Icons.error_rounded, color: RED),
                 const SizedBox(width: 16.0),
                 Expanded(child: Text(L10n.of(context)!.logFilesSaveFailed)),
               ],

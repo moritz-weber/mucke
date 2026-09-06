@@ -10,6 +10,7 @@ const Color LIGHT1 = Color(0xff913af1);
 const Color LIGHT2 = Color(0xffac5bfb);
 
 const Color RED = Colors.red;
+const Color YELLOW = Colors.amber;
 const Color GREEN = Color.fromARGB(255, 61, 161, 65);
 
 const double HORIZONTAL_PADDING = 16.0;
@@ -49,11 +50,13 @@ ThemeData theme() => ThemeData(
         ),
       ),
       textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(
-          foregroundColor: Colors.white,
-        )
+          style: TextButton.styleFrom(
+        foregroundColor: Colors.white,
+      )),
+      progressIndicatorTheme: const ProgressIndicatorThemeData(
+        color: LIGHT2,
+        linearTrackColor: DARK4,
       ),
-      progressIndicatorTheme: const ProgressIndicatorThemeData(color: LIGHT2),
       sliderTheme: const SliderThemeData(
         activeTrackColor: LIGHT1,
         thumbColor: DARK35,
