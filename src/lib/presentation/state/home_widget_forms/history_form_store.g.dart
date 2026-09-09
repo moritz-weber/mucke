@@ -18,10 +18,14 @@ mixin _$HistoryFormStore on _HistoryFormStore, Store {
     return super.maxEntries;
   }
 
+  bool _maxEntriesIsInitialized = false;
+
   @override
   set maxEntries(String value) {
-    _$maxEntriesAtom.reportWrite(value, super.maxEntries, () {
+    _$maxEntriesAtom.reportWrite(
+        value, _maxEntriesIsInitialized ? super.maxEntries : null, () {
       super.maxEntries = value;
+      _maxEntriesIsInitialized = true;
     });
   }
 

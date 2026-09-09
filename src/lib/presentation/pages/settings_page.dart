@@ -65,7 +65,16 @@ class SettingsPage extends StatelessWidget {
                 L10n.of(context)!.artistsAlbumsSongs(artistCount, albumCount, songCount),
               );
             }),
-            onTap: () => musicDataStore.updateDatabase(),
+            onTap: () => musicDataStore.updateDatabase().then((result) {
+              if (context.mounted) showScanResult(context, result);
+            }),
+          ),
+          const Divider(),
+          ListTile(
+            title: Text(L10n.of(context)!.rescanAll),
+            onTap: () => musicDataStore.updateDatabase(force: true).then((result) {
+              if (context.mounted) showScanResult(context, result);
+            }),
           ),
           const Divider(),
           ListTile(
@@ -259,7 +268,7 @@ class SettingsPage extends StatelessWidget {
           SnackBar(
             content: Row(
               children: [
-                const Icon(Icons.warning_rounded, color: RED),
+                const Icon(Icons.error_rounded, color: RED),
                 const SizedBox(width: 16.0),
                 Expanded(child: Text(L10n.of(context)!.logFilesSaveFailed)),
               ],

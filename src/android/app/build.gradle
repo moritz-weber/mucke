@@ -29,7 +29,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    compileSdkVersion 36
+    compileSdkVersion 37
     namespace "rocks.mucke"
     ndkVersion flutter.ndkVersion
 

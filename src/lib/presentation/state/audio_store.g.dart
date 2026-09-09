@@ -53,10 +53,15 @@ mixin _$AudioStore on _AudioStore, Store {
     return super.currentSongStream;
   }
 
+  bool _currentSongStreamIsInitialized = false;
+
   @override
   set currentSongStream(ObservableStream<Song?> value) {
-    _$currentSongStreamAtom.reportWrite(value, super.currentSongStream, () {
+    _$currentSongStreamAtom.reportWrite(
+        value, _currentSongStreamIsInitialized ? super.currentSongStream : null,
+        () {
       super.currentSongStream = value;
+      _currentSongStreamIsInitialized = true;
     });
   }
 
@@ -69,10 +74,14 @@ mixin _$AudioStore on _AudioStore, Store {
     return super.playingStream;
   }
 
+  bool _playingStreamIsInitialized = false;
+
   @override
   set playingStream(ObservableStream<bool> value) {
-    _$playingStreamAtom.reportWrite(value, super.playingStream, () {
+    _$playingStreamAtom.reportWrite(
+        value, _playingStreamIsInitialized ? super.playingStream : null, () {
       super.playingStream = value;
+      _playingStreamIsInitialized = true;
     });
   }
 
@@ -85,11 +94,17 @@ mixin _$AudioStore on _AudioStore, Store {
     return super.currentPositionStream;
   }
 
+  bool _currentPositionStreamIsInitialized = false;
+
   @override
   set currentPositionStream(ObservableStream<Duration> value) {
-    _$currentPositionStreamAtom.reportWrite(value, super.currentPositionStream,
-        () {
+    _$currentPositionStreamAtom.reportWrite(
+        value,
+        _currentPositionStreamIsInitialized
+            ? super.currentPositionStream
+            : null, () {
       super.currentPositionStream = value;
+      _currentPositionStreamIsInitialized = true;
     });
   }
 
@@ -102,10 +117,14 @@ mixin _$AudioStore on _AudioStore, Store {
     return super.queueStream;
   }
 
+  bool _queueStreamIsInitialized = false;
+
   @override
   set queueStream(ObservableStream<List<QueueItem>> value) {
-    _$queueStreamAtom.reportWrite(value, super.queueStream, () {
+    _$queueStreamAtom.reportWrite(
+        value, _queueStreamIsInitialized ? super.queueStream : null, () {
       super.queueStream = value;
+      _queueStreamIsInitialized = true;
     });
   }
 
@@ -119,10 +138,14 @@ mixin _$AudioStore on _AudioStore, Store {
   @override
   List<QueueItem> get _queue => queue;
 
+  bool __queueIsInitialized = false;
+
   @override
   set _queue(List<QueueItem> value) {
-    _$_queueAtom.reportWrite(value, super._queue, () {
+    _$_queueAtom.reportWrite(value, __queueIsInitialized ? super._queue : null,
+        () {
       super._queue = value;
+      __queueIsInitialized = true;
     });
   }
 
@@ -135,10 +158,15 @@ mixin _$AudioStore on _AudioStore, Store {
     return super._availableSongs;
   }
 
+  bool __availableSongsIsInitialized = false;
+
   @override
   set _availableSongs(List<QueueItem> value) {
-    _$_availableSongsAtom.reportWrite(value, super._availableSongs, () {
+    _$_availableSongsAtom.reportWrite(
+        value, __availableSongsIsInitialized ? super._availableSongs : null,
+        () {
       super._availableSongs = value;
+      __availableSongsIsInitialized = true;
     });
   }
 
@@ -151,10 +179,14 @@ mixin _$AudioStore on _AudioStore, Store {
     return super.playableStream;
   }
 
+  bool _playableStreamIsInitialized = false;
+
   @override
   set playableStream(ObservableStream<Playable> value) {
-    _$playableStreamAtom.reportWrite(value, super.playableStream, () {
+    _$playableStreamAtom.reportWrite(
+        value, _playableStreamIsInitialized ? super.playableStream : null, () {
       super.playableStream = value;
+      _playableStreamIsInitialized = true;
     });
   }
 
@@ -167,10 +199,15 @@ mixin _$AudioStore on _AudioStore, Store {
     return super.queueIndexStream;
   }
 
+  bool _queueIndexStreamIsInitialized = false;
+
   @override
   set queueIndexStream(ObservableStream<int?> value) {
-    _$queueIndexStreamAtom.reportWrite(value, super.queueIndexStream, () {
+    _$queueIndexStreamAtom.reportWrite(
+        value, _queueIndexStreamIsInitialized ? super.queueIndexStream : null,
+        () {
       super.queueIndexStream = value;
+      _queueIndexStreamIsInitialized = true;
     });
   }
 
@@ -183,10 +220,15 @@ mixin _$AudioStore on _AudioStore, Store {
     return super.shuffleModeStream;
   }
 
+  bool _shuffleModeStreamIsInitialized = false;
+
   @override
   set shuffleModeStream(ObservableStream<ShuffleMode> value) {
-    _$shuffleModeStreamAtom.reportWrite(value, super.shuffleModeStream, () {
+    _$shuffleModeStreamAtom.reportWrite(
+        value, _shuffleModeStreamIsInitialized ? super.shuffleModeStream : null,
+        () {
       super.shuffleModeStream = value;
+      _shuffleModeStreamIsInitialized = true;
     });
   }
 
@@ -199,10 +241,14 @@ mixin _$AudioStore on _AudioStore, Store {
     return super.loopModeStream;
   }
 
+  bool _loopModeStreamIsInitialized = false;
+
   @override
   set loopModeStream(ObservableStream<LoopMode> value) {
-    _$loopModeStreamAtom.reportWrite(value, super.loopModeStream, () {
+    _$loopModeStreamAtom.reportWrite(
+        value, _loopModeStreamIsInitialized ? super.loopModeStream : null, () {
       super.loopModeStream = value;
+      _loopModeStreamIsInitialized = true;
     });
   }
 

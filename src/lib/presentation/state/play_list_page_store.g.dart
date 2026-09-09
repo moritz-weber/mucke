@@ -18,10 +18,14 @@ mixin _$PlaylistPageStore on _PlaylistPageStore, Store {
     return super.playlistStream;
   }
 
+  bool _playlistStreamIsInitialized = false;
+
   @override
   set playlistStream(ObservableStream<Playlist> value) {
-    _$playlistStreamAtom.reportWrite(value, super.playlistStream, () {
+    _$playlistStreamAtom.reportWrite(
+        value, _playlistStreamIsInitialized ? super.playlistStream : null, () {
       super.playlistStream = value;
+      _playlistStreamIsInitialized = true;
     });
   }
 
@@ -34,10 +38,14 @@ mixin _$PlaylistPageStore on _PlaylistPageStore, Store {
     return super.playlistSongStream;
   }
 
+  bool _playlistSongStreamIsInitialized = false;
+
   @override
   set playlistSongStream(ObservableStream<List<Song>> value) {
-    _$playlistSongStreamAtom.reportWrite(value, super.playlistSongStream, () {
+    _$playlistSongStreamAtom.reportWrite(value,
+        _playlistSongStreamIsInitialized ? super.playlistSongStream : null, () {
       super.playlistSongStream = value;
+      _playlistSongStreamIsInitialized = true;
     });
   }
 

@@ -18,10 +18,14 @@ mixin _$SongStore on _SongStore, Store {
     return super.songStream;
   }
 
+  bool _songStreamIsInitialized = false;
+
   @override
   set songStream(ObservableStream<Song> value) {
-    _$songStreamAtom.reportWrite(value, super.songStream, () {
+    _$songStreamAtom.reportWrite(
+        value, _songStreamIsInitialized ? super.songStream : null, () {
       super.songStream = value;
+      _songStreamIsInitialized = true;
     });
   }
 

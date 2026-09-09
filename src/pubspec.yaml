@@ -12,7 +12,6 @@ dependencies:
   async_task: ^1.0.20
   audio_service: ^0.18.18  # MIT
   audio_session: ^0.2.2  # MIT
-  audiotags: ^1.4.5  # MIT
   battery_optimization_helper: ^0.2.0
   collection: ^1.17.1  # BSD 3
   device_info_plus: ^12.4.0  # BSD 3; required to get SDK verion
@@ -26,6 +25,7 @@ dependencies:
   flutter_mobx: ^2.0.0  # MIT
   flutter_speed_dial: ^7.0.0  # MIT
   get_it: ^9.2.1  # MIT
+  haudiotagger: ^1.2.9
   image: ^4.9.1
   intl: any
   just_audio: ^0.10.5  # MIT

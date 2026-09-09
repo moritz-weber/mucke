@@ -89,14 +89,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.4"
-  audiotags:
-    dependency: "direct main"
-    description:
-      name: audiotags
-      sha256: b09ab98c9b7d516470763d33fe974cab710bea1de24b5811339ac1b9e68268de
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.4.5"
   battery_optimization_helper:
     dependency: "direct main"
     description:
@@ -407,10 +399,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_rust_bridge
-      sha256: "35c257fc7f98e34c1314d6c145e5ed54e7c94e8a9f469947e31c9298177d546f"
+      sha256: ec69331e2335ab4d456c0a9fc700892c2c85b72b9c0cb39df3ecfe8833d5d5c8
       url: "https://pub.dev"
     source: hosted
-    version: "2.7.0"
+    version: "2.13.0"
   flutter_speed_dial:
     dependency: "direct main"
     description:
@@ -433,10 +425,10 @@ packages:
     dependency: transitive
     description:
       name: freezed_annotation
-      sha256: c2e2d632dd9b8a2b7751117abcfc2b4888ecfe181bd9fca7170d9ef02e595fe2
+      sha256: "7294967ff0a6d98638e7acb774aac3af2550777accd8149c90af5b014e6d44d8"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.4"
+    version: "3.1.0"
   frontend_server_client:
     dependency: transitive
     description:
@@ -469,6 +461,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.2"
+  haudiotagger:
+    dependency: "direct main"
+    description:
+      name: haudiotagger
+      sha256: "5dbec48394744866f3f3eed038a28f47738c04619ce961ff6bedd3bce0e80328"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.9"
   hooks:
     dependency: transitive
     description:

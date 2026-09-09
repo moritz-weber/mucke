@@ -31,9 +31,63 @@ class L10nMs extends L10n {
   String get updateLibrary => 'Kemaskini pustaka';
 
   @override
+  String get rescanAll => 'Rescan all files (slow)';
+
+  @override
   String artistsAlbumsSongs(int artistCount, int albumCount, int songCount) {
     return '$artistCount artis, $albumCount album, $songCount lagu';
   }
+
+  @override
+  String get scanSuccessful => 'Library scan completed.';
+
+  @override
+  String scanFailed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count scan failures',
+      one: '1 scan failure',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get scanPermissionDenied =>
+      'Audio permission required to scan the library.';
+
+  @override
+  String get scanErrorDetails => 'Details';
+
+  @override
+  String get scanFailures => 'Scan failures';
+
+  @override
+  String get scanFailureStage => 'Stage';
+
+  @override
+  String get scanStageMetadata => 'Metadata';
+
+  @override
+  String get scanStageAlbumArt => 'Album art';
+
+  @override
+  String get scanStageAccentColor => 'Accent color';
+
+  @override
+  String get scanStagePermission => 'Permission';
+
+  @override
+  String get scanErrorMetadata => 'Metadata could not be read.';
+
+  @override
+  String get scanErrorAlbumArt => 'Album art could not be read.';
+
+  @override
+  String get scanErrorAccentColor => 'Accent color could not be generated.';
+
+  @override
+  String get scanErrorPermission => 'Audio permission was denied.';
 
   @override
   String get manageLibraryFolders => 'Menguruskan folder pustaka';

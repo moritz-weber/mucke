@@ -1,15 +1,73 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:mucke/l10n/localizations.dart';
 
 import '../domain/entities/album.dart';
 import '../domain/entities/playable.dart';
 import '../domain/entities/playlist.dart';
+import '../domain/entities/scan_failure.dart';
+import '../domain/entities/scan_result.dart';
 import '../domain/entities/smart_list.dart';
 import 'gradients.dart';
 import 'mucke_icons.dart';
+import 'pages/scan_failures_page.dart';
 import 'theming.dart';
 import 'widgets/playlist_cover.dart';
+
+/// Shows a snackbar describing the result of a library scan.
+void showScanResult(BuildContext context, ScanResult result) {
+  final l10n = L10n.of(context)!;
+
+  if (result.permissionDenied) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            const Icon(Icons.error_rounded, color: RED),
+            const SizedBox(width: 16.0),
+            Expanded(child: Text(l10n.scanPermissionDenied)),
+          ],
+        ),
+        duration: const Duration(seconds: 10),
+        showCloseIcon: true,
+      ),
+    );
+    return;
+  }
+
+  final bool success = !result.hasFailures;
+  final List<ScanFailure> failures = result.failures;
+
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Row(
+        children: [
+          if (success) const Icon(Icons.check_circle_rounded, color: GREEN),
+          if (!success) const Icon(Icons.warning_rounded, color: YELLOW),
+          const SizedBox(width: 16.0),
+          Expanded(
+            child: Text(
+              success ? l10n.scanSuccessful : l10n.scanFailed(result.failureCount),
+            ),
+          ),
+        ],
+      ),
+      action: success
+          ? null
+          : SnackBarAction(
+              label: l10n.scanErrorDetails,
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (context) => ScanFailuresPage(failures: failures),
+                ),
+              ),
+            ),
+      duration: const Duration(seconds: 10),
+      showCloseIcon: true,
+    ),
+  );
+}
 
 ImageProvider getAlbumImage(String? albumArtPath) {
   // return Image.asset('assets/no_cover.png');

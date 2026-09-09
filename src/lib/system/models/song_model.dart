@@ -2,8 +2,8 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:audio_service/audio_service.dart';
-import 'package:audiotags/audiotags.dart';
 import 'package:drift/drift.dart';
+import 'package:haudiotagger/haudiotagger.dart';
 import 'package:path/path.dart' as p;
 
 import '../../constants.dart';

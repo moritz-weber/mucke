@@ -18,10 +18,15 @@ mixin _$ArtistPageStore on _ArtistPageStore, Store {
     return super.artistAlbumStream;
   }
 
+  bool _artistAlbumStreamIsInitialized = false;
+
   @override
   set artistAlbumStream(ObservableStream<List<Album>> value) {
-    _$artistAlbumStreamAtom.reportWrite(value, super.artistAlbumStream, () {
+    _$artistAlbumStreamAtom.reportWrite(
+        value, _artistAlbumStreamIsInitialized ? super.artistAlbumStream : null,
+        () {
       super.artistAlbumStream = value;
+      _artistAlbumStreamIsInitialized = true;
     });
   }
 
@@ -34,11 +39,17 @@ mixin _$ArtistPageStore on _ArtistPageStore, Store {
     return super.artistHighlightedSongStream;
   }
 
+  bool _artistHighlightedSongStreamIsInitialized = false;
+
   @override
   set artistHighlightedSongStream(ObservableStream<List<Song>> value) {
-    _$artistHighlightedSongStreamAtom
-        .reportWrite(value, super.artistHighlightedSongStream, () {
+    _$artistHighlightedSongStreamAtom.reportWrite(
+        value,
+        _artistHighlightedSongStreamIsInitialized
+            ? super.artistHighlightedSongStream
+            : null, () {
       super.artistHighlightedSongStream = value;
+      _artistHighlightedSongStreamIsInitialized = true;
     });
   }
 

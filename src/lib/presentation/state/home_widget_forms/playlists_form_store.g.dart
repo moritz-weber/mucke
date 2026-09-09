@@ -18,10 +18,14 @@ mixin _$PlaylistsFormStore on _PlaylistsFormStore, Store {
     return super.title;
   }
 
+  bool _titleIsInitialized = false;
+
   @override
   set title(String value) {
-    _$titleAtom.reportWrite(value, super.title, () {
+    _$titleAtom.reportWrite(value, _titleIsInitialized ? super.title : null,
+        () {
       super.title = value;
+      _titleIsInitialized = true;
     });
   }
 
@@ -34,10 +38,14 @@ mixin _$PlaylistsFormStore on _PlaylistsFormStore, Store {
     return super.maxEntries;
   }
 
+  bool _maxEntriesIsInitialized = false;
+
   @override
   set maxEntries(String value) {
-    _$maxEntriesAtom.reportWrite(value, super.maxEntries, () {
+    _$maxEntriesAtom.reportWrite(
+        value, _maxEntriesIsInitialized ? super.maxEntries : null, () {
       super.maxEntries = value;
+      _maxEntriesIsInitialized = true;
     });
   }
 
@@ -50,10 +58,15 @@ mixin _$PlaylistsFormStore on _PlaylistsFormStore, Store {
     return super.maxEntriesEnabled;
   }
 
+  bool _maxEntriesEnabledIsInitialized = false;
+
   @override
   set maxEntriesEnabled(bool value) {
-    _$maxEntriesEnabledAtom.reportWrite(value, super.maxEntriesEnabled, () {
+    _$maxEntriesEnabledAtom.reportWrite(
+        value, _maxEntriesEnabledIsInitialized ? super.maxEntriesEnabled : null,
+        () {
       super.maxEntriesEnabled = value;
+      _maxEntriesEnabledIsInitialized = true;
     });
   }
 
@@ -66,10 +79,14 @@ mixin _$PlaylistsFormStore on _PlaylistsFormStore, Store {
     return super.orderCriterion;
   }
 
+  bool _orderCriterionIsInitialized = false;
+
   @override
   set orderCriterion(HomePlaylistsOrder value) {
-    _$orderCriterionAtom.reportWrite(value, super.orderCriterion, () {
+    _$orderCriterionAtom.reportWrite(
+        value, _orderCriterionIsInitialized ? super.orderCriterion : null, () {
       super.orderCriterion = value;
+      _orderCriterionIsInitialized = true;
     });
   }
 
@@ -82,10 +99,14 @@ mixin _$PlaylistsFormStore on _PlaylistsFormStore, Store {
     return super.orderDirection;
   }
 
+  bool _orderDirectionIsInitialized = false;
+
   @override
   set orderDirection(OrderDirection value) {
-    _$orderDirectionAtom.reportWrite(value, super.orderDirection, () {
+    _$orderDirectionAtom.reportWrite(
+        value, _orderDirectionIsInitialized ? super.orderDirection : null, () {
       super.orderDirection = value;
+      _orderDirectionIsInitialized = true;
     });
   }
 
@@ -98,10 +119,14 @@ mixin _$PlaylistsFormStore on _PlaylistsFormStore, Store {
     return super.filter;
   }
 
+  bool _filterIsInitialized = false;
+
   @override
   set filter(HomePlaylistsFilter value) {
-    _$filterAtom.reportWrite(value, super.filter, () {
+    _$filterAtom.reportWrite(value, _filterIsInitialized ? super.filter : null,
+        () {
       super.filter = value;
+      _filterIsInitialized = true;
     });
   }
 
