@@ -25,14 +25,7 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
         if (!_blockIndexUpdate) {
           _updateCurrentSong(queueStream.value, index);
         }
-        _dynamicQueue.onCurrentIndexUpdated(index, shuffleModeStream.value).then(
-          (songs) {
-            if (songs.isNotEmpty) {
-              _audioPlayerDataSource.addToQueue(songs.map((e) => e as SongModel).toList());
-              _queueSubject.add(_dynamicQueue.queue);
-            }
-          },
-        );
+        _enqueueQueueUpdate(index);
       },
     );
     _queueSubject.listen((queue) {
@@ -70,6 +63,29 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
 
   // temporarily block song updating via index updates to avoid double updates on shufflemode change
   bool _blockIndexUpdate = false;
+
+  // Serializes calls to onCurrentIndexUpdated so that concurrent index updates
+  // (e.g. the same index firing multiple times) don't race and each add songs
+  // based on a stale queue length.
+  Future<List<Song>> _queueUpdateChain = Future.value([]);
+
+  /// Enqueues a queue update for [index], chaining it after any pending update.
+  /// Returns the list of newly queued songs for this specific call.
+  Future<List<Song>> _enqueueQueueUpdate(int index) {
+    final result = _queueUpdateChain.then((_) async {
+      final songs = await _dynamicQueue.onCurrentIndexUpdated(
+        index,
+        shuffleModeStream.value,
+      );
+      if (songs.isNotEmpty) {
+        await _audioPlayerDataSource.addToQueue(songs.map((e) => e as SongModel).toList());
+        _queueSubject.add(_dynamicQueue.queue);
+      }
+      return songs;
+    });
+    _queueUpdateChain = result;
+    return result;
+  }
 
   @override
   ValueStream<ShuffleMode> get shuffleModeStream => _shuffleModeSubject.stream;
@@ -230,14 +246,7 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
       if (_dynamicQueue.availableSongs.isEmpty) {
         _audioPlayerDataSource.stop();
       } else {
-        final newSongs = await _dynamicQueue.onCurrentIndexUpdated(
-          newCurrentIndex,
-          shuffleModeStream.value,
-        );
-        if (newSongs.isNotEmpty) {
-          await _audioPlayerDataSource.addToQueue(newSongs.map((e) => e as SongModel).toList());
-          _queueSubject.add(_dynamicQueue.queue);
-        }
+        await _enqueueQueueUpdate(newCurrentIndex);
       }
     }
 

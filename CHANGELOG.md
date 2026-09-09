@@ -1,6 +1,9 @@
 ## Unreleased
 
 - Added Estonian translation.
+- Added monochrome/themed icon (#156).
+- Fixed a bug with non-updating queue length.
+- Fixed a bug with automatic queueing.
 
 ## 1.6.0
 

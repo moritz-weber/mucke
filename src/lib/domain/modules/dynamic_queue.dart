@@ -160,7 +160,7 @@ class DynamicQueue implements ManagedQueueInfo {
     _availableSongs.addAll(queueItems);
     _availableSongsSubject.add(_availableSongs);
     _queue.addAll(queueItems);
-    _queueSubject.add(_queue);
+    _queueSubject.add(List<QueueItem>.from(_queue));
   }
 
   void insertIntoQueue(List<Song> songs, int index) {
@@ -180,13 +180,13 @@ class DynamicQueue implements ManagedQueueInfo {
     _availableSongs.addAll(queueItems);
     _availableSongsSubject.add(_availableSongs);
     _queue.insertAll(min(_queue.length, index), queueItems);
-    _queueSubject.add(_queue);
+    _queueSubject.add(List<QueueItem>.from(_queue));
   }
 
   /// Move the QueueItem at index [oldIndex] to [newIndex].
   void moveQueueItem(int oldIndex, int newIndex) {
     _queue.insert(newIndex, _queue.removeAt(oldIndex));
-    _queueSubject.add(_queue);
+    _queueSubject.add(List<QueueItem>.from(_queue));
   }
 
   void removeQueueIndices(List<int> indices, bool permanent) {
@@ -210,7 +210,7 @@ class DynamicQueue implements ManagedQueueInfo {
     }
 
     if (permanent) _availableSongsSubject.add(_availableSongs);
-    _queueSubject.add(_queue);
+    _queueSubject.add(List<QueueItem>.from(_queue));
   }
 
   Future<int> reshuffleQueue(ShuffleMode shuffleMode, int currentIndex) async {
@@ -319,7 +319,7 @@ class DynamicQueue implements ManagedQueueInfo {
           qi.isAvailable = false;
         }
         _queue.addAll(newSongs);
-        _queueSubject.add(_queue);
+        _queueSubject.add(List<QueueItem>.from(_queue));
         _availableSongsSubject.add(_availableSongs);
         return newSongs.map((e) => e.song).toList();
       }
@@ -355,7 +355,7 @@ class DynamicQueue implements ManagedQueueInfo {
     // this was called too often while quickly skipping through a queue.
     // In general, this is fine though.
     if (availableSongsChanged) _availableSongsSubject.add(_availableSongs);
-    if (queueChanged) _queueSubject.add(_queue);
+    if (queueChanged) _queueSubject.add(List<QueueItem>.from(_queue));
 
     return queueChanged;
   }
@@ -393,7 +393,7 @@ class DynamicQueue implements ManagedQueueInfo {
     }
 
     if (availableSongsChanged) _availableSongsSubject.add(_availableSongs);
-    if (queueChanged) _queueSubject.add(_queue);
+    if (queueChanged) _queueSubject.add(List<QueueItem>.from(_queue));
 
     return queueChanged;
   }
