@@ -654,4 +654,7 @@ class L10nTa extends L10n {
 
   @override
   String get created => 'உருவாக்கப்பட்டது';
+
+  @override
+  String get viewLyrics => 'View lyrics';
 }

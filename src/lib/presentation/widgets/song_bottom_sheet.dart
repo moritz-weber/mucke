@@ -11,6 +11,7 @@ import '../l10n_utils.dart';
 import '../mucke_icons.dart';
 import '../pages/album_details_page.dart';
 import '../pages/artist_details_page.dart';
+import '../pages/lyrics_page.dart';
 import '../state/audio_store.dart';
 import '../state/music_data_store.dart';
 import '../state/navigation_store.dart';
@@ -31,6 +32,7 @@ class SongBottomSheet extends StatefulWidget {
     this.enableGoToArtist = true,
     this.enableSongCustomization = true,
     this.enableQueueActions = true,
+    this.enableLyrics = true,
     this.numNavPop = 1,
   }) : super(key: key);
 
@@ -39,6 +41,7 @@ class SongBottomSheet extends StatefulWidget {
   final bool enableGoToArtist;
   final bool enableSongCustomization;
   final bool enableQueueActions;
+  final bool enableLyrics;
   final int numNavPop;
 
   @override
@@ -202,6 +205,21 @@ class _SongBottomSheetState extends State<SongBottomSheet> {
                 }
               : () {},
         ),
+        if (widget.enableLyrics && song.hasLyrics)
+          ListTile(
+            title: Text(L10n.of(context)!.viewLyrics),
+            leading: const Icon(Icons.lyrics_rounded),
+            trailing: const Icon(Icons.open_in_new_rounded),
+            onTap: () {
+              for (final _ in List.generate(widget.numNavPop, (index) => null))
+                Navigator.pop(context);
+              navStore.pushOnCurrentTab(
+                MaterialPageRoute<Widget>(
+                  builder: (BuildContext context) => LyricsPage(song: song),
+                ),
+              );
+            },
+          ),
         if (widget.enableSongCustomization)
           ExcludeLevelOptions(songs: [song], musicDataStore: musicDataStore),
         if (widget.enableSongCustomization)

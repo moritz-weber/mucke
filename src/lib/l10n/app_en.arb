@@ -472,5 +472,7 @@
   "create": "Create",
   "@create": {},
   "created": "Created",
-  "@created": {}
+  "@created": {},
+  "viewLyrics": "View lyrics",
+  "@viewLyrics": {}
 }

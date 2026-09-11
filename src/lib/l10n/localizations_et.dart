@@ -643,4 +643,7 @@ class L10nEt extends L10n {
 
   @override
   String get created => 'Loodud';
+
+  @override
+  String get viewLyrics => 'View lyrics';
 }

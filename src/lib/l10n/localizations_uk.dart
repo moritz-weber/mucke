@@ -646,4 +646,7 @@ class L10nUk extends L10n {
 
   @override
   String get created => 'Створено';
+
+  @override
+  String get viewLyrics => 'View lyrics';
 }

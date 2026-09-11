@@ -640,4 +640,7 @@ class L10nMs extends L10n {
 
   @override
   String get created => 'Created';
+
+  @override
+  String get viewLyrics => 'View lyrics';
 }

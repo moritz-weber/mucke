@@ -51,6 +51,8 @@ class Song extends Equatable {
 
   final DateTime timeAdded;
 
+  bool get hasLyrics => lyrics != null && lyrics!.isNotEmpty;
+
   @override
   List<Object?> get props => [
         path,

@@ -647,4 +647,7 @@ class L10nRu extends L10n {
 
   @override
   String get created => 'Создано';
+
+  @override
+  String get viewLyrics => 'View lyrics';
 }

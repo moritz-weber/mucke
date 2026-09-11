@@ -644,4 +644,7 @@ class L10nId extends L10n {
 
   @override
   String get created => 'Dibuat';
+
+  @override
+  String get viewLyrics => 'View lyrics';
 }

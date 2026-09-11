@@ -648,4 +648,7 @@ class L10nIt extends L10n {
 
   @override
   String get created => 'Creato';
+
+  @override
+  String get viewLyrics => 'View lyrics';
 }

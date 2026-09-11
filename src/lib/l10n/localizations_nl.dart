@@ -649,4 +649,7 @@ class L10nNl extends L10n {
 
   @override
   String get created => 'Aangemaakt';
+
+  @override
+  String get viewLyrics => 'View lyrics';
 }

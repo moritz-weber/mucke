@@ -109,6 +109,25 @@ abstract class _NavigationStore with Store {
     }
   }
 
+  /// Pushes a route onto the navigator of the currently active tab (home or
+  /// library). Unlike [push], this keeps the navbar visible because the route
+  /// is pushed inside the root scaffold's body rather than on the root
+  /// navigator. Unlike [pushOnLibrary], it does not switch to the library tab.
+  void pushOnCurrentTab(Route route) {
+    _log.fine('pushOnCurrentTab');
+    _log.fine(
+      'history: ${_navTypeHistory.length} (${_navTypeHistory.isEmpty ? "-" : _navTypeHistory.last})',
+    );
+    final _navIndex = navIndex;
+
+    if (_navIndex == 0) {
+      homeNavKey!.currentState?.push(route);
+    } else {
+      libraryNavKey!.currentState?.push(route);
+    }
+    _navTypeHistory.add(_NavState(_NavType.route, _navIndex, navIndex));
+  }
+
   /// This function is triggered when pressing the Android back button.
   Future<bool> onWillPop() async {
     _log.fine('onWillPop');

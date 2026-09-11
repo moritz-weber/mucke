@@ -629,4 +629,7 @@ class L10nZh extends L10n {
 
   @override
   String get created => '已创建';
+
+  @override
+  String get viewLyrics => 'View lyrics';
 }

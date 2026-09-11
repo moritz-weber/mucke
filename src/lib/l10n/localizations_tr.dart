@@ -646,4 +646,7 @@ class L10nTr extends L10n {
 
   @override
   String get created => 'Oluşturuldu';
+
+  @override
+  String get viewLyrics => 'View lyrics';
 }

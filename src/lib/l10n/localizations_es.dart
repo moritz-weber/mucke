@@ -651,4 +651,7 @@ class L10nEs extends L10n {
 
   @override
   String get created => 'Creada';
+
+  @override
+  String get viewLyrics => 'View lyrics';
 }

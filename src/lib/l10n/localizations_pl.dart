@@ -647,4 +647,7 @@ class L10nPl extends L10n {
 
   @override
   String get created => 'Utworzono';
+
+  @override
+  String get viewLyrics => 'View lyrics';
 }

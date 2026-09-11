@@ -647,4 +647,7 @@ class L10nDe extends L10n {
 
   @override
   String get created => 'Erzeugt';
+
+  @override
+  String get viewLyrics => 'Lyrics anzeigen';
 }

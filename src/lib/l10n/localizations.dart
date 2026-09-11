@@ -1243,6 +1243,12 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Created'**
   String get created;
+
+  /// No description provided for @viewLyrics.
+  ///
+  /// In en, this message translates to:
+  /// **'View lyrics'**
+  String get viewLyrics;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

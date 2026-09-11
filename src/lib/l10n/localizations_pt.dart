@@ -647,6 +647,9 @@ class L10nPt extends L10n {
 
   @override
   String get created => 'Criada';
+
+  @override
+  String get viewLyrics => 'View lyrics';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).

@@ -86,7 +86,6 @@ class _AlbumArtSwipeState extends State<AlbumArtSwipe> {
         final song = _queue[index].song;
         return Observer(
           builder: (BuildContext context) {
-            final bool hasLyrics = song.lyrics != null && song.lyrics!.isNotEmpty;
             final bool showLyrics = audioStore.showLyrics;
             return Center(
               child: Padding(
@@ -97,7 +96,7 @@ class _AlbumArtSwipeState extends State<AlbumArtSwipe> {
                     fit: StackFit.loose,
                     children: [
                       AlbumArt(song: song),
-                      if (hasLyrics && showLyrics) LyricsViewBlurred(song: song),
+                      if (song.hasLyrics && showLyrics) LyricsViewBlurred(song: song),
                     ],
                   ),
                 ),
