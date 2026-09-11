@@ -105,6 +105,8 @@ String? validateNumber(bool enabled, String number) {
 
 Color bgColor(Color? color) => Color.lerp(DARK3, color, 0.4) ?? DARK3;
 
+Color bgColorLight(Color? color) => Color.lerp(DARK4, color, 0.4) ?? DARK4;
+
 IconData blockLevelIcon(int blockLevel) {
   switch (blockLevel) {
     case 1:

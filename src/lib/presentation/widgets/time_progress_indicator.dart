@@ -16,9 +16,8 @@ class TimeProgressIndicator extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const CustomTimeIndicator(),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Row(
             children: [
               Observer(builder: (context) {
@@ -35,6 +34,7 @@ class TimeProgressIndicator extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
           ),
         ),
+        const CustomTimeIndicator(),
       ],
     );
   }

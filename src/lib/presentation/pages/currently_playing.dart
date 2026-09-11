@@ -62,49 +62,58 @@ class CurrentlyPlayingPage extends StatelessWidget {
                       flex: 50,
                     ),
                     Observer(
+                      // song title, artist, album, and lyrics button
                       builder: (BuildContext context) {
                         final Song? song = audioStore.currentSongStream.value;
 
                         if (song == null) return Container();
                         return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0 + 12.0),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0 + 12.0,
+                          ),
                           child: SizedBox(
                             width: double.infinity,
                             height: 58.0,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            child: Row(
                               children: [
-                                TextScroll(
-                                  song.title,
-                                  mode: TextScrollMode.endless,
-                                  velocity: const Velocity(pixelsPerSecond: Offset(40, 0)),
-                                  delayBefore: const Duration(milliseconds: 500),
-                                  pauseBetween: const Duration(milliseconds: 2000),
-                                  pauseOnBounce: const Duration(milliseconds: 1000),
-                                  style: TEXT_BIG,
-                                  textAlign: TextAlign.left,
-                                  fadedBorder: true,
-                                  fadedBorderWidth: 0.02,
-                                  fadeBorderVisibility: FadeBorderVisibility.auto,
-                                  intervalSpaces: 30,
-                                ),
-                                TextScroll(
-                                  '${song.artist} • ${song.album}',
-                                  mode: TextScrollMode.endless,
-                                  velocity: const Velocity(pixelsPerSecond: Offset(40, 0)),
-                                  delayBefore: const Duration(milliseconds: 500),
-                                  pauseBetween: const Duration(milliseconds: 2000),
-                                  pauseOnBounce: const Duration(milliseconds: 1000),
-                                  style: TextStyle(
-                                    color: Colors.grey[300],
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.w300,
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      TextScroll(
+                                        song.title,
+                                        mode: TextScrollMode.endless,
+                                        velocity: const Velocity(pixelsPerSecond: Offset(40, 0)),
+                                        delayBefore: const Duration(milliseconds: 500),
+                                        pauseBetween: const Duration(milliseconds: 2000),
+                                        pauseOnBounce: const Duration(milliseconds: 1000),
+                                        style: TEXT_BIG,
+                                        textAlign: TextAlign.left,
+                                        fadedBorder: true,
+                                        fadedBorderWidth: 0.02,
+                                        fadeBorderVisibility: FadeBorderVisibility.auto,
+                                        intervalSpaces: 30,
+                                      ),
+                                      TextScroll(
+                                        '${song.artist} • ${song.album}',
+                                        mode: TextScrollMode.endless,
+                                        velocity: const Velocity(pixelsPerSecond: Offset(40, 0)),
+                                        delayBefore: const Duration(milliseconds: 500),
+                                        pauseBetween: const Duration(milliseconds: 2000),
+                                        pauseOnBounce: const Duration(milliseconds: 1000),
+                                        style: TextStyle(
+                                          color: Colors.grey[300],
+                                          fontSize: 18.0,
+                                          fontWeight: FontWeight.w300,
+                                        ),
+                                        textAlign: TextAlign.left,
+                                        fadedBorder: true,
+                                        fadedBorderWidth: 0.02,
+                                        fadeBorderVisibility: FadeBorderVisibility.auto,
+                                        intervalSpaces: 30,
+                                      ),
+                                    ],
                                   ),
-                                  textAlign: TextAlign.left,
-                                  fadedBorder: true,
-                                  fadedBorderWidth: 0.02,
-                                  fadeBorderVisibility: FadeBorderVisibility.auto,
-                                  intervalSpaces: 30,
                                 ),
                               ],
                             ),
@@ -116,6 +125,39 @@ class CurrentlyPlayingPage extends StatelessWidget {
                       flex: 10,
                     ),
                     const CurrentlyPlayingControl(),
+                    const Spacer(
+                      flex: 10,
+                    ),
+                    Observer(
+                      builder: (BuildContext context) {
+                        final Song? song = audioStore.currentSongStream.value;
+                        final bool hasLyrics =
+                            song?.lyrics != null && song!.lyrics!.isNotEmpty;
+                        return SizedBox(
+                          width: double.infinity,
+                          height: 48.0,
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              const Icon(
+                                Icons.expand_less_rounded,
+                                color: Colors.white70,
+                              ),
+                              if (hasLyrics)
+                                Positioned(
+                                  right: 16.0,
+                                  child: IconButton(
+                                    onPressed: () {},
+                                    icon: const Icon(Icons.lyrics),
+                                    color: Colors.white,
+                                  ),
+                                ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 8.0),
                   ],
                 ),
               ),
@@ -130,8 +172,7 @@ class CurrentlyPlayingPage extends StatelessWidget {
     Navigator.push(
       context,
       PageRouteBuilder(
-        pageBuilder: (BuildContext context, animation, secondaryAnimation) =>
-            const QueuePage(),
+        pageBuilder: (BuildContext context, animation, secondaryAnimation) => const QueuePage(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           const begin = Offset(0.0, 1.0);
           const end = Offset.zero;

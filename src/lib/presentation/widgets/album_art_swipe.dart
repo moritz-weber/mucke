@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 import '../../domain/entities/queue_item.dart';
 import '../state/audio_store.dart';
 import 'album_art.dart';
+import 'lyrics_view_blurred.dart';
 
 class AlbumArtSwipe extends StatefulWidget {
   const AlbumArtSwipe({Key? key}) : super(key: key);
@@ -81,10 +82,12 @@ class _AlbumArtSwipeState extends State<AlbumArtSwipe> {
       controller: controller,
       clipBehavior: Clip.none,
       itemBuilder: (_, index) {
+        final song = _queue[index].song;
+        final bool hasLyrics = song.lyrics != null && song.lyrics!.isNotEmpty;
         return Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
-            child: AlbumArt(song: _queue[index].song),
+            child: hasLyrics ? LyricsViewBlurred(song: song) : AlbumArt(song: song),
           ),
         );
       },
