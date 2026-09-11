@@ -21,6 +21,7 @@ class Song extends Equatable {
     this.albumArtPath,
     this.color,
     this.year,
+    this.lyrics,
   });
 
   final String album;
@@ -46,6 +47,7 @@ class Song extends Equatable {
   final String? albumArtPath;
   final Color? color;
   final int? year;
+  final String? lyrics;
 
   final DateTime timeAdded;
 

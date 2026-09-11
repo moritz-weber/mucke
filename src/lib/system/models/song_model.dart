@@ -31,6 +31,7 @@ class SongModel extends Song {
     required DateTime timeAdded,
     required this.lastModified,
     int? year,
+    String? lyrics,
   }) : super(
           album: album,
           albumId: albumId,
@@ -49,6 +50,7 @@ class SongModel extends Song {
           playCount: playCount,
           timeAdded: timeAdded,
           year: year,
+          lyrics: lyrics,
         );
 
   factory SongModel.fromDrift(DriftSong driftSong) {
@@ -74,6 +76,7 @@ class SongModel extends Song {
       timeAdded: driftSong.timeAdded,
       lastModified: driftSong.lastModified,
       year: driftSong.year,
+      lyrics: driftSong.lyrics,
     );
   }
 
@@ -106,6 +109,7 @@ class SongModel extends Song {
       year: songData.year,
       timeAdded: DateTime.fromMillisecondsSinceEpoch(0),
       lastModified: lastModified,
+      lyrics: songData.lyrics,
     );
   }
 
@@ -135,6 +139,7 @@ class SongModel extends Song {
     DateTime? timeAdded,
     DateTime? lastModified,
     int? year,
+    String? lyrics,
   }) =>
       SongModel(
         album: album ?? this.album,
@@ -155,6 +160,7 @@ class SongModel extends Song {
         timeAdded: timeAdded ?? this.timeAdded,
         lastModified: lastModified ?? this.lastModified,
         year: year ?? this.year,
+        lyrics: lyrics ?? this.lyrics,
       );
 
   SongsCompanion toSongsCompanion() => SongsCompanion(
@@ -176,6 +182,7 @@ class SongModel extends Song {
         playCount: Value(playCount),
         timeAdded: Value(timeAdded),
         lastModified: Value(lastModified),
+        lyrics: Value(lyrics),
       );
 
   SongsCompanion toDriftInsert() => SongsCompanion(
@@ -192,6 +199,7 @@ class SongModel extends Song {
         year: Value(year),
         present: const Value(true),
         lastModified: Value(lastModified),
+        lyrics: Value(lyrics),
       );
 
   MediaItem toMediaItem() {

@@ -55,6 +55,7 @@ class Songs extends Table {
   IntColumn get discNumber => integer()();
   IntColumn get trackNumber => integer()();
   IntColumn get year => integer().nullable()();
+  TextColumn get lyrics => text().nullable()();
   IntColumn get blockLevel => integer().withDefault(const Constant(0))();
   IntColumn get likeCount => integer().withDefault(const Constant(0))();
   IntColumn get skipCount => integer().withDefault(const Constant(0))();
@@ -221,7 +222,7 @@ class MainDatabase extends _$MainDatabase {
   MainDatabase.withQueryExecutor(QueryExecutor e) : super(e);
 
   @override
-  int get schemaVersion => 18;
+  int get schemaVersion => 19;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -391,6 +392,10 @@ class MainDatabase extends _$MainDatabase {
                 value: Value('true'),
               ),
             );
+          }
+          if (from < 19) {
+            await m.addColumn(songs, songs.lyrics);
+            await m.alterTable(TableMigration(songs));
           }
         },
       );

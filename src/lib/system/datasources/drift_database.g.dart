@@ -1340,6 +1340,11 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, DriftSong> {
   late final GeneratedColumn<int> year = GeneratedColumn<int>(
       'year', aliasedName, true,
       type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _lyricsMeta = const VerificationMeta('lyrics');
+  @override
+  late final GeneratedColumn<String> lyrics = GeneratedColumn<String>(
+      'lyrics', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _blockLevelMeta =
       const VerificationMeta('blockLevel');
   @override
@@ -1428,6 +1433,7 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, DriftSong> {
         discNumber,
         trackNumber,
         year,
+        lyrics,
         blockLevel,
         likeCount,
         skipCount,
@@ -1516,6 +1522,10 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, DriftSong> {
       context.handle(
           _yearMeta, year.isAcceptableOrUnknown(data['year']!, _yearMeta));
     }
+    if (data.containsKey('lyrics')) {
+      context.handle(_lyricsMeta,
+          lyrics.isAcceptableOrUnknown(data['lyrics']!, _lyricsMeta));
+    }
     if (data.containsKey('block_level')) {
       context.handle(
           _blockLevelMeta,
@@ -1589,6 +1599,8 @@ class $SongsTable extends Songs with TableInfo<$SongsTable, DriftSong> {
           .read(DriftSqlType.int, data['${effectivePrefix}track_number'])!,
       year: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}year']),
+      lyrics: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}lyrics']),
       blockLevel: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}block_level'])!,
       likeCount: attachedDatabase.typeMapping
@@ -1628,6 +1640,7 @@ class DriftSong extends DataClass implements Insertable<DriftSong> {
   final int discNumber;
   final int trackNumber;
   final int? year;
+  final String? lyrics;
   final int blockLevel;
   final int likeCount;
   final int skipCount;
@@ -1649,6 +1662,7 @@ class DriftSong extends DataClass implements Insertable<DriftSong> {
       required this.discNumber,
       required this.trackNumber,
       this.year,
+      this.lyrics,
       required this.blockLevel,
       required this.likeCount,
       required this.skipCount,
@@ -1678,6 +1692,9 @@ class DriftSong extends DataClass implements Insertable<DriftSong> {
     if (!nullToAbsent || year != null) {
       map['year'] = Variable<int>(year);
     }
+    if (!nullToAbsent || lyrics != null) {
+      map['lyrics'] = Variable<String>(lyrics);
+    }
     map['block_level'] = Variable<int>(blockLevel);
     map['like_count'] = Variable<int>(likeCount);
     map['skip_count'] = Variable<int>(skipCount);
@@ -1706,6 +1723,8 @@ class DriftSong extends DataClass implements Insertable<DriftSong> {
       discNumber: Value(discNumber),
       trackNumber: Value(trackNumber),
       year: year == null && nullToAbsent ? const Value.absent() : Value(year),
+      lyrics:
+          lyrics == null && nullToAbsent ? const Value.absent() : Value(lyrics),
       blockLevel: Value(blockLevel),
       likeCount: Value(likeCount),
       skipCount: Value(skipCount),
@@ -1733,6 +1752,7 @@ class DriftSong extends DataClass implements Insertable<DriftSong> {
       discNumber: serializer.fromJson<int>(json['discNumber']),
       trackNumber: serializer.fromJson<int>(json['trackNumber']),
       year: serializer.fromJson<int?>(json['year']),
+      lyrics: serializer.fromJson<String?>(json['lyrics']),
       blockLevel: serializer.fromJson<int>(json['blockLevel']),
       likeCount: serializer.fromJson<int>(json['likeCount']),
       skipCount: serializer.fromJson<int>(json['skipCount']),
@@ -1759,6 +1779,7 @@ class DriftSong extends DataClass implements Insertable<DriftSong> {
       'discNumber': serializer.toJson<int>(discNumber),
       'trackNumber': serializer.toJson<int>(trackNumber),
       'year': serializer.toJson<int?>(year),
+      'lyrics': serializer.toJson<String?>(lyrics),
       'blockLevel': serializer.toJson<int>(blockLevel),
       'likeCount': serializer.toJson<int>(likeCount),
       'skipCount': serializer.toJson<int>(skipCount),
@@ -1783,6 +1804,7 @@ class DriftSong extends DataClass implements Insertable<DriftSong> {
           int? discNumber,
           int? trackNumber,
           Value<int?> year = const Value.absent(),
+          Value<String?> lyrics = const Value.absent(),
           int? blockLevel,
           int? likeCount,
           int? skipCount,
@@ -1805,6 +1827,7 @@ class DriftSong extends DataClass implements Insertable<DriftSong> {
         discNumber: discNumber ?? this.discNumber,
         trackNumber: trackNumber ?? this.trackNumber,
         year: year.present ? year.value : this.year,
+        lyrics: lyrics.present ? lyrics.value : this.lyrics,
         blockLevel: blockLevel ?? this.blockLevel,
         likeCount: likeCount ?? this.likeCount,
         skipCount: skipCount ?? this.skipCount,
@@ -1833,6 +1856,7 @@ class DriftSong extends DataClass implements Insertable<DriftSong> {
       trackNumber:
           data.trackNumber.present ? data.trackNumber.value : this.trackNumber,
       year: data.year.present ? data.year.value : this.year,
+      lyrics: data.lyrics.present ? data.lyrics.value : this.lyrics,
       blockLevel:
           data.blockLevel.present ? data.blockLevel.value : this.blockLevel,
       likeCount: data.likeCount.present ? data.likeCount.value : this.likeCount,
@@ -1862,6 +1886,7 @@ class DriftSong extends DataClass implements Insertable<DriftSong> {
           ..write('discNumber: $discNumber, ')
           ..write('trackNumber: $trackNumber, ')
           ..write('year: $year, ')
+          ..write('lyrics: $lyrics, ')
           ..write('blockLevel: $blockLevel, ')
           ..write('likeCount: $likeCount, ')
           ..write('skipCount: $skipCount, ')
@@ -1876,27 +1901,29 @@ class DriftSong extends DataClass implements Insertable<DriftSong> {
   }
 
   @override
-  int get hashCode => Object.hash(
-      title,
-      albumTitle,
-      albumId,
-      artist,
-      path,
-      duration,
-      albumArtPath,
-      color,
-      discNumber,
-      trackNumber,
-      year,
-      blockLevel,
-      likeCount,
-      skipCount,
-      playCount,
-      present,
-      timeAdded,
-      lastModified,
-      previous,
-      next);
+  int get hashCode => Object.hashAll([
+        title,
+        albumTitle,
+        albumId,
+        artist,
+        path,
+        duration,
+        albumArtPath,
+        color,
+        discNumber,
+        trackNumber,
+        year,
+        lyrics,
+        blockLevel,
+        likeCount,
+        skipCount,
+        playCount,
+        present,
+        timeAdded,
+        lastModified,
+        previous,
+        next
+      ]);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1912,6 +1939,7 @@ class DriftSong extends DataClass implements Insertable<DriftSong> {
           other.discNumber == this.discNumber &&
           other.trackNumber == this.trackNumber &&
           other.year == this.year &&
+          other.lyrics == this.lyrics &&
           other.blockLevel == this.blockLevel &&
           other.likeCount == this.likeCount &&
           other.skipCount == this.skipCount &&
@@ -1935,6 +1963,7 @@ class SongsCompanion extends UpdateCompanion<DriftSong> {
   final Value<int> discNumber;
   final Value<int> trackNumber;
   final Value<int?> year;
+  final Value<String?> lyrics;
   final Value<int> blockLevel;
   final Value<int> likeCount;
   final Value<int> skipCount;
@@ -1957,6 +1986,7 @@ class SongsCompanion extends UpdateCompanion<DriftSong> {
     this.discNumber = const Value.absent(),
     this.trackNumber = const Value.absent(),
     this.year = const Value.absent(),
+    this.lyrics = const Value.absent(),
     this.blockLevel = const Value.absent(),
     this.likeCount = const Value.absent(),
     this.skipCount = const Value.absent(),
@@ -1980,6 +2010,7 @@ class SongsCompanion extends UpdateCompanion<DriftSong> {
     required int discNumber,
     required int trackNumber,
     this.year = const Value.absent(),
+    this.lyrics = const Value.absent(),
     this.blockLevel = const Value.absent(),
     this.likeCount = const Value.absent(),
     this.skipCount = const Value.absent(),
@@ -2011,6 +2042,7 @@ class SongsCompanion extends UpdateCompanion<DriftSong> {
     Expression<int>? discNumber,
     Expression<int>? trackNumber,
     Expression<int>? year,
+    Expression<String>? lyrics,
     Expression<int>? blockLevel,
     Expression<int>? likeCount,
     Expression<int>? skipCount,
@@ -2034,6 +2066,7 @@ class SongsCompanion extends UpdateCompanion<DriftSong> {
       if (discNumber != null) 'disc_number': discNumber,
       if (trackNumber != null) 'track_number': trackNumber,
       if (year != null) 'year': year,
+      if (lyrics != null) 'lyrics': lyrics,
       if (blockLevel != null) 'block_level': blockLevel,
       if (likeCount != null) 'like_count': likeCount,
       if (skipCount != null) 'skip_count': skipCount,
@@ -2059,6 +2092,7 @@ class SongsCompanion extends UpdateCompanion<DriftSong> {
       Value<int>? discNumber,
       Value<int>? trackNumber,
       Value<int?>? year,
+      Value<String?>? lyrics,
       Value<int>? blockLevel,
       Value<int>? likeCount,
       Value<int>? skipCount,
@@ -2081,6 +2115,7 @@ class SongsCompanion extends UpdateCompanion<DriftSong> {
       discNumber: discNumber ?? this.discNumber,
       trackNumber: trackNumber ?? this.trackNumber,
       year: year ?? this.year,
+      lyrics: lyrics ?? this.lyrics,
       blockLevel: blockLevel ?? this.blockLevel,
       likeCount: likeCount ?? this.likeCount,
       skipCount: skipCount ?? this.skipCount,
@@ -2130,6 +2165,9 @@ class SongsCompanion extends UpdateCompanion<DriftSong> {
     if (year.present) {
       map['year'] = Variable<int>(year.value);
     }
+    if (lyrics.present) {
+      map['lyrics'] = Variable<String>(lyrics.value);
+    }
     if (blockLevel.present) {
       map['block_level'] = Variable<int>(blockLevel.value);
     }
@@ -2177,6 +2215,7 @@ class SongsCompanion extends UpdateCompanion<DriftSong> {
           ..write('discNumber: $discNumber, ')
           ..write('trackNumber: $trackNumber, ')
           ..write('year: $year, ')
+          ..write('lyrics: $lyrics, ')
           ..write('blockLevel: $blockLevel, ')
           ..write('likeCount: $likeCount, ')
           ..write('skipCount: $skipCount, ')
@@ -5642,6 +5681,7 @@ typedef $$SongsTableCreateCompanionBuilder = SongsCompanion Function({
   required int discNumber,
   required int trackNumber,
   Value<int?> year,
+  Value<String?> lyrics,
   Value<int> blockLevel,
   Value<int> likeCount,
   Value<int> skipCount,
@@ -5665,6 +5705,7 @@ typedef $$SongsTableUpdateCompanionBuilder = SongsCompanion Function({
   Value<int> discNumber,
   Value<int> trackNumber,
   Value<int?> year,
+  Value<String?> lyrics,
   Value<int> blockLevel,
   Value<int> likeCount,
   Value<int> skipCount,
@@ -5717,6 +5758,9 @@ class $$SongsTableFilterComposer extends Composer<_$MainDatabase, $SongsTable> {
 
   ColumnFilters<int> get year => $composableBuilder(
       column: $table.year, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get lyrics => $composableBuilder(
+      column: $table.lyrics, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<int> get blockLevel => $composableBuilder(
       column: $table.blockLevel, builder: (column) => ColumnFilters(column));
@@ -5789,6 +5833,9 @@ class $$SongsTableOrderingComposer
   ColumnOrderings<int> get year => $composableBuilder(
       column: $table.year, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<String> get lyrics => $composableBuilder(
+      column: $table.lyrics, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<int> get blockLevel => $composableBuilder(
       column: $table.blockLevel, builder: (column) => ColumnOrderings(column));
 
@@ -5860,6 +5907,9 @@ class $$SongsTableAnnotationComposer
   GeneratedColumn<int> get year =>
       $composableBuilder(column: $table.year, builder: (column) => column);
 
+  GeneratedColumn<String> get lyrics =>
+      $composableBuilder(column: $table.lyrics, builder: (column) => column);
+
   GeneratedColumn<int> get blockLevel => $composableBuilder(
       column: $table.blockLevel, builder: (column) => column);
 
@@ -5922,6 +5972,7 @@ class $$SongsTableTableManager extends RootTableManager<
             Value<int> discNumber = const Value.absent(),
             Value<int> trackNumber = const Value.absent(),
             Value<int?> year = const Value.absent(),
+            Value<String?> lyrics = const Value.absent(),
             Value<int> blockLevel = const Value.absent(),
             Value<int> likeCount = const Value.absent(),
             Value<int> skipCount = const Value.absent(),
@@ -5945,6 +5996,7 @@ class $$SongsTableTableManager extends RootTableManager<
             discNumber: discNumber,
             trackNumber: trackNumber,
             year: year,
+            lyrics: lyrics,
             blockLevel: blockLevel,
             likeCount: likeCount,
             skipCount: skipCount,
@@ -5968,6 +6020,7 @@ class $$SongsTableTableManager extends RootTableManager<
             required int discNumber,
             required int trackNumber,
             Value<int?> year = const Value.absent(),
+            Value<String?> lyrics = const Value.absent(),
             Value<int> blockLevel = const Value.absent(),
             Value<int> likeCount = const Value.absent(),
             Value<int> skipCount = const Value.absent(),
@@ -5991,6 +6044,7 @@ class $$SongsTableTableManager extends RootTableManager<
             discNumber: discNumber,
             trackNumber: trackNumber,
             year: year,
+            lyrics: lyrics,
             blockLevel: blockLevel,
             likeCount: likeCount,
             skipCount: skipCount,
