@@ -144,6 +144,14 @@ abstract class _AudioStore with Store {
   late ObservableStream<LoopMode> loopModeStream =
       _audioPlayerRepository.loopModeStream.asObservable();
 
+  @observable
+  bool showLyrics = false;
+
+  @action
+  void toggleShowLyrics() {
+    showLyrics = !showLyrics;
+  }
+
   @computed
   bool get hasNext =>
       (queueIndexStream.value != null && queueIndexStream.value! < queueLength - 1) ||

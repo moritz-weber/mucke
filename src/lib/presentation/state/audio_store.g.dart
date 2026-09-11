@@ -252,6 +252,22 @@ mixin _$AudioStore on _AudioStore, Store {
     });
   }
 
+  late final _$showLyricsAtom =
+      Atom(name: '_AudioStore.showLyrics', context: context);
+
+  @override
+  bool get showLyrics {
+    _$showLyricsAtom.reportRead();
+    return super.showLyrics;
+  }
+
+  @override
+  set showLyrics(bool value) {
+    _$showLyricsAtom.reportWrite(value, super.showLyrics, () {
+      super.showLyrics = value;
+    });
+  }
+
   late final _$_AudioStoreActionController =
       ActionController(name: '_AudioStore', context: context);
 
@@ -278,6 +294,17 @@ mixin _$AudioStore on _AudioStore, Store {
   }
 
   @override
+  void toggleShowLyrics() {
+    final _$actionInfo = _$_AudioStoreActionController.startAction(
+        name: '_AudioStore.toggleShowLyrics');
+    try {
+      return super.toggleShowLyrics();
+    } finally {
+      _$_AudioStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 currentSongStream: ${currentSongStream},
@@ -288,6 +315,7 @@ playableStream: ${playableStream},
 queueIndexStream: ${queueIndexStream},
 shuffleModeStream: ${shuffleModeStream},
 loopModeStream: ${loopModeStream},
+showLyrics: ${showLyrics},
 positionString: ${positionString},
 queueLength: ${queueLength},
 numAvailableSongs: ${numAvailableSongs},

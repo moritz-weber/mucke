@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../domain/entities/queue_item.dart';
@@ -83,12 +84,26 @@ class _AlbumArtSwipeState extends State<AlbumArtSwipe> {
       clipBehavior: Clip.none,
       itemBuilder: (_, index) {
         final song = _queue[index].song;
-        final bool hasLyrics = song.lyrics != null && song.lyrics!.isNotEmpty;
-        return Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
-            child: hasLyrics ? LyricsViewBlurred(song: song) : AlbumArt(song: song),
-          ),
+        return Observer(
+          builder: (BuildContext context) {
+            final bool hasLyrics = song.lyrics != null && song.lyrics!.isNotEmpty;
+            final bool showLyrics = audioStore.showLyrics;
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(2.0),
+                  child: Stack(
+                    fit: StackFit.loose,
+                    children: [
+                      AlbumArt(song: song),
+                      if (hasLyrics && showLyrics) LyricsViewBlurred(song: song),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
         );
       },
       onPageChanged: _conditionalSeek,

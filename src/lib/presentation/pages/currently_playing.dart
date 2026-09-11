@@ -133,6 +133,7 @@ class CurrentlyPlayingPage extends StatelessWidget {
                         final Song? song = audioStore.currentSongStream.value;
                         final bool hasLyrics =
                             song?.lyrics != null && song!.lyrics!.isNotEmpty;
+                        final bool showLyrics = audioStore.showLyrics;
                         return SizedBox(
                           width: double.infinity,
                           height: 48.0,
@@ -147,9 +148,11 @@ class CurrentlyPlayingPage extends StatelessWidget {
                                 Positioned(
                                   right: 16.0,
                                   child: IconButton(
-                                    onPressed: () {},
-                                    icon: const Icon(Icons.lyrics),
-                                    color: Colors.white,
+                                    onPressed: () => audioStore.toggleShowLyrics(),
+                                    icon: Icon(
+                                      Icons.lyrics,
+                                      color: showLyrics ? Colors.white : Colors.white24,
+                                    ),
                                   ),
                                 ),
                             ],
