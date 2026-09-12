@@ -33,6 +33,11 @@ class _SyncedLyricsViewBlurredState extends State<SyncedLyricsViewBlurred> {
 
   int _lastActiveIndex = -1;
 
+  /// Whether the initial positioning of the list has happened. The first
+  /// scroll to the active line is done without animation so the lyrics don't
+  /// visibly jump around when the view is opened.
+  bool _initialized = false;
+
   /// Whether the view automatically scrolls to the active line. Disabled once
   /// the user scrolls manually; re-enabled via the lock button.
   bool _followEnabled = true;
@@ -56,8 +61,14 @@ class _SyncedLyricsViewBlurredState extends State<SyncedLyricsViewBlurred> {
   ///
   /// Uses the item index rather than a computed pixel offset so that lines of
   /// any height (including wrapped multi-line entries) scroll correctly.
-  void _autoScroll(int activeIndex) {
+  /// When [animate] is false the list jumps instantly, which is used for the
+  /// initial positioning when the view is opened.
+  void _autoScroll(int activeIndex, {bool animate = true}) {
     if (!_itemScrollController.isAttached) return;
+    if (!animate) {
+      _itemScrollController.jumpTo(index: activeIndex, alignment: 0.5);
+      return;
+    }
     _itemScrollController.scrollTo(
       index: activeIndex,
       alignment: 0.5,
@@ -74,7 +85,10 @@ class _SyncedLyricsViewBlurredState extends State<SyncedLyricsViewBlurred> {
     setState(() {
       _followEnabled = true;
     });
-    if (activeIndex >= 0) _autoScroll(activeIndex);
+    if (activeIndex >= 0)
+      _autoScroll(activeIndex);
+    else
+      _autoScroll(0); // fallback to top if no active line
 
     _buttonHideTimer?.cancel();
     _buttonHideTimer = Timer(const Duration(seconds: 3), () {
@@ -84,6 +98,15 @@ class _SyncedLyricsViewBlurredState extends State<SyncedLyricsViewBlurred> {
         });
       }
     });
+  }
+
+  /// Jumps playback to the timestamp of the tapped line.
+  Future<void> _seekToLine(LyricsLine line) async {
+    final Duration songDuration = widget.song.duration;
+    if (songDuration.inMilliseconds <= 0) return;
+    final double fraction =
+        (line.timestamp.inMilliseconds / songDuration.inMilliseconds).clamp(0.0, 1.0);
+    await audioStore.seekToPosition(fraction);
   }
 
   /// Called when the user starts dragging the lyrics list.
@@ -126,11 +149,20 @@ class _SyncedLyricsViewBlurredState extends State<SyncedLyricsViewBlurred> {
             padding: const EdgeInsets.all(2.0),
             child: Observer(
               builder: (BuildContext context) {
-                final Duration position =
-                    audioStore.currentPositionStream.value ?? Duration.zero;
+                final Duration position = audioStore.currentPositionStream.value ?? Duration.zero;
                 final int activeIndex = _synced.activeLineIndex(position);
 
-                if (activeIndex != _lastActiveIndex) {
+                if (!_initialized) {
+                  // Position the list at the active line without animation the
+                  // first time the view is shown, so the lyrics don't visibly
+                  // jump around when opening the view.
+                  _initialized = true;
+                  _lastActiveIndex = activeIndex;
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    if (!mounted) return;
+                    _autoScroll(activeIndex >= 0 ? activeIndex : 0, animate: false);
+                  });
+                } else if (activeIndex != _lastActiveIndex) {
                   _lastActiveIndex = activeIndex;
                   // Schedule after this frame, once the list has laid out.
                   // Skip while the user is driving the scroll position.
@@ -154,15 +186,19 @@ class _SyncedLyricsViewBlurredState extends State<SyncedLyricsViewBlurred> {
                     itemBuilder: (context, index) {
                       final LyricsLine line = _synced.lines[index];
                       final bool isActive = index == activeIndex;
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: Text(
-                          line.text,
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            color: isActive ? Colors.white : Colors.white54,
-                            fontSize: isActive ? 20.0 : 18.0,
-                            fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+                      return GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () => _seekToLine(line),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4.0),
+                          child: Text(
+                            line.text,
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              color: isActive ? Colors.white : Colors.white54,
+                              fontSize: 18.0,
+                              fontWeight: isActive ? FontWeight.w500 : FontWeight.normal,
+                            ),
                           ),
                         ),
                       );

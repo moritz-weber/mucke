@@ -96,7 +96,10 @@ class _AlbumArtSwipeState extends State<AlbumArtSwipe> {
                   child: Stack(
                     fit: StackFit.loose,
                     children: [
-                      AlbumArt(song: song),
+                      Padding(
+                        padding: const EdgeInsets.all(0.5),
+                        child: AlbumArt(song: song),
+                      ),
                       if (song.hasPlainLyrics && showLyrics)
                         song.hasSyncedLyrics
                             ? SyncedLyricsViewBlurred(
