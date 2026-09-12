@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../../domain/entities/song.dart';
 import '../../domain/entities/synced_lyrics.dart';
@@ -25,32 +27,81 @@ class SyncedLyricsViewBlurred extends StatefulWidget {
 
 class _SyncedLyricsViewBlurredState extends State<SyncedLyricsViewBlurred> {
   final AudioStore audioStore = GetIt.I<AudioStore>();
-  final ScrollController _scrollController = ScrollController();
+
+  final ItemScrollController _itemScrollController = ItemScrollController();
+  final ItemPositionsListener _itemPositionsListener = ItemPositionsListener.create();
 
   int _lastActiveIndex = -1;
 
-  static const double _lineHeight = 30.0;
+  /// Whether the view automatically scrolls to the active line. Disabled once
+  /// the user scrolls manually; re-enabled via the lock button.
+  bool _followEnabled = true;
+
+  /// Whether the lock button is shown. It appears as soon as the user scrolls
+  /// manually and reflects the current [_followEnabled] state. After
+  /// re-enabling auto-scroll it fades out again.
+  bool _buttonVisible = false;
+
+  Timer? _buttonHideTimer;
 
   SyncedLyrics get _synced => widget.song.syncedLyrics!;
 
   @override
   void dispose() {
-    _scrollController.dispose();
+    _buttonHideTimer?.cancel();
     super.dispose();
   }
 
   /// Scrolls the active line to (roughly) the vertical center of the view.
+  ///
+  /// Uses the item index rather than a computed pixel offset so that lines of
+  /// any height (including wrapped multi-line entries) scroll correctly.
   void _autoScroll(int activeIndex) {
-    if (!_scrollController.hasClients) return;
-    // Approximate offset using a fixed line height. Good enough for a prototype.
-    final target = (activeIndex * _lineHeight) -
-        (_scrollController.position.viewportDimension / 2) +
-        (_lineHeight / 2);
-    _scrollController.animateTo(
-      target.clamp(0.0, _scrollController.position.maxScrollExtent),
+    if (!_itemScrollController.isAttached) return;
+    _itemScrollController.scrollTo(
+      index: activeIndex,
+      alignment: 0.5,
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
+  }
+
+  /// Scrolls back to the currently active line and re-enables auto-scroll.
+  /// Hides the lock button again after a short delay.
+  void _jumpToActive() {
+    final Duration position = audioStore.currentPositionStream.value ?? Duration.zero;
+    final int activeIndex = _synced.activeLineIndex(position);
+    setState(() {
+      _followEnabled = true;
+    });
+    if (activeIndex >= 0) _autoScroll(activeIndex);
+
+    _buttonHideTimer?.cancel();
+    _buttonHideTimer = Timer(const Duration(seconds: 3), () {
+      if (mounted) {
+        setState(() {
+          _buttonVisible = false;
+        });
+      }
+    });
+  }
+
+  /// Called when the user starts dragging the lyrics list.
+  bool _onScrollNotification(ScrollNotification notification) {
+    // Only react to the lyrics list itself (not the enclosing PageView) and
+    // only to actual user drags — ignore our own programmatic scrolls.
+    if (notification.depth != 0) return false;
+    if (notification is! ScrollStartNotification) return false;
+    if (notification.dragDetails == null) return false;
+
+    _buttonHideTimer?.cancel();
+    if (!_buttonVisible || _followEnabled) {
+      setState(() {
+        _followEnabled = false;
+        _buttonVisible = true;
+      });
+    }
+    return false;
   }
 
   @override
@@ -82,34 +133,32 @@ class _SyncedLyricsViewBlurredState extends State<SyncedLyricsViewBlurred> {
                 if (activeIndex != _lastActiveIndex) {
                   _lastActiveIndex = activeIndex;
                   // Schedule after this frame, once the list has laid out.
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    if (activeIndex >= 0) _autoScroll(activeIndex);
-                  });
+                  // Skip while the user is driving the scroll position.
+                  if (_followEnabled) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (activeIndex >= 0) _autoScroll(activeIndex);
+                    });
+                  }
                 }
 
-                return Scrollbar(
-                  controller: _scrollController,
-                  thumbVisibility: true,
-                  thickness: 3.0,
-                  radius: const Radius.circular(1.5),
-                  child: ListView.builder(
-                    controller: _scrollController,
-                    clipBehavior: Clip.antiAlias,
+                return NotificationListener<ScrollNotification>(
+                  onNotification: _onScrollNotification,
+                  child: ScrollablePositionedList.builder(
+                    itemScrollController: _itemScrollController,
+                    itemPositionsListener: _itemPositionsListener,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 14.0,
-                      vertical: 40.0,
+                      vertical: 28.0,
                     ),
                     itemCount: _synced.lines.length,
-                    itemExtent: _lineHeight,
                     itemBuilder: (context, index) {
                       final LyricsLine line = _synced.lines[index];
                       final bool isActive = index == activeIndex;
-                      return Center(
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4.0),
                         child: Text(
                           line.text,
-                          textAlign: TextAlign.center,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.left,
                           style: TextStyle(
                             color: isActive ? Colors.white : Colors.white54,
                             fontSize: isActive ? 20.0 : 18.0,
@@ -121,6 +170,27 @@ class _SyncedLyricsViewBlurredState extends State<SyncedLyricsViewBlurred> {
                   ),
                 );
               },
+            ),
+          ),
+          // Lock button: shown once the user scrolls manually. Tapping it
+          // re-enables auto-scroll and jumps back to the active line.
+          Positioned(
+            right: 4.0,
+            bottom: 4.0,
+            child: IgnorePointer(
+              ignoring: !_buttonVisible,
+              child: AnimatedOpacity(
+                opacity: _buttonVisible ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 400),
+                child: IconButton(
+                  onPressed: _followEnabled ? null : _jumpToActive,
+                  tooltip: _followEnabled ? null : 'Scroll to current line',
+                  icon: Icon(
+                    _followEnabled ? Icons.lock_outline : Icons.lock_open,
+                    color: Colors.white.withValues(alpha: 0.6),
+                  ),
+                ),
+              ),
             ),
           ),
         ],

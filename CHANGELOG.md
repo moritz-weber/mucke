@@ -4,6 +4,7 @@
 - Added monochrome/themed icon (#156).
 - Fixed a bug with non-updating queue length.
 - Fixed a bug with automatic queueing.
+- Added support to view (synced) lyrics from metadata and lrc files (#147).
 
 ## 1.6.0
 

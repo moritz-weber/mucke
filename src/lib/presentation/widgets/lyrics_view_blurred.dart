@@ -55,7 +55,10 @@ class _LyricsViewBlurredState extends State<LyricsViewBlurred> {
               child: SingleChildScrollView(
                 controller: _scrollController,
                 clipBehavior: Clip.antiAlias,
-                padding: const EdgeInsets.all(14.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14.0,
+                  vertical: 28.0,
+                ),
                 child: Text(
                   lyrics,
                   style: const TextStyle(

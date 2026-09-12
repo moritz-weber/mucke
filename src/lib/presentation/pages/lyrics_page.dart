@@ -50,7 +50,7 @@ class LyricsPage extends StatelessWidget {
       ),
       body: Expanded(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(HORIZONTAL_PADDING),
+          padding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING, vertical: 28.0),
           child: Text(
             song.plainLyrics ?? '',
             style: const TextStyle(

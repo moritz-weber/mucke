@@ -37,6 +37,7 @@ dependencies:
   path_provider: ^2.0.2  # BSD 3
   permission_handler: ^12.0.1  # MIT
   reorderables: ^0.6.0  # MIT
+  scrollable_positioned_list: ^0.3.8
   share_plus: ^12.0.2
   string_similarity: ^2.0.0  # MIT
   text_scroll: ^0.2.0  # MIT
