@@ -481,7 +481,28 @@ class MetadataLoader extends AsyncTask<File, (File, Tag?, String?)> {
   @override
   FutureOr<(File, Tag?, String?)> run() async {
     try {
-      final tag = await Haudiotagger.read(file.path);
+      var tag = await Haudiotagger.read(file.path);
+
+      if (tag == null) {
+        return (file, null, null);
+      }
+
+      final stem = p.basenameWithoutExtension(file.path);
+      final lrcFiles = await file.parent
+          .list(recursive: false, followLinks: false)
+          .where((item) =>
+              FileSystemEntity.isFileSync(item.path) &&
+              p.basenameWithoutExtension(item.path).toLowerCase() ==
+                  stem.toLowerCase() &&
+              p.extension(item.path).toLowerCase() == '.lrc')
+          .toList();
+      if (lrcFiles.isNotEmpty) {
+        final lyrics = File(lrcFiles.first.path).readAsStringSync();
+        if (lyrics.isNotEmpty) {
+          tag = tag.copyWith(lyrics: lyrics);
+        }
+      }
+
       return (file, tag, null);
     } catch (e) {
       return (file, null, e.toString());
