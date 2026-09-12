@@ -205,7 +205,7 @@ class _SongBottomSheetState extends State<SongBottomSheet> {
                 }
               : () {},
         ),
-        if (widget.enableLyrics && song.hasLyrics)
+        if (widget.enableLyrics && song.hasPlainLyrics)
           ListTile(
             title: Text(L10n.of(context)!.viewLyrics),
             leading: const Icon(Icons.lyrics_rounded),

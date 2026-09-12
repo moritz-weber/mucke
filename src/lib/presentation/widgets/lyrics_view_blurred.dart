@@ -29,7 +29,7 @@ class _LyricsViewBlurredState extends State<LyricsViewBlurred> {
 
   @override
   Widget build(BuildContext context) {
-    final String? lyrics = widget.song.lyrics;
+    final String? lyrics = widget.song.plainLyrics;
     if (lyrics == null || lyrics.isEmpty) {
       return const SizedBox.shrink();
     }

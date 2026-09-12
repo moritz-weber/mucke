@@ -55,8 +55,6 @@ class _AlbumBackgroundState extends State<AlbumBackground> {
 
   Future<void> _setBackgroundWidget(Song? song) async {
     if (song == null) return;
-    final Color color =
-        song.color ?? DARK3;
 
     setState(() {
       _backgroundWidget = Container(
@@ -67,7 +65,7 @@ class _AlbumBackgroundState extends State<AlbumBackground> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [bgColor(color), DARK1],
+            colors: [bgColor(song.color), DARK1],
             stops: const [0.0, 1.0],
           ),
         ),

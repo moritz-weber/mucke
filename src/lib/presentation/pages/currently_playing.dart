@@ -142,7 +142,7 @@ class CurrentlyPlayingPage extends StatelessWidget {
                                 Icons.expand_less_rounded,
                                 color: Colors.white70,
                               ),
-                              if (song?.hasLyrics == true)
+                              if (song?.hasPlainLyrics == true)
                                 Positioned(
                                   right: 16.0,
                                   child: IconButton(

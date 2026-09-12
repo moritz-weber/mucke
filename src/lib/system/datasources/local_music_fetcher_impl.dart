@@ -19,6 +19,7 @@ import '../models/album_model.dart';
 import '../models/artist_model.dart';
 import '../models/default_values.dart';
 import '../models/song_model.dart';
+import '../models/synced_lyrics_model.dart';
 import '../utils.dart';
 import 'library_scan_result.dart';
 import 'local_music_fetcher.dart';
@@ -110,7 +111,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     final failures = scans.failures;
     _log.fine('Songs to process: ${songsToCheck.length}');
 
-    for (final (songFile, songData) in songsToCheck) {
+    for (final (songFile, songData, syncedLyrics) in songsToCheck) {
       _log.info('Processing Song ${songFile.path}');
       _progressSubject.add(++scanCount);
 
@@ -132,6 +133,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
             albumId: albumId,
             albumArtPath: albumArtMap[albumId],
             lastModified: lastModified,
+            syncedLyrics: syncedLyrics,
           ),
         );
         continue;
@@ -203,6 +205,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
           albumId: albumId,
           lastModified: lastModified,
           albumArtPath: albumArtMap[albumId],
+          syncedLyrics: syncedLyrics,
         ),
       );
     }
@@ -388,7 +391,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
 
   Future<MetadataScanResult> getMetadataForFiles(List<File> filesToCheck) async {
     _log.fine('Getting meta data for songs: START');
-    final List<(File, Tag)> songsMetadata = [];
+    final List<(File, Tag, SyncedLyricsModel?)> songsMetadata = [];
     final List<ScanFailure> failures = [];
 
     final tasks = filesToCheck.map((e) => MetadataLoader(e));
@@ -406,9 +409,9 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     await Future.wait(executions);
 
     for (final execution in executions) {
-      final (file, tag, error) = await execution;
+      final (file, tag, syncedLyrics, error) = await execution;
       if (tag != null) {
-        songsMetadata.add((file, tag));
+        songsMetadata.add((file, tag, syncedLyrics));
       } else {
         failures.add(
           ScanFailure(
@@ -454,19 +457,19 @@ class MetadataScanResult {
     required this.failures,
   });
 
-  final List<(File, Tag)> metadata;
+  final List<(File, Tag, SyncedLyricsModel?)> metadata;
   final List<ScanFailure> failures;
 }
 
 List<AsyncTask> metadataLoaderTypeRegister() => [MetadataLoader(File(''))];
 
-class MetadataLoader extends AsyncTask<File, (File, Tag?, String?)> {
+class MetadataLoader extends AsyncTask<File, (File, Tag?, SyncedLyricsModel?, String?)> {
   MetadataLoader(this.file);
 
   final File file;
 
   @override
-  AsyncTask<File, (File, Tag?, String?)> instantiate(
+  AsyncTask<File, (File, Tag?, SyncedLyricsModel?, String?)> instantiate(
     File parameters, [
     Map<String, SharedData>? sharedData,
   ]) {
@@ -479,12 +482,12 @@ class MetadataLoader extends AsyncTask<File, (File, Tag?, String?)> {
   }
 
   @override
-  FutureOr<(File, Tag?, String?)> run() async {
+  FutureOr<(File, Tag?, SyncedLyricsModel?, String?)> run() async {
     try {
       var tag = await Haudiotagger.read(file.path);
 
       if (tag == null) {
-        return (file, null, null);
+        return (file, null, null, null);
       }
 
       final stem = p.basenameWithoutExtension(file.path);
@@ -503,9 +506,13 @@ class MetadataLoader extends AsyncTask<File, (File, Tag?, String?)> {
         }
       }
 
-      return (file, tag, null);
+      // Parse synced lyrics from the (possibly lrc-overridden) lyrics text.
+      final SyncedLyricsModel? syncedLyrics =
+          tag.lyrics != null ? SyncedLyricsModel.fromLrc(tag.lyrics!) : null;
+
+      return (file, tag, syncedLyrics, null);
     } catch (e) {
-      return (file, null, e.toString());
+      return (file, null, null, e.toString());
     }
   }
 }

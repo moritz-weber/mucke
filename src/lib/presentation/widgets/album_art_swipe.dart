@@ -8,6 +8,7 @@ import '../../domain/entities/queue_item.dart';
 import '../state/audio_store.dart';
 import 'album_art.dart';
 import 'lyrics_view_blurred.dart';
+import 'synced_lyrics_view_blurred.dart';
 
 class AlbumArtSwipe extends StatefulWidget {
   const AlbumArtSwipe({Key? key}) : super(key: key);
@@ -96,7 +97,13 @@ class _AlbumArtSwipeState extends State<AlbumArtSwipe> {
                     fit: StackFit.loose,
                     children: [
                       AlbumArt(song: song),
-                      if (song.hasLyrics && showLyrics) LyricsViewBlurred(song: song),
+                      if (song.hasPlainLyrics && showLyrics)
+                        song.hasSyncedLyrics
+                            ? SyncedLyricsViewBlurred(
+                                key: ValueKey('SYNCED_LYRICS_${song.path}'),
+                                song: song,
+                              )
+                            : LyricsViewBlurred(song: song),
                     ],
                   ),
                 ),
