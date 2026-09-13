@@ -7,14 +7,28 @@ import '../state/navigation_store.dart';
 import '../theming.dart';
 
 /// Displays the lyrics of a single song in a full page.
-class LyricsPage extends StatelessWidget {
+class LyricsPage extends StatefulWidget {
   const LyricsPage({Key? key, required this.song}) : super(key: key);
 
   final Song song;
 
   @override
+  State<LyricsPage> createState() => _LyricsPageState();
+}
+
+class _LyricsPageState extends State<LyricsPage> {
+  final ScrollController controller = ScrollController();
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final NavigationStore navStore = GetIt.I<NavigationStore>();
+    final song = widget.song;
 
     return Scaffold(
       appBar: AppBar(
@@ -48,8 +62,10 @@ class LyricsPage extends StatelessWidget {
         titleSpacing: 0.0,
         backgroundColor: bgColor(song.color),
       ),
-      body: Expanded(
+      body: Scrollbar(
+        controller: controller,
         child: SingleChildScrollView(
+          controller: controller,
           padding: const EdgeInsets.symmetric(horizontal: HORIZONTAL_PADDING, vertical: 28.0),
           child: Text(
             song.plainLyrics ?? '',
