@@ -103,7 +103,7 @@
     "minYear": "Väikseim aasta",
     "maxYear": "Suurim aasta",
     "orderSettings": "Järjestuse seadistused",
-    "createSmartlist": "Loo nutikas esitusloend",
+    "createSmartlist": "Koosta nutikas esitusloend",
     "editSmartlist": "Muuda nutikat esitusloendit",
     "playNext": "Esita järgmisena",
     "selectArtists": "Vali esitajad",
@@ -152,7 +152,7 @@
     "managePermissionSubtitle": "Õiguste keelamisel see rakendus käivitub uuesti.",
     "grantManagePermission": "Anna õigused kõikide failide haldamiseks.",
     "disabledBattery": "Akukasutuse optimeerimine on lülitatud välja.",
-    "disableBattery": "Probleemide lahendamiseks lülita ta mucke jaoks välja.",
+    "disableBattery": "Lülita akukasutuse optimeerimine mucke jaoks välja.",
     "batteryExplanation": "Alates Androidi 12-st versioonist akukasutuse optimeerimine tekitab helifookuse kaotamisel (näiteks kõne ajal) teavituste vea. Optimeerimise keelamine lahendab selle vea.",
     "dataExportedTo": "Andmed on eksporditud kausta:\n{path}",
     "@dataExportedTo": {
@@ -181,5 +181,105 @@
     "setupLibraryDescription": "Vali kaustad, lubatud faililaiendid, jne.",
     "alwaysExcludeSong": "Välista alati see lugu.",
     "excludeShuffleAllSong": "Välista lugude segamisel.",
-    "dontExcludeSong": "Ära välista seda lugu."
+    "dontExcludeSong": "Ära välista seda lugu.",
+    "noSongsYet": "Tundub, et su muusikakogus pole ühtegi lugu: ava seadistused, lisa oma muusikakaustad ja uuenda muusikakogu.",
+    "allowedFileExtensionsDescription": "Komadega eraldatud loend lubatud faililaienditest. Suurtähed ja väiketähed ei ole olulised. Kui sa selles osas pole kindel, kasuta lihtsalt vaikimisi valikut.",
+    "numberOfBlockedFiles": "Hetkel blokeeritud faile: {blockedFiles}",
+    "@numberOfBlockedFiles": {
+        "placeholders": {
+            "blockedFiles": {
+                "type": "int",
+                "example": "3"
+            }
+        }
+    },
+    "playAlbumsInOrder": "Esita albumeid järjekorras",
+    "playAlbumsInOrderDescription": "Kui klõpsad albumis mõnda lugu, hakatakse laule mängima õiges järjestuses, mitte ei säilitata eelmist taasesitusrežiimi.",
+    "logFilesSavedTo": "Logifail on salvestatud asukohta:\n{path}",
+    "@logFilesSavedTo": {
+        "placeholders": {
+            "path": {
+                "type": "String"
+            }
+        }
+    },
+    "saveLogFilesDescription": "Järgnevaga luuakse alamkaust logifailidega.",
+    "saveLogFiles": "Salvesta logifaile",
+    "logFilesSaveFailed": "Logifailide salvestamine ei õnnestunud!",
+    "disableBatteryDescription": "Akukasutuse optimeerimise väljalülitamisega võid lahendada võimalikke teavituse vigu.",
+    "createSmartlistsDesc": "Parema kuulamiskogemuse nimel koosta soovitatud nutikaid esitusloendeid. Neid saad hiljem oma maitse järgi kohendada.",
+    "playedNTimes": "{count, plural, =0{pole veel esitatud} =1{esitatud üks kord} other{esitatud {count} korda}}",
+    "@playedNTimes": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            }
+        }
+    },
+    "nSongsInQueue": "esitusjärjekorras {count, plural, =0{pole lugusid} =1{on üks lugu} other{on {count} lugu}}",
+    "@nSongsInQueue": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            }
+        }
+    },
+    "limitSongs": "Piira lugusde arvu",
+    "countSongsPlayed": "Arvesta lugusid, kui sellest on esitatud {percentage}%",
+    "@countSongsPlayed": {
+        "placeholders": {
+            "percentage": {
+                "type": "int"
+            }
+        }
+    },
+    "playlistNormalMode": "Esita ülalt",
+    "playlistShuffleMode": "Esita segatud järjestuses",
+    "playlistFavShuffleMode": "Esita segatud järjestuses arvestades lemmikuid",
+    "filterLikes": "Meeldimisi vahemikust {min} kuni {max}",
+    "@filterLikes": {
+        "placeholders": {
+            "min": {
+                "type": "int"
+            },
+            "max": {
+                "type": "int"
+            }
+        }
+    },
+    "selectArtistsExclude": "Vali välistatavad esitajad: {num} on valitud.",
+    "@selectArtistsExclude": {
+        "placeholders": {
+            "num": {
+                "type": "int"
+            }
+        }
+    },
+    "selectArtistsInclude": "Vali kaasatavad esitajad: {num} on valitud.",
+    "@selectArtistsInclude": {
+        "placeholders": {
+            "num": {
+                "type": "int"
+            }
+        }
+    },
+    "excludeAllSongs": "Välista vastavalt märgitud lood.",
+    "excludeInShuffle": "Välista segatud režiimi jaoks vastavalt märgitud lood.",
+    "excludeAlways": "Välista alatiseks vastavalt märgitud lood.",
+    "dontExclude": "Ära välista ütegi lugu.",
+    "includeAllArtists": "Kui ühtegi pole valitud, kaasa kõik esitajad.",
+    "orderSettingsDescription": "Olulisuse muutmiseks kohenda järjestust.",
+    "nSongsSelected": "{count, plural, =0{ühtegi lugu pole valitud} =1{üks lugu on valitud} other{{count} lugu on valitud}}",
+    "@nSongsSelected": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            }
+        }
+    },
+    "appendToQueued": "Lisa käsitsi lisatud lugudele",
+    "blockFromLibrary": "Eemalda ja blokeeri muusikakogust",
+    "alwaysPlayPrevious": "Alati esita eelmine lugu enne",
+    "alwaysPlayNext": "Alati esita järgmine lugu hiljem",
+    "blockedFilesDescription": "Blokeeritud failid imporditud andmetest. Muusikakogu skaneerimisest jäetakse välja ainult täpsed vasteid. Lisafaile saad hiljem rakenduses blokeerida."
 }
