@@ -5,6 +5,8 @@
 - Fixed a bug with non-updating queue length.
 - Fixed a bug with automatic queueing.
 - Added support to view (synced) lyrics from metadata and lrc files (#147).
+- Reworked audio player state management (#194).
+- Pipeline: build per-ABI APKs (#196).
 
 ## 1.6.0
 
