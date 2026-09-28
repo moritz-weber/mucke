@@ -23,7 +23,7 @@ class PlayArtist {
     if (shuffleMode != null) {
       await _audioPlayerRepository.setShuffleMode(shuffleMode, updateQueue: false);
     }
-    
+
     final activeShuffleMode = _audioPlayerRepository.shuffleModeStream.value;
     int index = 0;
     if (activeShuffleMode != ShuffleMode.none) {

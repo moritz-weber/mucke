@@ -17,8 +17,8 @@ import '../models/song_model.dart';
 
 class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   AudioPlayerRepositoryImpl(this._audioPlayerDataSource, this._dynamicQueue) {
-    _shuffleModeSubject.add(ShuffleMode.none);
-    _loopModeSubject.add(LoopMode.off);
+    _shuffleMode = ShuffleMode.none;
+    _loopMode = LoopMode.off;
 
     _audioPlayerDataSource.currentIndexStream.listen(_onDataSourceIndexChanged);
     positionStream.listen((position) async {
@@ -42,13 +42,40 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   final AudioPlayerDataSource _audioPlayerDataSource;
   final DynamicQueue _dynamicQueue;
 
-  final BehaviorSubject<LoopMode> _loopModeSubject = BehaviorSubject();
-  final BehaviorSubject<ShuffleMode> _shuffleModeSubject = BehaviorSubject();
-  final BehaviorSubject<Playable> _playableSubject = BehaviorSubject();
+  ShuffleMode _shuffleMode = ShuffleMode.none;
+  LoopMode _loopMode = LoopMode.off;
+  Playable? _playable;
 
   /// The structural state, released as atomic snapshots.
   final BehaviorSubject<AudioPlayerState> _stateSubject =
       BehaviorSubject.seeded(AudioPlayerState.initial());
+
+  late final ValueStream<ShuffleMode> _shuffleModeStream =
+      ValueConnectableStream<ShuffleMode>.seeded(
+    stateStream.skip(1).map((state) => state.shuffleMode).distinct(),
+    _stateSubject.value.shuffleMode,
+  )..connect();
+
+  late final ValueStream<LoopMode> _loopModeStream = ValueConnectableStream<LoopMode>.seeded(
+    stateStream.skip(1).map((state) => state.loopMode).distinct(),
+    _stateSubject.value.loopMode,
+  )..connect();
+
+  late final ValueStream<Playable> _playableStream = ValueConnectableStream<Playable>(
+    stateStream.map((state) => state.playable).whereType<Playable>().distinct(),
+  )..connect();
+
+  late final ValueStream<List<Song>> _queueStream = ValueConnectableStream<List<Song>>.seeded(
+    stateStream.skip(1).map(
+          (state) => state.queue.map((item) => item.song).toList(),
+        ),
+    _stateSubject.value.queue.map((item) => item.song).toList(),
+  )..connect();
+
+  late final ValueStream<int?> _currentIndexStream = ValueConnectableStream<int?>.seeded(
+    stateStream.skip(1).map((state) => state.currentIndex).distinct(),
+    _stateSubject.value.currentIndex,
+  )..connect();
 
   /// Monotonic token identifying the transition that produced the latest snapshot.
   int _stateRevision = 0;
@@ -88,7 +115,7 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   Future<void> _extendQueue(int index) async {
     final songs = await _dynamicQueue.onCurrentIndexUpdated(
       index,
-      _shuffleModeSubject.value,
+      _shuffleMode,
     );
     if (songs.isNotEmpty) {
       await _audioPlayerDataSource.addToQueue(songs.map((e) => e as SongModel).toList());
@@ -100,21 +127,19 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   ValueStream<AudioPlayerState> get stateStream => _stateSubject.stream;
 
   @override
-  ValueStream<ShuffleMode> get shuffleModeStream => _shuffleModeSubject.stream;
+  ValueStream<ShuffleMode> get shuffleModeStream => _shuffleModeStream;
 
   @override
-  ValueStream<LoopMode> get loopModeStream => _loopModeSubject.stream;
+  ValueStream<LoopMode> get loopModeStream => _loopModeStream;
 
   @override
-  ValueStream<Playable> get playableStream => _playableSubject.stream;
+  ValueStream<Playable> get playableStream => _playableStream;
 
   @override
-  Stream<List<Song>> get queueStream =>
-      stateStream.map((state) => state.queue.map((item) => item.song).toList());
+  ValueStream<List<Song>> get queueStream => _queueStream;
 
   @override
-  Stream<int?> get currentIndexStream =>
-      stateStream.map((state) => state.currentIndex).distinct();
+  ValueStream<int?> get currentIndexStream => _currentIndexStream;
 
   @override
   Stream<Song?> get currentSongStream => stateStream
@@ -138,7 +163,7 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
 
   @override
   Future<void> addToQueue(List<Song> songs) => _enqueueTransition(() async {
-      await _audioPlayerDataSource.addToQueue(songs.map((e) => e as SongModel).toList());
+        await _audioPlayerDataSource.addToQueue(songs.map((e) => e as SongModel).toList());
         _dynamicQueue.addToQueue(songs);
         _emitState();
       });
@@ -156,7 +181,7 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   ) =>
       _enqueueTransition(() async {
         _log.fine('initQueue');
-        _playableSubject.add(playable);
+        _playable = playable;
 
         if (index != null) {
           _dynamicQueue.init(
@@ -187,8 +212,8 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
     bool keepInitialIndex = false,
   }) =>
       _enqueueTransition(() async {
-        _playableSubject.add(playable);
-        final shuffleMode = shuffleModeStream.value;
+        _playable = playable;
+        final shuffleMode = _shuffleMode;
         final _initialIndex = await _dynamicQueue.generateQueue(
           songs,
           playable,
@@ -259,9 +284,8 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
     _dynamicQueue.removeQueueIndices(indices, permanent);
     final newQueue = _dynamicQueue.queue;
 
-    final newCurrentIndex = newQueue.isNotEmpty
-        ? _calcNewCurrentIndexOnRemove(_currentIndex ?? 0, indices)
-        : 0;
+    final newCurrentIndex =
+        newQueue.isNotEmpty ? _calcNewCurrentIndexOnRemove(_currentIndex ?? 0, indices) : 0;
     _currentIndex = newCurrentIndex;
     _emitState();
 
@@ -293,7 +317,7 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
 
   @override
   Future<void> setLoopMode(LoopMode loopMode) => _enqueueTransition(() async {
-        _loopModeSubject.add(loopMode);
+        _loopMode = loopMode;
         _emitState();
         await _audioPlayerDataSource.setLoopMode(loopMode);
       });
@@ -301,7 +325,7 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
   @override
   Future<void> setShuffleMode(ShuffleMode shuffleMode, {bool updateQueue = true}) =>
       _enqueueTransition(() async {
-        _shuffleModeSubject.add(shuffleMode);
+        _shuffleMode = shuffleMode;
 
         final currentIndex = _currentIndex ?? 0;
 
@@ -331,7 +355,7 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
         final oldQueue = List<Song>.from(_dynamicQueue.queue);
 
         if (_dynamicQueue.onSongsUpdated(songs)) {
-          final blockLevel = calcBlockLevel(shuffleModeStream.value, playableStream.value);
+          final blockLevel = calcBlockLevel(_shuffleMode, _playable!);
           final queue = _dynamicQueue.queue;
 
           final indicesToRemove = <int>[];
@@ -379,9 +403,9 @@ class AudioPlayerRepositoryImpl implements AudioPlayerRepository {
       AudioPlayerState(
         queue: List<QueueItem>.unmodifiable(queue),
         currentIndex: _currentIndex,
-        shuffleMode: _shuffleModeSubject.valueOrNull ?? ShuffleMode.none,
-        loopMode: _loopModeSubject.valueOrNull ?? LoopMode.off,
-        playable: _playableSubject.valueOrNull,
+        shuffleMode: _shuffleMode,
+        loopMode: _loopMode,
+        playable: _playable,
         revision: ++_stateRevision,
       ),
     );

@@ -24,6 +24,7 @@ class PlayPlaylist {
     final rng = Random();
     final initialIndex = shuffleMode == ShuffleMode.none ? 0 : rng.nextInt(songs.length);
 
-    _playSongs(songs: songs, initialIndex: initialIndex, playable: playlist, keepInitialIndex: false);
+    _playSongs(
+        songs: songs, initialIndex: initialIndex, playable: playlist, keepInitialIndex: false);
   }
 }

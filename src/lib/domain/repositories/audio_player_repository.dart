@@ -12,7 +12,7 @@ import '../modules/managed_queue_info.dart';
 abstract class AudioPlayerInfoRepository {
   /// The structural player state.
   ///
-  /// Every snapshot is self-consistent and is emitted as a unit by the single writer, 
+  /// Every snapshot is self-consistent and is emitted as a unit by the single writer,
   /// so consumers never observe an inconsistent state (e.g. a new index with an old queue).
   ///
   /// The individual `*Stream` projections below are kept for consumers that only
@@ -25,10 +25,10 @@ abstract class AudioPlayerInfoRepository {
   ValueStream<Playable> get playableStream;
 
   /// The queue as a list of songs, projected from [stateStream].
-  Stream<List<Song>> get queueStream;
+  ValueStream<List<Song>> get queueStream;
 
   /// The index of the current song, projected from [stateStream].
-  Stream<int?> get currentIndexStream;
+  ValueStream<int?> get currentIndexStream;
   Stream<Song?> get currentSongStream;
   Stream<PlaybackEvent> get playbackEventStream;
   Stream<bool> get playingStream;
@@ -44,6 +44,7 @@ abstract class AudioPlayerRepository extends AudioPlayerInfoRepository {
   Future<bool> seekToNext();
   Future<void> seekToPrevious();
   Future<void> seekToIndex(int index);
+
   /// Seek to a relative position of the current track.
   Future<void> seekToPosition(double position);
   // Future<void> dispose();  // TODO: unused

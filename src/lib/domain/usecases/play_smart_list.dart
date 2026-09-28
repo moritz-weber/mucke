@@ -28,6 +28,7 @@ class PlaySmartList {
     final rng = Random();
     final initialIndex = shuffleMode == ShuffleMode.none ? 0 : rng.nextInt(songs.length);
 
-    _playSongs(songs: songs, initialIndex: initialIndex, playable: smartList, keepInitialIndex: false);
+    _playSongs(
+        songs: songs, initialIndex: initialIndex, playable: smartList, keepInitialIndex: false);
   }
 }
