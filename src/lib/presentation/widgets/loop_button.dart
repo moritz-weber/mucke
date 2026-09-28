@@ -20,7 +20,7 @@ class LoopButton extends StatelessWidget {
 
     return Observer(
       builder: (BuildContext context) {
-        switch (audioStore.loopModeStream.value) {
+        switch (audioStore.loopMode) {
           case LoopMode.off:
             return IconButton(
               icon: const Icon(
@@ -69,8 +69,6 @@ class LoopButton extends StatelessWidget {
               },
               splashRadius: iconSize / 2 + 6.0,
             );
-          case null:
-            return Container();
         }
       },
     );

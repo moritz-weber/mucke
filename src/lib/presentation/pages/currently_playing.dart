@@ -64,7 +64,7 @@ class CurrentlyPlayingPage extends StatelessWidget {
                     Observer(
                       // song title, artist, album, and lyrics button
                       builder: (BuildContext context) {
-                        final Song? song = audioStore.currentSongStream.value;
+                        final Song? song = audioStore.currentSong;
 
                         if (song == null) return Container();
                         return Padding(
@@ -130,7 +130,7 @@ class CurrentlyPlayingPage extends StatelessWidget {
                     ),
                     Observer(
                       builder: (BuildContext context) {
-                        final Song? song = audioStore.currentSongStream.value;
+                        final Song? song = audioStore.currentSong;
                         final bool showLyrics = audioStore.showLyrics;
                         return SizedBox(
                           width: double.infinity,
@@ -197,7 +197,7 @@ class CurrentlyPlayingPage extends StatelessWidget {
   Future<void> _openMoreMenu(BuildContext context) async {
     final AudioStore audioStore = GetIt.I<AudioStore>();
 
-    final song = audioStore.currentSongStream.value;
+    final song = audioStore.currentSong;
     if (song == null) return;
 
     showModalBottomSheet(

@@ -30,6 +30,9 @@ class DynamicQueue implements ManagedQueueInfo {
   /// The queue as a list of Songs instead of QueueItems.
   List<Song> get queue => _queue.map((e) => e.song).toList();
 
+  @override
+  List<QueueItem> get queueItems => _queue;
+
   /// The list of Songs still available for queue generation, excluding songs that have already been queued.
   List<Song> get availableSongs =>
       _availableSongs.where((element) => element.isAvailable).map((e) => e.song).toList();

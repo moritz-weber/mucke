@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mucke/presentation/utils.dart';
 
 import '../../domain/entities/song.dart';
 import '../state/navigation_store.dart';
 import '../theming.dart';
+import '../utils.dart';
 
 /// Displays the lyrics of a single song in a full page.
 class LyricsPage extends StatefulWidget {

@@ -19,7 +19,7 @@ class L10nEt extends L10n {
 
   @override
   String get noSongsYet =>
-      'Looks like you don\'t have any songs in your library: Go to settings, add your music folders, and update your library.';
+      'Tundub, et su muusikakogus pole ühtegi lugu: ava seadistused, lisa oma muusikakaustad ja uuenda muusikakogu.';
 
   @override
   String get library => 'Muusikakogu';
@@ -97,29 +97,29 @@ class L10nEt extends L10n {
 
   @override
   String get allowedFileExtensionsDescription =>
-      'A comma-separated list of allowed file extensions. Lower- or uppercase does not matter. If you are unsure about this, just use the default.';
+      'Komadega eraldatud loend lubatud faililaienditest. Suurtähed ja väiketähed ei ole olulised. Kui sa selles osas pole kindel, kasuta lihtsalt vaikimisi valikut.';
 
   @override
   String get manageBlockedFiles => 'Halda blokeeritud faile';
 
   @override
   String numberOfBlockedFiles(int blockedFiles) {
-    return 'Number of currently blocked files: $blockedFiles';
+    return 'Hetkel blokeeritud faile: $blockedFiles';
   }
 
   @override
   String get playback => 'Taasesitus';
 
   @override
-  String get playAlbumsInOrder => 'Play albums in order';
+  String get playAlbumsInOrder => 'Esita albumeid järjekorras';
 
   @override
   String get playAlbumsInOrderDescription =>
-      'When you click a song in an album the songs will be played in order instead of keeping the previous play mode.';
+      'Kui klõpsad albumis mõnda lugu, hakatakse laule mängima õiges järjestuses, mitte ei säilitata eelmist taasesitusrežiimi.';
 
   @override
   String countSongsPlayed(int percentage) {
-    return 'Count songs as played after: $percentage%';
+    return 'Arvesta lugusid, kui sellest on esitatud $percentage%';
   }
 
   @override
@@ -215,13 +215,14 @@ class L10nEt extends L10n {
   String get favShuffleMode => 'Lemmikupõhine segamisviis';
 
   @override
-  String get playlistNormalMode => 'Play from the top';
+  String get playlistNormalMode => 'Esita ülalt';
 
   @override
-  String get playlistShuffleMode => 'Start shuffle playback';
+  String get playlistShuffleMode => 'Esita segatud järjestuses';
 
   @override
-  String get playlistFavShuffleMode => 'Start favorite shuffle playback';
+  String get playlistFavShuffleMode =>
+      'Esita segatud järjestuses arvestades lemmikuid';
 
   @override
   String get name => 'Nimi';
@@ -278,24 +279,24 @@ class L10nEt extends L10n {
   String get playbackMode => 'Taasesituse režiim';
 
   @override
-  String get excludeAllSongs => 'Exclude all songs marked for exclusion.';
+  String get excludeAllSongs => 'Välista vastavalt märgitud lood.';
 
   @override
   String get excludeInShuffle =>
-      'Exclude songs marked for exclusion in shuffle mode.';
+      'Välista segatud režiimi jaoks vastavalt märgitud lood.';
 
   @override
-  String get excludeAlways => 'Exclude only songs marked as always exclude.';
+  String get excludeAlways => 'Välista alatiseks vastavalt märgitud lood.';
 
   @override
-  String get dontExclude => 'Don\'t exclude any songs.';
+  String get dontExclude => 'Ära välista ütegi lugu.';
 
   @override
   String get filterSettings => 'Filtrite seadistused';
 
   @override
   String filterLikes(int min, int max) {
-    return 'Likes between $min and $max';
+    return 'Meeldimisi vahemikust $min kuni $max';
   }
 
   @override
@@ -312,32 +313,33 @@ class L10nEt extends L10n {
 
   @override
   String selectArtistsExclude(int num) {
-    return 'Select artists to exclude: $num selected.';
+    return 'Vali välistatavad esitajad: $num on valitud.';
   }
 
   @override
   String selectArtistsInclude(int num) {
-    return 'Select artists to include: $num selected.';
+    return 'Vali kaasatavad esitajad: $num on valitud.';
   }
 
   @override
-  String get includeAllArtists => 'Include all artists if none are selected.';
+  String get includeAllArtists =>
+      'Kui ühtegi pole valitud, kaasa kõik esitajad.';
 
   @override
   String get excludeArtists => 'Välista valitud esitajad';
 
   @override
-  String get limitSongs => 'Limit number of songs';
+  String get limitSongs => 'Piira lugusde arvu';
 
   @override
   String get orderSettings => 'Järjestuse seadistused';
 
   @override
   String get orderSettingsDescription =>
-      'Reorder options to change priorities.';
+      'Olulisuse muutmiseks kohenda järjestust.';
 
   @override
-  String get createSmartlist => 'Loo nutikas esitusloend';
+  String get createSmartlist => 'Koosta nutikas esitusloend';
 
   @override
   String get editSmartlist => 'Muuda nutikat esitusloendit';
@@ -350,9 +352,9 @@ class L10nEt extends L10n {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count songs selected',
-      one: 'one song selected',
-      zero: 'no songs selected',
+      other: '$count lugu on valitud',
+      one: 'üks lugu on valitud',
+      zero: 'ühtegi lugu pole valitud',
     );
     return '$_temp0';
   }
@@ -361,7 +363,7 @@ class L10nEt extends L10n {
   String get playNext => 'Esita järgmisena';
 
   @override
-  String get appendToQueued => 'Append to manually queued songs';
+  String get appendToQueued => 'Lisa käsitsi lisatud lugudele';
 
   @override
   String get addToQueue => 'Lisa esitusjärjekorda';
@@ -370,7 +372,7 @@ class L10nEt extends L10n {
   String get disc => 'Plaat';
 
   @override
-  String get blockFromLibrary => 'Remove and block from library';
+  String get blockFromLibrary => 'Eemalda ja blokeeri muusikakogust';
 
   @override
   String get highlights => 'Esiletõstetud';
@@ -392,11 +394,11 @@ class L10nEt extends L10n {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count songs',
-      one: 'one song',
-      zero: 'no songs',
+      other: 'on $count lugu',
+      one: 'on üks lugu',
+      zero: 'pole lugusid',
     );
-    return '$_temp0 in queue';
+    return 'esitusjärjekorras $_temp0';
   }
 
   @override
@@ -445,18 +447,18 @@ class L10nEt extends L10n {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'played $count times',
-      one: 'played once',
-      zero: 'not played yet',
+      other: 'esitatud $count korda',
+      one: 'esitatud üks kord',
+      zero: 'pole veel esitatud',
     );
     return '$_temp0';
   }
 
   @override
-  String get alwaysPlayPrevious => 'Always play previous song before';
+  String get alwaysPlayPrevious => 'Alati esita eelmine lugu enne';
 
   @override
-  String get alwaysPlayNext => 'Always play next song after';
+  String get alwaysPlayNext => 'Alati esita järgmine lugu hiljem';
 
   @override
   String get dontExcludeSong => 'Ära välista seda lugu.';
@@ -510,7 +512,7 @@ class L10nEt extends L10n {
 
   @override
   String get blockedFilesDescription =>
-      'Blocked files from the imported data. Only exact matches will be excluded from the library scan. Additional files can be blocked later in the app.';
+      'Blokeeritud failid imporditud andmetest. Muusikakogu skaneerimisest jäetakse välja ainult täpsed vasteid. Lisafaile saad hiljem rakenduses blokeerida.';
 
   @override
   String get importLibData => 'Impordi muusikakogu andmed';
@@ -539,19 +541,19 @@ class L10nEt extends L10n {
   String get exportData => 'Ekspordi andmed';
 
   @override
-  String get saveLogFiles => 'Save log files';
+  String get saveLogFiles => 'Salvesta logifaile';
 
   @override
   String get saveLogFilesDescription =>
-      'This creates a subfolder with the log files in it.';
+      'Järgnevaga luuakse alamkaust logifailidega.';
 
   @override
   String logFilesSavedTo(String path) {
-    return 'Log files saved to:\n$path';
+    return 'Logifail on salvestatud asukohta:\n$path';
   }
 
   @override
-  String get logFilesSaveFailed => 'Saving log files failed!';
+  String get logFilesSaveFailed => 'Logifailide salvestamine ei õnnestunud!';
 
   @override
   String get exportDescription =>
@@ -586,11 +588,11 @@ class L10nEt extends L10n {
 
   @override
   String get disableBattery =>
-      'Probleemide lahendamiseks lülita ta mucke jaoks välja.';
+      'Lülita akukasutuse optimeerimine mucke jaoks välja.';
 
   @override
   String get disableBatteryDescription =>
-      'Disabling battery optimization can solve potential notification issues.';
+      'Akukasutuse optimeerimise väljalülitamisega võid lahendada võimalikke teavituse vigu.';
 
   @override
   String get disabledBattery => 'Akukasutuse optimeerimine on lülitatud välja.';
@@ -636,7 +638,7 @@ class L10nEt extends L10n {
 
   @override
   String get createSmartlistsDesc =>
-      'Create suggested smartlists to enhance your listening experience. You can customize these lists later.';
+      'Parema kuulamiskogemuse nimel koosta soovitatud nutikaid esitusloendeid. Neid saad hiljem oma maitse järgi kohendada.';
 
   @override
   String get create => 'Loo';

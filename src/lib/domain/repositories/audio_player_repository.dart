@@ -1,5 +1,6 @@
 import 'package:rxdart/rxdart.dart';
 
+import '../entities/audio_player_state.dart';
 import '../entities/loop_mode.dart';
 import '../entities/playable.dart';
 import '../entities/playback_event.dart';
@@ -9,12 +10,25 @@ import '../entities/song.dart';
 import '../modules/managed_queue_info.dart';
 
 abstract class AudioPlayerInfoRepository {
+  /// The structural player state.
+  ///
+  /// Every snapshot is self-consistent and is emitted as a unit by the single writer, 
+  /// so consumers never observe an inconsistent state (e.g. a new index with an old queue).
+  ///
+  /// The individual `*Stream` projections below are kept for consumers that only
+  /// care about a single field; new code that needs more than one structural field
+  /// should read them from one snapshot here instead.
+  ValueStream<AudioPlayerState> get stateStream;
+
   ValueStream<ShuffleMode> get shuffleModeStream;
   ValueStream<LoopMode> get loopModeStream;
-  ValueStream<List<Song>> get queueStream;
   ValueStream<Playable> get playableStream;
 
-  ValueStream<int?> get currentIndexStream;
+  /// The queue as a list of songs, projected from [stateStream].
+  Stream<List<Song>> get queueStream;
+
+  /// The index of the current song, projected from [stateStream].
+  Stream<int?> get currentIndexStream;
   Stream<Song?> get currentSongStream;
   Stream<PlaybackEvent> get playbackEventStream;
   Stream<bool> get playingStream;

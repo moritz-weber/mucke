@@ -26,7 +26,7 @@ class TimeProgressIndicator extends StatelessWidget {
               Observer(
                 builder: (context) {
                   final duration =
-                      audioStore.currentSongStream.value?.duration ?? const Duration(minutes: 1);
+                      audioStore.currentSong?.duration ?? const Duration(minutes: 1);
                   return Text(msToTimeString(duration));
                 },
               ),
@@ -61,7 +61,7 @@ class _CustomTimeIndicatorState extends State<CustomTimeIndicator> {
       child: Observer(
         builder: (context) {
           final duration =
-              audioStore.currentSongStream.value?.duration ?? const Duration(minutes: 1);
+              audioStore.currentSong?.duration ?? const Duration(minutes: 1);
           final sliderWidth = useLocalPosition
               ? localPosition
               : _position(audioStore.currentPositionStream.value, duration);

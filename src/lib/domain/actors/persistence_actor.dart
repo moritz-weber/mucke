@@ -30,7 +30,6 @@ class PersistenceActor {
       _log.fine('setCurrentIndex: $index');
       _persistentStateRepository.setCurrentIndex(index);
     });
-
     _audioPlayerRepository.loopModeStream.skip(1).listen((loopMode) {
       _log.fine('setLoopMode: $loopMode');
       _persistentStateRepository.setLoopMode(loopMode);

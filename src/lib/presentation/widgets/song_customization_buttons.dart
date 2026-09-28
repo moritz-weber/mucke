@@ -20,7 +20,7 @@ class SongCustomizationButtons extends StatelessWidget {
 
     return Observer(
       builder: (BuildContext context) {
-        final Song? song = audioStore.currentSongStream.value;
+        final Song? song = audioStore.currentSong;
 
         if (song == null) {
           return Container();
@@ -70,7 +70,7 @@ class SongCustomizationButtons extends StatelessWidget {
       builder: (context) => MyBottomSheet(
         widgets: [
           Observer(builder: (context) {
-            final song = audioStore.currentSongStream.value;
+            final song = audioStore.currentSong;
             if (song == null) return Container();
             final firstLast = musicDataStore.isSongFirstLast(song);
             return FutureBuilder(
@@ -90,7 +90,7 @@ class SongCustomizationButtons extends StatelessWidget {
                 });
           }),
           Observer(builder: (context) {
-            final song = audioStore.currentSongStream.value;
+            final song = audioStore.currentSong;
             if (song == null) return Container();
             final firstLast = musicDataStore.isSongFirstLast(song);
             return FutureBuilder(
@@ -138,7 +138,7 @@ class SongCustomizationButtons extends StatelessWidget {
           descriptions.length,
           (index) => Observer(
             builder: (BuildContext context) {
-              final song = audioStore.currentSongStream.value;
+              final song = audioStore.currentSong;
               if (song == null) return Container();
               return ListTile(
                 title: Text(

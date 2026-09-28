@@ -16,7 +16,7 @@ class QueueControlBar extends StatelessWidget {
 
     return Observer(
       builder: (BuildContext context) {
-        final Song? song = audioStore.currentSongStream.value;
+        final Song? song = audioStore.currentSong;
         final Duration position =
             audioStore.currentPositionStream.value ?? const Duration(seconds: 0);
         if (song != null) {

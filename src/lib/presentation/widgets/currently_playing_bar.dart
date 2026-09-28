@@ -25,7 +25,7 @@ class CurrentlyPlayingBar extends StatelessWidget {
           child: Material(
             color: DARK1,
             child: Observer(builder: (context) {
-              final Song? song = audioStore.currentSongStream.value;
+              final Song? song = audioStore.currentSong;
               if (song == null) return Container();
 
               return Padding(
@@ -74,7 +74,7 @@ class CurrentlyPlayingBar extends StatelessWidget {
         Container(
           child: Observer(
             builder: (context) {
-              final Song? song = audioStore.currentSongStream.value;
+              final Song? song = audioStore.currentSong;
               if (song == null) return Container();
               final Duration position =
                   audioStore.currentPositionStream.value ?? const Duration(seconds: 0);

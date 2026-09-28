@@ -14,7 +14,7 @@ class NextSong extends StatelessWidget {
       final audioStore = GetIt.I<AudioStore>();
 
       final List<Song> queue = audioStore.queue.map((e) => e.song).toList();
-      final int? index = audioStore.queueIndexStream.value;
+      final int? index = audioStore.currentIndex;
 
       if (index != null && index < queue.length - 1) {
         final Song song = queue[index + 1];

@@ -215,13 +215,14 @@ class L10nFr extends L10n {
   String get favShuffleMode => 'Mode aléatoire favori';
 
   @override
-  String get playlistNormalMode => 'Play from the top';
+  String get playlistNormalMode => 'Écouter depuis le début';
 
   @override
-  String get playlistShuffleMode => 'Start shuffle playback';
+  String get playlistShuffleMode => 'Lancer la lecture aléatoire';
 
   @override
-  String get playlistFavShuffleMode => 'Start favorite shuffle playback';
+  String get playlistFavShuffleMode =>
+      'Lancer la lecture aléatoire des favoris';
 
   @override
   String get name => 'Nom';
@@ -546,19 +547,20 @@ class L10nFr extends L10n {
   String get exportData => 'Exporter les données';
 
   @override
-  String get saveLogFiles => 'Save log files';
+  String get saveLogFiles => 'Enregistrer les fichiers journaux';
 
   @override
   String get saveLogFilesDescription =>
-      'This creates a subfolder with the log files in it.';
+      'Cela crée un sous-dossier contenant les fichiers journaux.';
 
   @override
   String logFilesSavedTo(String path) {
-    return 'Log files saved to:\n$path';
+    return 'Fichiers journaux enregistrés dans :\n$path';
   }
 
   @override
-  String get logFilesSaveFailed => 'Saving log files failed!';
+  String get logFilesSaveFailed =>
+      'Échec de l\'enregistrement des fichiers journaux !';
 
   @override
   String get exportDescription =>
@@ -593,11 +595,11 @@ class L10nFr extends L10n {
 
   @override
   String get disableBattery =>
-      'Désactivez l\'optimisation pour mucke afin de résoudre les problèmes de notification.';
+      'Désactiver l\'optimisation de la batterie pour mucke.';
 
   @override
   String get disableBatteryDescription =>
-      'Disabling battery optimization can solve potential notification issues.';
+      'La désactivation de l\'optimisation de la batterie peut résoudre d\'éventuels problèmes liés aux notifications.';
 
   @override
   String get disabledBattery =>

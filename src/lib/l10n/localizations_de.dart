@@ -39,55 +39,55 @@ class L10nDe extends L10n {
   }
 
   @override
-  String get scanSuccessful => 'Library scan completed.';
+  String get scanSuccessful => 'Bibliothek fertig gescannt.';
 
   @override
   String scanFailed(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count scan failures',
-      one: '1 scan failure',
+      other: '$count Scan-Fehler',
+      one: 'Ein Scan-Fehler',
     );
     return '$_temp0';
   }
 
   @override
   String get scanPermissionDenied =>
-      'Audio permission required to scan the library.';
+      'Audio-Berechtigung benötigt, um Bibliothek zu scannen.';
 
   @override
   String get scanErrorDetails => 'Details';
 
   @override
-  String get scanFailures => 'Scan failures';
+  String get scanFailures => 'Scan-Fehler';
 
   @override
-  String get scanFailureStage => 'Stage';
+  String get scanFailureStage => 'Stufe';
 
   @override
-  String get scanStageMetadata => 'Metadata';
+  String get scanStageMetadata => 'Metadaten';
 
   @override
-  String get scanStageAlbumArt => 'Album art';
+  String get scanStageAlbumArt => 'Album-Cover';
 
   @override
-  String get scanStageAccentColor => 'Accent color';
+  String get scanStageAccentColor => 'Akzentfarbe';
 
   @override
-  String get scanStagePermission => 'Permission';
+  String get scanStagePermission => 'Berechtigung';
 
   @override
-  String get scanErrorMetadata => 'Metadata could not be read.';
+  String get scanErrorMetadata => 'Metadaten konnten nicht gelesen werden.';
 
   @override
-  String get scanErrorAlbumArt => 'Album art could not be read.';
+  String get scanErrorAlbumArt => 'Album-Cover konnte nicht gelesen werden.';
 
   @override
-  String get scanErrorAccentColor => 'Accent color could not be generated.';
+  String get scanErrorAccentColor => 'Akzentfarbe konnte nicht erzeugt werden.';
 
   @override
-  String get scanErrorPermission => 'Audio permission was denied.';
+  String get scanErrorPermission => 'Audio-Berechtigung fehlt.';
 
   @override
   String get manageLibraryFolders => 'Ordner der Bibliothek verwalten';
@@ -649,5 +649,5 @@ class L10nDe extends L10n {
   String get created => 'Erzeugt';
 
   @override
-  String get viewLyrics => 'Lyrics anzeigen';
+  String get viewLyrics => 'View lyrics';
 }

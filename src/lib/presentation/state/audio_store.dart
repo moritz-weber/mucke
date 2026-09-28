@@ -2,6 +2,7 @@ import 'package:mobx/mobx.dart';
 
 import '../../domain/entities/album.dart';
 import '../../domain/entities/artist.dart';
+import '../../domain/entities/audio_player_state.dart';
 import '../../domain/entities/loop_mode.dart';
 import '../../domain/entities/playable.dart';
 import '../../domain/entities/playlist.dart';
@@ -63,10 +64,11 @@ abstract class _AudioStore with Store {
     this._shuffleAll,
     this._playPlayable,
   ) {
-    _audioPlayerRepository.managedQueueInfo.queueItemsStream.listen(_setQueue);
     _audioPlayerRepository.managedQueueInfo.availableSongsStream.listen((_) => _setAvSongs());
-    _audioPlayerRepository.shuffleModeStream.listen((_) => _setAvSongs());
-    _audioPlayerRepository.playableStream.listen((_) => _setAvSongs());
+    _audioPlayerRepository.stateStream.listen((next) {
+      _onState(next);
+      _setAvSongs();
+    });
   }
 
   final AudioPlayerRepository _audioPlayerRepository;
@@ -81,9 +83,41 @@ abstract class _AudioStore with Store {
   final SeekToNext _seekToNext;
   final ShuffleAll _shuffleAll;
 
+  /// The atomic structural player state, as released by the system layer.
+  ///
+  /// This is the single observable for structural state. It is fed from
+  /// [AudioPlayerRepository.stateStream] and updated in a single [@action], so
+  /// mobx observers are notified once per committed snapshot and never see a
+  /// torn intermediate state. Everything else structural is a [@computed]
+  /// getter on top of it.
   @observable
-  late ObservableStream<Song?> currentSongStream =
-      _audioPlayerRepository.currentSongStream.asObservable();
+  AudioPlayerState state = AudioPlayerState.initial();
+
+  @action
+  void _onState(AudioPlayerState next) {
+    state = next;
+  }
+
+  @computed
+  Song? get currentSong => state.currentSong;
+
+  @computed
+  int? get currentIndex => state.currentIndex;
+
+  @computed
+  List<QueueItem> get queue => state.queue;
+
+  @computed
+  int get queueLength => state.queue.length;
+
+  @computed
+  ShuffleMode get shuffleMode => state.shuffleMode;
+
+  @computed
+  LoopMode get loopMode => state.loopMode;
+
+  @computed
+  Playable? get playable => state.playable;
 
   @observable
   late ObservableStream<bool> playingStream = _audioPlayerRepository.playingStream.asObservable();
@@ -97,52 +131,18 @@ abstract class _AudioStore with Store {
       utils.msToTimeString(currentPositionStream.value ?? const Duration(seconds: 0));
 
   @observable
-  late ObservableStream<List<QueueItem>> queueStream =
-      _audioPlayerRepository.managedQueueInfo.queueItemsStream.asObservable();
-
-  @readonly
-  late List<QueueItem> _queue = [];
-
-  @action
-  void _setQueue(List<QueueItem> queue) {
-    _queue = queue;
-  }
-
-  @computed
-  int get queueLength => _queue.length;
-
-  @observable
   late List<QueueItem> _availableSongs = [];
 
   @action
   void _setAvSongs() {
     _availableSongs = filterAvailableSongs(
       _audioPlayerRepository.managedQueueInfo.availableSongsStream.value,
-      blockLevel: calcBlockLevel(
-        _audioPlayerRepository.shuffleModeStream.value,
-        _audioPlayerRepository.playableStream.value,
-      ),
+      blockLevel: state.playable == null ? 2 : calcBlockLevel(state.shuffleMode, state.playable!),
     );
   }
 
   @computed
   int get numAvailableSongs => _availableSongs.length;
-
-  @observable
-  late ObservableStream<Playable> playableStream =
-      _audioPlayerRepository.managedQueueInfo.playableStream.asObservable();
-
-  @observable
-  late ObservableStream<int?> queueIndexStream =
-      _audioPlayerRepository.currentIndexStream.asObservable();
-
-  @observable
-  late ObservableStream<ShuffleMode> shuffleModeStream =
-      _audioPlayerRepository.shuffleModeStream.asObservable();
-
-  @observable
-  late ObservableStream<LoopMode> loopModeStream =
-      _audioPlayerRepository.loopModeStream.asObservable();
 
   @observable
   bool showLyrics = false;
@@ -154,13 +154,10 @@ abstract class _AudioStore with Store {
 
   @computed
   bool get hasNext =>
-      (queueIndexStream.value != null && queueIndexStream.value! < queueLength - 1) ||
-      (loopModeStream.value ?? LoopMode.off) != LoopMode.off;
+      (currentIndex != null && currentIndex! < queueLength - 1) || loopMode != LoopMode.off;
 
   @computed
-  bool get hasPrevious =>
-      (queueIndexStream.value != null && queueIndexStream.value! > 0) ||
-      (loopModeStream.value ?? LoopMode.off) != LoopMode.off;
+  bool get hasPrevious => (currentIndex != null && currentIndex! > 0) || loopMode != LoopMode.off;
 
   Future<void> playSong(int index, List<Song> songList, Playable playable) async {
     _playSongs(songs: songList, initialIndex: index, playable: playable, keepInitialIndex: true);

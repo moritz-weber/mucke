@@ -1,7 +1,6 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mobx/mobx.dart';
 
 import '../../domain/entities/song.dart';
 import '../state/audio_store.dart';
@@ -28,21 +27,24 @@ class _AlbumBackgroundState extends State<AlbumBackground> {
       stops: [0.0, 1.0],
     )),
   );
-  late StreamSubscription<Song?> _streamSub;
+  late ReactionDisposer _songReaction;
 
   @override
   void initState() {
     super.initState();
 
-    _setBackgroundWidget(audioStore.currentSongStream.value);
+    _setBackgroundWidget(audioStore.currentSong);
 
-    _streamSub = audioStore.currentSongStream.listen(_setBackgroundWidget);
+    _songReaction = reaction<Song?>(
+      (_) => audioStore.currentSong,
+      _setBackgroundWidget,
+    );
   }
 
   @override
   void dispose() {
     super.dispose();
-    _streamSub.cancel();
+    _songReaction();
   }
 
   @override

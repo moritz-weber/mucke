@@ -20,7 +20,7 @@ class ShuffleButton extends StatelessWidget {
 
     return Observer(
       builder: (BuildContext context) {
-        switch (audioStore.shuffleModeStream.value) {
+        switch (audioStore.shuffleMode) {
           case ShuffleMode.none:
             return IconButton(
               icon: const Icon(
@@ -52,8 +52,6 @@ class ShuffleButton extends StatelessWidget {
               onPressed: () => audioStore.setShuffleMode(ShuffleMode.none),
               splashRadius: iconSize / 2 + 6.0,
             );
-          case null:
-            return Container();
         }
       },
     );

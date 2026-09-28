@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mobx/mobx.dart';
 import 'package:mucke/l10n/localizations.dart';
 import 'package:reorderables/reorderables.dart';
 
@@ -32,8 +31,8 @@ class QueuePage extends StatelessWidget {
     final QueuePageStore queuePageStore = GetIt.I<QueuePageStore>();
     queuePageStore.reset();
 
-    final ObservableStream<int?> queueIndexStream = audioStore.queueIndexStream;
-    final initialIndex = max((queueIndexStream.value ?? 0) - 2, 0);
+    final int? queueIndex = audioStore.currentIndex;
+    final initialIndex = max((queueIndex ?? 0) - 2, 0);
     final ScrollController _scrollController =
         ScrollController(initialScrollOffset: initialIndex * 72.0);
 
@@ -53,7 +52,7 @@ class QueuePage extends StatelessWidget {
         toolbarHeight: 80.0,
         title: Observer(
           builder: (context) {
-            final playable = audioStore.playableStream.value;
+            final playable = audioStore.playable;
             final numAvailableSongs = audioStore.numAvailableSongs;
 
             Widget subTitle = Container();
@@ -140,7 +139,7 @@ class QueuePage extends StatelessWidget {
 
           while (isSelected.length < queue.length) isSelected.add(false);
 
-          final int activeIndex = queueIndexStream.value ?? -1;
+          final int activeIndex = audioStore.currentIndex ?? -1;
           return Scrollbar(
             child: CustomScrollView(
               controller: _scrollController,

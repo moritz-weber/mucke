@@ -9,12 +9,26 @@ part of 'audio_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$AudioStore on _AudioStore, Store {
-  Computed<String>? _$positionStringComputed;
+  Computed<Song?>? _$currentSongComputed;
 
   @override
-  String get positionString =>
-      (_$positionStringComputed ??= Computed<String>(() => super.positionString,
-              name: '_AudioStore.positionString'))
+  Song? get currentSong =>
+      (_$currentSongComputed ??= Computed<Song?>(() => super.currentSong,
+              name: '_AudioStore.currentSong'))
+          .value;
+  Computed<int?>? _$currentIndexComputed;
+
+  @override
+  int? get currentIndex =>
+      (_$currentIndexComputed ??= Computed<int?>(() => super.currentIndex,
+              name: '_AudioStore.currentIndex'))
+          .value;
+  Computed<List<QueueItem>>? _$queueComputed;
+
+  @override
+  List<QueueItem> get queue =>
+      (_$queueComputed ??= Computed<List<QueueItem>>(() => super.queue,
+              name: '_AudioStore.queue'))
           .value;
   Computed<int>? _$queueLengthComputed;
 
@@ -22,6 +36,34 @@ mixin _$AudioStore on _AudioStore, Store {
   int get queueLength =>
       (_$queueLengthComputed ??= Computed<int>(() => super.queueLength,
               name: '_AudioStore.queueLength'))
+          .value;
+  Computed<ShuffleMode>? _$shuffleModeComputed;
+
+  @override
+  ShuffleMode get shuffleMode =>
+      (_$shuffleModeComputed ??= Computed<ShuffleMode>(() => super.shuffleMode,
+              name: '_AudioStore.shuffleMode'))
+          .value;
+  Computed<LoopMode>? _$loopModeComputed;
+
+  @override
+  LoopMode get loopMode =>
+      (_$loopModeComputed ??= Computed<LoopMode>(() => super.loopMode,
+              name: '_AudioStore.loopMode'))
+          .value;
+  Computed<Playable?>? _$playableComputed;
+
+  @override
+  Playable? get playable =>
+      (_$playableComputed ??= Computed<Playable?>(() => super.playable,
+              name: '_AudioStore.playable'))
+          .value;
+  Computed<String>? _$positionStringComputed;
+
+  @override
+  String get positionString =>
+      (_$positionStringComputed ??= Computed<String>(() => super.positionString,
+              name: '_AudioStore.positionString'))
           .value;
   Computed<int>? _$numAvailableSongsComputed;
 
@@ -44,24 +86,18 @@ mixin _$AudioStore on _AudioStore, Store {
               name: '_AudioStore.hasPrevious'))
           .value;
 
-  late final _$currentSongStreamAtom =
-      Atom(name: '_AudioStore.currentSongStream', context: context);
+  late final _$stateAtom = Atom(name: '_AudioStore.state', context: context);
 
   @override
-  ObservableStream<Song?> get currentSongStream {
-    _$currentSongStreamAtom.reportRead();
-    return super.currentSongStream;
+  AudioPlayerState get state {
+    _$stateAtom.reportRead();
+    return super.state;
   }
 
-  bool _currentSongStreamIsInitialized = false;
-
   @override
-  set currentSongStream(ObservableStream<Song?> value) {
-    _$currentSongStreamAtom.reportWrite(
-        value, _currentSongStreamIsInitialized ? super.currentSongStream : null,
-        () {
-      super.currentSongStream = value;
-      _currentSongStreamIsInitialized = true;
+  set state(AudioPlayerState value) {
+    _$stateAtom.reportWrite(value, super.state, () {
+      super.state = value;
     });
   }
 
@@ -108,47 +144,6 @@ mixin _$AudioStore on _AudioStore, Store {
     });
   }
 
-  late final _$queueStreamAtom =
-      Atom(name: '_AudioStore.queueStream', context: context);
-
-  @override
-  ObservableStream<List<QueueItem>> get queueStream {
-    _$queueStreamAtom.reportRead();
-    return super.queueStream;
-  }
-
-  bool _queueStreamIsInitialized = false;
-
-  @override
-  set queueStream(ObservableStream<List<QueueItem>> value) {
-    _$queueStreamAtom.reportWrite(
-        value, _queueStreamIsInitialized ? super.queueStream : null, () {
-      super.queueStream = value;
-      _queueStreamIsInitialized = true;
-    });
-  }
-
-  late final _$_queueAtom = Atom(name: '_AudioStore._queue', context: context);
-
-  List<QueueItem> get queue {
-    _$_queueAtom.reportRead();
-    return super._queue;
-  }
-
-  @override
-  List<QueueItem> get _queue => queue;
-
-  bool __queueIsInitialized = false;
-
-  @override
-  set _queue(List<QueueItem> value) {
-    _$_queueAtom.reportWrite(value, __queueIsInitialized ? super._queue : null,
-        () {
-      super._queue = value;
-      __queueIsInitialized = true;
-    });
-  }
-
   late final _$_availableSongsAtom =
       Atom(name: '_AudioStore._availableSongs', context: context);
 
@@ -167,88 +162,6 @@ mixin _$AudioStore on _AudioStore, Store {
         () {
       super._availableSongs = value;
       __availableSongsIsInitialized = true;
-    });
-  }
-
-  late final _$playableStreamAtom =
-      Atom(name: '_AudioStore.playableStream', context: context);
-
-  @override
-  ObservableStream<Playable> get playableStream {
-    _$playableStreamAtom.reportRead();
-    return super.playableStream;
-  }
-
-  bool _playableStreamIsInitialized = false;
-
-  @override
-  set playableStream(ObservableStream<Playable> value) {
-    _$playableStreamAtom.reportWrite(
-        value, _playableStreamIsInitialized ? super.playableStream : null, () {
-      super.playableStream = value;
-      _playableStreamIsInitialized = true;
-    });
-  }
-
-  late final _$queueIndexStreamAtom =
-      Atom(name: '_AudioStore.queueIndexStream', context: context);
-
-  @override
-  ObservableStream<int?> get queueIndexStream {
-    _$queueIndexStreamAtom.reportRead();
-    return super.queueIndexStream;
-  }
-
-  bool _queueIndexStreamIsInitialized = false;
-
-  @override
-  set queueIndexStream(ObservableStream<int?> value) {
-    _$queueIndexStreamAtom.reportWrite(
-        value, _queueIndexStreamIsInitialized ? super.queueIndexStream : null,
-        () {
-      super.queueIndexStream = value;
-      _queueIndexStreamIsInitialized = true;
-    });
-  }
-
-  late final _$shuffleModeStreamAtom =
-      Atom(name: '_AudioStore.shuffleModeStream', context: context);
-
-  @override
-  ObservableStream<ShuffleMode> get shuffleModeStream {
-    _$shuffleModeStreamAtom.reportRead();
-    return super.shuffleModeStream;
-  }
-
-  bool _shuffleModeStreamIsInitialized = false;
-
-  @override
-  set shuffleModeStream(ObservableStream<ShuffleMode> value) {
-    _$shuffleModeStreamAtom.reportWrite(
-        value, _shuffleModeStreamIsInitialized ? super.shuffleModeStream : null,
-        () {
-      super.shuffleModeStream = value;
-      _shuffleModeStreamIsInitialized = true;
-    });
-  }
-
-  late final _$loopModeStreamAtom =
-      Atom(name: '_AudioStore.loopModeStream', context: context);
-
-  @override
-  ObservableStream<LoopMode> get loopModeStream {
-    _$loopModeStreamAtom.reportRead();
-    return super.loopModeStream;
-  }
-
-  bool _loopModeStreamIsInitialized = false;
-
-  @override
-  set loopModeStream(ObservableStream<LoopMode> value) {
-    _$loopModeStreamAtom.reportWrite(
-        value, _loopModeStreamIsInitialized ? super.loopModeStream : null, () {
-      super.loopModeStream = value;
-      _loopModeStreamIsInitialized = true;
     });
   }
 
@@ -272,11 +185,11 @@ mixin _$AudioStore on _AudioStore, Store {
       ActionController(name: '_AudioStore', context: context);
 
   @override
-  void _setQueue(List<QueueItem> queue) {
-    final _$actionInfo = _$_AudioStoreActionController.startAction(
-        name: '_AudioStore._setQueue');
+  void _onState(AudioPlayerState next) {
+    final _$actionInfo =
+        _$_AudioStoreActionController.startAction(name: '_AudioStore._onState');
     try {
-      return super._setQueue(queue);
+      return super._onState(next);
     } finally {
       _$_AudioStoreActionController.endAction(_$actionInfo);
     }
@@ -307,17 +220,18 @@ mixin _$AudioStore on _AudioStore, Store {
   @override
   String toString() {
     return '''
-currentSongStream: ${currentSongStream},
+state: ${state},
 playingStream: ${playingStream},
 currentPositionStream: ${currentPositionStream},
-queueStream: ${queueStream},
-playableStream: ${playableStream},
-queueIndexStream: ${queueIndexStream},
-shuffleModeStream: ${shuffleModeStream},
-loopModeStream: ${loopModeStream},
 showLyrics: ${showLyrics},
-positionString: ${positionString},
+currentSong: ${currentSong},
+currentIndex: ${currentIndex},
+queue: ${queue},
 queueLength: ${queueLength},
+shuffleMode: ${shuffleMode},
+loopMode: ${loopMode},
+playable: ${playable},
+positionString: ${positionString},
 numAvailableSongs: ${numAvailableSongs},
 hasNext: ${hasNext},
 hasPrevious: ${hasPrevious}
