@@ -30,7 +30,9 @@ jobs:
         distribution: 'zulu'
     - run: echo $KEYSTORE_GITHUB | base64 -d > android/github.jks
     - run: echo $KEY_PROPERTIES_GITHUB | base64 -d > android/key.properties
+    - run: git -C .flutter fetch --depth=1 origin 3.44.6
     - run: echo "$GITHUB_WORKSPACE/src/.flutter/bin" >> "$GITHUB_PATH"
+    - run: flutter doctor -v
     - run: flutter pub get
     - if: startsWith(github.ref, 'refs/tags')
       run: flutter build apk --split-per-abi --flavor github
