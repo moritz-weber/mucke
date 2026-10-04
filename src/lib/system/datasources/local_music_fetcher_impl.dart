@@ -5,6 +5,7 @@ import 'dart:typed_data';
 
 import 'package:async_task/async_task.dart';
 import 'package:collection/collection.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:haudiotagger/haudiotagger.dart';
 import 'package:image/image.dart' as img;
@@ -61,10 +62,12 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
     final allowedExtensions = getExtensionSet(extString);
     final blockedPaths = await _musicDataSource.blockedFilesStream.first;
 
-    final hasStorageAccess = await Permission.audio.isGranted;
-    if (!hasStorageAccess) {
-      await Permission.audio.request();
-      if (!await Permission.audio.isGranted) {
+    final scanPermission = (await DeviceInfoPlugin().androidInfo).version.sdkInt < 33
+        ? Permission.storage
+        : Permission.audio;
+    if (!await scanPermission.isGranted) {
+      await scanPermission.request();
+      if (!await scanPermission.isGranted) {
         return const LibraryScanResult(
           failures: [ScanFailure(type: ScanFailureType.permission)],
         );
@@ -495,8 +498,7 @@ class MetadataLoader extends AsyncTask<File, (File, Tag?, SyncedLyricsModel?, St
           .list(recursive: false, followLinks: false)
           .where((item) =>
               FileSystemEntity.isFileSync(item.path) &&
-              p.basenameWithoutExtension(item.path).toLowerCase() ==
-                  stem.toLowerCase() &&
+              p.basenameWithoutExtension(item.path).toLowerCase() == stem.toLowerCase() &&
               p.extension(item.path).toLowerCase() == '.lrc')
           .toList();
       if (lrcFiles.isNotEmpty) {
