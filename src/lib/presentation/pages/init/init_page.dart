@@ -89,9 +89,9 @@ class InitPage extends StatelessWidget {
         allowedExtensions: ['json'],
         type: FileType.custom,
       );
-      if (pickResult != null) {
-        final importPath = pickResult.paths.first!;
+      final importPath = pickResult.first.path;
 
+      if (importPath != null) {
         final importStore = GetIt.I<ImportStore>(param1: importPath);
         importStore.readDataFile(importPath).then((_) {
           if (importStore.error) {
@@ -99,7 +99,7 @@ class InitPage extends StatelessWidget {
               SnackBar(
                 content: Row(
                   children: [
-                    const Icon(Icons.warning_rounded, color: RED),
+                    const Icon(Icons.error_rounded, color: RED),
                     const SizedBox(width: 16.0),
                     Expanded(child: Text(L10n.of(context)!.errorReadData)),
                   ],
