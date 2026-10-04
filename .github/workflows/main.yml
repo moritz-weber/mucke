@@ -24,13 +24,13 @@ jobs:
     - uses: actions/checkout@v7
       with:
         submodules: true
+        fetch-depth: 0
     - uses: actions/setup-java@v5
       with:
         java-version: '17.x'
         distribution: 'zulu'
     - run: echo $KEYSTORE_GITHUB | base64 -d > android/github.jks
     - run: echo $KEY_PROPERTIES_GITHUB | base64 -d > android/key.properties
-    - run: git -C .flutter fetch --depth=1 origin 3.44.6
     - run: echo "$GITHUB_WORKSPACE/src/.flutter/bin" >> "$GITHUB_PATH"
     - run: flutter doctor -v
     - run: flutter pub get
