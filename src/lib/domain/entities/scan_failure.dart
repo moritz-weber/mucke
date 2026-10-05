@@ -20,6 +20,7 @@ class ScanFailure extends Equatable {
   const ScanFailure({
     this.path,
     required this.type,
+    required this.location,
     this.reason,
   });
 
@@ -28,24 +29,30 @@ class ScanFailure extends Equatable {
 
   final ScanFailureType type;
 
+  /// Stable identifier for the code location that produced this failure.
+  final String location;
+
   /// A human readable description of the failure, when available.
   final String? reason;
 
   ScanFailure copyWith({
     String? path,
     ScanFailureType? type,
+    String? location,
     String? reason,
   }) {
     return ScanFailure(
       path: path ?? this.path,
       type: type ?? this.type,
+      location: location ?? this.location,
       reason: reason ?? this.reason,
     );
   }
 
   @override
-  List<Object?> get props => [path, type, reason];
+  List<Object?> get props => [path, type, location, reason];
 
   @override
-  String toString() => 'ScanFailure(type: $type, path: $path, reason: $reason)';
+  String toString() =>
+      'ScanFailure(type: $type, path: $path, location: $location, reason: $reason)';
 }

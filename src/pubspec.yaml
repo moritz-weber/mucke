@@ -6,7 +6,7 @@ version: 1.6.0+13
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
-  flutter: ">=3.44.0"
+  flutter: 3.44.6
 
 dependencies:
   async_task: ^1.0.20
@@ -25,7 +25,7 @@ dependencies:
   flutter_mobx: ^2.0.0  # MIT
   flutter_speed_dial: ^7.0.0  # MIT
   get_it: ^9.2.1  # MIT
-  haudiotagger: ^1.2.9
+  haudiotagger: ^3.1.0  # MIT
   image: ^4.9.1
   intl: any
   just_audio: ^0.10.5  # MIT
