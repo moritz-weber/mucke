@@ -241,7 +241,7 @@
         }
     },
     "batteryExplanation": "Android v. 12:sta alkaen akun optimointi aiheuttaa ilmoituksen virheen äänen tarkennuksen menettämisen jälkeen, esimerkiksi puhelun saapuessa. Mucken optimoinnin poistaminen käytöstä ratkaisee tämän ongelman.",
-    "disableBattery": "Poista muckin optimointi käytöstä ilmoitusongelmien ratkaisemiseksi.",
+    "disableBattery": "Poista akun optimointi käytöstä mucken kohdalla.",
     "manageExternalExplanation": "Tämän luvan myöntäminen voi parantaa kirjaston tarkistuksia merkittävästi. Se ei muuta sovelluksen toimintaa muuten.",
     "nSongs": "{count, plural, =0{no songs} =1{one song} other{{count} songs}}",
     "@nSongs": {
@@ -266,5 +266,41 @@
                 "type": "num"
             }
         }
-    }
+    },
+    "viewLyrics": "Näytä sanoitukset",
+    "scanStageAccentColor": "Korostusväri",
+    "scanStagePermission": "Oikeus",
+    "scanErrorMetadata": "Metatietoa ei voitu lukea.",
+    "scanErrorAlbumArt": "Albumin kuvitusta ei voitu lukea.",
+    "scanErrorAccentColor": "Korostusväriä ei voitu luoda.",
+    "scanErrorPermission": "Äänen käyttöoikeus estettiin.",
+    "rescanAll": "Skannaa uudelleen kaikki tiedostot (hidas)",
+    "scanSuccessful": "Kirjaston skannaus valmistui.",
+    "scanFailed": "{count, plural, =1{1 skannausvirhe} other{{count} skannausvirhettä}}",
+    "@scanFailed": {
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "3"
+            }
+        }
+    },
+    "scanPermissionDenied": "Äänen käyttöoikeus vaaditaan kirjaston skannaamista varten.",
+    "scanErrorDetails": "Yksityiskohdat",
+    "scanStageAlbumArt": "Albumin kuvitus",
+    "playlistNormalMode": "Toista ylhäältä",
+    "playlistShuffleMode": "Aloita satunnaistoisto",
+    "playlistFavShuffleMode": "Aloita suosikkien satunnaistoisto",
+    "saveLogFiles": "Tallenna lokitiedostot",
+    "saveLogFilesDescription": "Tämä luo alihakemiston, johon lokitiedostot sijoitetaan.",
+    "logFilesSavedTo": "Lokitiedostot tallennettu:\n{path}",
+    "@logFilesSavedTo": {
+        "placeholders": {
+            "path": {
+                "type": "String"
+            }
+        }
+    },
+    "logFilesSaveFailed": "Lokitiedostojen tallentaminen epäonnistui!",
+    "disableBatteryDescription": "Akkuoptimoinnin poistaminen käytöstä saattaa ratkaista mahdollisia ilmoitusongelmia."
 }

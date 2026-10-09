@@ -281,5 +281,29 @@
             }
         }
     },
-    "logFilesSaveFailed": "Помилка збереження файлів журналу!"
+    "logFilesSaveFailed": "Помилка збереження файлів журналу!",
+    "rescanAll": "Пересканувати всі файли (повільно)",
+    "scanSuccessful": "Сканування бібліотеки завершено.",
+    "scanFailed": "{count, plural, one{{count} помилка сканування} few{{count} помилки сканування} other{{count} помилок сканування}}",
+    "@scanFailed": {
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "3"
+            }
+        }
+    },
+    "scanPermissionDenied": "Для сканування бібліотеки потрібен дозвіл на доступ до аудіо.",
+    "scanErrorDetails": "Подробиці",
+    "scanFailures": "Помилки сканування",
+    "scanFailureStage": "Етап",
+    "scanStageMetadata": "Метадані",
+    "scanStageAlbumArt": "Обкладинка альбому",
+    "scanStageAccentColor": "Акцентний колір",
+    "scanStagePermission": "Дозвіл",
+    "scanErrorMetadata": "Не вдалося прочитати метадані.",
+    "scanErrorAlbumArt": "Не вдалося прочитати обкладинку альбому.",
+    "scanErrorAccentColor": "Не вдалося згенерувати акцентний колір.",
+    "scanErrorPermission": "У доступі до аудіо було відмовлено.",
+    "viewLyrics": "Переглянути текст пісні"
 }
