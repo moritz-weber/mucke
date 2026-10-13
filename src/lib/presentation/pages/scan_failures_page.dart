@@ -51,7 +51,6 @@ class _ScanFailureTile extends StatelessWidget {
     return ListTile(
       title: Text(_title(context)),
       subtitle: Text(detail, style: TEXT_SMALL_SUBTITLE),
-      // isThreeLine: true,
     );
   }
 

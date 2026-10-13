@@ -163,7 +163,7 @@ void main() {
     });
 
     test('returns -1 for empty lines', () {
-      final empty = SyncedLyrics(lines: []);
+      const empty = SyncedLyrics(lines: []);
       expect(empty.activeLineIndex(const Duration(milliseconds: 1000)), -1);
     });
   });
