@@ -281,5 +281,29 @@
     "blockFromLibrary": "Eemalda ja blokeeri muusikakogust",
     "alwaysPlayPrevious": "Alati esita eelmine lugu enne",
     "alwaysPlayNext": "Alati esita järgmine lugu hiljem",
-    "blockedFilesDescription": "Blokeeritud failid imporditud andmetest. Muusikakogu skaneerimisest jäetakse välja ainult täpsed vasteid. Lisafaile saad hiljem rakenduses blokeerida."
+    "blockedFilesDescription": "Blokeeritud failid imporditud andmetest. Muusikakogu skaneerimisest jäetakse välja ainult täpsed vasteid. Lisafaile saad hiljem rakenduses blokeerida.",
+    "rescanAll": "Skaneeri kõik failid uuesti (aeglane)",
+    "scanSuccessful": "Muusikakogu skaneerimine on lõppenud.",
+    "scanFailed": "{count, plural, =1{1 skaneerimisviga} other{{count} skaneerimisviga}}",
+    "@scanFailed": {
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "3"
+            }
+        }
+    },
+    "scanPermissionDenied": "Muusikakogu skaneerimine eeldab õigust lugeda helifaile.",
+    "scanErrorDetails": "Üksikasjad",
+    "scanFailures": "Skaneerimisvead",
+    "scanFailureStage": "Samm",
+    "scanStageMetadata": "Metateave",
+    "scanStageAlbumArt": "Kaanepildid",
+    "scanStageAccentColor": "Aktsentvärv",
+    "scanStagePermission": "Õigused",
+    "scanErrorMetadata": "Metaandmete lugemine ei õnnestunud.",
+    "scanErrorAlbumArt": "Kaanepiltide lugemine ei õnnestunud.",
+    "scanErrorAccentColor": "Aktsentvärvi loomine ei õnnestunud.",
+    "scanErrorPermission": "Õigused helifailide kasutamiseks on puudu.",
+    "viewLyrics": "Näita laulusõnu"
 }
