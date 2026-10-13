@@ -48,19 +48,10 @@ class _ScanFailureTile extends StatelessWidget {
         ? failure.reason!
         : _fallbackReason(context, failure.type);
 
-    final l10n = L10n.of(context)!;
 
     return ListTile(
       title: Text(_title(context)),
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(detail, style: TEXT_SMALL_SUBTITLE),
-          Text('Failure location: ${failure.location}',
-              style: TEXT_SMALL_SUBTITLE),
-        ],
-      ),
-      isThreeLine: true,
+      subtitle: Text(detail, style: TEXT_SMALL_SUBTITLE),
     );
   }
 

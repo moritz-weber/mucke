@@ -72,7 +72,6 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
           failures: [
             ScanFailure(
               type: ScanFailureType.permission,
-              location: 'LocalMusicFetcherImpl.getLocalMusic.permissionCheck',
             ),
           ],
         );
@@ -178,7 +177,6 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
               ScanFailure(
                 path: image.path,
                 type: ScanFailureType.albumArt,
-                location: 'LocalMusicFetcherImpl.getLocalMusic.folderAlbumArtRead',
                 reason: e.toString(),
               ),
             );
@@ -250,7 +248,6 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
           ScanFailure(
             path: albumTitleById[albumId],
             type: ScanFailureType.accentColor,
-            location: 'LocalMusicFetcherImpl.getLocalMusic.accentColorGeneration',
           ),
         );
         continue;
@@ -427,7 +424,6 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
           ScanFailure(
             path: file.path,
             type: ScanFailureType.metadataRead,
-            location: 'LocalMusicFetcherImpl.getMetadataForFiles.metadataMissing',
             reason: error,
           ),
         );
