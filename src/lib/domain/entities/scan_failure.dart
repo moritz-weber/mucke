@@ -34,7 +34,6 @@ class ScanFailure extends Equatable {
   ScanFailure copyWith({
     String? path,
     ScanFailureType? type,
-    String? location,
     String? reason,
   }) {
     return ScanFailure(
@@ -48,6 +47,5 @@ class ScanFailure extends Equatable {
   List<Object?> get props => [path, type, reason];
 
   @override
-  String toString() =>
-      'ScanFailure(type: $type, path: $path, reason: $reason)';
+  String toString() => 'ScanFailure(type: $type, path: $path, reason: $reason)';
 }

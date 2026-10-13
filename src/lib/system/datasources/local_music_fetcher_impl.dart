@@ -69,11 +69,7 @@ class LocalMusicFetcherImpl implements LocalMusicFetcher {
       await scanPermission.request();
       if (!await scanPermission.isGranted) {
         return const LibraryScanResult(
-          failures: [
-            ScanFailure(
-              type: ScanFailureType.permission,
-            ),
-          ],
+          failures: [ScanFailure(type: ScanFailureType.permission)],
         );
       }
     }

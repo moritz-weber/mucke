@@ -48,7 +48,6 @@ class _ScanFailureTile extends StatelessWidget {
         ? failure.reason!
         : _fallbackReason(context, failure.type);
 
-
     return ListTile(
       title: Text(_title(context)),
       subtitle: Text(detail, style: TEXT_SMALL_SUBTITLE),
