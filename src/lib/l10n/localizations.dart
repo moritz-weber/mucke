@@ -1249,6 +1249,48 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'View lyrics'**
   String get viewLyrics;
+
+  /// No description provided for @whatsNew.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s new'**
+  String get whatsNew;
+
+  /// No description provided for @whatsNewInVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s new in {version}'**
+  String whatsNewInVersion(String version);
+
+  /// No description provided for @whatsNewDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Here is what changed in this version.'**
+  String get whatsNewDescription;
+
+  /// No description provided for @dismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss'**
+  String get dismiss;
+
+  /// No description provided for @releaseNoteAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'New'**
+  String get releaseNoteAdded;
+
+  /// No description provided for @releaseNoteChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Changed'**
+  String get releaseNoteChanged;
+
+  /// No description provided for @releaseNoteFixed.
+  ///
+  /// In en, this message translates to:
+  /// **'Fixed'**
+  String get releaseNoteFixed;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

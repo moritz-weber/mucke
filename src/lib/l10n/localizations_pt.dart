@@ -650,6 +650,29 @@ class L10nPt extends L10n {
 
   @override
   String get viewLyrics => 'View lyrics';
+
+  @override
+  String get whatsNew => 'What\'s new';
+
+  @override
+  String whatsNewInVersion(String version) {
+    return 'What\'s new in $version';
+  }
+
+  @override
+  String get whatsNewDescription => 'Here is what changed in this version.';
+
+  @override
+  String get dismiss => 'Dismiss';
+
+  @override
+  String get releaseNoteAdded => 'New';
+
+  @override
+  String get releaseNoteChanged => 'Changed';
+
+  @override
+  String get releaseNoteFixed => 'Fixed';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).

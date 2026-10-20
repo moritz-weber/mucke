@@ -252,4 +252,22 @@ class PersistentStateDao extends DatabaseAccessor<MainDatabase>
     await (update(keyValueEntries)..where((tbl) => tbl.key.equals(INITIALIZED)))
         .write(const KeyValueEntriesCompanion(value: Value('true')));
   }
+
+  @override
+  Future<String?> get lastSeenVersion async {
+    final entry = await (select(keyValueEntries)
+          ..where((tbl) => tbl.key.equals(LAST_SEEN_VERSION)))
+        .getSingleOrNull();
+    return entry?.value;
+  }
+
+  @override
+  Future<void> setLastSeenVersion(String version) async {
+    await into(keyValueEntries).insertOnConflictUpdate(
+      KeyValueEntriesCompanion(
+        key: const Value(LAST_SEEN_VERSION),
+        value: Value(version),
+      ),
+    );
+  }
 }

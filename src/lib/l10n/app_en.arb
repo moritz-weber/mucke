@@ -474,5 +474,26 @@
   "created": "Created",
   "@created": {},
   "viewLyrics": "View lyrics",
-  "@viewLyrics": {}
+  "@viewLyrics": {},
+  "whatsNew": "What's new",
+  "@whatsNew": {},
+  "whatsNewInVersion": "What's new in {version}",
+  "@whatsNewInVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String",
+        "example": "1.6.0"
+      }
+    }
+  },
+  "whatsNewDescription": "Here is what changed in this version.",
+  "@whatsNewDescription": {},
+  "dismiss": "Dismiss",
+  "@dismiss": {},
+  "releaseNoteAdded": "New",
+  "@releaseNoteAdded": {},
+  "releaseNoteChanged": "Changed",
+  "@releaseNoteChanged": {},
+  "releaseNoteFixed": "Fixed",
+  "@releaseNoteFixed": {}
 }

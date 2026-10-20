@@ -7,6 +7,9 @@ abstract class PersistentStateDataSource {
   Future<bool> get isInitialized;
   Future<void> setInitialized();
 
+  Future<String?> get lastSeenVersion;
+  Future<void> setLastSeenVersion(String version);
+
   Future<void> setQueueItems(List<QueueItemModel> queueItems);
   Future<List<QueueItemModel>> get queueItems;
 

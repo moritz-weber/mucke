@@ -9,6 +9,7 @@ import '../models/home_widgets/history_model.dart';
 import '../models/home_widgets/home_widget_model.dart';
 import '../models/home_widgets/playlists_model.dart';
 import '../models/home_widgets/shuffle_all_model.dart';
+import '../models/home_widgets/whats_new_model.dart';
 
 class HomeWidgetRepositoryImpl implements HomeWidgetRepository {
   HomeWidgetRepositoryImpl(this._homeWidgetDataSource) {
@@ -56,6 +57,8 @@ class HomeWidgetRepositoryImpl implements HomeWidgetRepository {
         return HomePlaylistsModel.fromEntity(homeWidget);
       case HomeWidgetType.history:
         return HomeHistoryModel.fromEntity(homeWidget);
+      case HomeWidgetType.whats_new:
+        return HomeWhatsNewModel.fromEntity(homeWidget);
     }
   }
 }

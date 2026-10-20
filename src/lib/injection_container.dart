@@ -59,6 +59,7 @@ import 'presentation/state/settings_store.dart';
 import 'presentation/state/smart_list_form_store.dart';
 import 'presentation/state/smart_list_page_store.dart';
 import 'presentation/state/song_store.dart';
+import 'presentation/state/whats_new_store.dart';
 import 'system/datasources/audio_player_data_source.dart';
 import 'system/datasources/audio_player_data_source_impl.dart';
 import 'system/datasources/drift_database.dart';
@@ -136,6 +137,14 @@ Future<void> setupGetIt() async {
     () => SettingsStore(
       settingsRepository: getIt(),
       musicDataRepository: getIt(),
+    ),
+  );
+  getIt.registerLazySingleton<WhatsNewStore>(
+    () => WhatsNewStore(
+      homeWidgetRepository: getIt(),
+      persistentStateRepository: getIt(),
+      initRepository: getIt(),
+      packageInfo: getIt(),
     ),
   );
   getIt.registerLazySingleton<QueuePageStore>(

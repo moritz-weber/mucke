@@ -10,6 +10,7 @@ import '../home_widgets/history_repr.dart';
 import '../home_widgets/home_widget_repr.dart';
 import '../home_widgets/playlists_repr.dart';
 import '../home_widgets/shuffle_all_repr.dart';
+import '../home_widgets/whats_new_repr.dart';
 import '../state/home_page_store.dart';
 import '../state/navigation_store.dart';
 import '../theming.dart';
@@ -129,6 +130,7 @@ class HomeSettingsPage extends StatelessWidget {
       ArtistOfDayRepr.fromPosition(homeWidgets.length),
       HistoryRepr.fromPosition(homeWidgets.length),
       PlaylistsRepr.fromPosition(homeWidgets.length),
+      WhatsNewRepr.fromPosition(homeWidgets.length),
     ];
 
     showModalBottomSheet(
