@@ -649,28 +649,28 @@ class L10nDe extends L10n {
   String get created => 'Erzeugt';
 
   @override
-  String get viewLyrics => 'View lyrics';
+  String get viewLyrics => 'Lyrics anzeigen';
 
   @override
-  String get whatsNew => 'What\'s new';
+  String get whatsNew => 'Was gibt\'s neues';
 
   @override
   String whatsNewInVersion(String version) {
-    return 'What\'s new in $version';
+    return 'Was gibt\'s neues in $version';
   }
 
   @override
-  String get whatsNewDescription => 'Here is what changed in this version.';
+  String get whatsNewDescription => 'Was sich in dieser Version geändert hat.';
 
   @override
-  String get dismiss => 'Dismiss';
+  String get dismiss => 'Abhaken';
 
   @override
-  String get releaseNoteAdded => 'New';
+  String get releaseNoteAdded => 'Neu';
 
   @override
-  String get releaseNoteChanged => 'Changed';
+  String get releaseNoteChanged => 'Geändert';
 
   @override
-  String get releaseNoteFixed => 'Fixed';
+  String get releaseNoteFixed => 'Behoben';
 }

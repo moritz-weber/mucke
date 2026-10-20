@@ -214,5 +214,28 @@
     "scanErrorMetadata": "Metadaten konnten nicht gelesen werden.",
     "scanErrorAlbumArt": "Album-Cover konnte nicht gelesen werden.",
     "scanErrorAccentColor": "Akzentfarbe konnte nicht erzeugt werden.",
-    "scanErrorPermission": "Audio-Berechtigung fehlt."
+    "scanErrorPermission": "Audio-Berechtigung fehlt.",
+    "viewLyrics": "Lyrics anzeigen",
+    "@viewLyrics": {},
+    "whatsNew": "Was gibt's neues",
+    "@whatsNew": {},
+    "whatsNewInVersion": "Was gibt's neues in {version}",
+    "@whatsNewInVersion": {
+        "placeholders": {
+            "version": {
+                "type": "String",
+                "example": "1.6.0"
+            }
+        }
+    },
+    "whatsNewDescription": "Was sich in dieser Version geändert hat.",
+    "@whatsNewDescription": {},
+    "dismiss": "Abhaken",
+    "@dismiss": {},
+    "releaseNoteAdded": "Neu",
+    "@releaseNoteAdded": {},
+    "releaseNoteChanged": "Geändert",
+    "@releaseNoteChanged": {},
+    "releaseNoteFixed": "Behoben",
+    "@releaseNoteFixed": {}
 }
