@@ -14,6 +14,7 @@ import '../models/home_widgets/artist_of_day_model.dart';
 import '../models/home_widgets/history_model.dart';
 import '../models/home_widgets/playlists_model.dart';
 import '../models/home_widgets/shuffle_all_model.dart';
+import '../models/home_widgets/whats_new_model.dart';
 
 class InitRepositoryImpl extends InitRepository {
   InitRepositoryImpl(
@@ -28,12 +29,13 @@ class InitRepositoryImpl extends InitRepository {
 
   @override
   Future<void> initHomePage(BuildContext context) async {
-    await _homeWidgetDataSource.insertHomeWidget(HomeAlbumOfDayModel(0));
-    await _homeWidgetDataSource.insertHomeWidget(HomeArtistOfDayModel(1, ShuffleMode.plus));
-    await _homeWidgetDataSource.insertHomeWidget(HomeShuffleAllModel(2, ShuffleMode.plus));
+    await _homeWidgetDataSource.insertHomeWidget(HomeWhatsNewModel(0, dismissed: true));
+    await _homeWidgetDataSource.insertHomeWidget(HomeAlbumOfDayModel(1));
+    await _homeWidgetDataSource.insertHomeWidget(HomeArtistOfDayModel(2, ShuffleMode.plus));
+    await _homeWidgetDataSource.insertHomeWidget(HomeShuffleAllModel(3, ShuffleMode.plus));
     await _homeWidgetDataSource.insertHomeWidget(
       HomePlaylistsModel(
-        3,
+        4,
         3,
         L10n.of(context)!.yourPlaylists,
         HomePlaylistsOrder.history,
@@ -41,7 +43,7 @@ class InitRepositoryImpl extends InitRepository {
         HomePlaylistsFilter.both,
       ),
     );
-    await _homeWidgetDataSource.insertHomeWidget(HomeHistoryModel(4, 3));
+    await _homeWidgetDataSource.insertHomeWidget(HomeHistoryModel(5, 3));
   }
 
   @override

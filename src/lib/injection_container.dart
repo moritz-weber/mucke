@@ -145,7 +145,6 @@ Future<void> setupGetIt() async {
     () => WhatsNewStore(
       homeWidgetRepository: getIt(),
       persistentStateRepository: getIt(),
-      initRepository: getIt(),
       packageInfo: getIt(),
     ),
   );

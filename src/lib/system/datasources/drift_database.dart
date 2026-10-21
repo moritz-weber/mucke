@@ -223,7 +223,7 @@ class MainDatabase extends _$MainDatabase {
   MainDatabase.withQueryExecutor(QueryExecutor e) : super(e);
 
   @override
-  int get schemaVersion => 20;
+  int get schemaVersion => 21;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -401,6 +401,25 @@ class MainDatabase extends _$MainDatabase {
           if (from < 20) {
             await m.addColumn(songs, songs.syncedLyrics);
             await m.alterTable(TableMigration(songs));
+          }
+          if (from < 21) {
+            // Make room at the top for the "What's new" widget. Shift in
+            // descending order so the primary key never collides.
+            final rows = await (select(homeWidgets)
+                  ..orderBy([(t) => OrderingTerm.desc(t.position)]))
+                .get();
+            for (final row in rows) {
+              await (update(homeWidgets)..where((t) => t.position.equals(row.position)))
+                  .write(HomeWidgetsCompanion(position: Value(row.position + 1)));
+            }
+            // Existing users upgrading from an old version get the widget visible.
+            await into(homeWidgets).insert(
+              const HomeWidgetsCompanion(
+                position: Value(0),
+                type: Value('HomeWidgetType.whats_new'),
+                data: Value('{"dismissed":false}'),
+              ),
+            );
           }
         },
       );
