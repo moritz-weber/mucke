@@ -227,7 +227,7 @@ class SettingsPage extends StatelessWidget {
             trailing: const Icon(Icons.chevron_right_rounded),
             onTap: () {
               final WhatsNewStore whatsNewStore = GetIt.I<WhatsNewStore>();
-              whatsNewStore.dismiss();
+              whatsNewStore.dismissIfAutoDismiss();
               navStore.push(
                 context,
                 MaterialPageRoute(

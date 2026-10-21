@@ -645,6 +645,13 @@ class L10nZh extends L10n {
   String get whatsNewDescription => 'Here is what changed in this version.';
 
   @override
+  String get autoDismissWhatsNew => 'Dismiss automatically';
+
+  @override
+  String get autoDismissWhatsNewDescription =>
+      'Hide this widget from the home page after the release notes have been viewed.';
+
+  @override
   String get dismiss => 'Dismiss';
 
   @override

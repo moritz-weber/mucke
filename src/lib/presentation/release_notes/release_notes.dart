@@ -41,7 +41,7 @@ const List<ReleaseNote> RELEASE_NOTES = [
     date: '2026-10-XX',
     sections: [
       ReleaseNoteSection(ReleaseNoteCategory.added, [
-        'View lyrics from metadata and .lrc files, including synced lyrics. Perform a library re-scan to add them to the library. Note: SYLT frames are currently not supported.',
+        'View lyrics from metadata and .lrc files, including synced lyrics. Perform a library re-scan to add them to the library.\nNote: SYLT frames are currently not supported.',
         'A "What\'s new" widget and page that lists the changes of every release.',
         'Monochrome and themed app icon.',
         'Estonian translation.',
@@ -57,7 +57,7 @@ const List<ReleaseNote> RELEASE_NOTES = [
     date: '2026-08-16',
     sections: [
       ReleaseNoteSection(ReleaseNoteCategory.added, [
-        'Android Auto support: play smartlists, playlists, and all songs.',
+        'Basic Android Auto support: play smartlists, playlists, and all songs.\nNote: You need to enable "unknown sources" in the Android Auto app settings to use apps from outside Google Play.',
         'Image files are scanned as part of the library.',
         'Turkish, Dutch, Indonesian, Polish, Portuguese, and Tamil translations.',
       ]),

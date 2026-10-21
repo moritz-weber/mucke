@@ -663,6 +663,13 @@ class L10nDe extends L10n {
   String get whatsNewDescription => 'Was sich in dieser Version geändert hat.';
 
   @override
+  String get autoDismissWhatsNew => 'Automatisch ausblenden';
+
+  @override
+  String get autoDismissWhatsNewDescription =>
+      'Dieses Widget von der Startseite ausblenden, nachdem die Versionshinweise angesehen wurden.';
+
+  @override
   String get dismiss => 'Abhaken';
 
   @override

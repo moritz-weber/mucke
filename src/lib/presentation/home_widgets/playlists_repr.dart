@@ -6,7 +6,7 @@ import 'forms/playlists_form_page.dart';
 import 'home_widget_repr.dart';
 import 'widgets/playlists_widget.dart';
 
-class PlaylistsRepr implements HomeWidgetRepr {
+class PlaylistsRepr with HomeWidgetVisibility implements HomeWidgetRepr {
   const PlaylistsRepr(this.homeWidgetEntity);
 
   factory PlaylistsRepr.fromPosition(int position) {

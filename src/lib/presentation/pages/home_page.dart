@@ -101,6 +101,7 @@ class _HomePageInner extends StatelessWidget {
           ];
 
           for (final we in widgetEntities ?? <HomeWidgetRepr>[]) {
+            if (!we.isVisible) continue;
             widgets.add(
               SliverPadding(
                 padding: const EdgeInsets.symmetric(

@@ -19,7 +19,7 @@ class WhatsNewWidget extends StatelessWidget {
     final version = whatsNewStore.currentVersion;
 
     void openPage() {
-      whatsNewStore.dismiss();
+      whatsNewStore.dismissIfAutoDismiss();
       navStore.push(
         context,
         MaterialPageRoute<Widget>(
@@ -30,40 +30,35 @@ class WhatsNewWidget extends StatelessWidget {
 
     return Card(
       margin: EdgeInsets.zero,
-      clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-      child: InkWell(
-        onTap: openPage,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(12.0, 12.0, 4.0, 12.0),
-          child: Row(
-            children: [
-              const Icon(Icons.new_releases_rounded, color: LIGHT2),
-              const SizedBox(width: 12.0),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      l10n.whatsNewInVersion(version),
-                      style: TEXT_HEADER_S,
-                    ),
-                    const SizedBox(height: 2.0),
-                    Text(
-                      l10n.whatsNewDescription,
-                      style: TEXT_SMALL_SUBTITLE,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-              IconButton(
-                icon: const Icon(Icons.close_rounded),
-                tooltip: l10n.dismiss,
-                onPressed: whatsNewStore.dismiss,
-              ),
-            ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: ListTile(
+          contentPadding: const EdgeInsets.only(left: 12.0, right: 8.0),
+          onTap: openPage,
+          leading: const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Icon(
+              Icons.new_releases_rounded,
+              size: 40.0,
+              color: LIGHT2,
+            ),
+          ),
+          title: Text(
+            l10n.whatsNewInVersion(version),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          subtitle: Text(
+            l10n.whatsNewDescription,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: TEXT_SMALL_SUBTITLE,
+          ),
+          trailing: IconButton(
+            icon: const Icon(Icons.close_rounded),
+            tooltip: l10n.dismiss,
+            onPressed: whatsNewStore.dismiss,
           ),
         ),
       ),

@@ -1268,6 +1268,18 @@ abstract class L10n {
   /// **'Here is what changed in this version.'**
   String get whatsNewDescription;
 
+  /// No description provided for @autoDismissWhatsNew.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss automatically'**
+  String get autoDismissWhatsNew;
+
+  /// No description provided for @autoDismissWhatsNewDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide this widget from the home page after the release notes have been viewed.'**
+  String get autoDismissWhatsNewDescription;
+
   /// No description provided for @dismiss.
   ///
   /// In en, this message translates to:

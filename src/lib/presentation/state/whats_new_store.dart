@@ -2,7 +2,6 @@ import 'package:collection/collection.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
-import '../../constants.dart';
 import '../../domain/entities/home_widgets/home_widget.dart';
 import '../../domain/entities/home_widgets/whats_new.dart';
 import '../../domain/repositories/home_widget_repository.dart';
@@ -66,11 +65,25 @@ class WhatsNewStore {
   }
 
   /// Inserts the "What's new" widget at the top of the home page unless it is
-  /// already present.
+  /// already present. If it is present but was dismissed, it is shown again.
   Future<void> _insertWhatsNewWidget() async {
     final homeWidgets = await _homeWidgetRepository.homeWidgetsStream.first;
-    if (homeWidgets
-        .any((homeWidget) => homeWidget.type == HomeWidgetType.whats_new)) {
+    final existing = homeWidgets
+        .where((homeWidget) => homeWidget.type == HomeWidgetType.whats_new)
+        .firstOrNull;
+
+    if (existing != null) {
+      if (existing is HomeWhatsNew && existing.dismissed) {
+        // Show the widget again for the new version, but keep the position and
+        // settings the user chose for it.
+        await _homeWidgetRepository.updateHomeWidget(
+          HomeWhatsNew(
+            position: existing.position,
+            autoDismiss: existing.autoDismiss,
+          ),
+        );
+        _log.info('re-enabled what\'s new widget for $currentVersion');
+      }
       return;
     }
 
@@ -83,17 +96,44 @@ class WhatsNewStore {
     _log.info('inserted what\'s new widget for $currentVersion');
   }
 
-  /// Removes the "What's new" home widget, if present.
+  /// Whether the widget is dismissed automatically when the release notes are
+  /// viewed.
+  Future<bool> get autoDismiss async {
+    final whatsNew = await _getWhatsNew();
+    return whatsNew?.autoDismiss ?? true;
+  }
+
+  /// Marks the "What's new" home widget as dismissed.
+  ///
+  /// The widget stays in the list of home widgets so that the user can still
+  /// customize its position, but it is no longer displayed on the home page.
   Future<void> dismiss() async {
     try {
-      final homeWidgets = await _homeWidgetRepository.homeWidgetsStream.first;
-      final whatsNew = homeWidgets
-          .where((homeWidget) => homeWidget.type == HomeWidgetType.whats_new)
-          .firstOrNull;
+      final whatsNew = await _getWhatsNew();
       if (whatsNew == null) return;
-      await _homeWidgetRepository.removeHomeWidget(whatsNew);
+      await _homeWidgetRepository.updateHomeWidget(
+        HomeWhatsNew(
+          position: whatsNew.position,
+          dismissed: true,
+          autoDismiss: whatsNew.autoDismiss,
+        ),
+      );
     } catch (error, stackTrace) {
       _log.warning('dismiss failed', error, stackTrace);
     }
+  }
+
+  /// Dismisses the widget when the release notes are viewed, if the user did
+  /// not disable automatic dismissal.
+  Future<void> dismissIfAutoDismiss() async {
+    if (await autoDismiss) await dismiss();
+  }
+
+  Future<HomeWhatsNew?> _getWhatsNew() async {
+    final homeWidgets = await _homeWidgetRepository.homeWidgetsStream.first;
+    final whatsNew = homeWidgets
+        .where((homeWidget) => homeWidget.type == HomeWidgetType.whats_new)
+        .firstOrNull;
+    return whatsNew is HomeWhatsNew ? whatsNew : null;
   }
 }

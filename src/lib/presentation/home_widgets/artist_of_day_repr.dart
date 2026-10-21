@@ -6,7 +6,7 @@ import 'forms/artistofday_form_page.dart';
 import 'home_widget_repr.dart';
 import 'widgets/artist_of_day_widget.dart';
 
-class ArtistOfDayRepr implements HomeWidgetRepr {
+class ArtistOfDayRepr with HomeWidgetVisibility implements HomeWidgetRepr {
   ArtistOfDayRepr(this.homeWidgetEntity);
 
   factory ArtistOfDayRepr.fromPosition(int position) {
