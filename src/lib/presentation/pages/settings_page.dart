@@ -13,6 +13,7 @@ import '../../defaults.dart';
 import '../state/music_data_store.dart';
 import '../state/navigation_store.dart';
 import '../state/settings_store.dart';
+import '../state/whats_new_store.dart';
 import '../theming.dart';
 import '../utils.dart';
 import '../widgets/battery_optimization_tile.dart';
@@ -20,6 +21,7 @@ import '../widgets/settings_section.dart';
 import 'blocked_files_page.dart';
 import 'export_page.dart';
 import 'library_folders_page.dart';
+import 'whats_new_page.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -215,6 +217,27 @@ class SettingsPage extends StatelessWidget {
               ),
             ),
           ),
+          const Divider(),
+          ListTile(
+            title: Text(L10n.of(context)!.whatsNew),
+            subtitle: Text(
+              L10n.of(context)!.whatsNewDescription,
+              style: TEXT_SMALL_SUBTITLE,
+            ),
+            trailing: const Icon(Icons.chevron_right_rounded),
+            onTap: () {
+              final WhatsNewStore whatsNewStore = GetIt.I<WhatsNewStore>();
+              whatsNewStore.dismissIfAutoDismiss();
+              navStore.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => WhatsNewPage(
+                    version: whatsNewStore.currentVersion,
+                  ),
+                ),
+              );
+            },
+          ),
           const SizedBox(height: 8.0),
         ],
       ),
@@ -254,7 +277,9 @@ class SettingsPage extends StatelessWidget {
               children: [
                 const Icon(Icons.check_circle_rounded, color: GREEN),
                 const SizedBox(width: 16.0),
-                Expanded(child: Text(L10n.of(context)!.logFilesSavedTo(targetDir.path))),
+                Expanded(
+                  child: Text(L10n.of(context)!.logFilesSavedTo(targetDir.path)),
+                ),
               ],
             ),
             duration: const Duration(seconds: 10),

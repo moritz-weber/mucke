@@ -14,6 +14,7 @@ import 'domain/entities/home_widgets/artist_of_day.dart';
 import 'domain/entities/home_widgets/history.dart';
 import 'domain/entities/home_widgets/playlists.dart';
 import 'domain/entities/home_widgets/shuffle_all.dart';
+import 'domain/entities/home_widgets/whats_new.dart';
 import 'domain/entities/playlist.dart';
 import 'domain/entities/smart_list.dart';
 import 'domain/entities/song.dart';
@@ -48,6 +49,7 @@ import 'presentation/state/home_widget_forms/artistofday_form_store.dart';
 import 'presentation/state/home_widget_forms/history_form_store.dart';
 import 'presentation/state/home_widget_forms/playlists_form_store.dart';
 import 'presentation/state/home_widget_forms/shuffleall_form_store.dart';
+import 'presentation/state/home_widget_forms/whats_new_form_store.dart';
 import 'presentation/state/import_store.dart';
 import 'presentation/state/music_data_store.dart';
 import 'presentation/state/navigation_store.dart';
@@ -59,6 +61,7 @@ import 'presentation/state/settings_store.dart';
 import 'presentation/state/smart_list_form_store.dart';
 import 'presentation/state/smart_list_page_store.dart';
 import 'presentation/state/song_store.dart';
+import 'presentation/state/whats_new_store.dart';
 import 'system/datasources/audio_player_data_source.dart';
 import 'system/datasources/audio_player_data_source_impl.dart';
 import 'system/datasources/drift_database.dart';
@@ -138,6 +141,13 @@ Future<void> setupGetIt() async {
       musicDataRepository: getIt(),
     ),
   );
+  getIt.registerLazySingleton<WhatsNewStore>(
+    () => WhatsNewStore(
+      homeWidgetRepository: getIt(),
+      persistentStateRepository: getIt(),
+      packageInfo: getIt(),
+    ),
+  );
   getIt.registerLazySingleton<QueuePageStore>(
     () => QueuePageStore(
       audioStore: getIt(),
@@ -196,6 +206,12 @@ Future<void> setupGetIt() async {
     (HomeHistory history, _) => HistoryFormStore(
       homeWidgetRepository: getIt(),
       homeHistory: history,
+    ),
+  );
+  getIt.registerFactoryParam<WhatsNewFormStore, HomeWhatsNew, void>(
+    (HomeWhatsNew whatsNew, _) => WhatsNewFormStore(
+      homeWidgetRepository: getIt(),
+      homeWhatsNew: whatsNew,
     ),
   );
   getIt.registerFactory<ImportStore>(

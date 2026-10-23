@@ -9,6 +9,9 @@ abstract class PersistentStateRepository {
   Future<Playable> get playable;
   Future<int?> get currentIndex;
 
+  Future<String?> get lastSeenVersion;
+  Future<void> setLastSeenVersion(String version);
+
   Future<LoopMode> get loopMode;
   Future<ShuffleMode> get shuffleMode;
 

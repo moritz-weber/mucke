@@ -7,6 +7,7 @@ import '../../models/home_widgets/history_model.dart';
 import '../../models/home_widgets/home_widget_model.dart';
 import '../../models/home_widgets/playlists_model.dart';
 import '../../models/home_widgets/shuffle_all_model.dart';
+import '../../models/home_widgets/whats_new_model.dart';
 import '../drift_database.dart';
 import '../home_widget_data_source.dart';
 
@@ -86,7 +87,9 @@ class HomeWidgetDao extends DatabaseAccessor<MainDatabase>
       case HomeWidgetType.playlists:
         return HomePlaylistsModel.fromDrift(driftHomeWidget);
       case HomeWidgetType.history:
-      return HomeHistoryModel.fromDrift(driftHomeWidget);
+        return HomeHistoryModel.fromDrift(driftHomeWidget);
+      case HomeWidgetType.whats_new:
+        return HomeWhatsNewModel.fromDrift(driftHomeWidget);
     }
   }
 }

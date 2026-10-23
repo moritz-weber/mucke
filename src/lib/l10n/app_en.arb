@@ -474,5 +474,30 @@
   "created": "Created",
   "@created": {},
   "viewLyrics": "View lyrics",
-  "@viewLyrics": {}
+  "@viewLyrics": {},
+  "whatsNew": "What's new",
+  "@whatsNew": {},
+  "whatsNewInVersion": "What's new in {version}",
+  "@whatsNewInVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String",
+        "example": "1.6.0"
+      }
+    }
+  },
+  "whatsNewDescription": "Here is what changed in this version.",
+  "@whatsNewDescription": {},
+  "autoDismissWhatsNew": "Dismiss automatically",
+  "@autoDismissWhatsNew": {},
+  "autoDismissWhatsNewDescription": "Hide this widget from the home page after the release notes have been viewed.",
+  "@autoDismissWhatsNewDescription": {},
+  "dismiss": "Dismiss",
+  "@dismiss": {},
+  "releaseNoteAdded": "New",
+  "@releaseNoteAdded": {},
+  "releaseNoteChanged": "Changed",
+  "@releaseNoteChanged": {},
+  "releaseNoteFixed": "Fixed",
+  "@releaseNoteFixed": {}
 }

@@ -4,12 +4,14 @@ import 'package:get_it/get_it.dart';
 import 'package:mucke/l10n/localizations.dart';
 import 'package:reorderables/reorderables.dart';
 
+import '../../domain/entities/home_widgets/home_widget.dart';
 import '../home_widgets/album_of_day_repr.dart';
 import '../home_widgets/artist_of_day_repr.dart';
 import '../home_widgets/history_repr.dart';
 import '../home_widgets/home_widget_repr.dart';
 import '../home_widgets/playlists_repr.dart';
 import '../home_widgets/shuffle_all_repr.dart';
+import '../home_widgets/whats_new_repr.dart';
 import '../state/home_page_store.dart';
 import '../state/navigation_store.dart';
 import '../theming.dart';
@@ -51,21 +53,27 @@ class HomeSettingsPage extends StatelessWidget {
                 ReorderableSliverList(
                   delegate: ReorderableSliverChildBuilderDelegate(
                     (context, int index) {
+                      final widgetRepr = widgetReprs[index];
                       return Dismissible(
                         key: UniqueKey(),
                         child: ListTile(
-                          title: Text(widgetReprs[index].title(context)),
-                          leading: Icon(widgetReprs[index].icon),
+                          title: Text(
+                            widgetRepr.title(context),
+                            style: widgetRepr.isVisible
+                                ? null
+                                : TextStyle(color: TEXT_SMALL_SUBTITLE.color),
+                          ),
+                          leading: Icon(widgetRepr.icon),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              if (widgetReprs[index].hasParameters)
+                              if (widgetRepr.hasParameters)
                                 IconButton(
                                   onPressed: () {
                                     navStore.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => widgetReprs[index].formPage()!,
+                                        builder: (context) => widgetRepr.formPage()!,
                                       ),
                                     );
                                   },
@@ -81,7 +89,7 @@ class HomeSettingsPage extends StatelessWidget {
                           ),
                         ),
                         onDismissed: (direction) {
-                          homeStore.removeHomeWidget(widgetReprs[index].homeWidgetEntity);
+                          homeStore.removeHomeWidget(widgetRepr.homeWidgetEntity);
                         },
                         background: Container(
                           width: double.infinity,
@@ -122,6 +130,11 @@ class HomeSettingsPage extends StatelessWidget {
   Future<void> _onTapAdd(BuildContext context) async {
     final homeStore = GetIt.I<HomePageStore>();
     final homeWidgets = homeStore.homeWidgetsStream.value ?? <HomeWidgetRepr>[];
+    // The "What's new" widget is a singleton: it stays in the list after being
+    // dismissed, so it must not be offered for adding again.
+    final hasWhatsNew = homeWidgets.any(
+      (homeWidgetRepr) => homeWidgetRepr.homeWidgetEntity.type == HomeWidgetType.whats_new,
+    );
 
     final homeWidgetReprs = [
       ShuffleAllRepr.fromPosition(homeWidgets.length),
@@ -129,6 +142,7 @@ class HomeSettingsPage extends StatelessWidget {
       ArtistOfDayRepr.fromPosition(homeWidgets.length),
       HistoryRepr.fromPosition(homeWidgets.length),
       PlaylistsRepr.fromPosition(homeWidgets.length),
+      if (!hasWhatsNew) WhatsNewRepr.fromPosition(homeWidgets.length),
     ];
 
     showModalBottomSheet(

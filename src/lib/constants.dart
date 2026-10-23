@@ -15,6 +15,8 @@ const String ARTIST_OF_DAY = 'ARTIST_OF_DAY';
 
 const String LISTENED_PERCENTAGE = 'LISTENED_PERCENTAGE';
 
+const String LAST_SEEN_VERSION = 'LAST_SEEN_VERSION';
+
 const String PACKAGE_NAME = String.fromEnvironment(
   'PACKAGE_NAME',
   defaultValue: 'rocks.mucke',

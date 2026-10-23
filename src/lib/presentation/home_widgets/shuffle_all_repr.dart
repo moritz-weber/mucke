@@ -6,7 +6,7 @@ import 'forms/shuffle_all_form_page.dart';
 import 'home_widget_repr.dart';
 import 'widgets/shuffle_all_button.dart';
 
-class ShuffleAllRepr implements HomeWidgetRepr {
+class ShuffleAllRepr with HomeWidgetVisibility implements HomeWidgetRepr {
   const ShuffleAllRepr(this.homeWidgetEntity);
 
   factory ShuffleAllRepr.fromPosition(int position) {

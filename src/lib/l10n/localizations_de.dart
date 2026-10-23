@@ -649,5 +649,35 @@ class L10nDe extends L10n {
   String get created => 'Erzeugt';
 
   @override
-  String get viewLyrics => 'View lyrics';
+  String get viewLyrics => 'Lyrics anzeigen';
+
+  @override
+  String get whatsNew => 'Was gibt\'s neues';
+
+  @override
+  String whatsNewInVersion(String version) {
+    return 'Was gibt\'s neues in $version';
+  }
+
+  @override
+  String get whatsNewDescription => 'Was sich in dieser Version geändert hat.';
+
+  @override
+  String get autoDismissWhatsNew => 'Automatisch ausblenden';
+
+  @override
+  String get autoDismissWhatsNewDescription =>
+      'Dieses Widget von der Startseite ausblenden, nachdem die Versionshinweise angesehen wurden.';
+
+  @override
+  String get dismiss => 'Abhaken';
+
+  @override
+  String get releaseNoteAdded => 'Neu';
+
+  @override
+  String get releaseNoteChanged => 'Geändert';
+
+  @override
+  String get releaseNoteFixed => 'Behoben';
 }

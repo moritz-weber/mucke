@@ -17,6 +17,7 @@ import 'presentation/pages/init/init_page.dart';
 import 'presentation/pages/library_page.dart';
 import 'presentation/pages/search_page.dart';
 import 'presentation/state/navigation_store.dart';
+import 'presentation/state/whats_new_store.dart';
 import 'presentation/theming.dart';
 import 'presentation/widgets/navbar.dart';
 import 'system/logging.dart';
@@ -124,6 +125,12 @@ class _RootPageState extends State<RootPage> {
       key: PageStorageKey('SearchPage'),
     ),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    GetIt.I<WhatsNewStore>().checkForUpgrade();
+  }
 
   @override
   void dispose() {

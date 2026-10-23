@@ -6,6 +6,7 @@ import '../../domain/entities/home_widgets/history.dart';
 import '../../domain/entities/home_widgets/home_widget.dart';
 import '../../domain/entities/home_widgets/playlists.dart';
 import '../../domain/entities/home_widgets/shuffle_all.dart';
+import '../../domain/entities/home_widgets/whats_new.dart';
 import '../../domain/repositories/home_widget_repository.dart';
 import '../home_widgets/album_of_day_repr.dart';
 import '../home_widgets/artist_of_day_repr.dart';
@@ -13,6 +14,7 @@ import '../home_widgets/history_repr.dart';
 import '../home_widgets/home_widget_repr.dart';
 import '../home_widgets/playlists_repr.dart';
 import '../home_widgets/shuffle_all_repr.dart';
+import '../home_widgets/whats_new_repr.dart';
 
 part 'home_page_store.g.dart';
 
@@ -53,6 +55,8 @@ abstract class _HomePageStore with Store {
       return PlaylistsRepr(homeWidget);
     } else if (homeWidget is HomeShuffleAll) {
       return ShuffleAllRepr(homeWidget);
+    } else if (homeWidget is HomeWhatsNew) {
+      return WhatsNewRepr(homeWidget);
     }
     throw TypeError();
   }

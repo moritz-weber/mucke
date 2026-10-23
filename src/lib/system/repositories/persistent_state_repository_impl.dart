@@ -15,6 +15,13 @@ class PersistentStateRepositoryImpl implements PersistentStateRepository {
   Future<int?> get currentIndex => _persistentStateDataSource.currentIndex;
 
   @override
+  Future<String?> get lastSeenVersion => _persistentStateDataSource.lastSeenVersion;
+
+  @override
+  Future<void> setLastSeenVersion(String version) =>
+      _persistentStateDataSource.setLastSeenVersion(version);
+
+  @override
   Future<LoopMode> get loopMode => _persistentStateDataSource.loopMode;
 
   @override

@@ -7,6 +7,9 @@
 - Added support to view (synced) lyrics from metadata and lrc files (#147).
 - Reworked audio player state management (#194).
 - Pipeline: build per-ABI APKs (#196).
+- Enabled reproducible builds (#196).
+- Fixed a bug that prevented scanning in older Android versions (#199).
+- Added "What's new" home widget and page in settings. (#198)
 
 ## 1.6.0
 

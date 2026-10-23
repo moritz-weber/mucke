@@ -9,6 +9,7 @@ enum HomeWidgetType {
   artist_of_day,
   playlists,
   history,
+  whats_new,
 }
 
 extension HomeWidgetTypeExtension on String {
@@ -24,6 +25,8 @@ extension HomeWidgetTypeExtension on String {
         return HomeWidgetType.playlists;
       case 'HomeWidgetType.history':
         return HomeWidgetType.history;
+      case 'HomeWidgetType.whats_new':
+        return HomeWidgetType.whats_new;
       default:
         throw TypeError();
     }

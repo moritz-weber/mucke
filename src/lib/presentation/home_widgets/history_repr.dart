@@ -6,7 +6,7 @@ import 'forms/history_form_page.dart';
 import 'home_widget_repr.dart';
 import 'widgets/history_widget.dart';
 
-class HistoryRepr implements HomeWidgetRepr {
+class HistoryRepr with HomeWidgetVisibility implements HomeWidgetRepr {
   HistoryRepr(this.homeWidgetEntity);
 
   factory HistoryRepr.fromPosition(int position) {

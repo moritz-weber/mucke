@@ -5,7 +5,7 @@ import '../../domain/entities/home_widgets/album_of_day.dart';
 import 'home_widget_repr.dart';
 import 'widgets/album_of_day_widget.dart';
 
-class AlbumOfDayRepr implements HomeWidgetRepr {
+class AlbumOfDayRepr with HomeWidgetVisibility implements HomeWidgetRepr {
   AlbumOfDayRepr(this.homeWidgetEntity);
 
   factory AlbumOfDayRepr.fromPosition(int position) {
