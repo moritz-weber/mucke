@@ -31,7 +31,7 @@ class L10nFi extends L10n {
   String get updateLibrary => 'Päivitä kirjasto';
 
   @override
-  String get rescanAll => 'Rescan all files (slow)';
+  String get rescanAll => 'Skannaa uudelleen kaikki tiedostot (hidas)';
 
   @override
   String artistsAlbumsSongs(int artistCount, int albumCount, int songCount) {
@@ -39,25 +39,25 @@ class L10nFi extends L10n {
   }
 
   @override
-  String get scanSuccessful => 'Library scan completed.';
+  String get scanSuccessful => 'Kirjaston skannaus valmistui.';
 
   @override
   String scanFailed(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count scan failures',
-      one: '1 scan failure',
+      other: '$count skannausvirhettä',
+      one: '1 skannausvirhe',
     );
     return '$_temp0';
   }
 
   @override
   String get scanPermissionDenied =>
-      'Audio permission required to scan the library.';
+      'Äänen käyttöoikeus vaaditaan kirjaston skannaamista varten.';
 
   @override
-  String get scanErrorDetails => 'Details';
+  String get scanErrorDetails => 'Yksityiskohdat';
 
   @override
   String get scanFailures => 'Scan failures';
@@ -69,25 +69,25 @@ class L10nFi extends L10n {
   String get scanStageMetadata => 'Metadata';
 
   @override
-  String get scanStageAlbumArt => 'Album art';
+  String get scanStageAlbumArt => 'Albumin kuvitus';
 
   @override
-  String get scanStageAccentColor => 'Accent color';
+  String get scanStageAccentColor => 'Korostusväri';
 
   @override
-  String get scanStagePermission => 'Permission';
+  String get scanStagePermission => 'Oikeus';
 
   @override
-  String get scanErrorMetadata => 'Metadata could not be read.';
+  String get scanErrorMetadata => 'Metatietoa ei voitu lukea.';
 
   @override
-  String get scanErrorAlbumArt => 'Album art could not be read.';
+  String get scanErrorAlbumArt => 'Albumin kuvitusta ei voitu lukea.';
 
   @override
-  String get scanErrorAccentColor => 'Accent color could not be generated.';
+  String get scanErrorAccentColor => 'Korostusväriä ei voitu luoda.';
 
   @override
-  String get scanErrorPermission => 'Audio permission was denied.';
+  String get scanErrorPermission => 'Äänen käyttöoikeus estettiin.';
 
   @override
   String get manageLibraryFolders => 'Hallitse kirjastokansioita';
@@ -214,13 +214,13 @@ class L10nFi extends L10n {
   String get favShuffleMode => 'Suosikki sekoitustila';
 
   @override
-  String get playlistNormalMode => 'Play from the top';
+  String get playlistNormalMode => 'Toista ylhäältä';
 
   @override
-  String get playlistShuffleMode => 'Start shuffle playback';
+  String get playlistShuffleMode => 'Aloita satunnaistoisto';
 
   @override
-  String get playlistFavShuffleMode => 'Start favorite shuffle playback';
+  String get playlistFavShuffleMode => 'Aloita suosikkien satunnaistoisto';
 
   @override
   String get name => 'Nimi';
@@ -543,19 +543,19 @@ class L10nFi extends L10n {
   String get exportData => 'Vie tiedot';
 
   @override
-  String get saveLogFiles => 'Save log files';
+  String get saveLogFiles => 'Tallenna lokitiedostot';
 
   @override
   String get saveLogFilesDescription =>
-      'This creates a subfolder with the log files in it.';
+      'Tämä luo alihakemiston, johon lokitiedostot sijoitetaan.';
 
   @override
   String logFilesSavedTo(String path) {
-    return 'Log files saved to:\n$path';
+    return 'Lokitiedostot tallennettu:\n$path';
   }
 
   @override
-  String get logFilesSaveFailed => 'Saving log files failed!';
+  String get logFilesSaveFailed => 'Lokitiedostojen tallentaminen epäonnistui!';
 
   @override
   String get exportDescription =>
@@ -590,11 +590,11 @@ class L10nFi extends L10n {
 
   @override
   String get disableBattery =>
-      'Poista muckin optimointi käytöstä ilmoitusongelmien ratkaisemiseksi.';
+      'Poista akun optimointi käytöstä mucken kohdalla.';
 
   @override
   String get disableBatteryDescription =>
-      'Disabling battery optimization can solve potential notification issues.';
+      'Akkuoptimoinnin poistaminen käytöstä saattaa ratkaista mahdollisia ilmoitusongelmia.';
 
   @override
   String get disabledBattery => 'Akun optimointi on poistettu käytöstä.';
@@ -648,7 +648,7 @@ class L10nFi extends L10n {
   String get created => 'Luotu';
 
   @override
-  String get viewLyrics => 'View lyrics';
+  String get viewLyrics => 'Näytä sanoitukset';
 
   @override
   String get whatsNew => 'What\'s new';

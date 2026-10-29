@@ -1,4 +1,4 @@
-## Unreleased
+## 1.7.0
 
 - Added Estonian translation.
 - Added monochrome/themed icon (#156).
@@ -9,7 +9,8 @@
 - Pipeline: build per-ABI APKs (#196).
 - Enabled reproducible builds (#196).
 - Fixed a bug that prevented scanning in older Android versions (#199).
-- Added "What's new" home widget and page in settings. (#198)
+- Added "What's new" home widget and page in settings (#198).
+- Removed unnecessary network state permission (#203).
 
 ## 1.6.0
 

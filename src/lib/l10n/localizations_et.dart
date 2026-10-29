@@ -31,7 +31,7 @@ class L10nEt extends L10n {
   String get updateLibrary => 'Uuenda muusikakogu';
 
   @override
-  String get rescanAll => 'Rescan all files (slow)';
+  String get rescanAll => 'Skaneeri kõik failid uuesti (aeglane)';
 
   @override
   String artistsAlbumsSongs(int artistCount, int albumCount, int songCount) {
@@ -39,55 +39,56 @@ class L10nEt extends L10n {
   }
 
   @override
-  String get scanSuccessful => 'Library scan completed.';
+  String get scanSuccessful => 'Muusikakogu skaneerimine on lõppenud.';
 
   @override
   String scanFailed(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count scan failures',
-      one: '1 scan failure',
+      other: '$count skaneerimisviga',
+      one: '1 skaneerimisviga',
     );
     return '$_temp0';
   }
 
   @override
   String get scanPermissionDenied =>
-      'Audio permission required to scan the library.';
+      'Muusikakogu skaneerimine eeldab õigust lugeda helifaile.';
 
   @override
-  String get scanErrorDetails => 'Details';
+  String get scanErrorDetails => 'Üksikasjad';
 
   @override
-  String get scanFailures => 'Scan failures';
+  String get scanFailures => 'Skaneerimisvead';
 
   @override
-  String get scanFailureStage => 'Stage';
+  String get scanFailureStage => 'Samm';
 
   @override
-  String get scanStageMetadata => 'Metadata';
+  String get scanStageMetadata => 'Metateave';
 
   @override
-  String get scanStageAlbumArt => 'Album art';
+  String get scanStageAlbumArt => 'Kaanepildid';
 
   @override
-  String get scanStageAccentColor => 'Accent color';
+  String get scanStageAccentColor => 'Aktsentvärv';
 
   @override
-  String get scanStagePermission => 'Permission';
+  String get scanStagePermission => 'Õigused';
 
   @override
-  String get scanErrorMetadata => 'Metadata could not be read.';
+  String get scanErrorMetadata => 'Metaandmete lugemine ei õnnestunud.';
 
   @override
-  String get scanErrorAlbumArt => 'Album art could not be read.';
+  String get scanErrorAlbumArt => 'Kaanepiltide lugemine ei õnnestunud.';
 
   @override
-  String get scanErrorAccentColor => 'Accent color could not be generated.';
+  String get scanErrorAccentColor => 'Aktsentvärvi loomine ei õnnestunud.';
 
   @override
-  String get scanErrorPermission => 'Audio permission was denied.';
+  String get scanErrorPermission =>
+      'Õigused helifailide kasutamiseks on puudu.';
 
   @override
   String get manageLibraryFolders => 'Halda muusikakogu kaustu';
@@ -647,35 +648,35 @@ class L10nEt extends L10n {
   String get created => 'Loodud';
 
   @override
-  String get viewLyrics => 'View lyrics';
+  String get viewLyrics => 'Näita laulusõnu';
 
   @override
-  String get whatsNew => 'What\'s new';
+  String get whatsNew => 'Mida on meil uut';
 
   @override
   String whatsNewInVersion(String version) {
-    return 'What\'s new in $version';
+    return 'Mida uut on versioonis $version';
   }
 
   @override
-  String get whatsNewDescription => 'Here is what changed in this version.';
+  String get whatsNewDescription => 'Siin on selle versiooni muudatused.';
 
   @override
-  String get autoDismissWhatsNew => 'Dismiss automatically';
+  String get autoDismissWhatsNew => 'Loobu automaatselt';
 
   @override
   String get autoDismissWhatsNewDescription =>
-      'Hide this widget from the home page after the release notes have been viewed.';
+      'Peale uue versiooni teabe vaatamist peida see vidin avalehelt.';
 
   @override
-  String get dismiss => 'Dismiss';
+  String get dismiss => 'Loobu';
 
   @override
-  String get releaseNoteAdded => 'New';
+  String get releaseNoteAdded => 'Uus';
 
   @override
-  String get releaseNoteChanged => 'Changed';
+  String get releaseNoteChanged => 'Muudatused';
 
   @override
-  String get releaseNoteFixed => 'Fixed';
+  String get releaseNoteFixed => 'Parandused';
 }

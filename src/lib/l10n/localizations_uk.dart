@@ -31,7 +31,7 @@ class L10nUk extends L10n {
   String get updateLibrary => 'Оновити бібліотеку';
 
   @override
-  String get rescanAll => 'Rescan all files (slow)';
+  String get rescanAll => 'Пересканувати всі файли (повільно)';
 
   @override
   String artistsAlbumsSongs(int artistCount, int albumCount, int songCount) {
@@ -39,55 +39,56 @@ class L10nUk extends L10n {
   }
 
   @override
-  String get scanSuccessful => 'Library scan completed.';
+  String get scanSuccessful => 'Сканування бібліотеки завершено.';
 
   @override
   String scanFailed(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count scan failures',
-      one: '1 scan failure',
+      other: '$count помилок сканування',
+      few: '$count помилки сканування',
+      one: '$count помилка сканування',
     );
     return '$_temp0';
   }
 
   @override
   String get scanPermissionDenied =>
-      'Audio permission required to scan the library.';
+      'Для сканування бібліотеки потрібен дозвіл на доступ до аудіо.';
 
   @override
-  String get scanErrorDetails => 'Details';
+  String get scanErrorDetails => 'Подробиці';
 
   @override
-  String get scanFailures => 'Scan failures';
+  String get scanFailures => 'Помилки сканування';
 
   @override
-  String get scanFailureStage => 'Stage';
+  String get scanFailureStage => 'Етап';
 
   @override
-  String get scanStageMetadata => 'Metadata';
+  String get scanStageMetadata => 'Метадані';
 
   @override
-  String get scanStageAlbumArt => 'Album art';
+  String get scanStageAlbumArt => 'Обкладинка альбому';
 
   @override
-  String get scanStageAccentColor => 'Accent color';
+  String get scanStageAccentColor => 'Акцентний колір';
 
   @override
-  String get scanStagePermission => 'Permission';
+  String get scanStagePermission => 'Дозвіл';
 
   @override
-  String get scanErrorMetadata => 'Metadata could not be read.';
+  String get scanErrorMetadata => 'Не вдалося прочитати метадані.';
 
   @override
-  String get scanErrorAlbumArt => 'Album art could not be read.';
+  String get scanErrorAlbumArt => 'Не вдалося прочитати обкладинку альбому.';
 
   @override
-  String get scanErrorAccentColor => 'Accent color could not be generated.';
+  String get scanErrorAccentColor => 'Не вдалося згенерувати акцентний колір.';
 
   @override
-  String get scanErrorPermission => 'Audio permission was denied.';
+  String get scanErrorPermission => 'У доступі до аудіо було відмовлено.';
 
   @override
   String get manageLibraryFolders => 'Керування папками бібліотеки';
@@ -648,35 +649,35 @@ class L10nUk extends L10n {
   String get created => 'Створено';
 
   @override
-  String get viewLyrics => 'View lyrics';
+  String get viewLyrics => 'Переглянути текст пісні';
 
   @override
-  String get whatsNew => 'What\'s new';
+  String get whatsNew => 'Що нового';
 
   @override
   String whatsNewInVersion(String version) {
-    return 'What\'s new in $version';
+    return 'Що нового у $version';
   }
 
   @override
-  String get whatsNewDescription => 'Here is what changed in this version.';
+  String get whatsNewDescription => 'Ось що змінилося в цій версії.';
 
   @override
-  String get autoDismissWhatsNew => 'Dismiss automatically';
+  String get autoDismissWhatsNew => 'Автовідхилення';
 
   @override
   String get autoDismissWhatsNewDescription =>
-      'Hide this widget from the home page after the release notes have been viewed.';
+      'Приховати цей віджет з головної сторінки після перегляду інформації про оновлення.';
 
   @override
-  String get dismiss => 'Dismiss';
+  String get dismiss => 'Відхилити';
 
   @override
-  String get releaseNoteAdded => 'New';
+  String get releaseNoteAdded => 'Нове';
 
   @override
-  String get releaseNoteChanged => 'Changed';
+  String get releaseNoteChanged => 'Змінено';
 
   @override
-  String get releaseNoteFixed => 'Fixed';
+  String get releaseNoteFixed => 'Виправлено';
 }

@@ -1,0 +1,6 @@
+- Added support to view (synced) lyrics from metadata and lrc files.
+- Fixed a bug that prevented scanning in older Android versions.
+- Added "What's new" home widget and page in settings.
+- Removed unnecessary network state permission.
+- Added monochrome/themed icon.
+- Added Estonian translation.
