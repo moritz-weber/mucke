@@ -37,8 +37,8 @@ class ReleaseNote {
 /// The texts are intentionally not localized.
 const List<ReleaseNote> RELEASE_NOTES = [
   ReleaseNote(
-    version: 'Unreleased',
-    date: '2026-10-XX',
+    version: '1.7.0',
+    date: '2026-10-29',
     sections: [
       ReleaseNoteSection(ReleaseNoteCategory.added, [
         'View lyrics from metadata and .lrc files, including synced lyrics. Perform a library re-scan to add them to the library.\nNote: SYLT frames are currently not supported.',
